@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
@@ -6,6 +7,7 @@ import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +30,20 @@ export default function Navigation() {
     { href: "#contact", label: "Contact" },
   ];
 
-  const scrollToSection = (href: string) => {
+  const handleNavigation = (href: string, label: string) => {
+    if (label === "Home") {
+      // Always navigate to home page
+      window.location.href = "/";
+      return;
+    }
+    
+    if (location !== "/") {
+      // If not on home page, go to home first then scroll
+      window.location.href = "/" + href;
+      return;
+    }
+    
+    // On home page, scroll to section
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -43,11 +58,13 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <img 
-              src={logoPath} 
-              alt="Dan Bizzarro Eventing" 
-              className="h-12 w-auto"
-            />
+            <Link href="/">
+              <img 
+                src={logoPath} 
+                alt="Dan Bizzarro Eventing" 
+                className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </Link>
           </div>
           
           <div className="hidden md:block">
@@ -55,7 +72,7 @@ export default function Navigation() {
               {navItems.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => handleNavigation(item.href, item.label)}
                   className="text-charcoal hover:text-italian-red transition-colors duration-200 font-medium"
                 >
                   {item.label}
@@ -84,7 +101,7 @@ export default function Navigation() {
             {navItems.map((item) => (
               <button
                 key={item.href}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item.href, item.label)}
                 className="block w-full text-left px-3 py-2 text-charcoal hover:text-italian-red transition-colors duration-200"
               >
                 {item.label}
