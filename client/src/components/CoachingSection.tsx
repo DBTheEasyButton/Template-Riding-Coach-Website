@@ -107,7 +107,7 @@ export default function CoachingSection() {
                   <Target className="text-2xl" />
                   <div>
                     <div className="font-semibold">Cross country lessons</div>
-                    <div className="text-sm opacity-80">Natural obstacles & boldness</div>
+                    <div className="text-sm opacity-80">Be confident and have fun</div>
                   </div>
                 </div>
               </div>

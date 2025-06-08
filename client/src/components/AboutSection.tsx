@@ -25,10 +25,14 @@ export default function AboutSection() {
             <p className="text-lg text-dark leading-relaxed">
               In 2024 Dan was in the Short List for the Paris Olympic games.
             </p>
-            <div className="grid grid-cols-3 gap-8 pt-8">
+            <div className="grid grid-cols-4 gap-6 pt-8">
               <div className="text-center">
-                <div className="text-3xl font-playfair font-bold text-orange">2014</div>
-                <div className="text-medium mt-2">RoR Elite Champion</div>
+                <div className="text-3xl font-playfair font-bold text-orange">20+</div>
+                <div className="text-medium mt-2">Years Experience</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-playfair font-bold text-orange">500+</div>
+                <div className="text-medium mt-2">riders coached</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-playfair font-bold text-orange">2025</div>

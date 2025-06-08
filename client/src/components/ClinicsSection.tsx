@@ -11,7 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, InsertClinicRegistration } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, Euro } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Euro, FileText } from "lucide-react";
+import { Link } from "wouter";
 
 export default function ClinicsSection() {
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
@@ -127,9 +128,15 @@ export default function ClinicsSection() {
         <div className="text-center mb-16">
           <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Upcoming Clinics</h2>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-          <p className="text-xl text-dark max-w-3xl mx-auto">
+          <p className="text-xl text-dark max-w-3xl mx-auto mb-6">
             Join Dan for intensive training sessions designed to elevate your riding to the next level
           </p>
+          <Link href="/terms-and-conditions">
+            <Button variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white">
+              <FileText className="w-4 h-4 mr-2" />
+              Clinic Terms & Conditions
+            </Button>
+          </Link>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
