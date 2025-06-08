@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro, Copy } from "lucide-react";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -197,6 +197,33 @@ export default function AdminClinics() {
     });
   };
 
+  const handleClone = (clinic: Clinic) => {
+    // Calculate next available date (1 week from original)
+    const originalDate = new Date(clinic.date);
+    const cloneDate = new Date(originalDate);
+    cloneDate.setDate(originalDate.getDate() + 7);
+    
+    setEditingClinic(null); // Clear editing clinic to create new one
+    setFormData({
+      title: `${clinic.title} (Copy)`,
+      description: clinic.description,
+      date: cloneDate.toISOString().split('T')[0],
+      endDate: clinic.endDate ? new Date(new Date(clinic.endDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
+      location: clinic.location,
+      price: clinic.price.toString(),
+      maxParticipants: clinic.maxParticipants.toString(),
+      type: clinic.type,
+      level: clinic.level,
+      image: clinic.image,
+      isActive: true, // Default new clinic to active
+      hasMultipleSessions: clinic.hasMultipleSessions || false,
+      clinicType: clinic.clinicType || "single",
+      crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
+      showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
+    });
+    setIsCreateOpen(true);
+  };
+
   const handleSave = () => {
     if (!formData.title || !formData.description || !formData.date || 
         !formData.location || !formData.price) {
@@ -314,6 +341,10 @@ export default function AdminClinics() {
                     <Button variant="outline" size="sm" onClick={() => handleEdit(clinic)}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={() => handleClone(clinic)}>
+                      <Copy className="w-4 h-4 mr-1" />
+                      Clone
                     </Button>
                     <Button variant="destructive" size="sm" onClick={() => handleDelete(clinic.id)}>
                       <Trash2 className="w-4 h-4 mr-1" />
