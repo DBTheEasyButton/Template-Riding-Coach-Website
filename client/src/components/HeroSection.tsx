@@ -34,14 +34,14 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-6 justify-center opacity-0 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
           <Button 
             onClick={() => scrollToSection('#achievements')}
-            className="bg-italian-red hover:bg-red-700 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+            className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
           >
             View Achievements
           </Button>
           <Button 
             variant="outline"
             onClick={() => scrollToSection('#contact')}
-            className="border-2 border-white text-white hover:bg-white hover:text-charcoal px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+            className="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
           >
             Get In Touch
           </Button>

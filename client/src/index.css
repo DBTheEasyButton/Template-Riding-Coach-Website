@@ -24,15 +24,15 @@
   --ring: hsl(12, 76%, 61%);
   --radius: 0.5rem;
   
-  /* Dan Bizzarro professional color scheme */
-  --navy: 220, 26%, 14%;
-  --cream: 45, 37%, 97%;
-  --orange: 12, 76%, 61%;
-  --dark-grey: 220, 9%, 46%;
-  --light-grey: 210, 16%, 93%;
-  --text-dark: 220, 26%, 14%;
-  --text-medium: 220, 9%, 46%;
-  --text-light: 215, 16%, 47%;
+  /* Dan Bizzarro professional color scheme - based on dbeventing.co.uk */
+  --navy: 214, 47%, 23%;
+  --cream: 0, 0%, 98%;
+  --orange: 25, 95%, 53%;
+  --dark-grey: 0, 0%, 20%;
+  --light-grey: 0, 0%, 96%;
+  --text-dark: 0, 0%, 13%;
+  --text-medium: 0, 0%, 40%;
+  --text-light: 0, 0%, 55%;
 }
 
 .dark {
