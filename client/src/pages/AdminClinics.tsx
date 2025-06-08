@@ -202,7 +202,7 @@ export default function AdminClinics() {
                       <Badge variant={clinic.isActive ? "default" : "secondary"}>
                         {clinic.isActive ? "Active" : "Inactive"}
                       </Badge>
-                      <Badge variant="outline">{clinic.category}</Badge>
+                      <Badge variant="outline">{clinic.type}</Badge>
                     </div>
                   </div>
                 </CardHeader>
@@ -315,19 +315,44 @@ export default function AdminClinics() {
               </div>
             </div>
             
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="type">Type</Label>
+                <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dressage">Dressage</SelectItem>
+                    <SelectItem value="jumping">Show Jumping</SelectItem>
+                    <SelectItem value="cross-country">Cross Country</SelectItem>
+                    <SelectItem value="full-day">Full Day</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="level">Level</Label>
+                <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="beginner">Beginner</SelectItem>
+                    <SelectItem value="intermediate">Intermediate</SelectItem>
+                    <SelectItem value="advanced">Advanced</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
             <div className="grid gap-2">
-              <Label htmlFor="category">Category</Label>
-              <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="dressage">Dressage</SelectItem>
-                  <SelectItem value="jumping">Show Jumping</SelectItem>
-                  <SelectItem value="cross-country">Cross Country</SelectItem>
-                  <SelectItem value="eventing">Eventing</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="image">Image URL</Label>
+              <Input
+                id="image"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                placeholder="https://example.com/clinic-image.jpg"
+              />
             </div>
           </div>
           
