@@ -44,7 +44,7 @@ export default function AdminClinics() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data: InsertClinic) => {
+    mutationFn: async (data: any) => {
       return await apiRequest('POST', '/api/admin/clinics', data);
     },
     onSuccess: () => {
@@ -57,7 +57,7 @@ export default function AdminClinics() {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error creating clinic",
         description: error.message,
@@ -67,7 +67,7 @@ export default function AdminClinics() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async (data: { id: number } & Partial<InsertClinic>) => {
+    mutationFn: async (data: any) => {
       const { id, ...updateData } = data;
       return await apiRequest('PUT', `/api/admin/clinics/${id}`, updateData);
     },
@@ -81,7 +81,7 @@ export default function AdminClinics() {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error updating clinic",
         description: error.message,
