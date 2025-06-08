@@ -212,8 +212,8 @@ export class DatabaseStorage implements IStorage {
       {
         title: "Dressage Basics: Building a Foundation",
         description: "Learn the fundamental principles of dressage training, from basic position to advanced movements.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        thumbnailUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        videoUrl: "https://www.dbeventing.co.uk/videos/dressage-foundation-training",
+        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/01/dressage-training-thumbnail.jpg",
         duration: 1800, // 30 minutes
         category: "dressage",
         level: "beginner",
@@ -222,8 +222,8 @@ export class DatabaseStorage implements IStorage {
       {
         title: "Cross-Country: Reading the Terrain",
         description: "Master the art of course analysis and tactical riding across challenging cross-country courses.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        thumbnailUrl: "https://images.unsplash.com/photo-1553284966-19b8815c7817?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        videoUrl: "https://www.dbeventing.co.uk/videos/cross-country-terrain-analysis",
+        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/02/cross-country-analysis-thumbnail.jpg",
         duration: 2100, // 35 minutes
         category: "cross-country",
         level: "intermediate",
@@ -232,8 +232,8 @@ export class DatabaseStorage implements IStorage {
       {
         title: "Show Jumping: Advanced Techniques",
         description: "Elevate your show jumping with Olympic-level strategies for complex courses and combinations.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", 
-        thumbnailUrl: "https://images.unsplash.com/photo-1573068629844-e4c3f8df9b1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        videoUrl: "https://www.dbeventing.co.uk/videos/advanced-show-jumping-techniques", 
+        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/03/show-jumping-advanced-thumbnail.jpg",
         duration: 2400, // 40 minutes
         category: "jumping",
         level: "advanced",
@@ -242,8 +242,8 @@ export class DatabaseStorage implements IStorage {
       {
         title: "Mental Preparation for Competition",
         description: "Develop the mental strength and focus required for high-level equestrian competition.",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        thumbnailUrl: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        videoUrl: "https://www.dbeventing.co.uk/videos/mental-preparation-competition",
+        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/04/mental-preparation-thumbnail.jpg",
         duration: 1500, // 25 minutes
         category: "general",
         level: "intermediate",
