@@ -83,8 +83,23 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
   medicalConditions: text("medical_conditions"),
   paymentMethod: text("payment_method").notNull().default("bank_transfer"),
   agreeToTerms: boolean("agree_to_terms").notNull().default(false),
-  status: text("status").notNull().default("pending"), // pending, confirmed, cancelled
+  status: text("status").notNull().default("pending"), // pending, confirmed, cancelled, waitlist
   registeredAt: timestamp("registered_at").notNull().defaultNow(),
+});
+
+export const clinicWaitlist = pgTable("clinic_waitlist", {
+  id: serial("id").primaryKey(),
+  clinicId: integer("clinic_id").notNull().references(() => clinics.id),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  experienceLevel: text("experience_level").notNull(),
+  horseName: text("horse_name"),
+  specialRequests: text("special_requests"),
+  position: integer("position").notNull(), // position in waitlist
+  notified: boolean("notified").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const trainingVideos = pgTable("training_videos", {
@@ -135,6 +150,13 @@ export const insertClinicRegistrationSchema = createInsertSchema(clinicRegistrat
   registeredAt: true,
 });
 
+export const insertClinicWaitlistSchema = createInsertSchema(clinicWaitlist).omit({
+  id: true,
+  position: true,
+  notified: true,
+  createdAt: true,
+});
+
 export const insertTrainingVideoSchema = createInsertSchema(trainingVideos).omit({
   id: true,
   viewCount: true,
@@ -155,5 +177,7 @@ export type Clinic = typeof clinics.$inferSelect;
 export type InsertClinic = z.infer<typeof insertClinicSchema>;
 export type ClinicRegistration = typeof clinicRegistrations.$inferSelect;
 export type InsertClinicRegistration = z.infer<typeof insertClinicRegistrationSchema>;
+export type ClinicWaitlist = typeof clinicWaitlist.$inferSelect;
+export type InsertClinicWaitlist = z.infer<typeof insertClinicWaitlistSchema>;
 export type TrainingVideo = typeof trainingVideos.$inferSelect;
 export type InsertTrainingVideo = z.infer<typeof insertTrainingVideoSchema>;

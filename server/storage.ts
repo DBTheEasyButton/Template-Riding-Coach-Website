@@ -6,6 +6,7 @@ import {
   contacts,
   clinics,
   clinicRegistrations,
+  clinicWaitlist,
   trainingVideos,
   type User, 
   type InsertUser,
@@ -21,6 +22,8 @@ import {
   type InsertClinic,
   type ClinicRegistration,
   type InsertClinicRegistration,
+  type ClinicWaitlist,
+  type InsertClinicWaitlist,
   type TrainingVideo,
   type InsertTrainingVideo
 } from "@shared/schema";
@@ -49,6 +52,11 @@ export interface IStorage {
   
   createClinicRegistration(registration: InsertClinicRegistration): Promise<ClinicRegistration>;
   getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]>;
+  
+  addToWaitlist(waitlistEntry: InsertClinicWaitlist): Promise<ClinicWaitlist>;
+  getWaitlist(clinicId: number): Promise<ClinicWaitlist[]>;
+  removeFromWaitlist(id: number): Promise<void>;
+  promoteFromWaitlist(clinicId: number): Promise<ClinicWaitlist | null>;
   
   getAllTrainingVideos(): Promise<TrainingVideo[]>;
   getTrainingVideosByCategory(category: string): Promise<TrainingVideo[]>;
@@ -322,6 +330,37 @@ export class DatabaseStorage implements IStorage {
 
   async getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]> {
     return await db.select().from(clinicRegistrations).where(eq(clinicRegistrations.clinicId, clinicId));
+  }
+
+  async addToWaitlist(insertWaitlistEntry: InsertClinicWaitlist): Promise<ClinicWaitlist> {
+    // Get current waitlist position
+    const waitlistCount = await db.select().from(clinicWaitlist).where(eq(clinicWaitlist.clinicId, insertWaitlistEntry.clinicId));
+    const position = waitlistCount.length + 1;
+    
+    const [waitlistEntry] = await db.insert(clinicWaitlist).values({
+      ...insertWaitlistEntry,
+      position
+    }).returning();
+    return waitlistEntry;
+  }
+
+  async getWaitlist(clinicId: number): Promise<ClinicWaitlist[]> {
+    return await db.select().from(clinicWaitlist)
+      .where(eq(clinicWaitlist.clinicId, clinicId))
+      .orderBy(clinicWaitlist.position);
+  }
+
+  async removeFromWaitlist(id: number): Promise<void> {
+    await db.delete(clinicWaitlist).where(eq(clinicWaitlist.id, id));
+  }
+
+  async promoteFromWaitlist(clinicId: number): Promise<ClinicWaitlist | null> {
+    const [nextInLine] = await db.select().from(clinicWaitlist)
+      .where(eq(clinicWaitlist.clinicId, clinicId))
+      .orderBy(clinicWaitlist.position)
+      .limit(1);
+    
+    return nextInLine || null;
   }
 
   async getAllTrainingVideos(): Promise<TrainingVideo[]> {

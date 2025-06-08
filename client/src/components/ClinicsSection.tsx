@@ -217,14 +217,28 @@ export default function ClinicsSection() {
                 </div>
               </CardContent>
               
-              <CardFooter>
-                <Button 
-                  onClick={() => handleRegistration(clinic)}
-                  disabled={clinic.currentParticipants >= clinic.maxParticipants}
-                  className="w-full bg-navy hover:bg-slate-800 text-white font-semibold"
-                >
-                  {clinic.currentParticipants >= clinic.maxParticipants ? 'Fully Booked' : 'Register Now'}
-                </Button>
+              <CardFooter className="flex flex-col gap-2">
+                {clinic.currentParticipants >= clinic.maxParticipants ? (
+                  <Button 
+                    onClick={() => handleRegistration(clinic)}
+                    variant="outline"
+                    className="w-full border-orange text-orange hover:bg-orange hover:text-white font-semibold"
+                  >
+                    Join Waitlist
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={() => handleRegistration(clinic)}
+                    className="w-full bg-navy hover:bg-slate-800 text-white font-semibold"
+                  >
+                    Register Now
+                  </Button>
+                )}
+                {clinic.currentParticipants >= clinic.maxParticipants && (
+                  <p className="text-xs text-gray-500 text-center">
+                    Clinic is full. Join the waitlist to be notified if spots become available.
+                  </p>
+                )}
               </CardFooter>
             </Card>
           ))}
