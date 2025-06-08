@@ -94,6 +94,15 @@ export default function Footer() {
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
           <p>&copy; 2024 Dan Bizzarro. All rights reserved. | Designed with excellence in mind.</p>
+          <div className="mt-2">
+            <a 
+              href="/admin/clinics" 
+              className="text-xs text-gray-600 hover:text-orange transition-colors"
+              title="Admin Access"
+            >
+              •
+            </a>
+          </div>
         </div>
       </div>
     </footer>
