@@ -27,16 +27,16 @@ export default function AboutSection() {
             </p>
             <div className="grid grid-cols-3 gap-8 pt-8">
               <div className="text-center">
-                <div className="text-3xl font-playfair font-bold text-orange">17+</div>
-                <div className="text-medium mt-2">Years Professional</div>
-              </div>
-              <div className="text-center">
                 <div className="text-3xl font-playfair font-bold text-orange">2014</div>
                 <div className="text-medium mt-2">RoR Elite Champion</div>
               </div>
               <div className="text-center">
+                <div className="text-3xl font-playfair font-bold text-orange">2025</div>
+                <div className="text-medium mt-2">Olympic Short Listed</div>
+              </div>
+              <div className="text-center">
                 <div className="text-3xl font-playfair font-bold text-orange">2nd</div>
-                <div className="text-medium mt-2">Team Italy Boekelo</div>
+                <div className="text-medium mt-2">Nations Cup Boekelo</div>
               </div>
             </div>
           </div>
