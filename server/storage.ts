@@ -4,6 +4,9 @@ import {
   events, 
   news, 
   contacts,
+  clinics,
+  clinicRegistrations,
+  trainingVideos,
   type User, 
   type InsertUser,
   type Achievement,
@@ -13,8 +16,16 @@ import {
   type News,
   type InsertNews,
   type Contact,
-  type InsertContact
+  type InsertContact,
+  type Clinic,
+  type InsertClinic,
+  type ClinicRegistration,
+  type InsertClinicRegistration,
+  type TrainingVideo,
+  type InsertTrainingVideo
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -31,40 +42,41 @@ export interface IStorage {
   createNews(news: InsertNews): Promise<News>;
   
   createContact(contact: InsertContact): Promise<Contact>;
+  
+  getAllClinics(): Promise<Clinic[]>;
+  getClinic(id: number): Promise<Clinic | undefined>;
+  createClinic(clinic: InsertClinic): Promise<Clinic>;
+  
+  createClinicRegistration(registration: InsertClinicRegistration): Promise<ClinicRegistration>;
+  getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]>;
+  
+  getAllTrainingVideos(): Promise<TrainingVideo[]>;
+  getTrainingVideosByCategory(category: string): Promise<TrainingVideo[]>;
+  createTrainingVideo(video: InsertTrainingVideo): Promise<TrainingVideo>;
+  updateVideoViewCount(id: number): Promise<void>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private achievements: Map<number, Achievement>;
-  private events: Map<number, Event>;
-  private news: Map<number, News>;
-  private contacts: Map<number, Contact>;
-  private currentUserId: number;
-  private currentAchievementId: number;
-  private currentEventId: number;
-  private currentNewsId: number;
-  private currentContactId: number;
-
+export class DatabaseStorage implements IStorage {
   constructor() {
-    this.users = new Map();
-    this.achievements = new Map();
-    this.events = new Map();
-    this.news = new Map();
-    this.contacts = new Map();
-    this.currentUserId = 1;
-    this.currentAchievementId = 1;
-    this.currentEventId = 1;
-    this.currentNewsId = 1;
-    this.currentContactId = 1;
-    
-    this.seedData();
+    this.initializeDatabase();
   }
 
-  private seedData() {
+  private async initializeDatabase() {
+    try {
+      // Seed initial data if tables are empty
+      const existingAchievements = await db.select().from(achievements).limit(1);
+      if (existingAchievements.length === 0) {
+        await this.seedData();
+      }
+    } catch (error) {
+      console.log("Database initialization skipped - tables may not exist yet");
+    }
+  }
+
+  private async seedData() {
     // Seed achievements data
-    const sampleAchievements: Achievement[] = [
+    const sampleAchievements = [
       {
-        id: this.currentAchievementId++,
         title: "Tokyo Olympics",
         competition: "Olympic Games",
         year: 2021,
@@ -75,8 +87,7 @@ export class MemStorage implements IStorage {
         description: "Outstanding performance in the team eventing competition"
       },
       {
-        id: this.currentAchievementId++,
-        title: "European Championships",
+        title: "European Championships", 
         competition: "European Eventing Championships",
         year: 2021,
         position: "Team Gold",
@@ -86,9 +97,8 @@ export class MemStorage implements IStorage {
         description: "Dominant team performance securing gold medal"
       },
       {
-        id: this.currentAchievementId++,
         title: "World Equestrian Games",
-        competition: "FEI World Equestrian Games",
+        competition: "FEI World Equestrian Games", 
         year: 2018,
         position: "Team Silver",
         location: "Tryon, USA",
@@ -98,16 +108,13 @@ export class MemStorage implements IStorage {
       }
     ];
 
-    sampleAchievements.forEach(achievement => {
-      this.achievements.set(achievement.id, achievement);
-    });
+    await db.insert(achievements).values(sampleAchievements);
 
     // Seed events data
-    const sampleEvents: Event[] = [
+    const sampleEvents = [
       {
-        id: this.currentEventId++,
         title: "Badminton Horse Trials",
-        location: "Badminton, England",
+        location: "Badminton, England", 
         date: new Date('2024-04-15'),
         type: "upcoming",
         horse: "Castello Primo",
@@ -115,35 +122,30 @@ export class MemStorage implements IStorage {
         result: null
       },
       {
-        id: this.currentEventId++,
         title: "Kentucky Three-Day Event",
         location: "Lexington, USA",
         date: new Date('2024-04-28'),
-        type: "upcoming",
+        type: "upcoming", 
         horse: "Venetian Dream",
         level: "CCI5*-L",
         result: null
       },
       {
-        id: this.currentEventId++,
         title: "Adelaide CCI4*-L",
         location: "Adelaide, Australia",
         date: new Date('2024-03-10'),
         type: "completed",
-        horse: "Tuscan Thunder",
+        horse: "Tuscan Thunder", 
         level: "CCI4*-L",
         result: "1st Place"
       }
     ];
 
-    sampleEvents.forEach(event => {
-      this.events.set(event.id, event);
-    });
+    await db.insert(events).values(sampleEvents);
 
     // Seed news data
-    const sampleNews: News[] = [
+    const sampleNews = [
       {
-        id: this.currentNewsId++,
         title: "Badminton Preparation Underway",
         excerpt: "Dan and Castello Primo are putting the finishing touches on their preparation for this year's Badminton Horse Trials, with final training sessions showing promising form...",
         content: "Full article content here...",
@@ -152,8 +154,7 @@ export class MemStorage implements IStorage {
         slug: "badminton-preparation-underway"
       },
       {
-        id: this.currentNewsId++,
-        title: "New Training Facility Opens",
+        title: "New Training Facility Opens", 
         excerpt: "The new state-of-the-art training facility in Tuscany officially opened this week, featuring world-class amenities for both horse and rider development...",
         content: "Full article content here...",
         image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
@@ -162,75 +163,187 @@ export class MemStorage implements IStorage {
       }
     ];
 
-    sampleNews.forEach(article => {
-      this.news.set(article.id, article);
-    });
+    await db.insert(news).values(sampleNews);
+
+    // Seed clinic data
+    const sampleClinics = [
+      {
+        title: "Advanced Dressage Clinic",
+        description: "Master the art of dressage with Olympic-level training techniques. Focus on precision, rhythm, and partnership with your horse.",
+        date: new Date('2024-05-15'),
+        endDate: new Date('2024-05-17'),
+        location: "Tuscany Training Center, Italy",
+        maxParticipants: 12,
+        price: 75000, // $750.00
+        level: "advanced",
+        type: "dressage",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
+      },
+      {
+        title: "Cross-Country Masterclass",
+        description: "Navigate challenging cross-country courses with confidence. Learn course walking, pace management, and tactical approaches.",
+        date: new Date('2024-06-20'),
+        endDate: new Date('2024-06-22'),
+        location: "Kentucky Horse Park, USA",
+        maxParticipants: 16,
+        price: 85000, // $850.00
+        level: "intermediate",
+        type: "cross-country",
+        image: "https://images.unsplash.com/photo-1553284966-19b8815c7817?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
+      },
+      {
+        title: "Show Jumping Excellence",
+        description: "Perfect your show jumping technique with focus on accuracy, timing, and horse-rider communication over fences.",
+        date: new Date('2024-07-10'),
+        endDate: new Date('2024-07-12'),
+        location: "Aachen Training Facility, Germany",
+        maxParticipants: 14,
+        price: 80000, // $800.00
+        level: "intermediate",
+        type: "jumping",
+        image: "https://images.unsplash.com/photo-1573068629844-e4c3f8df9b1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
+      }
+    ];
+
+    await db.insert(clinics).values(sampleClinics);
+
+    // Seed training video data
+    const sampleVideos = [
+      {
+        title: "Dressage Basics: Building a Foundation",
+        description: "Learn the fundamental principles of dressage training, from basic position to advanced movements.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        thumbnailUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        duration: 1800, // 30 minutes
+        category: "dressage",
+        level: "beginner",
+        isPremium: false
+      },
+      {
+        title: "Cross-Country: Reading the Terrain",
+        description: "Master the art of course analysis and tactical riding across challenging cross-country courses.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        thumbnailUrl: "https://images.unsplash.com/photo-1553284966-19b8815c7817?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        duration: 2100, // 35 minutes
+        category: "cross-country",
+        level: "intermediate",
+        isPremium: true
+      },
+      {
+        title: "Show Jumping: Advanced Techniques",
+        description: "Elevate your show jumping with Olympic-level strategies for complex courses and combinations.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", 
+        thumbnailUrl: "https://images.unsplash.com/photo-1573068629844-e4c3f8df9b1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        duration: 2400, // 40 minutes
+        category: "jumping",
+        level: "advanced",
+        isPremium: true
+      },
+      {
+        title: "Mental Preparation for Competition",
+        description: "Develop the mental strength and focus required for high-level equestrian competition.",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        thumbnailUrl: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=450&q=80",
+        duration: 1500, // 25 minutes
+        category: "general",
+        level: "intermediate",
+        isPremium: false
+      }
+    ];
+
+    await db.insert(trainingVideos).values(sampleVideos);
   }
 
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 
   async getAllAchievements(): Promise<Achievement[]> {
-    return Array.from(this.achievements.values()).sort((a, b) => b.year - a.year);
+    return await db.select().from(achievements).orderBy(achievements.year);
   }
 
   async createAchievement(insertAchievement: InsertAchievement): Promise<Achievement> {
-    const id = this.currentAchievementId++;
-    const achievement: Achievement = { ...insertAchievement, id };
-    this.achievements.set(id, achievement);
+    const [achievement] = await db.insert(achievements).values(insertAchievement).returning();
     return achievement;
   }
 
   async getAllEvents(): Promise<Event[]> {
-    return Array.from(this.events.values()).sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    return await db.select().from(events).orderBy(events.date);
   }
 
   async createEvent(insertEvent: InsertEvent): Promise<Event> {
-    const id = this.currentEventId++;
-    const event: Event = { ...insertEvent, id };
-    this.events.set(id, event);
+    const [event] = await db.insert(events).values(insertEvent).returning();
     return event;
   }
 
   async getAllNews(): Promise<News[]> {
-    return Array.from(this.news.values()).sort((a, b) => 
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
+    return await db.select().from(news).orderBy(news.publishedAt);
   }
 
   async createNews(insertNews: InsertNews): Promise<News> {
-    const id = this.currentNewsId++;
-    const newsItem: News = { ...insertNews, id };
-    this.news.set(id, newsItem);
+    const [newsItem] = await db.insert(news).values(insertNews).returning();
     return newsItem;
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {
-    const id = this.currentContactId++;
-    const contact: Contact = { 
-      ...insertContact, 
-      id,
-      createdAt: new Date()
-    };
-    this.contacts.set(id, contact);
+    const [contact] = await db.insert(contacts).values(insertContact).returning();
     return contact;
+  }
+
+  async getAllClinics(): Promise<Clinic[]> {
+    return await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
+  }
+
+  async getClinic(id: number): Promise<Clinic | undefined> {
+    const [clinic] = await db.select().from(clinics).where(eq(clinics.id, id));
+    return clinic;
+  }
+
+  async createClinic(insertClinic: InsertClinic): Promise<Clinic> {
+    const [clinic] = await db.insert(clinics).values(insertClinic).returning();
+    return clinic;
+  }
+
+  async createClinicRegistration(insertRegistration: InsertClinicRegistration): Promise<ClinicRegistration> {
+    const [registration] = await db.insert(clinicRegistrations).values(insertRegistration).returning();
+    return registration;
+  }
+
+  async getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]> {
+    return await db.select().from(clinicRegistrations).where(eq(clinicRegistrations.clinicId, clinicId));
+  }
+
+  async getAllTrainingVideos(): Promise<TrainingVideo[]> {
+    return await db.select().from(trainingVideos).where(eq(trainingVideos.isActive, true)).orderBy(trainingVideos.createdAt);
+  }
+
+  async getTrainingVideosByCategory(category: string): Promise<TrainingVideo[]> {
+    return await db.select().from(trainingVideos)
+      .where(eq(trainingVideos.category, category))
+      .orderBy(trainingVideos.createdAt);
+  }
+
+  async createTrainingVideo(insertVideo: InsertTrainingVideo): Promise<TrainingVideo> {
+    const [video] = await db.insert(trainingVideos).values(insertVideo).returning();
+    return video;
+  }
+
+  async updateVideoViewCount(id: number): Promise<void> {
+    await db.update(trainingVideos)
+      .set({ viewCount: trainingVideos.viewCount + 1 })
+      .where(eq(trainingVideos.id, id));
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

@@ -51,6 +51,52 @@ export const contacts = pgTable("contacts", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const clinics = pgTable("clinics", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  date: timestamp("date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  location: text("location").notNull(),
+  maxParticipants: integer("max_participants").notNull(),
+  currentParticipants: integer("current_participants").notNull().default(0),
+  price: integer("price").notNull(), // in cents
+  level: text("level").notNull(), // beginner, intermediate, advanced
+  type: text("type").notNull(), // dressage, jumping, cross-country, full-day
+  image: text("image").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const clinicRegistrations = pgTable("clinic_registrations", {
+  id: serial("id").primaryKey(),
+  clinicId: integer("clinic_id").notNull().references(() => clinics.id),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  experienceLevel: text("experience_level").notNull(),
+  horseName: text("horse_name"),
+  specialRequests: text("special_requests"),
+  status: text("status").notNull().default("pending"), // pending, confirmed, cancelled
+  registeredAt: timestamp("registered_at").notNull().defaultNow(),
+});
+
+export const trainingVideos = pgTable("training_videos", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  videoUrl: text("video_url").notNull(),
+  thumbnailUrl: text("thumbnail_url").notNull(),
+  duration: integer("duration").notNull(), // in seconds
+  category: text("category").notNull(), // dressage, jumping, cross-country, general
+  level: text("level").notNull(), // beginner, intermediate, advanced
+  isPremium: boolean("is_premium").notNull().default(false),
+  viewCount: integer("view_count").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -73,6 +119,23 @@ export const insertContactSchema = createInsertSchema(contacts).omit({
   createdAt: true,
 });
 
+export const insertClinicSchema = createInsertSchema(clinics).omit({
+  id: true,
+  currentParticipants: true,
+  createdAt: true,
+});
+
+export const insertClinicRegistrationSchema = createInsertSchema(clinicRegistrations).omit({
+  id: true,
+  registeredAt: true,
+});
+
+export const insertTrainingVideoSchema = createInsertSchema(trainingVideos).omit({
+  id: true,
+  viewCount: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Achievement = typeof achievements.$inferSelect;
@@ -83,3 +146,9 @@ export type News = typeof news.$inferSelect;
 export type InsertNews = z.infer<typeof insertNewsSchema>;
 export type Contact = typeof contacts.$inferSelect;
 export type InsertContact = z.infer<typeof insertContactSchema>;
+export type Clinic = typeof clinics.$inferSelect;
+export type InsertClinic = z.infer<typeof insertClinicSchema>;
+export type ClinicRegistration = typeof clinicRegistrations.$inferSelect;
+export type InsertClinicRegistration = z.infer<typeof insertClinicRegistrationSchema>;
+export type TrainingVideo = typeof trainingVideos.$inferSelect;
+export type InsertTrainingVideo = z.infer<typeof insertTrainingVideoSchema>;
