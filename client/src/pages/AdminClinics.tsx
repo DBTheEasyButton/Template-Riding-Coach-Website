@@ -196,7 +196,10 @@ export default function AdminClinics() {
       date: new Date(formData.date),
       endDate: formData.endDate ? new Date(formData.endDate) : new Date(formData.date),
       price: Number(formData.price),
-      maxParticipants: Number(formData.maxParticipants)
+      maxParticipants: Number(formData.maxParticipants),
+      crossCountryMaxParticipants: formData.hasMultipleSessions ? Number(formData.crossCountryMaxParticipants) : undefined,
+      showJumpingMaxParticipants: formData.hasMultipleSessions ? Number(formData.showJumpingMaxParticipants) : undefined,
+      sessions: formData.hasMultipleSessions ? sessions : []
     };
 
     if (editingClinic) {
@@ -532,6 +535,26 @@ export default function AdminClinics() {
                     </div>
                   </div>
                 ))}
+                
+                {/* Overall Max Participants for Multi-Session Clinics */}
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                  <div className="grid gap-2">
+                    <Label>Cross Country Max Participants (All Classes)</Label>
+                    <Input
+                      type="number"
+                      value={formData.crossCountryMaxParticipants}
+                      onChange={(e) => setFormData({ ...formData, crossCountryMaxParticipants: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Show Jumping Max Participants (All Classes)</Label>
+                    <Input
+                      type="number"
+                      value={formData.showJumpingMaxParticipants}
+                      onChange={(e) => setFormData({ ...formData, showJumpingMaxParticipants: e.target.value })}
+                    />
+                  </div>
+                </div>
               </div>
             )}
             
