@@ -35,7 +35,7 @@ export default function AdminClinics() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: clinics = [] } = useQuery<Clinic[]>({
+  const { data: clinics = [], isLoading, error } = useQuery<Clinic[]>({
     queryKey: ['/api/admin/clinics'],
   });
 
@@ -107,8 +107,8 @@ export default function AdminClinics() {
     setFormData({
       title: clinic.title,
       description: clinic.description,
-      date: clinic.date.toISOString().split('T')[0],
-      endDate: clinic.endDate ? clinic.endDate.toISOString().split('T')[0] : "",
+      date: new Date(clinic.date).toISOString().split('T')[0],
+      endDate: clinic.endDate ? new Date(clinic.endDate).toISOString().split('T')[0] : "",
       location: clinic.location,
       price: clinic.price.toString(),
       maxParticipants: clinic.maxParticipants.toString(),
@@ -147,12 +147,20 @@ export default function AdminClinics() {
     }
   };
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).format(date);
+  const formatDate = (date: Date | string) => {
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      if (isNaN(dateObj.getTime())) {
+        return 'Invalid Date';
+      }
+      return new Intl.DateTimeFormat('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(dateObj);
+    } catch (error) {
+      return 'Invalid Date';
+    }
   };
 
   return (
@@ -171,6 +179,18 @@ export default function AdminClinics() {
               Create New Clinic
             </Button>
           </div>
+
+          {isLoading && (
+            <div className="text-center py-8">
+              <p className="text-slate-600 dark:text-slate-300">Loading clinics...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="text-center py-8">
+              <p className="text-red-600">Error loading clinics. Please try again.</p>
+            </div>
+          )}
 
           <div className="grid gap-6">
             {clinics.map((clinic) => (
