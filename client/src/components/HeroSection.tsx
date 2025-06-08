@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import heroImagePath from "@assets/hero-background.jpg";
 
 export default function HeroSection() {
   const scrollToSection = (href: string) => {
@@ -15,7 +16,7 @@ export default function HeroSection() {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
         style={{
-          backgroundImage: "url('https://www.dbeventing.co.uk/wp-content/uploads/2020/01/Dan-Bizzarro-hero-image.jpg')"
+          backgroundImage: `url(${heroImagePath})`
         }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
