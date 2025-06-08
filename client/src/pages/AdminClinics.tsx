@@ -321,7 +321,7 @@ export default function AdminClinics() {
           resetForm();
         }
       }}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingClinic ? 'Edit Clinic' : 'Create New Clinic'}</DialogTitle>
             <DialogDescription>
@@ -329,7 +329,7 @@ export default function AdminClinics() {
             </DialogDescription>
           </DialogHeader>
           
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-4 py-4 pr-2">
             <div className="grid gap-2">
               <Label htmlFor="title">Title *</Label>
               <Input
