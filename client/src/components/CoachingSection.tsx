@@ -39,7 +39,7 @@ export default function CoachingSection() {
           <h2 className="text-5xl font-playfair font-bold mb-6 text-navy">Professional Coaching</h2>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           <p className="text-xl text-dark max-w-3xl mx-auto">
-            Elevate your equestrian skills with world-class instruction from Olympic competitor Dan Bizzarro
+            Elevate your equestrian skills with tailored coaching sessions
           </p>
         </div>
 
