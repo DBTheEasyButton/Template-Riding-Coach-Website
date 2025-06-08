@@ -90,8 +90,8 @@ export default function CoachingSection() {
                 <div className="flex items-center space-x-3">
                   <Award className="text-2xl" />
                   <div>
-                    <div className="font-semibold">Flat Work Specialist</div>
-                    <div className="text-sm opacity-80">Dressage & Groundwork</div>
+                    <div className="font-semibold">Flat work and jumping lessons</div>
+                    <div className="text-sm opacity-80">Technique & Foundation</div>
                   </div>
                 </div>
               </div>
