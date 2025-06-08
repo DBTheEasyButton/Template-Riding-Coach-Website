@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(60, 9%, 98%);
+  --foreground: hsl(200, 6%, 15%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(60, 9%, 98%);
+  --popover-foreground: hsl(200, 6%, 15%);
+  --card: hsl(60, 9%, 98%);
+  --card-foreground: hsl(200, 6%, 15%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(27, 69%, 42%);
+  --primary-foreground: hsl(60, 9%, 98%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(200, 6%, 15%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for Dan Bizzarro theme */
+  --forest: hsl(154, 49%, 16%);
+  --ivory: hsl(60, 64%, 95%);
+  --italian-red: hsl(27, 69%, 42%);
+  --charcoal: hsl(208, 10%, 19%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(27, 69%, 42%);
+  --primary-foreground: hsl(60, 9%, 98%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-inter antialiased bg-background text-foreground;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .bg-forest {
+    background-color: hsl(var(--forest));
+  }
+  
+  .bg-ivory {
+    background-color: hsl(var(--ivory));
+  }
+  
+  .bg-italian-red {
+    background-color: hsl(var(--italian-red));
+  }
+  
+  .bg-charcoal {
+    background-color: hsl(var(--charcoal));
+  }
+  
+  .text-forest {
+    color: hsl(var(--forest));
+  }
+  
+  .text-ivory {
+    color: hsl(var(--ivory));
+  }
+  
+  .text-italian-red {
+    color: hsl(var(--italian-red));
+  }
+  
+  .text-charcoal {
+    color: hsl(var(--charcoal));
+  }
+  
+  .border-forest {
+    border-color: hsl(var(--forest));
+  }
+  
+  .border-italian-red {
+    border-color: hsl(var(--italian-red));
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(-5px);
+  }
+  90% {
+    transform: translateY(-2px);
+  }
+}
