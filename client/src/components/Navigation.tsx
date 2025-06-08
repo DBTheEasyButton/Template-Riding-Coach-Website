@@ -19,7 +19,6 @@ export default function Navigation() {
   const navItems = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
-    { href: "#achievements", label: "Achievements" },
     { href: "#coaching", label: "Coaching" },
     { href: "#clinics", label: "Clinics" },
     { href: "#training-videos", label: "Training" },

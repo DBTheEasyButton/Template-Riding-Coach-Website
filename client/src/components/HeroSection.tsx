@@ -27,7 +27,7 @@ export default function HeroSection() {
           Dan Bizzarro
         </h1>
         <h2 className="text-2xl md:text-3xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.4s'}}>
-          International Event Rider & Olympic Competitor
+          International Event Rider & Coach
         </h2>
         <p className="text-xl md:text-2xl mb-12 opacity-0 animate-fade-in-up font-light leading-relaxed" style={{animationDelay: '0.6s'}}>
           Representing Italy on the world's most prestigious equestrian stages
