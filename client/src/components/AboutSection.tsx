@@ -18,7 +18,10 @@ export default function AboutSection() {
               A move to England in 2011 saw Dan working as a rider for British eventing legend William Fox-Pitt. An invaluable experience, learning from one of the most successful British event riders of all time.
             </p>
             <p className="text-lg text-dark leading-relaxed">
-              Since then, Dan has made the Gloucestershire/Oxfordshire area his base from where he competes for loyal owners and teaches a wide range of abilities. In 2022, Dan represented Italy riding Stormhill Riot in the Nation Cups, where the Italian team finished 2nd at Boekelo.
+              Since then, Dan has made the Gloucestershire/Oxfordshire area his base from where he competes for loyal owners and teaches a wide range of abilities. As well as producing great results at national and international level Dan has represented Italy in several Nations Cup events and in 2022 the Italian team finished 2nd at Boekelo.
+            </p>
+            <p className="text-lg text-dark leading-relaxed">
+              In 2024 Dan was in the Short List for the Paris Olympic games.
             </p>
             <div className="grid grid-cols-3 gap-8 pt-8">
               <div className="text-center">
