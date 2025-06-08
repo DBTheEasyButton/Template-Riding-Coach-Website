@@ -8,10 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, InsertClinicRegistration } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, Euro, FileText } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Euro, FileText, AlertCircle, Check } from "lucide-react";
 import { Link } from "wouter";
 
 export default function ClinicsSection() {
@@ -24,8 +25,14 @@ export default function ClinicsSection() {
     phone: '',
     experienceLevel: '',
     horseName: '',
-    specialRequests: ''
+    specialRequests: '',
+    emergencyContact: '',
+    emergencyPhone: '',
+    medicalConditions: '',
+    agreeToTerms: false,
+    paymentMethod: 'bank_transfer'
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -51,8 +58,14 @@ export default function ClinicsSection() {
         phone: '',
         experienceLevel: '',
         horseName: '',
-        specialRequests: ''
+        specialRequests: '',
+        emergencyContact: '',
+        emergencyPhone: '',
+        medicalConditions: '',
+        agreeToTerms: false,
+        paymentMethod: 'bank_transfer'
       });
+      setFormErrors({});
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
     onError: (error) => {
@@ -100,13 +113,31 @@ export default function ClinicsSection() {
     setIsRegistrationOpen(true);
   };
 
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    
+    if (!registrationData.firstName.trim()) errors.firstName = "First name is required";
+    if (!registrationData.lastName.trim()) errors.lastName = "Last name is required";
+    if (!registrationData.email.trim()) errors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registrationData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+    if (!registrationData.phone.trim()) errors.phone = "Phone number is required";
+    if (!registrationData.experienceLevel) errors.experienceLevel = "Experience level is required";
+    if (!registrationData.emergencyContact.trim()) errors.emergencyContact = "Emergency contact is required";
+    if (!registrationData.emergencyPhone.trim()) errors.emergencyPhone = "Emergency phone is required";
+    if (!registrationData.agreeToTerms) errors.agreeToTerms = "You must agree to the terms and conditions";
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const submitRegistration = () => {
     if (!selectedClinic) return;
     
-    if (!registrationData.firstName || !registrationData.lastName || !registrationData.email || 
-        !registrationData.phone || !registrationData.experienceLevel) {
+    if (!validateForm()) {
       toast({
-        title: "Please fill in all required fields",
+        title: "Please correct the errors below",
         variant: "destructive",
       });
       return;
@@ -118,8 +149,12 @@ export default function ClinicsSection() {
     });
   };
 
-  const handleInputChange = (field: keyof typeof registrationData, value: string) => {
+  const handleInputChange = (field: keyof typeof registrationData, value: string | boolean) => {
     setRegistrationData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (formErrors[field]) {
+      setFormErrors(prev => ({ ...prev, [field]: '' }));
+    }
   };
 
   return (
@@ -202,9 +237,9 @@ export default function ClinicsSection() {
         )}
 
         <Dialog open={isRegistrationOpen} onOpenChange={setIsRegistrationOpen}>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-playfair text-forest">
+              <DialogTitle className="text-2xl font-playfair text-navy">
                 Register for {selectedClinic?.title}
               </DialogTitle>
               <DialogDescription>
@@ -212,94 +247,259 @@ export default function ClinicsSection() {
               </DialogDescription>
             </DialogHeader>
             
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-6 py-4">
+              {/* Personal Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Personal Information</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input
+                      id="firstName"
+                      value={registrationData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      placeholder="John"
+                      className={formErrors.firstName ? "border-red-500" : ""}
+                    />
+                    {formErrors.firstName && (
+                      <p className="text-sm text-red-500 mt-1 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-1" />
+                        {formErrors.firstName}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input
+                      id="lastName"
+                      value={registrationData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      placeholder="Doe"
+                      className={formErrors.lastName ? "border-red-500" : ""}
+                    />
+                    {formErrors.lastName && (
+                      <p className="text-sm text-red-500 mt-1 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-1" />
+                        {formErrors.lastName}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                
                 <div>
-                  <Label htmlFor="firstName">First Name *</Label>
+                  <Label htmlFor="email">Email *</Label>
                   <Input
-                    id="firstName"
-                    value={registrationData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    placeholder="John"
+                    id="email"
+                    type="email"
+                    value={registrationData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    placeholder="john@example.com"
+                    className={formErrors.email ? "border-red-500" : ""}
+                  />
+                  {formErrors.email && (
+                    <p className="text-sm text-red-500 mt-1 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" />
+                      {formErrors.email}
+                    </p>
+                  )}
+                </div>
+                
+                <div>
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input
+                    id="phone"
+                    value={registrationData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    placeholder="+44 123 456 7890"
+                    className={formErrors.phone ? "border-red-500" : ""}
+                  />
+                  {formErrors.phone && (
+                    <p className="text-sm text-red-500 mt-1 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" />
+                      {formErrors.phone}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Emergency Contact */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Emergency Contact</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="emergencyContact">Emergency Contact Name *</Label>
+                    <Input
+                      id="emergencyContact"
+                      value={registrationData.emergencyContact}
+                      onChange={(e) => handleInputChange('emergencyContact', e.target.value)}
+                      placeholder="Emergency contact name"
+                      className={formErrors.emergencyContact ? "border-red-500" : ""}
+                    />
+                    {formErrors.emergencyContact && (
+                      <p className="text-sm text-red-500 mt-1 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-1" />
+                        {formErrors.emergencyContact}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor="emergencyPhone">Emergency Contact Phone *</Label>
+                    <Input
+                      id="emergencyPhone"
+                      value={registrationData.emergencyPhone}
+                      onChange={(e) => handleInputChange('emergencyPhone', e.target.value)}
+                      placeholder="+44 123 456 7890"
+                      className={formErrors.emergencyPhone ? "border-red-500" : ""}
+                    />
+                    {formErrors.emergencyPhone && (
+                      <p className="text-sm text-red-500 mt-1 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-1" />
+                        {formErrors.emergencyPhone}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Riding Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Riding Information</h3>
+                <div>
+                  <Label htmlFor="experienceLevel">Experience Level *</Label>
+                  <Select value={registrationData.experienceLevel} onValueChange={(value) => handleInputChange('experienceLevel', value)}>
+                    <SelectTrigger className={formErrors.experienceLevel ? "border-red-500" : ""}>
+                      <SelectValue placeholder="Select your experience level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="beginner">Beginner (New to eventing)</SelectItem>
+                      <SelectItem value="intermediate">Intermediate (Competing up to 90cm)</SelectItem>
+                      <SelectItem value="advanced">Advanced (Competing 1m+)</SelectItem>
+                      <SelectItem value="professional">Professional</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {formErrors.experienceLevel && (
+                    <p className="text-sm text-red-500 mt-1 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" />
+                      {formErrors.experienceLevel}
+                    </p>
+                  )}
+                </div>
+                
+                <div>
+                  <Label htmlFor="horseName">Horse Name (optional)</Label>
+                  <Input
+                    id="horseName"
+                    value={registrationData.horseName}
+                    onChange={(e) => handleInputChange('horseName', e.target.value)}
+                    placeholder="Your horse's name"
                   />
                 </div>
+                
                 <div>
-                  <Label htmlFor="lastName">Last Name *</Label>
-                  <Input
-                    id="lastName"
-                    value={registrationData.lastName}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    placeholder="Doe"
+                  <Label htmlFor="medicalConditions">Medical Conditions or Allergies</Label>
+                  <Textarea
+                    id="medicalConditions"
+                    value={registrationData.medicalConditions}
+                    onChange={(e) => handleInputChange('medicalConditions', e.target.value)}
+                    placeholder="Please list any medical conditions, allergies, or medications that may affect your participation..."
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="specialRequests">Special Requests (optional)</Label>
+                  <Textarea
+                    id="specialRequests"
+                    value={registrationData.specialRequests}
+                    onChange={(e) => handleInputChange('specialRequests', e.target.value)}
+                    placeholder="Any special requirements, goals for the clinic, or questions..."
+                    rows={3}
                   />
                 </div>
               </div>
-              
-              <div>
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={registrationData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  placeholder="john@example.com"
-                />
+
+              {/* Payment Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Payment Information</h3>
+                <div className="bg-orange/10 p-4 rounded-lg">
+                  <div className="flex items-center text-orange mb-2">
+                    <Euro className="w-5 h-5 mr-2" />
+                    <span className="font-semibold">Clinic Fee: {selectedClinic ? formatPrice(selectedClinic.price) : ''}</span>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Payment must be made at time of booking to secure your place. Payment details will be provided upon registration confirmation.
+                  </p>
+                </div>
+                
+                <div>
+                  <Label htmlFor="paymentMethod">Preferred Payment Method</Label>
+                  <Select value={registrationData.paymentMethod} onValueChange={(value) => handleInputChange('paymentMethod', value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                      <SelectItem value="paypal">PayPal</SelectItem>
+                      <SelectItem value="cheque">Cheque</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              
-              <div>
-                <Label htmlFor="phone">Phone Number *</Label>
-                <Input
-                  id="phone"
-                  value={registrationData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  placeholder="+1 234 567 8900"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="experienceLevel">Experience Level *</Label>
-                <Select value={registrationData.experienceLevel} onValueChange={(value) => handleInputChange('experienceLevel', value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your experience level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
-                    <SelectItem value="professional">Professional</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <Label htmlFor="horseName">Horse Name (optional)</Label>
-                <Input
-                  id="horseName"
-                  value={registrationData.horseName}
-                  onChange={(e) => handleInputChange('horseName', e.target.value)}
-                  placeholder="Your horse's name"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="specialRequests">Special Requests (optional)</Label>
-                <Textarea
-                  id="specialRequests"
-                  value={registrationData.specialRequests}
-                  onChange={(e) => handleInputChange('specialRequests', e.target.value)}
-                  placeholder="Any special requirements or questions..."
-                  rows={3}
-                />
+
+              {/* Terms and Conditions */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Terms & Conditions</h3>
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="agreeToTerms"
+                    checked={registrationData.agreeToTerms}
+                    onCheckedChange={(checked) => handleInputChange('agreeToTerms', checked as boolean)}
+                    className={formErrors.agreeToTerms ? "border-red-500" : ""}
+                  />
+                  <div className="space-y-1">
+                    <Label htmlFor="agreeToTerms" className="text-sm leading-relaxed cursor-pointer">
+                      I have read and agree to the{' '}
+                      <Link href="/terms-and-conditions">
+                        <span className="text-orange hover:underline font-medium">Clinic Terms and Conditions</span>
+                      </Link>
+                      {' '}and understand the risks involved in equestrian activities. *
+                    </Label>
+                    {formErrors.agreeToTerms && (
+                      <p className="text-sm text-red-500 flex items-center">
+                        <AlertCircle className="w-4 h-4 mr-1" />
+                        {formErrors.agreeToTerms}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             
-            <DialogFooter>
+            <DialogFooter className="flex flex-col sm:flex-row gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsRegistrationOpen(false)}
+                className="border-gray-300"
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 onClick={submitRegistration}
                 disabled={registrationMutation.isPending}
-                className="bg-forest hover:bg-green-800 text-white"
+                className="bg-navy hover:bg-slate-800 text-white"
               >
-                {registrationMutation.isPending ? 'Registering...' : 'Complete Registration'}
+                {registrationMutation.isPending ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Complete Registration
+                  </>
+                )}
               </Button>
             </DialogFooter>
           </DialogContent>
