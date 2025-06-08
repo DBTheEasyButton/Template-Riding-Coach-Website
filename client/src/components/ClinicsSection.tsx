@@ -14,6 +14,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, InsertClinicRegistration } from "@shared/schema";
 import { Calendar, MapPin, Users, Clock, Euro, FileText, AlertCircle, Check } from "lucide-react";
 import { Link } from "wouter";
+import SocialShare from "@/components/SocialShare";
 
 export default function ClinicsSection() {
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);

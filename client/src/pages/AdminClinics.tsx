@@ -14,7 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro, Copy } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro, Copy, Share2 } from "lucide-react";
+import SocialShare from "@/components/SocialShare";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -337,7 +338,7 @@ export default function AdminClinics() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">{clinic.description}</p>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     <Button variant="outline" size="sm" onClick={() => handleEdit(clinic)}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
@@ -346,6 +347,7 @@ export default function AdminClinics() {
                       <Copy className="w-4 h-4 mr-1" />
                       Clone
                     </Button>
+                    <SocialShare clinic={clinic} />
                     <Button variant="destructive" size="sm" onClick={() => handleDelete(clinic.id)}>
                       <Trash2 className="w-4 h-4 mr-1" />
                       Delete
