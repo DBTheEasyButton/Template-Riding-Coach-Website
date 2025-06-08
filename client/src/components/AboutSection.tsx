@@ -46,15 +46,7 @@ export default function AboutSection() {
               alt="Dan Bizzarro with his horse - authentic photo showing the professional bond between rider and mount" 
               className="rounded-2xl shadow-2xl w-full h-auto object-cover"
             />
-            <div className="absolute -bottom-6 -right-6 bg-navy text-white p-6 rounded-xl shadow-xl">
-              <div className="flex items-center space-x-3">
-                <i className="fas fa-flag text-orange text-2xl"></i>
-                <div>
-                  <div className="font-semibold">Team Italy</div>
-                  <div className="text-sm opacity-80">Since 2008</div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
