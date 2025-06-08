@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Award, Users, Target, Star } from "lucide-react";
+import { Award, Users, Target, Star, Video, Smartphone } from "lucide-react";
 
 export default function CoachingSection() {
   const scrollToSection = (href: string) => {
@@ -11,24 +11,24 @@ export default function CoachingSection() {
 
   const coachingServices = [
     {
-      icon: <Award className="w-8 h-8" />,
-      title: "Olympic-Level Training",
-      description: "Learn from a three-time Olympian with proven success at the highest levels of international competition."
-    },
-    {
       icon: <Users className="w-8 h-8" />,
-      title: "Personalized Coaching",
-      description: "Individual and group sessions tailored to your experience level and competitive goals."
+      title: "Private Lessons",
+      description: "One-on-one personalized instruction tailored to your specific riding goals and experience level."
     },
     {
-      icon: <Target className="w-8 h-8" />,
-      title: "Competition Preparation",
-      description: "Strategic training programs designed to optimize performance when it matters most."
+      icon: <Award className="w-8 h-8" />,
+      title: "Clinics",
+      description: "Group training sessions combining technical instruction with competitive preparation strategies."
     },
     {
-      icon: <Star className="w-8 h-8" />,
-      title: "All Disciplines",
-      description: "Expert instruction in dressage, show jumping, and cross-country eventing."
+      icon: <Video className="w-8 h-8" />,
+      title: "Remote Lessons",
+      description: "Virtual coaching sessions allowing you to receive expert guidance from anywhere in the world."
+    },
+    {
+      icon: <Smartphone className="w-8 h-8" />,
+      title: "Dan Bizzarro Method App",
+      description: "Audio lessons and training content accessible through Dan's exclusive mobile application."
     }
   ];
 
