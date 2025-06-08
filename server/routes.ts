@@ -148,6 +148,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin contact management
+  app.get('/api/admin/contacts', async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      res.status(500).json({ message: "Failed to fetch contacts" });
+    }
+  });
+
   // Get all training videos
   app.get("/api/training-videos", async (req, res) => {
     try {

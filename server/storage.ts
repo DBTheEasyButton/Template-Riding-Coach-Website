@@ -45,6 +45,7 @@ export interface IStorage {
   createNews(news: InsertNews): Promise<News>;
   
   createContact(contact: InsertContact): Promise<Contact>;
+  getAllContacts(): Promise<Contact[]>;
   
   getAllClinics(): Promise<Clinic[]>;
   getClinic(id: number): Promise<Clinic | undefined>;
@@ -309,6 +310,10 @@ export class DatabaseStorage implements IStorage {
   async createContact(insertContact: InsertContact): Promise<Contact> {
     const [contact] = await db.insert(contacts).values(insertContact).returning();
     return contact;
+  }
+
+  async getAllContacts(): Promise<Contact[]> {
+    return await db.select().from(contacts).orderBy(contacts.createdAt);
   }
 
   async getAllClinics(): Promise<Clinic[]> {
