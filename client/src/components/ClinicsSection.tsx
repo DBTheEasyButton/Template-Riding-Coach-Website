@@ -152,26 +152,26 @@ export default function ClinicsSection() {
               </div>
               
               <CardHeader>
-                <CardTitle className="text-xl font-playfair text-forest">{clinic.title}</CardTitle>
-                <CardDescription className="text-gray-700 font-medium">{clinic.description}</CardDescription>
+                <CardTitle className="text-xl font-playfair text-navy font-bold">{clinic.title}</CardTitle>
+                <CardDescription className="text-dark font-medium">{clinic.description}</CardDescription>
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <div className="flex items-center text-sm text-gray-700 font-medium">
+                <div className="flex items-center text-sm text-dark font-medium">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{formatDate(clinic.date)}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-700 font-medium">
+                <div className="flex items-center text-sm text-dark font-medium">
                   <MapPin className="w-4 h-4 mr-2" />
                   <span>{clinic.location}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-700 font-medium">
+                <div className="flex items-center text-sm text-dark font-medium">
                   <Users className="w-4 h-4 mr-2" />
                   <span>{clinic.currentParticipants}/{clinic.maxParticipants} participants</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-700">
+                <div className="flex items-center text-sm text-dark">
                   <Euro className="w-4 h-4 mr-2" />
-                  <span className="font-bold text-xl text-forest">{formatPrice(clinic.price)}</span>
+                  <span className="font-bold text-xl text-orange">{formatPrice(clinic.price)}</span>
                 </div>
               </CardContent>
               
@@ -179,7 +179,7 @@ export default function ClinicsSection() {
                 <Button 
                   onClick={() => handleRegistration(clinic)}
                   disabled={clinic.currentParticipants >= clinic.maxParticipants}
-                  className="w-full bg-forest hover:bg-green-800 text-white"
+                  className="w-full bg-navy hover:bg-slate-800 text-white font-semibold"
                 >
                   {clinic.currentParticipants >= clinic.maxParticipants ? 'Fully Booked' : 'Register Now'}
                 </Button>

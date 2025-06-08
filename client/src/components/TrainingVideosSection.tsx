@@ -82,9 +82,9 @@ export default function TrainingVideosSection() {
     <section id="training-videos" className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-playfair font-bold text-forest mb-6">Training Videos</h2>
-          <div className="w-24 h-1 bg-italian-red mx-auto mb-8"></div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Training Videos</h2>
+          <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          <p className="text-xl text-dark max-w-3xl mx-auto">
             Learn from Olympic-level expertise with our comprehensive video training library
           </p>
         </div>
@@ -145,12 +145,12 @@ export default function TrainingVideosSection() {
               </div>
               
               <CardHeader>
-                <CardTitle className="text-lg font-playfair text-forest line-clamp-2 font-bold">{video.title}</CardTitle>
-                <CardDescription className="text-gray-700 line-clamp-3 font-medium">{video.description}</CardDescription>
+                <CardTitle className="text-lg font-playfair text-navy line-clamp-2 font-bold">{video.title}</CardTitle>
+                <CardDescription className="text-dark line-clamp-3 font-medium">{video.description}</CardDescription>
               </CardHeader>
               
               <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-700 font-medium">
+                <div className="flex items-center justify-between text-sm text-dark font-medium">
                   <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
                     <span>{video.viewCount} views</span>
