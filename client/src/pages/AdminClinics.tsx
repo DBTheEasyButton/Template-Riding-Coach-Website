@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -13,31 +13,27 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro, Eye } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro } from "lucide-react";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingClinic, setEditingClinic] = useState<Clinic | null>(null);
-  const [clinicData, setClinicData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    endDate: '',
-    location: '',
-    maxParticipants: 12,
-    price: 0,
-    level: 'intermediate',
-    type: 'dressage',
-    image: '',
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    date: "",
+    endDate: "",
+    location: "",
+    price: "",
+    maxParticipants: "12",
+    type: "dressage",
+    level: "intermediate",
+    image: "",
     isActive: true
   });
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const { data: clinics = [] } = useQuery<Clinic[]>({
     queryKey: ['/api/admin/clinics'],
@@ -48,21 +44,14 @@ export default function AdminClinics() {
       return await apiRequest('POST', '/api/admin/clinics', data);
     },
     onSuccess: () => {
-      toast({
-        title: "Clinic created successfully!",
-        description: "The new clinic has been added to the schedule.",
-      });
+      toast({ title: "Clinic created successfully!" });
       setIsCreateOpen(false);
       resetForm();
       queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
-    onError: (error: any) => {
-      toast({
-        title: "Error creating clinic",
-        description: error.message,
-        variant: "destructive",
-      });
+    onError: () => {
+      toast({ title: "Error creating clinic", variant: "destructive" });
     },
   });
 
@@ -72,21 +61,14 @@ export default function AdminClinics() {
       return await apiRequest('PUT', `/api/admin/clinics/${id}`, updateData);
     },
     onSuccess: () => {
-      toast({
-        title: "Clinic updated successfully!",
-        description: "The clinic details have been saved.",
-      });
+      toast({ title: "Clinic updated successfully!" });
       setEditingClinic(null);
       resetForm();
       queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
-    onError: (error: any) => {
-      toast({
-        title: "Error updating clinic",
-        description: error.message,
-        variant: "destructive",
-      });
+    onError: () => {
+      toast({ title: "Error updating clinic", variant: "destructive" });
     },
   });
 
@@ -95,77 +77,73 @@ export default function AdminClinics() {
       return await apiRequest('DELETE', `/api/admin/clinics/${id}`);
     },
     onSuccess: () => {
-      toast({
-        title: "Clinic deleted successfully!",
-        description: "The clinic has been removed from the schedule.",
-      });
+      toast({ title: "Clinic deleted successfully!" });
       queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
-    onError: (error) => {
-      toast({
-        title: "Error deleting clinic",
-        description: error.message,
-        variant: "destructive",
-      });
+    onError: () => {
+      toast({ title: "Error deleting clinic", variant: "destructive" });
     },
   });
 
   const resetForm = () => {
-    setClinicData({
-      title: '',
-      description: '',
-      date: '',
-      endDate: '',
-      location: '',
-      maxParticipants: 12,
-      price: 0,
-      level: 'intermediate',
-      type: 'dressage',
-      image: '',
+    setFormData({
+      title: "",
+      description: "",
+      date: "",
+      endDate: "",
+      location: "",
+      price: "",
+      maxParticipants: "12",
+      type: "dressage",
+      level: "intermediate",
+      image: "",
       isActive: true
     });
   };
 
   const handleEdit = (clinic: Clinic) => {
     setEditingClinic(clinic);
-    setClinicData({
+    setFormData({
       title: clinic.title,
       description: clinic.description,
-      date: new Date(clinic.date).toISOString().split('T')[0],
-      endDate: new Date(clinic.endDate).toISOString().split('T')[0],
+      date: clinic.date.toISOString().split('T')[0],
+      endDate: clinic.endDate ? clinic.endDate.toISOString().split('T')[0] : "",
       location: clinic.location,
-      maxParticipants: clinic.maxParticipants,
-      price: clinic.price,
-      level: clinic.level,
+      price: clinic.price.toString(),
+      maxParticipants: clinic.maxParticipants.toString(),
       type: clinic.type,
+      level: clinic.level,
       image: clinic.image,
       isActive: clinic.isActive
     });
   };
 
   const handleSave = () => {
-    if (!clinicData.title || !clinicData.description || !clinicData.date || 
-        !clinicData.location || !clinicData.price) {
-      toast({
-        title: "Please fill in all required fields",
-        variant: "destructive",
-      });
+    if (!formData.title || !formData.description || !formData.date || 
+        !formData.location || !formData.price) {
+      toast({ title: "Please fill in all required fields", variant: "destructive" });
       return;
     }
 
     const submitData = {
-      ...clinicData,
-      date: new Date(clinicData.date),
-      endDate: clinicData.endDate ? new Date(clinicData.endDate) : new Date(clinicData.date),
-      price: Number(clinicData.price),
-      maxParticipants: Number(clinicData.maxParticipants)
+      ...formData,
+      date: new Date(formData.date),
+      endDate: formData.endDate ? new Date(formData.endDate) : new Date(formData.date),
+      price: Number(formData.price),
+      maxParticipants: Number(formData.maxParticipants)
     };
 
     if (editingClinic) {
       updateMutation.mutate({ id: editingClinic.id, ...submitData });
     } else {
       createMutation.mutate(submitData);
+    }
+  };
+
+  const handleDelete = (id: number) => {
+    if (confirm("Are you sure you want to delete this clinic?")) {
+      deleteMutation.mutate(id);
     }
   };
 
@@ -177,278 +155,191 @@ export default function AdminClinics() {
     }).format(date);
   };
 
-  const formatPrice = (price: number) => {
-    return `£${(price / 100).toFixed(2)}`;
-  };
-
-  const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'beginner': return 'bg-green-100 text-green-800 hover:bg-green-200';
-      case 'intermediate': return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
-      case 'advanced': return 'bg-purple-100 text-purple-800 hover:bg-purple-200';
-      default: return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
       <Navigation />
       
-      <div className="pt-24 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-4xl font-playfair font-bold text-navy mb-4">Clinic Management</h1>
-              <div className="w-24 h-1 bg-orange"></div>
+              <h1 className="text-4xl font-bold text-navy dark:text-white mb-2">Clinic Management</h1>
+              <p className="text-slate-600 dark:text-slate-300">Manage your upcoming clinics and events</p>
             </div>
-            <Button 
-              onClick={() => setIsCreateOpen(true)}
-              className="bg-navy hover:bg-slate-800 text-white"
-            >
+            <Button onClick={() => setIsCreateOpen(true)} className="bg-navy hover:bg-slate-800">
               <Plus className="w-4 h-4 mr-2" />
-              Add New Clinic
+              Create New Clinic
             </Button>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6">
             {clinics.map((clinic) => (
-              <Card key={clinic.id} className="overflow-hidden">
-                <div className="relative">
-                  <img 
-                    src={clinic.image}
-                    alt={clinic.title}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <Badge className={getLevelColor(clinic.level)}>
-                      {clinic.level.charAt(0).toUpperCase() + clinic.level.slice(1)}
-                    </Badge>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <Badge variant={clinic.isActive ? "default" : "secondary"}>
-                      {clinic.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                  </div>
-                </div>
-                
+              <Card key={clinic.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
-                  <CardTitle className="text-xl font-playfair text-navy">{clinic.title}</CardTitle>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-xl text-navy dark:text-white">{clinic.title}</CardTitle>
+                      <div className="flex items-center gap-4 mt-2 text-sm text-slate-600 dark:text-slate-300">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-4 h-4" />
+                          {formatDate(clinic.date)}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-4 h-4" />
+                          {clinic.location}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Euro className="w-4 h-4" />
+                          €{clinic.price}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Users className="w-4 h-4" />
+                          {clinic.maxParticipants} max
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={clinic.isActive ? "default" : "secondary"}>
+                        {clinic.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                      <Badge variant="outline">{clinic.category}</Badge>
+                    </div>
+                  </div>
                 </CardHeader>
-                
-                <CardContent className="space-y-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>{formatDate(clinic.date)}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span>{clinic.location}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Users className="w-4 h-4 mr-2" />
-                    <span>{clinic.currentParticipants}/{clinic.maxParticipants} participants</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Euro className="w-4 h-4 mr-2" />
-                    <span className="font-bold text-orange">{formatPrice(clinic.price)}</span>
-                  </div>
-                  
-                  <div className="flex gap-2 pt-4">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(clinic)}
-                      className="flex-1"
-                    >
+                <CardContent>
+                  <p className="text-slate-600 dark:text-slate-300 mb-4">{clinic.description}</p>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={() => handleEdit(clinic)}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => window.open(`/admin/clinics/${clinic.id}/registrations`, '_blank')}
-                      className="flex-1"
-                    >
-                      <Eye className="w-4 h-4 mr-1" />
-                      View
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => {
-                        if (confirm('Are you sure you want to delete this clinic?')) {
-                          deleteMutation.mutate(clinic.id);
-                        }
-                      }}
-                    >
-                      <Trash2 className="w-4 h-4" />
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(clinic.id)}>
+                      <Trash2 className="w-4 h-4 mr-1" />
+                      Delete
                     </Button>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          {clinics.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No clinics created yet. Add your first clinic to get started!</p>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Create/Edit Dialog */}
-      <Dialog open={isCreateOpen || editingClinic !== null} onOpenChange={(open) => {
+      <Dialog open={isCreateOpen || !!editingClinic} onOpenChange={(open) => {
         if (!open) {
           setIsCreateOpen(false);
           setEditingClinic(null);
           resetForm();
         }
       }}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-playfair text-navy">
-              {editingClinic ? 'Edit Clinic' : 'Create New Clinic'}
-            </DialogTitle>
+            <DialogTitle>{editingClinic ? 'Edit Clinic' : 'Create New Clinic'}</DialogTitle>
             <DialogDescription>
               {editingClinic ? 'Update the clinic details below.' : 'Fill in the details for your new clinic.'}
             </DialogDescription>
           </DialogHeader>
           
-          <div className="grid gap-6 py-4">
-            <div>
-              <Label htmlFor="title">Clinic Title *</Label>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Title *</Label>
               <Input
                 id="title"
-                value={clinicData.title}
-                onChange={(e) => setClinicData(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="Advanced Dressage Clinic"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="e.g., Advanced Dressage Clinic"
               />
             </div>
             
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="description">Description *</Label>
               <Textarea
                 id="description"
-                value={clinicData.description}
-                onChange={(e) => setClinicData(prev => ({ ...prev, description: e.target.value }))}
-                placeholder="Detailed description of what the clinic covers..."
-                rows={4}
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Describe what participants will learn..."
+                rows={3}
               />
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="date">Start Date *</Label>
                 <Input
                   id="date"
                   type="date"
-                  value={clinicData.date}
-                  onChange={(e) => setClinicData(prev => ({ ...prev, date: e.target.value }))}
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                 />
               </div>
-              <div>
+              <div className="grid gap-2">
                 <Label htmlFor="endDate">End Date</Label>
                 <Input
                   id="endDate"
                   type="date"
-                  value={clinicData.endDate}
-                  onChange={(e) => setClinicData(prev => ({ ...prev, endDate: e.target.value }))}
+                  value={formData.endDate}
+                  onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                 />
               </div>
             </div>
             
-            <div>
+            <div className="grid gap-2">
               <Label htmlFor="location">Location *</Label>
               <Input
                 id="location"
-                value={clinicData.location}
-                onChange={(e) => setClinicData(prev => ({ ...prev, location: e.target.value }))}
-                placeholder="Training facility, City, Country"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                placeholder="e.g., Dan Bizzarro Training Center"
               />
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              <div>
+              <div className="grid gap-2">
+                <Label htmlFor="price">Price (€) *</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  placeholder="150"
+                />
+              </div>
+              <div className="grid gap-2">
                 <Label htmlFor="maxParticipants">Max Participants</Label>
                 <Input
                   id="maxParticipants"
                   type="number"
-                  value={clinicData.maxParticipants}
-                  onChange={(e) => setClinicData(prev => ({ ...prev, maxParticipants: parseInt(e.target.value) }))}
-                  min="1"
-                  max="50"
-                />
-              </div>
-              <div>
-                <Label htmlFor="price">Price (in pence) *</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={clinicData.price}
-                  onChange={(e) => setClinicData(prev => ({ ...prev, price: parseInt(e.target.value) }))}
-                  placeholder="25000 for £250.00"
+                  value={formData.maxParticipants}
+                  onChange={(e) => setFormData({ ...formData, maxParticipants: e.target.value })}
                 />
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="level">Level</Label>
-                <Select value={clinicData.level} onValueChange={(value) => setClinicData(prev => ({ ...prev, level: value }))}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="type">Type</Label>
-                <Select value={clinicData.type} onValueChange={(value) => setClinicData(prev => ({ ...prev, type: value }))}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="dressage">Dressage</SelectItem>
-                    <SelectItem value="jumping">Show Jumping</SelectItem>
-                    <SelectItem value="cross-country">Cross Country</SelectItem>
-                    <SelectItem value="full-day">Full Day</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <div>
-              <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                value={clinicData.image}
-                onChange={(e) => setClinicData(prev => ({ ...prev, image: e.target.value }))}
-                placeholder="https://example.com/image.jpg"
-              />
+            <div className="grid gap-2">
+              <Label htmlFor="category">Category</Label>
+              <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dressage">Dressage</SelectItem>
+                  <SelectItem value="jumping">Show Jumping</SelectItem>
+                  <SelectItem value="cross-country">Cross Country</SelectItem>
+                  <SelectItem value="eventing">Eventing</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsCreateOpen(false);
-                setEditingClinic(null);
-                resetForm();
-              }}
-            >
+            <Button variant="outline" onClick={() => {
+              setIsCreateOpen(false);
+              setEditingClinic(null);
+              resetForm();
+            }}>
               Cancel
             </Button>
-            <Button
-              onClick={handleSave}
-              disabled={createMutation.isPending || updateMutation.isPending}
-              className="bg-navy hover:bg-slate-800 text-white"
-            >
+            <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending}>
               {createMutation.isPending || updateMutation.isPending ? 'Saving...' : 'Save Clinic'}
             </Button>
           </DialogFooter>
