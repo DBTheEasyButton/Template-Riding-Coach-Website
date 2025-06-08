@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema } from "@shared/schema";
+import { insertContactSchema, insertClinicRegistrationSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all achievements
@@ -46,6 +46,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating contact:", error);
       res.status(400).json({ message: "Invalid contact data" });
+    }
+  });
+
+  // Get all clinics
+  app.get("/api/clinics", async (req, res) => {
+    try {
+      const clinics = await storage.getAllClinics();
+      res.json(clinics);
+    } catch (error) {
+      console.error("Error fetching clinics:", error);
+      res.status(500).json({ message: "Failed to fetch clinics" });
+    }
+  });
+
+  // Get specific clinic
+  app.get("/api/clinics/:id", async (req, res) => {
+    try {
+      const clinic = await storage.getClinic(parseInt(req.params.id));
+      if (!clinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+      res.json(clinic);
+    } catch (error) {
+      console.error("Error fetching clinic:", error);
+      res.status(500).json({ message: "Failed to fetch clinic" });
+    }
+  });
+
+  // Register for clinic
+  app.post("/api/clinics/:id/register", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.id);
+      const registrationData = insertClinicRegistrationSchema.parse({
+        ...req.body,
+        clinicId
+      });
+      
+      const clinic = await storage.getClinic(clinicId);
+      if (!clinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+      
+      if (clinic.currentParticipants >= clinic.maxParticipants) {
+        return res.status(400).json({ message: "Clinic is full" });
+      }
+      
+      const registration = await storage.createClinicRegistration(registrationData);
+      res.status(201).json(registration);
+    } catch (error) {
+      console.error("Error creating clinic registration:", error);
+      res.status(400).json({ message: "Invalid registration data" });
+    }
+  });
+
+  // Get all training videos
+  app.get("/api/training-videos", async (req, res) => {
+    try {
+      const { category } = req.query;
+      let videos;
+      
+      if (category && typeof category === 'string') {
+        videos = await storage.getTrainingVideosByCategory(category);
+      } else {
+        videos = await storage.getAllTrainingVideos();
+      }
+      
+      res.json(videos);
+    } catch (error) {
+      console.error("Error fetching training videos:", error);
+      res.status(500).json({ message: "Failed to fetch training videos" });
+    }
+  });
+
+  // Update video view count
+  app.post("/api/training-videos/:id/view", async (req, res) => {
+    try {
+      const videoId = parseInt(req.params.id);
+      await storage.updateVideoViewCount(videoId);
+      res.status(200).json({ message: "View count updated" });
+    } catch (error) {
+      console.error("Error updating view count:", error);
+      res.status(500).json({ message: "Failed to update view count" });
     }
   });
 

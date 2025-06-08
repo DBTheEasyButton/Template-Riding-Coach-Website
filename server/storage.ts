@@ -340,9 +340,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateVideoViewCount(id: number): Promise<void> {
-    await db.update(trainingVideos)
-      .set({ viewCount: trainingVideos.viewCount + 1 })
-      .where(eq(trainingVideos.id, id));
+    const [video] = await db.select().from(trainingVideos).where(eq(trainingVideos.id, id));
+    if (video) {
+      await db.update(trainingVideos)
+        .set({ viewCount: video.viewCount + 1 })
+        .where(eq(trainingVideos.id, id));
+    }
   }
 }
 
