@@ -48,19 +48,16 @@ export default function CoachingSection() {
             <div>
               <h3 className="text-3xl font-playfair font-bold mb-6 text-navy">Why Train with Dan?</h3>
               <p className="text-lg text-dark leading-relaxed mb-6 font-medium">
-                Dan's coaching philosophy focuses on building a strong foundation in horsemanship and technique, 
-                tailored to each rider's individual goals and experience level. His approach combines classical 
-                training methods with modern competition strategies.
+                With over 20 years of international competition experience and a big passion for helping other riders communicate better with their horses as well as achieving great results, Dan brings unparalleled expertise to every training session. His proven methodology has helped riders at all levels achieve their competitive goals.
               </p>
               <p className="text-lg text-dark leading-relaxed font-medium">
-                From beginner riders developing their seat and balance to advanced competitors preparing for 
-                international events, Dan provides personalized instruction that builds confidence and delivers results.
+                Whether you're just starting your equestrian journey or aiming for international competition, Dan's personalized approach ensures every rider reaches their full potential.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="bg-navy/10 rounded-xl p-4 text-center">
-                <div className="text-2xl font-bold text-orange">17+</div>
-                <div className="text-sm text-dark">Years Professional</div>
+                <div className="text-2xl font-bold text-orange">20+</div>
+                <div className="text-sm text-dark">Years Experience</div>
               </div>
               <div className="bg-navy/10 rounded-xl p-4 text-center">
                 <div className="text-2xl font-bold text-orange">2014</div>
