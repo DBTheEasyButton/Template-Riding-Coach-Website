@@ -10,11 +10,11 @@ export default function ScheduleSection() {
   const upcomingEvents = events.filter(e => e.type === 'upcoming').slice(0, 3);
   const recentEvents = events.filter(e => e.type === 'completed').slice(0, 3);
 
-  const formatDate = (date: string) => {
+  const formatDate = (date: string | Date) => {
     const d = new Date(date);
     return {
       day: d.getDate().toString().padStart(2, '0'),
-      month: d.toLocaleLowerCase().substring(0, 3).toUpperCase()
+      month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
     };
   };
 
