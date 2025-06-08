@@ -29,22 +29,12 @@ export default function HeroSection() {
         <h2 className="text-2xl md:text-3xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.4s'}}>
           International Event Rider & Coach
         </h2>
-        <p className="text-xl md:text-2xl mb-12 opacity-0 animate-fade-in-up font-light leading-relaxed" style={{animationDelay: '0.6s'}}>
-          Representing Italy on the world's most prestigious equestrian stages
-        </p>
-        <div className="flex flex-col sm:flex-row gap-6 justify-center opacity-0 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
+        <div className="flex justify-center opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
           <Button 
-            onClick={() => scrollToSection('#achievements')}
-            className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+            onClick={() => scrollToSection('#coaching')}
+            className="bg-orange hover:bg-orange/90 text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
           >
-            View Achievements
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={() => scrollToSection('#contact')}
-            className="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
-          >
-            Get In Touch
+            BOOK A LESSON/CLINIC
           </Button>
         </div>
       </div>
