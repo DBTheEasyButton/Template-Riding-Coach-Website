@@ -145,12 +145,12 @@ export default function TrainingVideosSection() {
               </div>
               
               <CardHeader>
-                <CardTitle className="text-lg font-playfair text-forest line-clamp-2">{video.title}</CardTitle>
-                <CardDescription className="text-gray-600 line-clamp-3">{video.description}</CardDescription>
+                <CardTitle className="text-lg font-playfair text-forest line-clamp-2 font-bold">{video.title}</CardTitle>
+                <CardDescription className="text-gray-700 line-clamp-3 font-medium">{video.description}</CardDescription>
               </CardHeader>
               
               <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-gray-700 font-medium">
                   <div className="flex items-center">
                     <Eye className="w-4 h-4 mr-1" />
                     <span>{video.viewCount} views</span>

@@ -153,25 +153,25 @@ export default function ClinicsSection() {
               
               <CardHeader>
                 <CardTitle className="text-xl font-playfair text-forest">{clinic.title}</CardTitle>
-                <CardDescription className="text-gray-600">{clinic.description}</CardDescription>
+                <CardDescription className="text-gray-700 font-medium">{clinic.description}</CardDescription>
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-700 font-medium">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{formatDate(clinic.date)}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-700 font-medium">
                   <MapPin className="w-4 h-4 mr-2" />
                   <span>{clinic.location}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-700 font-medium">
                   <Users className="w-4 h-4 mr-2" />
                   <span>{clinic.currentParticipants}/{clinic.maxParticipants} participants</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
+                <div className="flex items-center text-sm text-gray-700">
                   <Euro className="w-4 h-4 mr-2" />
-                  <span className="font-semibold text-lg text-forest">{formatPrice(clinic.price)}</span>
+                  <span className="font-bold text-xl text-forest">{formatPrice(clinic.price)}</span>
                 </div>
               </CardContent>
               
