@@ -163,6 +163,19 @@ export default function AdminClinics() {
     }
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Create a preview URL for the image
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageDataUrl = event.target?.result as string;
+        setFormData({ ...formData, image: imageDataUrl });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleEdit = (clinic: Clinic) => {
     setEditingClinic(clinic);
     setFormData({
@@ -559,13 +572,21 @@ export default function AdminClinics() {
             )}
             
             <div className="grid gap-2">
-              <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                placeholder="https://example.com/clinic-image.jpg"
-              />
+              <Label htmlFor="image">Clinic Image</Label>
+              <div className="space-y-2">
+                <Input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {formData.image && (
+                  <div className="mt-2">
+                    <img src={formData.image} alt="Preview" className="w-24 h-24 object-cover rounded-lg border" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           
