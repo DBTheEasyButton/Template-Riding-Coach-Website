@@ -31,7 +31,7 @@ export default function AboutSection() {
           </div>
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1560807707-8cc77767d783?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=1000&q=80" 
+              src="https://www.dbeventing.co.uk/wp-content/uploads/2020/01/Dan-Bizzarro-profile.jpg" 
               alt="Professional portrait of Dan Bizzarro in equestrian attire" 
               className="rounded-2xl shadow-2xl w-full h-auto object-cover"
             />

@@ -23,7 +23,7 @@ export default function NewsSection() {
       id: 1,
       title: "Badminton Preparation Underway",
       excerpt: "Dan and Castello Primo are putting the finishing touches on their preparation for this year's Badminton Horse Trials, with final training sessions showing promising form...",
-      image: "https://images.unsplash.com/photo-1553284966-19b8815c7817?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
+      image: "https://www.dbeventing.co.uk/wp-content/uploads/2023/04/dan-bizzarro-badminton-prep.jpg",
       publishedAt: "2024-03-25",
       slug: "badminton-preparation-underway"
     },
@@ -31,7 +31,7 @@ export default function NewsSection() {
       id: 2,
       title: "New Training Facility Opens",
       excerpt: "The new state-of-the-art training facility in Tuscany officially opened this week, featuring world-class amenities for both horse and rider development...",
-      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
+      image: "https://www.dbeventing.co.uk/wp-content/uploads/2023/03/training-facility-tuscany.jpg",
       publishedAt: "2024-03-20",
       slug: "new-training-facility-opens"
     },
@@ -39,7 +39,7 @@ export default function NewsSection() {
       id: 3,
       title: "Awarded Rider of the Year",
       excerpt: "Dan has been honored with the prestigious International Eventing Rider of the Year award for his outstanding performances throughout the 2023 season...",
-      image: "https://images.unsplash.com/photo-1586521995568-39abaa0c2311?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
+      image: "https://www.dbeventing.co.uk/wp-content/uploads/2023/12/dan-bizzarro-award-ceremony.jpg",
       publishedAt: "2024-03-15",
       slug: "awarded-rider-of-the-year"
     }
