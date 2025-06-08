@@ -28,7 +28,7 @@ import {
   type InsertTrainingVideo
 } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -313,7 +313,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllContacts(): Promise<Contact[]> {
-    return await db.select().from(contacts).orderBy(contacts.createdAt);
+    return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
   }
 
   async getAllClinics(): Promise<Clinic[]> {
