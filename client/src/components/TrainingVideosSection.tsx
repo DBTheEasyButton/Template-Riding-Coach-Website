@@ -79,7 +79,7 @@ export default function TrainingVideosSection() {
   );
 
   return (
-    <section id="training-videos" className="py-24 bg-gray-50">
+    <section id="training-videos" className="py-24 bg-light-grey">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Training Videos</h2>
