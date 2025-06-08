@@ -1,4 +1,5 @@
 import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
+import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
 
 export default function Footer() {
   const scrollToSection = (href: string) => {
@@ -9,25 +10,29 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-charcoal text-white py-12">
+    <footer className="bg-navy text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-playfair font-bold mb-4">Dan Bizzarro</h3>
-            <p className="text-gray-300 mb-6 leading-relaxed">
+            <img 
+              src={logoPath} 
+              alt="Dan Bizzarro Eventing" 
+              className="h-16 w-auto mb-4"
+            />
+            <p className="text-slate-300 mb-6 leading-relaxed">
               International event rider representing Italy with passion, precision, and dedication to the sport of three-day eventing.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-italian-red transition-colors">
+              <a href="#" className="text-gray-400 hover:text-orange transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-italian-red transition-colors">
+              <a href="#" className="text-gray-400 hover:text-orange transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-italian-red transition-colors">
+              <a href="#" className="text-gray-400 hover:text-orange transition-colors">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-italian-red transition-colors">
+              <a href="#" className="text-gray-400 hover:text-orange transition-colors">
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
@@ -38,7 +43,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => scrollToSection('#about')}
-                  className="text-gray-300 hover:text-italian-red transition-colors"
+                  className="text-gray-300 hover:text-orange transition-colors"
                 >
                   About
                 </button>
@@ -46,7 +51,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => scrollToSection('#achievements')}
-                  className="text-gray-300 hover:text-italian-red transition-colors"
+                  className="text-gray-300 hover:text-orange transition-colors"
                 >
                   Achievements
                 </button>
@@ -54,7 +59,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => scrollToSection('#schedule')}
-                  className="text-gray-300 hover:text-italian-red transition-colors"
+                  className="text-gray-300 hover:text-orange transition-colors"
                 >
                   Schedule
                 </button>
@@ -62,7 +67,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => scrollToSection('#gallery')}
-                  className="text-gray-300 hover:text-italian-red transition-colors"
+                  className="text-gray-300 hover:text-orange transition-colors"
                 >
                   Gallery
                 </button>
@@ -70,7 +75,7 @@ export default function Footer() {
               <li>
                 <button 
                   onClick={() => scrollToSection('#news')}
-                  className="text-gray-300 hover:text-italian-red transition-colors"
+                  className="text-gray-300 hover:text-orange transition-colors"
                 >
                   News
                 </button>

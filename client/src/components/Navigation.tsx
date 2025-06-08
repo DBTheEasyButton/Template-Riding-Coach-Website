@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,7 +44,11 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-playfair font-bold text-forest">Dan Bizzarro</h1>
+            <img 
+              src={logoPath} 
+              alt="Dan Bizzarro Eventing" 
+              className="h-12 w-auto"
+            />
           </div>
           
           <div className="hidden md:block">
