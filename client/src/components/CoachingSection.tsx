@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Award, Users, Target, Star, Video, Smartphone } from "lucide-react";
+import coachingImage1 from "@assets/1_1749388256611.jpg";
+import coachingImage2 from "@assets/2_1749388256612.jpg";
 
 export default function CoachingSection() {
   const scrollToSection = (href: string) => {
@@ -50,6 +52,9 @@ export default function CoachingSection() {
               <p className="text-lg text-dark leading-relaxed mb-6 font-medium">
                 With over 20 years of international competition experience and a big passion for helping other riders communicate better with their horses as well as achieving great results, Dan brings unparalleled expertise to every training session. His proven methodology has helped riders at all levels achieve their competitive goals.
               </p>
+              <p className="text-lg text-dark leading-relaxed mb-6 font-medium">
+                Dan offers comprehensive instruction across all three eventing disciplines: <strong>flat work</strong> for foundation and dressage development, <strong>jumping</strong> for technique and confidence, and <strong>cross-country</strong> for boldness and precision over natural obstacles.
+              </p>
               <p className="text-lg text-dark leading-relaxed font-medium">
                 Whether you're just starting your equestrian journey or aiming for international competition, Dan's personalized approach ensures every rider reaches their full potential.
               </p>
@@ -74,18 +79,36 @@ export default function CoachingSection() {
             </div>
           </div>
           
-          <div className="relative">
-            <img 
-              src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80" 
-              alt="Dan Bizzarro coaching a student" 
-              className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-            />
-            <div className="absolute -bottom-6 -left-6 bg-orange text-white p-6 rounded-xl shadow-xl">
-              <div className="flex items-center space-x-3">
-                <Award className="text-2xl" />
-                <div>
-                  <div className="font-semibold">Professional Coach</div>
-                  <div className="text-sm opacity-80">International Level</div>
+          <div className="space-y-6">
+            <div className="relative">
+              <img 
+                src={coachingImage1} 
+                alt="Dan Bizzarro coaching flat work - personalized instruction in the arena" 
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+              />
+              <div className="absolute -bottom-6 -left-6 bg-orange text-white p-6 rounded-xl shadow-xl">
+                <div className="flex items-center space-x-3">
+                  <Award className="text-2xl" />
+                  <div>
+                    <div className="font-semibold">Flat Work Specialist</div>
+                    <div className="text-sm opacity-80">Dressage & Groundwork</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <img 
+                src={coachingImage2} 
+                alt="Dan Bizzarro coaching cross-country - group instruction at training obstacles" 
+                className="rounded-2xl shadow-xl w-full h-auto object-cover"
+              />
+              <div className="absolute -bottom-6 -right-6 bg-navy text-white p-6 rounded-xl shadow-xl">
+                <div className="flex items-center space-x-3">
+                  <Target className="text-2xl" />
+                  <div>
+                    <div className="font-semibold">Cross Country Expert</div>
+                    <div className="text-sm opacity-80">Jumping & Technique</div>
+                  </div>
                 </div>
               </div>
             </div>
