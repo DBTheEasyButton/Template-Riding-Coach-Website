@@ -1,3 +1,5 @@
+import danPhotoPath from "@assets/13_1749386080915.jpg";
+
 export default function AboutSection() {
   return (
     <section id="about" className="py-24 bg-white">
@@ -40,8 +42,8 @@ export default function AboutSection() {
           </div>
           <div className="relative">
             <img 
-              src="https://www.dbeventing.co.uk/wp-content/uploads/2020/01/Dan-Bizzarro-profile.jpg" 
-              alt="Professional portrait of Dan Bizzarro in equestrian attire" 
+              src={danPhotoPath} 
+              alt="Dan Bizzarro with his horse - authentic photo showing the professional bond between rider and mount" 
               className="rounded-2xl shadow-2xl w-full h-auto object-cover"
             />
             <div className="absolute -bottom-6 -right-6 bg-navy text-white p-6 rounded-xl shadow-xl">
