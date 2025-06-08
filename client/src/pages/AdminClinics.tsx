@@ -32,18 +32,17 @@ export default function AdminClinics() {
     image: "",
     isActive: true,
     hasMultipleSessions: false,
-    clinicType: "single"
+    clinicType: "single",
+    crossCountryMaxParticipants: "12",
+    showJumpingMaxParticipants: "12"
   });
 
   const [sessions, setSessions] = useState([
     {
       sessionName: "",
-      startTime: "09:00",
-      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 12,
       requirements: ""
     }
   ]);
@@ -116,16 +115,15 @@ export default function AdminClinics() {
       image: "",
       isActive: true,
       hasMultipleSessions: false,
-      clinicType: "single"
+      clinicType: "single",
+      crossCountryMaxParticipants: "12",
+      showJumpingMaxParticipants: "12"
     });
     setSessions([{
       sessionName: "",
-      startTime: "09:00",
-      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 12,
       requirements: ""
     }]);
   };
@@ -133,12 +131,9 @@ export default function AdminClinics() {
   const addSession = () => {
     setSessions([...sessions, {
       sessionName: "",
-      startTime: "09:00",
-      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 12,
       requirements: ""
     }]);
   };
@@ -183,7 +178,9 @@ export default function AdminClinics() {
       image: clinic.image,
       isActive: clinic.isActive,
       hasMultipleSessions: clinic.hasMultipleSessions || false,
-      clinicType: clinic.clinicType || "single"
+      clinicType: clinic.clinicType || "single",
+      crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
+      showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
     });
   };
 
@@ -501,23 +498,7 @@ export default function AdminClinics() {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-3">
-                      <div className="grid gap-2">
-                        <Label>Start Time</Label>
-                        <Input
-                          type="time"
-                          value={session.startTime}
-                          onChange={(e) => updateSession(index, 'startTime', e.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>End Time</Label>
-                        <Input
-                          type="time"
-                          value={session.endTime}
-                          onChange={(e) => updateSession(index, 'endTime', e.target.value)}
-                        />
-                      </div>
+                    <div className="grid grid-cols-2 gap-3">
                       <div className="grid gap-2">
                         <Label>Skill Level</Label>
                         <Select value={session.skillLevel} onValueChange={(value) => updateSession(index, 'skillLevel', value)}>
@@ -531,23 +512,12 @@ export default function AdminClinics() {
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
                       <div className="grid gap-2">
                         <Label>Price (€)</Label>
                         <Input
                           type="number"
                           value={session.price}
                           onChange={(e) => updateSession(index, 'price', Number(e.target.value))}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>Max Participants</Label>
-                        <Input
-                          type="number"
-                          value={session.maxParticipants}
-                          onChange={(e) => updateSession(index, 'maxParticipants', Number(e.target.value))}
                         />
                       </div>
                     </div>
