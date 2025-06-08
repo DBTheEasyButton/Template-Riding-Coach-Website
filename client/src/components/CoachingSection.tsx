@@ -106,8 +106,8 @@ export default function CoachingSection() {
                 <div className="flex items-center space-x-3">
                   <Target className="text-2xl" />
                   <div>
-                    <div className="font-semibold">Cross Country Expert</div>
-                    <div className="text-sm opacity-80">Jumping & Technique</div>
+                    <div className="font-semibold">Cross country lessons</div>
+                    <div className="text-sm opacity-80">Natural obstacles & boldness</div>
                   </div>
                 </div>
               </div>
