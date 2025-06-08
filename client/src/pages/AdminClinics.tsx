@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Clinic, InsertClinic } from "@shared/schema";
+import type { Clinic } from "@shared/schema";
 import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro, Eye } from "lucide-react";
 
 export default function AdminClinics() {
@@ -156,11 +156,11 @@ export default function AdminClinics() {
 
     const submitData = {
       ...clinicData,
-      date: new Date(clinicData.date!),
-      endDate: clinicData.endDate ? new Date(clinicData.endDate) : new Date(clinicData.date!),
+      date: new Date(clinicData.date),
+      endDate: clinicData.endDate ? new Date(clinicData.endDate) : new Date(clinicData.date),
       price: Number(clinicData.price),
       maxParticipants: Number(clinicData.maxParticipants)
-    } as InsertClinic;
+    };
 
     if (editingClinic) {
       updateMutation.mutate({ id: editingClinic.id, ...submitData });
