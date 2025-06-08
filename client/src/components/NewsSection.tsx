@@ -51,9 +51,9 @@ export default function NewsSection() {
     <section id="news" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-playfair font-bold text-forest mb-6">Latest News</h2>
-          <div className="w-24 h-1 bg-italian-red mx-auto mb-8"></div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Latest News</h2>
+          <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          <p className="text-xl text-dark max-w-3xl mx-auto">
             Stay updated with Dan's latest competitions, training insights, and equestrian journey
           </p>
         </div>
