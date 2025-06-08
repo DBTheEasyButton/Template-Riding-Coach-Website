@@ -48,13 +48,13 @@ export default function CoachingSection() {
             <div>
               <h3 className="text-3xl font-playfair font-bold mb-6 text-navy">Why Train with Dan?</h3>
               <p className="text-lg text-dark leading-relaxed mb-6 font-medium">
-                With over 15 years of international competition experience and Olympic short-listing, 
-                Dan brings unparalleled expertise to every training session. His proven methodology has 
-                helped riders at all levels achieve their competitive goals.
+                Dan's coaching philosophy focuses on building a strong foundation in horsemanship and technique, 
+                tailored to each rider's individual goals and experience level. His approach combines classical 
+                training methods with modern competition strategies.
               </p>
               <p className="text-lg text-dark leading-relaxed font-medium">
-                Whether you're just starting your equestrian journey or aiming for international competition, 
-                Dan's personalized approach ensures every rider reaches their full potential.
+                From beginner riders developing their seat and balance to advanced competitors preparing for 
+                international events, Dan provides personalized instruction that builds confidence and delivers results.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-6">
