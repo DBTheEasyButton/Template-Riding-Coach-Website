@@ -36,31 +36,31 @@ export default function ScheduleSection() {
     <section id="schedule" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-playfair font-bold text-forest mb-6">Competition Schedule</h2>
-          <div className="w-24 h-1 bg-italian-red mx-auto mb-8"></div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Competition Schedule</h2>
+          <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          <p className="text-xl text-dark max-w-3xl mx-auto">
             Follow Dan's journey through the world's most prestigious equestrian competitions
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-gradient-to-br from-ivory to-white rounded-2xl p-8 border border-gray-100 shadow-lg">
-            <h3 className="text-2xl font-playfair font-bold text-forest mb-6">Upcoming Events</h3>
+          <div className="bg-gradient-to-br from-cream to-white rounded-2xl p-8 border border-gray-100 shadow-lg">
+            <h3 className="text-2xl font-playfair font-bold text-navy mb-6">Upcoming Events</h3>
             <div className="space-y-6">
               {upcomingEvents.length > 0 ? (
                 upcomingEvents.map((event, index) => {
                   const dateInfo = formatDate(event.date.toString());
                   return (
                     <div key={index} className="flex items-start space-x-4 p-4 bg-white rounded-xl shadow-sm">
-                      <div className="bg-italian-red text-white rounded-lg p-2 text-center min-w-[60px]">
+                      <div className="bg-orange text-white rounded-lg p-2 text-center min-w-[60px]">
                         <div className="text-lg font-bold">{dateInfo.day}</div>
                         <div className="text-xs">{dateInfo.month}</div>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-forest">{event.title}</h4>
-                        <p className="text-gray-600 text-sm">{event.location} • {event.level}</p>
+                        <h4 className="font-semibold text-navy">{event.title}</h4>
+                        <p className="text-medium text-sm">{event.location} • {event.level}</p>
                         {event.horse && (
-                          <div className="flex items-center mt-2 text-xs text-italian-red">
+                          <div className="flex items-center mt-2 text-xs text-orange">
                             <i className="fas fa-horse mr-1"></i>
                             <span>Riding: {event.horse}</span>
                           </div>

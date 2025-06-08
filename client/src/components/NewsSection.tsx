@@ -60,20 +60,20 @@ export default function NewsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsToDisplay.map((article, index) => (
-            <article key={article.id || index} className="bg-gradient-to-br from-ivory to-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <article key={article.id || index} className="bg-gradient-to-br from-cream to-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <img 
                 src={article.image}
                 alt={article.title}
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
-                <div className="flex items-center text-sm text-gray-500 mb-3">
+                <div className="flex items-center text-sm text-medium mb-3">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{formatDate(article.publishedAt)}</span>
                 </div>
-                <h3 className="text-xl font-playfair font-bold text-forest mb-3">{article.title}</h3>
-                <p className="text-gray-600 mb-4">{article.excerpt}</p>
-                <button className="text-italian-red hover:text-red-700 font-medium flex items-center transition-colors duration-200">
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">{article.title}</h3>
+                <p className="text-dark mb-4">{article.excerpt}</p>
+                <button className="text-orange hover:text-orange/80 font-medium flex items-center transition-colors duration-200">
                   Read More <ArrowRight className="w-4 h-4 ml-2" />
                 </button>
               </div>
@@ -82,7 +82,7 @@ export default function NewsSection() {
         </div>
 
         <div className="text-center mt-12">
-          <Button className="bg-forest hover:bg-green-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105">
+          <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105">
             View All News
           </Button>
         </div>
