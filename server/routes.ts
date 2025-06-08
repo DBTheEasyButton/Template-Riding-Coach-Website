@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, insertClinicRegistrationSchema } from "@shared/schema";
+import { insertContactSchema, insertClinicRegistrationSchema, insertClinicSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all achievements
@@ -97,6 +97,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating clinic registration:", error);
       res.status(400).json({ message: "Invalid registration data" });
+    }
+  });
+
+  // Admin clinic management routes
+  app.get("/api/admin/clinics", async (req, res) => {
+    try {
+      const clinics = await storage.getAllClinics();
+      res.json(clinics);
+    } catch (error) {
+      console.error("Error fetching admin clinics:", error);
+      res.status(500).json({ message: "Failed to fetch clinics" });
+    }
+  });
+
+  app.post("/api/admin/clinics", async (req, res) => {
+    try {
+      const clinicData = req.body;
+      const clinic = await storage.createClinic(clinicData);
+      res.status(201).json(clinic);
+    } catch (error) {
+      console.error("Error creating clinic:", error);
+      res.status(400).json({ message: "Invalid clinic data" });
+    }
+  });
+
+  app.put("/api/admin/clinics/:id", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.id);
+      const updateData = req.body;
+      const updatedClinic = await storage.updateClinic(clinicId, updateData);
+      if (!updatedClinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+      res.json(updatedClinic);
+    } catch (error) {
+      console.error("Error updating clinic:", error);
+      res.status(400).json({ message: "Invalid clinic data" });
+    }
+  });
+
+  app.delete("/api/admin/clinics/:id", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.id);
+      await storage.deleteClinic(clinicId);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting clinic:", error);
+      res.status(500).json({ message: "Failed to delete clinic" });
     }
   });
 
