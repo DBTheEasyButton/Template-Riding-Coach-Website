@@ -60,17 +60,36 @@ export const clinics = pgTable("clinics", {
   location: text("location").notNull(),
   maxParticipants: integer("max_participants").notNull(),
   currentParticipants: integer("current_participants").notNull().default(0),
-  price: integer("price").notNull(), // in cents
+  price: integer("price").notNull(), // in euros
   level: text("level").notNull(), // beginner, intermediate, advanced
   type: text("type").notNull(), // dressage, jumping, cross-country, full-day
   image: text("image").notNull(),
   isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  // Enhanced fields for multi-session support
+  hasMultipleSessions: boolean("has_multiple_sessions").notNull().default(false),
+  clinicType: text("clinic_type").notNull().default("single"), // single, multi-session, combo
+});
+
+export const clinicSessions = pgTable("clinic_sessions", {
+  id: serial("id").primaryKey(),
+  clinicId: integer("clinic_id").notNull().references(() => clinics.id, { onDelete: 'cascade' }),
+  sessionName: text("session_name").notNull(), // "Show Jumping", "Cross Country", "Morning Session", etc.
+  startTime: text("start_time").notNull(), // "09:00"
+  endTime: text("end_time").notNull(), // "12:00"
+  discipline: text("discipline").notNull(), // jumping, cross-country, dressage, polework, gridwork
+  skillLevel: text("skill_level").notNull(), // 70cm/80cm, 90cm, 1m, 1.10m, beginner, intermediate, experienced
+  price: integer("price").notNull(), // in euros
+  maxParticipants: integer("max_participants").notNull(),
+  currentParticipants: integer("current_participants").notNull().default(0),
+  requirements: text("requirements"), // "Own horse required", "Suitable for green horses", etc.
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const clinicRegistrations = pgTable("clinic_registrations", {
   id: serial("id").primaryKey(),
   clinicId: integer("clinic_id").notNull().references(() => clinics.id),
+  sessionId: integer("session_id").references(() => clinicSessions.id), // Optional for backward compatibility
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
