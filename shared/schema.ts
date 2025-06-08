@@ -167,6 +167,14 @@ export const insertClinicSchema = createInsertSchema(clinics).omit({
 export const insertClinicRegistrationSchema = createInsertSchema(clinicRegistrations).omit({
   id: true,
   registeredAt: true,
+}).extend({
+  sessionId: z.number().optional(), // Make sessionId optional for backward compatibility
+});
+
+export const insertClinicSessionSchema = createInsertSchema(clinicSessions).omit({
+  id: true,
+  createdAt: true,
+  currentParticipants: true,
 });
 
 export const insertClinicWaitlistSchema = createInsertSchema(clinicWaitlist).omit({
@@ -198,5 +206,7 @@ export type ClinicRegistration = typeof clinicRegistrations.$inferSelect;
 export type InsertClinicRegistration = z.infer<typeof insertClinicRegistrationSchema>;
 export type ClinicWaitlist = typeof clinicWaitlist.$inferSelect;
 export type InsertClinicWaitlist = z.infer<typeof insertClinicWaitlistSchema>;
+export type ClinicSession = typeof clinicSessions.$inferSelect;
+export type InsertClinicSession = z.infer<typeof insertClinicSessionSchema>;
 export type TrainingVideo = typeof trainingVideos.$inferSelect;
 export type InsertTrainingVideo = z.infer<typeof insertTrainingVideoSchema>;

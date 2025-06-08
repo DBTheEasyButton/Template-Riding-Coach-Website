@@ -30,8 +30,23 @@ export default function AdminClinics() {
     type: "dressage",
     level: "intermediate",
     image: "",
-    isActive: true
+    isActive: true,
+    hasMultipleSessions: false,
+    clinicType: "single"
   });
+
+  const [sessions, setSessions] = useState([
+    {
+      sessionName: "",
+      startTime: "09:00",
+      endTime: "12:00",
+      discipline: "jumping",
+      skillLevel: "90cm",
+      price: 80,
+      maxParticipants: 12,
+      requirements: ""
+    }
+  ]);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -99,8 +114,58 @@ export default function AdminClinics() {
       type: "dressage",
       level: "intermediate",
       image: "",
-      isActive: true
+      isActive: true,
+      hasMultipleSessions: false,
+      clinicType: "single"
     });
+    setSessions([{
+      sessionName: "",
+      startTime: "09:00",
+      endTime: "12:00",
+      discipline: "jumping",
+      skillLevel: "90cm",
+      price: 80,
+      maxParticipants: 12,
+      requirements: ""
+    }]);
+  };
+
+  const addSession = () => {
+    setSessions([...sessions, {
+      sessionName: "",
+      startTime: "09:00",
+      endTime: "12:00",
+      discipline: "jumping",
+      skillLevel: "90cm",
+      price: 80,
+      maxParticipants: 12,
+      requirements: ""
+    }]);
+  };
+
+  const removeSession = (index: number) => {
+    if (sessions.length > 1) {
+      setSessions(sessions.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateSession = (index: number, field: string, value: any) => {
+    const newSessions = [...sessions];
+    newSessions[index] = { ...newSessions[index], [field]: value };
+    setSessions(newSessions);
+  };
+
+  const getSkillLevelOptions = (discipline: string) => {
+    switch (discipline) {
+      case 'jumping':
+      case 'cross-country':
+        return ['70cm/80cm', '90cm', '1m', '1.10m'];
+      case 'polework':
+      case 'gridwork':
+        return ['Beginner', 'Intermediate', 'Experienced'];
+      default:
+        return ['Beginner', 'Intermediate', 'Advanced'];
+    }
   };
 
   const handleEdit = (clinic: Clinic) => {
@@ -116,7 +181,9 @@ export default function AdminClinics() {
       type: clinic.type,
       level: clinic.level,
       image: clinic.image,
-      isActive: clinic.isActive
+      isActive: clinic.isActive,
+      hasMultipleSessions: clinic.hasMultipleSessions || false,
+      clinicType: clinic.clinicType || "single"
     });
   };
 
@@ -337,35 +404,166 @@ export default function AdminClinics() {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="type">Type</Label>
-                <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="dressage">Dressage</SelectItem>
-                    <SelectItem value="jumping">Show Jumping</SelectItem>
-                    <SelectItem value="cross-country">Cross Country</SelectItem>
-                    <SelectItem value="full-day">Full Day</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="level">Level</Label>
-                <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="grid gap-2">
+              <Label htmlFor="clinicType">Clinic Type</Label>
+              <Select value={formData.clinicType} onValueChange={(value) => {
+                setFormData({ ...formData, clinicType: value, hasMultipleSessions: value !== "single" });
+                if (value === "single") {
+                  setSessions([sessions[0]]);
+                }
+              }}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="single">Single Session</SelectItem>
+                  <SelectItem value="multi-session">Multi-Session (Show Jumping + Cross Country)</SelectItem>
+                  <SelectItem value="combo">Combo Day</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
+
+            {!formData.hasMultipleSessions ? (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="type">Type</Label>
+                  <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="dressage">Dressage</SelectItem>
+                      <SelectItem value="jumping">Show Jumping</SelectItem>
+                      <SelectItem value="cross-country">Cross Country</SelectItem>
+                      <SelectItem value="polework">Polework</SelectItem>
+                      <SelectItem value="gridwork">Gridwork</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="level">Level</Label>
+                  <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {getSkillLevelOptions(formData.type).map((level) => (
+                        <SelectItem key={level} value={level.toLowerCase().replace(/[^a-z0-9]/g, '_')}>{level}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <Label className="text-lg font-semibold">Sessions</Label>
+                  <Button type="button" onClick={addSession} variant="outline" size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Session
+                  </Button>
+                </div>
+                
+                {sessions.map((session, index) => (
+                  <div key={index} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-medium">Session {index + 1}</h4>
+                      {sessions.length > 1 && (
+                        <Button type="button" onClick={() => removeSession(index)} variant="destructive" size="sm">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-2">
+                        <Label>Session Name</Label>
+                        <Input
+                          value={session.sessionName}
+                          onChange={(e) => updateSession(index, 'sessionName', e.target.value)}
+                          placeholder="e.g., Show Jumping Morning"
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>Discipline</Label>
+                        <Select value={session.discipline} onValueChange={(value) => updateSession(index, 'discipline', value)}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="jumping">Show Jumping</SelectItem>
+                            <SelectItem value="cross-country">Cross Country</SelectItem>
+                            <SelectItem value="dressage">Dressage</SelectItem>
+                            <SelectItem value="polework">Polework</SelectItem>
+                            <SelectItem value="gridwork">Gridwork</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="grid gap-2">
+                        <Label>Start Time</Label>
+                        <Input
+                          type="time"
+                          value={session.startTime}
+                          onChange={(e) => updateSession(index, 'startTime', e.target.value)}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>End Time</Label>
+                        <Input
+                          type="time"
+                          value={session.endTime}
+                          onChange={(e) => updateSession(index, 'endTime', e.target.value)}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>Skill Level</Label>
+                        <Select value={session.skillLevel} onValueChange={(value) => updateSession(index, 'skillLevel', value)}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {getSkillLevelOptions(session.discipline).map((level) => (
+                              <SelectItem key={level} value={level}>{level}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-2">
+                        <Label>Price (€)</Label>
+                        <Input
+                          type="number"
+                          value={session.price}
+                          onChange={(e) => updateSession(index, 'price', Number(e.target.value))}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>Max Participants</Label>
+                        <Input
+                          type="number"
+                          value={session.maxParticipants}
+                          onChange={(e) => updateSession(index, 'maxParticipants', Number(e.target.value))}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid gap-2">
+                      <Label>Requirements</Label>
+                      <Input
+                        value={session.requirements}
+                        onChange={(e) => updateSession(index, 'requirements', e.target.value)}
+                        placeholder="e.g., Own horse required, Suitable for green horses"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
             
             <div className="grid gap-2">
               <Label htmlFor="image">Image URL</Label>
