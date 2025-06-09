@@ -47,7 +47,13 @@ export default function AppSection() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="space-y-8">
             <div>
-              <h3 className="text-3xl font-playfair font-bold mb-6 text-white">Riding Audio Lessons at Your Fingertips</h3>
+              <h3 className="text-3xl font-playfair font-bold mb-6 text-white">What is the Dan Bizzarro Method?</h3>
+              <p className="text-lg text-gray-200 leading-relaxed mb-6">
+                The Dan Bizzarro Method is a <strong>proven and effective approach</strong> to horse training and riding that helps riders to develop a strong partnership with their horses, improve their skills and confidence, and achieve remarkable results in their chosen discipline.
+              </p>
+              <p className="text-lg text-gray-200 leading-relaxed mb-6">
+                Developed by experienced rider and trainer Dan Bizzarro, this method offers a <strong>clear and systematic framework</strong> that can be applied to riders of any level and horses of any breed or discipline.
+              </p>
               <p className="text-lg text-gray-200 leading-relaxed mb-6">
                 The Dan Bizzarro Method app allows users to access <strong>riding audio lessons</strong> and improve their riding skills in as little as <strong>1 week</strong>.
               </p>
