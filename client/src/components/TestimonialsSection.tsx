@@ -150,18 +150,18 @@ export default function TestimonialsSection() {
                     </Card>
 
                     {/* Expanded card on hover */}
-                    <Card className="absolute top-0 left-0 w-80 bg-white border-2 border-orange-300 shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 transform -translate-y-2">
-                      <CardContent className="p-4">
-                        <div className="mb-4">
-                          <Quote className="w-5 h-5 text-orange-500 mb-3 opacity-70" />
-                          <p className="text-gray-700 leading-relaxed text-sm mb-4 italic">
+                    <Card className="absolute top-0 left-0 w-96 min-h-64 bg-white border-2 border-orange-300 shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 transform -translate-y-8 -translate-x-4">
+                      <CardContent className="p-6">
+                        <div className="mb-6">
+                          <Quote className="w-6 h-6 text-orange-500 mb-4 opacity-70" />
+                          <p className="text-gray-700 leading-relaxed text-base mb-6 italic">
                             "{testimonial.content}"
                           </p>
-                          <div className="flex items-center mb-3">
+                          <div className="flex items-center mb-4">
                             {Array.from({ length: 5 }, (_, i) => (
                               <Star
                                 key={i}
-                                className={`w-4 h-4 ${
+                                className={`w-5 h-5 ${
                                   i < testimonial.rating ? "text-yellow-400 fill-current" : "text-gray-300"
                                 }`}
                               />
@@ -169,23 +169,23 @@ export default function TestimonialsSection() {
                           </div>
                         </div>
                         
-                        <div className="flex items-center space-x-3">
-                          <Avatar className="w-10 h-10">
+                        <div className="flex items-center space-x-4">
+                          <Avatar className="w-12 h-12">
                             <AvatarImage 
                               src={testimonial.imageUrl || undefined} 
                               alt={testimonial.name}
                               className="object-cover"
                             />
-                            <AvatarFallback className="bg-orange-500 text-white font-semibold">
+                            <AvatarFallback className="bg-orange-500 text-white font-semibold text-sm">
                               {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <h4 className="font-semibold text-gray-900 text-base">
+                            <h4 className="font-semibold text-gray-900 text-lg">
                               {testimonial.name}
                             </h4>
                             {testimonial.location && (
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-gray-600 text-base">
                                 {testimonial.location}
                               </p>
                             )}
