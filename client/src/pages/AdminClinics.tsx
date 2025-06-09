@@ -234,7 +234,13 @@ export default function AdminClinics() {
     if (!formData.description.trim()) requiredFields.push('description');
     if (!formData.date) requiredFields.push('date');
     if (!formData.location.trim()) requiredFields.push('location');
-    if (!formData.price || formData.price === '0') requiredFields.push('price');
+    
+    // More robust price validation
+    const priceValue = formData.price?.toString().trim();
+    const numericPrice = parseFloat(priceValue || '0');
+    if (!priceValue || priceValue === '' || numericPrice <= 0) {
+      requiredFields.push('price');
+    }
     
     setMissingFields(requiredFields);
     
@@ -546,7 +552,11 @@ export default function AdminClinics() {
                       type="text"
                       value={formData.price}
                       onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9.]/g, '');
+                        let value = e.target.value.replace(/[^0-9.]/g, '');
+                        // Prevent leading zeros except for decimal numbers
+                        if (value.length > 1 && value.startsWith('0') && !value.startsWith('0.')) {
+                          value = value.substring(1);
+                        }
                         setFormData({ ...formData, price: value });
                         if (missingFields.includes('price')) {
                           setMissingFields(missingFields.filter(f => f !== 'price'));
