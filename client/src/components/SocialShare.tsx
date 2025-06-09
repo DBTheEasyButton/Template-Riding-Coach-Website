@@ -7,10 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Share2, Facebook, Instagram, Linkedin, Link, Copy } from "lucide-react";
 import { SiFacebook, SiX, SiInstagram, SiLinkedin, SiWhatsapp } from "react-icons/si";
-import type { Clinic } from "@shared/schema";
+import type { ClinicWithSessions } from "@shared/schema";
 
 interface SocialShareProps {
-  clinic: Clinic;
+  clinic: ClinicWithSessions;
 }
 
 export default function SocialShare({ clinic }: SocialShareProps) {
@@ -32,13 +32,30 @@ export default function SocialShare({ clinic }: SocialShareProps) {
   const clinicUrl = `${window.location.origin}/clinics/${clinic.id}`;
   const mapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`;
 
+  // Generate price display for social sharing
+  const getPriceDisplay = () => {
+    if (clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0) {
+      const minPrice = Math.min(...clinic.sessions.map(s => s.price));
+      const maxPrice = Math.max(...clinic.sessions.map(s => s.price));
+      if (minPrice === maxPrice) {
+        return `£${(minPrice / 100).toFixed(2)}`;
+      } else {
+        return `£${(minPrice / 100).toFixed(2)} - £${(maxPrice / 100).toFixed(2)}`;
+      }
+    } else if (clinic.price > 0) {
+      return `£${(clinic.price / 100).toFixed(2)}`;
+    } else {
+      return 'Price TBA';
+    }
+  };
+
   // Default sharing message
   const defaultMessage = `🐎 Join Dan Bizzarro's ${clinic.title}!
 
 📅 ${formatDate(clinic.date)}
 📍 ${clinic.location}
 🗺️ Directions: ${mapsUrl}
-💰 £${(clinic.price / 100).toFixed(2)}
+💰 ${getPriceDisplay()}
 👥 Limited to ${clinic.maxParticipants} participants
 
 ${clinic.description}
