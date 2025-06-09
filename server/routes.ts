@@ -133,12 +133,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           await storage.createClinicSession({
             clinicId: clinic.id,
             sessionName: session.sessionName,
-            startTime: session.startTime,
-            endTime: session.endTime,
+            startTime: "09:00", // Default time since not needed in UI
+            endTime: "17:00", // Default time since not needed in UI
             discipline: session.discipline,
             skillLevel: session.skillLevel,
             price: session.price,
-            maxParticipants: session.maxParticipants,
+            maxParticipants: 8, // Default value, actual limits controlled by clinic-level settings
             currentParticipants: 0,
             requirements: session.requirements || null
           });

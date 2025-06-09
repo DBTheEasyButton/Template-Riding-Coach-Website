@@ -44,7 +44,6 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 8,
       requirements: ""
     }
   ]);
@@ -128,7 +127,6 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 8,
       requirements: ""
     }]);
     setMissingFields([]);
@@ -140,7 +138,6 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 8,
       requirements: ""
     };
     setSessions([...sessions, newSession]);
@@ -246,7 +243,6 @@ export default function AdminClinics() {
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
         price: session.price ? Math.round(session.price / 100) : 80, // Convert from cents to pounds
-        maxParticipants: session.maxParticipants || 8,
         requirements: session.requirements || ""
       }));
       setSessions(existingSessions);
@@ -257,7 +253,6 @@ export default function AdminClinics() {
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
-        maxParticipants: 8,
         requirements: ""
       }]);
     }
@@ -297,7 +292,6 @@ export default function AdminClinics() {
         discipline: session.discipline,
         skillLevel: session.skillLevel,
         price: session.price / 100, // Convert from cents to pounds for form display
-        maxParticipants: session.maxParticipants,
         requirements: session.requirements || ""
       }));
       setSessions(clonedSessions);
@@ -308,7 +302,6 @@ export default function AdminClinics() {
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
-        maxParticipants: 8,
         requirements: ""
       }]);
     }
@@ -821,25 +814,13 @@ export default function AdminClinics() {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="grid gap-2">
-                        <Label>Max Participants</Label>
-                        <Input
-                          type="number"
-                          min="1"
-                          max="20"
-                          value={session.maxParticipants}
-                          onChange={(e) => updateSession(index, 'maxParticipants', parseInt(e.target.value) || 8)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>Requirements</Label>
-                        <Input
-                          value={session.requirements}
-                          onChange={(e) => updateSession(index, 'requirements', e.target.value)}
-                          placeholder="e.g., Own horse required, Suitable for green horses"
-                        />
-                      </div>
+                    <div className="grid gap-2">
+                      <Label>Requirements</Label>
+                      <Input
+                        value={session.requirements}
+                        onChange={(e) => updateSession(index, 'requirements', e.target.value)}
+                        placeholder="e.g., Own horse required, Suitable for green horses"
+                      />
                     </div>
                   </div>
                 ))}
