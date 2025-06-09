@@ -523,12 +523,12 @@ export default function ClinicsSection() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="medicalConditions">Medical Conditions or Allergies</Label>
+                  <Label htmlFor="medicalConditions">Info about your horse</Label>
                   <Textarea
                     id="medicalConditions"
                     value={registrationData.medicalConditions}
                     onChange={(e) => handleInputChange('medicalConditions', e.target.value)}
-                    placeholder="Please list any medical conditions, allergies, or medications that may affect your participation..."
+                    placeholder="Please provide any relevant information about your horse (age, breed, temperament, experience level, special requirements)..."
                     rows={3}
                   />
                 </div>
