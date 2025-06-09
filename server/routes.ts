@@ -134,10 +134,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const rawData = req.body;
       const { sessions, ...clinicData } = rawData;
       
+      // Convert price to cents if it exists
+      const processedPrice = clinicData.price ? Math.round(parseFloat(clinicData.price.toString()) * 100) : 0;
+      
       const processedClinicData = {
         ...clinicData,
         date: new Date(clinicData.date),
-        endDate: new Date(clinicData.endDate)
+        endDate: new Date(clinicData.endDate),
+        price: processedPrice
       };
       
       // Validate the clinic data
@@ -154,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             endTime: "17:00", // Default time since not needed in UI
             discipline: session.discipline,
             skillLevel: session.skillLevel,
-            price: session.price,
+            price: session.price ? Math.round(session.price * 100) : 8000,
             maxParticipants: 8, // Default value, actual limits controlled by clinic-level settings
             currentParticipants: 0,
             requirements: session.requirements || null

@@ -237,7 +237,7 @@ export default function ClinicsSection() {
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
                       ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
                       : clinic.price > 0 
-                        ? `£${(clinic.price / 100).toFixed(0)}`
+                        ? `£${clinic.price > 100 ? (clinic.price / 100).toFixed(0) : clinic.price}`
                         : 'Price TBA'
                     }
                   </span>
