@@ -113,7 +113,7 @@ export default function ContactSection() {
                 <a href="https://www.facebook.com/DanBizzarro/" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
                   <Facebook className="w-6 h-6 text-white" />
                 </a>
-                <a href="#" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
+                <a href="https://x.com/DanBizzarro" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
                   <Twitter className="w-6 h-6 text-white" />
                 </a>
                 <a href="https://www.youtube.com/@Dan_Bizzarro_Method" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
