@@ -33,7 +33,7 @@ export default function Navigation() {
 
   const coachingSubmenu = [
     { href: "#clinics", label: "Clinics" },
-    { label: "Training with Dan", action: () => window.open('https://wa.me/447767291713', '_blank') },
+    { href: "#coaching", label: "Training with Dan" },
     { href: "#app", label: "Dan Bizzarro Method App", action: () => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank') },
     { href: "#training-videos", label: "Training Videos" },
     { href: "#podcast", label: "Our Equestrian Life Podcast" },
