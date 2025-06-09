@@ -213,7 +213,12 @@ export default function ClinicsSection() {
                 </div>
                 <div className="flex items-center text-sm text-dark font-medium">
                   <Users className="w-4 h-4 mr-2" />
-                  <span>{clinic.currentParticipants}/{clinic.maxParticipants} participants</span>
+                  <span>
+                    {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                      ? `${clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0)}/${clinic.sessions.reduce((total, session) => total + session.maxParticipants, 0)} participants`
+                      : `${clinic.currentParticipants}/${clinic.maxParticipants} participants`
+                    }
+                  </span>
                 </div>
                 <div className="flex items-center text-sm text-dark">
                   <PoundSterling className="w-4 h-4 mr-2" />
@@ -230,29 +235,41 @@ export default function ClinicsSection() {
               
               <CardFooter className="flex flex-col gap-2">
                 <div className="flex gap-2 w-full">
-                  {clinic.currentParticipants >= clinic.maxParticipants ? (
-                    <Button 
-                      onClick={() => handleRegistration(clinic)}
-                      variant="outline"
-                      className="flex-1 border-orange text-orange hover:bg-orange hover:text-white font-semibold"
-                    >
-                      Join Waitlist
-                    </Button>
-                  ) : (
-                    <Button 
-                      onClick={() => handleRegistration(clinic)}
-                      className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold"
-                    >
-                      Register Now
-                    </Button>
-                  )}
+                  {(() => {
+                    const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                      ? clinic.sessions.every(session => session.currentParticipants >= session.maxParticipants)
+                      : clinic.currentParticipants >= clinic.maxParticipants;
+                    
+                    return isFull ? (
+                      <Button 
+                        onClick={() => handleRegistration(clinic)}
+                        variant="outline"
+                        className="flex-1 border-orange text-orange hover:bg-orange hover:text-white font-semibold"
+                      >
+                        Join Waitlist
+                      </Button>
+                    ) : (
+                      <Button 
+                        onClick={() => handleRegistration(clinic)}
+                        className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold"
+                      >
+                        Register Now
+                      </Button>
+                    );
+                  })()}
                   <SocialShare clinic={clinic} />
                 </div>
-                {clinic.currentParticipants >= clinic.maxParticipants && (
-                  <p className="text-xs text-gray-500 text-center">
-                    Clinic is full. Join the waitlist to be notified if spots become available.
-                  </p>
-                )}
+                {(() => {
+                  const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                    ? clinic.sessions.some(session => session.currentParticipants >= session.maxParticipants)
+                    : clinic.currentParticipants >= clinic.maxParticipants;
+                  
+                  return isFull && (
+                    <p className="text-xs text-gray-500 text-center">
+                      {clinic.hasMultipleSessions ? 'Some sessions are full.' : 'Clinic is full.'} Join the waitlist to be notified if spots become available.
+                    </p>
+                  );
+                })()}
               </CardFooter>
             </Card>
           ))}
