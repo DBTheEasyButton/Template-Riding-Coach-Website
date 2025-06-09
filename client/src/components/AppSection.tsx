@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Smartphone, Headphones, Clock, MapPin, Star, Play, Image, Video } from "lucide-react";
+import appScreenshot1 from "@assets/Screenshot_20250609_162238_Dan Bizzarro Method_1749482846019.jpg";
+import appScreenshot2 from "@assets/Screenshot_20250609_162257_Dan Bizzarro Method_1749482841960.jpg";
+import appScreenshot3 from "@assets/Screenshot_20250609_162327_Dan Bizzarro Method_1749482838060.jpg";
+import appScreenshot4 from "@assets/Screenshot_20250609_162340_Dan Bizzarro Method_1749482833362.jpg";
 
 export default function AppSection() {
   const lessonFocuses = [
@@ -118,6 +122,41 @@ export default function AppSection() {
                 <div className="text-2xl font-bold text-orange">Your Horse</div>
                 <div className="text-sm text-gray-200">Your Arena</div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* App Screenshots Gallery */}
+        <div className="mt-16">
+          <h4 className="text-2xl font-playfair font-bold mb-8 text-center text-white">See the App in Action</h4>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
+              <img 
+                src={appScreenshot1} 
+                alt="Dan Bizzarro Method app courses overview showing class structure"
+                className="w-full h-auto rounded-xl shadow-lg"
+              />
+            </div>
+            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
+              <img 
+                src={appScreenshot2} 
+                alt="App lesson setup with arena diagrams and pole placement instructions"
+                className="w-full h-auto rounded-xl shadow-lg"
+              />
+            </div>
+            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
+              <img 
+                src={appScreenshot3} 
+                alt="Audio lesson player with circles exercise and visual riding instructions"
+                className="w-full h-auto rounded-xl shadow-lg"
+              />
+            </div>
+            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
+              <img 
+                src={appScreenshot4} 
+                alt="Detailed arena setup diagrams showing circle patterns and measurements"
+                className="w-full h-auto rounded-xl shadow-lg"
+              />
             </div>
           </div>
         </div>
