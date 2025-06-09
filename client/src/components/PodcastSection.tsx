@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play, Headphones, Users, Star, ExternalLink } from "lucide-react";
+import podcastLogo from "@assets/Podcast Logo_1749499160253.png";
 
 export default function PodcastSection() {
   return (
@@ -26,30 +27,36 @@ export default function PodcastSection() {
               <p className="text-lg text-dark leading-relaxed mb-8">
                 We get to know them and we learn from their experiences and vast knowledge, gaining a deeper understanding of the equestrian way of life.
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  onClick={() => window.open('https://open.spotify.com/show/2KiQE9pq1onqkGv0Pm14p4', '_blank')}
-                  className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Listen on Spotify
-                </Button>
-                <Button 
-                  onClick={() => window.open('https://podcasts.apple.com/gb/podcast/our-equestrian-life/id1720429214', '_blank')}
-                  variant="outline"
-                  className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
-                >
-                  <Headphones className="w-5 h-5 mr-2" />
-                  Listen on Apple Podcasts
-                </Button>
-              </div>
             </div>
-
-
           </div>
           
+          <div className="relative flex justify-center">
+            <img 
+              src={podcastLogo} 
+              alt="Our Equestrian Life Podcast" 
+              className="w-full max-w-md rounded-2xl shadow-2xl"
+            />
+          </div>
+        </div>
 
+        <div className="mt-16 text-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
+            <Button 
+              onClick={() => window.open('https://open.spotify.com/show/2KiQE9pq1onqkGv0Pm14p4', '_blank')}
+              className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Listen on Spotify
+            </Button>
+            <Button 
+              onClick={() => window.open('https://podcasts.apple.com/gb/podcast/our-equestrian-life/id1720429214', '_blank')}
+              variant="outline"
+              className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+            >
+              <Headphones className="w-5 h-5 mr-2" />
+              Listen on Apple Podcasts
+            </Button>
+          </div>
         </div>
 
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
