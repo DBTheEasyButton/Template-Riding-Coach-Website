@@ -107,17 +107,17 @@ export default function ContactSection() {
             <div>
               <h3 className="text-2xl font-playfair font-bold mb-6 text-white">Follow Dan</h3>
               <div className="flex space-x-6">
-                <a href="https://www.instagram.com/danbizzarro/?hl=en-gb" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
-                  <Instagram className="w-6 h-6 text-white" />
+                <a href="https://www.instagram.com/danbizzarro/?hl=en-gb" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500 rounded-full p-4 transition-all duration-300 transform hover:scale-110 hover:rotate-12 hover:shadow-lg group">
+                  <Instagram className="w-6 h-6 text-white group-hover:text-white transition-all duration-300" />
                 </a>
-                <a href="https://www.facebook.com/DanBizzarro/" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
-                  <Facebook className="w-6 h-6 text-white" />
+                <a href="https://www.facebook.com/DanBizzarro/" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-blue-600 rounded-full p-4 transition-all duration-300 transform hover:scale-110 hover:-rotate-12 hover:shadow-lg group">
+                  <Facebook className="w-6 h-6 text-white group-hover:text-white transition-all duration-300" />
                 </a>
-                <a href="https://x.com/DanBizzarro" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
-                  <Twitter className="w-6 h-6 text-white" />
+                <a href="https://x.com/DanBizzarro" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-black rounded-full p-4 transition-all duration-300 transform hover:scale-110 hover:rotate-6 hover:shadow-lg group">
+                  <Twitter className="w-6 h-6 text-white group-hover:text-white transition-all duration-300" />
                 </a>
-                <a href="https://www.youtube.com/@Dan_Bizzarro_Method" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-white/20 rounded-full p-4 transition-colors duration-300">
-                  <Youtube className="w-6 h-6 text-white" />
+                <a href="https://www.youtube.com/@Dan_Bizzarro_Method" target="_blank" rel="noopener noreferrer" className="bg-white/10 hover:bg-red-600 rounded-full p-4 transition-all duration-300 transform hover:scale-110 hover:-rotate-6 hover:shadow-lg group">
+                  <Youtube className="w-6 h-6 text-white group-hover:text-white transition-all duration-300" />
                 </a>
               </div>
             </div>
