@@ -130,12 +130,12 @@ export default function AppSection() {
         <div className="mt-16">
           <h4 className="text-2xl font-playfair font-bold mb-8 text-center text-white">See the App in Action</h4>
           
-          {/* Phone Mockup Carousel */}
-          <div className="relative max-w-6xl mx-auto">
-            <div className="flex justify-center items-center space-x-8 overflow-hidden">
-              {/* Main phone in center */}
-              <div className="relative group cursor-pointer">
-                <div className="relative w-80 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+          {/* Phone Mockup Display */}
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+              {/* Phone 1 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
                   <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
                     {/* iPhone notch */}
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
@@ -146,16 +146,17 @@ export default function AppSection() {
                     />
                   </div>
                 </div>
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                <div className="mt-4 text-center">
                   <p className="text-orange font-medium">Course Selection</p>
+                  <p className="text-gray-300 text-sm">Choose your training level</p>
                 </div>
               </div>
 
-              {/* Side phones with slight rotation and smaller size */}
-              <div className="hidden lg:block relative group cursor-pointer">
-                <div className="relative w-64 h-auto bg-black rounded-[2.5rem] p-3 shadow-xl transform rotate-12 group-hover:rotate-6 group-hover:scale-105 transition-all duration-500 opacity-80 group-hover:opacity-100">
-                  <div className="bg-white rounded-[2rem] overflow-hidden relative">
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-5 bg-black rounded-b-lg z-10"></div>
+              {/* Phone 2 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
                     <img 
                       src={appScreenshot2} 
                       alt="Arena setup diagrams"
@@ -163,15 +164,17 @@ export default function AppSection() {
                     />
                   </div>
                 </div>
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
-                  <p className="text-gray-300 text-sm">Arena Setup</p>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Arena Setup</p>
+                  <p className="text-gray-300 text-sm">Visual diagrams included</p>
                 </div>
               </div>
 
-              <div className="hidden lg:block relative group cursor-pointer">
-                <div className="relative w-64 h-auto bg-black rounded-[2.5rem] p-3 shadow-xl transform -rotate-12 group-hover:-rotate-6 group-hover:scale-105 transition-all duration-500 opacity-80 group-hover:opacity-100">
-                  <div className="bg-white rounded-[2rem] overflow-hidden relative">
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-5 bg-black rounded-b-lg z-10"></div>
+              {/* Phone 3 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
                     <img 
                       src={appScreenshot3} 
                       alt="Audio lesson player"
@@ -179,16 +182,30 @@ export default function AppSection() {
                     />
                   </div>
                 </div>
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
-                  <p className="text-gray-300 text-sm">Audio Lessons</p>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Audio Lessons</p>
+                  <p className="text-gray-300 text-sm">Listen while you ride</p>
+                </div>
+              </div>
+
+              {/* Phone 4 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                    <img 
+                      src={appScreenshot4} 
+                      alt="Detailed arena setup diagrams"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Exercise Details</p>
+                  <p className="text-gray-300 text-sm">Step-by-step guidance</p>
                 </div>
               </div>
             </div>
-
-            {/* Floating elements for extra visual interest */}
-            <div className="absolute top-10 left-10 w-4 h-4 bg-orange rounded-full animate-pulse opacity-60"></div>
-            <div className="absolute bottom-20 right-16 w-6 h-6 bg-white/20 rounded-full animate-bounce"></div>
-            <div className="absolute top-32 right-8 w-3 h-3 bg-orange/40 rounded-full animate-ping"></div>
           </div>
 
           {/* Interactive feature grid below */}
