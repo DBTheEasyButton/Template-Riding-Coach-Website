@@ -35,10 +35,10 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <TestimonialsSection />
+      <ClinicsSection />
       <AboutSection />
       <CoachingSection />
       <AppSection />
-      <ClinicsSection />
       <TrainingVideosSection />
       <PodcastSection />
       <ScheduleSection />
