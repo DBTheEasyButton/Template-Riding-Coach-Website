@@ -225,7 +225,7 @@ export default function AdminClinics() {
     }
   };
 
-  const handleEdit = (clinic: Clinic) => {
+  const handleEdit = (clinic: any) => {
     setEditingClinic(clinic);
     setFormData({
       title: clinic.title,
@@ -244,6 +244,35 @@ export default function AdminClinics() {
       crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
       showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
     });
+    
+    // Load existing session data if available
+    if (clinic.sessions && clinic.sessions.length > 0) {
+      const existingSessions = clinic.sessions.map((session: any) => ({
+        sessionName: session.sessionName || "",
+        startTime: session.startTime || "09:00",
+        endTime: session.endTime || "12:00",
+        discipline: session.discipline || "jumping",
+        skillLevel: session.skillLevel || "90cm",
+        price: session.price ? Math.round(session.price / 100) : 80, // Convert from cents to pounds
+        maxParticipants: session.maxParticipants || 8,
+        requirements: session.requirements || ""
+      }));
+      setSessions(existingSessions);
+    } else {
+      // Reset to default single session for single clinics
+      setSessions([{
+        sessionName: "",
+        startTime: "09:00",
+        endTime: "12:00",
+        discipline: "jumping",
+        skillLevel: "90cm",
+        price: 80,
+        maxParticipants: 8,
+        requirements: ""
+      }]);
+    }
+    
+    setIsCreateOpen(true);
   };
 
   const handleClone = (clinic: any) => {
@@ -750,6 +779,25 @@ export default function AdminClinics() {
                     
                     <div className="grid grid-cols-2 gap-3">
                       <div className="grid gap-2">
+                        <Label>Start Time</Label>
+                        <Input
+                          type="time"
+                          value={session.startTime}
+                          onChange={(e) => updateSession(index, 'startTime', e.target.value)}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>End Time</Label>
+                        <Input
+                          type="time"
+                          value={session.endTime}
+                          onChange={(e) => updateSession(index, 'endTime', e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-2">
                         <Label>Skill Level</Label>
                         <Select value={session.skillLevel} onValueChange={(value) => updateSession(index, 'skillLevel', value)}>
                           <SelectTrigger>
@@ -806,13 +854,25 @@ export default function AdminClinics() {
                       </div>
                     </div>
                     
-                    <div className="grid gap-2">
-                      <Label>Requirements</Label>
-                      <Input
-                        value={session.requirements}
-                        onChange={(e) => updateSession(index, 'requirements', e.target.value)}
-                        placeholder="e.g., Own horse required, Suitable for green horses"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-2">
+                        <Label>Max Participants</Label>
+                        <Input
+                          type="number"
+                          min="1"
+                          max="20"
+                          value={session.maxParticipants}
+                          onChange={(e) => updateSession(index, 'maxParticipants', parseInt(e.target.value) || 8)}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label>Requirements</Label>
+                        <Input
+                          value={session.requirements}
+                          onChange={(e) => updateSession(index, 'requirements', e.target.value)}
+                          placeholder="e.g., Own horse required, Suitable for green horses"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
