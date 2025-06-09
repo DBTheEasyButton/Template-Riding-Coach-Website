@@ -143,11 +143,11 @@ export default function CoachingSection() {
               Book a Private Lesson
             </Button>
             <Button 
-              onClick={() => scrollToSection('#training-videos')}
+              onClick={() => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank')}
               variant="outline"
               className="border-2 border-navy text-navy hover:bg-navy hover:text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
             >
-              Watch Training Videos
+              Download the Dan Bizzarro Method App
             </Button>
           </div>
         </div>
