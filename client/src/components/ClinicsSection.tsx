@@ -154,8 +154,29 @@ export default function ClinicsSection() {
     queryKey: ['/api/clinics'],
   });
 
+  // Create payment intent mutation
+  const createPaymentIntentMutation = useMutation({
+    mutationFn: async () => {
+      const payload = selectedClinic?.hasMultipleSessions 
+        ? { sessionIds: selectedSessions }
+        : {};
+      
+      return await apiRequest('POST', `/api/clinics/${selectedClinic?.id}/create-payment-intent`, payload);
+    },
+    onSuccess: (data: { clientSecret: string }) => {
+      setClientSecret(data.clientSecret);
+    },
+    onError: (error) => {
+      toast({
+        title: "Payment setup failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const registrationMutation = useMutation({
-    mutationFn: async (data: InsertClinicRegistration) => {
+    mutationFn: async (data: InsertClinicRegistration & { paymentIntentId?: string }) => {
       return await apiRequest('POST', `/api/clinics/${selectedClinic?.id}/register`, data);
     },
     onSuccess: () => {
@@ -175,9 +196,10 @@ export default function ClinicsSection() {
       
       toast({
         title: "Registration successful!",
-        description: "You'll receive a confirmation email shortly. Your details have been saved for future registrations.",
+        description: "Payment confirmed. You'll receive a confirmation email shortly.",
       });
       setIsRegistrationOpen(false);
+      setClientSecret(null);
       setRegistrationData({
         firstName: '',
         lastName: '',
@@ -190,7 +212,7 @@ export default function ClinicsSection() {
         emergencyPhone: '',
         medicalConditions: '',
         agreeToTerms: false,
-        paymentMethod: 'bank_transfer'
+        paymentMethod: 'debit_card'
       });
       setFormErrors({});
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
@@ -288,6 +310,41 @@ export default function ClinicsSection() {
     return Object.keys(errors).length === 0;
   };
 
+  const handlePaymentSuccess = (paymentIntentId: string) => {
+    if (!selectedClinic) return;
+    
+    // For now, use the first selected session ID or undefined for single sessions
+    const sessionId = selectedClinic.hasMultipleSessions && selectedSessions.length > 0 
+      ? selectedSessions[0] 
+      : undefined;
+    
+    registrationMutation.mutate({
+      paymentIntentId,
+      clinicId: selectedClinic.id,
+      sessionId,
+      firstName: registrationData.firstName,
+      lastName: registrationData.lastName,
+      email: registrationData.email,
+      phone: registrationData.phone,
+      experienceLevel: registrationData.experienceLevel,
+      horseName: registrationData.horseName || undefined,
+      specialRequests: registrationData.specialRequests || undefined,
+      emergencyContact: registrationData.emergencyContact,
+      emergencyPhone: registrationData.emergencyPhone,
+      medicalConditions: registrationData.medicalConditions || undefined,
+      paymentMethod: registrationData.paymentMethod,
+      agreeToTerms: registrationData.agreeToTerms,
+    });
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast({
+      title: "Payment failed",
+      description: error,
+      variant: "destructive",
+    });
+  };
+
   const submitRegistration = () => {
     if (!selectedClinic) return;
     
@@ -299,10 +356,8 @@ export default function ClinicsSection() {
       return;
     }
 
-    registrationMutation.mutate({
-      ...registrationData,
-      clinicId: selectedClinic.id
-    });
+    // Create payment intent to proceed to payment
+    createPaymentIntentMutation.mutate();
   };
 
   const handleInputChange = (field: keyof typeof registrationData, value: string | boolean) => {
