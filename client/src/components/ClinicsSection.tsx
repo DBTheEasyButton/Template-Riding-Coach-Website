@@ -332,7 +332,7 @@ export default function ClinicsSection() {
                               {!isFull && spotsRemaining <= 2 && <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">{spotsRemaining} spots left</span>}
                             </div>
                             <p className={`text-sm ${isFull ? 'text-gray-400' : 'text-gray-600'}`}>
-                              {session.startTime} - {session.endTime} • {session.discipline} • {session.skillLevel}
+                              {session.discipline} • {session.skillLevel}
                             </p>
                             <p className={`text-sm ${isFull ? 'text-gray-400' : 'text-gray-500'}`}>
                               {session.currentParticipants}/{session.maxParticipants} participants • £{(session.price / 100).toFixed(0)}

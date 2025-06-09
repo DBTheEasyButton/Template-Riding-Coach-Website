@@ -41,8 +41,6 @@ export default function AdminClinics() {
   const [sessions, setSessions] = useState([
     {
       sessionName: "",
-      startTime: "09:00",
-      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
@@ -127,8 +125,6 @@ export default function AdminClinics() {
     });
     setSessions([{
       sessionName: "",
-      startTime: "09:00",
-      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
@@ -141,8 +137,6 @@ export default function AdminClinics() {
   const addSession = () => {
     const newSession = {
       sessionName: "",
-      startTime: "09:00",
-      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
@@ -249,8 +243,6 @@ export default function AdminClinics() {
     if (clinic.sessions && clinic.sessions.length > 0) {
       const existingSessions = clinic.sessions.map((session: any) => ({
         sessionName: session.sessionName || "",
-        startTime: session.startTime || "09:00",
-        endTime: session.endTime || "12:00",
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
         price: session.price ? Math.round(session.price / 100) : 80, // Convert from cents to pounds
@@ -262,8 +254,6 @@ export default function AdminClinics() {
       // Reset to default single session for single clinics
       setSessions([{
         sessionName: "",
-        startTime: "09:00",
-        endTime: "12:00",
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
@@ -304,8 +294,6 @@ export default function AdminClinics() {
     if (clinic.sessions && clinic.sessions.length > 0) {
       const clonedSessions = clinic.sessions.map((session: any) => ({
         sessionName: session.sessionName,
-        startTime: session.startTime || "09:00",
-        endTime: session.endTime || "12:00",
         discipline: session.discipline,
         skillLevel: session.skillLevel,
         price: session.price / 100, // Convert from cents to pounds for form display
@@ -317,8 +305,6 @@ export default function AdminClinics() {
       // Reset to default session for single clinics
       setSessions([{
         sessionName: "",
-        startTime: "09:00",
-        endTime: "12:00",
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
@@ -779,26 +765,7 @@ export default function AdminClinics() {
                     
                     <div className="grid grid-cols-2 gap-3">
                       <div className="grid gap-2">
-                        <Label>Start Time</Label>
-                        <Input
-                          type="time"
-                          value={session.startTime}
-                          onChange={(e) => updateSession(index, 'startTime', e.target.value)}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>End Time</Label>
-                        <Input
-                          type="time"
-                          value={session.endTime}
-                          onChange={(e) => updateSession(index, 'endTime', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="grid gap-2">
-                        <Label>Skill Level</Label>
+                        <Label>Level</Label>
                         <Select value={session.skillLevel} onValueChange={(value) => updateSession(index, 'skillLevel', value)}>
                           <SelectTrigger>
                             <SelectValue />
