@@ -31,6 +31,7 @@ export default function SocialShare({ clinic }: SocialShareProps) {
   // Generate clinic URL (assuming it will be accessible on the main site)
   const clinicUrl = `${window.location.origin}/clinics/${clinic.id}`;
   const mapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`;
+  const imageUrl = clinic.image?.startsWith('http') ? clinic.image : `${window.location.origin}${clinic.image}`;
 
   // Generate price display for social sharing
   const getPriceDisplay = () => {
@@ -101,6 +102,37 @@ Register now: ${clinicUrl}
     });
   };
 
+  const shareWithNativeAPI = async () => {
+    if (navigator.share) {
+      try {
+        // Create a blob from the image for native sharing
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], `${clinic.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`, { type: blob.type });
+        
+        await navigator.share({
+          title: clinic.title,
+          text: shareMessage,
+          url: clinicUrl,
+          files: [file]
+        });
+      } catch (error) {
+        // Fallback to text-only sharing if image sharing fails
+        try {
+          await navigator.share({
+            title: clinic.title,
+            text: shareMessage,
+            url: clinicUrl
+          });
+        } catch (fallbackError) {
+          copyToClipboard();
+        }
+      }
+    } else {
+      copyToClipboard();
+    }
+  };
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareMessage).then(() => {
       toast({
@@ -136,6 +168,15 @@ Register now: ${clinicUrl}
           {/* Preview */}
           <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
             <h4 className="font-semibold mb-2">Preview</h4>
+            {clinic.image && (
+              <div className="mb-3">
+                <img 
+                  src={imageUrl} 
+                  alt={clinic.title}
+                  className="w-full h-32 object-cover rounded-md"
+                />
+              </div>
+            )}
             <div className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-300">
               {shareMessage}
             </div>
@@ -156,6 +197,15 @@ Register now: ${clinicUrl}
           {/* Social Media Buttons */}
           <div className="space-y-4">
             <h4 className="font-semibold">Share on Social Media</h4>
+            
+            {/* Native Share Button (shows image when supported) */}
+            {navigator.share && (
+              <Button onClick={shareWithNativeAPI} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white mb-3">
+                <Share2 className="w-4 h-4 mr-2" />
+                Share with Image
+              </Button>
+            )}
+            
             <div className="grid grid-cols-2 gap-3">
               <Button onClick={shareToFacebook} className="bg-blue-600 hover:bg-blue-700 text-white">
                 <SiFacebook className="w-4 h-4 mr-2" />
