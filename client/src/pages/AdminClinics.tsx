@@ -472,7 +472,12 @@ export default function AdminClinics() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Euro className="w-4 h-4" />
-                          £{clinic.price}
+                          {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                            ? `from £${(Math.min(...clinic.sessions.map((s: any) => s.price)) / 100).toFixed(0)}`
+                            : clinic.price > 0 
+                              ? `£${(clinic.price / 100).toFixed(0)}`
+                              : 'Price TBA'
+                          }
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
