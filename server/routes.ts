@@ -258,7 +258,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             endTime: "17:00", 
             discipline: session.discipline || "jumping",
             skillLevel: session.skillLevel || "90cm",
-            price: session.price ? Math.round(session.price * 100) : 8000, // Convert to cents
+            price: session.price ? Math.round(session.price * 100) : 8000,
             maxParticipants: 12,
             currentParticipants: 0,
             requirements: session.requirements || null
