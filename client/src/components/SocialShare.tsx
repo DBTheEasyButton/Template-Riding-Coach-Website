@@ -28,8 +28,8 @@ export default function SocialShare({ clinic }: SocialShareProps) {
     }).format(new Date(date));
   };
 
-  // Generate clinic URL (assuming it will be accessible on the main site)
-  const clinicUrl = `${window.location.origin}/clinics/${clinic.id}`;
+  // Generate clinic URL pointing to the clinics section on main page
+  const clinicUrl = `${window.location.origin}/#clinics`;
   const mapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`;
   const imageUrl = clinic.image?.startsWith('http') ? clinic.image : `${window.location.origin}${clinic.image}`;
 
