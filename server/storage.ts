@@ -56,6 +56,7 @@ export interface IStorage {
   createClinic(clinic: InsertClinic): Promise<Clinic>;
   updateClinic(id: number, clinic: Partial<InsertClinic>): Promise<Clinic | undefined>;
   deleteClinic(id: number): Promise<void>;
+  createClinicSession(session: InsertClinicSession): Promise<ClinicSession>;
   
   createClinicRegistration(registration: InsertClinicRegistration): Promise<ClinicRegistration>;
   getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]>;
@@ -357,6 +358,11 @@ export class DatabaseStorage implements IStorage {
 
   async deleteClinic(id: number): Promise<void> {
     await db.delete(clinics).where(eq(clinics.id, id));
+  }
+
+  async createClinicSession(insertSession: InsertClinicSession): Promise<ClinicSession> {
+    const [session] = await db.insert(clinicSessions).values(insertSession).returning();
+    return session;
   }
 
   async createClinicRegistration(insertRegistration: InsertClinicRegistration): Promise<ClinicRegistration> {

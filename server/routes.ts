@@ -115,15 +115,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Convert date strings to Date objects before validation
       const rawData = req.body;
-      const clinicData = {
-        ...rawData,
-        date: new Date(rawData.date),
-        endDate: new Date(rawData.endDate)
+      const { sessions, ...clinicData } = rawData;
+      
+      const processedClinicData = {
+        ...clinicData,
+        date: new Date(clinicData.date),
+        endDate: new Date(clinicData.endDate)
       };
       
       // Validate the clinic data
-      const validatedData = insertClinicSchema.parse(clinicData);
+      const validatedData = insertClinicSchema.parse(processedClinicData);
       const clinic = await storage.createClinic(validatedData);
+      
+      // If there are sessions, create them
+      if (sessions && Array.isArray(sessions) && sessions.length > 0) {
+        for (const session of sessions) {
+          await storage.createClinicSession({
+            clinicId: clinic.id,
+            sessionName: session.sessionName,
+            startTime: session.startTime,
+            endTime: session.endTime,
+            discipline: session.discipline,
+            skillLevel: session.skillLevel,
+            price: session.price,
+            maxParticipants: session.maxParticipants,
+            currentParticipants: 0,
+            requirements: session.requirements || null
+          });
+        }
+      }
+      
       res.status(201).json(clinic);
     } catch (error) {
       console.error("Error creating clinic:", error);
