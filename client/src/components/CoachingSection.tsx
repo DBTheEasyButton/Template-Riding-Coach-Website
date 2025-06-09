@@ -117,7 +117,13 @@ export default function CoachingSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {coachingServices.map((service, index) => (
-            <div key={index} className="bg-white rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg border border-gray-100">
+            <div 
+              key={index} 
+              className={`bg-white rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg border border-gray-100 ${
+                service.title === 'Private Lessons' ? 'cursor-pointer hover:shadow-xl' : ''
+              }`}
+              onClick={service.title === 'Private Lessons' ? () => scrollToSection('#contact') : undefined}
+            >
               <div className="text-orange mb-4 flex justify-center">
                 {service.icon}
               </div>
