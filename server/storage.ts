@@ -5,6 +5,7 @@ import {
   news, 
   contacts,
   clinics,
+  clinicSessions,
   clinicRegistrations,
   clinicWaitlist,
   trainingVideos,
@@ -20,6 +21,7 @@ import {
   type InsertContact,
   type Clinic,
   type InsertClinic,
+  type ClinicSession,
   type ClinicRegistration,
   type InsertClinicRegistration,
   type ClinicWaitlist,
@@ -317,7 +319,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllClinics(): Promise<Clinic[]> {
-    return await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
+    const clinicsData = await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
+    
+    // For each clinic, get its sessions if it has multiple sessions
+    const clinicsWithSessions = await Promise.all(
+      clinicsData.map(async (clinic) => {
+        if (clinic.hasMultipleSessions) {
+          const sessions = await db.select().from(clinicSessions).where(eq(clinicSessions.clinicId, clinic.id));
+          return { ...clinic, sessions };
+        }
+        return { ...clinic, sessions: [] };
+      })
+    );
+    
+    return clinicsWithSessions;
   }
 
   async getClinic(id: number): Promise<Clinic | undefined> {

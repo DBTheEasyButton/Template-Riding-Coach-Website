@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Clinic, InsertClinicRegistration } from "@shared/schema";
+import type { ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
 import { Calendar, MapPin, Users, Clock, Euro, FileText, AlertCircle, Check } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
@@ -38,7 +38,7 @@ export default function ClinicsSection() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: clinics = [] } = useQuery<Clinic[]>({
+  const { data: clinics = [] } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/clinics'],
   });
 

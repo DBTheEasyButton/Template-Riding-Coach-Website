@@ -212,3 +212,8 @@ export type ClinicSession = typeof clinicSessions.$inferSelect;
 export type InsertClinicSession = z.infer<typeof insertClinicSessionSchema>;
 export type TrainingVideo = typeof trainingVideos.$inferSelect;
 export type InsertTrainingVideo = z.infer<typeof insertTrainingVideoSchema>;
+
+// Extended type for clinics with sessions
+export type ClinicWithSessions = Clinic & {
+  sessions: ClinicSession[];
+};
