@@ -176,7 +176,7 @@ export default function ClinicsSection() {
   });
 
   const registrationMutation = useMutation({
-    mutationFn: async (data: InsertClinicRegistration & { paymentIntentId?: string }) => {
+    mutationFn: async (data: any) => {
       return await apiRequest('POST', `/api/clinics/${selectedClinic?.id}/register`, data);
     },
     onSuccess: () => {
@@ -768,32 +768,39 @@ export default function ClinicsSection() {
               </div>
 
               {/* Payment Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Payment Information</h3>
-                <div className="bg-orange/10 p-4 rounded-lg">
-                  <div className="flex items-center text-orange mb-2">
-                    <PoundSterling className="w-5 h-5 mr-2" />
-                    <span className="font-semibold">Clinic Fee: {selectedClinic ? `£${(selectedClinic.price / 100).toFixed(0)}` : ''}</span>
+              {!clientSecret ? (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Payment Information</h3>
+                  <div className="bg-orange/10 p-4 rounded-lg">
+                    <div className="flex items-center text-orange mb-2">
+                      <PoundSterling className="w-5 h-5 mr-2" />
+                      <span className="font-semibold">
+                        Clinic Fee: {selectedClinic ? (
+                          selectedClinic.hasMultipleSessions && selectedSessions.length > 0
+                            ? `£${(selectedClinic.sessions.filter(s => selectedSessions.includes(s.id)).reduce((total, s) => total + s.price, 0) / 100).toFixed(0)}`
+                            : `£${selectedClinic.price > 100 ? (selectedClinic.price / 100).toFixed(0) : selectedClinic.price}`
+                        ) : ''}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Complete registration details above, then proceed to secure debit card payment.
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600">
-                    Payment must be made at time of booking to secure your place. Payment details will be provided upon registration confirmation.
-                  </p>
                 </div>
-                
-                <div>
-                  <Label htmlFor="paymentMethod">Preferred Payment Method</Label>
-                  <Select value={registrationData.paymentMethod} onValueChange={(value) => handleInputChange('paymentMethod', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                      <SelectItem value="paypal">PayPal</SelectItem>
-                      <SelectItem value="cheque">Cheque</SelectItem>
-                    </SelectContent>
-                  </Select>
+              ) : (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Secure Payment</h3>
+                  <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <PaymentForm
+                      onPaymentSuccess={handlePaymentSuccess}
+                      onPaymentError={handlePaymentError}
+                      registrationData={registrationData}
+                      selectedClinic={selectedClinic!}
+                      selectedSessions={selectedSessions}
+                    />
+                  </Elements>
                 </div>
-              </div>
+              )}
 
               {/* Terms and Conditions */}
               <div className="space-y-4">
@@ -824,33 +831,35 @@ export default function ClinicsSection() {
               </div>
             </div>
             
-            <DialogFooter className="flex flex-col sm:flex-row gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setIsRegistrationOpen(false)}
-                className="border-gray-300"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                onClick={submitRegistration}
-                disabled={registrationMutation.isPending}
-                className="bg-navy hover:bg-slate-800 text-white"
-              >
-                {registrationMutation.isPending ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Check className="w-4 h-4 mr-2" />
-                    Complete Registration
-                  </>
-                )}
-              </Button>
-            </DialogFooter>
+            {!clientSecret && (
+              <DialogFooter className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsRegistrationOpen(false)}
+                  className="border-gray-300"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={submitRegistration}
+                  disabled={createPaymentIntentMutation.isPending}
+                  className="bg-navy hover:bg-slate-800 text-white"
+                >
+                  {createPaymentIntentMutation.isPending ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Setting up payment...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Proceed to Payment
+                    </>
+                  )}
+                </Button>
+              </DialogFooter>
+            )}
           </DialogContent>
         </Dialog>
       </div>
