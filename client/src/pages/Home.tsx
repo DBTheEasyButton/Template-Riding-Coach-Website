@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import CoachingSection from "@/components/CoachingSection";
+import AppSection from "@/components/AppSection";
 import ClinicsSection from "@/components/ClinicsSection";
 import TrainingVideosSection from "@/components/TrainingVideosSection";
 import ScheduleSection from "@/components/ScheduleSection";
@@ -33,6 +34,7 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <CoachingSection />
+      <AppSection />
       <ClinicsSection />
       <TrainingVideosSection />
       <ScheduleSection />
