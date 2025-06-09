@@ -452,7 +452,7 @@ export default function ClinicsSection() {
                 <div className="bg-orange/10 p-4 rounded-lg">
                   <div className="flex items-center text-orange mb-2">
                     <PoundSterling className="w-5 h-5 mr-2" />
-                    <span className="font-semibold">Clinic Fee: {selectedClinic ? formatPrice(selectedClinic.price) : ''}</span>
+                    <span className="font-semibold">Clinic Fee: {selectedClinic ? `£${(selectedClinic.price / 100).toFixed(0)}` : ''}</span>
                   </div>
                   <p className="text-sm text-gray-600">
                     Payment must be made at time of booking to secure your place. Payment details will be provided upon registration confirmation.
