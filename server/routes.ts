@@ -114,7 +114,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         automatic_payment_methods: {
           enabled: true,
         },
-        payment_method_types: ['card', 'apple_pay'],
         metadata: {
           clinicId: clinicId.toString(),
           sessionIds: sessionIds ? JSON.stringify(sessionIds) : null,
