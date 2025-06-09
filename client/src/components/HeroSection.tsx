@@ -1,8 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
 import heroImagePath from "@assets/hero-background.jpg";
+import dressageImage from "@assets/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
+import crossCountryImage from "@assets/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
+import showJumpingImage from "@assets/Riot Boekelo sj 2022_1749504436583.jpg";
 
 export default function HeroSection() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const images = [
+    heroImagePath,
+    dressageImage,
+    crossCountryImage,
+    showJumpingImage
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -12,15 +33,20 @@ export default function HeroSection() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-        style={{
-          backgroundImage: `url(${heroImagePath})`
-        }}
-      >
-        <div className="absolute inset-0 bg-black/40"></div>
-      </div>
+      {/* Background images carousel */}
+      {images.map((image, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ${
+            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{
+            backgroundImage: `url(${image})`
+          }}
+        >
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+      ))}
       
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
         <h1 className="text-6xl md:text-8xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
