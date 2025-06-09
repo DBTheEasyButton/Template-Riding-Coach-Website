@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,9 +35,31 @@ export default function ClinicsSection() {
   });
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [hasSavedData, setHasSavedData] = useState(false);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Load saved client data from localStorage on component mount
+  useEffect(() => {
+    const savedClientData = localStorage.getItem('clinicClientData');
+    if (savedClientData) {
+      try {
+        const parsedData = JSON.parse(savedClientData);
+        setRegistrationData(prev => ({
+          ...prev,
+          ...parsedData,
+          // Reset session-specific fields
+          specialRequests: '',
+          medicalConditions: '',
+          agreeToTerms: false
+        }));
+        setHasSavedData(true);
+      } catch (error) {
+        console.error('Error loading saved client data:', error);
+      }
+    }
+  }, []);
 
   const { data: clinics = [] } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/clinics'],
@@ -48,9 +70,23 @@ export default function ClinicsSection() {
       return await apiRequest('POST', `/api/clinics/${selectedClinic?.id}/register`, data);
     },
     onSuccess: () => {
+      // Save client data to localStorage (excluding session-specific fields)
+      const clientDataToSave = {
+        firstName: registrationData.firstName,
+        lastName: registrationData.lastName,
+        email: registrationData.email,
+        phone: registrationData.phone,
+        experienceLevel: registrationData.experienceLevel,
+        horseName: registrationData.horseName,
+        emergencyContact: registrationData.emergencyContact,
+        emergencyPhone: registrationData.emergencyPhone,
+        paymentMethod: registrationData.paymentMethod
+      };
+      localStorage.setItem('clinicClientData', JSON.stringify(clientDataToSave));
+      
       toast({
         title: "Registration successful!",
-        description: "You'll receive a confirmation email shortly.",
+        description: "You'll receive a confirmation email shortly. Your details have been saved for future registrations.",
       });
       setIsRegistrationOpen(false);
       setRegistrationData({
@@ -114,6 +150,29 @@ export default function ClinicsSection() {
     setSelectedClinic(clinic);
     setSelectedSessions([]); // Reset session selection
     setIsRegistrationOpen(true);
+  };
+
+  const clearSavedData = () => {
+    localStorage.removeItem('clinicClientData');
+    setHasSavedData(false);
+    setRegistrationData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      experienceLevel: '',
+      horseName: '',
+      specialRequests: '',
+      emergencyContact: '',
+      emergencyPhone: '',
+      medicalConditions: '',
+      agreeToTerms: false,
+      paymentMethod: 'bank_transfer'
+    });
+    toast({
+      title: "Saved data cleared",
+      description: "Your saved registration details have been removed.",
+    });
   };
 
   const validateForm = () => {
