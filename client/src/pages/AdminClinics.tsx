@@ -302,11 +302,17 @@ export default function AdminClinics() {
       return;
     }
 
+    // Ensure valid dates
+    const startDate = new Date(formData.date + 'T00:00:00');
+    const endDate = formData.endDate 
+      ? new Date(formData.endDate + 'T00:00:00') 
+      : new Date(formData.date + 'T00:00:00');
+
     const submitData = {
       ...formData,
-      date: new Date(formData.date),
-      endDate: formData.endDate ? new Date(formData.endDate) : new Date(formData.date),
-      price: Number(formData.price),
+      date: startDate,
+      endDate: endDate,
+      price: formData.clinicType === 'single' ? Number(formData.price) : 0,
       maxParticipants: Number(formData.maxParticipants),
       crossCountryMaxParticipants: formData.hasMultipleSessions ? Number(formData.crossCountryMaxParticipants) : undefined,
       showJumpingMaxParticipants: formData.hasMultipleSessions ? Number(formData.showJumpingMaxParticipants) : undefined,
