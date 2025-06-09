@@ -435,30 +435,8 @@ export default function AdminClinics() {
               />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="price">Price (€) *</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  placeholder="150"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="maxParticipants">Max Participants</Label>
-                <Input
-                  id="maxParticipants"
-                  type="number"
-                  value={formData.maxParticipants}
-                  onChange={(e) => setFormData({ ...formData, maxParticipants: e.target.value })}
-                />
-              </div>
-            </div>
-            
             <div className="grid gap-2">
-              <Label htmlFor="clinicType">Clinic Type</Label>
+              <Label htmlFor="clinicType">Clinic Type *</Label>
               <Select value={formData.clinicType} onValueChange={(value) => {
                 setFormData({ ...formData, clinicType: value, hasMultipleSessions: value !== "single" });
                 if (value === "single") {
@@ -477,36 +455,60 @@ export default function AdminClinics() {
             </div>
 
             {!formData.hasMultipleSessions ? (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="type">Type</Label>
-                  <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="dressage">Dressage</SelectItem>
-                      <SelectItem value="jumping">Show Jumping</SelectItem>
-                      <SelectItem value="cross-country">Cross Country</SelectItem>
-                      <SelectItem value="polework">Polework</SelectItem>
-                      <SelectItem value="gridwork">Gridwork</SelectItem>
-                    </SelectContent>
-                  </Select>
+              <>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="type">Type</Label>
+                    <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="dressage">Dressage</SelectItem>
+                        <SelectItem value="jumping">Show Jumping</SelectItem>
+                        <SelectItem value="cross-country">Cross Country</SelectItem>
+                        <SelectItem value="polework">Polework</SelectItem>
+                        <SelectItem value="gridwork">Gridwork</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="level">Level</Label>
+                    <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getSkillLevelOptions(formData.type).map((level) => (
+                          <SelectItem key={level} value={level.toLowerCase().replace(/[^a-z0-9]/g, '_')}>{level}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="level">Level</Label>
-                  <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getSkillLevelOptions(formData.type).map((level) => (
-                        <SelectItem key={level} value={level.toLowerCase().replace(/[^a-z0-9]/g, '_')}>{level}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="price">Price (€) *</Label>
+                    <Input
+                      id="price"
+                      type="number"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      placeholder="150"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="maxParticipants">Max Participants</Label>
+                    <Input
+                      id="maxParticipants"
+                      type="number"
+                      value={formData.maxParticipants}
+                      onChange={(e) => setFormData({ ...formData, maxParticipants: e.target.value })}
+                    />
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
