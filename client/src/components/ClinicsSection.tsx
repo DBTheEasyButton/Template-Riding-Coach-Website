@@ -184,11 +184,7 @@ export default function ClinicsSection() {
                   alt={clinic.title}
                   className="w-full h-48 object-cover"
                 />
-                <div className="absolute top-4 left-4">
-                  <Badge className={getLevelColor(clinic.level)}>
-                    {clinic.level.charAt(0).toUpperCase() + clinic.level.slice(1)}
-                  </Badge>
-                </div>
+
                 <div className="absolute top-4 right-4 text-2xl">
                   {getTypeIcon(clinic.type)}
                 </div>
@@ -221,7 +217,12 @@ export default function ClinicsSection() {
                 </div>
                 <div className="flex items-center text-sm text-dark">
                   <Euro className="w-4 h-4 mr-2" />
-                  <span className="font-bold text-xl text-orange">£{clinic.price}</span>
+                  <span className="font-bold text-xl text-orange">
+                    {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                      ? `from £${Math.min(...clinic.sessions.map(s => s.price))}`
+                      : `£${clinic.price}`
+                    }
+                  </span>
                 </div>
               </CardContent>
               
