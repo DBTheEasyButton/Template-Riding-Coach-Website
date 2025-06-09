@@ -13,13 +13,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Clinic } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, MapPin, Users, Euro, Copy, Share2 } from "lucide-react";
+import type { Clinic, ClinicWithSessions } from "@shared/schema";
+import { Plus, Edit, Trash2, Calendar, MapPin, Users, Copy, Share2 } from "lucide-react";
 import SocialShare from "@/components/SocialShare";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingClinic, setEditingClinic] = useState<Clinic | null>(null);
+  const [editingClinic, setEditingClinic] = useState<ClinicWithSessions | null>(null);
   const [dialogKey, setDialogKey] = useState(0); // Force dialog re-render
   const [formData, setFormData] = useState({
     title: "",
@@ -54,7 +54,7 @@ export default function AdminClinics() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: clinics = [], isLoading, error } = useQuery<Clinic[]>({
+  const { data: clinics = [], isLoading, error } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/admin/clinics'],
   });
 
@@ -471,11 +471,11 @@ export default function AdminClinics() {
                           </a>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Euro className="w-4 h-4" />
+                          <span className="text-orange font-bold">£</span>
                           {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                            ? `from £${(Math.min(...clinic.sessions.map((s: any) => s.price)) / 100).toFixed(0)}`
+                            ? `from ${(Math.min(...clinic.sessions.map((s: any) => s.price)) / 100).toFixed(0)}`
                             : clinic.price > 0 
-                              ? `£${(clinic.price / 100).toFixed(0)}`
+                              ? `${(clinic.price / 100).toFixed(0)}`
                               : 'Price TBA'
                           }
                         </div>
