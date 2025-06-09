@@ -305,32 +305,47 @@ export default function ClinicsSection() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Session Selection</h3>
                   <div className="space-y-3">
-                    {selectedClinic.sessions.map((session) => (
-                      <div key={session.id} className="flex items-center space-x-3 p-3 border rounded-lg">
-                        <Checkbox
-                          id={`session-${session.id}`}
-                          checked={selectedSessions.includes(session.id)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setSelectedSessions([...selectedSessions, session.id]);
-                            } else {
-                              setSelectedSessions(selectedSessions.filter(id => id !== session.id));
-                            }
-                          }}
-                        />
-                        <div className="flex-1">
-                          <label htmlFor={`session-${session.id}`} className="font-medium cursor-pointer">
-                            {session.sessionName}
-                          </label>
-                          <p className="text-sm text-gray-600">
-                            {session.startTime} - {session.endTime} • {session.discipline} • {session.skillLevel}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {session.currentParticipants}/{session.maxParticipants} participants • £{(session.price / 100).toFixed(0)}
-                          </p>
+                    {selectedClinic.sessions.map((session) => {
+                      const isFull = session.currentParticipants >= session.maxParticipants;
+                      const spotsRemaining = session.maxParticipants - session.currentParticipants;
+                      
+                      return (
+                        <div key={session.id} className={`flex items-center space-x-3 p-3 border rounded-lg ${isFull ? 'bg-gray-50 border-gray-300' : 'border-gray-200'}`}>
+                          <Checkbox
+                            id={`session-${session.id}`}
+                            checked={selectedSessions.includes(session.id)}
+                            disabled={isFull}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setSelectedSessions([...selectedSessions, session.id]);
+                              } else {
+                                setSelectedSessions(selectedSessions.filter(id => id !== session.id));
+                              }
+                            }}
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <label htmlFor={`session-${session.id}`} className={`font-medium cursor-pointer ${isFull ? 'text-gray-500' : ''}`}>
+                                {session.sessionName}
+                              </label>
+                              {isFull && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">FULL</span>}
+                              {!isFull && spotsRemaining <= 2 && <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">{spotsRemaining} spots left</span>}
+                            </div>
+                            <p className={`text-sm ${isFull ? 'text-gray-400' : 'text-gray-600'}`}>
+                              {session.startTime} - {session.endTime} • {session.discipline} • {session.skillLevel}
+                            </p>
+                            <p className={`text-sm ${isFull ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {session.currentParticipants}/{session.maxParticipants} participants • £{(session.price / 100).toFixed(0)}
+                            </p>
+                            {session.requirements && (
+                              <p className="text-xs text-blue-600 mt-1">
+                                Requirements: {session.requirements}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   {selectedSessions.length > 0 && (
                     <div className="bg-orange/10 p-3 rounded-lg">
@@ -340,6 +355,12 @@ export default function ClinicsSection() {
                           .reduce((total, session) => total + session.price, 0) / 100}
                       </p>
                     </div>
+                  )}
+                  {formErrors.sessions && (
+                    <p className="text-sm text-red-500 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" />
+                      {formErrors.sessions}
+                    </p>
                   )}
                 </div>
               )}

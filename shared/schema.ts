@@ -176,7 +176,8 @@ export const insertClinicRegistrationSchema = createInsertSchema(clinicRegistrat
 export const insertClinicSessionSchema = createInsertSchema(clinicSessions).omit({
   id: true,
   createdAt: true,
-  currentParticipants: true,
+}).extend({
+  currentParticipants: z.number().default(0),
 });
 
 export const insertClinicWaitlistSchema = createInsertSchema(clinicWaitlist).omit({
