@@ -446,7 +446,10 @@ export default function ClinicsSection() {
               </CardHeader>
               
               <CardContent className="transition-transform duration-300 group-hover:translate-y-1 flex-grow">
-                <div className="space-y-3 mt-auto">
+              </CardContent>
+              
+              <CardFooter className="flex flex-col gap-4 transition-transform duration-300 group-hover:translate-y-2">
+                <div className="space-y-3 w-full">
                   <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
                     <Calendar className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                     <span className="transition-colors duration-300 group-hover:text-navy">{formatDate(clinic.date)}</span>
@@ -487,9 +490,6 @@ export default function ClinicsSection() {
                     </span>
                   </div>
                 </div>
-              </CardContent>
-              
-              <CardFooter className="flex flex-col gap-2 transition-transform duration-300 group-hover:translate-y-2">
                 <div className="flex gap-2 w-full">
                   {(() => {
                     const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
