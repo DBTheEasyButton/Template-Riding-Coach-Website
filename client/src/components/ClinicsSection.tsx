@@ -442,30 +442,30 @@ export default function ClinicsSection() {
 
               </div>
               
-              <CardHeader>
-                <CardTitle className="text-xl font-playfair text-navy font-bold">{clinic.title}</CardTitle>
-                <CardDescription className="text-dark font-medium">{clinic.description}</CardDescription>
+              <CardHeader className="transition-transform duration-300 group-hover:translate-y-1">
+                <CardTitle className="text-xl font-playfair text-navy font-bold transition-colors duration-300 group-hover:text-orange">{clinic.title}</CardTitle>
+                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600">{clinic.description}</CardDescription>
               </CardHeader>
               
-              <CardContent className="space-y-4">
-                <div className="flex items-center text-sm text-dark font-medium">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>{formatDate(clinic.date)}</span>
+              <CardContent className="space-y-4 transition-transform duration-300 group-hover:translate-y-1">
+                <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                  <Calendar className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                  <span className="transition-colors duration-300 group-hover:text-navy">{formatDate(clinic.date)}</span>
                 </div>
-                <div className="flex items-center text-sm text-dark font-medium">
-                  <MapPin className="w-4 h-4 mr-2" />
+                <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                  <MapPin className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                   <a 
                     href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-orange underline"
+                    className="hover:text-orange underline transition-colors duration-300 group-hover:text-navy"
                   >
                     {clinic.location}
                   </a>
                 </div>
-                <div className="flex items-center text-sm text-dark font-medium">
-                  <Users className="w-4 h-4 mr-2" />
-                  <span>
+                <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                  <Users className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                  <span className="transition-colors duration-300 group-hover:text-navy">
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
                       ? (() => {
                           const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
@@ -476,9 +476,9 @@ export default function ClinicsSection() {
                     }
                   </span>
                 </div>
-                <div className="flex items-center text-sm text-dark">
-                  <PoundSterling className="w-4 h-4 mr-2" />
-                  <span className="font-bold text-xl text-orange">
+                <div className="flex items-center text-sm text-dark transition-all duration-300 group-hover:translate-x-1">
+                  <PoundSterling className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                  <span className="font-bold text-xl text-orange transition-all duration-300 group-hover:text-2xl group-hover:text-navy">
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
                       ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
                       : clinic.price > 0 
@@ -489,7 +489,7 @@ export default function ClinicsSection() {
                 </div>
               </CardContent>
               
-              <CardFooter className="flex flex-col gap-2">
+              <CardFooter className="flex flex-col gap-2 transition-transform duration-300 group-hover:translate-y-2">
                 <div className="flex gap-2 w-full">
                   {(() => {
                     const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
@@ -504,20 +504,22 @@ export default function ClinicsSection() {
                       <Button 
                         onClick={() => handleRegistration(clinic)}
                         variant="outline"
-                        className="flex-1 border-orange text-orange hover:bg-orange hover:text-white font-semibold"
+                        className="flex-1 border-orange text-orange hover:bg-orange hover:text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:border-2"
                       >
                         Join Waitlist
                       </Button>
                     ) : (
                       <Button 
                         onClick={() => handleRegistration(clinic)}
-                        className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold"
+                        className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:bg-orange"
                       >
                         Register Now
                       </Button>
                     );
                   })()}
-                  <SocialShare clinic={clinic} />
+                  <div className="transition-transform duration-300 group-hover:scale-110">
+                    <SocialShare clinic={clinic} />
+                  </div>
                 </div>
                 {(() => {
                   const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0

@@ -199,7 +199,7 @@ Register now: ${clinicUrl}
             <h4 className="font-semibold">Share on Social Media</h4>
             
             {/* Native Share Button (shows image when supported) */}
-            {navigator.share && (
+            {typeof navigator !== 'undefined' && navigator.share && (
               <Button onClick={shareWithNativeAPI} className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white mb-3">
                 <Share2 className="w-4 h-4 mr-2" />
                 Share with Image
