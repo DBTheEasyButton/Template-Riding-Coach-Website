@@ -476,7 +476,10 @@ export default function AdminClinics() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
-                          {clinic.maxParticipants} max
+                          {clinic.hasMultipleSessions 
+                            ? `${(clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12)} max`
+                            : `${clinic.maxParticipants} max`
+                          }
                         </div>
                       </div>
                     </div>

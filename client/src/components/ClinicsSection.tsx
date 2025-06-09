@@ -222,7 +222,11 @@ export default function ClinicsSection() {
                   <Users className="w-4 h-4 mr-2" />
                   <span>
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? `${clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0)}/${clinic.sessions.reduce((total, session) => total + session.maxParticipants, 0)} participants`
+                      ? (() => {
+                          const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
+                          const maxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
+                          return `${currentParticipants}/${maxParticipants} participants`;
+                        })()
                       : `${clinic.currentParticipants}/${clinic.maxParticipants} participants`
                     }
                   </span>
@@ -244,7 +248,11 @@ export default function ClinicsSection() {
                 <div className="flex gap-2 w-full">
                   {(() => {
                     const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? clinic.sessions.every(session => session.currentParticipants >= session.maxParticipants)
+                      ? (() => {
+                          const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
+                          const maxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
+                          return currentParticipants >= maxParticipants;
+                        })()
                       : clinic.currentParticipants >= clinic.maxParticipants;
                     
                     return isFull ? (
@@ -268,7 +276,11 @@ export default function ClinicsSection() {
                 </div>
                 {(() => {
                   const isFull = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                    ? clinic.sessions.some(session => session.currentParticipants >= session.maxParticipants)
+                    ? (() => {
+                        const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
+                        const maxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
+                        return currentParticipants >= maxParticipants;
+                      })()
                     : clinic.currentParticipants >= clinic.maxParticipants;
                   
                   return isFull && (
