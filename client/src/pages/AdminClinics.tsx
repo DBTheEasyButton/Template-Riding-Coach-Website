@@ -235,11 +235,13 @@ export default function AdminClinics() {
     if (!formData.date) requiredFields.push('date');
     if (!formData.location.trim()) requiredFields.push('location');
     
-    // More robust price validation
-    const priceValue = formData.price?.toString().trim();
-    const numericPrice = parseFloat(priceValue || '0');
-    if (!priceValue || priceValue === '' || numericPrice <= 0) {
-      requiredFields.push('price');
+    // Only validate price for single session clinics
+    if (formData.clinicType === 'single') {
+      const priceValue = formData.price?.toString().trim();
+      const numericPrice = parseFloat(priceValue || '0');
+      if (!priceValue || priceValue === '' || numericPrice <= 0) {
+        requiredFields.push('price');
+      }
     }
     
     setMissingFields(requiredFields);
