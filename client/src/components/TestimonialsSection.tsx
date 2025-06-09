@@ -53,7 +53,7 @@ export default function TestimonialsSection() {
   return (
     <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             What Dan's pupils say
           </h2>
@@ -62,7 +62,7 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="relative max-w-6xl mx-auto overflow-hidden py-20">
+        <div className="relative max-w-6xl mx-auto overflow-hidden py-10">
           <div className="flex animate-scroll gap-4">
             {/* Duplicate testimonials for seamless infinite scroll */}
             {[...testimonials, ...testimonials].map((testimonial, index) => (
