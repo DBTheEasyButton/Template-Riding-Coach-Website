@@ -47,6 +47,8 @@ export default function AdminClinics() {
       requirements: ""
     }
   ]);
+  
+  const [missingFields, setMissingFields] = useState<string[]>([]);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -226,9 +228,21 @@ export default function AdminClinics() {
   };
 
   const handleSave = () => {
-    if (!formData.title || !formData.description || !formData.date || 
-        !formData.location || !formData.price) {
-      toast({ title: "Please fill in all required fields", variant: "destructive" });
+    const requiredFields = [];
+    if (!formData.title.trim()) requiredFields.push('title');
+    if (!formData.description.trim()) requiredFields.push('description');
+    if (!formData.date) requiredFields.push('date');
+    if (!formData.location.trim()) requiredFields.push('location');
+    if (!formData.price || formData.price === '0') requiredFields.push('price');
+    
+    setMissingFields(requiredFields);
+    
+    if (requiredFields.length > 0) {
+      toast({ 
+        title: "Please fill in all required fields", 
+        description: `Missing: ${requiredFields.join(', ')}`,
+        variant: "destructive" 
+      });
       return;
     }
 
@@ -388,9 +402,18 @@ export default function AdminClinics() {
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, title: e.target.value });
+                  if (missingFields.includes('title')) {
+                    setMissingFields(missingFields.filter(f => f !== 'title'));
+                  }
+                }}
                 placeholder="e.g., Advanced Dressage Clinic"
+                className={missingFields.includes('title') ? 'border-red-500 focus:border-red-500' : ''}
               />
+              {missingFields.includes('title') && (
+                <p className="text-sm text-red-500">Title is required</p>
+              )}
             </div>
             
             <div className="grid gap-2">
