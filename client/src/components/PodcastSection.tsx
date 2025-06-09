@@ -46,53 +46,10 @@ export default function PodcastSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-orange">Expert</div>
-                <div className="text-sm text-dark">Interviews</div>
-              </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-orange">Industry</div>
-                <div className="text-sm text-dark">Insights</div>
-              </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-orange">Passionate</div>
-                <div className="text-sm text-dark">Stories</div>
-              </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-lg">
-                <div className="text-2xl font-bold text-orange">Equestrian</div>
-                <div className="text-sm text-dark">Lifestyle</div>
-              </div>
-            </div>
+
           </div>
           
-          <div className="relative">
-            <div className="bg-gradient-to-br from-navy to-navy/80 rounded-3xl p-8 text-center shadow-2xl">
-              <div className="bg-orange rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                <Headphones className="w-12 h-12 text-white" />
-              </div>
-              <h4 className="text-2xl font-playfair font-bold mb-4 text-white">Available on All Platforms</h4>
-              <p className="text-white/90 mb-6">Join the conversation and discover the stories that shape our equestrian community</p>
-              
-              <div className="space-y-4">
-                <div className="bg-white/20 rounded-xl p-4 backdrop-blur-sm">
-                  <div className="flex items-center justify-center space-x-2 text-white mb-2">
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                    <Star className="w-4 h-4 fill-current" />
-                  </div>
-                  <p className="text-sm text-white/90">Trusted by equestrian enthusiasts worldwide</p>
-                </div>
-                
-                <div className="flex items-center justify-center text-white/80 text-sm">
-                  <Users className="w-4 h-4 mr-2" />
-                  Growing community of listeners
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
