@@ -100,7 +100,7 @@ export default function AppSection() {
           </div>
           
           <div className="relative">
-            <div className="bg-gradient-to-br from-orange to-orange/70 rounded-3xl p-8 text-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+            <div className="bg-gradient-to-br from-orange to-orange/70 rounded-3xl p-8 text-center shadow-2xl hover:shadow-3xl transition-shadow duration-500">
               <Smartphone className="w-24 h-24 mx-auto mb-6 text-white" />
               <h4 className="text-2xl font-playfair font-bold mb-4 text-white">Available on iOS</h4>
               <p className="text-white/90 mb-6">Download the Dan Bizzarro Method app and start your transformation today</p>
