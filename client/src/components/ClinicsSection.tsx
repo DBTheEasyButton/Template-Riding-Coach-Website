@@ -366,6 +366,25 @@ export default function ClinicsSection() {
               <DialogDescription>
                 Complete your registration for this exclusive training clinic with Dan Bizzarro.
               </DialogDescription>
+              {hasSavedData && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-green-800">
+                      <Check className="w-4 h-4 mr-2" />
+                      <span className="text-sm font-medium">Your details have been pre-filled from your last registration</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={clearSavedData}
+                      className="text-green-700 hover:text-green-900 text-xs"
+                    >
+                      Clear saved data
+                    </Button>
+                  </div>
+                  <p className="text-xs text-green-600 mt-1">You can edit any information below as needed.</p>
+                </div>
+              )}
             </DialogHeader>
             
             <div className="grid gap-6 py-4">
