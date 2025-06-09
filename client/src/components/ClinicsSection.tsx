@@ -445,45 +445,47 @@ export default function ClinicsSection() {
                 <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-3">{clinic.description}</CardDescription>
               </CardHeader>
               
-              <CardContent className="space-y-4 transition-transform duration-300 group-hover:translate-y-1 flex-grow">
-                <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
-                  <Calendar className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
-                  <span className="transition-colors duration-300 group-hover:text-navy">{formatDate(clinic.date)}</span>
-                </div>
-                <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
-                  <MapPin className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
-                  <a 
-                    href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-orange underline transition-colors duration-300 group-hover:text-navy"
-                  >
-                    {clinic.location}
-                  </a>
-                </div>
-                <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
-                  <Users className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
-                  <span className="transition-colors duration-300 group-hover:text-navy">
-                    {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? (() => {
-                          const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
-                          const maxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
-                          return `${currentParticipants}/${maxParticipants} participants`;
-                        })()
-                      : `${clinic.currentParticipants}/${clinic.maxParticipants} participants`
-                    }
-                  </span>
-                </div>
-                <div className="flex items-center text-sm text-dark transition-all duration-300 group-hover:translate-x-1">
-                  <PoundSterling className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
-                  <span className="font-bold text-xl text-orange transition-all duration-300 group-hover:text-2xl group-hover:text-navy">
-                    {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
-                      : clinic.price > 0 
-                        ? `£${(clinic.price / 100).toFixed(0)}`
-                        : 'Price TBA'
-                    }
-                  </span>
+              <CardContent className="transition-transform duration-300 group-hover:translate-y-1 flex-grow">
+                <div className="space-y-3 mt-auto">
+                  <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                    <Calendar className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                    <span className="transition-colors duration-300 group-hover:text-navy">{formatDate(clinic.date)}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                    <MapPin className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                    <a 
+                      href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-orange underline transition-colors duration-300 group-hover:text-navy"
+                    >
+                      {clinic.location}
+                    </a>
+                  </div>
+                  <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                    <Users className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                    <span className="transition-colors duration-300 group-hover:text-navy">
+                      {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                        ? (() => {
+                            const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
+                            const maxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
+                            return `${currentParticipants}/${maxParticipants} participants`;
+                          })()
+                        : `${clinic.currentParticipants}/${clinic.maxParticipants} participants`
+                      }
+                    </span>
+                  </div>
+                  <div className="flex items-center text-sm text-dark transition-all duration-300 group-hover:translate-x-1">
+                    <PoundSterling className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                    <span className="font-bold text-xl text-orange transition-all duration-300 group-hover:text-2xl group-hover:text-navy">
+                      {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                        ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
+                        : clinic.price > 0 
+                          ? `£${(clinic.price / 100).toFixed(0)}`
+                          : 'Price TBA'
+                      }
+                    </span>
+                  </div>
                 </div>
               </CardContent>
               
