@@ -106,6 +106,12 @@ export default function TestimonialsSection() {
             ))}
           </div>
         </div>
+
+        <div className="text-center mt-10">
+          <p className="text-gray-600 text-lg">
+            Join hundreds of satisfied riders who have transformed their equestrian journey
+          </p>
+        </div>
       </div>
 
       {/* Fixed position expanded testimonial overlay */}
