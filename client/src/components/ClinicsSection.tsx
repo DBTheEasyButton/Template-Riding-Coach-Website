@@ -17,7 +17,7 @@ import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 
 export default function ClinicsSection() {
-  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
+  const [selectedClinic, setSelectedClinic] = useState<ClinicWithSessions | null>(null);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [registrationData, setRegistrationData] = useState({
     firstName: '',
@@ -33,6 +33,7 @@ export default function ClinicsSection() {
     agreeToTerms: false,
     paymentMethod: 'bank_transfer'
   });
+  const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const { toast } = useToast();
@@ -109,8 +110,9 @@ export default function ClinicsSection() {
     }
   };
 
-  const handleRegistration = (clinic: Clinic) => {
+  const handleRegistration = (clinic: ClinicWithSessions) => {
     setSelectedClinic(clinic);
+    setSelectedSessions([]); // Reset session selection
     setIsRegistrationOpen(true);
   };
 
@@ -128,6 +130,11 @@ export default function ClinicsSection() {
     if (!registrationData.emergencyContact.trim()) errors.emergencyContact = "Emergency contact is required";
     if (!registrationData.emergencyPhone.trim()) errors.emergencyPhone = "Emergency phone is required";
     if (!registrationData.agreeToTerms) errors.agreeToTerms = "You must agree to the terms and conditions";
+    
+    // Validate session selection for multi-session clinics
+    if (selectedClinic?.hasMultipleSessions && selectedSessions.length === 0) {
+      errors.sessions = "Please select at least one session";
+    }
     
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -293,6 +300,50 @@ export default function ClinicsSection() {
             </DialogHeader>
             
             <div className="grid gap-6 py-4">
+              {/* Session Selection for Multi-Session Clinics */}
+              {selectedClinic?.hasMultipleSessions && selectedClinic.sessions && selectedClinic.sessions.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Session Selection</h3>
+                  <div className="space-y-3">
+                    {selectedClinic.sessions.map((session) => (
+                      <div key={session.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+                        <Checkbox
+                          id={`session-${session.id}`}
+                          checked={selectedSessions.includes(session.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setSelectedSessions([...selectedSessions, session.id]);
+                            } else {
+                              setSelectedSessions(selectedSessions.filter(id => id !== session.id));
+                            }
+                          }}
+                        />
+                        <div className="flex-1">
+                          <label htmlFor={`session-${session.id}`} className="font-medium cursor-pointer">
+                            {session.sessionName}
+                          </label>
+                          <p className="text-sm text-gray-600">
+                            {session.startTime} - {session.endTime} • {session.discipline} • {session.skillLevel}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {session.currentParticipants}/{session.maxParticipants} participants • £{(session.price / 100).toFixed(0)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {selectedSessions.length > 0 && (
+                    <div className="bg-orange/10 p-3 rounded-lg">
+                      <p className="font-semibold text-orange">
+                        Total Cost: £{selectedClinic.sessions
+                          .filter(session => selectedSessions.includes(session.id))
+                          .reduce((total, session) => total + session.price, 0) / 100}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              
               {/* Personal Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Personal Information</h3>
