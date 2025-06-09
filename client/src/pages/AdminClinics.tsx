@@ -552,13 +552,31 @@ export default function AdminClinics() {
                       type="text"
                       value={formData.price}
                       onChange={(e) => {
-                        let value = e.target.value.replace(/[^0-9.]/g, '');
-                        // Prevent leading zeros except for decimal numbers
-                        if (value.length > 1 && value.startsWith('0') && !value.startsWith('0.')) {
-                          value = value.substring(1);
+                        const rawValue = e.target.value;
+                        
+                        // Allow empty string for clearing
+                        if (rawValue === '') {
+                          setFormData({ ...formData, price: '' });
+                          return;
                         }
-                        setFormData({ ...formData, price: value });
-                        if (missingFields.includes('price')) {
+                        
+                        // Only allow numbers and one decimal point
+                        const value = rawValue.replace(/[^0-9.]/g, '');
+                        
+                        // Prevent multiple decimal points
+                        const decimalCount = (value.match(/\./g) || []).length;
+                        if (decimalCount > 1) return;
+                        
+                        // Don't allow leading zeros unless it's a decimal
+                        let cleanValue = value;
+                        if (cleanValue.length > 1 && cleanValue.startsWith('0') && !cleanValue.startsWith('0.')) {
+                          cleanValue = cleanValue.substring(1);
+                        }
+                        
+                        setFormData({ ...formData, price: cleanValue });
+                        
+                        // Clear error if we now have a valid price
+                        if (cleanValue && parseFloat(cleanValue) > 0 && missingFields.includes('price')) {
                           setMissingFields(missingFields.filter(f => f !== 'price'));
                         }
                       }}
@@ -647,8 +665,28 @@ export default function AdminClinics() {
                           type="text"
                           value={session.price}
                           onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9.]/g, '');
-                            updateSession(index, 'price', value ? Number(value) : '');
+                            const rawValue = e.target.value;
+                            
+                            // Allow empty string for clearing
+                            if (rawValue === '') {
+                              updateSession(index, 'price', '');
+                              return;
+                            }
+                            
+                            // Only allow numbers and one decimal point
+                            const value = rawValue.replace(/[^0-9.]/g, '');
+                            
+                            // Prevent multiple decimal points
+                            const decimalCount = (value.match(/\./g) || []).length;
+                            if (decimalCount > 1) return;
+                            
+                            // Don't allow leading zeros unless it's a decimal
+                            let cleanValue = value;
+                            if (cleanValue.length > 1 && cleanValue.startsWith('0') && !cleanValue.startsWith('0.')) {
+                              cleanValue = cleanValue.substring(1);
+                            }
+                            
+                            updateSession(index, 'price', cleanValue ? Number(cleanValue) : '');
                           }}
                         />
                       </div>
