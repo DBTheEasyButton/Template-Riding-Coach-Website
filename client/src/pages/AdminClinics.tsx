@@ -26,14 +26,11 @@ export default function AdminClinics() {
     date: "",
     endDate: "",
     location: "",
-    price: "",
     maxParticipants: "12",
-    type: "dressage",
-    level: "intermediate",
     image: "",
     isActive: true,
-    hasMultipleSessions: false,
-    clinicType: "single",
+    hasMultipleSessions: true,
+    clinicType: "multi-session",
     crossCountryMaxParticipants: "12",
     showJumpingMaxParticipants: "12"
   });
@@ -109,14 +106,11 @@ export default function AdminClinics() {
       date: "",
       endDate: "",
       location: "",
-      price: "",
       maxParticipants: "12",
-      type: "dressage",
-      level: "intermediate",
       image: "",
       isActive: true,
-      hasMultipleSessions: false,
-      clinicType: "single",
+      hasMultipleSessions: true,
+      clinicType: "multi-session",
       crossCountryMaxParticipants: "12",
       showJumpingMaxParticipants: "12"
     });
@@ -185,14 +179,11 @@ export default function AdminClinics() {
       date: new Date(clinic.date).toISOString().split('T')[0],
       endDate: clinic.endDate ? new Date(clinic.endDate).toISOString().split('T')[0] : "",
       location: clinic.location,
-      price: clinic.price.toString(),
       maxParticipants: clinic.maxParticipants.toString(),
-      type: clinic.type,
-      level: clinic.level,
       image: clinic.image,
       isActive: clinic.isActive,
-      hasMultipleSessions: clinic.hasMultipleSessions || false,
-      clinicType: clinic.clinicType || "single",
+      hasMultipleSessions: true,
+      clinicType: "multi-session",
       crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
       showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
     });
@@ -211,14 +202,11 @@ export default function AdminClinics() {
       date: cloneDate.toISOString().split('T')[0],
       endDate: clinic.endDate ? new Date(new Date(clinic.endDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
       location: clinic.location,
-      price: clinic.price.toString(),
       maxParticipants: clinic.maxParticipants.toString(),
-      type: clinic.type,
-      level: clinic.level,
       image: clinic.image,
       isActive: true, // Default new clinic to active
-      hasMultipleSessions: clinic.hasMultipleSessions || false,
-      clinicType: clinic.clinicType || "single",
+      hasMultipleSessions: true,
+      clinicType: "multi-session",
       crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
       showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
     });
@@ -226,9 +214,13 @@ export default function AdminClinics() {
   };
 
   const handleSave = () => {
-    if (!formData.title || !formData.description || !formData.date || 
-        !formData.location || !formData.price) {
+    if (!formData.title || !formData.description || !formData.date || !formData.location) {
       toast({ title: "Please fill in all required fields", variant: "destructive" });
+      return;
+    }
+
+    if (sessions.length === 0) {
+      toast({ title: "Please add at least one session", variant: "destructive" });
       return;
     }
 
@@ -236,11 +228,11 @@ export default function AdminClinics() {
       ...formData,
       date: new Date(formData.date),
       endDate: formData.endDate ? new Date(formData.endDate) : new Date(formData.date),
-      price: Number(formData.price),
+      price: sessions.length > 0 ? sessions[0].price : 0, // Use first session price for compatibility
       maxParticipants: Number(formData.maxParticipants),
-      crossCountryMaxParticipants: formData.hasMultipleSessions ? Number(formData.crossCountryMaxParticipants) : undefined,
-      showJumpingMaxParticipants: formData.hasMultipleSessions ? Number(formData.showJumpingMaxParticipants) : undefined,
-      sessions: formData.hasMultipleSessions ? sessions : []
+      crossCountryMaxParticipants: Number(formData.crossCountryMaxParticipants),
+      showJumpingMaxParticipants: Number(formData.showJumpingMaxParticipants),
+      sessions: sessions
     };
 
     if (editingClinic) {
@@ -457,65 +449,14 @@ export default function AdminClinics() {
               </div>
             </div>
             
-            <div className="grid gap-2">
-              <Label htmlFor="clinicType">Clinic Type</Label>
-              <Select value={formData.clinicType} onValueChange={(value) => {
-                setFormData({ ...formData, clinicType: value, hasMultipleSessions: value !== "single" });
-                if (value === "single") {
-                  setSessions([sessions[0]]);
-                }
-              }}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="single">Single Session</SelectItem>
-                  <SelectItem value="multi-session">Multi-Session (Show Jumping + Cross Country)</SelectItem>
-                  <SelectItem value="combo">Combo Day</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {!formData.hasMultipleSessions ? (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="type">Type</Label>
-                  <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="dressage">Dressage</SelectItem>
-                      <SelectItem value="jumping">Show Jumping</SelectItem>
-                      <SelectItem value="cross-country">Cross Country</SelectItem>
-                      <SelectItem value="polework">Polework</SelectItem>
-                      <SelectItem value="gridwork">Gridwork</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="level">Level</Label>
-                  <Select value={formData.level} onValueChange={(value) => setFormData({ ...formData, level: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getSkillLevelOptions(formData.type).map((level) => (
-                        <SelectItem key={level} value={level.toLowerCase().replace(/[^a-z0-9]/g, '_')}>{level}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <Label className="text-lg font-semibold">Sessions</Label>
+                <Button type="button" onClick={addSession} variant="outline" size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Session
+                </Button>
               </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <Label className="text-lg font-semibold">Sessions</Label>
-                  <Button type="button" onClick={addSession} variant="outline" size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Session
-                  </Button>
-                </div>
                 
                 {sessions.map((session, index) => (
                   <div key={index} className="border rounded-lg p-4 space-y-3">
@@ -609,7 +550,6 @@ export default function AdminClinics() {
                   </div>
                 </div>
               </div>
-            )}
             
             <div className="grid gap-2">
               <Label htmlFor="image">Clinic Image</Label>
