@@ -157,8 +157,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clinicId = parseInt(req.params.id);
       const updateData = { ...req.body };
       
-      console.log("Raw update data:", updateData);
-      
       // Filter out undefined and null values and only update allowed fields
       const allowedFields = [
         'title', 'description', 'date', 'endDate', 'location', 'price', 
@@ -225,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         cleanedData.showJumpingMaxParticipants = parseInt(cleanedData.showJumpingMaxParticipants.toString());
       }
       
-      console.log("Cleaned data for update:", cleanedData);
+
       
       const updatedClinic = await storage.updateClinic(clinicId, cleanedData);
       if (!updatedClinic) {
