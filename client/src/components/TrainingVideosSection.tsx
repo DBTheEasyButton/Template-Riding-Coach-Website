@@ -98,8 +98,8 @@ export default function TrainingVideosSection() {
                 variant={activeCategory === category.id ? "default" : "outline"}
                 className={`${
                   activeCategory === category.id 
-                    ? 'bg-forest hover:bg-green-800 text-white' 
-                    : 'border-forest text-forest hover:bg-forest hover:text-white'
+                    ? 'bg-navy hover:bg-gray-800 text-white' 
+                    : 'border-navy text-navy hover:bg-navy hover:text-white'
                 } transition-all duration-300`}
               >
                 <span className="mr-2">{category.icon}</span>
@@ -172,14 +172,14 @@ export default function TrainingVideosSection() {
         )}
 
         <div className="text-center mt-12">
-          <div className="bg-gradient-to-r from-forest to-green-800 text-white rounded-2xl p-8">
+          <div className="bg-gradient-to-r from-navy to-gray-800 text-white rounded-2xl p-8">
             <Crown className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
-            <h3 className="text-2xl font-playfair font-bold mb-4">Unlock Premium Content</h3>
-            <p className="text-green-100 mb-6 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-playfair font-bold mb-4 text-white">Unlock Premium Content</h3>
+            <p className="text-gray-200 mb-6 max-w-2xl mx-auto">
               Get access to advanced training techniques, exclusive masterclasses, and personalized video feedback with our premium membership.
             </p>
             <Button 
-              className="bg-italian-red hover:bg-red-700 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+              className="bg-orange hover:bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
             >
               Upgrade to Premium
             </Button>
