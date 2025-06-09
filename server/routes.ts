@@ -111,6 +111,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/admin/clinics/:id", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.id);
+      const clinics = await storage.getAllClinics();
+      const clinic = clinics.find(c => c.id === clinicId);
+      
+      if (!clinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+      
+      res.json(clinic);
+    } catch (error) {
+      console.error("Error fetching clinic:", error);
+      res.status(500).json({ message: "Failed to fetch clinic" });
+    }
+  });
+
   app.post("/api/admin/clinics", async (req, res) => {
     try {
       // Convert date strings to Date objects before validation

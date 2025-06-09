@@ -78,12 +78,15 @@ export default function AdminClinics() {
       const { id, ...updateData } = data;
       return await apiRequest('PUT', `/api/admin/clinics/${id}`, updateData);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({ title: "Clinic updated successfully!" });
       setEditingClinic(null);
       resetForm();
-      queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
+      setIsCreateOpen(false);
+      // Force refetch of fresh data
+      await queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
+      await queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
+      await queryClient.refetchQueries({ queryKey: ['/api/admin/clinics'] });
     },
     onError: () => {
       toast({ title: "Error updating clinic", variant: "destructive" });
@@ -216,29 +219,34 @@ export default function AdminClinics() {
     }
   };
 
-  const handleEdit = (clinic: any) => {
-    setEditingClinic(clinic);
+  const handleEdit = async (clinic: any) => {
+    // Get the most recent clinic data from the cache or refetch
+    await queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
+    const freshClinics = await queryClient.fetchQuery({ queryKey: ['/api/admin/clinics'] });
+    const freshClinic = freshClinics.find((c: any) => c.id === clinic.id) || clinic;
+    
+    setEditingClinic(freshClinic);
     setFormData({
-      title: clinic.title,
-      description: clinic.description,
-      date: new Date(clinic.date).toISOString().split('T')[0],
-      endDate: clinic.endDate ? new Date(clinic.endDate).toISOString().split('T')[0] : "",
-      location: clinic.location,
-      price: clinic.price.toString(),
-      maxParticipants: clinic.maxParticipants.toString(),
-      type: clinic.type,
-      level: clinic.level,
-      image: clinic.image,
-      isActive: clinic.isActive,
-      hasMultipleSessions: clinic.hasMultipleSessions || false,
-      clinicType: clinic.clinicType || "single",
-      crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
-      showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
+      title: freshClinic.title,
+      description: freshClinic.description,
+      date: new Date(freshClinic.date).toISOString().split('T')[0],
+      endDate: freshClinic.endDate ? new Date(freshClinic.endDate).toISOString().split('T')[0] : "",
+      location: freshClinic.location,
+      price: freshClinic.price.toString(),
+      maxParticipants: freshClinic.maxParticipants.toString(),
+      type: freshClinic.type,
+      level: freshClinic.level,
+      image: freshClinic.image,
+      isActive: freshClinic.isActive,
+      hasMultipleSessions: freshClinic.hasMultipleSessions || false,
+      clinicType: freshClinic.clinicType || "single",
+      crossCountryMaxParticipants: freshClinic.crossCountryMaxParticipants?.toString() || "12",
+      showJumpingMaxParticipants: freshClinic.showJumpingMaxParticipants?.toString() || "12"
     });
     
     // Load existing session data if available
-    if (clinic.sessions && clinic.sessions.length > 0) {
-      const existingSessions = clinic.sessions.map((session: any) => ({
+    if (freshClinic.sessions && freshClinic.sessions.length > 0) {
+      const existingSessions = freshClinic.sessions.map((session: any) => ({
         sessionName: session.sessionName || "",
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
