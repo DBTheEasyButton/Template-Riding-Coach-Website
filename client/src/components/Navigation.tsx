@@ -186,7 +186,7 @@ export default function Navigation() {
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href, item.label)}
-                className="block w-full text-left px-3 py-2 text-charcoal hover:text-italian-red transition-colors duration-200"
+                className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
               >
                 {item.label}
               </button>
