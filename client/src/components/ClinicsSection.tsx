@@ -430,7 +430,7 @@ export default function ClinicsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {clinics.map((clinic) => (
-            <Card key={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform">
+            <Card key={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
               <div className="relative overflow-hidden">
                 <img 
                   src={clinic.image}
@@ -438,16 +438,14 @@ export default function ClinicsSection() {
                   className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-
               </div>
               
               <CardHeader className="transition-transform duration-300 group-hover:translate-y-1">
                 <CardTitle className="text-xl font-playfair text-navy font-bold transition-colors duration-300 group-hover:text-orange">{clinic.title}</CardTitle>
-                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600">{clinic.description}</CardDescription>
+                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-3">{clinic.description}</CardDescription>
               </CardHeader>
               
-              <CardContent className="space-y-4 transition-transform duration-300 group-hover:translate-y-1">
+              <CardContent className="space-y-4 transition-transform duration-300 group-hover:translate-y-1 flex-grow">
                 <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
                   <Calendar className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                   <span className="transition-colors duration-300 group-hover:text-navy">{formatDate(clinic.date)}</span>
