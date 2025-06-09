@@ -192,9 +192,7 @@ export default function ClinicsSection() {
                   className="w-full h-48 object-cover"
                 />
 
-                <div className="absolute top-4 right-4 text-2xl">
-                  {getTypeIcon(clinic.type)}
-                </div>
+
               </div>
               
               <CardHeader>
