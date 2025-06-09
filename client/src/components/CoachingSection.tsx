@@ -120,11 +120,12 @@ export default function CoachingSection() {
             <div 
               key={index} 
               className={`bg-white rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg border border-gray-100 ${
-                (service.title === 'Private Lessons' || service.title === 'Clinics') ? 'cursor-pointer hover:shadow-xl' : ''
+                (service.title === 'Private Lessons' || service.title === 'Clinics' || service.title === 'Dan Bizzarro Method App') ? 'cursor-pointer hover:shadow-xl' : ''
               }`}
               onClick={
                 service.title === 'Private Lessons' ? () => scrollToSection('#contact') :
-                service.title === 'Clinics' ? () => scrollToSection('#clinics') : undefined
+                service.title === 'Clinics' ? () => scrollToSection('#clinics') :
+                service.title === 'Dan Bizzarro Method App' ? () => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank') : undefined
               }
             >
               <div className="text-orange mb-4 flex justify-center">
