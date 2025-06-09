@@ -11,41 +11,8 @@ export default function TestimonialsSection() {
     queryKey: ["/api/testimonials"],
   });
 
-  const [api, setApi] = useState<any>(null);
-  const [isHovered, setIsHovered] = useState(false);
   const [hoveredTestimonial, setHoveredTestimonial] = useState<Testimonial | null>(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (!api) return;
-
-    const startAutoScroll = () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      
-      intervalRef.current = setInterval(() => {
-        if (!hoveredTestimonial) {
-          api.scrollNext();
-        }
-      }, 2000);
-    };
-
-    startAutoScroll();
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [api, hoveredTestimonial]);
-
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
 
   const handleTestimonialHover = (testimonial: Testimonial, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -107,25 +74,16 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="relative max-w-6xl mx-auto overflow-visible py-20">
-          <Carousel
-            setApi={setApi}
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full overflow-visible"
-          >
-            <CarouselContent className="-ml-1 md:-ml-2 overflow-visible">
-              {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="pl-1 md:pl-2 basis-1/3 md:basis-1/4 lg:basis-1/6">
-                  <div className="relative">
-                    {/* Normal card */}
-                    <Card 
-                      className="h-full bg-white/80 backdrop-blur-sm border border-orange-200 shadow-sm transition-all duration-300 cursor-pointer hover:shadow-md"
-                      onMouseEnter={(e) => handleTestimonialHover(testimonial, e)}
-                      onMouseLeave={handleTestimonialLeave}
-                    >
+        <div className="relative max-w-6xl mx-auto overflow-hidden py-20">
+          <div className="flex animate-scroll gap-4">
+            {/* Duplicate testimonials for seamless infinite scroll */}
+            {[...testimonials, ...testimonials].map((testimonial, index) => (
+              <div key={`${testimonial.id}-${index}`} className="flex-shrink-0 w-48">
+                <Card 
+                  className="h-full bg-white/80 backdrop-blur-sm border border-orange-200 shadow-sm transition-all duration-300 cursor-pointer hover:shadow-md"
+                  onMouseEnter={(e) => handleTestimonialHover(testimonial, e)}
+                  onMouseLeave={handleTestimonialLeave}
+                >
                       <CardContent className="p-2 flex flex-col justify-between h-full">
                         <div className="mb-2">
                           <Quote className="w-3 h-3 text-orange-500 mb-1 opacity-50" />
@@ -166,12 +124,8 @@ export default function TestimonialsSection() {
                       </CardContent>
                     </Card>
                   </div>
-                </CarouselItem>
               ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute -left-8 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-orange-200 text-orange-600 hover:text-orange-700 w-6 h-6" />
-            <CarouselNext className="absolute -right-8 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-orange-200 text-orange-600 hover:text-orange-700 w-6 h-6" />
-          </Carousel>
+            </div>
         </div>
 
         <div className="text-center mt-12">
