@@ -21,7 +21,9 @@ import {
   type InsertContact,
   type Clinic,
   type InsertClinic,
+  type ClinicWithSessions,
   type ClinicSession,
+  type InsertClinicSession,
   type ClinicRegistration,
   type InsertClinicRegistration,
   type ClinicWaitlist,
@@ -49,7 +51,7 @@ export interface IStorage {
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
   
-  getAllClinics(): Promise<Clinic[]>;
+  getAllClinics(): Promise<ClinicWithSessions[]>;
   getClinic(id: number): Promise<Clinic | undefined>;
   createClinic(clinic: InsertClinic): Promise<Clinic>;
   updateClinic(id: number, clinic: Partial<InsertClinic>): Promise<Clinic | undefined>;
@@ -318,12 +320,12 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
   }
 
-  async getAllClinics(): Promise<Clinic[]> {
+  async getAllClinics(): Promise<ClinicWithSessions[]> {
     const clinicsData = await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
     
     // For each clinic, get its sessions if it has multiple sessions
-    const clinicsWithSessions = await Promise.all(
-      clinicsData.map(async (clinic) => {
+    const clinicsWithSessions: ClinicWithSessions[] = await Promise.all(
+      clinicsData.map(async (clinic): Promise<ClinicWithSessions> => {
         if (clinic.hasMultipleSessions) {
           const sessions = await db.select().from(clinicSessions).where(eq(clinicSessions.clinicId, clinic.id));
           return { ...clinic, sessions };

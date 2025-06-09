@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
+import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
 import { Calendar, MapPin, Users, Clock, Euro, FileText, AlertCircle, Check } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
@@ -219,7 +219,7 @@ export default function ClinicsSection() {
                   <Euro className="w-4 h-4 mr-2" />
                   <span className="font-bold text-xl text-orange">
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? `from £${Math.min(...clinic.sessions.map(s => s.price))}`
+                      ? `from £${Math.min(...clinic.sessions.map((s: ClinicSession) => s.price))}`
                       : `£${clinic.price}`
                     }
                   </span>
