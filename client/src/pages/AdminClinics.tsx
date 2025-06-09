@@ -735,10 +735,6 @@ export default function AdminClinics() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <Label className="text-lg font-semibold">Sessions</Label>
-                  <Button type="button" onClick={addSession} variant="outline" size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Session
-                  </Button>
                 </div>
                 
                 {sessions.map((session, index) => (
@@ -856,6 +852,13 @@ export default function AdminClinics() {
                     </div>
                   </div>
                 ))}
+                
+                <div className="flex justify-center pt-2">
+                  <Button type="button" onClick={addSession} variant="outline" size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Session
+                  </Button>
+                </div>
                 
                 {/* Overall Max Participants for Multi-Session Clinics */}
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t">
