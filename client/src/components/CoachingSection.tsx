@@ -129,12 +129,18 @@ export default function CoachingSection() {
 
         <div className="text-center space-y-6">
           <h3 className="text-2xl font-playfair font-bold text-navy">Ready to Start Your Journey?</h3>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-4xl mx-auto">
             <Button 
               onClick={() => scrollToSection('#clinics')}
               className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
             >
               Book a Clinic
+            </Button>
+            <Button 
+              onClick={() => window.open('https://wa.me/447767291713', '_blank')}
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+            >
+              Book a Private Lesson
             </Button>
             <Button 
               onClick={() => scrollToSection('#training-videos')}
