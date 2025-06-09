@@ -129,6 +129,7 @@ export default function AdminClinics() {
       price: 80,
       requirements: ""
     }]);
+    setMissingFields([]);
   };
 
   const addSession = () => {
@@ -421,10 +422,19 @@ export default function AdminClinics() {
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, description: e.target.value });
+                  if (missingFields.includes('description')) {
+                    setMissingFields(missingFields.filter(f => f !== 'description'));
+                  }
+                }}
                 placeholder="Describe what participants will learn..."
                 rows={3}
+                className={missingFields.includes('description') ? 'border-red-500 focus:border-red-500' : ''}
               />
+              {missingFields.includes('description') && (
+                <p className="text-sm text-red-500">Description is required</p>
+              )}
             </div>
             
             <div className="grid grid-cols-2 gap-4">
@@ -434,8 +444,17 @@ export default function AdminClinics() {
                   id="date"
                   type="date"
                   value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, date: e.target.value });
+                    if (missingFields.includes('date')) {
+                      setMissingFields(missingFields.filter(f => f !== 'date'));
+                    }
+                  }}
+                  className={missingFields.includes('date') ? 'border-red-500 focus:border-red-500' : ''}
                 />
+                {missingFields.includes('date') && (
+                  <p className="text-sm text-red-500">Date is required</p>
+                )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="endDate">End Date</Label>
@@ -453,9 +472,18 @@ export default function AdminClinics() {
               <Input
                 id="location"
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, location: e.target.value });
+                  if (missingFields.includes('location')) {
+                    setMissingFields(missingFields.filter(f => f !== 'location'));
+                  }
+                }}
                 placeholder="e.g., Dan Bizzarro Training Center"
+                className={missingFields.includes('location') ? 'border-red-500 focus:border-red-500' : ''}
               />
+              {missingFields.includes('location') && (
+                <p className="text-sm text-red-500">Location is required</p>
+              )}
             </div>
             
             <div className="grid gap-2">
@@ -520,9 +548,16 @@ export default function AdminClinics() {
                       onChange={(e) => {
                         const value = e.target.value.replace(/[^0-9.]/g, '');
                         setFormData({ ...formData, price: value });
+                        if (missingFields.includes('price')) {
+                          setMissingFields(missingFields.filter(f => f !== 'price'));
+                        }
                       }}
                       placeholder="150"
+                      className={missingFields.includes('price') ? 'border-red-500 focus:border-red-500' : ''}
                     />
+                    {missingFields.includes('price') && (
+                      <p className="text-sm text-red-500">Price is required</p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="maxParticipants">Max Participants</Label>
