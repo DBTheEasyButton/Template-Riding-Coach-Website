@@ -20,6 +20,7 @@ import SocialShare from "@/components/SocialShare";
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingClinic, setEditingClinic] = useState<Clinic | null>(null);
+  const [dialogKey, setDialogKey] = useState(0); // Force dialog re-render
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -220,29 +221,43 @@ export default function AdminClinics() {
   };
 
   const handleEdit = async (clinic: any) => {
-    // Get the most recent clinic data from the cache or refetch
+    // Force complete refresh of clinic data
     await queryClient.invalidateQueries({ queryKey: ['/api/admin/clinics'] });
-    const freshClinics = await queryClient.fetchQuery({ queryKey: ['/api/admin/clinics'] });
+    const freshClinics = await queryClient.fetchQuery({ 
+      queryKey: ['/api/admin/clinics'],
+      staleTime: 0,
+      gcTime: 0
+    }) as any[];
+    
     const freshClinic = freshClinics.find((c: any) => c.id === clinic.id) || clinic;
     
+    console.log('Editing clinic with fresh data:', freshClinic);
+    
+    // Force dialog to re-render with fresh data
+    setDialogKey(prev => prev + 1);
     setEditingClinic(freshClinic);
-    setFormData({
-      title: freshClinic.title,
-      description: freshClinic.description,
-      date: new Date(freshClinic.date).toISOString().split('T')[0],
+    
+    // Reset form completely
+    const newFormData = {
+      title: freshClinic.title || "",
+      description: freshClinic.description || "",
+      date: freshClinic.date ? new Date(freshClinic.date).toISOString().split('T')[0] : "",
       endDate: freshClinic.endDate ? new Date(freshClinic.endDate).toISOString().split('T')[0] : "",
-      location: freshClinic.location,
-      price: freshClinic.price.toString(),
-      maxParticipants: freshClinic.maxParticipants.toString(),
-      type: freshClinic.type,
-      level: freshClinic.level,
-      image: freshClinic.image,
-      isActive: freshClinic.isActive,
+      location: freshClinic.location || "",
+      price: freshClinic.price?.toString() || "",
+      maxParticipants: freshClinic.maxParticipants?.toString() || "12",
+      type: freshClinic.type || "dressage",
+      level: freshClinic.level || "intermediate",
+      image: freshClinic.image || "",
+      isActive: freshClinic.isActive !== undefined ? freshClinic.isActive : true,
       hasMultipleSessions: freshClinic.hasMultipleSessions || false,
       clinicType: freshClinic.clinicType || "single",
       crossCountryMaxParticipants: freshClinic.crossCountryMaxParticipants?.toString() || "12",
       showJumpingMaxParticipants: freshClinic.showJumpingMaxParticipants?.toString() || "12"
-    });
+    };
+    
+    console.log('Setting form data:', newFormData);
+    setFormData(newFormData);
     
     // Load existing session data if available
     if (freshClinic.sessions && freshClinic.sessions.length > 0) {
@@ -250,12 +265,12 @@ export default function AdminClinics() {
         sessionName: session.sessionName || "",
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
-        price: session.price ? Math.round(session.price / 100) : 80, // Convert from cents to pounds
+        price: session.price ? Math.round(session.price / 100) : 80,
         requirements: session.requirements || ""
       }));
+      console.log('Setting sessions:', existingSessions);
       setSessions(existingSessions);
     } else {
-      // Reset to default single session for single clinics
       setSessions([{
         sessionName: "",
         discipline: "jumping",
@@ -497,7 +512,7 @@ export default function AdminClinics() {
         </div>
       </div>
 
-      <Dialog open={isCreateOpen || !!editingClinic} onOpenChange={(open) => {
+      <Dialog key={dialogKey} open={isCreateOpen || !!editingClinic} onOpenChange={(open) => {
         if (!open) {
           setIsCreateOpen(false);
           setEditingClinic(null);
