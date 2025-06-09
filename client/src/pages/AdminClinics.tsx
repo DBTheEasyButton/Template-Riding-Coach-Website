@@ -327,7 +327,7 @@ export default function AdminClinics() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Euro className="w-4 h-4" />
-                          €{clinic.price}
+                          £{clinic.price}
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
@@ -489,12 +489,15 @@ export default function AdminClinics() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="price">Price (€) *</Label>
+                    <Label htmlFor="price">Price (£) *</Label>
                     <Input
                       id="price"
-                      type="number"
+                      type="text"
                       value={formData.price}
-                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/[^0-9.]/g, '');
+                        setFormData({ ...formData, price: value });
+                      }}
                       placeholder="150"
                     />
                   </div>
@@ -571,11 +574,14 @@ export default function AdminClinics() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <Label>Price (€)</Label>
+                        <Label>Price (£)</Label>
                         <Input
-                          type="number"
+                          type="text"
                           value={session.price}
-                          onChange={(e) => updateSession(index, 'price', Number(e.target.value))}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9.]/g, '');
+                            updateSession(index, 'price', value ? Number(value) : '');
+                          }}
                         />
                       </div>
                     </div>

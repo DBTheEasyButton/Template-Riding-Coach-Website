@@ -221,7 +221,7 @@ export default function ClinicsSection() {
                 </div>
                 <div className="flex items-center text-sm text-dark">
                   <Euro className="w-4 h-4 mr-2" />
-                  <span className="font-bold text-xl text-orange">{formatPrice(clinic.price)}</span>
+                  <span className="font-bold text-xl text-orange">£{clinic.price}</span>
                 </div>
               </CardContent>
               
