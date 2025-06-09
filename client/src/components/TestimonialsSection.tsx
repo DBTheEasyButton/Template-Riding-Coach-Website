@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Star, Quote } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { Testimonial } from "@shared/schema";
 
 export default function TestimonialsSection() {
@@ -27,49 +26,38 @@ export default function TestimonialsSection() {
     setHoveredTestimonial(null);
   };
 
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star
+        key={i}
+        className={`w-2 h-2 ${
+          i < rating ? "text-orange-500 fill-orange-500" : "text-gray-300"
+        }`}
+      />
+    ));
+  };
+
   if (isLoading) {
     return (
       <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-playfair font-bold text-gray-900 mb-4">
-              What Our Riders Say
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover the transformative experiences of riders who have embraced the Dan Bizzarro Method
-            </p>
-          </div>
-          <div className="flex items-center justify-center">
-            <div className="animate-spin w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading testimonials...</p>
           </div>
         </div>
       </section>
     );
   }
 
-  if (testimonials.length === 0) {
-    return null;
-  }
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-2 h-2 ${
-          i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
-        }`}
-      />
-    ));
-  };
-
   return (
-    <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100 overflow-visible">
-      <div className="container mx-auto px-4 overflow-visible">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">
+    <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
             What Dan's pupils say
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Discover the transformative experiences of riders who have embraced the Dan Bizzarro Method
           </p>
         </div>
@@ -84,48 +72,48 @@ export default function TestimonialsSection() {
                   onMouseEnter={(e) => handleTestimonialHover(testimonial, e)}
                   onMouseLeave={handleTestimonialLeave}
                 >
-                      <CardContent className="p-2 flex flex-col justify-between h-full">
-                        <div className="mb-2">
-                          <Quote className="w-3 h-3 text-orange-500 mb-1 opacity-50" />
-                          <p className="text-gray-700 leading-tight text-xs mb-2 italic overflow-hidden" style={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical'
-                          }}>
-                            "{testimonial.content}"
+                  <CardContent className="p-2 flex flex-col justify-between h-full">
+                    <div className="mb-2">
+                      <Quote className="w-3 h-3 text-orange-500 mb-1 opacity-50" />
+                      <p className="text-gray-700 leading-tight text-xs mb-2 italic overflow-hidden" style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical'
+                      }}>
+                        "{testimonial.content}"
+                      </p>
+                      <div className="flex items-center mb-1">
+                        {renderStars(testimonial.rating)}
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Avatar className="w-5 h-5">
+                        <AvatarImage 
+                          src={testimonial.imageUrl || undefined} 
+                          alt={testimonial.name}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
+                          {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-semibold text-gray-900 text-xs truncate">
+                          {testimonial.name}
+                        </h4>
+                        {testimonial.location && (
+                          <p className="text-gray-600 text-xs truncate">
+                            {testimonial.location}
                           </p>
-                          <div className="flex items-center mb-1">
-                            {renderStars(testimonial.rating)}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <Avatar className="w-5 h-5">
-                            <AvatarImage 
-                              src={testimonial.imageUrl || undefined} 
-                              alt={testimonial.name}
-                              className="object-cover"
-                            />
-                            <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
-                              {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-0 flex-1">
-                            <h4 className="font-semibold text-gray-900 text-xs truncate">
-                              {testimonial.name}
-                            </h4>
-                            {testimonial.location && (
-                              <p className="text-gray-600 text-xs truncate">
-                                {testimonial.location}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-              ))}
-            </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="text-center mt-12">
@@ -146,45 +134,28 @@ export default function TestimonialsSection() {
         >
           <Card className="w-80 bg-white border-2 border-orange-300 shadow-2xl">
             <CardContent className="p-4">
-              <div className="mb-4">
-                <Quote className="w-4 h-4 text-orange-500 mb-3 opacity-70" />
-                <p className="text-gray-700 leading-relaxed text-xs mb-4 italic">
-                  "{hoveredTestimonial.content}"
-                </p>
-                <div className="flex items-center mb-3">
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3 h-3 ${
-                        i < hoveredTestimonial.rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage 
-                    src={hoveredTestimonial.imageUrl || undefined} 
-                    alt={hoveredTestimonial.name}
-                    className="object-cover"
-                  />
-                  <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
+              <div className="flex items-center gap-3 mb-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={hoveredTestimonial.imageUrl || undefined} />
+                  <AvatarFallback className="bg-orange-100 text-orange-600 font-semibold">
                     {hoveredTestimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h4 className="font-semibold text-gray-900 text-sm">
-                    {hoveredTestimonial.name}
-                  </h4>
+                  <h3 className="font-semibold text-gray-900">{hoveredTestimonial.name}</h3>
                   {hoveredTestimonial.location && (
-                    <p className="text-gray-600 text-xs">
-                      {hoveredTestimonial.location}
-                    </p>
+                    <p className="text-sm text-gray-600">{hoveredTestimonial.location}</p>
                   )}
                 </div>
               </div>
+              
+              <div className="flex items-center gap-1 mb-3">
+                {renderStars(hoveredTestimonial.rating)}
+              </div>
+              
+              <blockquote className="text-gray-700 italic leading-relaxed">
+                "{hoveredTestimonial.content}"
+              </blockquote>
             </CardContent>
           </Card>
         </div>
