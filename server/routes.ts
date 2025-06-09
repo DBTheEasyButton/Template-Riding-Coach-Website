@@ -113,18 +113,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/clinics", async (req, res) => {
     try {
-      console.log("Received clinic data:", JSON.stringify(req.body, null, 2));
+      // Convert date strings to Date objects before validation
+      const rawData = req.body;
+      const clinicData = {
+        ...rawData,
+        date: new Date(rawData.date),
+        endDate: new Date(rawData.endDate)
+      };
       
       // Validate the clinic data
-      const clinicData = insertClinicSchema.parse(req.body);
-      const clinic = await storage.createClinic(clinicData);
+      const validatedData = insertClinicSchema.parse(clinicData);
+      const clinic = await storage.createClinic(validatedData);
       res.status(201).json(clinic);
     } catch (error) {
       console.error("Error creating clinic:", error);
-      if (error instanceof Error) {
-        console.error("Error details:", error.message);
-        console.error("Stack trace:", error.stack);
-      }
       res.status(400).json({ message: "Invalid clinic data" });
     }
   });
