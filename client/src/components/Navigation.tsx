@@ -93,7 +93,7 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-3 py-2 rounded-lg hover:bg-orange-50 hover:px-4"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105"
                 >
                   {item.label}
                 </button>
@@ -105,7 +105,7 @@ export default function Navigation() {
                 onMouseEnter={() => setIsCoachingDropdownOpen(true)}
                 onMouseLeave={() => setIsCoachingDropdownOpen(false)}
               >
-                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center px-3 py-2 rounded-lg hover:bg-orange-50 hover:px-4">
+                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105">
                   Coaching
                   <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-300 ${isCoachingDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -133,7 +133,7 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 hover:px-4"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105"
                 >
                   {item.label}
                 </button>
