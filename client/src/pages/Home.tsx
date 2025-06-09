@@ -6,6 +6,7 @@ import CoachingSection from "@/components/CoachingSection";
 import AppSection from "@/components/AppSection";
 import ClinicsSection from "@/components/ClinicsSection";
 import TrainingVideosSection from "@/components/TrainingVideosSection";
+import PodcastSection from "@/components/PodcastSection";
 import ScheduleSection from "@/components/ScheduleSection";
 import GallerySection from "@/components/GallerySection";
 import NewsSection from "@/components/NewsSection";
@@ -37,6 +38,7 @@ export default function Home() {
       <AppSection />
       <ClinicsSection />
       <TrainingVideosSection />
+      <PodcastSection />
       <ScheduleSection />
       <GallerySection />
       <NewsSection />
