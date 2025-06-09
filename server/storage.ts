@@ -275,6 +275,54 @@ export class DatabaseStorage implements IStorage {
     ];
 
     await db.insert(trainingVideos).values(sampleVideos);
+
+    // Seed testimonials data
+    const sampleTestimonials = [
+      {
+        name: "Sarah Mitchell",
+        location: "Gloucestershire, UK",
+        content: "Working with Dan has completely transformed my riding. His approach to building trust and communication with my horse has taken us from struggling at novice level to confidently competing at intermediate. The Dan Bizzarro Method truly works!",
+        rating: 5,
+        featured: true
+      },
+      {
+        name: "James Richardson",
+        location: "Yorkshire, UK", 
+        content: "Dan's coaching style is exceptional. He has this unique ability to break down complex movements into simple, achievable steps. My dressage scores have improved dramatically since attending his clinics.",
+        rating: 5,
+        featured: true
+      },
+      {
+        name: "Emma Thompson",
+        location: "Devon, UK",
+        content: "I was nervous about cross-country until I worked with Dan. His methodical approach to building confidence over fences has been life-changing. We recently completed our first CCI2*!",
+        rating: 5,
+        featured: false
+      },
+      {
+        name: "Michael O'Brien",
+        location: "Ireland",
+        content: "The technical knowledge Dan shares is incredible. As a professional rider myself, I've learned so much from his biomechanics approach and how he develops both horse and rider together.",
+        rating: 5,
+        featured: true
+      },
+      {
+        name: "Charlotte Williams",
+        location: "Surrey, UK",
+        content: "Dan's training videos and clinics have been invaluable for my young horse's development. His patience and systematic approach create willing, confident horses. Highly recommend!",
+        rating: 5,
+        featured: false
+      },
+      {
+        name: "Alexander Schmidt",
+        location: "Germany",
+        content: "I traveled from Germany specifically for Dan's clinic and it was worth every mile. His understanding of the horse's psychology and biomechanics is world-class. My horse and I have never felt more connected.",
+        rating: 5,
+        featured: true
+      }
+    ];
+
+    await db.insert(testimonials).values(sampleTestimonials);
   }
 
   async getUser(id: number): Promise<User | undefined> {
