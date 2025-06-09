@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Smartphone, Headphones, Clock, MapPin, Star, Play } from "lucide-react";
+import { Smartphone, Headphones, Clock, MapPin, Star, Play, Image, Video } from "lucide-react";
 
 export default function AppSection() {
   const lessonFocuses = [
@@ -44,7 +44,7 @@ export default function AppSection() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-4xl mx-auto text-center">
           <div className="space-y-8">
             <div>
               <h3 className="text-3xl font-playfair font-bold mb-6 text-white">Riding Audio Lessons at Your Fingertips</h3>
@@ -54,11 +54,21 @@ export default function AppSection() {
               <p className="text-lg text-gray-200 leading-relaxed mb-6">
                 Get access to expert tuition while riding your own horse, anytime, anywhere.
               </p>
-              <p className="text-lg text-gray-200 leading-relaxed mb-6">
+              <p className="text-lg text-gray-200 leading-relaxed mb-8">
                 <strong>No need to travel or to schedule an instructor.</strong> Transform your riding with Dan's proven methodology delivered directly through your mobile device.
               </p>
               
-              <div className="mb-8">
+              <Button 
+                onClick={() => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank')}
+                className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 mb-12"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                Download Now on App Store
+              </Button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 text-left">
+              <div>
                 <h4 className="text-xl font-playfair font-bold mb-4 text-orange">The Lessons Focus On:</h4>
                 <ul className="space-y-2 text-gray-200">
                   {lessonFocuses.map((focus, index) => (
@@ -69,17 +79,23 @@ export default function AppSection() {
                   ))}
                 </ul>
               </div>
-              
-              <Button 
-                onClick={() => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank')}
-                className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 mb-8"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Download Now on App Store
-              </Button>
+
+              <div>
+                <h4 className="text-xl font-playfair font-bold mb-4 text-orange">Extras:</h4>
+                <div className="space-y-3 text-gray-200">
+                  <div className="flex items-start">
+                    <Image className="w-5 h-5 text-orange mr-3 mt-0.5 flex-shrink-0" />
+                    <p>Lots of lessons have <strong>diagrams</strong> that explain how to set up poles, cones, etc as well as give you more information about the exercises you will work on.</p>
+                  </div>
+                  <div className="flex items-start">
+                    <Video className="w-5 h-5 text-orange mr-3 mt-0.5 flex-shrink-0" />
+                    <p>There are also <strong>videos</strong> that can help you to visualise the correct way to ride the movements.</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
               <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
                 <div className="text-2xl font-bold text-orange">Audio</div>
                 <div className="text-sm text-gray-200">Lessons Format</div>
@@ -95,24 +111,6 @@ export default function AppSection() {
               <div className="bg-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
                 <div className="text-2xl font-bold text-orange">Your Horse</div>
                 <div className="text-sm text-gray-200">Your Arena</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="relative">
-            <div className="bg-gradient-to-br from-orange to-orange/70 rounded-3xl p-8 text-center shadow-2xl hover:shadow-3xl transition-shadow duration-500">
-              <Smartphone className="w-24 h-24 mx-auto mb-6 text-white" />
-              <h4 className="text-2xl font-playfair font-bold mb-4 text-white">Available on iOS</h4>
-              <p className="text-white/90 mb-6">Download the Dan Bizzarro Method app and start your transformation today</p>
-              <div className="bg-white/20 rounded-xl p-4 backdrop-blur-sm">
-                <div className="flex items-center justify-center space-x-2 text-white">
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                </div>
-                <p className="text-sm text-white/90 mt-2">Expert coaching in your pocket</p>
               </div>
             </div>
           </div>
