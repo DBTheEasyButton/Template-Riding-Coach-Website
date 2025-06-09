@@ -4,7 +4,6 @@ import appScreenshot1 from "@assets/Screenshot_20250609_162238_Dan Bizzarro Meth
 import appScreenshot2 from "@assets/Screenshot_20250609_162257_Dan Bizzarro Method_1749482841960.jpg";
 import appScreenshot3 from "@assets/Screenshot_20250609_162327_Dan Bizzarro Method_1749482838060.jpg";
 import appScreenshot4 from "@assets/Screenshot_20250609_162340_Dan Bizzarro Method_1749482833362.jpg";
-import phoneMockupPath from "@assets/image_1749505836570.png";
 
 export default function AppSection() {
   const lessonFocuses = [
@@ -132,31 +131,79 @@ export default function AppSection() {
           <h4 className="text-2xl font-playfair font-bold mb-8 text-center text-white">See the App in Action</h4>
           
           {/* Phone Mockup Display */}
-          <div className="max-w-4xl mx-auto flex justify-center">
-            <div className="relative group cursor-pointer">
-              {/* Hand-held Phone Mockup */}
-              <div className="relative w-96 h-auto transform group-hover:scale-105 transition-all duration-300">
-                {/* Base phone image */}
-                <img 
-                  src={phoneMockupPath} 
-                  alt="Hand holding iPhone mockup"
-                  className="w-full h-auto drop-shadow-2xl"
-                />
-                
-                {/* Overlay app screenshot on the phone screen */}
-                <div className="absolute top-[13%] left-[13%] w-[74%] h-[74%] overflow-hidden rounded-[3.5rem]">
-                  <img 
-                    src={appScreenshot1} 
-                    alt="Dan Bizzarro Method app courses overview"
-                    className="w-full h-full object-cover"
-                  />
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+              {/* Phone 1 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    {/* iPhone notch */}
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                    <img 
+                      src={appScreenshot1} 
+                      alt="Dan Bizzarro Method app courses overview"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Course Selection</p>
+                  <p className="text-gray-300 text-sm">Choose your training level</p>
                 </div>
               </div>
-              
-              {/* Description below */}
-              <div className="mt-8 text-center">
-                <p className="text-orange font-medium text-lg">Experience the Dan Bizzarro Method App</p>
-                <p className="text-gray-300 text-sm mt-2">Professional coaching in the palm of your hand</p>
+
+              {/* Phone 2 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                    <img 
+                      src={appScreenshot2} 
+                      alt="Arena setup diagrams"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Arena Setup</p>
+                  <p className="text-gray-300 text-sm">Visual diagrams included</p>
+                </div>
+              </div>
+
+              {/* Phone 3 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                    <img 
+                      src={appScreenshot3} 
+                      alt="Audio lesson player"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Audio Lessons</p>
+                  <p className="text-gray-300 text-sm">Listen while you ride</p>
+                </div>
+              </div>
+
+              {/* Phone 4 */}
+              <div className="flex flex-col items-center group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                    <img 
+                      src={appScreenshot4} 
+                      alt="Detailed arena setup diagrams"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-orange font-medium">Exercise Details</p>
+                  <p className="text-gray-300 text-sm">Step-by-step guidance</p>
+                </div>
               </div>
             </div>
           </div>
