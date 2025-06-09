@@ -316,7 +316,14 @@ export default function AdminClinics() {
                         </div>
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
-                          {clinic.location}
+                          <a 
+                            href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-orange underline"
+                          >
+                            {clinic.location}
+                          </a>
                         </div>
                         <div className="flex items-center gap-1">
                           <Euro className="w-4 h-4" />

@@ -206,7 +206,14 @@ export default function ClinicsSection() {
                 </div>
                 <div className="flex items-center text-sm text-dark font-medium">
                   <MapPin className="w-4 h-4 mr-2" />
-                  <span>{clinic.location}</span>
+                  <a 
+                    href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-orange underline"
+                  >
+                    {clinic.location}
+                  </a>
                 </div>
                 <div className="flex items-center text-sm text-dark font-medium">
                   <Users className="w-4 h-4 mr-2" />

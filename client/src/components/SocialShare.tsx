@@ -30,12 +30,14 @@ export default function SocialShare({ clinic }: SocialShareProps) {
 
   // Generate clinic URL (assuming it will be accessible on the main site)
   const clinicUrl = `${window.location.origin}/clinics/${clinic.id}`;
+  const mapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`;
 
   // Default sharing message
   const defaultMessage = `🐎 Join Dan Bizzarro's ${clinic.title}!
 
 📅 ${formatDate(clinic.date)}
 📍 ${clinic.location}
+🗺️ Directions: ${mapsUrl}
 💰 €${clinic.price}
 👥 Limited to ${clinic.maxParticipants} participants
 
