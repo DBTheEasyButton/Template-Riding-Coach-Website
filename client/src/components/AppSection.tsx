@@ -144,11 +144,11 @@ export default function AppSection() {
                 />
                 
                 {/* Overlay app screenshot on the phone screen */}
-                <div className="absolute top-[15%] left-[15%] w-[70%] h-[68%] overflow-hidden rounded-[2.5rem]">
+                <div className="absolute top-[12%] left-[13.5%] w-[73%] h-[76%] overflow-hidden rounded-[3rem] bg-black">
                   <img 
                     src={appScreenshot1} 
                     alt="Dan Bizzarro Method app courses overview"
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               </div>
