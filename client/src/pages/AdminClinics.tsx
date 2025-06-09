@@ -235,13 +235,25 @@ export default function AdminClinics() {
     if (!formData.date) requiredFields.push('date');
     if (!formData.location.trim()) requiredFields.push('location');
     
-    // Only validate price for single session clinics
+    // Validate price for single session clinics
     if (formData.clinicType === 'single') {
       const priceValue = formData.price?.toString().trim();
       const numericPrice = parseFloat(priceValue || '0');
       if (!priceValue || priceValue === '' || numericPrice <= 0) {
         requiredFields.push('price');
       }
+    }
+    
+    // Validate sessions for multi-session clinics
+    if (formData.clinicType !== 'single' && sessions.length > 0) {
+      sessions.forEach((session, index) => {
+        if (!session.sessionName.trim()) {
+          requiredFields.push(`session ${index + 1} name`);
+        }
+        if (!session.price || session.price <= 0) {
+          requiredFields.push(`session ${index + 1} price`);
+        }
+      });
     }
     
     setMissingFields(requiredFields);
@@ -623,12 +635,22 @@ export default function AdminClinics() {
                     
                     <div className="grid grid-cols-2 gap-3">
                       <div className="grid gap-2">
-                        <Label>Session Name</Label>
+                        <Label>Session Name *</Label>
                         <Input
                           value={session.sessionName}
-                          onChange={(e) => updateSession(index, 'sessionName', e.target.value)}
+                          onChange={(e) => {
+                            updateSession(index, 'sessionName', e.target.value);
+                            const fieldName = `session ${index + 1} name`;
+                            if (e.target.value.trim() && missingFields.includes(fieldName)) {
+                              setMissingFields(missingFields.filter(f => f !== fieldName));
+                            }
+                          }}
                           placeholder="e.g., Show Jumping Morning"
+                          className={missingFields.includes(`session ${index + 1} name`) ? 'border-red-500 focus:border-red-500' : ''}
                         />
+                        {missingFields.includes(`session ${index + 1} name`) && (
+                          <p className="text-sm text-red-500">Session name is required</p>
+                        )}
                       </div>
                       <div className="grid gap-2">
                         <Label>Discipline</Label>
@@ -662,7 +684,7 @@ export default function AdminClinics() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <Label>Price (£)</Label>
+                        <Label>Price (£) *</Label>
                         <Input
                           type="text"
                           value={session.price}
@@ -688,9 +710,20 @@ export default function AdminClinics() {
                               cleanValue = cleanValue.substring(1);
                             }
                             
-                            updateSession(index, 'price', cleanValue ? Number(cleanValue) : '');
+                            const numericValue = cleanValue ? Number(cleanValue) : '';
+                            updateSession(index, 'price', numericValue);
+                            
+                            // Clear error if we now have a valid price
+                            const fieldName = `session ${index + 1} price`;
+                            if (numericValue && Number(numericValue) > 0 && missingFields.includes(fieldName)) {
+                              setMissingFields(missingFields.filter(f => f !== fieldName));
+                            }
                           }}
+                          className={missingFields.includes(`session ${index + 1} price`) ? 'border-red-500 focus:border-red-500' : ''}
                         />
+                        {missingFields.includes(`session ${index + 1} price`) && (
+                          <p className="text-sm text-red-500">Price is required</p>
+                        )}
                       </div>
                     </div>
                     
