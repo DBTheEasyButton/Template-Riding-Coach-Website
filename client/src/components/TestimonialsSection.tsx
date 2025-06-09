@@ -53,15 +53,6 @@ export default function TestimonialsSection() {
   return (
     <section className="py-10 bg-gradient-to-br from-orange-50 to-orange-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            What Dan's pupils say
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover the transformative experiences of riders who have embraced the Dan Bizzarro Method
-          </p>
-        </div>
-
         <div className="relative max-w-6xl mx-auto overflow-hidden">
           <div className="flex animate-scroll gap-4">
             {/* Duplicate testimonials for seamless infinite scroll */}
@@ -114,12 +105,6 @@ export default function TestimonialsSection() {
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="text-center mt-10">
-          <p className="text-gray-600 text-lg">
-            Join hundreds of satisfied riders who have transformed their equestrian journey
-          </p>
         </div>
       </div>
 
