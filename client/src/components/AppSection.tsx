@@ -4,6 +4,7 @@ import appScreenshot1 from "@assets/Screenshot_20250609_162238_Dan Bizzarro Meth
 import appScreenshot2 from "@assets/Screenshot_20250609_162257_Dan Bizzarro Method_1749482841960.jpg";
 import appScreenshot3 from "@assets/Screenshot_20250609_162327_Dan Bizzarro Method_1749482838060.jpg";
 import appScreenshot4 from "@assets/Screenshot_20250609_162340_Dan Bizzarro Method_1749482833362.jpg";
+import phoneFramePath from "@assets/Screenshot 2025-06-09 224757_1749505699166.png";
 
 export default function AppSection() {
   const lessonFocuses = [
@@ -135,15 +136,38 @@ export default function AppSection() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
               {/* Phone 1 */}
               <div className="flex flex-col items-center group cursor-pointer">
-                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
-                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
-                    {/* iPhone notch */}
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
-                    <img 
-                      src={appScreenshot1} 
-                      alt="Dan Bizzarro Method app courses overview"
-                      className="w-full h-auto"
-                    />
+                <div className="relative">
+                  {/* iPhone Frame - Metallic Design */}
+                  <div className="relative w-64 bg-gradient-to-b from-gray-600 via-gray-700 to-gray-800 rounded-[3.5rem] p-2 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                    {/* Side buttons */}
+                    <div className="absolute left-0 top-16 w-1 h-8 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-28 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-36 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute right-0 top-20 w-1 h-12 bg-gray-600 rounded-r-full"></div>
+                    
+                    {/* Screen */}
+                    <div className="bg-black rounded-[3rem] overflow-hidden relative">
+                      {/* Dynamic Island */}
+                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-28 h-7 bg-black rounded-full z-10 border border-gray-900"></div>
+                      
+                      {/* Status bar elements */}
+                      <div className="absolute top-2 left-6 text-white text-sm font-medium z-20">9:41</div>
+                      <div className="absolute top-2 right-6 flex items-center space-x-1 z-20">
+                        <div className="w-4 h-2 border border-white rounded-sm">
+                          <div className="w-3 h-1 bg-white rounded-sm"></div>
+                        </div>
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-6 h-3 border border-white rounded-sm">
+                          <div className="w-5 h-2 bg-white rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      <img 
+                        src={appScreenshot1} 
+                        alt="Dan Bizzarro Method app courses overview"
+                        className="w-full h-auto"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
@@ -154,14 +178,32 @@ export default function AppSection() {
 
               {/* Phone 2 */}
               <div className="flex flex-col items-center group cursor-pointer">
-                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
-                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
-                    <img 
-                      src={appScreenshot2} 
-                      alt="Arena setup diagrams"
-                      className="w-full h-auto"
-                    />
+                <div className="relative">
+                  <div className="relative w-64 bg-gradient-to-b from-gray-600 via-gray-700 to-gray-800 rounded-[3.5rem] p-2 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                    <div className="absolute left-0 top-16 w-1 h-8 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-28 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-36 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute right-0 top-20 w-1 h-12 bg-gray-600 rounded-r-full"></div>
+                    
+                    <div className="bg-black rounded-[3rem] overflow-hidden relative">
+                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-28 h-7 bg-black rounded-full z-10 border border-gray-900"></div>
+                      <div className="absolute top-2 left-6 text-white text-sm font-medium z-20">9:41</div>
+                      <div className="absolute top-2 right-6 flex items-center space-x-1 z-20">
+                        <div className="w-4 h-2 border border-white rounded-sm">
+                          <div className="w-3 h-1 bg-white rounded-sm"></div>
+                        </div>
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-6 h-3 border border-white rounded-sm">
+                          <div className="w-5 h-2 bg-white rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      <img 
+                        src={appScreenshot2} 
+                        alt="Arena setup diagrams"
+                        className="w-full h-auto"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
@@ -172,14 +214,32 @@ export default function AppSection() {
 
               {/* Phone 3 */}
               <div className="flex flex-col items-center group cursor-pointer">
-                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
-                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
-                    <img 
-                      src={appScreenshot3} 
-                      alt="Audio lesson player"
-                      className="w-full h-auto"
-                    />
+                <div className="relative">
+                  <div className="relative w-64 bg-gradient-to-b from-gray-600 via-gray-700 to-gray-800 rounded-[3.5rem] p-2 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                    <div className="absolute left-0 top-16 w-1 h-8 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-28 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-36 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute right-0 top-20 w-1 h-12 bg-gray-600 rounded-r-full"></div>
+                    
+                    <div className="bg-black rounded-[3rem] overflow-hidden relative">
+                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-28 h-7 bg-black rounded-full z-10 border border-gray-900"></div>
+                      <div className="absolute top-2 left-6 text-white text-sm font-medium z-20">9:41</div>
+                      <div className="absolute top-2 right-6 flex items-center space-x-1 z-20">
+                        <div className="w-4 h-2 border border-white rounded-sm">
+                          <div className="w-3 h-1 bg-white rounded-sm"></div>
+                        </div>
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-6 h-3 border border-white rounded-sm">
+                          <div className="w-5 h-2 bg-white rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      <img 
+                        src={appScreenshot3} 
+                        alt="Audio lesson player"
+                        className="w-full h-auto"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
@@ -190,14 +250,32 @@ export default function AppSection() {
 
               {/* Phone 4 */}
               <div className="flex flex-col items-center group cursor-pointer">
-                <div className="relative w-64 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
-                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
-                    <img 
-                      src={appScreenshot4} 
-                      alt="Detailed arena setup diagrams"
-                      className="w-full h-auto"
-                    />
+                <div className="relative">
+                  <div className="relative w-64 bg-gradient-to-b from-gray-600 via-gray-700 to-gray-800 rounded-[3.5rem] p-2 shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+                    <div className="absolute left-0 top-16 w-1 h-8 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-28 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute left-0 top-36 w-1 h-6 bg-gray-600 rounded-l-full"></div>
+                    <div className="absolute right-0 top-20 w-1 h-12 bg-gray-600 rounded-r-full"></div>
+                    
+                    <div className="bg-black rounded-[3rem] overflow-hidden relative">
+                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-28 h-7 bg-black rounded-full z-10 border border-gray-900"></div>
+                      <div className="absolute top-2 left-6 text-white text-sm font-medium z-20">9:41</div>
+                      <div className="absolute top-2 right-6 flex items-center space-x-1 z-20">
+                        <div className="w-4 h-2 border border-white rounded-sm">
+                          <div className="w-3 h-1 bg-white rounded-sm"></div>
+                        </div>
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-6 h-3 border border-white rounded-sm">
+                          <div className="w-5 h-2 bg-white rounded-sm"></div>
+                        </div>
+                      </div>
+                      
+                      <img 
+                        src={appScreenshot4} 
+                        alt="Detailed arena setup diagrams"
+                        className="w-full h-auto"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
