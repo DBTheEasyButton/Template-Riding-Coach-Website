@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isCoachingDropdownOpen, setIsCoachingDropdownOpen] = useState(false);
   const [location] = useLocation();
 
   useEffect(() => {
@@ -21,13 +22,18 @@ export default function Navigation() {
   const navItems = [
     { href: "#home", label: "Home" },
     { href: "#about", label: "About" },
-    { href: "#coaching", label: "Coaching" },
-    { href: "#clinics", label: "Clinics" },
-    { href: "#training-videos", label: "Training" },
     { href: "#schedule", label: "Schedule" },
     { href: "#gallery", label: "Gallery" },
     { href: "#news", label: "News" },
     { href: "#contact", label: "Contact" },
+  ];
+
+  const coachingSubmenu = [
+    { href: "#clinics", label: "Clinics" },
+    { href: "#app", label: "Dan Bizzarro Method App", action: () => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank') },
+    { href: "#training-videos", label: "Training Videos" },
+    { label: "Private Lessons", action: () => window.open('https://wa.me/447767291713', '_blank') },
+    { href: "#podcast", label: "Podcast" },
   ];
 
   const handleNavigation = (href: string, label: string) => {
@@ -48,6 +54,17 @@ export default function Navigation() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setIsMenuOpen(false);
+      setIsCoachingDropdownOpen(false);
+    }
+  };
+
+  const handleSubmenuClick = (item: any) => {
+    if (item.action) {
+      item.action();
+      setIsCoachingDropdownOpen(false);
+      setIsMenuOpen(false);
+    } else if (item.href) {
+      handleNavigation(item.href, item.label);
     }
   };
 
@@ -78,6 +95,34 @@ export default function Navigation() {
                   {item.label}
                 </button>
               ))}
+              
+              {/* Coaching Dropdown */}
+              <div 
+                className="relative"
+                onMouseEnter={() => setIsCoachingDropdownOpen(true)}
+                onMouseLeave={() => setIsCoachingDropdownOpen(false)}
+              >
+                <button className="text-charcoal hover:text-italian-red transition-colors duration-200 font-medium flex items-center">
+                  Coaching
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </button>
+                
+                {isCoachingDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className="py-2">
+                      {coachingSubmenu.map((item, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleSubmenuClick(item)}
+                          className="block w-full text-left px-4 py-2 text-charcoal hover:bg-gray-50 hover:text-italian-red transition-colors duration-200"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           
@@ -107,6 +152,22 @@ export default function Navigation() {
                 {item.label}
               </button>
             ))}
+            
+            {/* Mobile Coaching Section */}
+            <div className="border-t pt-2 mt-2">
+              <div className="px-3 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                Coaching
+              </div>
+              {coachingSubmenu.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSubmenuClick(item)}
+                  className="block w-full text-left px-3 py-2 pl-6 text-charcoal hover:text-italian-red transition-colors duration-200"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
