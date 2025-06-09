@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
       if (intervalRef.current) clearInterval(intervalRef.current);
       
       intervalRef.current = setInterval(() => {
-        if (!isHovered) {
+        if (!hoveredTestimonial) {
           api.scrollNext();
         }
       }, 2000);
@@ -37,7 +37,7 @@ export default function TestimonialsSection() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [api, isHovered]);
+  }, [api, hoveredTestimonial]);
 
   useEffect(() => {
     return () => {
@@ -54,12 +54,10 @@ export default function TestimonialsSection() {
       y: rect.top + rect.height / 2
     });
     setHoveredTestimonial(testimonial);
-    setIsHovered(true);
   };
 
   const handleTestimonialLeave = () => {
     setHoveredTestimonial(null);
-    setIsHovered(false);
   };
 
   if (isLoading) {
@@ -117,8 +115,6 @@ export default function TestimonialsSection() {
               loop: true,
             }}
             className="w-full overflow-visible"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
           >
             <CarouselContent className="-ml-1 md:-ml-2 overflow-visible">
               {testimonials.map((testimonial) => (
