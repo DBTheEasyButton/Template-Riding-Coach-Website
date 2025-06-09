@@ -38,7 +38,7 @@ export default function SocialShare({ clinic }: SocialShareProps) {
 📅 ${formatDate(clinic.date)}
 📍 ${clinic.location}
 🗺️ Directions: ${mapsUrl}
-💰 £${clinic.price}
+💰 £${(clinic.price / 100).toFixed(2)}
 👥 Limited to ${clinic.maxParticipants} participants
 
 ${clinic.description}
