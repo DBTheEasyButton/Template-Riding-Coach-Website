@@ -93,7 +93,7 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-charcoal hover:text-italian-red transition-colors duration-200 font-medium"
+                  className="text-gray-800 hover:text-orange-500 transition-colors duration-200 font-medium"
                 >
                   {item.label}
                 </button>
@@ -105,19 +105,19 @@ export default function Navigation() {
                 onMouseEnter={() => setIsCoachingDropdownOpen(true)}
                 onMouseLeave={() => setIsCoachingDropdownOpen(false)}
               >
-                <button className="text-charcoal hover:text-italian-red transition-colors duration-200 font-medium flex items-center">
+                <button className="text-gray-800 hover:text-orange-500 transition-colors duration-200 font-medium flex items-center">
                   Coaching
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </button>
                 
                 {isCoachingDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg" style={{ zIndex: 9999 }}>
                     <div className="py-2">
                       {coachingSubmenu.map((item, index) => (
                         <button
                           key={index}
                           onClick={() => handleSubmenuClick(item)}
-                          className="block w-full text-left px-4 py-2 text-charcoal hover:bg-gray-50 hover:text-italian-red transition-colors duration-200"
+                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors duration-200"
                         >
                           {item.label}
                         </button>
@@ -131,7 +131,7 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-charcoal hover:text-italian-red transition-colors duration-200 font-medium"
+                  className="text-gray-800 hover:text-orange-500 transition-colors duration-200 font-medium"
                 >
                   {item.label}
                 </button>
@@ -144,7 +144,7 @@ export default function Navigation() {
               variant="ghost"
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-charcoal hover:text-italian-red"
+              className="text-gray-800 hover:text-orange-500"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -160,7 +160,7 @@ export default function Navigation() {
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href, item.label)}
-                className="block w-full text-left px-3 py-2 text-charcoal hover:text-italian-red transition-colors duration-200"
+                className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
               >
                 {item.label}
               </button>
@@ -175,7 +175,7 @@ export default function Navigation() {
                 <button
                   key={index}
                   onClick={() => handleSubmenuClick(item)}
-                  className="block w-full text-left px-3 py-2 pl-6 text-charcoal hover:text-italian-red transition-colors duration-200"
+                  className="block w-full text-left px-3 py-2 pl-6 text-gray-800 hover:text-orange-500 transition-colors duration-200"
                 >
                   {item.label}
                 </button>

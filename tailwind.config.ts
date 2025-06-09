@@ -51,6 +51,13 @@ export default {
           "4": "var(--chart-4)",
           "5": "var(--chart-5)",
         },
+        // Custom Dan Bizzarro colors
+        navy: "hsl(var(--navy))",
+        cream: "hsl(var(--cream))",
+        orange: "hsl(var(--orange))",
+        dark: "hsl(var(--text-dark))",
+        charcoal: "hsl(var(--text-dark))",
+        "italian-red": "hsl(var(--orange))",
         sidebar: {
           DEFAULT: "var(--sidebar-background)",
           foreground: "var(--sidebar-foreground)",
