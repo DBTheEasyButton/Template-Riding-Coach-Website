@@ -129,34 +129,100 @@ export default function AppSection() {
         {/* App Screenshots Gallery */}
         <div className="mt-16">
           <h4 className="text-2xl font-playfair font-bold mb-8 text-center text-white">See the App in Action</h4>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
-              <img 
-                src={appScreenshot1} 
-                alt="Dan Bizzarro Method app courses overview showing class structure"
-                className="w-full h-auto rounded-xl shadow-lg"
-              />
+          
+          {/* Phone Mockup Carousel */}
+          <div className="relative max-w-6xl mx-auto">
+            <div className="flex justify-center items-center space-x-8 overflow-hidden">
+              {/* Main phone in center */}
+              <div className="relative group cursor-pointer">
+                <div className="relative w-80 h-auto bg-black rounded-[3rem] p-4 shadow-2xl transform group-hover:scale-105 transition-all duration-500">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
+                    {/* iPhone notch */}
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-xl z-10"></div>
+                    <img 
+                      src={appScreenshot1} 
+                      alt="Dan Bizzarro Method app courses overview"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                  <p className="text-orange font-medium">Course Selection</p>
+                </div>
+              </div>
+
+              {/* Side phones with slight rotation and smaller size */}
+              <div className="hidden lg:block relative group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[2.5rem] p-3 shadow-xl transform rotate-12 group-hover:rotate-6 group-hover:scale-105 transition-all duration-500 opacity-80 group-hover:opacity-100">
+                  <div className="bg-white rounded-[2rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-5 bg-black rounded-b-lg z-10"></div>
+                    <img 
+                      src={appScreenshot2} 
+                      alt="Arena setup diagrams"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                  <p className="text-gray-300 text-sm">Arena Setup</p>
+                </div>
+              </div>
+
+              <div className="hidden lg:block relative group cursor-pointer">
+                <div className="relative w-64 h-auto bg-black rounded-[2.5rem] p-3 shadow-xl transform -rotate-12 group-hover:-rotate-6 group-hover:scale-105 transition-all duration-500 opacity-80 group-hover:opacity-100">
+                  <div className="bg-white rounded-[2rem] overflow-hidden relative">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-5 bg-black rounded-b-lg z-10"></div>
+                    <img 
+                      src={appScreenshot3} 
+                      alt="Audio lesson player"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                  <p className="text-gray-300 text-sm">Audio Lessons</p>
+                </div>
+              </div>
             </div>
-            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
-              <img 
-                src={appScreenshot2} 
-                alt="App lesson setup with arena diagrams and pole placement instructions"
-                className="w-full h-auto rounded-xl shadow-lg"
-              />
+
+            {/* Floating elements for extra visual interest */}
+            <div className="absolute top-10 left-10 w-4 h-4 bg-orange rounded-full animate-pulse opacity-60"></div>
+            <div className="absolute bottom-20 right-16 w-6 h-6 bg-white/20 rounded-full animate-bounce"></div>
+            <div className="absolute top-32 right-8 w-3 h-3 bg-orange/40 rounded-full animate-ping"></div>
+          </div>
+
+          {/* Interactive feature grid below */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+            <div className="group bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/20 hover:border-orange/50 transition-all duration-300 cursor-pointer">
+              <div className="flex items-center justify-center w-12 h-12 bg-orange/20 rounded-xl mb-4 group-hover:bg-orange/30 transition-colors">
+                <Headphones className="w-6 h-6 text-orange" />
+              </div>
+              <h5 className="font-bold text-white mb-2">Audio Training</h5>
+              <p className="text-gray-300 text-sm">Listen while you ride</p>
             </div>
-            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
-              <img 
-                src={appScreenshot3} 
-                alt="Audio lesson player with circles exercise and visual riding instructions"
-                className="w-full h-auto rounded-xl shadow-lg"
-              />
+            
+            <div className="group bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/20 hover:border-orange/50 transition-all duration-300 cursor-pointer">
+              <div className="flex items-center justify-center w-12 h-12 bg-orange/20 rounded-xl mb-4 group-hover:bg-orange/30 transition-colors">
+                <Image className="w-6 h-6 text-orange" />
+              </div>
+              <h5 className="font-bold text-white mb-2">Visual Diagrams</h5>
+              <p className="text-gray-300 text-sm">Clear arena layouts</p>
             </div>
-            <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20 hover:scale-105 transition-transform duration-300">
-              <img 
-                src={appScreenshot4} 
-                alt="Detailed arena setup diagrams showing circle patterns and measurements"
-                className="w-full h-auto rounded-xl shadow-lg"
-              />
+            
+            <div className="group bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/20 hover:border-orange/50 transition-all duration-300 cursor-pointer">
+              <div className="flex items-center justify-center w-12 h-12 bg-orange/20 rounded-xl mb-4 group-hover:bg-orange/30 transition-colors">
+                <Video className="w-6 h-6 text-orange" />
+              </div>
+              <h5 className="font-bold text-white mb-2">Video Guides</h5>
+              <p className="text-gray-300 text-sm">Watch demonstrations</p>
+            </div>
+            
+            <div className="group bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/20 hover:border-orange/50 transition-all duration-300 cursor-pointer">
+              <div className="flex items-center justify-center w-12 h-12 bg-orange/20 rounded-xl mb-4 group-hover:bg-orange/30 transition-colors">
+                <Smartphone className="w-6 h-6 text-orange" />
+              </div>
+              <h5 className="font-bold text-white mb-2">Mobile Ready</h5>
+              <p className="text-gray-300 text-sm">Anywhere, anytime</p>
             </div>
           </div>
         </div>
