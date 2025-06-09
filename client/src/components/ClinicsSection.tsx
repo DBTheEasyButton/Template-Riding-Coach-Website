@@ -219,8 +219,10 @@ export default function ClinicsSection() {
                   <PoundSterling className="w-4 h-4 mr-2" />
                   <span className="font-bold text-xl text-orange">
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? `from £${Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100}`
-                      : `£${clinic.price / 100}`
+                      ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
+                      : clinic.price > 0 
+                        ? `£${(clinic.price / 100).toFixed(0)}`
+                        : 'Price TBA'
                     }
                   </span>
                 </div>
