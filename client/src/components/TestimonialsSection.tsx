@@ -105,47 +105,95 @@ export default function TestimonialsSection() {
           >
             <CarouselContent className="-ml-1 md:-ml-2">
               {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="pl-1 md:pl-2 basis-1/3 md:basis-1/4 lg:basis-1/6">
-                  <Card className="h-full bg-white/80 backdrop-blur-sm border border-orange-200 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
-                    <CardContent className="p-2 flex flex-col justify-between h-full">
-                      <div className="mb-2">
-                        <Quote className="w-3 h-3 text-orange-500 mb-1 opacity-50" />
-                        <p className="text-gray-700 leading-tight text-xs mb-2 italic overflow-hidden" style={{
-                          display: '-webkit-box',
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: 'vertical'
-                        }}>
-                          "{testimonial.content}"
-                        </p>
-                        <div className="flex items-center mb-1">
-                          {renderStars(testimonial.rating)}
+                <CarouselItem key={testimonial.id} className="pl-1 md:pl-2 basis-1/3 md:basis-1/4 lg:basis-1/6 group relative">
+                  <div className="relative">
+                    {/* Normal card */}
+                    <Card className="h-full bg-white/80 backdrop-blur-sm border border-orange-200 shadow-sm group-hover:opacity-0 transition-all duration-300">
+                      <CardContent className="p-2 flex flex-col justify-between h-full">
+                        <div className="mb-2">
+                          <Quote className="w-3 h-3 text-orange-500 mb-1 opacity-50" />
+                          <p className="text-gray-700 leading-tight text-xs mb-2 italic overflow-hidden" style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical'
+                          }}>
+                            "{testimonial.content}"
+                          </p>
+                          <div className="flex items-center mb-1">
+                            {renderStars(testimonial.rating)}
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <Avatar className="w-5 h-5">
-                          <AvatarImage 
-                            src={testimonial.imageUrl || undefined} 
-                            alt={testimonial.name}
-                            className="object-cover"
-                          />
-                          <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
-                            {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0 flex-1">
-                          <h4 className="font-semibold text-gray-900 text-xs truncate">
-                            {testimonial.name}
-                          </h4>
-                          {testimonial.location && (
-                            <p className="text-gray-600 text-xs truncate">
-                              {testimonial.location}
-                            </p>
-                          )}
+                        
+                        <div className="flex items-center space-x-2">
+                          <Avatar className="w-5 h-5">
+                            <AvatarImage 
+                              src={testimonial.imageUrl || undefined} 
+                              alt={testimonial.name}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
+                              {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold text-gray-900 text-xs truncate">
+                              {testimonial.name}
+                            </h4>
+                            {testimonial.location && (
+                              <p className="text-gray-600 text-xs truncate">
+                                {testimonial.location}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+
+                    {/* Expanded card on hover */}
+                    <Card className="absolute top-0 left-0 w-80 bg-white border-2 border-orange-300 shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-50 transform -translate-y-2">
+                      <CardContent className="p-4">
+                        <div className="mb-4">
+                          <Quote className="w-5 h-5 text-orange-500 mb-3 opacity-70" />
+                          <p className="text-gray-700 leading-relaxed text-sm mb-4 italic">
+                            "{testimonial.content}"
+                          </p>
+                          <div className="flex items-center mb-3">
+                            {Array.from({ length: 5 }, (_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 ${
+                                  i < testimonial.rating ? "text-yellow-400 fill-current" : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="w-10 h-10">
+                            <AvatarImage 
+                              src={testimonial.imageUrl || undefined} 
+                              alt={testimonial.name}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-orange-500 text-white font-semibold">
+                              {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h4 className="font-semibold text-gray-900 text-base">
+                              {testimonial.name}
+                            </h4>
+                            {testimonial.location && (
+                              <p className="text-gray-600 text-sm">
+                                {testimonial.location}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
