@@ -16,7 +16,7 @@ import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, C
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
@@ -26,13 +26,15 @@ function PaymentForm({
   onPaymentError, 
   registrationData, 
   selectedClinic, 
-  selectedSessions 
+  selectedSessions,
+  clientSecret 
 }: {
   onPaymentSuccess: (paymentIntentId: string) => void;
   onPaymentError: (error: string) => void;
   registrationData: any;
   selectedClinic: ClinicWithSessions;
   selectedSessions: number[];
+  clientSecret: string;
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -68,38 +70,79 @@ function PaymentForm({
     }
   };
 
+  const handleExpressCheckout = async (event: any) => {
+    const { complete, error } = event;
+    
+    if (error) {
+      onPaymentError(error.message || 'Apple Pay payment failed');
+      return;
+    }
+
+    if (complete) {
+      // Extract payment intent ID from client secret for Apple Pay success
+      const paymentIntentId = clientSecret.split('_secret_')[0];
+      onPaymentSuccess(paymentIntentId);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-6">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-center text-blue-800 mb-2">
           <CreditCard className="w-5 h-5 mr-2" />
           <span className="font-semibold">Secure Payment</span>
         </div>
         <p className="text-sm text-blue-700">
-          Complete your registration with secure debit card payment. Your card details are processed securely by Stripe.
+          Complete your registration with secure payment. Choose Apple Pay for quick checkout or use your debit card.
         </p>
       </div>
+
+      {/* Express Checkout (Apple Pay, Google Pay) */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-medium text-gray-900">Quick Payment</h4>
+        <ExpressCheckoutElement
+          onConfirm={handleExpressCheckout}
+          options={{
+            buttonType: {
+              applePay: 'book',
+              googlePay: 'book'
+            }
+          }}
+        />
+      </div>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="bg-white px-2 text-gray-500">Or pay with card</span>
+        </div>
+      </div>
       
-      <PaymentElement />
-      
-      <Button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="w-full bg-navy hover:bg-slate-800 text-white"
-      >
-        {isProcessing ? (
-          <>
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-            Processing Payment...
-          </>
-        ) : (
-          <>
-            <CreditCard className="w-4 h-4 mr-2" />
-            Complete Registration & Pay
-          </>
-        )}
-      </Button>
-    </form>
+      {/* Regular Card Payment */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <PaymentElement />
+        
+        <Button
+          type="submit"
+          disabled={!stripe || isProcessing}
+          className="w-full bg-navy hover:bg-slate-800 text-white"
+        >
+          {isProcessing ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Processing Payment...
+            </>
+          ) : (
+            <>
+              <CreditCard className="w-4 h-4 mr-2" />
+              Complete Registration & Pay
+            </>
+          )}
+        </Button>
+      </form>
+    </div>
   );
 }
 
@@ -797,6 +840,7 @@ export default function ClinicsSection() {
                       registrationData={registrationData}
                       selectedClinic={selectedClinic!}
                       selectedSessions={selectedSessions}
+                      clientSecret={clientSecret}
                     />
                   </Elements>
                 </div>
