@@ -81,24 +81,24 @@ export default function ContactSection() {
               <h3 className="text-2xl font-playfair font-bold mb-6">Contact Information</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <MapPin className="text-italian-red text-xl mt-1" />
+                  <MapPin className="text-orange text-xl mt-1" />
                   <div>
                     <h4 className="font-semibold mb-1">Training Facility</h4>
-                    <p className="text-green-100">Via dei Cavalli 123<br />Tuscany, Italy 50125</p>
+                    <p className="text-gray-200">Crown Farm<br />Ascott-Under-Wychwood<br />OX7 6AB</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <Phone className="text-italian-red text-xl mt-1" />
+                  <Phone className="text-orange text-xl mt-1" />
                   <div>
                     <h4 className="font-semibold mb-1">Phone</h4>
-                    <p className="text-green-100">+39 055 123 4567</p>
+                    <p className="text-gray-200">+44 7767 291713</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <Mail className="text-italian-red text-xl mt-1" />
+                  <Mail className="text-orange text-xl mt-1" />
                   <div>
                     <h4 className="font-semibold mb-1">Email</h4>
-                    <p className="text-green-100">info@danbizzarro.com</p>
+                    <p className="text-gray-200">dan@danbizzarromethod.com</p>
                   </div>
                 </div>
               </div>
