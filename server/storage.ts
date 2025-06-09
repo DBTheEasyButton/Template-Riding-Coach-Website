@@ -9,6 +9,7 @@ import {
   clinicRegistrations,
   clinicWaitlist,
   trainingVideos,
+  testimonials,
   type User, 
   type InsertUser,
   type Achievement,
@@ -70,6 +71,10 @@ export interface IStorage {
   getTrainingVideosByCategory(category: string): Promise<TrainingVideo[]>;
   createTrainingVideo(video: InsertTrainingVideo): Promise<TrainingVideo>;
   updateVideoViewCount(id: number): Promise<void>;
+  
+  getAllTestimonials(): Promise<Testimonial[]>;
+  getFeaturedTestimonials(): Promise<Testimonial[]>;
+  createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial>;
 }
 
 export class DatabaseStorage implements IStorage {
