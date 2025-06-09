@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, Euro, FileText, AlertCircle, Check } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 
@@ -88,7 +88,7 @@ export default function ClinicsSection() {
   };
 
   const formatPrice = (price: number) => {
-    return `€${(price / 100).toFixed(0)}`;
+    return `£${(price / 100).toFixed(0)}`;
   };
 
   const getLevelColor = (level: string) => {
@@ -216,11 +216,11 @@ export default function ClinicsSection() {
                   <span>{clinic.currentParticipants}/{clinic.maxParticipants} participants</span>
                 </div>
                 <div className="flex items-center text-sm text-dark">
-                  <Euro className="w-4 h-4 mr-2" />
+                  <PoundSterling className="w-4 h-4 mr-2" />
                   <span className="font-bold text-xl text-orange">
                     {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                      ? `from £${Math.min(...clinic.sessions.map((s: ClinicSession) => s.price))}`
-                      : `£${clinic.price}`
+                      ? `from £${Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100}`
+                      : `£${clinic.price / 100}`
                     }
                   </span>
                 </div>
@@ -449,7 +449,7 @@ export default function ClinicsSection() {
                 <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Payment Information</h3>
                 <div className="bg-orange/10 p-4 rounded-lg">
                   <div className="flex items-center text-orange mb-2">
-                    <Euro className="w-5 h-5 mr-2" />
+                    <PoundSterling className="w-5 h-5 mr-2" />
                     <span className="font-semibold">Clinic Fee: {selectedClinic ? formatPrice(selectedClinic.price) : ''}</span>
                   </div>
                   <p className="text-sm text-gray-600">
