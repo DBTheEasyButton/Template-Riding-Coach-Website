@@ -41,9 +41,12 @@ export default function AdminClinics() {
   const [sessions, setSessions] = useState([
     {
       sessionName: "",
+      startTime: "09:00",
+      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
+      maxParticipants: 8,
       requirements: ""
     }
   ]);
@@ -124,22 +127,29 @@ export default function AdminClinics() {
     });
     setSessions([{
       sessionName: "",
+      startTime: "09:00",
+      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
+      maxParticipants: 8,
       requirements: ""
     }]);
     setMissingFields([]);
   };
 
   const addSession = () => {
-    setSessions([...sessions, {
+    const newSession = {
       sessionName: "",
+      startTime: "09:00",
+      endTime: "12:00",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
+      maxParticipants: 8,
       requirements: ""
-    }]);
+    };
+    setSessions([...sessions, newSession]);
   };
 
   const removeSession = (index: number) => {
@@ -236,7 +246,7 @@ export default function AdminClinics() {
     });
   };
 
-  const handleClone = (clinic: Clinic) => {
+  const handleClone = (clinic: any) => {
     // Calculate next available date (1 week from original)
     const originalDate = new Date(clinic.date);
     const cloneDate = new Date(originalDate);
@@ -260,6 +270,34 @@ export default function AdminClinics() {
       crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
       showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
     });
+    
+    // Copy session data if it exists
+    if (clinic.sessions && clinic.sessions.length > 0) {
+      const clonedSessions = clinic.sessions.map((session: any) => ({
+        sessionName: session.sessionName,
+        startTime: session.startTime || "09:00",
+        endTime: session.endTime || "12:00",
+        discipline: session.discipline,
+        skillLevel: session.skillLevel,
+        price: session.price / 100, // Convert from cents to pounds for form display
+        maxParticipants: session.maxParticipants,
+        requirements: session.requirements || ""
+      }));
+      setSessions(clonedSessions);
+    } else {
+      // Reset to default session for single clinics
+      setSessions([{
+        sessionName: "",
+        startTime: "09:00",
+        endTime: "12:00",
+        discipline: "jumping",
+        skillLevel: "90cm",
+        price: 80,
+        maxParticipants: 8,
+        requirements: ""
+      }]);
+    }
+    
     setIsCreateOpen(true);
   };
 
