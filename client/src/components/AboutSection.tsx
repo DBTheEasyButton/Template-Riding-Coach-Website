@@ -1,4 +1,5 @@
 import danPhotoPath from "@assets/13_1749386080915.jpg";
+import danWithHorsesPath from "@assets/11_1749504952106.jpg";
 
 export default function AboutSection() {
   return (
@@ -44,13 +45,21 @@ export default function AboutSection() {
               </div>
             </div>
           </div>
-          <div className="relative">
-            <img 
-              src={danPhotoPath} 
-              alt="Dan Bizzarro with his horse - authentic photo showing the professional bond between rider and mount" 
-              className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-            />
-
+          <div className="space-y-6">
+            <div className="relative">
+              <img 
+                src={danPhotoPath} 
+                alt="Dan Bizzarro with his horse - authentic photo showing the professional bond between rider and mount" 
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+              />
+            </div>
+            <div className="relative">
+              <img 
+                src={danWithHorsesPath} 
+                alt="Dan Bizzarro with his horses and dog - showing his personal connection with all his animals" 
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+              />
+            </div>
           </div>
         </div>
       </div>
