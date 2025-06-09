@@ -155,8 +155,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/clinics/:id", async (req, res) => {
     try {
       const clinicId = parseInt(req.params.id);
-      const updateData = req.body;
-      const updatedClinic = await storage.updateClinic(clinicId, updateData);
+      const updateData = { ...req.body };
+      
+      console.log("Raw update data:", updateData);
+      
+      // Filter out undefined and null values and only update allowed fields
+      const allowedFields = [
+        'title', 'description', 'date', 'endDate', 'location', 'price', 
+        'maxParticipants', 'level', 'type', 'image', 'isActive',
+        'hasMultipleSessions', 'clinicType', 'crossCountryMaxParticipants', 
+        'showJumpingMaxParticipants'
+      ];
+      
+      const cleanedData: any = {};
+      
+      for (const field of allowedFields) {
+        if (updateData[field] !== undefined && updateData[field] !== null) {
+          cleanedData[field] = updateData[field];
+        }
+      }
+      
+      // Convert date strings to proper Date objects only if they're valid
+      if (cleanedData.date && typeof cleanedData.date === 'string' && cleanedData.date.trim() !== '') {
+        try {
+          const dateStr = cleanedData.date.includes('T') ? cleanedData.date : `${cleanedData.date}T09:00:00.000Z`;
+          const parsedDate = new Date(dateStr);
+          if (!isNaN(parsedDate.getTime())) {
+            cleanedData.date = parsedDate;
+          } else {
+            delete cleanedData.date; // Remove invalid date
+          }
+        } catch (e) {
+          delete cleanedData.date; // Remove invalid date
+        }
+      } else if (cleanedData.date === '' || cleanedData.date === null) {
+        delete cleanedData.date; // Don't update with empty values
+      }
+      
+      if (cleanedData.endDate && typeof cleanedData.endDate === 'string' && cleanedData.endDate.trim() !== '') {
+        try {
+          const dateStr = cleanedData.endDate.includes('T') ? cleanedData.endDate : `${cleanedData.endDate}T17:00:00.000Z`;
+          const parsedDate = new Date(dateStr);
+          if (!isNaN(parsedDate.getTime())) {
+            cleanedData.endDate = parsedDate;
+          } else {
+            delete cleanedData.endDate; // Remove invalid date
+          }
+        } catch (e) {
+          delete cleanedData.endDate; // Remove invalid date
+        }
+      } else if (cleanedData.endDate === '' || cleanedData.endDate === null) {
+        delete cleanedData.endDate; // Don't update with empty values
+      }
+      
+      // Convert price to number and then to cents
+      if (cleanedData.price !== undefined) {
+        const priceInPounds = parseFloat(cleanedData.price.toString());
+        cleanedData.price = Math.round(priceInPounds * 100);
+      }
+      
+      // Convert participant counts to numbers
+      if (cleanedData.maxParticipants !== undefined) {
+        cleanedData.maxParticipants = parseInt(cleanedData.maxParticipants.toString());
+      }
+      if (cleanedData.crossCountryMaxParticipants !== undefined) {
+        cleanedData.crossCountryMaxParticipants = parseInt(cleanedData.crossCountryMaxParticipants.toString());
+      }
+      if (cleanedData.showJumpingMaxParticipants !== undefined) {
+        cleanedData.showJumpingMaxParticipants = parseInt(cleanedData.showJumpingMaxParticipants.toString());
+      }
+      
+      console.log("Cleaned data for update:", cleanedData);
+      
+      const updatedClinic = await storage.updateClinic(clinicId, cleanedData);
       if (!updatedClinic) {
         return res.status(404).json({ message: "Clinic not found" });
       }
