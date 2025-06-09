@@ -38,7 +38,7 @@ export default function TestimonialsSection() {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`w-5 h-5 ${
+        className={`w-3 h-3 ${
           i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
         }`}
       />
@@ -49,10 +49,10 @@ export default function TestimonialsSection() {
     <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-playfair font-bold text-gray-900 mb-4">
-            What Our Riders Say
+          <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">
+            What Dan's pupils say
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Discover the transformative experiences of riders who have embraced the Dan Bizzarro Method
           </p>
         </div>
@@ -67,36 +67,36 @@ export default function TestimonialsSection() {
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                  <Card className="h-full bg-white/80 backdrop-blur-sm border border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <CardContent className="p-8 flex flex-col justify-between h-full">
-                      <div className="mb-6">
-                        <Quote className="w-8 h-8 text-orange-500 mb-4 opacity-50" />
-                        <p className="text-gray-700 leading-relaxed text-lg mb-6 italic">
+                <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/4">
+                  <Card className="h-full bg-white/80 backdrop-blur-sm border border-orange-200 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <CardContent className="p-4 flex flex-col justify-between h-full">
+                      <div className="mb-3">
+                        <Quote className="w-5 h-5 text-orange-500 mb-2 opacity-50" />
+                        <p className="text-gray-700 leading-relaxed text-sm mb-3 italic">
                           "{testimonial.content}"
                         </p>
-                        <div className="flex items-center mb-4">
+                        <div className="flex items-center mb-2">
                           {renderStars(testimonial.rating)}
                         </div>
                       </div>
                       
-                      <div className="flex items-center space-x-4">
-                        <Avatar className="w-12 h-12">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="w-8 h-8">
                           <AvatarImage 
                             src={testimonial.imageUrl || undefined} 
                             alt={testimonial.name}
                             className="object-cover"
                           />
-                          <AvatarFallback className="bg-orange-500 text-white font-semibold">
+                          <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
                             {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <h4 className="font-semibold text-gray-900 text-lg">
+                          <h4 className="font-semibold text-gray-900 text-sm">
                             {testimonial.name}
                           </h4>
                           {testimonial.location && (
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-gray-600 text-xs">
                               {testimonial.location}
                             </p>
                           )}
