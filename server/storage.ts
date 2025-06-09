@@ -30,7 +30,9 @@ import {
   type ClinicWaitlist,
   type InsertClinicWaitlist,
   type TrainingVideo,
-  type InsertTrainingVideo
+  type InsertTrainingVideo,
+  type Testimonial,
+  type InsertTestimonial
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
@@ -436,6 +438,21 @@ export class DatabaseStorage implements IStorage {
         .set({ viewCount: video.viewCount + 1 })
         .where(eq(trainingVideos.id, id));
     }
+  }
+
+  async getAllTestimonials(): Promise<Testimonial[]> {
+    return await db.select().from(testimonials).orderBy(desc(testimonials.createdAt));
+  }
+
+  async getFeaturedTestimonials(): Promise<Testimonial[]> {
+    return await db.select().from(testimonials)
+      .where(eq(testimonials.featured, true))
+      .orderBy(desc(testimonials.createdAt));
+  }
+
+  async createTestimonial(insertTestimonial: InsertTestimonial): Promise<Testimonial> {
+    const [testimonial] = await db.insert(testimonials).values(insertTestimonial).returning();
+    return testimonial;
   }
 }
 

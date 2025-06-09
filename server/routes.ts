@@ -394,6 +394,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Testimonials endpoints
+  app.get("/api/testimonials", async (req, res) => {
+    try {
+      const testimonials = await storage.getAllTestimonials();
+      res.json(testimonials);
+    } catch (error) {
+      console.error("Error fetching testimonials:", error);
+      res.status(500).json({ message: "Failed to fetch testimonials" });
+    }
+  });
+
+  app.get("/api/testimonials/featured", async (req, res) => {
+    try {
+      const testimonials = await storage.getFeaturedTestimonials();
+      res.json(testimonials);
+    } catch (error) {
+      console.error("Error fetching featured testimonials:", error);
+      res.status(500).json({ message: "Failed to fetch featured testimonials" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
