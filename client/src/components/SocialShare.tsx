@@ -36,16 +36,21 @@ export default function SocialShare({ clinic }: SocialShareProps) {
   const getPriceDisplay = () => {
     if (clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0) {
       const minPrice = Math.min(...clinic.sessions.map(s => s.price));
-      const maxPrice = Math.max(...clinic.sessions.map(s => s.price));
-      if (minPrice === maxPrice) {
-        return `£${(minPrice / 100).toFixed(2)}`;
-      } else {
-        return `£${(minPrice / 100).toFixed(2)} - £${(maxPrice / 100).toFixed(2)}`;
-      }
+      return `from £${(minPrice / 100).toFixed(2)}`;
     } else if (clinic.price > 0) {
       return `£${(clinic.price / 100).toFixed(2)}`;
     } else {
       return 'Price TBA';
+    }
+  };
+
+  // Generate participant count display
+  const getParticipantDisplay = () => {
+    if (clinic.hasMultipleSessions) {
+      const totalMaxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
+      return `Limited to ${totalMaxParticipants} participants`;
+    } else {
+      return `Limited to ${clinic.maxParticipants} participants`;
     }
   };
 
@@ -56,7 +61,7 @@ export default function SocialShare({ clinic }: SocialShareProps) {
 📍 ${clinic.location}
 🗺️ Directions: ${mapsUrl}
 💰 ${getPriceDisplay()}
-👥 Limited to ${clinic.maxParticipants} participants
+👥 ${getParticipantDisplay()}
 
 ${clinic.description}
 
