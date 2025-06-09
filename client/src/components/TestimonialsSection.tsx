@@ -81,8 +81,8 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
-      <div className="container mx-auto px-4">
+    <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100 overflow-visible">
+      <div className="container mx-auto px-4 overflow-visible">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-playfair font-bold text-gray-900 mb-4">
             What Dan's pupils say
@@ -92,14 +92,14 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative max-w-6xl mx-auto overflow-visible py-20">
           <Carousel
             setApi={setApi}
             opts={{
               align: "start",
               loop: true,
             }}
-            className="w-full"
+            className="w-full overflow-visible"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -150,49 +150,51 @@ export default function TestimonialsSection() {
                     </Card>
 
                     {/* Expanded card on hover */}
-                    <Card className="absolute top-1/2 left-1/2 w-80 max-w-sm bg-white border-2 border-orange-300 shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-[100] transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-100 scale-95 pointer-events-none group-hover:pointer-events-auto">
-                      <CardContent className="p-4">
-                        <div className="mb-4">
-                          <Quote className="w-4 h-4 text-orange-500 mb-3 opacity-70" />
-                          <p className="text-gray-700 leading-relaxed text-xs mb-4 italic">
-                            "{testimonial.content}"
-                          </p>
-                          <div className="flex items-center mb-3">
-                            {Array.from({ length: 5 }, (_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-3 h-3 ${
-                                  i < testimonial.rating ? "text-yellow-400 fill-current" : "text-gray-300"
-                                }`}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-[100] pointer-events-none group-hover:pointer-events-auto">
+                      <Card className="w-80 bg-white border-2 border-orange-300 shadow-2xl">
+                        <CardContent className="p-4">
+                          <div className="mb-4">
+                            <Quote className="w-4 h-4 text-orange-500 mb-3 opacity-70" />
+                            <p className="text-gray-700 leading-relaxed text-xs mb-4 italic whitespace-normal">
+                              "{testimonial.content}"
+                            </p>
+                            <div className="flex items-center mb-3">
+                              {Array.from({ length: 5 }, (_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`w-3 h-3 ${
+                                    i < testimonial.rating ? "text-yellow-400 fill-current" : "text-gray-300"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center space-x-3">
+                            <Avatar className="w-8 h-8">
+                              <AvatarImage 
+                                src={testimonial.imageUrl || undefined} 
+                                alt={testimonial.name}
+                                className="object-cover"
                               />
-                            ))}
+                              <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
+                                {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-semibold text-gray-900 text-sm">
+                                {testimonial.name}
+                              </h4>
+                              {testimonial.location && (
+                                <p className="text-gray-600 text-xs">
+                                  {testimonial.location}
+                                </p>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                        
-                        <div className="flex items-center space-x-3">
-                          <Avatar className="w-8 h-8">
-                            <AvatarImage 
-                              src={testimonial.imageUrl || undefined} 
-                              alt={testimonial.name}
-                              className="object-cover"
-                            />
-                            <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
-                              {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h4 className="font-semibold text-gray-900 text-sm">
-                              {testimonial.name}
-                            </h4>
-                            {testimonial.location && (
-                              <p className="text-gray-600 text-xs">
-                                {testimonial.location}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </div>
                 </CarouselItem>
               ))}
