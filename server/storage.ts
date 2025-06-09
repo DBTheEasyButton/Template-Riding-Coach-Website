@@ -349,6 +349,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateClinic(id: number, updateData: Partial<InsertClinic>): Promise<Clinic | undefined> {
+    // First, delete all existing sessions for this clinic to avoid confusion
+    await db.delete(clinicSessions).where(eq(clinicSessions.clinicId, id));
+    
+    // Update the clinic with complete replacement of all fields
     const [clinic] = await db.update(clinics)
       .set(updateData)
       .where(eq(clinics.id, id))

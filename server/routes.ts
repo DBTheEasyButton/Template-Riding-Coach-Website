@@ -174,7 +174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clinicId = parseInt(req.params.id);
       const updateData = { ...req.body };
       
-      // Filter out undefined and null values and only update allowed fields
+      // Process all allowed fields - allow empty strings to clear old data
       const allowedFields = [
         'title', 'description', 'date', 'endDate', 'location', 'price', 
         'maxParticipants', 'level', 'type', 'image', 'isActive',
@@ -185,7 +185,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cleanedData: any = {};
       
       for (const field of allowedFields) {
-        if (updateData[field] !== undefined && updateData[field] !== null) {
+        if (updateData[field] !== undefined) {
+          // Allow empty strings and null values to clear old data
           cleanedData[field] = updateData[field];
         }
       }
@@ -204,7 +205,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           delete cleanedData.date; // Remove invalid date
         }
       } else if (cleanedData.date === '' || cleanedData.date === null) {
-        delete cleanedData.date; // Don't update with empty values
+        cleanedData.date = null; // Allow clearing the date field
       }
       
       if (cleanedData.endDate && typeof cleanedData.endDate === 'string' && cleanedData.endDate.trim() !== '') {
@@ -239,13 +240,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (cleanedData.showJumpingMaxParticipants !== undefined) {
         cleanedData.showJumpingMaxParticipants = parseInt(cleanedData.showJumpingMaxParticipants.toString());
       }
-      
-
+      // Extract sessions from the update data
+      const { sessions, ...clinicUpdateData } = updateData;
       
       const updatedClinic = await storage.updateClinic(clinicId, cleanedData);
       if (!updatedClinic) {
         return res.status(404).json({ message: "Clinic not found" });
       }
+      
+      // Recreate sessions if provided (old sessions already deleted in updateClinic)
+      if (sessions && Array.isArray(sessions)) {
+        for (const session of sessions) {
+          await storage.createClinicSession({
+            clinicId: updatedClinic.id,
+            sessionName: session.sessionName || "",
+            startTime: "09:00",
+            endTime: "17:00", 
+            discipline: session.discipline || "jumping",
+            skillLevel: session.skillLevel || "90cm",
+            price: session.price ? Math.round(session.price * 100) : 8000, // Convert to cents
+            maxParticipants: 12,
+            currentParticipants: 0,
+            requirements: session.requirements || null
+          });
+        }
+      }
+      
       res.json(updatedClinic);
     } catch (error) {
       console.error("Error updating clinic:", error);
