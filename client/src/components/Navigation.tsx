@@ -111,17 +111,19 @@ export default function Navigation() {
                 </button>
                 
                 {isCoachingDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg" style={{ zIndex: 9999 }}>
-                    <div className="py-2">
-                      {coachingSubmenu.map((item, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleSubmenuClick(item)}
-                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors duration-200"
-                        >
-                          {item.label}
-                        </button>
-                      ))}
+                  <div className="absolute top-full left-0 pt-2 w-56" style={{ zIndex: 9999 }}>
+                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg">
+                      <div className="py-2">
+                        {coachingSubmenu.map((item, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleSubmenuClick(item)}
+                            className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors duration-200"
+                          >
+                            {item.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
