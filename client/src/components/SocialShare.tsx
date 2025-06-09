@@ -93,6 +93,11 @@ Register now: ${clinicUrl}
     window.open(url, '_blank');
   };
 
+  const shareToWhatsAppBusiness = () => {
+    const url = `https://web.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`;
+    window.open(url, '_blank');
+  };
+
   const shareToInstagram = () => {
     // Instagram doesn't support direct URL sharing, so we copy the message
     copyToClipboard();
@@ -159,7 +164,7 @@ Register now: ${clinicUrl}
           Share
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Share "{clinic.title}"</DialogTitle>
         </DialogHeader>
@@ -225,6 +230,11 @@ Register now: ${clinicUrl}
               <Button onClick={shareToWhatsApp} className="bg-green-600 hover:bg-green-700 text-white">
                 <SiWhatsapp className="w-4 h-4 mr-2" />
                 WhatsApp
+              </Button>
+              
+              <Button onClick={shareToWhatsAppBusiness} className="bg-green-700 hover:bg-green-800 text-white">
+                <SiWhatsapp className="w-4 h-4 mr-2" />
+                WhatsApp Web
               </Button>
               
               <Button onClick={shareToInstagram} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
