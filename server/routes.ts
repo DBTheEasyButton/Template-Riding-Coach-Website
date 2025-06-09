@@ -1,7 +1,13 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import Stripe from "stripe";
 import { storage } from "./storage";
 import { insertContactSchema, insertClinicRegistrationSchema, insertClinicSchema } from "@shared/schema";
+
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all achievements
@@ -74,13 +80,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Register for clinic
+  // Create payment intent for clinic registration
+  app.post("/api/clinics/:id/create-payment-intent", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.id);
+      const { sessionIds } = req.body;
+      
+      const clinic = await storage.getClinic(clinicId);
+      if (!clinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+      
+      let amount: number;
+      
+      if (clinic.hasMultipleSessions && sessionIds?.length > 0) {
+        // Calculate total for selected sessions
+        const allSessions = await storage.getAllClinics();
+        const clinicWithSessions = allSessions.find(c => c.id === clinicId);
+        if (!clinicWithSessions?.sessions) {
+          return res.status(400).json({ message: "Sessions not found" });
+        }
+        
+        const selectedSessions = clinicWithSessions.sessions.filter(s => sessionIds.includes(s.id));
+        amount = selectedSessions.reduce((total, session) => total + session.price, 0);
+      } else {
+        // Single session clinic
+        amount = clinic.price;
+      }
+      
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount), // Amount is already in cents
+        currency: "gbp",
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        metadata: {
+          clinicId: clinicId.toString(),
+          sessionIds: sessionIds ? JSON.stringify(sessionIds) : null,
+        },
+      });
+      
+      res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      res.status(500).json({ message: "Failed to create payment intent" });
+    }
+  });
+
+  // Register for clinic (after payment confirmation)
   app.post("/api/clinics/:id/register", async (req, res) => {
     try {
       const clinicId = parseInt(req.params.id);
-      const registrationData = insertClinicRegistrationSchema.parse({
-        ...req.body,
-        clinicId
+      const { paymentIntentId, ...registrationData } = req.body;
+      
+      // Verify payment was successful
+      if (paymentIntentId) {
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+        if (paymentIntent.status !== 'succeeded') {
+          return res.status(400).json({ message: "Payment not completed" });
+        }
+      }
+      
+      const validatedData = insertClinicRegistrationSchema.parse({
+        ...registrationData,
+        clinicId,
+        status: 'confirmed' // Set to confirmed since payment succeeded
       });
       
       const clinic = await storage.getClinic(clinicId);
@@ -92,7 +156,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Clinic is full" });
       }
       
-      const registration = await storage.createClinicRegistration(registrationData);
+      const registration = await storage.createClinicRegistration(validatedData);
       res.status(201).json(registration);
     } catch (error) {
       console.error("Error creating clinic registration:", error);
