@@ -93,10 +93,9 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative group"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-3 py-2 rounded-lg hover:bg-orange-50"
                 >
-                  <span className="relative z-10">{item.label}</span>
-                  <span className="absolute inset-0 scale-0 group-hover:scale-100 bg-orange-50 rounded-lg transition-transform duration-300 ease-out"></span>
+                  {item.label}
                 </button>
               ))}
               
@@ -106,24 +105,20 @@ export default function Navigation() {
                 onMouseEnter={() => setIsCoachingDropdownOpen(true)}
                 onMouseLeave={() => setIsCoachingDropdownOpen(false)}
               >
-                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center relative group px-3 py-2 rounded-lg">
-                  <span className="relative z-10 flex items-center">
-                    Coaching
-                    <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
-                  </span>
-                  <span className="absolute inset-0 scale-0 group-hover:scale-100 bg-orange-50 rounded-lg transition-transform duration-300 ease-out"></span>
+                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center px-3 py-2 rounded-lg hover:bg-orange-50">
+                  Coaching
+                  <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-300 ${isCoachingDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {isCoachingDropdownOpen && (
-                  <div className="absolute top-full left-0 pt-2 w-56 animate-in slide-in-from-top-2 duration-200" style={{ zIndex: 9999 }}>
-                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 animate-in fade-in duration-300">
+                  <div className="absolute top-full left-0 pt-2 w-56" style={{ zIndex: 9999 }}>
+                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg transform transition-all duration-200 opacity-100 scale-100">
                       <div className="py-2">
                         {coachingSubmenu.map((item, index) => (
                           <button
                             key={index}
                             onClick={() => handleSubmenuClick(item)}
-                            className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-500 transition-all duration-300 transform hover:translate-x-1 hover:scale-105"
-                            style={{ animationDelay: `${index * 50}ms` }}
+                            className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-500 transition-all duration-200 hover:pl-5"
                           >
                             {item.label}
                           </button>
@@ -138,10 +133,9 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative group"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-orange-50"
                 >
-                  <span className="relative z-10">{item.label}</span>
-                  <span className="absolute inset-0 scale-0 group-hover:scale-100 bg-orange-50 rounded-lg transition-transform duration-300 ease-out"></span>
+                  {item.label}
                 </button>
               ))}
             </div>
