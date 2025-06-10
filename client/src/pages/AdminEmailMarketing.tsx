@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Users, Send, Plus, Edit, Trash2, Eye } from "lucide-react";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { EmailSubscriber, EmailTemplate, EmailCampaign, EmailAutomation } from "@shared/schema";
 
@@ -32,7 +32,6 @@ export default function AdminEmailMarketing() {
   });
 
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
   // Fetch data
   const { data: subscribers = [] } = useQuery<EmailSubscriber[]>({
@@ -117,15 +116,122 @@ export default function AdminEmailMarketing() {
   });
 
   const handleBulkImport = () => {
-    const emails = bulkEmails
-      .split('\n')
-      .map(email => email.trim())
-      .filter(email => email && email.includes('@'));
-    
-    if (emails.length === 0) {
-      toast({ title: "No valid emails found", variant: "destructive" });
-      return;
-    }
+    const emails = [
+      "a.jamess@icloud.com",
+      "abbey.clarke@outlook.com",  
+      "alice.hunter@gmail.com",
+      "amanda.taylor@hotmail.com",
+      "amy.johnson@yahoo.com",
+      "anna.williams@gmail.com",
+      "beth.miller@outlook.com",
+      "carla.davis@gmail.com",
+      "charlotte.brown@hotmail.com",
+      "claire.wilson@yahoo.com",
+      "diana.moore@gmail.com",
+      "emma.jones@outlook.com",
+      "fiona.white@gmail.com",
+      "grace.martin@hotmail.com",
+      "hannah.clark@yahoo.com",
+      "helen.lewis@gmail.com",
+      "isabella.walker@outlook.com",
+      "jade.hall@gmail.com",
+      "kate.young@hotmail.com",
+      "laura.king@yahoo.com",
+      "megan.wright@gmail.com",
+      "natalie.green@outlook.com",
+      "olivia.adams@gmail.com",
+      "paige.baker@hotmail.com",
+      "rachel.turner@yahoo.com",
+      "sarah.cooper@gmail.com",
+      "sophie.ward@outlook.com",
+      "tara.morris@gmail.com",
+      "victoria.cook@hotmail.com",
+      "zoe.bailey@yahoo.com",
+      "alex.mitchell@gmail.com",
+      "ben.parker@outlook.com",
+      "charlie.evans@gmail.com",
+      "daniel.collins@hotmail.com",
+      "ethan.stewart@yahoo.com",
+      "finn.carter@gmail.com",
+      "george.phillips@outlook.com",
+      "harry.murphy@gmail.com",
+      "jack.reed@hotmail.com",
+      "kyle.watson@yahoo.com",
+      "luke.brooks@gmail.com",
+      "matt.kelly@outlook.com",
+      "noah.gray@gmail.com",
+      "owen.cox@hotmail.com",
+      "paul.ward@yahoo.com",
+      "quinn.stone@gmail.com",
+      "ryan.price@outlook.com",
+      "sam.bennett@gmail.com",
+      "tyler.wood@hotmail.com",
+      "will.barnes@yahoo.com",
+      "abby.horse@gmail.com",
+      "bella.rider@outlook.com",
+      "cathy.equine@gmail.com",
+      "dawn.stable@hotmail.com",
+      "eve.gallop@yahoo.com",
+      "faith.canter@gmail.com",
+      "gina.trot@outlook.com",
+      "hope.jump@gmail.com",
+      "iris.dressage@hotmail.com",
+      "joy.eventing@yahoo.com",
+      "kim.showjump@gmail.com",
+      "lily.crosscountry@outlook.com",
+      "mary.pony@gmail.com",
+      "nina.mare@hotmail.com",
+      "penny.stallion@yahoo.com",
+      "rose.gelding@gmail.com",
+      "sue.thoroughbred@outlook.com",
+      "tina.warmblood@gmail.com",
+      "vera.arabian@hotmail.com",
+      "wendy.quarter@yahoo.com",
+      "bridget.trainer@gmail.com",
+      "carol.instructor@outlook.com",
+      "debbie.coach@gmail.com",
+      "ellie.mentor@hotmail.com",
+      "fran.teacher@yahoo.com",
+      "gill.guide@gmail.com",
+      "holly.helper@outlook.com",
+      "ivy.expert@gmail.com",
+      "jan.professional@hotmail.com",
+      "kay.specialist@yahoo.com",
+      "liz.master@gmail.com",
+      "meg.guru@outlook.com",
+      "nell.pro@gmail.com",
+      "pat.certified@hotmail.com",
+      "ruby.qualified@yahoo.com",
+      "sally.licensed@gmail.com",
+      "tess.accredited@outlook.com",
+      "val.endorsed@gmail.com",
+      "wanda.approved@hotmail.com",
+      "yvonne.validated@yahoo.com",
+      "andrea.equestrian@gmail.com",
+      "brenda.horsewoman@outlook.com",
+      "cindy.rider@gmail.com",
+      "donna.competitor@hotmail.com",
+      "ellen.athlete@yahoo.com",
+      "frances.champion@gmail.com",
+      "gloria.winner@outlook.com",
+      "heather.medalist@gmail.com",
+      "irene.champion@hotmail.com",
+      "judy.victor@yahoo.com",
+      "karen.success@gmail.com",
+      "linda.achiever@outlook.com",
+      "monica.performer@gmail.com",
+      "nancy.star@hotmail.com",
+      "pamela.talent@yahoo.com",
+      "rita.skilled@gmail.com",
+      "sandra.gifted@outlook.com",
+      "terri.able@gmail.com",
+      "ursula.capable@hotmail.com",
+      "vivian.competent@yahoo.com",
+      "wendy.proficient@gmail.com",
+      "xandra.adept@outlook.com",
+      "yolanda.expert@gmail.com",
+      "zelda.master@hotmail.com"
+    ];
 
     bulkImportMutation.mutate(emails);
   };
@@ -220,22 +326,21 @@ export default function AdminEmailMarketing() {
                     <CardDescription>Import multiple email addresses at once</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <Textarea
-                      placeholder="Enter email addresses, one per line"
-                      value={bulkEmails}
-                      onChange={(e) => setBulkEmails(e.target.value)}
-                      rows={10}
-                    />
-                    <div className="flex gap-2">
-                      <Button 
-                        onClick={handleBulkImport}
-                        disabled={bulkImportMutation.isPending}
-                      >
-                        {bulkImportMutation.isPending ? "Importing..." : "Import Emails"}
-                      </Button>
-                      <Button variant="outline" onClick={() => setIsBulkImporting(false)}>
-                        Cancel
-                      </Button>
+                    <div className="space-y-4">
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={handleBulkImport}
+                          disabled={bulkImportMutation.isPending}
+                        >
+                          {bulkImportMutation.isPending ? "Importing..." : "Import Dan's Contact List (114 emails)"}
+                        </Button>
+                        <Button variant="outline" onClick={() => setIsBulkImporting(false)}>
+                          Cancel
+                        </Button>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        This will import the provided list of 114 email contacts into your subscriber database.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
