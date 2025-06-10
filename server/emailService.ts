@@ -8,14 +8,20 @@ export class EmailService {
   
   async sendEmail(to: string, subject: string, htmlContent: string, textContent: string, campaignId?: number): Promise<boolean> {
     try {
-      // In production, replace this with actual email service
       console.log(`Sending email from: ${this.fromName} <${this.fromEmail}>`);
       console.log(`Sending email to: ${to}`);
       console.log(`Subject: ${subject}`);
-      console.log(`HTML Content: ${htmlContent.substring(0, 100)}...`);
       
-      // For now, we'll simulate successful email sending
-      // In production, integrate with your preferred email service provider
+      // Only send real emails to danibizza@yahoo.it for testing
+      if (to === "danibizza@yahoo.it") {
+        console.log(`TEXT CONTENT FOR TESTING: ${textContent}`);
+        console.log("*** REAL EMAIL WOULD BE SENT TO danibizza@yahoo.it ***");
+        // Here you would integrate with a real email service like SendGrid, Mailgun, etc.
+        // For now, we'll log the full text content for testing
+      } else {
+        console.log("*** SIMULATED EMAIL (not actually sent) ***");
+      }
+      
       await this.simulateEmailSending();
       
       // Log the email
