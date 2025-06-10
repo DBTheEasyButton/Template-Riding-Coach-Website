@@ -631,6 +631,69 @@ The Dan Bizzarro Method Team`,
     return await db.select().from(clinicRegistrations).where(eq(clinicRegistrations.clinicId, clinicId));
   }
 
+  async getAllClinicRegistrations(): Promise<ClinicRegistration[]> {
+    return await db.select().from(clinicRegistrations).orderBy(desc(clinicRegistrations.registeredAt));
+  }
+
+  async updateRegistrationStatus(id: number, status: string, refundAmount?: number, reason?: string): Promise<ClinicRegistration | undefined> {
+    const updateData: any = { status };
+    if (refundAmount !== undefined) {
+      updateData.refundAmount = refundAmount;
+      updateData.refundProcessedAt = new Date();
+    }
+    if (reason) {
+      updateData.cancellationReason = reason;
+    }
+    
+    const [registration] = await db.update(clinicRegistrations)
+      .set(updateData)
+      .where(eq(clinicRegistrations.id, id))
+      .returning();
+    return registration;
+  }
+
+  async canProcessRefund(registrationId: number): Promise<{ eligible: boolean; reason: string; amount?: number }> {
+    // Get registration details
+    const [registration] = await db.select().from(clinicRegistrations).where(eq(clinicRegistrations.id, registrationId));
+    if (!registration) {
+      return { eligible: false, reason: "Registration not found" };
+    }
+
+    // Get clinic details
+    const [clinic] = await db.select().from(clinics).where(eq(clinics.id, registration.clinicId));
+    if (!clinic) {
+      return { eligible: false, reason: "Clinic not found" };
+    }
+
+    const clinicDate = new Date(clinic.date);
+    const today = new Date();
+    const daysUntilClinic = Math.ceil((clinicDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Check if more than 7 days before clinic
+    if (daysUntilClinic > 7) {
+      return { 
+        eligible: true, 
+        reason: `More than 7 days before clinic (${daysUntilClinic} days remaining)`,
+        amount: clinic.price 
+      };
+    }
+
+    // Check if there's a waiting list
+    const waitlist = await this.getWaitlist(registration.clinicId);
+    if (waitlist.length > 0) {
+      return { 
+        eligible: true, 
+        reason: `Waiting list available (${waitlist.length} people waiting)`,
+        amount: clinic.price 
+      };
+    }
+
+    return { 
+      eligible: false, 
+      reason: `Less than 7 days before clinic (${daysUntilClinic} days) and no waiting list` 
+    };
+  }
+
   async addToWaitlist(insertWaitlistEntry: InsertClinicWaitlist): Promise<ClinicWaitlist> {
     // Get current waitlist position
     const waitlistCount = await db.select().from(clinicWaitlist).where(eq(clinicWaitlist.clinicId, insertWaitlistEntry.clinicId));

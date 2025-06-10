@@ -104,8 +104,12 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
   medicalConditions: text("medical_conditions"),
   paymentMethod: text("payment_method").notNull().default("bank_transfer"),
   agreeToTerms: boolean("agree_to_terms").notNull().default(false),
-  status: text("status").notNull().default("pending"), // pending, confirmed, cancelled, waitlist
+  status: text("status").notNull().default("pending"), // pending, confirmed, cancelled_by_admin, waitlist
   registeredAt: timestamp("registered_at").notNull().defaultNow(),
+  refundAmount: integer("refund_amount"), // amount refunded in pence
+  refundProcessedAt: timestamp("refund_processed_at"),
+  cancellationReason: text("cancellation_reason"),
+  paymentIntentId: text("payment_intent_id"),
 });
 
 export const clinicWaitlist = pgTable("clinic_waitlist", {
