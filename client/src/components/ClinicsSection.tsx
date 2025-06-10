@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
@@ -556,6 +556,20 @@ export default function ClinicsSection() {
               <DialogDescription>
                 Complete your registration for this exclusive training clinic with Dan Bizzarro.
               </DialogDescription>
+              <div className="bg-orange/10 border border-orange/20 rounded-lg p-4 mt-4">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-orange mb-2">Cancellation Policy</h4>
+                    <div className="text-sm text-gray-700 space-y-1">
+                      <p>• Once paid, you cannot cancel through this system</p>
+                      <p>• Refunds only if &gt;7 days before clinic OR waiting list exists</p>
+                      <p>• Contact dan@danbizzarromethod.com for cancellation requests</p>
+                      <p>• Full terms at <a href="/terms-and-conditions" className="text-orange hover:underline">Terms & Conditions</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
               {hasSavedData && (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-3">
                   <div className="flex items-center justify-between">
