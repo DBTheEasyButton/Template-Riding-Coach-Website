@@ -448,6 +448,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Bulk email import for admin
+  app.post("/api/admin/email-subscribers/bulk-import", async (req, res) => {
+    try {
+      const { emails, source = "bulk_import" } = req.body;
+      
+      if (!emails || !Array.isArray(emails)) {
+        return res.status(400).json({ message: "Emails array is required" });
+      }
+
+      const results: { imported: number; skipped: number; errors: string[] } = { imported: 0, skipped: 0, errors: [] };
+
+      for (const emailData of emails) {
+        try {
+          const email = typeof emailData === 'string' ? emailData : emailData.email;
+          const firstName = typeof emailData === 'object' ? emailData.firstName : undefined;
+          const lastName = typeof emailData === 'object' ? emailData.lastName : undefined;
+
+          if (!email || !email.includes('@')) {
+            results.errors.push(`Invalid email: ${email}`);
+            continue;
+          }
+
+          // Check if already exists
+          const existing = await storage.getEmailSubscriberByEmail(email);
+          if (existing) {
+            results.skipped++;
+            continue;
+          }
+
+          await storage.createEmailSubscriber({
+            email,
+            firstName,
+            lastName,
+            subscriptionSource: source,
+            interests: ["news", "clinics"]
+          });
+
+          results.imported++;
+        } catch (error) {
+          results.errors.push(`Failed to import ${emailData}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+      }
+
+      res.json({
+        message: `Import completed: ${results.imported} imported, ${results.skipped} skipped`,
+        results
+      });
+    } catch (error) {
+      console.error("Error bulk importing emails:", error);
+      res.status(500).json({ message: "Failed to bulk import emails" });
+    }
+  });
+
   // Unsubscribe from newsletter
   app.post("/api/newsletter/unsubscribe", async (req, res) => {
     try {

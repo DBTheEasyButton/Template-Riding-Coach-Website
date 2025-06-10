@@ -15,6 +15,8 @@ export default function AdminEmailMarketing() {
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
   const [isCreatingCampaign, setIsCreatingCampaign] = useState(false);
+  const [isBulkImporting, setIsBulkImporting] = useState(false);
+  const [bulkEmails, setBulkEmails] = useState("");
   const [templateForm, setTemplateForm] = useState({
     name: "",
     subject: "",
@@ -96,6 +98,38 @@ export default function AdminEmailMarketing() {
     }
   });
 
+  const bulkImportMutation = useMutation({
+    mutationFn: async (emails: string[]) => {
+      return await apiRequest("POST", "/api/admin/email-subscribers/bulk-import", { emails });
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/email-subscribers"] });
+      toast({ 
+        title: "Bulk import completed", 
+        description: data.message 
+      });
+      setBulkEmails("");
+      setIsBulkImporting(false);
+    },
+    onError: () => {
+      toast({ title: "Failed to import emails", variant: "destructive" });
+    }
+  });
+
+  const handleBulkImport = () => {
+    const emails = bulkEmails
+      .split('\n')
+      .map(email => email.trim())
+      .filter(email => email && email.includes('@'));
+    
+    if (emails.length === 0) {
+      toast({ title: "No valid emails found", variant: "destructive" });
+      return;
+    }
+
+    bulkImportMutation.mutate(emails);
+  };
+
   const activeSubscribersCount = subscribers.filter(sub => sub.isActive).length;
 
   return (
@@ -167,11 +201,47 @@ export default function AdminEmailMarketing() {
 
           {/* Subscribers Tab */}
           <TabsContent value="subscribers">
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-semibold">Email Subscribers</h2>
+                  <p className="text-gray-600">Manage your newsletter subscribers</p>
+                </div>
+                <Button onClick={() => setIsBulkImporting(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Bulk Import
+                </Button>
+              </div>
+
+              {isBulkImporting && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Bulk Import Subscribers</CardTitle>
+                    <CardDescription>Import multiple email addresses at once</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Textarea
+                      placeholder="Enter email addresses, one per line"
+                      value={bulkEmails}
+                      onChange={(e) => setBulkEmails(e.target.value)}
+                      rows={10}
+                    />
+                    <div className="flex gap-2">
+                      <Button 
+                        onClick={handleBulkImport}
+                        disabled={bulkImportMutation.isPending}
+                      >
+                        {bulkImportMutation.isPending ? "Importing..." : "Import Emails"}
+                      </Button>
+                      <Button variant="outline" onClick={() => setIsBulkImporting(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
             <Card>
-              <CardHeader>
-                <CardTitle>Email Subscribers</CardTitle>
-                <CardDescription>Manage your newsletter subscribers</CardDescription>
-              </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full table-auto">
@@ -212,6 +282,7 @@ export default function AdminEmailMarketing() {
                 </div>
               </CardContent>
             </Card>
+            </div>
           </TabsContent>
 
           {/* Templates Tab */}
