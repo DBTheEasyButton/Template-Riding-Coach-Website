@@ -13,6 +13,7 @@ import GallerySection from "@/components/GallerySection";
 import NewsSection from "@/components/NewsSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import ContactSection from "@/components/ContactSection";
+import NewsletterSubscription from "@/components/NewsletterSubscription";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -45,6 +46,7 @@ export default function Home() {
       <GallerySection />
       <NewsSection />
       <SponsorsSection />
+      <NewsletterSubscription />
       <ContactSection />
       <Footer />
     </div>

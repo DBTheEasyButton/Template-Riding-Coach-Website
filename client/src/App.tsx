@@ -7,6 +7,7 @@ import Home from "@/pages/Home";
 import TermsAndConditions from "@/pages/TermsAndConditions";
 import AdminClinics from "@/pages/AdminClinics";
 import AdminContacts from "@/pages/AdminContacts";
+import AdminEmailMarketing from "@/pages/AdminEmailMarketing";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/terms-and-conditions" component={TermsAndConditions} />
       <Route path="/admin/clinics" component={AdminClinics} />
       <Route path="/admin/contacts" component={AdminContacts} />
+      <Route path="/admin/email-marketing" component={AdminEmailMarketing} />
       <Route component={NotFound} />
     </Switch>
   );
