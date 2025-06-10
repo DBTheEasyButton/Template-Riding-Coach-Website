@@ -78,6 +78,9 @@ export interface IStorage {
   
   createClinicRegistration(registration: InsertClinicRegistration): Promise<ClinicRegistration>;
   getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]>;
+  getAllClinicRegistrations(): Promise<ClinicRegistration[]>;
+  updateRegistrationStatus(id: number, status: string, refundAmount?: number, reason?: string): Promise<ClinicRegistration | undefined>;
+  canProcessRefund(registrationId: number): Promise<{ eligible: boolean; reason: string; amount?: number }>;
   
   addToWaitlist(waitlistEntry: InsertClinicWaitlist): Promise<ClinicWaitlist>;
   getWaitlist(clinicId: number): Promise<ClinicWaitlist[]>;

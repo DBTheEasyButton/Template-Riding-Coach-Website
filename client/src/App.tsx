@@ -8,6 +8,7 @@ import TermsAndConditions from "@/pages/TermsAndConditions";
 import AdminClinics from "@/pages/AdminClinics";
 import AdminContacts from "@/pages/AdminContacts";
 import AdminEmailMarketing from "@/pages/AdminEmailMarketing";
+import AdminRegistrations from "@/pages/AdminRegistrations";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/admin/clinics" component={AdminClinics} />
       <Route path="/admin/contacts" component={AdminContacts} />
       <Route path="/admin/email-marketing" component={AdminEmailMarketing} />
+      <Route path="/admin/registrations" component={AdminRegistrations} />
       <Route component={NotFound} />
     </Switch>
   );

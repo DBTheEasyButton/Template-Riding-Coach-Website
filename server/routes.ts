@@ -424,6 +424,89 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Registration Management Routes
+
+  // Get all registrations for admin
+  app.get("/api/admin/registrations", async (req, res) => {
+    try {
+      const registrations = await storage.getAllClinicRegistrations();
+      res.json(registrations);
+    } catch (error) {
+      console.error("Error fetching all registrations:", error);
+      res.status(500).json({ message: "Failed to fetch registrations" });
+    }
+  });
+
+  // Check refund eligibility for a registration
+  app.get("/api/admin/registrations/:id/refund-check", async (req, res) => {
+    try {
+      const registrationId = parseInt(req.params.id);
+      const refundCheck = await storage.canProcessRefund(registrationId);
+      res.json(refundCheck);
+    } catch (error) {
+      console.error("Error checking refund eligibility:", error);
+      res.status(500).json({ message: "Failed to check refund eligibility" });
+    }
+  });
+
+  // Process cancellation and refund (admin only)
+  app.post("/api/admin/registrations/:id/cancel", async (req, res) => {
+    try {
+      const registrationId = parseInt(req.params.id);
+      const { reason } = req.body;
+
+      // Check refund eligibility first
+      const refundCheck = await storage.canProcessRefund(registrationId);
+      
+      if (refundCheck.eligible) {
+        // Process refund
+        const updatedRegistration = await storage.updateRegistrationStatus(
+          registrationId, 
+          "cancelled_by_admin", 
+          refundCheck.amount,
+          reason || refundCheck.reason
+        );
+
+        // If there's a waitlist, promote the next person
+        if (refundCheck.reason.includes("waiting list")) {
+          const registration = await storage.getAllClinicRegistrations();
+          const cancelledReg = registration.find(r => r.id === registrationId);
+          if (cancelledReg) {
+            const promoted = await storage.promoteFromWaitlist(cancelledReg.clinicId);
+            if (promoted) {
+              console.log(`Promoted waitlist participant: ${promoted.email}`);
+            }
+          }
+        }
+
+        res.json({
+          success: true,
+          message: `Registration cancelled with £${(refundCheck.amount! / 100).toFixed(2)} refund`,
+          registration: updatedRegistration,
+          refundAmount: refundCheck.amount
+        });
+      } else {
+        // Cancel without refund
+        const updatedRegistration = await storage.updateRegistrationStatus(
+          registrationId, 
+          "cancelled_by_admin", 
+          0,
+          reason || refundCheck.reason
+        );
+
+        res.json({
+          success: true,
+          message: `Registration cancelled - no refund (${refundCheck.reason})`,
+          registration: updatedRegistration,
+          refundAmount: 0
+        });
+      }
+    } catch (error) {
+      console.error("Error processing cancellation:", error);
+      res.status(500).json({ message: "Failed to process cancellation" });
+    }
+  });
+
   // Email Marketing System Routes
 
   // Newsletter subscription
