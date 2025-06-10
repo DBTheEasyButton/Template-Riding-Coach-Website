@@ -149,6 +149,73 @@ export const testimonials = pgTable("testimonials", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Email Marketing System Tables
+export const emailSubscribers = pgTable("email_subscribers", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  subscriptionSource: text("subscription_source").notNull(), // newsletter, clinic_registration, contact_form
+  isActive: boolean("is_active").notNull().default(true),
+  subscribedAt: timestamp("subscribed_at").notNull().defaultNow(),
+  unsubscribedAt: timestamp("unsubscribed_at"),
+  interests: jsonb("interests").default('[]'), // array of interests like ["clinics", "training_videos", "news"]
+  metadata: jsonb("metadata").default('{}'), // additional subscriber data
+});
+
+export const emailTemplates = pgTable("email_templates", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  subject: text("subject").notNull(),
+  htmlContent: text("html_content").notNull(),
+  textContent: text("text_content").notNull(),
+  templateType: text("template_type").notNull(), // welcome, newsletter, clinic_reminder, event_update
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const emailCampaigns = pgTable("email_campaigns", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  templateId: integer("template_id").notNull().references(() => emailTemplates.id),
+  subject: text("subject").notNull(),
+  status: text("status").notNull().default("draft"), // draft, scheduled, sending, sent, cancelled
+  scheduledAt: timestamp("scheduled_at"),
+  sentAt: timestamp("sent_at"),
+  recipientCount: integer("recipient_count").default(0),
+  openCount: integer("open_count").default(0),
+  clickCount: integer("click_count").default(0),
+  targetAudience: jsonb("target_audience").default('{}'), // filtering criteria
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const emailLogs = pgTable("email_logs", {
+  id: serial("id").primaryKey(),
+  campaignId: integer("campaign_id").references(() => emailCampaigns.id),
+  subscriberId: integer("subscriber_id").notNull().references(() => emailSubscribers.id),
+  subject: text("subject").notNull(),
+  status: text("status").notNull(), // sent, delivered, opened, clicked, bounced, failed
+  sentAt: timestamp("sent_at").notNull().defaultNow(),
+  openedAt: timestamp("opened_at"),
+  clickedAt: timestamp("clicked_at"),
+  errorMessage: text("error_message"),
+  metadata: jsonb("metadata").default('{}'),
+});
+
+export const emailAutomations = pgTable("email_automations", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  trigger: text("trigger").notNull(), // new_subscriber, clinic_registration, event_reminder
+  templateId: integer("template_id").notNull().references(() => emailTemplates.id),
+  delayHours: integer("delay_hours").default(0), // delay before sending
+  isActive: boolean("is_active").notNull().default(true),
+  conditions: jsonb("conditions").default('{}'), // additional conditions for triggering
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -209,6 +276,42 @@ export const insertTestimonialSchema = createInsertSchema(testimonials).omit({
   createdAt: true,
 });
 
+// Email Marketing System Insert Schemas
+export const insertEmailSubscriberSchema = createInsertSchema(emailSubscribers).omit({
+  id: true,
+  subscribedAt: true,
+  unsubscribedAt: true,
+});
+
+export const insertEmailTemplateSchema = createInsertSchema(emailTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEmailCampaignSchema = createInsertSchema(emailCampaigns).omit({
+  id: true,
+  sentAt: true,
+  recipientCount: true,
+  openCount: true,
+  clickCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertEmailLogSchema = createInsertSchema(emailLogs).omit({
+  id: true,
+  sentAt: true,
+  openedAt: true,
+  clickedAt: true,
+});
+
+export const insertEmailAutomationSchema = createInsertSchema(emailAutomations).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Achievement = typeof achievements.$inferSelect;
@@ -231,6 +334,18 @@ export type TrainingVideo = typeof trainingVideos.$inferSelect;
 export type InsertTrainingVideo = z.infer<typeof insertTrainingVideoSchema>;
 export type Testimonial = typeof testimonials.$inferSelect;
 export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
+
+// Email Marketing System Types
+export type EmailSubscriber = typeof emailSubscribers.$inferSelect;
+export type InsertEmailSubscriber = z.infer<typeof insertEmailSubscriberSchema>;
+export type EmailTemplate = typeof emailTemplates.$inferSelect;
+export type InsertEmailTemplate = z.infer<typeof insertEmailTemplateSchema>;
+export type EmailCampaign = typeof emailCampaigns.$inferSelect;
+export type InsertEmailCampaign = z.infer<typeof insertEmailCampaignSchema>;
+export type EmailLog = typeof emailLogs.$inferSelect;
+export type InsertEmailLog = z.infer<typeof insertEmailLogSchema>;
+export type EmailAutomation = typeof emailAutomations.$inferSelect;
+export type InsertEmailAutomation = z.infer<typeof insertEmailAutomationSchema>;
 
 // Extended type for clinics with sessions
 export type ClinicWithSessions = Clinic & {
