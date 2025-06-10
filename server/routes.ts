@@ -2,7 +2,16 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
-import { insertContactSchema, insertClinicRegistrationSchema, insertClinicSchema } from "@shared/schema";
+import { emailService } from "./emailService";
+import { 
+  insertContactSchema, 
+  insertClinicRegistrationSchema, 
+  insertClinicSchema,
+  insertEmailSubscriberSchema,
+  insertEmailTemplateSchema,
+  insertEmailCampaignSchema,
+  insertEmailAutomationSchema
+} from "@shared/schema";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -412,6 +421,167 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching featured testimonials:", error);
       res.status(500).json({ message: "Failed to fetch featured testimonials" });
+    }
+  });
+
+  // Email Marketing System Routes
+
+  // Newsletter subscription
+  app.post("/api/newsletter/subscribe", async (req, res) => {
+    try {
+      const { email, firstName, lastName } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const success = await emailService.subscribeToNewsletter(email, firstName, lastName, "newsletter");
+      
+      if (success) {
+        res.json({ message: "Successfully subscribed to newsletter" });
+      } else {
+        res.status(500).json({ message: "Failed to subscribe to newsletter" });
+      }
+    } catch (error) {
+      console.error("Error subscribing to newsletter:", error);
+      res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  // Unsubscribe from newsletter
+  app.post("/api/newsletter/unsubscribe", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      await storage.unsubscribeEmail(email);
+      res.json({ message: "Successfully unsubscribed from newsletter" });
+    } catch (error) {
+      console.error("Error unsubscribing from newsletter:", error);
+      res.status(500).json({ message: "Failed to unsubscribe from newsletter" });
+    }
+  });
+
+  // Email subscribers management (admin routes)
+  app.get("/api/admin/email-subscribers", async (req, res) => {
+    try {
+      const subscribers = await storage.getAllEmailSubscribers();
+      res.json(subscribers);
+    } catch (error) {
+      console.error("Error fetching email subscribers:", error);
+      res.status(500).json({ message: "Failed to fetch email subscribers" });
+    }
+  });
+
+  // Email templates management
+  app.get("/api/admin/email-templates", async (req, res) => {
+    try {
+      const templates = await storage.getAllEmailTemplates();
+      res.json(templates);
+    } catch (error) {
+      console.error("Error fetching email templates:", error);
+      res.status(500).json({ message: "Failed to fetch email templates" });
+    }
+  });
+
+  app.post("/api/admin/email-templates", async (req, res) => {
+    try {
+      const templateData = insertEmailTemplateSchema.parse(req.body);
+      const template = await storage.createEmailTemplate(templateData);
+      res.status(201).json(template);
+    } catch (error) {
+      console.error("Error creating email template:", error);
+      res.status(400).json({ message: "Invalid template data" });
+    }
+  });
+
+  app.put("/api/admin/email-templates/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = insertEmailTemplateSchema.partial().parse(req.body);
+      const template = await storage.updateEmailTemplate(id, updates);
+      
+      if (!template) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      
+      res.json(template);
+    } catch (error) {
+      console.error("Error updating email template:", error);
+      res.status(400).json({ message: "Invalid template data" });
+    }
+  });
+
+  app.delete("/api/admin/email-templates/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteEmailTemplate(id);
+      res.json({ message: "Template deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting email template:", error);
+      res.status(500).json({ message: "Failed to delete template" });
+    }
+  });
+
+  // Email campaigns management
+  app.get("/api/admin/email-campaigns", async (req, res) => {
+    try {
+      const campaigns = await storage.getAllEmailCampaigns();
+      res.json(campaigns);
+    } catch (error) {
+      console.error("Error fetching email campaigns:", error);
+      res.status(500).json({ message: "Failed to fetch email campaigns" });
+    }
+  });
+
+  app.post("/api/admin/email-campaigns", async (req, res) => {
+    try {
+      const campaignData = insertEmailCampaignSchema.parse(req.body);
+      const campaign = await storage.createEmailCampaign(campaignData);
+      res.status(201).json(campaign);
+    } catch (error) {
+      console.error("Error creating email campaign:", error);
+      res.status(400).json({ message: "Invalid campaign data" });
+    }
+  });
+
+  app.post("/api/admin/email-campaigns/:id/send", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await emailService.sendCampaign(id);
+      res.json({ 
+        message: "Campaign sent successfully", 
+        sent: result.sent, 
+        failed: result.failed 
+      });
+    } catch (error) {
+      console.error("Error sending email campaign:", error);
+      res.status(500).json({ message: "Failed to send campaign" });
+    }
+  });
+
+  // Email automations management
+  app.get("/api/admin/email-automations", async (req, res) => {
+    try {
+      const automations = await storage.getAllEmailAutomations();
+      res.json(automations);
+    } catch (error) {
+      console.error("Error fetching email automations:", error);
+      res.status(500).json({ message: "Failed to fetch email automations" });
+    }
+  });
+
+  app.post("/api/admin/email-automations", async (req, res) => {
+    try {
+      const automationData = insertEmailAutomationSchema.parse(req.body);
+      const automation = await storage.createEmailAutomation(automationData);
+      res.status(201).json(automation);
+    } catch (error) {
+      console.error("Error creating email automation:", error);
+      res.status(400).json({ message: "Invalid automation data" });
     }
   });
 

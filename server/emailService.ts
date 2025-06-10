@@ -89,8 +89,7 @@ export class EmailService {
     
     // Update campaign status
     await storage.updateEmailCampaign(campaignId, { 
-      status: "sending",
-      recipientCount: activeSubscribers.length 
+      status: "sending"
     });
     
     // Send emails to all active subscribers
@@ -120,8 +119,7 @@ export class EmailService {
     
     // Update campaign with final status
     await storage.updateEmailCampaign(campaignId, { 
-      status: "sent",
-      sentAt: new Date()
+      status: "sent"
     });
     
     return { sent: sentCount, failed: failedCount };
@@ -204,8 +202,7 @@ export class EmailService {
       if (existing && !existing.isActive) {
         // Reactivate subscription
         await storage.updateEmailSubscriber(existing.id, { 
-          isActive: true, 
-          unsubscribedAt: null,
+          isActive: true,
           subscriptionSource: source
         });
       } else {
