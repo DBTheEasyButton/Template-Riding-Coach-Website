@@ -367,6 +367,160 @@ export class DatabaseStorage implements IStorage {
     ];
 
     await db.insert(testimonials).values(sampleTestimonials);
+
+    // Seed email templates for marketing automation
+    const sampleEmailTemplates = [
+      {
+        name: "Welcome Email",
+        subject: "Welcome to the Dan Bizzarro Method Community!",
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); padding: 30px; text-align: center;">
+              <h1 style="color: white; margin: 0;">Welcome {{firstName}}!</h1>
+            </div>
+            <div style="padding: 30px; background: white;">
+              <h2 style="color: #1e3a8a;">Thank you for joining our community</h2>
+              <p>We're thrilled to have you as part of the Dan Bizzarro Method family. You'll now receive:</p>
+              <ul>
+                <li>Exclusive training tips and techniques</li>
+                <li>Early access to clinic announcements</li>
+                <li>Updates on Dan's competitive journey</li>
+                <li>Special offers on training videos and courses</li>
+              </ul>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://www.danbizzarromethod.com/app" style="background: #f97316; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px;">Download Our App</a>
+              </div>
+              <p>Best regards,<br>The Dan Bizzarro Method Team</p>
+            </div>
+          </div>
+        `,
+        textContent: `Welcome {{firstName}}!
+
+Thank you for joining the Dan Bizzarro Method community. You'll now receive exclusive training tips, clinic announcements, competition updates, and special offers.
+
+Download our app: https://www.danbizzarromethod.com/app
+
+Best regards,
+The Dan Bizzarro Method Team`,
+        templateType: "welcome",
+        isActive: true
+      },
+      {
+        name: "Monthly Newsletter",
+        subject: "{{firstName}}, Your Monthly Training Update from Dan",
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #1e3a8a; padding: 20px; text-align: center;">
+              <h1 style="color: white; margin: 0;">Training Update</h1>
+              <p style="color: #94a3b8; margin: 5px 0;">Monthly insights from Dan Bizzarro</p>
+            </div>
+            <div style="padding: 30px; background: white;">
+              <h2 style="color: #1e3a8a;">Hello {{firstName}},</h2>
+              <p>This month's focus is on building stronger partnerships with our horses through systematic training approaches.</p>
+              
+              <h3 style="color: #f97316;">Latest Competition Results</h3>
+              <p>Dan recently competed at Adelaide CCI4*-L with excellent results. The preparation techniques used are now available in our latest training video series.</p>
+              
+              <h3 style="color: #f97316;">Upcoming Clinics</h3>
+              <p>Don't miss out on our upcoming clinics. Early bird pricing available for newsletter subscribers.</p>
+              
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://www.danbizzarromethod.com/clinics" style="background: #f97316; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px;">View Clinics</a>
+              </div>
+              
+              <p>Happy riding,<br>Dan Bizzarro</p>
+            </div>
+          </div>
+        `,
+        textContent: `Hello {{firstName}},
+
+This month's focus is on building stronger partnerships with our horses through systematic training approaches.
+
+Latest Competition Results:
+Dan recently competed at Adelaide CCI4*-L with excellent results. The preparation techniques used are now available in our latest training video series.
+
+Upcoming Clinics:
+Don't miss out on our upcoming clinics. Early bird pricing available for newsletter subscribers.
+
+View Clinics: https://www.danbizzarromethod.com/clinics
+
+Happy riding,
+Dan Bizzarro`,
+        templateType: "newsletter",
+        isActive: true
+      },
+      {
+        name: "Clinic Reminder",
+        subject: "Reminder: {{clinicName}} starts {{clinicDate}}",
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #f97316; padding: 20px; text-align: center;">
+              <h1 style="color: white; margin: 0;">Clinic Reminder</h1>
+            </div>
+            <div style="padding: 30px; background: white;">
+              <h2 style="color: #1e3a8a;">Hi {{firstName}},</h2>
+              <p>This is a friendly reminder that <strong>{{clinicName}}</strong> starts on <strong>{{clinicDate}}</strong>.</p>
+              
+              <h3 style="color: #f97316;">What to Bring:</h3>
+              <ul>
+                <li>Your horse (if participating in mounted sessions)</li>
+                <li>Appropriate riding attire and safety equipment</li>
+                <li>Notebook for taking notes</li>
+                <li>Water bottle and snacks</li>
+              </ul>
+              
+              <h3 style="color: #f97316;">Location Details:</h3>
+              <p>Crown Farm, Ascott-Under-Wychwood, OX7 6AB</p>
+              
+              <p>We're looking forward to seeing you there!</p>
+              <p>Best regards,<br>The Dan Bizzarro Method Team</p>
+            </div>
+          </div>
+        `,
+        textContent: `Hi {{firstName}},
+
+This is a friendly reminder that {{clinicName}} starts on {{clinicDate}}.
+
+What to Bring:
+- Your horse (if participating in mounted sessions)
+- Appropriate riding attire and safety equipment
+- Notebook for taking notes
+- Water bottle and snacks
+
+Location: Crown Farm, Ascott-Under-Wychwood, OX7 6AB
+
+We're looking forward to seeing you there!
+
+Best regards,
+The Dan Bizzarro Method Team`,
+        templateType: "clinic_reminder",
+        isActive: true
+      }
+    ];
+
+    await db.insert(emailTemplates).values(sampleEmailTemplates);
+
+    // Seed email automations
+    const sampleAutomations = [
+      {
+        name: "Welcome Series",
+        trigger: "new_subscriber",
+        templateId: 1, // Welcome Email template
+        delayHours: 0,
+        isActive: true,
+        conditions: {}
+      },
+      {
+        name: "Clinic Reminder Automation",
+        trigger: "clinic_reminder",
+        templateId: 3, // Clinic Reminder template
+        delayHours: 24, // Send 24 hours before clinic
+        isActive: true,
+        conditions: {}
+      }
+    ];
+
+    await db.insert(emailAutomations).values(sampleAutomations);
   }
 
   async getUser(id: number): Promise<User | undefined> {
