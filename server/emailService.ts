@@ -3,10 +3,13 @@ import type { EmailTemplate, EmailSubscriber, EmailCampaign, InsertEmailLog } fr
 
 // Simple email service interface - in production, integrate with SendGrid, Mailgun, or similar
 export class EmailService {
+  private readonly fromEmail = "dan@danbizzarromethod.com";
+  private readonly fromName = "Dan Bizzarro";
   
   async sendEmail(to: string, subject: string, htmlContent: string, textContent: string, campaignId?: number): Promise<boolean> {
     try {
       // In production, replace this with actual email service
+      console.log(`Sending email from: ${this.fromName} <${this.fromEmail}>`);
       console.log(`Sending email to: ${to}`);
       console.log(`Subject: ${subject}`);
       console.log(`HTML Content: ${htmlContent.substring(0, 100)}...`);
