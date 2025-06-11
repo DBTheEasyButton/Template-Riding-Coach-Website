@@ -1,6 +1,6 @@
 import devoucouxLogo from "@assets/Logo_DEVOUCOUX_2021_VERT_CMJN-1-copie-300x130_1749678438773.png";
 import kepItaliaLogo from "@assets/images_1749678438770.png";
-import sergioGrassoLogo from "@assets/logo-sergio-grasso_a6dd3285-ca30-4b84-aeec-021e4226d823_480x480_1749678438772.avif";
+import sergioGrassoLogo from "@assets/download_1749678474539.png";
 
 export default function SponsorsSection() {
   const sponsors = [
