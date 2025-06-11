@@ -352,8 +352,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         </DialogHeader>
 
         {/* Progress Bar */}
-        <div className="px-6 py-3 bg-gray-50">
-          <div className="flex items-center justify-between mb-2">
+        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-blue-50">
+          <div className="flex items-center justify-between mb-3">
             {STEPS.map((step, index) => {
               const Icon = step.icon;
               const isActive = currentStep === step.id;
@@ -362,16 +362,16 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               return (
                 <div key={step.id} className="flex items-center">
                   <div className={`
-                    w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                    ${isActive ? 'bg-blue-600 text-white' : 
-                      isCompleted ? 'bg-green-500 text-white' : 
-                      'bg-gray-200 text-gray-400'}
+                    w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 shadow-sm
+                    ${isActive ? 'bg-blue-600 text-white shadow-lg transform scale-110' : 
+                      isCompleted ? 'bg-green-500 text-white shadow-md' : 
+                      'bg-white text-gray-400 border-2 border-gray-200'}
                   `}>
-                    {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                    {isCompleted ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                   </div>
                   {index < STEPS.length - 1 && (
                     <div className={`
-                      w-8 h-0.5 mx-1
+                      w-6 h-1 mx-2 rounded-full transition-all duration-300
                       ${currentStep > step.id ? 'bg-green-500' : 'bg-gray-200'}
                     `} />
                   )}
@@ -379,62 +379,73 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               );
             })}
           </div>
-          <p className="text-xs text-gray-600 text-center">
-            Step {currentStep} of {STEPS.length}: {STEPS.find(s => s.id === currentStep)?.title}
-          </p>
+          <div className="text-center">
+            <p className="text-sm font-medium text-gray-700">
+              {STEPS.find(s => s.id === currentStep)?.title}
+            </p>
+            <p className="text-xs text-gray-500">
+              Step {currentStep} of {STEPS.length}
+            </p>
+          </div>
         </div>
 
         {/* Content */}
         <div className="px-6 py-4 overflow-y-auto flex-1">
           {currentStep === 1 && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="firstName" className="text-sm font-medium">First Name *</Label>
+                  <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">First Name *</Label>
                   <Input
                     id="firstName"
                     value={registrationData.firstName}
                     onChange={(e) => updateRegistrationData('firstName', e.target.value)}
-                    className={`mt-1 ${errors.firstName ? 'border-red-500' : ''}`}
+                    className={`mt-2 h-12 text-base ${errors.firstName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
                     placeholder="Your first name"
+                    autoComplete="given-name"
                   />
                   {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="lastName" className="text-sm font-medium">Last Name *</Label>
+                  <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">Last Name *</Label>
                   <Input
                     id="lastName"
                     value={registrationData.lastName}
                     onChange={(e) => updateRegistrationData('lastName', e.target.value)}
-                    className={`mt-1 ${errors.lastName ? 'border-red-500' : ''}`}
+                    className={`mt-2 h-12 text-base ${errors.lastName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
                     placeholder="Your last name"
+                    autoComplete="family-name"
                   />
                   {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName}</p>}
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-sm font-medium">Email Address *</Label>
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address *</Label>
                 <Input
                   id="email"
                   type="email"
                   value={registrationData.email}
                   onChange={(e) => updateRegistrationData('email', e.target.value)}
-                  className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
+                  className={`mt-2 h-12 text-base ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
                   placeholder="your.email@example.com"
+                  autoComplete="email"
+                  inputMode="email"
                 />
                 {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-sm font-medium">Phone Number *</Label>
+                <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number *</Label>
                 <Input
                   id="phone"
                   type="tel"
                   value={registrationData.phone}
                   onChange={(e) => updateRegistrationData('phone', e.target.value)}
-                  className={`mt-1 ${errors.phone ? 'border-red-500' : ''}`}
+                  className={`mt-2 h-12 text-base ${errors.phone ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
                   placeholder="+44 7xxx xxx xxx"
+                  autoComplete="tel"
+                  inputMode="tel"
                 />
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
@@ -442,33 +453,34 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
           )}
 
           {currentStep === 2 && (
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
-                <Label htmlFor="experienceLevel" className="text-sm font-medium">Experience Level *</Label>
+                <Label htmlFor="experienceLevel" className="text-sm font-medium text-gray-700">Experience Level *</Label>
                 <Select 
                   value={registrationData.experienceLevel} 
                   onValueChange={(value) => updateRegistrationData('experienceLevel', value)}
                 >
-                  <SelectTrigger className={`mt-1 ${errors.experienceLevel ? 'border-red-500' : ''}`}>
+                  <SelectTrigger className={`mt-2 h-12 text-base ${errors.experienceLevel ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}>
                     <SelectValue placeholder="Select your experience level" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
+                  <SelectContent className="rounded-lg">
+                    <SelectItem value="beginner" className="h-12 text-base">🟢 Beginner</SelectItem>
+                    <SelectItem value="intermediate" className="h-12 text-base">🟡 Intermediate</SelectItem>
+                    <SelectItem value="advanced" className="h-12 text-base">🔴 Advanced</SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.experienceLevel && <p className="text-xs text-red-500 mt-1">{errors.experienceLevel}</p>}
               </div>
 
               <div>
-                <Label htmlFor="horseName" className="text-sm font-medium">Horse Name *</Label>
+                <Label htmlFor="horseName" className="text-sm font-medium text-gray-700">Horse Name *</Label>
                 <Input
                   id="horseName"
                   value={registrationData.horseName}
                   onChange={(e) => updateRegistrationData('horseName', e.target.value)}
-                  className={`mt-1 ${errors.horseName ? 'border-red-500' : ''}`}
+                  className={`mt-2 h-12 text-base ${errors.horseName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
                   placeholder="Your horse's name"
+                  autoComplete="off"
                 />
                 {errors.horseName && <p className="text-xs text-red-500 mt-1">{errors.horseName}</p>}
               </div>
@@ -503,12 +515,12 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               )}
 
               <div>
-                <Label htmlFor="specialRequests" className="text-sm font-medium">Special Requests</Label>
+                <Label htmlFor="specialRequests" className="text-sm font-medium text-gray-700">Special Requests</Label>
                 <Textarea
                   id="specialRequests"
                   value={registrationData.specialRequests}
                   onChange={(e) => updateRegistrationData('specialRequests', e.target.value)}
-                  className="mt-1 h-20"
+                  className="mt-2 h-24 text-base border-gray-300 focus:border-blue-500 rounded-lg transition-colors resize-none"
                   placeholder="Any special requirements or requests..."
                 />
               </div>

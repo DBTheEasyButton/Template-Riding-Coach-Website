@@ -564,9 +564,15 @@ export default function ClinicsSection() {
                     ) : (
                       <Button 
                         onClick={() => handleRegistration(clinic)}
-                        className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:bg-orange"
+                        className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:bg-orange relative"
                       >
-                        Register Now
+                        <span className="hidden sm:inline">Register Now</span>
+                        <span className="sm:hidden">Quick Register</span>
+                        {isMobileFlow && (
+                          <span className="absolute -top-1 -right-1 bg-orange text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
+                            Quick
+                          </span>
+                        )}
                       </Button>
                     );
                   })()}
@@ -600,7 +606,7 @@ export default function ClinicsSection() {
           </div>
         )}
 
-        <Dialog open={isRegistrationOpen} onOpenChange={setIsRegistrationOpen}>
+        <Dialog open={isRegistrationOpen && !isMobileFlow} onOpenChange={setIsRegistrationOpen}>
           <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-2xl font-playfair text-navy">
@@ -976,6 +982,15 @@ export default function ClinicsSection() {
             )}
           </DialogContent>
         </Dialog>
+
+        {/* Mobile Registration Flow */}
+        {isMobileFlow && selectedClinic && (
+          <MobileRegistrationFlow
+            clinic={selectedClinic}
+            isOpen={isRegistrationOpen}
+            onClose={() => setIsRegistrationOpen(false)}
+          />
+        )}
       </div>
     </section>
   );
