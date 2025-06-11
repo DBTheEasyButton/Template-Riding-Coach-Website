@@ -483,9 +483,31 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      // TODO: Validate discount code
-                      toast({ title: "Discount applied", description: "Your discount has been applied to the total." });
+                    onClick={async () => {
+                      const code = registrationData.discountCode?.trim();
+                      if (!code) {
+                        toast({ title: "Please enter a discount code", variant: "destructive" });
+                        return;
+                      }
+                      
+                      try {
+                        const response = await fetch(`/api/loyalty/${encodeURIComponent(registrationData.email)}/discount`);
+                        if (response.ok) {
+                          const discount = await response.json();
+                          if (discount.discountCode === code && !discount.isUsed) {
+                            toast({ 
+                              title: "Discount applied!", 
+                              description: `${discount.discountValue}% discount will be applied to your registration.` 
+                            });
+                          } else {
+                            toast({ title: "Invalid or expired discount code", variant: "destructive" });
+                          }
+                        } else {
+                          toast({ title: "No available discounts found", variant: "destructive" });
+                        }
+                      } catch (error) {
+                        toast({ title: "Error validating discount code", variant: "destructive" });
+                      }
                     }}
                   >
                     Apply
