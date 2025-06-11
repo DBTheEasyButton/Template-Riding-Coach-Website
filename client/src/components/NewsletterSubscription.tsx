@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import logoPath from "@assets/Dan Bizzarro Method_1749676680719.png";
 
 export default function NewsletterSubscription() {
   const [email, setEmail] = useState("");
@@ -53,6 +54,11 @@ export default function NewsletterSubscription() {
     <section className="py-16 bg-gradient-to-r from-navy to-navy-dark">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
+          <img 
+            src={logoPath} 
+            alt="Dan Bizzarro Method" 
+            className="h-16 w-auto mx-auto mb-6"
+          />
           <h2 className="text-3xl font-playfair font-bold text-white mb-4">
             Stay Connected with Dan Bizzarro Method
           </h2>

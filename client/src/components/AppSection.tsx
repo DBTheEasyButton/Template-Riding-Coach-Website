@@ -4,6 +4,7 @@ import appScreenshot1 from "@assets/Screenshot_20250609_162238_Dan Bizzarro Meth
 import appScreenshot2 from "@assets/Screenshot_20250609_162257_Dan Bizzarro Method_1749482841960.jpg";
 import appScreenshot3 from "@assets/Screenshot_20250609_162327_Dan Bizzarro Method_1749482838060.jpg";
 import appScreenshot4 from "@assets/Screenshot_20250609_162340_Dan Bizzarro Method_1749482833362.jpg";
+import logoPath from "@assets/Dan Bizzarro Method_1749676680719.png";
 
 export default function AppSection() {
   const lessonFocuses = [
@@ -41,6 +42,11 @@ export default function AppSection() {
     <section id="app" className="py-24 bg-navy text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <img 
+            src={logoPath} 
+            alt="Dan Bizzarro Method" 
+            className="h-20 w-auto mx-auto mb-6"
+          />
           <h2 className="text-5xl font-playfair font-bold mb-6 text-white">Dan Bizzarro Method App</h2>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto">

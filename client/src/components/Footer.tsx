@@ -1,6 +1,6 @@
 import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 import { Link } from "wouter";
-import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
+import logoPath from "@assets/Dan Bizzarro Method_1749676680719.png";
 
 export default function Footer() {
   const scrollToSection = (href: string) => {
