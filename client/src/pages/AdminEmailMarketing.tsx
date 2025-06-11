@@ -42,8 +42,16 @@ export default function AdminEmailMarketing() {
       '<a href="mailto:$1">$1</a>'
     );
     
-    // Wrap in basic HTML structure
-    return `<html><body>${html}</body></html>`;
+    // Add unsubscribe footer
+    const unsubscribeFooter = `
+<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+<p style="font-size: 12px; color: #666; text-align: center;">
+  You received this email because you subscribed to updates from Dan Bizzarro Method.<br>
+  If you no longer wish to receive these emails, you can <a href="https://danbizzarromethod.com/unsubscribe?email={{email}}" style="color: #666;">unsubscribe here</a>.
+</p>`;
+    
+    // Wrap in basic HTML structure with unsubscribe footer
+    return `<html><body>${html}${unsubscribeFooter}</body></html>`;
   };
 
   // Force refresh templates on component mount

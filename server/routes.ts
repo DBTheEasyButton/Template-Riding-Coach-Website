@@ -732,6 +732,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Newsletter unsubscribe
+  app.get("/api/unsubscribe", async (req, res) => {
+    try {
+      const { email } = req.query;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      await storage.unsubscribeEmail(email);
+      res.json({ message: "Successfully unsubscribed from all emails" });
+    } catch (error) {
+      console.error("Unsubscribe error:", error);
+      res.status(500).json({ message: "Failed to unsubscribe" });
+    }
+  });
+
+  app.post("/api/unsubscribe", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      await storage.unsubscribeEmail(email);
+      res.json({ message: "Successfully unsubscribed from all emails" });
+    } catch (error) {
+      console.error("Unsubscribe error:", error);
+      res.status(500).json({ message: "Failed to unsubscribe" });
+    }
+  });
+
   // Bulk email import for admin
   app.post("/api/admin/email-subscribers/bulk-import", async (req, res) => {
     try {
