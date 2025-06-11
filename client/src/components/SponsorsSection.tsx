@@ -20,7 +20,7 @@ export default function SponsorsSection() {
       name: "Kep Italia",
       description: "High-performance riding helmets and safety equipment",
       logo: kepItaliaLogo,
-      website: "https://www.kepitalia.com"
+      website: "https://www.kepitalia.com/en"
     }
   ];
 
