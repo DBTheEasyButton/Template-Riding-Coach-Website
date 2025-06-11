@@ -341,7 +341,13 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[95vw] max-w-[400px] p-0 max-h-[95vh] flex flex-col data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background shadow-lg duration-200">
+      <DialogContent 
+        className="mobile-registration-modal w-[95vw] max-w-[400px] p-0 max-h-[95vh] flex flex-col data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background shadow-lg duration-200"
+        style={{
+          contain: 'layout',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white flex-shrink-0">
           <DialogTitle className="text-lg font-semibold">
             Quick Registration
@@ -525,39 +531,48 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
           )}
 
           {currentStep === 3 && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="emergencyContact" className="text-sm font-medium">Emergency Contact Name *</Label>
-                <Input
-                  id="emergencyContact"
-                  value={registrationData.emergencyContact}
-                  onChange={(e) => updateRegistrationData('emergencyContact', e.target.value)}
-                  className={`mt-1 ${errors.emergencyContact ? 'border-red-500' : ''}`}
-                  placeholder="Emergency contact full name"
-                />
+            <div className="space-y-6 pb-8">
+              <div className="relative">
+                <Label htmlFor="emergencyContact" className="text-sm font-medium text-gray-700">Emergency Contact Name *</Label>
+                <div className="relative">
+                  <Input
+                    id="emergencyContact"
+                    value={registrationData.emergencyContact}
+                    onChange={(e) => updateRegistrationData('emergencyContact', e.target.value)}
+                    className={`mt-2 h-12 text-base ${errors.emergencyContact ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                    placeholder="Emergency contact full name"
+                    autoComplete="name"
+                    style={{ position: 'relative', zIndex: 10 }}
+                  />
+                </div>
                 {errors.emergencyContact && <p className="text-xs text-red-500 mt-1">{errors.emergencyContact}</p>}
               </div>
 
-              <div>
-                <Label htmlFor="emergencyPhone" className="text-sm font-medium">Emergency Contact Phone *</Label>
-                <Input
-                  id="emergencyPhone"
-                  type="tel"
-                  value={registrationData.emergencyPhone}
-                  onChange={(e) => updateRegistrationData('emergencyPhone', e.target.value)}
-                  className={`mt-1 ${errors.emergencyPhone ? 'border-red-500' : ''}`}
-                  placeholder="+44 7xxx xxx xxx"
-                />
+              <div className="relative">
+                <Label htmlFor="emergencyPhone" className="text-sm font-medium text-gray-700">Emergency Contact Phone *</Label>
+                <div className="relative">
+                  <Input
+                    id="emergencyPhone"
+                    type="tel"
+                    value={registrationData.emergencyPhone}
+                    onChange={(e) => updateRegistrationData('emergencyPhone', e.target.value)}
+                    className={`mt-2 h-12 text-base ${errors.emergencyPhone ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                    placeholder="+44 7xxx xxx xxx"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    style={{ position: 'relative', zIndex: 10 }}
+                  />
+                </div>
                 {errors.emergencyPhone && <p className="text-xs text-red-500 mt-1">{errors.emergencyPhone}</p>}
               </div>
 
-              <div>
-                <Label htmlFor="medicalConditions" className="text-sm font-medium">Medical Conditions</Label>
+              <div className="relative">
+                <Label htmlFor="medicalConditions" className="text-sm font-medium text-gray-700">Medical Conditions</Label>
                 <Textarea
                   id="medicalConditions"
                   value={registrationData.medicalConditions}
                   onChange={(e) => updateRegistrationData('medicalConditions', e.target.value)}
-                  className="mt-1 h-20"
+                  className="mt-2 h-24 text-base border-gray-300 focus:border-blue-500 rounded-lg transition-colors resize-none"
                   placeholder="Any medical conditions we should know about..."
                 />
               </div>

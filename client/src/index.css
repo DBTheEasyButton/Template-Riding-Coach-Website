@@ -86,6 +86,48 @@ html {
   --radius: 0.5rem;
 }
 
+/* Mobile registration modal autocomplete fixes */
+.mobile-registration-modal input:-webkit-autofill,
+.mobile-registration-modal input:-webkit-autofill:hover,
+.mobile-registration-modal input:-webkit-autofill:focus,
+.mobile-registration-modal input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+/* Ensure autocomplete dropdowns stay within modal bounds */
+.mobile-registration-modal {
+  position: relative;
+  contain: layout style;
+  overflow: visible;
+}
+
+/* Prevent autocomplete dropdown overflow */
+.mobile-registration-modal input {
+  position: relative;
+  z-index: 10;
+}
+
+/* Style autocomplete dropdown container */
+.mobile-registration-modal input:focus {
+  position: relative;
+  z-index: 15;
+}
+
+/* Force autocomplete dropdown to position correctly */
+@media (max-width: 768px) {
+  .mobile-registration-modal input:-webkit-autofill {
+    background-clip: content-box !important;
+  }
+  
+  /* Improve autocomplete visibility on mobile */
+  input[autocomplete] {
+    -webkit-appearance: textfield;
+    appearance: textfield;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
