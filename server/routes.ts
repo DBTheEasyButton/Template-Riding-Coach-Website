@@ -1005,6 +1005,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin gallery management routes
+  app.get("/api/admin/gallery", async (req, res) => {
+    try {
+      // For now, return empty array - gallery functionality would require image upload infrastructure
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching gallery:", error);
+      res.status(500).json({ message: "Failed to fetch gallery" });
+    }
+  });
+
+  app.post("/api/admin/gallery", async (req, res) => {
+    try {
+      // Gallery functionality would require proper image upload and storage
+      res.status(501).json({ message: "Gallery upload functionality requires additional infrastructure" });
+    } catch (error) {
+      console.error("Error adding to gallery:", error);
+      res.status(500).json({ message: "Failed to add to gallery" });
+    }
+  });
+
+  // Admin news management routes  
+  app.post("/api/admin/news", async (req, res) => {
+    try {
+      const newsData = {
+        ...req.body,
+        publishedAt: new Date()
+      };
+      const news = await storage.createNews(newsData);
+      res.status(201).json(news);
+    } catch (error) {
+      console.error("Error creating news:", error);
+      res.status(400).json({ message: "Invalid news data" });
+    }
+  });
+
+  app.put("/api/admin/news/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const news = await storage.updateNews(id, req.body);
+      
+      if (!news) {
+        return res.status(404).json({ message: "News article not found" });
+      }
+      
+      res.json(news);
+    } catch (error) {
+      console.error("Error updating news:", error);
+      res.status(400).json({ message: "Invalid news data" });
+    }
+  });
+
+  app.delete("/api/admin/news/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteNews(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting news:", error);
+      res.status(500).json({ message: "Failed to delete news" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -72,6 +72,8 @@ export interface IStorage {
   
   getAllNews(): Promise<News[]>;
   createNews(news: InsertNews): Promise<News>;
+  updateNews(id: number, updates: Partial<InsertNews>): Promise<News | undefined>;
+  deleteNews(id: number): Promise<void>;
   
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
@@ -583,6 +585,19 @@ The Dan Bizzarro Method Team`,
   async createNews(insertNews: InsertNews): Promise<News> {
     const [newsItem] = await db.insert(news).values(insertNews).returning();
     return newsItem;
+  }
+
+  async updateNews(id: number, updates: Partial<InsertNews>): Promise<News | undefined> {
+    const [newsItem] = await db
+      .update(news)
+      .set(updates)
+      .where(eq(news.id, id))
+      .returning();
+    return newsItem;
+  }
+
+  async deleteNews(id: number): Promise<void> {
+    await db.delete(news).where(eq(news.id, id));
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {

@@ -148,15 +148,15 @@ export default function AdminNews() {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-xl font-semibold">{news.title}</h3>
-                          <Badge variant={news.isPublished ? "default" : "secondary"}>
-                            {news.isPublished ? "Published" : "Draft"}
+                          <Badge variant="default">
+                            Published
                           </Badge>
                         </div>
                         <p className="text-gray-600 dark:text-gray-300 mb-2">{news.excerpt}</p>
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            {formatDate(news.createdAt)}
+                            {formatDate(news.publishedAt)}
                           </span>
                           <span className="flex items-center gap-1">
                             <FileText className="w-4 h-4" />
@@ -164,9 +164,9 @@ export default function AdminNews() {
                           </span>
                         </div>
                       </div>
-                      {news.imageUrl && (
+                      {news.image && (
                         <img 
-                          src={news.imageUrl} 
+                          src={news.image} 
                           alt={news.title}
                           className="w-24 h-24 object-cover rounded-lg ml-4"
                           onError={(e) => {
@@ -240,12 +240,22 @@ export default function AdminNews() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="imageUrl">Featured Image URL (Optional)</Label>
+                  <Label htmlFor="image">Featured Image URL (Optional)</Label>
                   <Input
-                    id="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                    id="image"
+                    value={formData.image}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                     placeholder="https://example.com/image.jpg"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="slug">URL Slug</Label>
+                  <Input
+                    id="slug"
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                    placeholder="article-url-slug"
                   />
                 </div>
                 
@@ -260,15 +270,7 @@ export default function AdminNews() {
                   />
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="isPublished"
-                    checked={formData.isPublished}
-                    onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
-                  />
-                  <Label htmlFor="isPublished">Publish immediately</Label>
-                </div>
+
               </div>
               
               <DialogFooter>
