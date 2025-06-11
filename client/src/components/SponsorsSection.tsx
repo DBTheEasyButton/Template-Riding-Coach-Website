@@ -7,17 +7,20 @@ export default function SponsorsSection() {
     {
       name: "Devoucoux",
       description: "Premium French saddlery and equestrian equipment",
-      logo: devoucouxLogo
+      logo: devoucouxLogo,
+      website: "https://www.devoucoux.com"
     },
     {
       name: "Sergio Grasso",
       description: "Italian luxury riding boots and equestrian wear",
-      logo: sergioGrassoLogo
+      logo: sergioGrassoLogo,
+      website: "https://www.sergiograsso.com"
     },
     {
       name: "Kep Italia",
       description: "High-performance riding helmets and safety equipment",
-      logo: kepItaliaLogo
+      logo: kepItaliaLogo,
+      website: "https://www.kepitalia.com"
     }
   ];
 
@@ -30,7 +33,13 @@ export default function SponsorsSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
           {sponsors.map((sponsor, index) => (
-            <div key={index} className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100">
+            <a 
+              key={index} 
+              href={sponsor.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 block cursor-pointer"
+            >
               <div className="text-center">
                 <div className="mb-6 flex justify-center items-center h-20">
                   <img 
@@ -42,7 +51,7 @@ export default function SponsorsSection() {
                 <h3 className="text-xl font-bold text-navy mb-2">{sponsor.name}</h3>
                 <p className="text-gray-600 text-sm">{sponsor.description}</p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
