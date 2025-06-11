@@ -56,8 +56,31 @@ export default function AdminEmailMarketing() {
   If you no longer wish to receive these emails, you can <a href="https://danbizzarromethod.com/unsubscribe?email={{email}}" style="color: #666;">unsubscribe here</a>.
 </p>`;
     
-    // Wrap in basic HTML structure with optional logo header and unsubscribe footer
-    const contentWrapper = includeLogo ? `<div style="padding: 20px;">${html}</div>` : html;
+    // Add app and podcast promotion sections
+    const appPromotion = `
+<div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 25px; margin: 20px 0; border-radius: 12px; text-align: center;">
+  <h3 style="color: white; margin: 0 0 15px 0; font-size: 20px;">📱 Download the Dan Bizzarro Method App</h3>
+  <p style="color: white; margin: 0 0 20px 0; font-size: 14px; opacity: 0.9;">Access exclusive training content, track your progress, and connect with our community anywhere, anytime.</p>
+  <a href="https://apps.apple.com/app/dan-bizzarro-method" style="background: white; color: #f97316; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 700; display: inline-block; font-size: 16px;">Download on App Store</a>
+</div>`;
+
+    const podcastPromotion = `
+<div style="background: #f8fafc; border: 2px solid #e2e8f0; padding: 25px; margin: 20px 0; border-radius: 12px;">
+  <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 20px;">
+    <img src="https://danbizzarromethod.com/podcast-logo.png" alt="Our Equestrian Life Podcast" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" />
+    <div style="flex: 1; min-width: 200px;">
+      <h3 style="color: #1e3a8a; margin: 0 0 10px 0; font-size: 18px;">🎙️ Listen to Our Equestrian Life</h3>
+      <p style="color: #374151; margin: 0 0 15px 0; font-size: 14px; line-height: 1.4;">Join Dan and guests for inspiring conversations about equestrian life, training insights, and competition stories.</p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="https://podcasts.apple.com/podcast/our-equestrian-life" style="background: #000; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px;">Apple Podcasts</a>
+        <a href="https://open.spotify.com/show/our-equestrian-life" style="background: #1db954; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 12px;">Spotify</a>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+    // Wrap in basic HTML structure with all promotional content
+    const contentWrapper = includeLogo ? `<div style="padding: 20px;">${html}${appPromotion}${podcastPromotion}</div>` : `${html}${appPromotion}${podcastPromotion}`;
     return `<html><body>${logoHeader}${contentWrapper}${unsubscribeFooter}</body></html>`;
   };
 
