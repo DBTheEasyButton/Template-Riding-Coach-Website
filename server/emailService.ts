@@ -63,6 +63,13 @@ export class EmailService {
       throw new Error(`Template with ID ${templateId} not found`);
     }
     
+    // Add upcoming clinics for newsletter templates
+    if (template.name.toLowerCase().includes('newsletter')) {
+      const upcomingClinics = await this.getUpcomingClinicsForEmail();
+      variables.upcomingClinicsHtml = upcomingClinics.html;
+      variables.upcomingClinicsText = upcomingClinics.text;
+    }
+    
     // Replace variables in template
     let htmlContent = template.htmlContent;
     let textContent = template.textContent;
@@ -79,6 +86,71 @@ export class EmailService {
     htmlContent = this.formatHtmlForEmail(htmlContent);
     
     return await this.sendEmail(to, subject, htmlContent, textContent, campaignId);
+  }
+
+  private async getUpcomingClinicsForEmail(): Promise<{ html: string; text: string }> {
+    try {
+      const allClinics = await storage.getAllClinics();
+      const upcomingClinics = allClinics
+        .filter(clinic => {
+          const clinicDate = new Date(clinic.date);
+          return clinicDate > new Date();
+        })
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        .slice(0, 2);
+
+      if (upcomingClinics.length === 0) {
+        return {
+          html: '<p style="text-align: center; color: #666;">No upcoming clinics scheduled. Check back soon!</p>',
+          text: 'No upcoming clinics scheduled. Check back soon!'
+        };
+      }
+
+      const htmlClinics = upcomingClinics.map(clinic => {
+        const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        return `
+          <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: white;">
+            ${clinic.image ? `<img src="${clinic.image}" alt="${clinic.title}" style="width: 100%; max-width: 400px; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" />` : ''}
+            <h3 style="color: #1e3a8a; margin: 0 0 10px 0; font-size: 20px;">${clinic.title}</h3>
+            <p style="color: #f97316; font-weight: 600; margin: 0 0 10px 0;">📅 ${clinicDate}</p>
+            <p style="color: #374151; margin: 0 0 15px 0; line-height: 1.5;">${clinic.description}</p>
+            <div style="text-align: center;">
+              <a href="https://danbizzarromethod.com/#clinics" style="background: #f97316; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Book Your Spot Now</a>
+            </div>
+          </div>`;
+      }).join('');
+
+      const textClinics = upcomingClinics.map(clinic => {
+        const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+        return `${clinic.title}\nDate: ${clinicDate}\n${clinic.description}\nBook now: https://danbizzarromethod.com/#clinics\n`;
+      }).join('\n');
+
+      return {
+        html: `
+          <div style="margin: 30px 0;">
+            <h2 style="color: #1e3a8a; text-align: center; margin-bottom: 25px;">🏇 Upcoming Clinics</h2>
+            ${htmlClinics}
+          </div>`,
+        text: `\n\nUPCOMING CLINICS:\n\n${textClinics}`
+      };
+    } catch (error) {
+      console.error("Error fetching upcoming clinics for email:", error);
+      return {
+        html: '<p style="text-align: center; color: #666;">Clinic information currently unavailable.</p>',
+        text: 'Clinic information currently unavailable.'
+      };
+    }
   }
 
   private formatHtmlForEmail(htmlContent: string): string {
