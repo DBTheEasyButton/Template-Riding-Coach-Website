@@ -1159,6 +1159,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin news management routes  
   app.post("/api/admin/news", async (req, res) => {
     try {
+      console.log("Request body:", req.body);
+      
       // Generate slug from title
       const generateSlug = (title: string): string => {
         return title
@@ -1188,15 +1190,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      const imageUrl = req.body.imageUrl || req.body.image;
+      if (!imageUrl) {
+        return res.status(400).json({ message: "Image is required" });
+      }
+
       const newsData = {
-        ...req.body,
-        image: req.body.imageUrl, // Map imageUrl to image field
+        title: req.body.title,
+        excerpt: req.body.excerpt,
+        content: req.body.content,
+        image: imageUrl,
         slug,
         publishedAt: new Date()
       };
       
-      // Remove imageUrl since it's not in the schema
-      delete newsData.imageUrl;
+      console.log("News data to insert:", newsData);
       const news = await storage.createNews(newsData);
       res.status(201).json(news);
     } catch (error) {

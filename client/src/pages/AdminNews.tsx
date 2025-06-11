@@ -162,7 +162,24 @@ export default function AdminNews() {
         imageUrl = await uploadImage(selectedImage);
       }
       
-      const submitData = { ...formData, image: imageUrl };
+      // Ensure we have an image
+      if (!imageUrl) {
+        toast({ 
+          title: "Image required", 
+          description: "Please upload an image or provide an image URL.", 
+          variant: "destructive" 
+        });
+        return;
+      }
+      
+      const submitData = { 
+        title: formData.title,
+        excerpt: formData.excerpt, 
+        content: formData.content,
+        imageUrl: imageUrl  // Send as imageUrl for server mapping
+      };
+      
+      console.log("Submitting data:", submitData);
       
       if (editingNews) {
         updateMutation.mutate({ id: editingNews.id, data: submitData });
