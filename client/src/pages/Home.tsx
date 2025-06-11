@@ -6,7 +6,7 @@ import AboutSection from "@/components/AboutSection";
 import CoachingSection from "@/components/CoachingSection";
 import AppSection from "@/components/AppSection";
 import ClinicsSection from "@/components/ClinicsSection";
-import TrainingVideosSection from "@/components/TrainingVideosSection";
+// import TrainingVideosSection from "@/components/TrainingVideosSection";
 import PodcastSection from "@/components/PodcastSection";
 import ScheduleSection from "@/components/ScheduleSection";
 import GallerySection from "@/components/GallerySection";
@@ -40,7 +40,7 @@ export default function Home() {
       <AboutSection />
       <CoachingSection />
       <AppSection />
-      <TrainingVideosSection />
+      {/* Training Videos Section temporarily hidden */}
       <PodcastSection />
       <ScheduleSection />
       <GallerySection />
