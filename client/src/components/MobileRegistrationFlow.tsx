@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { ClinicWithSessions, ClinicSession } from "@shared/schema";
-import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Heart, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Horse, AlertTriangle } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -41,7 +41,7 @@ interface RegistrationData {
 
 const STEPS = [
   { id: 1, title: "Personal Info", icon: User },
-  { id: 2, title: "Experience", icon: Heart },
+  { id: 2, title: "Horse Details", icon: Heart },
   { id: 3, title: "Emergency", icon: Phone },
   { id: 4, title: "Payment", icon: CreditCard }
 ];
@@ -244,8 +244,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         if (!registrationData.phone.trim()) newErrors.phone = 'Phone number is required';
         break;
       
-      case 2: // Experience
-        if (!registrationData.experienceLevel) newErrors.experienceLevel = 'Experience level is required';
+      case 2: // Horse Details
         if (!registrationData.horseName.trim()) newErrors.horseName = 'Horse name is required';
         break;
       
@@ -276,6 +275,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
   const handlePaymentSuccess = (paymentIntentId: string) => {
     const finalData = {
       ...registrationData,
+      experienceLevel: 'intermediate', // Default level since we don't ask for it in mobile flow
       paymentIntentId,
       sessionIds: clinic?.hasMultipleSessions ? selectedSessions : undefined
     };
@@ -341,8 +341,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md mx-4 p-0 max-h-[90vh] overflow-hidden">
-        <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+      <DialogContent className="sm:max-w-md mx-4 p-0 max-h-[95vh] flex flex-col">
+        <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white flex-shrink-0">
           <DialogTitle className="text-lg font-semibold">
             Quick Registration
           </DialogTitle>
@@ -352,7 +352,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         </DialogHeader>
 
         {/* Progress Bar */}
-        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-blue-50">
+        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-blue-50 flex-shrink-0">
           <div className="flex items-center justify-between mb-3">
             {STEPS.map((step, index) => {
               const Icon = step.icon;
@@ -454,24 +454,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
 
           {currentStep === 2 && (
             <div className="space-y-5">
-              <div>
-                <Label htmlFor="experienceLevel" className="text-sm font-medium text-gray-700">Experience Level *</Label>
-                <Select 
-                  value={registrationData.experienceLevel} 
-                  onValueChange={(value) => updateRegistrationData('experienceLevel', value)}
-                >
-                  <SelectTrigger className={`mt-2 h-12 text-base ${errors.experienceLevel ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}>
-                    <SelectValue placeholder="Select your experience level" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-lg">
-                    <SelectItem value="beginner" className="h-12 text-base">🟢 Beginner</SelectItem>
-                    <SelectItem value="intermediate" className="h-12 text-base">🟡 Intermediate</SelectItem>
-                    <SelectItem value="advanced" className="h-12 text-base">🔴 Advanced</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.experienceLevel && <p className="text-xs text-red-500 mt-1">{errors.experienceLevel}</p>}
-              </div>
-
               <div>
                 <Label htmlFor="horseName" className="text-sm font-medium text-gray-700">Horse Name *</Label>
                 <Input
@@ -644,14 +626,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
 
         {/* Navigation */}
         {currentStep < 4 && (
-          <div className="px-6 py-4 border-t bg-gray-50 flex gap-3">
+          <div className="px-6 py-4 border-t bg-gray-50 flex gap-3 flex-shrink-0">
             {currentStep > 1 && (
               <Button
                 variant="outline"
                 onClick={prevStep}
-                className="flex-1"
+                className="flex-1 h-12 text-base"
               >
-                <ChevronLeft className="w-4 h-4 mr-1" />
+                <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
               </Button>
             )}
@@ -659,10 +641,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
             <Button
               onClick={nextStep}
               disabled={currentStep === 3 && !registrationData.agreeToTerms}
-              className="flex-1"
+              className="flex-1 h-12 text-base font-semibold"
             >
               {currentStep === 3 ? 'Review & Pay' : 'Continue'}
-              <ChevronRight className="w-4 h-4 ml-1" />
+              <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
         )}
