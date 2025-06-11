@@ -1159,10 +1159,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin news management routes  
   app.post("/api/admin/news", async (req, res) => {
     try {
+      // Generate slug from title
+      const generateSlug = (title: string): string => {
+        return title
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+          .replace(/\s+/g, '-') // Replace spaces with hyphens
+          .replace(/-+/g, '-') // Replace multiple hyphens with single
+          .trim()
+          .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+      };
+
+      // Generate unique slug
+      const baseSlug = generateSlug(req.body.title);
+      let slug = baseSlug;
+      let counter = 1;
+      
+      // Check if slug exists and make it unique
+      while (true) {
+        try {
+          const existingNews = await storage.getNewsBySlug(slug);
+          if (!existingNews) break;
+          slug = `${baseSlug}-${counter}`;
+          counter++;
+        } catch (error) {
+          // If getNewsBySlug doesn't exist yet, break
+          break;
+        }
+      }
+
       const newsData = {
         ...req.body,
+        image: req.body.imageUrl, // Map imageUrl to image field
+        slug,
         publishedAt: new Date()
       };
+      
+      // Remove imageUrl since it's not in the schema
+      delete newsData.imageUrl;
       const news = await storage.createNews(newsData);
       res.status(201).json(news);
     } catch (error) {

@@ -74,6 +74,7 @@ export interface IStorage {
   createEvent(event: InsertEvent): Promise<Event>;
   
   getAllNews(): Promise<News[]>;
+  getNewsBySlug(slug: string): Promise<News | undefined>;
   createNews(news: InsertNews): Promise<News>;
   updateNews(id: number, updates: Partial<InsertNews>): Promise<News | undefined>;
   deleteNews(id: number): Promise<void>;
@@ -591,6 +592,11 @@ The Dan Bizzarro Method Team`,
 
   async getAllNews(): Promise<News[]> {
     return await db.select().from(news).orderBy(desc(news.publishedAt));
+  }
+
+  async getNewsBySlug(slug: string): Promise<News | undefined> {
+    const [newsItem] = await db.select().from(news).where(eq(news.slug, slug));
+    return newsItem;
   }
 
   async createNews(insertNews: InsertNews): Promise<News> {
