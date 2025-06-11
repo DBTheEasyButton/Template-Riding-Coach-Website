@@ -44,7 +44,7 @@ const storage_multer = multer.diskStorage({
 const upload = multer({
   storage: storage_multer,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 50 * 1024 * 1024, // 50MB - allow large files since we'll compress them
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -56,19 +56,116 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Image upload endpoint
-  app.post("/api/upload-image", upload.single('image'), (req, res) => {
+  // Image upload endpoint with automatic resizing
+  app.post("/api/upload-image", upload.single('image'), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ error: 'No image file provided' });
       }
       
-      // Return the URL path for the uploaded image
-      const imageUrl = `/uploads/${req.file.filename}`;
-      res.json({ url: imageUrl });
+      const sharp = (await import('sharp')).default;
+      const originalPath = req.file.path;
+      const originalSize = req.file.size;
+      
+      // Define max dimensions and target file size
+      const maxWidth = 1920;
+      const maxHeight = 1080;
+      const targetFileSize = 1024 * 1024; // 1MB target size
+      
+      // Get original image metadata
+      const metadata = await sharp(originalPath).metadata();
+      let { width = maxWidth, height = maxHeight } = metadata;
+      
+      // Calculate new dimensions while maintaining aspect ratio
+      if (width > maxWidth || height > maxHeight) {
+        const aspectRatio = width / height;
+        if (width > height) {
+          width = maxWidth;
+          height = Math.round(maxWidth / aspectRatio);
+        } else {
+          height = maxHeight;
+          width = Math.round(maxHeight * aspectRatio);
+        }
+      }
+      
+      // Start with quality settings
+      let quality = 85;
+      let outputBuffer;
+      let attempts = 0;
+      const maxAttempts = 5;
+      
+      // Compress until file size is acceptable or max attempts reached
+      do {
+        const sharpInstance = sharp(originalPath)
+          .resize(width, height, {
+            fit: 'inside',
+            withoutEnlargement: true
+          });
+        
+        // Choose output format and apply compression
+        if (req.file.mimetype === 'image/png') {
+          outputBuffer = await sharpInstance
+            .png({ 
+              quality,
+              compressionLevel: 9,
+              palette: true
+            })
+            .toBuffer();
+        } else if (req.file.mimetype === 'image/webp') {
+          outputBuffer = await sharpInstance
+            .webp({ quality })
+            .toBuffer();
+        } else {
+          // Convert all other formats to JPEG for better compression
+          outputBuffer = await sharpInstance
+            .jpeg({ 
+              quality,
+              progressive: true,
+              mozjpeg: true
+            })
+            .toBuffer();
+        }
+        
+        // If still too large and we haven't reached minimum quality, reduce quality
+        if (outputBuffer.length > targetFileSize && quality > 30 && attempts < maxAttempts) {
+          quality -= 15;
+          attempts++;
+        } else {
+          break;
+        }
+      } while (attempts < maxAttempts);
+      
+      // Create the final filename
+      const ext = req.file.mimetype === 'image/png' ? '.png' : 
+                  req.file.mimetype === 'image/webp' ? '.webp' : '.jpg';
+      const finalFilename = req.file.filename.replace(/\.[^.]+$/, `-optimized${ext}`);
+      const finalPath = path.join(uploadsDir, finalFilename);
+      
+      // Write the optimized image
+      await sharp(outputBuffer).toFile(finalPath);
+      
+      // Remove original file
+      fs.unlinkSync(originalPath);
+      
+      // Return the URL path for the optimized image
+      const imageUrl = `/uploads/${finalFilename}`;
+      res.json({ 
+        url: imageUrl,
+        originalSize: originalSize,
+        optimizedSize: outputBuffer.length,
+        compressionRatio: ((originalSize - outputBuffer.length) / originalSize * 100).toFixed(1),
+        dimensions: { width, height }
+      });
     } catch (error) {
-      console.error('Image upload error:', error);
-      res.status(500).json({ error: 'Failed to upload image' });
+      console.error('Image processing error:', error);
+      
+      // Fallback: if processing fails, return original file
+      try {
+        const imageUrl = `/uploads/${req.file.filename}`;
+        res.json({ url: imageUrl });
+      } catch (fallbackError) {
+        res.status(500).json({ error: 'Failed to upload image' });
+      }
     }
   });
 

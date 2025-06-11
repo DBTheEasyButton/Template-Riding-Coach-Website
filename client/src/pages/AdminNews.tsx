@@ -99,12 +99,6 @@ export default function AdminNews() {
         return;
       }
       
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast({ title: "File too large", description: "Please select an image smaller than 5MB", variant: "destructive" });
-        return;
-      }
-      
       setSelectedImage(file);
       
       // Create preview
@@ -132,6 +126,15 @@ export default function AdminNews() {
       }
       
       const data = await response.json();
+      
+      // Show compression results if available
+      if (data.compressionRatio) {
+        toast({
+          title: "Image optimized",
+          description: `Reduced by ${data.compressionRatio}% (${(data.originalSize / 1024 / 1024).toFixed(1)}MB → ${(data.optimizedSize / 1024 / 1024).toFixed(1)}MB)`,
+        });
+      }
+      
       return data.url;
     } catch (error) {
       console.error('Image upload error:', error);
@@ -407,7 +410,7 @@ export default function AdminNews() {
                     </div>
                     
                     <p className="text-xs text-gray-500">
-                      Supported formats: JPG, PNG, GIF. Max size: 5MB
+                      Supported formats: JPG, PNG, GIF, WebP. Large images will be automatically optimized.
                     </p>
                   </div>
                 </div>
