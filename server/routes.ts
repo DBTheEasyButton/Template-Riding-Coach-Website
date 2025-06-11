@@ -1,6 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 import { storage } from "./storage";
 import { emailService } from "./emailService";
 import { replaceCsvEmails } from "./csvImport";
@@ -19,7 +22,55 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(process.cwd(), 'client', 'public', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for image uploads
+const storage_multer = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, `news-${uniqueSuffix}${ext}`);
+  }
+});
+
+const upload = multer({
+  storage: storage_multer,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Image upload endpoint
+  app.post("/api/upload-image", upload.single('image'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No image file provided' });
+      }
+      
+      // Return the URL path for the uploaded image
+      const imageUrl = `/uploads/${req.file.filename}`;
+      res.json({ url: imageUrl });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      res.status(500).json({ error: 'Failed to upload image' });
+    }
+  });
+
   // Get all achievements
   app.get("/api/achievements", async (req, res) => {
     try {
