@@ -32,6 +32,7 @@ interface RefundCheck {
   eligible: boolean;
   reason: string;
   amount?: number;
+  adminFee?: number;
 }
 
 export default function AdminRegistrations() {
@@ -222,10 +223,15 @@ export default function AdminRegistrations() {
                                 </span>
                               </div>
                               <p className="text-sm mt-1">{refundCheck.reason}</p>
-                              {refundCheck.eligible && refundCheck.amount && (
-                                <p className="text-sm font-medium">
-                                  Refund Amount: £{(refundCheck.amount / 100).toFixed(2)}
-                                </p>
+                              {refundCheck.eligible && refundCheck.amount !== undefined && (
+                                <div className="text-sm font-medium mt-2 space-y-1">
+                                  <p>Refund Amount: £{(refundCheck.amount / 100).toFixed(2)}</p>
+                                  {refundCheck.adminFee && (
+                                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                                      (Original amount minus £{(refundCheck.adminFee / 100).toFixed(2)} admin fee)
+                                    </p>
+                                  )}
+                                </div>
                               )}
                             </div>
                           ) : null}

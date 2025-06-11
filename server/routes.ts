@@ -459,31 +459,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const refundCheck = await storage.canProcessRefund(registrationId);
       
       if (refundCheck.eligible) {
-        // Process refund
+        // Get the registration details for waitlist promotion
+        const registrations = await storage.getAllClinicRegistrations();
+        const cancelledReg = registrations.find(r => r.id === registrationId);
+        
+        // Process automatic refund with admin fee
         const updatedRegistration = await storage.updateRegistrationStatus(
           registrationId, 
           "cancelled_by_admin", 
           refundCheck.amount,
-          reason || refundCheck.reason
+          reason || `Automatic refund processed - £5 admin fee deducted`
         );
 
-        // If there's a waitlist, promote the next person
-        if (refundCheck.reason.includes("waiting list")) {
-          const registration = await storage.getAllClinicRegistrations();
-          const cancelledReg = registration.find(r => r.id === registrationId);
-          if (cancelledReg) {
-            const promoted = await storage.promoteFromWaitlist(cancelledReg.clinicId);
-            if (promoted) {
-              console.log(`Promoted waitlist participant: ${promoted.email}`);
-            }
+        let promotedParticipant = null;
+        
+        // If there's a waitlist, automatically promote the first person
+        if (refundCheck.reason.includes("waiting list") && cancelledReg) {
+          promotedParticipant = await storage.promoteFromWaitlist(cancelledReg.clinicId);
+          if (promotedParticipant) {
+            // Create a confirmed registration for the promoted participant
+            await storage.createClinicRegistration({
+              clinicId: cancelledReg.clinicId,
+              sessionId: cancelledReg.sessionId || undefined,
+              firstName: promotedParticipant.firstName,
+              lastName: promotedParticipant.lastName,
+              email: promotedParticipant.email,
+              phone: promotedParticipant.phone,
+              experienceLevel: promotedParticipant.experienceLevel,
+              horseName: promotedParticipant.horseName || undefined,
+              specialRequests: promotedParticipant.specialRequests || undefined,
+              emergencyContact: "To be provided", // Waitlist entries don't have emergency contact info
+              emergencyPhone: "To be provided",
+              medicalConditions: undefined,
+              paymentMethod: "bank_transfer",
+              agreeToTerms: true,
+              status: "confirmed"
+            });
+            console.log(`Automatically promoted waitlist participant: ${promotedParticipant.email}`);
           }
         }
 
+        const adminFeeText = refundCheck.adminFee ? ` (£${(refundCheck.adminFee / 100).toFixed(2)} admin fee deducted)` : '';
+        const promotionText = promotedParticipant ? ` - ${promotedParticipant.firstName} ${promotedParticipant.lastName} has been automatically accepted from the waiting list` : '';
+
         res.json({
           success: true,
-          message: `Registration cancelled with £${(refundCheck.amount! / 100).toFixed(2)} refund`,
+          message: `Refund processed: £${(refundCheck.amount! / 100).toFixed(2)}${adminFeeText}${promotionText}`,
           registration: updatedRegistration,
-          refundAmount: refundCheck.amount
+          refundAmount: refundCheck.amount,
+          adminFee: refundCheck.adminFee,
+          promotedParticipant: promotedParticipant
         });
       } else {
         // Cancel without refund

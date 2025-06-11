@@ -655,7 +655,7 @@ The Dan Bizzarro Method Team`,
     return registration;
   }
 
-  async canProcessRefund(registrationId: number): Promise<{ eligible: boolean; reason: string; amount?: number }> {
+  async canProcessRefund(registrationId: number): Promise<{ eligible: boolean; reason: string; amount?: number; adminFee?: number }> {
     // Get registration details
     const [registration] = await db.select().from(clinicRegistrations).where(eq(clinicRegistrations.id, registrationId));
     if (!registration) {
@@ -672,12 +672,16 @@ The Dan Bizzarro Method Team`,
     const today = new Date();
     const daysUntilClinic = Math.ceil((clinicDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
+    const adminFee = 500; // £5.00 in pence
+    const refundAmount = Math.max(0, clinic.price - adminFee);
+
     // Check if more than 7 days before clinic
     if (daysUntilClinic > 7) {
       return { 
         eligible: true, 
-        reason: `More than 7 days before clinic (${daysUntilClinic} days remaining)`,
-        amount: clinic.price 
+        reason: `More than 7 days before clinic (${daysUntilClinic} days remaining) - automatic refund with £5 admin fee`,
+        amount: refundAmount,
+        adminFee: adminFee
       };
     }
 
@@ -686,8 +690,9 @@ The Dan Bizzarro Method Team`,
     if (waitlist.length > 0) {
       return { 
         eligible: true, 
-        reason: `Waiting list available (${waitlist.length} people waiting)`,
-        amount: clinic.price 
+        reason: `Waiting list available (${waitlist.length} people waiting) - automatic refund with £5 admin fee`,
+        amount: refundAmount,
+        adminFee: adminFee
       };
     }
 
