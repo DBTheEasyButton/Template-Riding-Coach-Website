@@ -75,7 +75,36 @@ export class EmailService {
       subject = subject.replaceAll(placeholder, value);
     });
     
+    // Ensure HTML content is properly formatted for email clients
+    htmlContent = this.formatHtmlForEmail(htmlContent);
+    
     return await this.sendEmail(to, subject, htmlContent, textContent, campaignId);
+  }
+
+  private formatHtmlForEmail(htmlContent: string): string {
+    // Ensure all links have proper attributes for email clients
+    htmlContent = htmlContent.replace(
+      /<a\s+href="([^"]+)"([^>]*)>/gi,
+      '<a href="$1" target="_blank" style="color: #0079F2; text-decoration: underline;"$2>'
+    );
+    
+    // Add proper email HTML structure if not present
+    if (!htmlContent.includes('<html>')) {
+      htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dan Bizzarro Method</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  ${htmlContent}
+</body>
+</html>`;
+    }
+    
+    return htmlContent;
   }
   
   async sendCampaign(campaignId: number): Promise<{ sent: number; failed: number }> {

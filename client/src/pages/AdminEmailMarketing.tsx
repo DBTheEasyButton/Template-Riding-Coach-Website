@@ -526,9 +526,11 @@ export default function AdminEmailMarketing() {
                         onChange={(e) => setEditingTemplate({...editingTemplate, htmlContent: e.target.value})}
                         placeholder="HTML email content"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
-                        Use {`{{firstName}}`} and {`{{lastName}}`} for personalization
-                      </p>
+                      <div className="text-xs text-gray-500 mt-1 space-y-1">
+                        <p>Use {`{{firstName}}`} and {`{{lastName}}`} for personalization</p>
+                        <p>Make text clickable: {`<a href="https://example.com">clickable text</a>`}</p>
+                        <p>Example: {`<a href="https://danbizzarromethod.com/clinics">Book a clinic</a>`}</p>
+                      </div>
                     </div>
                     
                     <div>
