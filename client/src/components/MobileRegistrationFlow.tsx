@@ -477,7 +477,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                     id="discountCode"
                     value={registrationData.discountCode || ''}
                     onChange={(e) => updateRegistrationData('discountCode', e.target.value)}
-                    placeholder="Enter discount code"
+                    placeholder="Enter Dan15 for loyalty discount"
                     className="flex-1"
                   />
                   <Button
@@ -490,20 +490,34 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                         return;
                       }
                       
+                      if (code !== 'Dan15') {
+                        toast({ title: "Invalid discount code", description: "Only 'Dan15' discount codes are accepted.", variant: "destructive" });
+                        return;
+                      }
+                      
                       try {
-                        const response = await fetch(`/api/loyalty/${encodeURIComponent(registrationData.email)}/discount`);
+                        const response = await fetch('/api/loyalty/discount/validate', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            email: registrationData.email,
+                            discountCode: code
+                          })
+                        });
+                        
                         if (response.ok) {
-                          const discount = await response.json();
-                          if (discount.discountCode === code && !discount.isUsed) {
-                            toast({ 
-                              title: "Discount applied!", 
-                              description: `${discount.discountValue}% discount will be applied to your registration.` 
-                            });
-                          } else {
-                            toast({ title: "Invalid or expired discount code", variant: "destructive" });
-                          }
+                          const result = await response.json();
+                          toast({ 
+                            title: "Discount applied!", 
+                            description: result.message
+                          });
                         } else {
-                          toast({ title: "No available discounts found", variant: "destructive" });
+                          const error = await response.json();
+                          toast({ 
+                            title: "Discount not available", 
+                            description: error.message, 
+                            variant: "destructive" 
+                          });
                         }
                       } catch (error) {
                         toast({ title: "Error validating discount code", variant: "destructive" });

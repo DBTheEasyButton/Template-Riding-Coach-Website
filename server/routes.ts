@@ -954,6 +954,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/loyalty/discount/validate", async (req, res) => {
+    try {
+      const { email, discountCode } = req.body;
+      
+      if (!email || !discountCode) {
+        return res.status(400).json({ message: "Email and discount code required" });
+      }
+      
+      // Only allow "Dan15" discount code
+      if (discountCode !== 'Dan15') {
+        return res.status(400).json({ message: "Invalid discount code" });
+      }
+      
+      const availableDiscount = await storage.getAvailableDiscount(email);
+      
+      if (!availableDiscount) {
+        return res.status(404).json({ message: "No available Dan15 discount for this user" });
+      }
+      
+      res.json({ 
+        valid: true, 
+        discountValue: availableDiscount.discountValue,
+        message: `${availableDiscount.discountValue}% discount available`
+      });
+    } catch (error) {
+      console.error("Error validating discount:", error);
+      res.status(500).json({ message: "Failed to validate discount" });
+    }
+  });
+
   app.post("/api/loyalty/discount/use", async (req, res) => {
     try {
       const { discountCode, registrationId } = req.body;

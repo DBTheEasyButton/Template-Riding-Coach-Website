@@ -1016,14 +1016,13 @@ The Dan Bizzarro Method Team`,
   }
 
   private async generateLoyaltyDiscount(program: LoyaltyProgram): Promise<void> {
-    const discountCode = `LOYAL${program.clinicEntries}${Date.now().toString().slice(-4)}`;
     const expiresAt = new Date();
     expiresAt.setMonth(expiresAt.getMonth() + 6); // 6 months expiry
 
-    // 15% discount for every 5 entries
+    // Always use "Dan15" discount code for 15% discount every 5 entries
     await db.insert(loyaltyDiscounts).values({
       loyaltyId: program.id,
-      discountCode,
+      discountCode: 'Dan15',
       discountType: 'percentage',
       discountValue: 15,
       minimumEntries: program.clinicEntries,
@@ -1047,8 +1046,9 @@ The Dan Bizzarro Method Team`,
     const program = await this.getLoyaltyProgram(email);
     if (!program || !program.availableDiscounts) return undefined;
 
-    // Return the most recent unused discount
+    // Return the most recent unused "Dan15" discount for their current milestone
     return program.availableDiscounts
+      .filter(d => d.discountCode === 'Dan15' && !d.isUsed)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
   }
 
