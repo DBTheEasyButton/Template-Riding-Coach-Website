@@ -862,6 +862,9 @@ The Dan Bizzarro Method Team`,
   }
 
   async clearAllEmailSubscribers(): Promise<void> {
+    // Clear email logs first to avoid foreign key constraint
+    await db.delete(emailLogs);
+    // Then clear subscribers
     await db.delete(emailSubscribers);
   }
 
