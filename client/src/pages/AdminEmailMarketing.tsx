@@ -42,6 +42,12 @@ export default function AdminEmailMarketing() {
       '<a href="mailto:$1">$1</a>'
     );
     
+    // Add logo header
+    const logoHeader = `
+<div style="text-align: center; padding: 20px 0; background: #f8f9fa;">
+  <img src="https://danbizzarromethod.com/logo.png" alt="Dan Bizzarro Eventing" style="max-width: 300px; height: auto;" />
+</div>`;
+
     // Add unsubscribe footer
     const unsubscribeFooter = `
 <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
@@ -50,8 +56,8 @@ export default function AdminEmailMarketing() {
   If you no longer wish to receive these emails, you can <a href="https://danbizzarromethod.com/unsubscribe?email={{email}}" style="color: #666;">unsubscribe here</a>.
 </p>`;
     
-    // Wrap in basic HTML structure with unsubscribe footer
-    return `<html><body>${html}${unsubscribeFooter}</body></html>`;
+    // Wrap in basic HTML structure with logo header and unsubscribe footer
+    return `<html><body>${logoHeader}<div style="padding: 20px;">${html}</div>${unsubscribeFooter}</body></html>`;
   };
 
   // Force refresh templates on component mount
@@ -66,7 +72,8 @@ export default function AdminEmailMarketing() {
     subject: "",
     htmlContent: "",
     textContent: "",
-    templateType: "newsletter"
+    templateType: "newsletter",
+    includeLogo: true
   });
   const [campaignForm, setCampaignForm] = useState({
     name: "",
@@ -507,6 +514,18 @@ export default function AdminEmailMarketing() {
                       onChange={(e) => setTemplateForm({ ...templateForm, htmlContent: e.target.value })}
                       rows={8}
                     />
+                    <div className="flex items-center space-x-2 mb-4">
+                      <input
+                        type="checkbox"
+                        id="createIncludeLogo"
+                        checked={templateForm.includeLogo}
+                        onChange={(e) => setTemplateForm({ ...templateForm, includeLogo: e.target.checked })}
+                        className="rounded"
+                      />
+                      <label htmlFor="createIncludeLogo" className="text-sm font-medium">
+                        Include Dan Bizzarro logo in email header
+                      </label>
+                    </div>
                     <Textarea
                       placeholder="Write your email content here. HTML will be generated automatically. Use {{firstName}}, {{lastName}} for personalization."
                       value={templateForm.textContent}
@@ -563,6 +582,36 @@ export default function AdminEmailMarketing() {
                           placeholder="Email subject"
                         />
                       </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="includeLogo"
+                        checked={editingTemplate.htmlContent?.includes('danbizzarromethod.com/logo.png') || false}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            // Add logo if not present
+                            if (!editingTemplate.htmlContent?.includes('danbizzarromethod.com/logo.png')) {
+                              const updatedHtml = editingTemplate.htmlContent?.replace(
+                                '<html><body>',
+                                '<html><body><div style="text-align: center; padding: 20px 0; background: #f8f9fa;"><img src="https://danbizzarromethod.com/logo.png" alt="Dan Bizzarro Eventing" style="max-width: 300px; height: auto;" /></div><div style="padding: 20px;">'
+                              )?.replace('</body></html>', '</div></body></html>') || editingTemplate.htmlContent;
+                              setEditingTemplate({...editingTemplate, htmlContent: updatedHtml});
+                            }
+                          } else {
+                            // Remove logo if present
+                            const updatedHtml = editingTemplate.htmlContent
+                              ?.replace(/<div style="text-align: center; padding: 20px 0; background: #f8f9fa;"><img src="https:\/\/danbizzarromethod\.com\/logo\.png"[^>]*><\/div><div style="padding: 20px;">/, '')
+                              ?.replace(/<\/div><\/body><\/html>$/, '</body></html>') || editingTemplate.htmlContent;
+                            setEditingTemplate({...editingTemplate, htmlContent: updatedHtml});
+                          }
+                        }}
+                        className="rounded"
+                      />
+                      <label htmlFor="includeLogo" className="text-sm font-medium">
+                        Include Dan Bizzarro logo in email header
+                      </label>
                     </div>
                     
                     <div>
