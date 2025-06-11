@@ -377,14 +377,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                         />
                         <div className="flex-1">
                           <Label htmlFor={`session-${session.id}`} className="text-sm font-medium cursor-pointer">
-                            {session.title}
+                            {session.sessionName}
                           </Label>
                           <div className="text-xs text-gray-600 mt-1">
                             <div className="flex items-center gap-4">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-3 h-3" />
-                                {new Date(session.date).toLocaleDateString()}
-                              </span>
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
                                 {session.startTime} - {session.endTime}
@@ -397,6 +393,9 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                             <div className="flex items-center gap-1 mt-1">
                               <Users className="w-3 h-3" />
                               {session.currentParticipants}/{session.maxParticipants} participants
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {session.discipline} • {session.skillLevel}
                             </div>
                           </div>
                         </div>
@@ -434,6 +433,17 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   placeholder="+44 7xxx xxx xxx"
                 />
                 {errors.emergencyPhone && <p className="text-xs text-red-500 mt-1">{errors.emergencyPhone}</p>}
+              </div>
+
+              <div>
+                <Label htmlFor="specialRequests" className="text-sm font-medium">Special Requests</Label>
+                <Textarea
+                  id="specialRequests"
+                  value={registrationData.specialRequests}
+                  onChange={(e) => updateRegistrationData('specialRequests', e.target.value)}
+                  className="mt-1 h-20"
+                  placeholder="Any special requirements or requests..."
+                />
               </div>
 
               <div>
