@@ -382,7 +382,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                           <div className="text-xs text-gray-600 mt-1">
                             <span className="flex items-center gap-1">
                               <PoundSterling className="w-3 h-3" />
-                              £{(session.price / 100).toFixed(0)}
+                              {(session.price / 100).toFixed(0)}
                             </span>
                           </div>
                         </div>
