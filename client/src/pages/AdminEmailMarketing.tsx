@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,7 @@ export default function AdminEmailMarketing() {
   const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
 
   // Force refresh templates on component mount
-  React.useEffect(() => {
+  useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["/api/admin/email-templates"] });
   }, []);
   const [isCreatingCampaign, setIsCreatingCampaign] = useState(false);
@@ -46,9 +46,11 @@ export default function AdminEmailMarketing() {
     queryKey: ["/api/admin/email-subscribers"],
   });
 
-  const { data: templates = [] } = useQuery<EmailTemplate[]>({
+  const { data: templates = [], refetch: refetchTemplates } = useQuery<EmailTemplate[]>({
     queryKey: ["/api/admin/email-templates"],
     staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   const { data: campaigns = [] } = useQuery<EmailCampaign[]>({
@@ -420,11 +422,19 @@ export default function AdminEmailMarketing() {
           <TabsContent value="templates">
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Email Templates</h2>
-                <Button onClick={() => setIsCreatingTemplate(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Template
-                </Button>
+                <div>
+                  <h2 className="text-xl font-semibold">Email Templates</h2>
+                  <p className="text-sm text-gray-600">{templates.length} templates loaded</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => refetchTemplates()}>
+                    Refresh
+                  </Button>
+                  <Button onClick={() => setIsCreatingTemplate(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Template
+                  </Button>
+                </div>
               </div>
 
               {isCreatingTemplate && (
