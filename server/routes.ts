@@ -624,6 +624,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all gallery images (public route for website display)
+  app.get("/api/gallery", async (req, res) => {
+    try {
+      const images = await storage.getAllGalleryImages();
+      // Only return active images for public display
+      const activeImages = images.filter(image => image.isActive);
+      res.json(activeImages);
+    } catch (error) {
+      console.error("Error fetching gallery:", error);
+      res.status(500).json({ message: "Failed to fetch gallery" });
+    }
+  });
+
   // Admin Registration Management Routes
 
   // Get all registrations for admin
