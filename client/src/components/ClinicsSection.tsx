@@ -300,7 +300,22 @@ export default function ClinicsSection() {
     }
   };
 
+  const isRegistrationClosed = (clinic: ClinicWithSessions) => {
+    if (!clinic.entryClosingDate) return false;
+    const now = new Date();
+    const closingDate = new Date(clinic.entryClosingDate);
+    return now > closingDate;
+  };
+
   const handleRegistration = (clinic: ClinicWithSessions) => {
+    if (isRegistrationClosed(clinic)) {
+      toast({
+        title: "Registration Closed",
+        description: "Registration for this clinic has closed.",
+        variant: "destructive",
+      });
+      return;
+    }
     setSelectedClinic(clinic);
     setSelectedSessions([]); // Reset session selection
     setIsRegistrationOpen(true);
@@ -489,6 +504,17 @@ export default function ClinicsSection() {
                       }
                     </span>
                   </div>
+                  {clinic.entryClosingDate && (
+                    <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                      <Clock className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                      <span className={`transition-colors duration-300 ${isRegistrationClosed(clinic) ? 'text-red-600 font-bold' : 'group-hover:text-navy'}`}>
+                        {isRegistrationClosed(clinic) 
+                          ? 'Registration Closed'
+                          : `Entries close: ${formatDate(clinic.entryClosingDate)}`
+                        }
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex gap-2 w-full">
                   {(() => {
@@ -499,6 +525,20 @@ export default function ClinicsSection() {
                           return currentParticipants >= maxParticipants;
                         })()
                       : clinic.currentParticipants >= clinic.maxParticipants;
+                    
+                    const registrationClosed = isRegistrationClosed(clinic);
+                    
+                    if (registrationClosed) {
+                      return (
+                        <Button 
+                          disabled
+                          variant="outline"
+                          className="flex-1 border-gray-400 text-gray-400 cursor-not-allowed font-semibold"
+                        >
+                          Registration Closed
+                        </Button>
+                      );
+                    }
                     
                     return isFull ? (
                       <Button 

@@ -161,6 +161,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Clinic not found" });
       }
       
+      // Check if registration is still open
+      if (clinic.entryClosingDate) {
+        const now = new Date();
+        const closingDate = new Date(clinic.entryClosingDate);
+        if (now > closingDate) {
+          return res.status(400).json({ message: "Registration for this clinic has closed" });
+        }
+      }
+      
       if (clinic.currentParticipants >= clinic.maxParticipants) {
         return res.status(400).json({ message: "Clinic is full" });
       }
