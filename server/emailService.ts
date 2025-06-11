@@ -1,7 +1,7 @@
 import { storage } from "./storage";
 import type { EmailTemplate, EmailSubscriber, EmailCampaign, InsertEmailLog } from "@shared/schema";
 
-// Simple email service interface - in production, integrate with SendGrid, Mailgun, or similar
+// Email service that supports both SendGrid and MailerLite
 export class EmailService {
   private readonly fromEmail = "dan@danbizzarromethod.com";
   private readonly fromName = "Dan Bizzarro";
@@ -12,17 +12,13 @@ export class EmailService {
       console.log(`Sending email to: ${to}`);
       console.log(`Subject: ${subject}`);
       
-      // Only send real emails to danibizza@yahoo.it for testing
-      if (to === "danibizza@yahoo.it") {
-        console.log(`TEXT CONTENT FOR TESTING: ${textContent}`);
-        console.log("*** REAL EMAIL WOULD BE SENT TO danibizza@yahoo.it ***");
-        // Here you would integrate with a real email service like SendGrid, Mailgun, etc.
-        // For now, we'll log the full text content for testing
-      } else {
-        console.log("*** SIMULATED EMAIL (not actually sent) ***");
-      }
+      // Try to send with available email service
+      const sent = await this.sendWithAvailableService(to, subject, htmlContent, textContent);
       
-      await this.simulateEmailSending();
+      if (!sent) {
+        console.log("*** SIMULATED EMAIL (no service configured) ***");
+        await this.simulateEmailSending();
+      }
       
       // Log the email
       const subscriber = await storage.getEmailSubscriberByEmail(to);
@@ -224,6 +220,98 @@ export class EmailService {
         html: '<p style="text-align: center; color: #666;">News articles currently unavailable.</p>',
         text: 'News articles currently unavailable.'
       };
+    }
+  }
+
+  private async sendWithAvailableService(to: string, subject: string, htmlContent: string, textContent: string): Promise<boolean> {
+    // Try SendGrid first
+    if (process.env.SENDGRID_API_KEY) {
+      return await this.sendWithSendGrid(to, subject, htmlContent, textContent);
+    }
+    
+    // Try MailerLite second
+    if (process.env.MAILERLITE_API_KEY) {
+      return await this.sendWithMailerLite(to, subject, htmlContent, textContent);
+    }
+    
+    return false;
+  }
+
+  private async sendWithSendGrid(to: string, subject: string, htmlContent: string, textContent: string): Promise<boolean> {
+    try {
+      const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          personalizations: [{
+            to: [{ email: to }],
+          }],
+          from: {
+            email: this.fromEmail,
+            name: this.fromName,
+          },
+          subject: subject,
+          content: [
+            {
+              type: 'text/plain',
+              value: textContent,
+            },
+            {
+              type: 'text/html',
+              value: htmlContent,
+            },
+          ],
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Email sent successfully via SendGrid');
+        return true;
+      } else {
+        const error = await response.text();
+        console.error('SendGrid error:', error);
+        return false;
+      }
+    } catch (error) {
+      console.error('SendGrid send error:', error);
+      return false;
+    }
+  }
+
+  private async sendWithMailerLite(to: string, subject: string, htmlContent: string, textContent: string): Promise<boolean> {
+    try {
+      const response = await fetch('https://connect.mailerlite.com/api/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.MAILERLITE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: [{ email: to }],
+          from: {
+            email: this.fromEmail,
+            name: this.fromName,
+          },
+          subject: subject,
+          html: htmlContent,
+          text: textContent,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Email sent successfully via MailerLite');
+        return true;
+      } else {
+        const error = await response.text();
+        console.error('MailerLite error:', error);
+        return false;
+      }
+    } catch (error) {
+      console.error('MailerLite send error:', error);
+      return false;
     }
   }
 
