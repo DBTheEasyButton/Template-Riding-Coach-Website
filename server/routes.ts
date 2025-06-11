@@ -813,6 +813,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Replace all email subscribers with CSV data
+  app.post("/api/admin/email-subscribers/replace-csv", async (req, res) => {
+    try {
+      const result = await replaceCsvEmails();
+      res.json({
+        message: "Email list replaced successfully",
+        imported: result.successCount,
+        failed: result.errorCount
+      });
+    } catch (error) {
+      console.error("Error replacing email list:", error);
+      res.status(500).json({ message: "Failed to replace email list" });
+    }
+  });
+
   // Email templates management
   app.get("/api/admin/email-templates", async (req, res) => {
     try {

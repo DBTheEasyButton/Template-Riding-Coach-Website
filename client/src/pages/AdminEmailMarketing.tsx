@@ -51,6 +51,23 @@ export default function AdminEmailMarketing() {
     queryKey: ["/api/admin/email-automations"],
   });
 
+  // CSV replacement mutation
+  const csvReplaceMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest("POST", "/api/admin/email-subscribers/replace-csv", {});
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/email-subscribers"] });
+      toast({ 
+        title: "Email list replaced successfully", 
+        description: `Imported ${data.imported} contacts, ${data.failed} failed` 
+      });
+    },
+    onError: () => {
+      toast({ title: "Failed to replace email list", variant: "destructive" });
+    }
+  });
+
   // Mutations
   const createTemplateMutation = useMutation({
     mutationFn: async (data: typeof templateForm) => {
@@ -316,10 +333,19 @@ export default function AdminEmailMarketing() {
                   <h2 className="text-xl font-semibold">Email Subscribers</h2>
                   <p className="text-gray-600">Manage your newsletter subscribers</p>
                 </div>
-                <Button onClick={() => setIsBulkImporting(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Bulk Import
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => csvReplaceMutation.mutate()}
+                    disabled={csvReplaceMutation.isPending}
+                  >
+                    {csvReplaceMutation.isPending ? "Replacing..." : "Replace with CSV Data"}
+                  </Button>
+                  <Button onClick={() => setIsBulkImporting(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Bulk Import
+                  </Button>
+                </div>
               </div>
 
               {isBulkImporting && (
