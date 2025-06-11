@@ -65,6 +65,7 @@ export const clinics = pgTable("clinics", {
   type: text("type").notNull(), // dressage, jumping, cross-country, full-day
   image: text("image").notNull(),
   isActive: boolean("is_active").notNull().default(true),
+  entryClosingDate: timestamp("entry_closing_date"), // Date when registrations close
   createdAt: timestamp("created_at").notNull().defaultNow(),
   // Enhanced fields for multi-session support
   hasMultipleSessions: boolean("has_multiple_sessions").notNull().default(false),

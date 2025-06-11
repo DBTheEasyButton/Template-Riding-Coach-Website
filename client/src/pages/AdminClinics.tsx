@@ -26,6 +26,7 @@ export default function AdminClinics() {
     description: "",
     date: "",
     endDate: "",
+    entryClosingDate: "",
     location: "",
     price: "",
     maxParticipants: "12",
@@ -114,6 +115,7 @@ export default function AdminClinics() {
       description: "",
       date: "",
       endDate: "",
+      entryClosingDate: "",
       location: "",
       price: "",
       maxParticipants: "12",
@@ -243,6 +245,7 @@ export default function AdminClinics() {
       description: freshClinic.description || "",
       date: freshClinic.date ? new Date(freshClinic.date).toISOString().split('T')[0] : "",
       endDate: freshClinic.endDate ? new Date(freshClinic.endDate).toISOString().split('T')[0] : "",
+      entryClosingDate: freshClinic.entryClosingDate ? new Date(freshClinic.entryClosingDate).toISOString().split('T')[0] : "",
       location: freshClinic.location || "",
       price: freshClinic.price?.toString() || "",
       maxParticipants: freshClinic.maxParticipants?.toString() || "12",
@@ -295,6 +298,7 @@ export default function AdminClinics() {
       description: clinic.description,
       date: cloneDate.toISOString().split('T')[0],
       endDate: clinic.endDate ? new Date(new Date(clinic.endDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
+      entryClosingDate: clinic.entryClosingDate ? new Date(new Date(clinic.entryClosingDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
       location: clinic.location,
       price: clinic.price.toString(),
       maxParticipants: clinic.maxParticipants.toString(),
@@ -604,6 +608,18 @@ export default function AdminClinics() {
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                 />
               </div>
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="entryClosingDate">Entry Closing Date</Label>
+              <Input
+                id="entryClosingDate"
+                type="date"
+                value={formData.entryClosingDate}
+                onChange={(e) => setFormData({ ...formData, entryClosingDate: e.target.value })}
+                placeholder="Optional - when registrations close"
+              />
+              <p className="text-sm text-gray-500">Leave empty to keep registrations open until clinic date</p>
             </div>
             
             <div className="grid gap-2">
