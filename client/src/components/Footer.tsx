@@ -86,10 +86,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-300">
-              <li>Via dei Cavalli 123</li>
-              <li>Tuscany, Italy 50125</li>
-              <li>+39 055 123 4567</li>
-              <li>info@danbizzarro.com</li>
+              <li>United Kingdom</li>
+              <li>dan@danbizzarromethod.com</li>
+              <li>WhatsApp for Private Lessons</li>
             </ul>
           </div>
         </div>
