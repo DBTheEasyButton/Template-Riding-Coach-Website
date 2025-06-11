@@ -991,6 +991,13 @@ export default function ClinicsSection() {
             onClose={() => setIsRegistrationOpen(false)}
           />
         )}
+        
+        {/* Debug info */}
+        {process.env.NODE_ENV === 'development' && (
+          <div style={{ position: 'fixed', top: 0, right: 0, background: 'red', color: 'white', padding: '4px', fontSize: '12px', zIndex: 9999 }}>
+            Mobile: {isMobileFlow ? 'YES' : 'NO'} | Clinic: {selectedClinic?.title || 'NONE'} | Open: {isRegistrationOpen ? 'YES' : 'NO'}
+          </div>
+        )}
       </div>
     </section>
   );

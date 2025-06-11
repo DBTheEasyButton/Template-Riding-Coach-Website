@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { ClinicWithSessions, ClinicSession } from "@shared/schema";
-import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Zap, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Zap, AlertTriangle, X } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -46,87 +43,6 @@ const STEPS = [
   { id: 4, title: "Payment", icon: CreditCard }
 ];
 
-// Payment Component
-function MobilePaymentForm({ 
-  onPaymentSuccess, 
-  onPaymentError, 
-  registrationData,
-  clinic,
-  selectedSessions,
-  clientSecret 
-}: {
-  onPaymentSuccess: (paymentIntentId: string) => void;
-  onPaymentError: (error: string) => void;
-  registrationData: RegistrationData;
-  clinic: ClinicWithSessions;
-  selectedSessions: number[];
-  clientSecret: string;
-}) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!stripe || !elements) return;
-
-    setIsProcessing(true);
-
-    try {
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/registration-success`,
-        },
-        redirect: 'if_required'
-      });
-
-      if (error) {
-        onPaymentError(error.message || 'Payment failed');
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        onPaymentSuccess(paymentIntent.id);
-      }
-    } catch (error: any) {
-      onPaymentError(error.message || 'Payment processing failed');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="bg-blue-50 p-4 rounded-lg">
-        <PaymentElement 
-          options={{
-            layout: 'tabs',
-            paymentMethodOrder: ['card', 'apple_pay', 'google_pay']
-          }}
-        />
-      </div>
-      
-      <Button 
-        type="submit" 
-        disabled={!stripe || !elements || isProcessing}
-        className="w-full h-12 text-lg font-semibold"
-        size="lg"
-      >
-        {isProcessing ? (
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            Processing...
-          </div>
-        ) : (
-          <>
-            <CreditCard className="w-5 h-5 mr-2" />
-            Complete Registration
-          </>
-        )}
-      </Button>
-    </form>
-  );
-}
-
 export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: MobileRegistrationFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
@@ -136,7 +52,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     lastName: '',
     email: '',
     phone: '',
-    experienceLevel: '',
+    experienceLevel: 'intermediate', // Default for mobile flow
     horseName: '',
     specialRequests: '',
     emergencyContact: '',
@@ -177,6 +93,59 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     }
   }, [isOpen, clinic]);
 
+  const updateRegistrationData = (field: keyof RegistrationData, value: string | boolean) => {
+    setRegistrationData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const validateStep = (step: number) => {
+    const newErrors: Record<string, string> = {};
+    
+    if (step === 1) {
+      if (!registrationData.firstName.trim()) newErrors.firstName = "First name required";
+      if (!registrationData.lastName.trim()) newErrors.lastName = "Last name required";
+      if (!registrationData.email.trim()) newErrors.email = "Email required";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registrationData.email)) {
+        newErrors.email = "Invalid email format";
+      }
+      if (!registrationData.phone.trim()) newErrors.phone = "Phone required";
+    }
+    
+    if (step === 2) {
+      if (!registrationData.horseName.trim()) newErrors.horseName = "Horse name required";
+      if (clinic?.hasMultipleSessions && selectedSessions.length === 0) {
+        newErrors.sessions = "Please select at least one session";
+      }
+    }
+    
+    if (step === 3) {
+      if (!registrationData.emergencyContact.trim()) newErrors.emergencyContact = "Emergency contact required";
+      if (!registrationData.emergencyPhone.trim()) newErrors.emergencyPhone = "Emergency phone required";
+      if (!registrationData.agreeToTerms) newErrors.agreeToTerms = "You must agree to terms";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const nextStep = () => {
+    if (validateStep(currentStep)) {
+      if (currentStep === 3) {
+        // Create payment intent
+        createPaymentIntentMutation.mutate();
+      } else {
+        setCurrentStep(prev => prev + 1);
+      }
+    }
+  };
+
+  const prevStep = () => {
+    setCurrentStep(prev => prev - 1);
+  };
+
+  // Payment intent mutation
   const createPaymentIntentMutation = useMutation({
     mutationFn: async () => {
       const payload = clinic?.hasMultipleSessions 
@@ -187,6 +156,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     },
     onSuccess: (data: { clientSecret: string }) => {
       setClientSecret(data.clientSecret);
+      setCurrentStep(4);
     },
     onError: (error) => {
       toast({
@@ -197,9 +167,30 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     },
   });
 
+  // Registration mutation
   const registrationMutation = useMutation({
-    mutationFn: async (data: any) => {
-      return await apiRequest('POST', `/api/clinics/${clinic?.id}/register`, data);
+    mutationFn: async (paymentIntentId: string) => {
+      const sessionId = clinic?.hasMultipleSessions && selectedSessions.length > 0 
+        ? selectedSessions[0] 
+        : undefined;
+
+      return await apiRequest('POST', `/api/clinics/${clinic?.id}/register`, {
+        paymentIntentId,
+        clinicId: clinic?.id,
+        sessionId,
+        firstName: registrationData.firstName,
+        lastName: registrationData.lastName,
+        email: registrationData.email,
+        phone: registrationData.phone,
+        experienceLevel: registrationData.experienceLevel,
+        horseName: registrationData.horseName || undefined,
+        specialRequests: registrationData.specialRequests || undefined,
+        emergencyContact: registrationData.emergencyContact,
+        emergencyPhone: registrationData.emergencyPhone,
+        medicalConditions: registrationData.medicalConditions || undefined,
+        paymentMethod: registrationData.paymentMethod,
+        agreeToTerms: registrationData.agreeToTerms,
+      });
     },
     onSuccess: () => {
       // Save client data
@@ -215,14 +206,13 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         paymentMethod: registrationData.paymentMethod
       };
       localStorage.setItem('clinicClientData', JSON.stringify(clientDataToSave));
-      
+
+      queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
       toast({
         title: "Registration successful!",
-        description: "Payment confirmed. You'll receive a confirmation email shortly.",
+        description: "You'll receive a confirmation email shortly.",
       });
       onClose();
-      setClientSecret(null);
-      queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
     onError: (error) => {
       toast({
@@ -233,126 +223,35 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     },
   });
 
-  const validateCurrentStep = () => {
-    const newErrors: Record<string, string> = {};
-
-    switch (currentStep) {
-      case 1: // Personal Info
-        if (!registrationData.firstName.trim()) newErrors.firstName = 'First name is required';
-        if (!registrationData.lastName.trim()) newErrors.lastName = 'Last name is required';
-        if (!registrationData.email.trim()) newErrors.email = 'Email is required';
-        if (!registrationData.phone.trim()) newErrors.phone = 'Phone number is required';
-        break;
-      
-      case 2: // Enter session
-        if (!registrationData.horseName.trim()) newErrors.horseName = 'Horse name is required';
-        break;
-      
-      case 3: // Emergency
-        if (!registrationData.emergencyContact.trim()) newErrors.emergencyContact = 'Emergency contact is required';
-        if (!registrationData.emergencyPhone.trim()) newErrors.emergencyPhone = 'Emergency phone is required';
-        break;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const nextStep = () => {
-    if (validateCurrentStep()) {
-      if (currentStep === 3) {
-        // Moving to payment step - create payment intent
-        createPaymentIntentMutation.mutate();
-      }
-      setCurrentStep(prev => Math.min(prev + 1, STEPS.length));
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
-
-  const handlePaymentSuccess = (paymentIntentId: string) => {
-    const finalData = {
-      ...registrationData,
-      experienceLevel: 'intermediate', // Default level since we don't ask for it in mobile flow
-      paymentIntentId,
-      sessionIds: clinic?.hasMultipleSessions ? selectedSessions : undefined
-    };
-    registrationMutation.mutate(finalData);
-  };
-
-  const handlePaymentError = (error: string) => {
-    toast({
-      title: "Payment failed",
-      description: error,
-      variant: "destructive",
-    });
-  };
-
-  const updateRegistrationData = (field: keyof RegistrationData, value: any) => {
-    setRegistrationData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-  };
-
-  const getTotalPrice = () => {
-    if (clinic?.hasMultipleSessions && selectedSessions.length > 0) {
-      return selectedSessions.reduce((total, sessionId) => {
-        const session = clinic.sessions.find(s => s.id === sessionId);
-        return total + (session?.price || 0);
-      }, 0);
-    }
-    return clinic?.price || 0;
-  };
-
-  const formatPrice = (price: number) => {
-    return `£${(price / 100).toFixed(0)}`;
-  };
-
-  const isRegistrationClosed = () => {
-    if (!clinic?.entryClosingDate) return false;
-    return new Date() > new Date(clinic.entryClosingDate);
-  };
-
-  if (isRegistrationClosed()) {
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-md mx-4">
-          <div className="text-center py-6">
-            <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Registration Closed</h3>
-            <p className="text-gray-600 mb-4">
-              Registration for this clinic has closed. Please contact us for waitlist availability.
-            </p>
-            <Button onClick={onClose} className="w-full">
-              Close
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  if (!isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="mobile-registration-modal sm:max-w-md mx-4 p-0 max-h-[95vh] flex flex-col">
-        <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white flex-shrink-0">
-          <DialogTitle className="text-lg font-semibold">
-            Quick Registration
-          </DialogTitle>
-          <p className="text-blue-100 text-sm">
-            {clinic?.title}
-          </p>
-        </DialogHeader>
+    <div 
+      className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-lg w-full max-w-md max-h-[95vh] flex flex-col shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white flex justify-between items-center">
+          <div>
+            <h2 className="text-lg font-semibold">Quick Registration</h2>
+            <p className="text-blue-100 text-sm">{clinic?.title}</p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="text-white hover:bg-white/20"
+          >
+            <X className="w-5 h-5" />
+          </Button>
+        </div>
 
         {/* Progress Bar */}
-        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-blue-50 flex-shrink-0">
+        <div className="px-6 py-4 bg-gray-50 border-b">
           <div className="flex items-center justify-between mb-3">
             {STEPS.map((step, index) => {
               const Icon = step.icon;
@@ -361,32 +260,24 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               
               return (
                 <div key={step.id} className="flex items-center">
-                  <div className={`
-                    w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 shadow-sm
-                    ${isActive ? 'bg-blue-600 text-white shadow-lg transform scale-110' : 
-                      isCompleted ? 'bg-green-500 text-white shadow-md' : 
-                      'bg-white text-gray-400 border-2 border-gray-200'}
-                  `}>
-                    {isCompleted ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
+                    isCompleted ? 'bg-green-500 text-white' :
+                    isActive ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+                  }`}>
+                    {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                   </div>
                   {index < STEPS.length - 1 && (
-                    <div className={`
-                      w-6 h-1 mx-2 rounded-full transition-all duration-300
-                      ${currentStep > step.id ? 'bg-green-500' : 'bg-gray-200'}
-                    `} />
+                    <div className={`w-8 h-0.5 mx-2 ${
+                      isCompleted ? 'bg-green-500' : 'bg-gray-300'
+                    }`} />
                   )}
                 </div>
               );
             })}
           </div>
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-700">
-              {STEPS.find(s => s.id === currentStep)?.title}
-            </p>
-            <p className="text-xs text-gray-500">
-              Step {currentStep} of {STEPS.length}
-            </p>
-          </div>
+          <p className="text-sm text-gray-600 text-center font-medium">
+            Step {currentStep} of {STEPS.length}: {STEPS[currentStep - 1]?.title}
+          </p>
         </div>
 
         {/* Content */}
@@ -470,9 +361,9 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               {clinic?.hasMultipleSessions && clinic?.sessions && clinic.sessions.length > 0 && (
                 <div>
                   <Label className="text-sm font-medium">Select Sessions</Label>
-                  <div className="mt-2 space-y-2">
+                  <div className="mt-3 space-y-3">
                     {clinic.sessions.map((session) => (
-                      <div key={session.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+                      <div key={session.id} className="flex items-start space-x-3 p-3 border rounded-lg">
                         <Checkbox
                           id={`session-${session.id}`}
                           checked={selectedSessions.includes(session.id)}
@@ -486,26 +377,35 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                         />
                         <div className="flex-1">
                           <Label htmlFor={`session-${session.id}`} className="text-sm font-medium cursor-pointer">
-                            {session.sessionName}
+                            {session.title}
                           </Label>
-                          <p className="text-xs text-gray-600">{formatPrice(session.price)}</p>
+                          <div className="text-xs text-gray-600 mt-1">
+                            <div className="flex items-center gap-4">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-3 h-3" />
+                                {new Date(session.date).toLocaleDateString()}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {session.startTime} - {session.endTime}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <PoundSterling className="w-3 h-3" />
+                                £{(session.price / 100).toFixed(0)}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1 mt-1">
+                              <Users className="w-3 h-3" />
+                              {session.currentParticipants}/{session.maxParticipants} participants
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
+                  {errors.sessions && <p className="text-xs text-red-500 mt-1">{errors.sessions}</p>}
                 </div>
               )}
-
-              <div>
-                <Label htmlFor="specialRequests" className="text-sm font-medium text-gray-700">Special Requests</Label>
-                <Textarea
-                  id="specialRequests"
-                  value={registrationData.specialRequests}
-                  onChange={(e) => updateRegistrationData('specialRequests', e.target.value)}
-                  className="mt-2 h-24 text-base border-gray-300 focus:border-blue-500 rounded-lg transition-colors resize-none"
-                  placeholder="Any special requirements or requests..."
-                />
-              </div>
             </div>
           )}
 
@@ -564,63 +464,22 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                     </Label>
                   </div>
                 </div>
+                {errors.agreeToTerms && <p className="text-xs text-red-500 mt-2">{errors.agreeToTerms}</p>}
               </div>
             </div>
           )}
 
-          {currentStep === 4 && (
-            <div className="space-y-4">
-              {/* Summary */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Registration Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Participant:</span>
-                    <span className="font-medium">{registrationData.firstName} {registrationData.lastName}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Horse:</span>
-                    <span className="font-medium">{registrationData.horseName}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Level:</span>
-                    <Badge className="capitalize">{registrationData.experienceLevel}</Badge>
-                  </div>
-                  <div className="border-t pt-3">
-                    <div className="flex justify-between items-center font-semibold">
-                      <span>Total:</span>
-                      <span className="text-lg">{formatPrice(getTotalPrice())}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Payment */}
-              {clientSecret && (
-                <div>
-                  <h3 className="font-medium mb-3">Payment Details</h3>
-                  <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <MobilePaymentForm
-                      onPaymentSuccess={handlePaymentSuccess}
-                      onPaymentError={handlePaymentError}
-                      registrationData={registrationData}
-                      clinic={clinic}
-                      selectedSessions={selectedSessions}
-                      clientSecret={clientSecret}
-                    />
-                  </Elements>
-                </div>
-              )}
-
-              {!clientSecret && createPaymentIntentMutation.isPending && (
-                <div className="text-center py-4">
-                  <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Setting up payment...</p>
-                </div>
-              )}
-            </div>
+          {currentStep === 4 && clientSecret && (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <MobilePaymentForm 
+                onPaymentSuccess={(paymentIntentId) => registrationMutation.mutate(paymentIntentId)}
+                onPaymentError={(error) => toast({ title: "Payment failed", description: error, variant: "destructive" })}
+                registrationData={registrationData}
+                clinic={clinic}
+                selectedSessions={selectedSessions}
+                clientSecret={clientSecret}
+              />
+            </Elements>
           )}
         </div>
 
@@ -648,7 +507,106 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
             </Button>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
+  );
+}
+
+// Payment form component
+function MobilePaymentForm({ 
+  onPaymentSuccess, 
+  onPaymentError, 
+  registrationData,
+  clinic,
+  selectedSessions,
+  clientSecret 
+}: {
+  onPaymentSuccess: (paymentIntentId: string) => void;
+  onPaymentError: (error: string) => void;
+  registrationData: RegistrationData;
+  clinic: ClinicWithSessions;
+  selectedSessions: number[];
+  clientSecret: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) return;
+
+    setIsProcessing(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/registration-success`,
+        },
+        redirect: 'if_required'
+      });
+
+      if (error) {
+        onPaymentError(error.message || 'Payment failed');
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        onPaymentSuccess(paymentIntent.id);
+      }
+    } catch (error: any) {
+      onPaymentError(error.message || 'Payment processing failed');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-blue-50 p-4 rounded-lg">
+        <h3 className="font-semibold text-lg text-navy mb-2">Registration Summary</h3>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span>Participant:</span>
+            <span>{registrationData.firstName} {registrationData.lastName}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Horse:</span>
+            <span>{registrationData.horseName}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Clinic:</span>
+            <span>{clinic.title}</span>
+          </div>
+          {clinic.hasMultipleSessions && selectedSessions.length > 0 && (
+            <div className="flex justify-between">
+              <span>Sessions:</span>
+              <span>{selectedSessions.length} selected</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <PaymentElement />
+        
+        <Button
+          type="submit"
+          disabled={!stripe || isProcessing}
+          className="w-full bg-navy hover:bg-slate-800 text-white h-12 text-base font-semibold"
+        >
+          {isProcessing ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              Processing Payment...
+            </>
+          ) : (
+            <>
+              <CreditCard className="w-4 h-4 mr-2" />
+              Complete Registration & Pay
+            </>
+          )}
+        </Button>
+      </form>
+    </div>
   );
 }
