@@ -283,13 +283,82 @@ export default function AdminGallery() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="imageUrl">Image URL</Label>
-                  <Input
-                    id="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <Label htmlFor="image">Gallery Image</Label>
+                  <div className="space-y-3">
+                    {/* File Upload Button */}
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleImageSelect}
+                        accept="image/*"
+                        className="hidden"
+                        id="image-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center gap-2"
+                        disabled={isUploadingImage}
+                      >
+                        <Upload className="w-4 h-4" />
+                        {selectedImage ? 'Change Image' : 'Upload Image'}
+                      </Button>
+                      {selectedImage && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedImage(null);
+                            setImagePreview("");
+                            if (fileInputRef.current) fileInputRef.current.value = "";
+                          }}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {/* Image Preview */}
+                    {imagePreview && (
+                      <div className="relative">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full max-w-xs h-32 object-cover rounded-lg border"
+                        />
+                        {selectedImage && (
+                          <div className="mt-2 text-sm text-gray-600">
+                            Selected: {selectedImage.name} ({(selectedImage.size / 1024 / 1024).toFixed(2)} MB)
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Alternative URL Input */}
+                    <div className="border-t pt-3">
+                      <Label htmlFor="image-url" className="text-sm text-gray-600">Or enter image URL:</Label>
+                      <Input
+                        id="image-url"
+                        value={formData.imageUrl}
+                        onChange={(e) => {
+                          setFormData({ ...formData, imageUrl: e.target.value });
+                          if (e.target.value && !selectedImage) {
+                            setImagePreview(e.target.value);
+                          }
+                        }}
+                        placeholder="https://example.com/image.jpg"
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <p className="text-xs text-gray-500">
+                      Supported formats: JPG, PNG, GIF. Max size: 5MB
+                    </p>
+                  </div>
                 </div>
                 
                 <div>
