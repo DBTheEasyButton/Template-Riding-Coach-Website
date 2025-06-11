@@ -17,6 +17,7 @@ import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
+import MobileRegistrationFlow from "@/components/MobileRegistrationFlow";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
@@ -149,6 +150,7 @@ function PaymentForm({
 export default function ClinicsSection() {
   const [selectedClinic, setSelectedClinic] = useState<ClinicWithSessions | null>(null);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isMobileFlow, setIsMobileFlow] = useState(false);
   const [registrationData, setRegistrationData] = useState({
     firstName: '',
     lastName: '',
@@ -191,6 +193,17 @@ export default function ClinicsSection() {
         console.error('Error loading saved client data:', error);
       }
     }
+  }, []);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileFlow(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const { data: clinics = [] } = useQuery<ClinicWithSessions[]>({
