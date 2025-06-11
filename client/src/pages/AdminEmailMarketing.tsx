@@ -17,6 +17,11 @@ export default function AdminEmailMarketing() {
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
   const [isEditingTemplate, setIsEditingTemplate] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
+
+  // Force refresh templates on component mount
+  React.useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["/api/admin/email-templates"] });
+  }, []);
   const [isCreatingCampaign, setIsCreatingCampaign] = useState(false);
   const [isBulkImporting, setIsBulkImporting] = useState(false);
   const [bulkEmails, setBulkEmails] = useState("");
@@ -43,6 +48,7 @@ export default function AdminEmailMarketing() {
 
   const { data: templates = [] } = useQuery<EmailTemplate[]>({
     queryKey: ["/api/admin/email-templates"],
+    staleTime: 0,
   });
 
   const { data: campaigns = [] } = useQuery<EmailCampaign[]>({
@@ -511,7 +517,7 @@ export default function AdminEmailMarketing() {
                         placeholder="HTML email content"
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        Use {{firstName}} and {{lastName}} for personalization
+                        Use {`{{firstName}}`} and {`{{lastName}}`} for personalization
                       </p>
                     </div>
                     
