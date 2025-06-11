@@ -567,10 +567,10 @@ export default function ClinicsSection() {
                         className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:bg-orange relative"
                       >
                         <span className="hidden sm:inline">Register Now</span>
-                        <span className="sm:hidden">Quick Register</span>
+                        <span className="sm:hidden">Enter Now</span>
                         {isMobileFlow && (
                           <span className="absolute -top-1 -right-1 bg-orange text-white text-xs px-1.5 py-0.5 rounded-full font-medium">
-                            Quick
+                            Fast
                           </span>
                         )}
                       </Button>
