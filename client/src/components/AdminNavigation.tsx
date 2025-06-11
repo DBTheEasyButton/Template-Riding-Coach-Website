@@ -6,7 +6,7 @@ export default function AdminNavigation() {
   const [location] = useLocation();
 
   return (
-    <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 mb-8">
+    <div className="bg-orange-50 dark:bg-slate-800 border-b-4 border-orange-500 dark:border-slate-700 mb-8 shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-4 gap-4">
           <h2 className="text-xl font-semibold text-navy dark:text-white">Admin Panel</h2>
