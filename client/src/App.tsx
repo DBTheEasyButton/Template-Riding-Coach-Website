@@ -10,6 +10,8 @@ import AdminClinics from "@/pages/AdminClinics";
 import AdminContacts from "@/pages/AdminContacts";
 import AdminEmailMarketing from "@/pages/AdminEmailMarketing";
 import AdminRegistrations from "@/pages/AdminRegistrations";
+import AdminGallery from "@/pages/AdminGallery";
+import AdminNews from "@/pages/AdminNews";
 import NotFound from "@/pages/not-found";
 
 function Router() {
