@@ -520,7 +520,14 @@ export default function AdminEmailMarketing() {
                         type="checkbox"
                         id="createIncludeLogo"
                         checked={templateForm.includeLogo}
-                        onChange={(e) => setTemplateForm({ ...templateForm, includeLogo: e.target.checked })}
+                        onChange={(e) => {
+                          const newIncludeLogo = e.target.checked;
+                          setTemplateForm({ 
+                            ...templateForm, 
+                            includeLogo: newIncludeLogo,
+                            htmlContent: convertTextToHtml(templateForm.textContent, newIncludeLogo)
+                          });
+                        }}
                         className="rounded"
                       />
                       <label htmlFor="createIncludeLogo" className="text-sm font-medium">
