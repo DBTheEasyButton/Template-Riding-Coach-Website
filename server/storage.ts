@@ -1028,6 +1028,10 @@ The Dan Bizzarro Method Team`,
       minimumEntries: program.clinicEntries,
       expiresAt,
     });
+
+    // Send email with discount code to the user
+    const { emailService } = await import('./emailService');
+    await emailService.sendLoyaltyDiscountEmail(program.email, 'Dan15');
   }
 
   async createLoyaltyDiscount(insertDiscount: InsertLoyaltyDiscount): Promise<LoyaltyDiscount> {
