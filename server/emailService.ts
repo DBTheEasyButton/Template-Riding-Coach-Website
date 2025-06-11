@@ -200,6 +200,44 @@ export class EmailService {
   }
   
   // Newsletter subscription management
+  async sendLoyaltyDiscountEmail(subscriberEmail: string, discountCode: string): Promise<boolean> {
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2c3e50;">Congratulations! You've Earned a Loyalty Discount</h2>
+        <p>Dear valued client,</p>
+        <p>Thank you for your continued support and participation in our clinics!</p>
+        <div style="background-color: #8b4513; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+          <h3 style="margin-top: 0;">You've earned a 15% discount!</h3>
+          <p style="font-size: 18px; margin: 10px 0;"><strong>Your discount code: ${discountCode}</strong></p>
+          <p style="font-size: 14px; margin-bottom: 0;">Use this code on your next clinic registration</p>
+        </div>
+        <p>This discount is valid for 6 months and can be used once on any of our upcoming clinics.</p>
+        <p>Thank you for being a loyal member of the Dan Bizzarro Method community!</p>
+        <p>Best regards,<br>Dan Bizzarro and the Team</p>
+      </div>
+    `;
+
+    const textContent = `
+      Congratulations! You've Earned a Loyalty Discount
+      
+      Dear valued client,
+      
+      Thank you for your continued support and participation in our clinics!
+      
+      You've earned a 15% discount!
+      Your discount code: ${discountCode}
+      
+      This discount is valid for 6 months and can be used once on any of our upcoming clinics.
+      
+      Thank you for being a loyal member of the Dan Bizzarro Method community!
+      
+      Best regards,
+      Dan Bizzarro and the Team
+    `;
+
+    return this.sendEmail(subscriberEmail, "🎉 You've Earned a Loyalty Discount!", htmlContent, textContent);
+  }
+
   async subscribeToNewsletter(email: string, firstName?: string, lastName?: string, source: string = "newsletter"): Promise<boolean> {
     try {
       // Check if already subscribed

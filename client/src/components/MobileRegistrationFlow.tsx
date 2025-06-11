@@ -477,7 +477,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                     id="discountCode"
                     value={registrationData.discountCode || ''}
                     onChange={(e) => updateRegistrationData('discountCode', e.target.value)}
-                    placeholder="Enter Dan15 for loyalty discount"
+                    placeholder="Enter discount code"
                     className="flex-1"
                   />
                   <Button
@@ -490,10 +490,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                         return;
                       }
                       
-                      if (code !== 'Dan15') {
-                        toast({ title: "Invalid discount code", description: "Only 'Dan15' discount codes are accepted.", variant: "destructive" });
-                        return;
-                      }
+
                       
                       try {
                         const response = await fetch('/api/loyalty/discount/validate', {
@@ -528,7 +525,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   </Button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Have a loyalty discount? Enter your code here to save on your registration.
+                  Have a discount code? Enter it here to save on your registration.
                 </p>
               </div>
 
