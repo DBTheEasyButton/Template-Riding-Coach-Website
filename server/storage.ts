@@ -215,31 +215,85 @@ export class DatabaseStorage implements IStorage {
     // Seed events data
     const sampleEvents = [
       {
-        title: "Badminton Horse Trials",
-        location: "Badminton, England", 
-        date: new Date('2024-04-15'),
+        title: "Cotswold Cup",
+        location: "Waverton House", 
+        date: new Date('2024-06-22'),
         type: "upcoming",
-        horse: "Castello Primo",
-        level: "CCI5*-L",
+        horse: "TBC",
+        level: "Intermediate",
         result: null
       },
       {
-        title: "Kentucky Three-Day Event",
-        location: "Lexington, USA",
-        date: new Date('2024-04-28'),
+        title: "BYEH",
+        location: "Aston Le Walls",
+        date: new Date('2024-07-02'),
         type: "upcoming", 
-        horse: "Venetian Dream",
-        level: "CCI5*-L",
+        horse: "TBC",
+        level: "Intermediate",
         result: null
       },
       {
-        title: "Adelaide CCI4*-L",
-        location: "Adelaide, Australia",
-        date: new Date('2024-03-10'),
-        type: "completed",
-        horse: "Tuscan Thunder", 
-        level: "CCI4*-L",
-        result: "1st Place"
+        title: "Open Intermediate",
+        location: "Upton House",
+        date: new Date('2024-07-08'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "Intermediate",
+        result: null
+      },
+      {
+        title: "BYEH",
+        location: "Cirencester Park",
+        date: new Date('2024-07-10'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "Intermediate",
+        result: null
+      },
+      {
+        title: "Cotswold Cup",
+        location: "Cirencester Park",
+        date: new Date('2024-07-13'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "Intermediate",
+        result: null
+      },
+      {
+        title: "CIC4*",
+        location: "Burgham",
+        date: new Date('2024-07-24'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "CIC4*",
+        result: null
+      },
+      {
+        title: "Open Intermediate",
+        location: "Wellington",
+        date: new Date('2024-08-22'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "Intermediate",
+        result: null
+      },
+      {
+        title: "Cotswold Cup",
+        location: "Great Tew",
+        date: new Date('2024-08-24'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "Intermediate",
+        result: null
+      },
+      {
+        title: "European Championship",
+        location: "Blenheim Palace",
+        date: new Date('2024-09-17'),
+        type: "upcoming",
+        horse: "TBC", 
+        level: "Championship",
+        result: null
       }
     ];
 
