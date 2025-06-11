@@ -63,11 +63,15 @@ export class EmailService {
       throw new Error(`Template with ID ${templateId} not found`);
     }
     
-    // Add upcoming clinics for newsletter templates
+    // Add upcoming clinics and recent news for newsletter templates
     if (template.name.toLowerCase().includes('newsletter')) {
       const upcomingClinics = await this.getUpcomingClinicsForEmail();
       variables.upcomingClinicsHtml = upcomingClinics.html;
       variables.upcomingClinicsText = upcomingClinics.text;
+
+      const recentNews = await this.getRecentNewsForEmail();
+      variables.recentNewsHtml = recentNews.html;
+      variables.recentNewsText = recentNews.text;
     }
     
     // Replace variables in template
@@ -149,6 +153,76 @@ export class EmailService {
       return {
         html: '<p style="text-align: center; color: #666;">Clinic information currently unavailable.</p>',
         text: 'Clinic information currently unavailable.'
+      };
+    }
+  }
+
+  private async getRecentNewsForEmail(): Promise<{ html: string; text: string }> {
+    try {
+      const allNews = await storage.getAllNews();
+      const recentNews = allNews
+        .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+        .slice(0, 2);
+
+      if (recentNews.length === 0) {
+        return {
+          html: '<p style="text-align: center; color: #666;">No recent blog posts available.</p>',
+          text: 'No recent blog posts available.'
+        };
+      }
+
+      const htmlNews = recentNews.map(article => {
+        const publishDate = new Date(article.publishedAt).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+
+        // Create a brief summary from the excerpt or first part of content
+        const summary = article.excerpt || 
+          (article.content.length > 150 ? 
+            article.content.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 
+            article.content.replace(/<[^>]*>/g, ''));
+
+        return `
+          <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: white;">
+            ${article.image ? `<img src="${article.image}" alt="${article.title}" style="width: 100%; max-width: 400px; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 15px;" />` : ''}
+            <h3 style="color: #1e3a8a; margin: 0 0 10px 0; font-size: 18px;">${article.title}</h3>
+            <p style="color: #f97316; font-size: 14px; margin: 0 0 10px 0;">📅 ${publishDate}</p>
+            <p style="color: #374151; margin: 0 0 15px 0; line-height: 1.5; font-size: 14px;">${summary}</p>
+            <div style="text-align: center;">
+              <a href="https://danbizzarromethod.com/news/${article.id}" style="background: #1e3a8a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 14px;">Read Full Article</a>
+            </div>
+          </div>`;
+      }).join('');
+
+      const textNews = recentNews.map(article => {
+        const publishDate = new Date(article.publishedAt).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+        const summary = article.excerpt || 
+          (article.content.length > 150 ? 
+            article.content.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 
+            article.content.replace(/<[^>]*>/g, ''));
+        
+        return `${article.title}\nPublished: ${publishDate}\n${summary}\nRead more: https://danbizzarromethod.com/news/${article.id}\n`;
+      }).join('\n');
+
+      return {
+        html: `
+          <div style="margin: 30px 0;">
+            <h2 style="color: #1e3a8a; text-align: center; margin-bottom: 25px;">📰 Latest News & Insights</h2>
+            ${htmlNews}
+          </div>`,
+        text: `\n\nLATEST NEWS & INSIGHTS:\n\n${textNews}`
+      };
+    } catch (error) {
+      console.error("Error fetching recent news for email:", error);
+      return {
+        html: '<p style="text-align: center; color: #666;">News articles currently unavailable.</p>',
+        text: 'News articles currently unavailable.'
       };
     }
   }
