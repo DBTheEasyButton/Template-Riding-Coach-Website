@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Mail, Users, Send, Plus, Edit, Trash2, Eye } from "lucide-react";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import AdminNavigation from "@/components/AdminNavigation";
 import type { EmailSubscriber, EmailTemplate, EmailCampaign, EmailAutomation } from "@shared/schema";
 
 export default function AdminEmailMarketing() {
@@ -239,8 +240,10 @@ export default function AdminEmailMarketing() {
   const activeSubscribersCount = subscribers.filter(sub => sub.isActive).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+      <AdminNavigation />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Email Marketing</h1>
           <p className="text-gray-600 mt-2">Manage subscribers, templates, and campaigns</p>
