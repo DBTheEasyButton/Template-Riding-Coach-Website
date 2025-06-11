@@ -8,7 +8,7 @@ export default function SponsorsSection() {
       name: "Devoucoux",
       description: "Premium French saddlery and equestrian equipment",
       logo: devoucouxLogo,
-      website: "https://www.devoucoux.com"
+      website: "https://eu.devoucoux.com/gb/12-saddles"
     },
     {
       name: "Sergio Grasso",
