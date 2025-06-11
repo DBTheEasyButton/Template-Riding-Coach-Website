@@ -166,6 +166,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const registration = await storage.createClinicRegistration(validatedData);
+      
+      // Automatically subscribe participant to email list if not already subscribed
+      try {
+        const existingSubscriber = await storage.getEmailSubscriberByEmail(registration.email);
+        if (!existingSubscriber) {
+          await emailService.subscribeToNewsletter(
+            registration.email, 
+            registration.firstName, 
+            registration.lastName, 
+            "clinic_registration"
+          );
+          console.log(`Added clinic participant to email list: ${registration.email}`);
+        } else {
+          console.log(`Participant already in email list: ${registration.email}`);
+        }
+      } catch (error) {
+        console.error("Failed to add participant to email list:", error);
+        // Don't fail the registration if email subscription fails
+      }
+      
       res.status(201).json(registration);
     } catch (error) {
       console.error("Error creating clinic registration:", error);
@@ -478,7 +498,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           promotedParticipant = await storage.promoteFromWaitlist(cancelledReg.clinicId);
           if (promotedParticipant) {
             // Create a confirmed registration for the promoted participant
-            await storage.createClinicRegistration({
+            const newRegistration = await storage.createClinicRegistration({
               clinicId: cancelledReg.clinicId,
               sessionId: cancelledReg.sessionId || undefined,
               firstName: promotedParticipant.firstName,
@@ -495,6 +515,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
               agreeToTerms: true,
               status: "confirmed"
             });
+            
+            // Ensure promoted participant is in email list
+            try {
+              const existingSubscriber = await storage.getEmailSubscriberByEmail(promotedParticipant.email);
+              if (!existingSubscriber) {
+                await emailService.subscribeToNewsletter(
+                  promotedParticipant.email, 
+                  promotedParticipant.firstName, 
+                  promotedParticipant.lastName, 
+                  "waitlist_promotion"
+                );
+              }
+            } catch (error) {
+              console.error("Failed to add promoted participant to email list:", error);
+            }
+            
             console.log(`Automatically promoted waitlist participant: ${promotedParticipant.email}`);
           }
         }

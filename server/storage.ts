@@ -711,6 +711,25 @@ The Dan Bizzarro Method Team`,
       ...insertWaitlistEntry,
       position
     }).returning();
+
+    // Automatically subscribe waitlist participant to email list if not already subscribed
+    try {
+      const existingSubscriber = await this.getEmailSubscriberByEmail(waitlistEntry.email);
+      if (!existingSubscriber) {
+        await this.createEmailSubscriber({
+          email: waitlistEntry.email,
+          firstName: waitlistEntry.firstName,
+          lastName: waitlistEntry.lastName,
+          subscriptionSource: "clinic_waitlist",
+          interests: ["clinics", "news"]
+        });
+        console.log(`Added waitlist participant to email list: ${waitlistEntry.email}`);
+      }
+    } catch (error) {
+      console.error("Failed to add waitlist participant to email list:", error);
+      // Don't fail the waitlist addition if email subscription fails
+    }
+    
     return waitlistEntry;
   }
 
