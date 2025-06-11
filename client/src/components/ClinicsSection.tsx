@@ -329,7 +329,6 @@ export default function ClinicsSection() {
       });
       return;
     }
-    console.log('Registration clicked:', { isMobileFlow, clinic: clinic.title });
     setSelectedClinic(clinic);
     setSelectedSessions([]); // Reset session selection
     setIsRegistrationOpen(true);
