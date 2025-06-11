@@ -68,10 +68,17 @@ export default function AdminNews() {
     mutationFn: (id: number) => apiRequest("DELETE", `/api/admin/news/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/news'] });
-      toast({ title: "News article deleted" });
+      toast({ title: "News article deleted successfully" });
     },
     onError: (error: Error) => {
-      toast({ title: "Error deleting article", description: error.message, variant: "destructive" });
+      console.error("Delete error:", error);
+      if (error.message.includes("404")) {
+        toast({ title: "Article already deleted", description: "This article may have already been removed.", variant: "default" });
+      } else {
+        toast({ title: "Error deleting article", description: error.message, variant: "destructive" });
+      }
+      // Refresh the list anyway in case the delete actually succeeded
+      queryClient.invalidateQueries({ queryKey: ['/api/news'] });
     }
   });
 

@@ -1329,11 +1329,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/admin/news/:id", async (req, res) => {
     try {
       const id = parseInt(req.params.id);
+      
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid article ID" });
+      }
+      
+      // Check if article exists before attempting deletion
+      const existingNews = await storage.getNewsById(id);
+      if (!existingNews) {
+        return res.status(404).json({ message: "News article not found" });
+      }
+      
       await storage.deleteNews(id);
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting news:", error);
-      res.status(500).json({ message: "Failed to delete news" });
+      res.status(500).json({ message: "Failed to delete news article" });
     }
   });
 
