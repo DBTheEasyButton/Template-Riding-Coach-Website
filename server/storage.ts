@@ -49,7 +49,12 @@ import {
   type EmailLog,
   type InsertEmailLog,
   type EmailAutomation,
-  type InsertEmailAutomation
+  type InsertEmailAutomation,
+  type LoyaltyProgram,
+  type InsertLoyaltyProgram,
+  type LoyaltyDiscount,
+  type InsertLoyaltyDiscount,
+  type LoyaltyProgramWithDiscounts
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";

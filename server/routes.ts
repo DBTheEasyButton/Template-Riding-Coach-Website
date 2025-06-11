@@ -176,6 +176,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const registration = await storage.createClinicRegistration(validatedData);
       
+      // Calculate clinic price for loyalty tracking
+      let clinicPrice = clinic.price;
+      if (validatedData.sessionId && clinic.hasMultipleSessions) {
+        // Find session price if this is a multi-session clinic
+        const clinics = await storage.getAllClinics();
+        const clinicWithSessions = clinics.find(c => c.id === clinicId);
+        const session = clinicWithSessions?.sessions?.find(s => s.id === validatedData.sessionId);
+        clinicPrice = session?.price || clinic.price;
+      }
+
+      // Track clinic entry in loyalty program
+      try {
+        const loyaltyProgram = await storage.incrementClinicEntries(registration.email, clinicPrice);
+        if (loyaltyProgram && loyaltyProgram.clinicEntries % 5 === 0 && loyaltyProgram.clinicEntries >= 5) {
+          console.log(`Loyalty discount generated for ${registration.email} after ${loyaltyProgram.clinicEntries} entries`);
+        }
+      } catch (error) {
+        console.error('Failed to update loyalty program:', error);
+        // Don't fail the registration if loyalty tracking fails
+      }
+      
       // Automatically subscribe participant to email list if not already subscribed
       try {
         const existingSubscriber = await storage.getEmailSubscriberByEmail(registration.email);
@@ -897,6 +918,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating email automation:", error);
       res.status(400).json({ message: "Invalid automation data" });
+    }
+  });
+
+  // Loyalty Program routes
+  app.get("/api/loyalty/:email", async (req, res) => {
+    try {
+      const email = decodeURIComponent(req.params.email);
+      const loyaltyProgram = await storage.getLoyaltyProgram(email);
+      
+      if (!loyaltyProgram) {
+        return res.status(404).json({ message: "Loyalty program not found" });
+      }
+      
+      res.json(loyaltyProgram);
+    } catch (error) {
+      console.error("Error fetching loyalty program:", error);
+      res.status(500).json({ message: "Failed to fetch loyalty program" });
+    }
+  });
+
+  app.get("/api/loyalty/:email/discount", async (req, res) => {
+    try {
+      const email = decodeURIComponent(req.params.email);
+      const discount = await storage.getAvailableDiscount(email);
+      
+      if (!discount) {
+        return res.status(404).json({ message: "No available discount" });
+      }
+      
+      res.json(discount);
+    } catch (error) {
+      console.error("Error fetching available discount:", error);
+      res.status(500).json({ message: "Failed to fetch discount" });
+    }
+  });
+
+  app.post("/api/loyalty/discount/use", async (req, res) => {
+    try {
+      const { discountCode, registrationId } = req.body;
+      
+      if (!discountCode || !registrationId) {
+        return res.status(400).json({ message: "Discount code and registration ID required" });
+      }
+      
+      const usedDiscount = await storage.useLoyaltyDiscount(discountCode, registrationId);
+      
+      if (!usedDiscount) {
+        return res.status(404).json({ message: "Invalid or expired discount code" });
+      }
+      
+      res.json(usedDiscount);
+    } catch (error) {
+      console.error("Error using loyalty discount:", error);
+      res.status(500).json({ message: "Failed to use discount" });
     }
   });
 
