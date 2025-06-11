@@ -448,6 +448,20 @@ export default function ClinicsSection() {
           <p className="text-xl text-dark max-w-3xl mx-auto mb-6">
             Join Dan for intensive training sessions designed to elevate your riding to the next level
           </p>
+          <div className="bg-gradient-to-r from-orange/10 to-gold/10 border border-orange/20 rounded-lg p-4 max-w-2xl mx-auto mb-8">
+            <div className="flex items-center justify-center gap-3">
+              <div className="text-orange text-2xl">🎯</div>
+              <div className="text-center">
+                <p className="font-semibold text-navy mb-1">Earn Rewards with Every Clinic!</p>
+                <p className="text-sm text-dark">Get 15% discount codes after every 5 clinic registrations</p>
+              </div>
+              <Link href="/loyalty">
+                <Button variant="outline" size="sm" className="border-orange text-orange hover:bg-orange hover:text-white">
+                  View Status
+                </Button>
+              </Link>
+            </div>
+          </div>
           <Link href="/terms-and-conditions">
             <Button variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white">
               <FileText className="w-4 h-4 mr-2" />
