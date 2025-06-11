@@ -221,6 +221,17 @@ export const emailAutomations = pgTable("email_automations", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+export const gallery = pgTable("gallery", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  imageUrl: text("image_url").notNull(),
+  category: text("category").notNull(), // competition, training, clinic, personal
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -317,6 +328,12 @@ export const insertEmailAutomationSchema = createInsertSchema(emailAutomations).
   updatedAt: true,
 });
 
+export const insertGallerySchema = createInsertSchema(gallery).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Achievement = typeof achievements.$inferSelect;
@@ -351,6 +368,10 @@ export type EmailLog = typeof emailLogs.$inferSelect;
 export type InsertEmailLog = z.infer<typeof insertEmailLogSchema>;
 export type EmailAutomation = typeof emailAutomations.$inferSelect;
 export type InsertEmailAutomation = z.infer<typeof insertEmailAutomationSchema>;
+
+// Gallery System Types
+export type GalleryImage = typeof gallery.$inferSelect;
+export type InsertGalleryImage = z.infer<typeof insertGallerySchema>;
 
 // Loyalty Program Tables
 export const loyaltyProgram = pgTable("loyalty_program", {

@@ -15,6 +15,7 @@ import {
   emailCampaigns,
   emailLogs,
   emailAutomations,
+  gallery,
   loyaltyProgram,
   loyaltyDiscounts,
   type User, 
@@ -50,6 +51,8 @@ import {
   type InsertEmailLog,
   type EmailAutomation,
   type InsertEmailAutomation,
+  type GalleryImage,
+  type InsertGalleryImage,
   type LoyaltyProgram,
   type InsertLoyaltyProgram,
   type LoyaltyDiscount,
@@ -134,6 +137,13 @@ export interface IStorage {
   createEmailAutomation(automation: InsertEmailAutomation): Promise<EmailAutomation>;
   updateEmailAutomation(id: number, updates: Partial<InsertEmailAutomation>): Promise<EmailAutomation | undefined>;
   deleteEmailAutomation(id: number): Promise<void>;
+
+  // Gallery System
+  getAllGalleryImages(): Promise<GalleryImage[]>;
+  getGalleryImage(id: number): Promise<GalleryImage | undefined>;
+  createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage>;
+  updateGalleryImage(id: number, updates: Partial<InsertGalleryImage>): Promise<GalleryImage | undefined>;
+  deleteGalleryImage(id: number): Promise<void>;
 
   // Loyalty Program System
   getLoyaltyProgram(email: string): Promise<LoyaltyProgramWithDiscounts | undefined>;
