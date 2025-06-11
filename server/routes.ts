@@ -532,6 +532,115 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Excel export for registrations
+  app.get("/api/admin/registrations/excel-export", async (req, res) => {
+    try {
+      const XLSX = require('xlsx');
+      
+      // Get all registrations with clinic details
+      const registrations = await storage.getAllClinicRegistrations();
+      const clinics = await storage.getAllClinics();
+      
+      // Create clinic lookup
+      const clinicLookup = clinics.reduce((acc, clinic) => {
+        acc[clinic.id] = clinic;
+        return acc;
+      }, {} as Record<number, any>);
+
+      // Group registrations by clinic and organize by sessions/disciplines
+      const clinicGroups = registrations.reduce((acc, reg) => {
+        if (reg.status !== 'confirmed') return acc;
+        
+        const clinic = clinicLookup[reg.clinicId];
+        if (!clinic) return acc;
+
+        if (!acc[clinic.title]) {
+          acc[clinic.title] = {
+            showJumping: [],
+            crossCountry: [],
+            general: []
+          };
+        }
+
+        // Determine discipline based on session or default to general
+        let discipline = 'general';
+        if (clinic.hasMultipleSessions && reg.sessionId) {
+          // Would need session lookup for specific discipline
+          discipline = 'general';
+        } else if (clinic.title.toLowerCase().includes('show jumping')) {
+          discipline = 'showJumping';
+        } else if (clinic.title.toLowerCase().includes('cross country')) {
+          discipline = 'crossCountry';
+        }
+
+        acc[clinic.title][discipline].push({
+          'Rider Name': `${reg.firstName} ${reg.lastName}`,
+          'Horse Name': reg.horseName || 'N/A',
+          'Experience Level': reg.experienceLevel,
+          'Special Requests': reg.specialRequests || 'None',
+          'Email': reg.email,
+          'Phone': reg.phone,
+          'Emergency Contact': reg.emergencyContact,
+          'Emergency Phone': reg.emergencyPhone,
+          'Registration Date': new Date(reg.registeredAt).toLocaleDateString('en-GB')
+        });
+
+        return acc;
+      }, {} as Record<string, any>);
+
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
+
+      // Add sheets for each clinic and discipline
+      Object.entries(clinicGroups).forEach(([clinicName, disciplines]) => {
+        Object.entries(disciplines).forEach(([discipline, participants]) => {
+          if (participants.length === 0) return;
+
+          const sheetName = `${clinicName.substring(0, 20)} - ${discipline}`.substring(0, 31);
+          const worksheet = XLSX.utils.json_to_sheet(participants);
+          
+          // Auto-size columns
+          const cols = [
+            { wch: 20 }, // Rider Name
+            { wch: 20 }, // Horse Name
+            { wch: 15 }, // Experience Level
+            { wch: 30 }, // Special Requests
+            { wch: 25 }, // Email
+            { wch: 15 }, // Phone
+            { wch: 20 }, // Emergency Contact
+            { wch: 15 }, // Emergency Phone
+            { wch: 15 }  // Registration Date
+          ];
+          worksheet['!cols'] = cols;
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+        });
+      });
+
+      // If no sheets were added, create a summary sheet
+      if (workbook.SheetNames.length === 0) {
+        const summaryData = [{
+          'Message': 'No confirmed registrations found',
+          'Export Date': new Date().toLocaleDateString('en-GB')
+        }];
+        const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+        XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary');
+      }
+
+      // Generate buffer
+      const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+      // Set headers for file download
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="clinic-registrations-${new Date().toISOString().split('T')[0]}.xlsx"`);
+      
+      res.send(buffer);
+    } catch (error) {
+      console.error("Error generating Excel export:", error);
+      res.status(500).json({ message: "Failed to generate Excel export" });
+    }
+  });
+
   // Email Marketing System Routes
 
   // Newsletter subscription

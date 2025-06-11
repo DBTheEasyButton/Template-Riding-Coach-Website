@@ -279,31 +279,13 @@ export default function AdminRegistrations() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="font-medium">Emergency Contact</Label>
-                    <p>{selectedRegistration.emergencyContact}</p>
+                    <p>{selectedRegistration.emergencyContact || "Not provided"}</p>
                   </div>
                   <div>
                     <Label className="font-medium">Emergency Phone</Label>
-                    <p>{selectedRegistration.emergencyPhone}</p>
+                    <p>{selectedRegistration.emergencyPhone || "Not provided"}</p>
                   </div>
                 </div>
-
-                {selectedRegistration.specialRequests && (
-                  <div>
-                    <Label className="font-medium">Special Requests</Label>
-                    <p className="text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded">
-                      {selectedRegistration.specialRequests}
-                    </p>
-                  </div>
-                )}
-
-                {selectedRegistration.medicalConditions && (
-                  <div>
-                    <Label className="font-medium">Medical Conditions</Label>
-                    <p className="text-sm bg-gray-50 dark:bg-gray-800 p-3 rounded">
-                      {selectedRegistration.medicalConditions}
-                    </p>
-                  </div>
-                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
