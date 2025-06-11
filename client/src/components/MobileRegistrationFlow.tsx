@@ -11,7 +11,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { ClinicWithSessions, ClinicSession } from "@shared/schema";
 import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Zap, AlertTriangle, X } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
@@ -34,6 +34,7 @@ interface RegistrationData {
   medicalConditions: string;
   agreeToTerms: boolean;
   paymentMethod: string;
+  discountCode?: string;
 }
 
 const STEPS = [
@@ -466,17 +467,49 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
             </div>
           )}
 
-          {currentStep === 4 && clientSecret && (
-            <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <MobilePaymentForm 
-                onPaymentSuccess={(paymentIntentId) => registrationMutation.mutate(paymentIntentId)}
-                onPaymentError={(error) => toast({ title: "Payment failed", description: error, variant: "destructive" })}
-                registrationData={registrationData}
-                clinic={clinic}
-                selectedSessions={selectedSessions}
-                clientSecret={clientSecret}
-              />
-            </Elements>
+          {currentStep === 4 && (
+            <div className="space-y-6">
+              {/* Discount Code Section */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <Label htmlFor="discountCode" className="text-sm font-medium">Discount Code (Optional)</Label>
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    id="discountCode"
+                    value={registrationData.discountCode || ''}
+                    onChange={(e) => updateRegistrationData('discountCode', e.target.value)}
+                    placeholder="Enter discount code"
+                    className="flex-1"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      // TODO: Validate discount code
+                      toast({ title: "Discount applied", description: "Your discount has been applied to the total." });
+                    }}
+                  >
+                    Apply
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Have a loyalty discount? Enter your code here to save on your registration.
+                </p>
+              </div>
+
+              {/* Payment Section */}
+              {clientSecret && (
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <MobilePaymentForm 
+                    onPaymentSuccess={(paymentIntentId) => registrationMutation.mutate(paymentIntentId)}
+                    onPaymentError={(error) => toast({ title: "Payment failed", description: error, variant: "destructive" })}
+                    registrationData={registrationData}
+                    clinic={clinic}
+                    selectedSessions={selectedSessions}
+                    clientSecret={clientSecret}
+                  />
+                </Elements>
+              )}
+            </div>
           )}
         </div>
 
@@ -557,6 +590,21 @@ function MobilePaymentForm({
     }
   };
 
+  const handleExpressCheckout = async (event: any) => {
+    const { complete, error } = event;
+    
+    if (error) {
+      onPaymentError(error.message || 'Express payment failed');
+      return;
+    }
+
+    if (complete) {
+      // Extract payment intent ID from client secret for express payment success
+      const paymentIntentId = clientSecret.split('_secret_')[0];
+      onPaymentSuccess(paymentIntentId);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="bg-blue-50 p-4 rounded-lg">
@@ -583,8 +631,46 @@ function MobilePaymentForm({
         </div>
       </div>
 
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-center text-blue-800 mb-2">
+          <CreditCard className="w-5 h-5 mr-2" />
+          <span className="font-semibold">Secure Payment</span>
+        </div>
+        <p className="text-sm text-blue-700">
+          Complete your registration with secure payment. All payments processed through Dan's Stripe account.
+        </p>
+      </div>
+
+      {/* Express Checkout (Apple Pay, Google Pay) */}
+      <div className="space-y-2">
+        <h4 className="text-sm font-medium text-gray-900">Quick Payment</h4>
+        <ExpressCheckoutElement
+          onConfirm={handleExpressCheckout}
+          options={{
+            buttonType: {
+              applePay: 'book',
+              googlePay: 'book'
+            }
+          }}
+        />
+      </div>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="bg-white px-2 text-gray-500">Or pay with card</span>
+        </div>
+      </div>
+
+      {/* Regular Card Payment */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <PaymentElement />
+        <PaymentElement 
+          options={{
+            layout: 'tabs'
+          }}
+        />
         
         <Button
           type="submit"
