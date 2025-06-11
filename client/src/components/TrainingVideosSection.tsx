@@ -20,10 +20,15 @@ export default function TrainingVideosSection() {
 
   const { data: videos = [] } = useQuery<TrainingVideo[]>({
     queryKey: ['/api/training-videos', activeCategory === 'all' ? undefined : activeCategory],
-    queryFn: () => {
+    queryFn: async () => {
       const url = activeCategory === 'all' ? '/api/training-videos' : `/api/training-videos?category=${activeCategory}`;
-      return fetch(url).then(res => res.json());
-    }
+      const res = await fetch(url);
+      const data = await res.json();
+      // Ensure we always return an array, even if the API fails
+      return Array.isArray(data) ? data : [];
+    },
+    retry: false, // Don't retry on errors to prevent excessive database connections
+    refetchOnWindowFocus: false
   });
 
   const viewCountMutation = useMutation({

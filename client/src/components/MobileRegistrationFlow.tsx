@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { ClinicWithSessions, ClinicSession } from "@shared/schema";
-import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Horse, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Zap, AlertTriangle } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
@@ -41,7 +41,7 @@ interface RegistrationData {
 
 const STEPS = [
   { id: 1, title: "Personal Info", icon: User },
-  { id: 2, title: "Horse Details", icon: Heart },
+  { id: 2, title: "Enter session", icon: Zap },
   { id: 3, title: "Emergency", icon: Phone },
   { id: 4, title: "Payment", icon: CreditCard }
 ];
@@ -244,7 +244,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         if (!registrationData.phone.trim()) newErrors.phone = 'Phone number is required';
         break;
       
-      case 2: // Horse Details
+      case 2: // Enter session
         if (!registrationData.horseName.trim()) newErrors.horseName = 'Horse name is required';
         break;
       
