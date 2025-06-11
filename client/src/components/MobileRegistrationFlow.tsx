@@ -341,7 +341,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md mx-4 p-0 max-h-[95vh] flex flex-col">
+      <DialogContent className="w-[95vw] max-w-[400px] p-0 max-h-[95vh] flex flex-col data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background shadow-lg duration-200">
         <DialogHeader className="px-6 py-4 border-b bg-gradient-to-r from-blue-600 to-blue-700 text-white flex-shrink-0">
           <DialogTitle className="text-lg font-semibold">
             Quick Registration
@@ -390,80 +390,95 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         </div>
 
         {/* Content */}
-        <div className="px-6 py-4 overflow-y-auto flex-1">
+        <div className="px-6 py-4 overflow-y-auto flex-1 min-h-0">
           {currentStep === 1 && (
-            <div className="space-y-4">
+            <div className="space-y-6 pb-8">
               <div className="grid grid-cols-2 gap-4">
-                <div>
+                <div className="relative">
                   <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">First Name *</Label>
-                  <Input
-                    id="firstName"
-                    value={registrationData.firstName}
-                    onChange={(e) => updateRegistrationData('firstName', e.target.value)}
-                    className={`mt-2 h-12 text-base ${errors.firstName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
-                    placeholder="Your first name"
-                    autoComplete="given-name"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="firstName"
+                      value={registrationData.firstName}
+                      onChange={(e) => updateRegistrationData('firstName', e.target.value)}
+                      className={`mt-2 h-12 text-base ${errors.firstName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                      placeholder="Your first name"
+                      autoComplete="given-name"
+                      style={{ position: 'relative', zIndex: 10 }}
+                    />
+                  </div>
                   {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>}
                 </div>
-                <div>
+                <div className="relative">
                   <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">Last Name *</Label>
-                  <Input
-                    id="lastName"
-                    value={registrationData.lastName}
-                    onChange={(e) => updateRegistrationData('lastName', e.target.value)}
-                    className={`mt-2 h-12 text-base ${errors.lastName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
-                    placeholder="Your last name"
-                    autoComplete="family-name"
-                  />
+                  <div className="relative">
+                    <Input
+                      id="lastName"
+                      value={registrationData.lastName}
+                      onChange={(e) => updateRegistrationData('lastName', e.target.value)}
+                      className={`mt-2 h-12 text-base ${errors.lastName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                      placeholder="Your last name"
+                      autoComplete="family-name"
+                      style={{ position: 'relative', zIndex: 10 }}
+                    />
+                  </div>
                   {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName}</p>}
                 </div>
               </div>
 
-              <div>
+              <div className="relative">
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={registrationData.email}
-                  onChange={(e) => updateRegistrationData('email', e.target.value)}
-                  className={`mt-2 h-12 text-base ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
-                  placeholder="your.email@example.com"
-                  autoComplete="email"
-                  inputMode="email"
-                />
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={registrationData.email}
+                    onChange={(e) => updateRegistrationData('email', e.target.value)}
+                    className={`mt-2 h-12 text-base ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                    placeholder="your.email@example.com"
+                    autoComplete="email"
+                    inputMode="email"
+                    style={{ position: 'relative', zIndex: 10 }}
+                  />
+                </div>
                 {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
               </div>
 
-              <div>
+              <div className="relative">
                 <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number *</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={registrationData.phone}
-                  onChange={(e) => updateRegistrationData('phone', e.target.value)}
-                  className={`mt-2 h-12 text-base ${errors.phone ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
-                  placeholder="+44 7xxx xxx xxx"
-                  autoComplete="tel"
-                  inputMode="tel"
-                />
+                <div className="relative">
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={registrationData.phone}
+                    onChange={(e) => updateRegistrationData('phone', e.target.value)}
+                    className={`mt-2 h-12 text-base ${errors.phone ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                    placeholder="+44 7xxx xxx xxx"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    style={{ position: 'relative', zIndex: 10 }}
+                  />
+                </div>
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
             </div>
           )}
 
           {currentStep === 2 && (
-            <div className="space-y-5">
-              <div>
+            <div className="space-y-6 pb-8">
+              <div className="relative">
                 <Label htmlFor="horseName" className="text-sm font-medium text-gray-700">Horse Name *</Label>
-                <Input
-                  id="horseName"
-                  value={registrationData.horseName}
-                  onChange={(e) => updateRegistrationData('horseName', e.target.value)}
-                  className={`mt-2 h-12 text-base ${errors.horseName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
-                  placeholder="Your horse's name"
-                  autoComplete="off"
-                />
+                <div className="relative">
+                  <Input
+                    id="horseName"
+                    value={registrationData.horseName}
+                    onChange={(e) => updateRegistrationData('horseName', e.target.value)}
+                    className={`mt-2 h-12 text-base ${errors.horseName ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors relative z-10`}
+                    placeholder="Your horse's name"
+                    autoComplete="off"
+                    style={{ position: 'relative', zIndex: 10 }}
+                  />
+                </div>
                 {errors.horseName && <p className="text-xs text-red-500 mt-1">{errors.horseName}</p>}
               </div>
 
