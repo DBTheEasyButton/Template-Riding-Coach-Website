@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import AdminNavigation from "@/components/AdminNavigation";
@@ -13,11 +13,15 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { News } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, FileText, Eye } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, FileText, Eye, Upload, X } from "lucide-react";
 
 export default function AdminNews() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingNews, setEditingNews] = useState<News | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -79,6 +83,62 @@ export default function AdminNews() {
       image: "",
       slug: ""
     });
+    setSelectedImage(null);
+    setImagePreview("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({ title: "Invalid file type", description: "Please select an image file", variant: "destructive" });
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({ title: "File too large", description: "Please select an image smaller than 5MB", variant: "destructive" });
+        return;
+      }
+      
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    setIsUploadingImage(true);
+    try {
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+      
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error('Image upload error:', error);
+      throw error;
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const handleEdit = (news: News) => {
@@ -89,14 +149,32 @@ export default function AdminNews() {
       image: news.image || "",
       slug: news.slug
     });
+    setImagePreview(news.image || "");
     setEditingNews(news);
   };
 
-  const handleSubmit = () => {
-    if (editingNews) {
-      updateMutation.mutate({ id: editingNews.id, data: formData });
-    } else {
-      createMutation.mutate(formData);
+  const handleSubmit = async () => {
+    try {
+      let imageUrl = formData.image;
+      
+      // Upload image if one is selected
+      if (selectedImage) {
+        imageUrl = await uploadImage(selectedImage);
+      }
+      
+      const submitData = { ...formData, image: imageUrl };
+      
+      if (editingNews) {
+        updateMutation.mutate({ id: editingNews.id, data: submitData });
+      } else {
+        createMutation.mutate(submitData);
+      }
+    } catch (error) {
+      toast({ 
+        title: "Upload failed", 
+        description: "Failed to upload image. Please try again.", 
+        variant: "destructive" 
+      });
     }
   };
 
@@ -239,13 +317,82 @@ export default function AdminNews() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="image">Featured Image URL (Optional)</Label>
-                  <Input
-                    id="image"
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <Label htmlFor="image">Featured Image</Label>
+                  <div className="space-y-3">
+                    {/* File Upload Button */}
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleImageSelect}
+                        accept="image/*"
+                        className="hidden"
+                        id="image-upload"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center gap-2"
+                        disabled={isUploadingImage}
+                      >
+                        <Upload className="w-4 h-4" />
+                        {selectedImage ? 'Change Image' : 'Upload Image'}
+                      </Button>
+                      {selectedImage && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedImage(null);
+                            setImagePreview("");
+                            if (fileInputRef.current) fileInputRef.current.value = "";
+                          }}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {/* Image Preview */}
+                    {imagePreview && (
+                      <div className="relative">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full max-w-xs h-32 object-cover rounded-lg border"
+                        />
+                        {selectedImage && (
+                          <div className="mt-2 text-sm text-gray-600">
+                            Selected: {selectedImage.name} ({(selectedImage.size / 1024 / 1024).toFixed(2)} MB)
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Alternative URL Input */}
+                    <div className="border-t pt-3">
+                      <Label htmlFor="image-url" className="text-sm text-gray-600">Or enter image URL:</Label>
+                      <Input
+                        id="image-url"
+                        value={formData.image}
+                        onChange={(e) => {
+                          setFormData({ ...formData, image: e.target.value });
+                          if (e.target.value && !selectedImage) {
+                            setImagePreview(e.target.value);
+                          }
+                        }}
+                        placeholder="https://example.com/image.jpg"
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <p className="text-xs text-gray-500">
+                      Supported formats: JPG, PNG, GIF. Max size: 5MB
+                    </p>
+                  </div>
                 </div>
                 
                 <div>
