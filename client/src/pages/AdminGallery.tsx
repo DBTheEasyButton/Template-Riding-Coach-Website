@@ -359,7 +359,7 @@ export default function AdminGallery() {
                     </div>
                     
                     <p className="text-xs text-gray-500">
-                      Supported formats: JPG, PNG, GIF. Max size: 5MB
+                      Supported formats: JPG, PNG, GIF, WebP. Large images will be automatically optimized.
                     </p>
                   </div>
                 </div>
