@@ -14,7 +14,8 @@ import {
   insertEmailSubscriberSchema,
   insertEmailTemplateSchema,
   insertEmailCampaignSchema,
-  insertEmailAutomationSchema
+  insertEmailAutomationSchema,
+  insertGallerySchema
 } from "@shared/schema";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -1108,8 +1109,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin gallery management routes
   app.get("/api/admin/gallery", async (req, res) => {
     try {
-      // For now, return empty array - gallery functionality would require image upload infrastructure
-      res.json([]);
+      const images = await storage.getAllGalleryImages();
+      res.json(images);
     } catch (error) {
       console.error("Error fetching gallery:", error);
       res.status(500).json({ message: "Failed to fetch gallery" });
@@ -1118,11 +1119,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/gallery", async (req, res) => {
     try {
-      // Gallery functionality would require proper image upload and storage
-      res.status(501).json({ message: "Gallery upload functionality requires additional infrastructure" });
+      const galleryData = insertGallerySchema.parse(req.body);
+      const image = await storage.createGalleryImage(galleryData);
+      res.status(201).json(image);
     } catch (error) {
       console.error("Error adding to gallery:", error);
-      res.status(500).json({ message: "Failed to add to gallery" });
+      res.status(400).json({ message: "Invalid gallery data" });
+    }
+  });
+
+  app.put("/api/admin/gallery/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const galleryData = insertGallerySchema.partial().parse(req.body);
+      const image = await storage.updateGalleryImage(id, galleryData);
+      
+      if (!image) {
+        return res.status(404).json({ message: "Gallery image not found" });
+      }
+      
+      res.json(image);
+    } catch (error) {
+      console.error("Error updating gallery image:", error);
+      res.status(400).json({ message: "Invalid gallery data" });
+    }
+  });
+
+  app.delete("/api/admin/gallery/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteGalleryImage(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting gallery image:", error);
+      res.status(500).json({ message: "Failed to delete gallery image" });
     }
   });
 

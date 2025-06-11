@@ -1102,6 +1102,34 @@ The Dan Bizzarro Method Team`,
 
     return discount;
   }
+
+  // Gallery System Implementation
+  async getAllGalleryImages(): Promise<GalleryImage[]> {
+    return await db.select().from(gallery).orderBy(desc(gallery.createdAt));
+  }
+
+  async getGalleryImage(id: number): Promise<GalleryImage | undefined> {
+    const [image] = await db.select().from(gallery).where(eq(gallery.id, id));
+    return image;
+  }
+
+  async createGalleryImage(insertImage: InsertGalleryImage): Promise<GalleryImage> {
+    const [image] = await db.insert(gallery).values(insertImage).returning();
+    return image;
+  }
+
+  async updateGalleryImage(id: number, updates: Partial<InsertGalleryImage>): Promise<GalleryImage | undefined> {
+    const [image] = await db
+      .update(gallery)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(gallery.id, id))
+      .returning();
+    return image;
+  }
+
+  async deleteGalleryImage(id: number): Promise<void> {
+    await db.delete(gallery).where(eq(gallery.id, id));
+  }
 }
 
 export const storage = new DatabaseStorage();

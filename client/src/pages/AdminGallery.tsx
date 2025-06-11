@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import AdminNavigation from "@/components/AdminNavigation";
@@ -11,21 +11,16 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Plus, Edit, Trash2, Upload, Eye } from "lucide-react";
-
-interface GalleryImage {
-  id: number;
-  title: string;
-  description?: string;
-  imageUrl: string;
-  category: string;
-  isActive: boolean;
-  createdAt: Date;
-}
+import type { GalleryImage } from "@shared/schema";
+import { Plus, Edit, Trash2, Upload, Eye, X } from "lucide-react";
 
 export default function AdminGallery() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -79,6 +74,57 @@ export default function AdminGallery() {
     }
   });
 
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({ title: "Invalid file type", description: "Please select an image file", variant: "destructive" });
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({ title: "File too large", description: "Please select an image smaller than 5MB", variant: "destructive" });
+        return;
+      }
+      
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    setIsUploadingImage(true);
+    try {
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+      
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error('Image upload error:', error);
+      throw error;
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -87,6 +133,11 @@ export default function AdminGallery() {
       category: "competition",
       isActive: true
     });
+    setSelectedImage(null);
+    setImagePreview("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleEdit = (image: GalleryImage) => {
@@ -97,14 +148,32 @@ export default function AdminGallery() {
       category: image.category,
       isActive: image.isActive
     });
+    setImagePreview(image.imageUrl);
     setEditingImage(image);
   };
 
-  const handleSubmit = () => {
-    if (editingImage) {
-      updateMutation.mutate({ id: editingImage.id, data: formData });
-    } else {
-      createMutation.mutate(formData);
+  const handleSubmit = async () => {
+    try {
+      let imageUrl = formData.imageUrl;
+      
+      // Upload image if one is selected
+      if (selectedImage) {
+        imageUrl = await uploadImage(selectedImage);
+      }
+      
+      const submitData = { ...formData, imageUrl };
+      
+      if (editingImage) {
+        updateMutation.mutate({ id: editingImage.id, data: submitData });
+      } else {
+        createMutation.mutate(submitData);
+      }
+    } catch (error) {
+      toast({ 
+        title: "Upload failed", 
+        description: "Failed to upload image. Please try again.", 
+        variant: "destructive" 
+      });
     }
   };
 
