@@ -195,14 +195,14 @@ export default function AdminRegistrations() {
                         size="sm"
                         onClick={() => setSelectedRegistration(registration)}
                       >
-                        Cancel Registration
+                        Issue Refund
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Cancel Registration</DialogTitle>
+                        <DialogTitle>Issue Refund</DialogTitle>
                         <DialogDescription>
-                          Cancel registration for {registration.firstName} {registration.lastName}
+                          Process refund request for {registration.firstName} {registration.lastName}
                         </DialogDescription>
                       </DialogHeader>
 
@@ -256,7 +256,7 @@ export default function AdminRegistrations() {
                               onClick={handleCancelRegistration}
                               disabled={cancelRegistrationMutation.isPending}
                             >
-                              {cancelRegistrationMutation.isPending ? "Processing..." : "Confirm Cancellation"}
+                              {cancelRegistrationMutation.isPending ? "Processing..." : "Process Refund"}
                             </Button>
                           </div>
                         </div>
