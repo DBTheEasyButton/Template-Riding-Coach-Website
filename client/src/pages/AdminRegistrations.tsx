@@ -52,6 +52,10 @@ export default function AdminRegistrations() {
     queryKey: ["/api/admin/registrations"],
   });
 
+  const { data: clinics = [] } = useQuery({
+    queryKey: ["/api/admin/clinics"],
+  });
+
   const { data: refundCheck, isLoading: checkingRefund } = useQuery<RefundCheck>({
     queryKey: ["/api/admin/registrations", selectedRegistration?.id, "refund-check"],
     enabled: !!selectedRegistration && refundDialogOpen,
@@ -94,6 +98,18 @@ export default function AdminRegistrations() {
         return <Badge variant="secondary">{status}</Badge>;
     }
   };
+
+  // Group registrations by clinic
+  const groupedRegistrations = registrations.reduce((groups, registration) => {
+    const clinic = clinics.find((c: any) => c.id === registration.clinicId);
+    const clinicName = clinic ? clinic.name : `Clinic ${registration.clinicId}`;
+    
+    if (!groups[clinicName]) {
+      groups[clinicName] = [];
+    }
+    groups[clinicName].push(registration);
+    return groups;
+  }, {} as Record<string, Registration[]>);
 
   const handleViewDetails = (registration: Registration) => {
     setSelectedRegistration(registration);
@@ -166,74 +182,80 @@ export default function AdminRegistrations() {
           </Button>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Registration List</CardTitle>
-            <CardDescription>
-              Click on a participant name to view full details
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Participant</TableHead>
-                  <TableHead>Horse</TableHead>
-                  <TableHead>Level</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Registered</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {registrations.map((registration) => (
-                  <TableRow key={registration.id}>
-                    <TableCell>
-                      <Button 
-                        variant="link" 
-                        className="p-0 h-auto font-medium text-left"
-                        onClick={() => handleViewDetails(registration)}
-                      >
-                        {registration.firstName} {registration.lastName}
-                      </Button>
-                      <div className="text-sm text-gray-500">{registration.email}</div>
-                    </TableCell>
-                    <TableCell>{registration.horseName || "N/A"}</TableCell>
-                    <TableCell>{registration.experienceLevel}</TableCell>
-                    <TableCell>{getStatusBadge(registration.status)}</TableCell>
-                    <TableCell>{format(new Date(registration.registeredAt), "dd/MM/yyyy")}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => handleViewDetails(registration)}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        {registration.status === "confirmed" && (
-                          <Button 
-                            variant="destructive" 
-                            size="sm"
-                            onClick={() => handleIssueRefund(registration)}
-                          >
-                            Issue Refund
-                          </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            {registrations.length === 0 && (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                No registrations found
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {Object.keys(groupedRegistrations).length === 0 ? (
+          <Card>
+            <CardContent className="text-center py-8 text-gray-500 dark:text-gray-400">
+              No registrations found
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="space-y-8">
+            {Object.entries(groupedRegistrations).map(([clinicName, clinicRegistrations]) => (
+              <Card key={clinicName}>
+                <CardHeader>
+                  <CardTitle className="text-xl text-navy dark:text-blue-400">{clinicName}</CardTitle>
+                  <CardDescription>
+                    {clinicRegistrations.length} participant{clinicRegistrations.length !== 1 ? 's' : ''} registered
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Participant</TableHead>
+                        <TableHead>Horse</TableHead>
+                        <TableHead>Level</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Registered</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {clinicRegistrations.map((registration) => (
+                        <TableRow key={registration.id}>
+                          <TableCell>
+                            <Button 
+                              variant="link" 
+                              className="p-0 h-auto font-medium text-left"
+                              onClick={() => handleViewDetails(registration)}
+                            >
+                              {registration.firstName} {registration.lastName}
+                            </Button>
+                            <div className="text-sm text-gray-500">{registration.email}</div>
+                          </TableCell>
+                          <TableCell>{registration.horseName || "N/A"}</TableCell>
+                          <TableCell>{registration.experienceLevel}</TableCell>
+                          <TableCell>{getStatusBadge(registration.status)}</TableCell>
+                          <TableCell>{format(new Date(registration.registeredAt), "dd/MM/yyyy")}</TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleViewDetails(registration)}
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              {registration.status === "confirmed" && (
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm"
+                                  onClick={() => handleIssueRefund(registration)}
+                                >
+                                  Issue Refund
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Detailed View Dialog */}
         <Dialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
