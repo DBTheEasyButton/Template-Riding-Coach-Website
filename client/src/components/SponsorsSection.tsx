@@ -14,7 +14,7 @@ export default function SponsorsSection() {
       name: "Sergio Grasso",
       description: "Italian luxury riding boots and equestrian wear",
       logo: sergioGrassoLogo,
-      website: "https://www.sergiograsso.com"
+      website: "https://www.sergiograsso.it/en/"
     },
     {
       name: "Kep Italia",
