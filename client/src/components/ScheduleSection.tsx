@@ -128,36 +128,9 @@ export default function ScheduleSection() {
                   );
                 })
               ) : (
-                <>
-                  <div className="flex items-start space-x-4 p-4 bg-white/10 rounded-xl">
-                    <div className="bg-yellow-400 text-forest rounded-lg p-2 text-center min-w-[60px]">
-                      <div className="text-lg font-bold">1st</div>
-                      <div className="text-xs">MAR</div>
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold">Adelaide CCI4*-L</h4>
-                      <p className="text-green-100 text-sm">Adelaide, Australia</p>
-                      <div className="flex items-center mt-2 text-xs text-yellow-400">
-                        <Trophy className="w-4 h-4 mr-1" />
-                        <span>1st Place - Tuscan Thunder</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-4 p-4 bg-white/10 rounded-xl">
-                    <div className="bg-gray-300 text-forest rounded-lg p-2 text-center min-w-[60px]">
-                      <div className="text-lg font-bold">3rd</div>
-                      <div className="text-xs">FEB</div>
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold">Pau CCI4*-L</h4>
-                      <p className="text-green-100 text-sm">Pau, France</p>
-                      <div className="flex items-center mt-2 text-xs text-gray-300">
-                        <Medal className="w-4 h-4 mr-1" />
-                        <span>3rd Place - Castello Primo</span>
-                      </div>
-                    </div>
-                  </div>
-                </>
+                <div className="text-center py-8">
+                  <p className="text-green-100">Competition results will be posted here after events.</p>
+                </div>
               )}
             </div>
           </div>
