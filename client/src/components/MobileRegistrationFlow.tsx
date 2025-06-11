@@ -380,23 +380,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                             {session.sessionName}
                           </Label>
                           <div className="text-xs text-gray-600 mt-1">
-                            <div className="flex items-center gap-4">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {session.startTime} - {session.endTime}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <PoundSterling className="w-3 h-3" />
-                                £{(session.price / 100).toFixed(0)}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 mt-1">
-                              <Users className="w-3 h-3" />
-                              {session.currentParticipants}/{session.maxParticipants} participants
-                            </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              {session.discipline} • {session.skillLevel}
-                            </div>
+                            <span className="flex items-center gap-1">
+                              <PoundSterling className="w-3 h-3" />
+                              £{(session.price / 100).toFixed(0)}
+                            </span>
                           </div>
                         </div>
                       </div>
