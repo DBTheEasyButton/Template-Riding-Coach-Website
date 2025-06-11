@@ -352,7 +352,60 @@ export type InsertEmailLog = z.infer<typeof insertEmailLogSchema>;
 export type EmailAutomation = typeof emailAutomations.$inferSelect;
 export type InsertEmailAutomation = z.infer<typeof insertEmailAutomationSchema>;
 
+// Loyalty Program Tables
+export const loyaltyProgram = pgTable("loyalty_program", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  clinicEntries: integer("clinic_entries").notNull().default(0),
+  totalSpent: integer("total_spent").notNull().default(0), // in pence
+  discountsUsed: integer("discounts_used").notNull().default(0),
+  lastClinicDate: timestamp("last_clinic_date"),
+  loyaltyTier: text("loyalty_tier").notNull().default("bronze"), // bronze, silver, gold
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const loyaltyDiscounts = pgTable("loyalty_discounts", {
+  id: serial("id").primaryKey(),
+  loyaltyId: integer("loyalty_id").notNull().references(() => loyaltyProgram.id),
+  discountCode: text("discount_code").notNull().unique(),
+  discountType: text("discount_type").notNull(), // percentage, fixed_amount
+  discountValue: integer("discount_value").notNull(), // percentage (0-100) or amount in pence
+  minimumEntries: integer("minimum_entries").notNull().default(5),
+  isUsed: boolean("is_used").notNull().default(false),
+  usedAt: timestamp("used_at"),
+  expiresAt: timestamp("expires_at").notNull(),
+  clinicRegistrationId: integer("clinic_registration_id").references(() => clinicRegistrations.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertLoyaltyProgramSchema = createInsertSchema(loyaltyProgram).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertLoyaltyDiscountSchema = createInsertSchema(loyaltyDiscounts).omit({
+  id: true,
+  isUsed: true,
+  usedAt: true,
+  createdAt: true,
+});
+
+export type LoyaltyProgram = typeof loyaltyProgram.$inferSelect;
+export type InsertLoyaltyProgram = z.infer<typeof insertLoyaltyProgramSchema>;
+export type LoyaltyDiscount = typeof loyaltyDiscounts.$inferSelect;
+export type InsertLoyaltyDiscount = z.infer<typeof insertLoyaltyDiscountSchema>;
+
 // Extended type for clinics with sessions
 export type ClinicWithSessions = Clinic & {
   sessions: ClinicSession[];
 };
+
+// Combined type for loyalty program with available discounts
+export interface LoyaltyProgramWithDiscounts extends LoyaltyProgram {
+  availableDiscounts?: LoyaltyDiscount[];
+}

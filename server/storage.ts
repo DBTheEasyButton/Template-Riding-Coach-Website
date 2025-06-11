@@ -15,6 +15,8 @@ import {
   emailCampaigns,
   emailLogs,
   emailAutomations,
+  loyaltyProgram,
+  loyaltyDiscounts,
   type User, 
   type InsertUser,
   type Achievement,
@@ -124,6 +126,16 @@ export interface IStorage {
   createEmailAutomation(automation: InsertEmailAutomation): Promise<EmailAutomation>;
   updateEmailAutomation(id: number, updates: Partial<InsertEmailAutomation>): Promise<EmailAutomation | undefined>;
   deleteEmailAutomation(id: number): Promise<void>;
+
+  // Loyalty Program System
+  getLoyaltyProgram(email: string): Promise<LoyaltyProgramWithDiscounts | undefined>;
+  createLoyaltyProgram(program: InsertLoyaltyProgram): Promise<LoyaltyProgram>;
+  updateLoyaltyProgram(email: string, updates: Partial<InsertLoyaltyProgram>): Promise<LoyaltyProgram | undefined>;
+  incrementClinicEntries(email: string, amount: number): Promise<LoyaltyProgram | undefined>;
+  createLoyaltyDiscount(discount: InsertLoyaltyDiscount): Promise<LoyaltyDiscount>;
+  getLoyaltyDiscounts(loyaltyId: number): Promise<LoyaltyDiscount[]>;
+  getAvailableDiscount(email: string): Promise<LoyaltyDiscount | undefined>;
+  useLoyaltyDiscount(discountCode: string, registrationId: number): Promise<LoyaltyDiscount | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -917,6 +929,136 @@ The Dan Bizzarro Method Team`,
 
   async deleteEmailAutomation(id: number): Promise<void> {
     await db.delete(emailAutomations).where(eq(emailAutomations.id, id));
+  }
+
+  // Loyalty Program Methods
+  async getLoyaltyProgram(email: string): Promise<LoyaltyProgramWithDiscounts | undefined> {
+    const [program] = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email));
+    if (!program) return undefined;
+
+    const discounts = await this.getLoyaltyDiscounts(program.id);
+    return {
+      ...program,
+      availableDiscounts: discounts.filter(d => !d.isUsed && new Date(d.expiresAt) > new Date())
+    };
+  }
+
+  async createLoyaltyProgram(insertProgram: InsertLoyaltyProgram): Promise<LoyaltyProgram> {
+    const [program] = await db
+      .insert(loyaltyProgram)
+      .values(insertProgram)
+      .returning();
+    return program;
+  }
+
+  async updateLoyaltyProgram(email: string, updates: Partial<InsertLoyaltyProgram>): Promise<LoyaltyProgram | undefined> {
+    const [program] = await db
+      .update(loyaltyProgram)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(loyaltyProgram.email, email))
+      .returning();
+    return program;
+  }
+
+  async incrementClinicEntries(email: string, amount: number): Promise<LoyaltyProgram | undefined> {
+    // Get or create loyalty program
+    let program = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email)).then(rows => rows[0]);
+    
+    if (!program) {
+      // Create new loyalty program entry
+      const [emailParts] = email.split('@');
+      const [newProgram] = await db
+        .insert(loyaltyProgram)
+        .values({
+          email,
+          firstName: emailParts, // Will be updated with real data later
+          lastName: '',
+          clinicEntries: 1,
+          totalSpent: amount,
+          lastClinicDate: new Date(),
+        })
+        .returning();
+      program = newProgram;
+    } else {
+      // Update existing program
+      const newEntries = program.clinicEntries + 1;
+      const newSpent = program.totalSpent + amount;
+      
+      // Determine loyalty tier based on entries
+      let tier = 'bronze';
+      if (newEntries >= 10) tier = 'gold';
+      else if (newEntries >= 5) tier = 'silver';
+
+      [program] = await db
+        .update(loyaltyProgram)
+        .set({
+          clinicEntries: newEntries,
+          totalSpent: newSpent,
+          loyaltyTier: tier,
+          lastClinicDate: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(loyaltyProgram.email, email))
+        .returning();
+    }
+
+    // Generate discount if eligible
+    if (program.clinicEntries % 5 === 0 && program.clinicEntries >= 5) {
+      await this.generateLoyaltyDiscount(program);
+    }
+
+    return program;
+  }
+
+  private async generateLoyaltyDiscount(program: LoyaltyProgram): Promise<void> {
+    const discountCode = `LOYAL${program.clinicEntries}${Date.now().toString().slice(-4)}`;
+    const expiresAt = new Date();
+    expiresAt.setMonth(expiresAt.getMonth() + 6); // 6 months expiry
+
+    // 15% discount for every 5 entries
+    await db.insert(loyaltyDiscounts).values({
+      loyaltyId: program.id,
+      discountCode,
+      discountType: 'percentage',
+      discountValue: 15,
+      minimumEntries: program.clinicEntries,
+      expiresAt,
+    });
+  }
+
+  async createLoyaltyDiscount(insertDiscount: InsertLoyaltyDiscount): Promise<LoyaltyDiscount> {
+    const [discount] = await db
+      .insert(loyaltyDiscounts)
+      .values(insertDiscount)
+      .returning();
+    return discount;
+  }
+
+  async getLoyaltyDiscounts(loyaltyId: number): Promise<LoyaltyDiscount[]> {
+    return await db.select().from(loyaltyDiscounts).where(eq(loyaltyDiscounts.loyaltyId, loyaltyId));
+  }
+
+  async getAvailableDiscount(email: string): Promise<LoyaltyDiscount | undefined> {
+    const program = await this.getLoyaltyProgram(email);
+    if (!program || !program.availableDiscounts) return undefined;
+
+    // Return the most recent unused discount
+    return program.availableDiscounts
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+  }
+
+  async useLoyaltyDiscount(discountCode: string, registrationId: number): Promise<LoyaltyDiscount | undefined> {
+    const [discount] = await db
+      .update(loyaltyDiscounts)
+      .set({
+        isUsed: true,
+        usedAt: new Date(),
+        clinicRegistrationId: registrationId,
+      })
+      .where(eq(loyaltyDiscounts.discountCode, discountCode))
+      .returning();
+
+    return discount;
   }
 }
 
