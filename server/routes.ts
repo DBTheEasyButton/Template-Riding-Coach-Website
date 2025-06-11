@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
 import { emailService } from "./emailService";
+import { replaceCsvEmails } from "./csvImport";
 import { 
   insertContactSchema, 
   insertClinicRegistrationSchema, 

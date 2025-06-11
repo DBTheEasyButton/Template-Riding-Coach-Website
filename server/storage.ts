@@ -112,6 +112,7 @@ export interface IStorage {
   createEmailSubscriber(subscriber: InsertEmailSubscriber): Promise<EmailSubscriber>;
   updateEmailSubscriber(id: number, updates: Partial<InsertEmailSubscriber>): Promise<EmailSubscriber | undefined>;
   unsubscribeEmail(email: string): Promise<void>;
+  clearAllEmailSubscribers(): Promise<void>;
   
   getAllEmailTemplates(): Promise<EmailTemplate[]>;
   getEmailTemplate(id: number): Promise<EmailTemplate | undefined>;
@@ -858,6 +859,10 @@ The Dan Bizzarro Method Team`,
         unsubscribedAt: new Date() 
       })
       .where(eq(emailSubscribers.email, email));
+  }
+
+  async clearAllEmailSubscribers(): Promise<void> {
+    await db.delete(emailSubscribers);
   }
 
   async getAllEmailTemplates(): Promise<EmailTemplate[]> {
