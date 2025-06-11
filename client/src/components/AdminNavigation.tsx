@@ -8,15 +8,15 @@ export default function AdminNavigation() {
   return (
     <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 mb-8">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-6">
-            <h2 className="text-xl font-semibold text-navy dark:text-white">Admin Panel</h2>
-            <nav className="flex items-center gap-2">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-4 gap-4">
+          <h2 className="text-xl font-semibold text-navy dark:text-white">Admin Panel</h2>
+          <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
+            <nav className="grid grid-cols-2 lg:flex lg:items-center gap-1 w-full lg:w-auto">
               <Link href="/admin/clinics">
                 <Button 
                   variant={location === "/admin/clinics" ? "default" : "ghost"} 
                   size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 w-full lg:w-auto"
                 >
                   <Calendar className="w-4 h-4" />
                   Clinics
@@ -26,7 +26,7 @@ export default function AdminNavigation() {
                 <Button 
                   variant={location === "/admin/contacts" ? "default" : "ghost"} 
                   size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 w-full lg:w-auto"
                 >
                   <MessageSquare className="w-4 h-4" />
                   Contacts
@@ -36,17 +36,17 @@ export default function AdminNavigation() {
                 <Button 
                   variant={location === "/admin/email-marketing" ? "default" : "ghost"} 
                   size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 w-full lg:w-auto"
                 >
                   <Mail className="w-4 h-4" />
-                  Email Marketing
+                  Email
                 </Button>
               </Link>
               <Link href="/admin/gallery">
                 <Button 
                   variant={location === "/admin/gallery" ? "default" : "ghost"} 
                   size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 w-full lg:w-auto"
                 >
                   <Images className="w-4 h-4" />
                   Gallery
@@ -56,20 +56,20 @@ export default function AdminNavigation() {
                 <Button 
                   variant={location === "/admin/news" ? "default" : "ghost"} 
                   size="sm"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 w-full lg:w-auto"
                 >
                   <FileText className="w-4 h-4" />
-                  News & Blog
+                  News
                 </Button>
               </Link>
             </nav>
+            <Link href="/" className="lg:ml-4">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Home className="w-4 h-4" />
+                Back
+              </Button>
+            </Link>
           </div>
-          <Link href="/">
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
-              <Home className="w-4 h-4" />
-              Back to Website
-            </Button>
-          </Link>
         </div>
       </div>
     </div>
