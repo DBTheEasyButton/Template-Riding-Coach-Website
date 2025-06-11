@@ -1,16 +1,23 @@
+import devoucouxLogo from "@assets/Logo_DEVOUCOUX_2021_VERT_CMJN-1-copie-300x130_1749678438773.png";
+import kepItaliaLogo from "@assets/images_1749678438770.png";
+import sergioGrassoLogo from "@assets/logo-sergio-grasso_a6dd3285-ca30-4b84-aeec-021e4226d823_480x480_1749678438772.avif";
+
 export default function SponsorsSection() {
   const sponsors = [
     {
       name: "Devoucoux",
-      description: "Premium French saddlery and equestrian equipment"
+      description: "Premium French saddlery and equestrian equipment",
+      logo: devoucouxLogo
     },
     {
       name: "Sergio Grasso",
-      description: "Italian luxury riding boots and equestrian wear"
+      description: "Italian luxury riding boots and equestrian wear",
+      logo: sergioGrassoLogo
     },
     {
       name: "Kep Italia",
-      description: "High-performance riding helmets and safety equipment"
+      description: "High-performance riding helmets and safety equipment",
+      logo: kepItaliaLogo
     }
   ];
 
@@ -21,10 +28,17 @@ export default function SponsorsSection() {
           <h2 className="text-3xl font-playfair font-bold text-navy mb-4">Partners & Sponsors</h2>
           <p className="text-gray-600">Proud to be supported by industry leaders in equestrian excellence</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
           {sponsors.map((sponsor, index) => (
             <div key={index} className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100">
               <div className="text-center">
+                <div className="mb-6 flex justify-center items-center h-20">
+                  <img 
+                    src={sponsor.logo} 
+                    alt={sponsor.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
                 <h3 className="text-xl font-bold text-navy mb-2">{sponsor.name}</h3>
                 <p className="text-gray-600 text-sm">{sponsor.description}</p>
               </div>
