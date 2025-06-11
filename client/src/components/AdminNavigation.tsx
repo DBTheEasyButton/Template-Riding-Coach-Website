@@ -64,9 +64,9 @@ export default function AdminNavigation() {
               </Link>
             </nav>
             <Link href="/" className="lg:ml-4">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Button variant="outline" size="sm" className="flex items-center gap-2 bg-white hover:bg-gray-50 border-2 border-orange-300">
                 <Home className="w-4 h-4" />
-                Back
+                Back to Main Site
               </Button>
             </Link>
           </div>
