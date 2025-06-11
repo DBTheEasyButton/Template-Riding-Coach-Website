@@ -15,6 +15,8 @@ import type { EmailSubscriber, EmailTemplate, EmailCampaign, EmailAutomation } f
 export default function AdminEmailMarketing() {
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
+  const [isEditingTemplate, setIsEditingTemplate] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
   const [isCreatingCampaign, setIsCreatingCampaign] = useState(false);
   const [isBulkImporting, setIsBulkImporting] = useState(false);
   const [bulkEmails, setBulkEmails] = useState("");
@@ -79,6 +81,21 @@ export default function AdminEmailMarketing() {
     },
     onError: () => {
       toast({ title: "Failed to create campaign", variant: "destructive" });
+    }
+  });
+
+  const updateTemplateMutation = useMutation({
+    mutationFn: async (data: { id: number; updates: Partial<EmailTemplate> }) => {
+      return await apiRequest("PUT", `/api/admin/email-templates/${data.id}`, data.updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/email-templates"] });
+      setIsEditingTemplate(false);
+      setEditingTemplate(null);
+      toast({ title: "Template updated successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to update template", variant: "destructive" });
     }
   });
 
@@ -459,6 +476,81 @@ export default function AdminEmailMarketing() {
                 </Card>
               )}
 
+              {isEditingTemplate && editingTemplate && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Edit Template: {editingTemplate.name}</CardTitle>
+                    <CardDescription>Modify your email template content</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Template Name</label>
+                        <Input
+                          value={editingTemplate.name}
+                          onChange={(e) => setEditingTemplate({...editingTemplate, name: e.target.value})}
+                          placeholder="Template name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Subject Line</label>
+                        <Input
+                          value={editingTemplate.subject}
+                          onChange={(e) => setEditingTemplate({...editingTemplate, subject: e.target.value})}
+                          placeholder="Email subject"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">HTML Content</label>
+                      <textarea
+                        className="w-full h-64 p-3 border rounded-md font-mono text-sm"
+                        value={editingTemplate.htmlContent}
+                        onChange={(e) => setEditingTemplate({...editingTemplate, htmlContent: e.target.value})}
+                        placeholder="HTML email content"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Use {{firstName}} and {{lastName}} for personalization
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Text Content</label>
+                      <textarea
+                        className="w-full h-32 p-3 border rounded-md text-sm"
+                        value={editingTemplate.textContent}
+                        onChange={(e) => setEditingTemplate({...editingTemplate, textContent: e.target.value})}
+                        placeholder="Plain text version"
+                      />
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => updateTemplateMutation.mutate({ 
+                          id: editingTemplate.id, 
+                          updates: {
+                            name: editingTemplate.name,
+                            subject: editingTemplate.subject,
+                            htmlContent: editingTemplate.htmlContent,
+                            textContent: editingTemplate.textContent
+                          }
+                        })}
+                        disabled={updateTemplateMutation.isPending}
+                      >
+                        {updateTemplateMutation.isPending ? "Saving..." : "Save Changes"}
+                      </Button>
+                      <Button variant="outline" onClick={() => {
+                        setIsEditingTemplate(false);
+                        setEditingTemplate(null);
+                      }}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               <div className="grid gap-4">
                 {templates.map((template) => (
                   <Card key={template.id}>
@@ -470,7 +562,14 @@ export default function AdminEmailMarketing() {
                           <Badge variant="outline" className="mt-2">{template.templateType}</Badge>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => {
+                              setEditingTemplate(template);
+                              setIsEditingTemplate(true);
+                            }}
+                          >
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button size="sm" variant="outline">
