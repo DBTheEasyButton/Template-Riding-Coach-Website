@@ -580,7 +580,7 @@ The Dan Bizzarro Method Team`,
   }
 
   async getAllNews(): Promise<News[]> {
-    return await db.select().from(news).orderBy(news.publishedAt);
+    return await db.select().from(news).orderBy(desc(news.publishedAt));
   }
 
   async createNews(insertNews: InsertNews): Promise<News> {
