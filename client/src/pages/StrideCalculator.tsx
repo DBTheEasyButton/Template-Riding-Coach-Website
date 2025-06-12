@@ -22,7 +22,8 @@ interface StrideCalculation {
 }
 
 export default function StrideCalculator() {
-  const [userHeight, setUserHeight] = useState<number>(170);
+  const [userFeet, setUserFeet] = useState<number>(5);
+  const [userInches, setUserInches] = useState<number>(8);
   const [horseFeet, setHorseFeet] = useState<number>(16);
   const [horseInches, setHorseInches] = useState<number>(0);
   const [distanceType, setDistanceType] = useState<DistanceType>("trot-poles");
@@ -94,11 +95,37 @@ export default function StrideCalculator() {
     }
   };
 
-  // Calculate user steps based on height (average step length)
-  const calculateUserSteps = (heightCm: number, distanceMeters: number): number => {
-    // Average step length formula: height * 0.43 (in cm), converted to meters
-    const stepLengthMeters = (heightCm * 0.43) / 100;
-    return Math.round(distanceMeters / stepLengthMeters);
+  // Get stride length in inches based on height (from your provided data)
+  const getStrideLength = (feet: number, inches: number): number => {
+    const totalInches = (feet * 12) + inches;
+    
+    // Based on your stride data table
+    if (totalInches <= 60) return 25; // 5'0"
+    if (totalInches <= 61) return 25; // 5'1"
+    if (totalInches <= 62) return 26; // 5'2"
+    if (totalInches <= 63) return 26; // 5'3"
+    if (totalInches <= 64) return 26; // 5'4"
+    if (totalInches <= 65) return 27; // 5'5"
+    if (totalInches <= 66) return 27; // 5'6"
+    if (totalInches <= 67) return 28; // 5'7"
+    if (totalInches <= 68) return 28; // 5'8"
+    if (totalInches <= 69) return 28; // 5'9"
+    if (totalInches <= 70) return 29; // 5'10"
+    if (totalInches <= 71) return 29; // 5'11"
+    if (totalInches <= 72) return 30; // 6'0"
+    if (totalInches <= 73) return 30; // 6'1"
+    if (totalInches <= 74) return 31; // 6'2"
+    if (totalInches <= 75) return 31; // 6'3"
+    if (totalInches <= 76) return 31; // 6'4"
+    if (totalInches <= 77) return 32; // 6'5"
+    return 32; // 6'5"+
+  };
+
+  // Calculate user steps based on actual stride data
+  const calculateUserSteps = (distanceMeters: number): number => {
+    const strideInches = getStrideLength(userFeet, userInches);
+    const strideMeters = strideInches * 0.0254; // Convert inches to meters
+    return Math.round(distanceMeters / strideMeters);
   };
 
   const metersToYards = (meters: number): number => {
@@ -114,6 +141,11 @@ export default function StrideCalculator() {
   // Get horse height in cm from feet and inches inputs
   const getHorseHeightCm = (): number => {
     return feetInchesToCm(horseFeet, horseInches);
+  };
+
+  // Get user height in cm from feet and inches inputs
+  const getUserHeightCm = (): number => {
+    return feetInchesToCm(userFeet, userInches);
   };
 
   // Determine horse size category based on height in cm
@@ -146,7 +178,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
         
         let notes = getNotesForDistanceType(distanceType);
 
@@ -168,7 +200,7 @@ export default function StrideCalculator() {
         if (poleToFenceData) {
           const distanceMeters = poleToFenceData.distance;
           const distanceYards = metersToYards(distanceMeters);
-          const userSteps = calculateUserSteps(userHeight, distanceMeters);
+          const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
           
           calculations.push({
             distanceYards,
@@ -186,7 +218,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
         
         calculations.push({
           distanceYards,
@@ -203,7 +235,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
         
         calculations.push({
           distanceYards,
@@ -220,7 +252,7 @@ export default function StrideCalculator() {
         if (data.distance && data.description) {
           const distanceMeters = data.distance;
           const distanceYards = metersToYards(distanceMeters);
-          const userSteps = calculateUserSteps(userHeight, distanceMeters);
+          const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
           
           calculations.push({
             distanceYards,
@@ -262,7 +294,7 @@ export default function StrideCalculator() {
       if (data.distance && data.description) {
         const distanceMeters = data.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
         
         let notes = getNotesForDistanceType(distanceType);
 
@@ -307,16 +339,33 @@ export default function StrideCalculator() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="user-height">Your Height (cm)</Label>
-                <Input
-                  id="user-height"
-                  type="number"
-                  value={userHeight}
-                  onChange={(e) => setUserHeight(Number(e.target.value))}
-                  placeholder="170"
-                  min="140"
-                  max="220"
-                />
+                <Label htmlFor="user-height">Your Height</Label>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input
+                      id="user-feet"
+                      type="number"
+                      value={userFeet}
+                      onChange={(e) => setUserFeet(Number(e.target.value))}
+                      placeholder="5"
+                      min="4"
+                      max="7"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Feet</p>
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      id="user-inches"
+                      type="number"
+                      value={userInches}
+                      onChange={(e) => setUserInches(Number(e.target.value))}
+                      placeholder="8"
+                      min="0"
+                      max="11"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Inches</p>
+                  </div>
+                </div>
                 <p className="text-sm text-gray-500">
                   Used to calculate your personal step count
                 </p>
