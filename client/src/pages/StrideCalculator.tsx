@@ -24,7 +24,7 @@ interface StrideCalculation {
 export default function StrideCalculator() {
   const [userFeet, setUserFeet] = useState<number>(5);
   const [userInches, setUserInches] = useState<number>(8);
-  const [horseFeet, setHorseFeet] = useState<number>(16);
+  const [horseHands, setHorseHands] = useState<number>(16);
   const [horseInches, setHorseInches] = useState<number>(0);
   const [distanceType, setDistanceType] = useState<DistanceType>("trot-poles");
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
@@ -138,9 +138,10 @@ export default function StrideCalculator() {
     return Math.round(totalInches * 2.54);
   };
 
-  // Get horse height in cm from feet and inches inputs
+  // Get horse height in cm from hands and inches inputs
   const getHorseHeightCm = (): number => {
-    return feetInchesToCm(horseFeet, horseInches);
+    const totalInches = (horseHands * 4) + horseInches; // 1 hand = 4 inches
+    return Math.round(totalInches * 2.54); // Convert to cm
   };
 
   // Get user height in cm from feet and inches inputs
@@ -176,12 +177,7 @@ export default function StrideCalculator() {
     const horseHeightCm = getHorseHeightCm();
     const horseSizeCategory = getHorseSizeFromHeight(horseHeightCm);
 
-    // Debug logging
-    console.log("Horse feet:", horseFeet, "inches:", horseInches);
-    console.log("Horse height cm:", horseHeightCm);
-    console.log("Horse size category:", horseSizeCategory);
-    console.log("Distance type:", distanceType);
-    console.log("Available distances:", Object.keys(distances));
+
 
     if (distanceType === "course-distances") {
       // For course distances, filter by stride count and horse size
@@ -409,15 +405,15 @@ export default function StrideCalculator() {
                 <div className="flex gap-2">
                   <div className="flex-1">
                     <Input
-                      id="horse-feet"
+                      id="horse-hands"
                       type="number"
-                      value={horseFeet}
-                      onChange={(e) => setHorseFeet(Number(e.target.value))}
+                      value={horseHands}
+                      onChange={(e) => setHorseHands(Number(e.target.value))}
                       placeholder="16"
                       min="10"
                       max="18"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Feet</p>
+                    <p className="text-xs text-gray-500 mt-1">Hands</p>
                   </div>
                   <div className="flex-1">
                     <Input
