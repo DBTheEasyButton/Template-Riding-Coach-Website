@@ -428,40 +428,40 @@ export default function CompetitionChecklists() {
                           }
                           return (
                             <div key={categoryKey} className="space-y-3">
-                            <h3 className="text-xl font-playfair font-bold text-navy border-b border-gray-200 pb-2">
-                              {categoryKey}
-                            </h3>
-                            <div className="space-y-2">
-                              {(tasks as any[]).map((task) => (
-                                <div
-                                  key={task.id}
-                                  className={`p-3 border rounded-lg ${getPriorityColor(task.priority)} ${
-                                    task.completed ? 'opacity-60' : ''
-                                  }`}
-                                >
-                                  <div className="flex items-center space-x-3">
-                                    <Checkbox
-                                      checked={task.completed}
-                                      onCheckedChange={(checked) => 
-                                        handleTaskToggle(selectedChecklist.id, categoryKey, task.id, !!checked)
-                                      }
-                                    />
-                                    <div className="flex-1">
-                                      <div className="flex items-center space-x-2">
-                                        {getPriorityIcon(task.priority)}
-                                        <span className={`${task.completed ? 'line-through' : ''}`}>
-                                          {task.task}
-                                        </span>
+                              <h3 className="text-xl font-playfair font-bold text-navy border-b border-gray-200 pb-2">
+                                {categoryKey}
+                              </h3>
+                              <div className="space-y-2">
+                                {(tasks as any[]).map((task) => (
+                                  <div
+                                    key={task.id}
+                                    className={`p-3 border rounded-lg ${getPriorityColor(task.priority)} ${
+                                      task.completed ? 'opacity-60' : ''
+                                    }`}
+                                  >
+                                    <div className="flex items-center space-x-3">
+                                      <Checkbox
+                                        checked={task.completed}
+                                        onCheckedChange={(checked) => 
+                                          handleTaskToggle(selectedChecklist.id, categoryKey, task.id, !!checked)
+                                        }
+                                      />
+                                      <div className="flex-1">
+                                        <div className="flex items-center space-x-2">
+                                          {getPriorityIcon(task.priority)}
+                                          <span className={`${task.completed ? 'line-through' : ''}`}>
+                                            {task.task}
+                                          </span>
+                                        </div>
                                       </div>
+                                      <Badge variant="outline" className="text-xs capitalize">
+                                        {task.priority}
+                                      </Badge>
                                     </div>
-                                    <Badge variant="outline" className="text-xs capitalize">
-                                      {task.priority}
-                                    </Badge>
                                   </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
-                          </div>
                           );
                         })}
                       </div>
