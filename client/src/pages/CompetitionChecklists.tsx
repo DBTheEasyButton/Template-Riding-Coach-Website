@@ -380,7 +380,12 @@ export default function CompetitionChecklists() {
                 <CardHeader className="bg-gradient-to-r from-navy to-blue-800 text-white">
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle className="text-2xl mb-2">{selectedChecklist.competitionName}</CardTitle>
+                      <CardTitle className="text-2xl mb-2">{selectedChecklist.competitionName || 'Training Competition'}</CardTitle>
+                      {selectedChecklist.discipline && (
+                        <div className="text-lg text-blue-100 mb-2 capitalize">
+                          {selectedChecklist.discipline} - {selectedChecklist.competitionType}
+                        </div>
+                      )}
                       <div className="flex flex-wrap gap-4 text-blue-100">
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-1" />
@@ -388,7 +393,7 @@ export default function CompetitionChecklists() {
                         </div>
                         <div className="flex items-center">
                           <MapPin className="w-4 h-4 mr-1" />
-                          {selectedChecklist.location}
+                          {selectedChecklist.location || 'Location TBC'}
                         </div>
                         {selectedChecklist.horseName && (
                           <div className="flex items-center">
