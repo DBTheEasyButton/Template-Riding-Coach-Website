@@ -178,7 +178,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
+        const userSteps = calculateUserSteps(distanceMeters);
         
         let notes = getNotesForDistanceType(distanceType);
 
@@ -200,7 +200,7 @@ export default function StrideCalculator() {
         if (poleToFenceData) {
           const distanceMeters = poleToFenceData.distance;
           const distanceYards = metersToYards(distanceMeters);
-          const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
+          const userSteps = calculateUserSteps(distanceMeters);
           
           calculations.push({
             distanceYards,
@@ -218,7 +218,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
+        const userSteps = calculateUserSteps(distanceMeters);
         
         calculations.push({
           distanceYards,
@@ -235,7 +235,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
+        const userSteps = calculateUserSteps(distanceMeters);
         
         calculations.push({
           distanceYards,
@@ -252,7 +252,7 @@ export default function StrideCalculator() {
         if (data.distance && data.description) {
           const distanceMeters = data.distance;
           const distanceYards = metersToYards(distanceMeters);
-          const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
+          const userSteps = calculateUserSteps(distanceMeters);
           
           calculations.push({
             distanceYards,
@@ -294,7 +294,7 @@ export default function StrideCalculator() {
       if (data.distance && data.description) {
         const distanceMeters = data.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(getUserHeightCm(), distanceMeters);
+        const userSteps = calculateUserSteps(distanceMeters);
         
         let notes = getNotesForDistanceType(distanceType);
 
