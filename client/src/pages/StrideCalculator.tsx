@@ -26,42 +26,42 @@ export default function StrideCalculator() {
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
 
-  // Standard distances in meters
+  // Standard distances in meters - Based on British Equestrian Federation guidelines
   const standardDistances = {
     "walk-poles": {
-      "standard": { distance: 0.8, description: "Walk poles - standard spacing" },
-      "extended": { distance: 1.0, description: "Walk poles - extended for long stride" },
-      "collected": { distance: 0.7, description: "Walk poles - collected for short stride" }
+      "collected": { distance: 0.8, description: "Walk poles - collected spacing" },
+      "standard": { distance: 0.9, description: "Walk poles - standard spacing" },
+      "extended": { distance: 1.0, description: "Walk poles - extended spacing" }
     },
     "trot-poles": {
-      "standard": { distance: 1.3, description: "Trot poles - standard spacing" },
-      "extended": { distance: 1.5, description: "Trot poles - extended for big stride" },
-      "collected": { distance: 1.1, description: "Trot poles - collected for small stride" },
-      "young-horse": { distance: 1.2, description: "Trot poles - suitable for young horses" }
+      "collected": { distance: 1.2, description: "Trot poles - collected for small stride" },
+      "standard": { distance: 1.4, description: "Trot poles - standard spacing" },
+      "extended": { distance: 1.6, description: "Trot poles - extended for big stride" },
+      "young-horse": { distance: 1.3, description: "Trot poles - suitable for young horses" }
     },
     "canter-poles": {
-      "bounce": { distance: 2.7, description: "Canter poles - bounce spacing" },
-      "1-stride": { distance: 5.5, description: "Canter poles - one stride apart" },
-      "2-stride": { distance: 8.2, description: "Canter poles - two strides apart" },
-      "3-stride": { distance: 11.0, description: "Canter poles - three strides apart" },
-      "4-stride": { distance: 13.7, description: "Canter poles - four strides apart" }
+      "bounce": { distance: 3.0, description: "Canter poles - bounce spacing" },
+      "1-stride": { distance: 6.0, description: "Canter poles - one stride apart" },
+      "2-stride": { distance: 9.0, description: "Canter poles - two strides apart" },
+      "3-stride": { distance: 12.0, description: "Canter poles - three strides apart" },
+      "4-stride": { distance: 15.0, description: "Canter poles - four strides apart" }
     },
     "gridwork": {
-      "bounce": { distance: 3.6, description: "Grid bounce - pole to small jump or jump to jump" },
-      "1-stride": { distance: 7.0, description: "Grid one stride - pole to jump or jump to jump" },
-      "2-stride": { distance: 10.4, description: "Grid two strides - between jumps" },
-      "3-stride": { distance: 13.7, description: "Grid three strides - between jumps" },
-      "4-stride": { distance: 17.1, description: "Grid four strides - between jumps" },
-      "5-stride": { distance: 20.4, description: "Grid five strides - between jumps" },
-      "6-stride": { distance: 23.8, description: "Grid six strides - between jumps" }
+      "bounce": { distance: 3.5, description: "Grid bounce - pole to small jump (60cm) or jump to jump" },
+      "1-stride": { distance: 7.3, description: "Grid one stride - between 80cm jumps" },
+      "2-stride": { distance: 10.7, description: "Grid two strides - between 90cm jumps" },
+      "3-stride": { distance: 14.0, description: "Grid three strides - between 1m jumps" },
+      "4-stride": { distance: 17.4, description: "Grid four strides - between 1.10m jumps" },
+      "5-stride": { distance: 20.7, description: "Grid five strides - between larger jumps" },
+      "6-stride": { distance: 24.0, description: "Grid six strides - between larger jumps" }
     },
     "course-distances": {
-      "1-stride": { distance: 24.0, description: "Course - one galloping stride" },
-      "2-stride": { distance: 35.0, description: "Course - two galloping strides" },
-      "3-stride": { distance: 46.0, description: "Course - three galloping strides" },
-      "4-stride": { distance: 57.0, description: "Course - four galloping strides" },
-      "5-stride": { distance: 68.0, description: "Course - five galloping strides" },
-      "6-stride": { distance: 79.0, description: "Course - six galloping strides" }
+      "1-stride": { distance: 24.4, description: "Course - one galloping stride (related distance)" },
+      "2-stride": { distance: 35.0, description: "Course - two galloping strides (related distance)" },
+      "3-stride": { distance: 45.7, description: "Course - three galloping strides (related distance)" },
+      "4-stride": { distance: 56.4, description: "Course - four galloping strides (related distance)" },
+      "5-stride": { distance: 67.1, description: "Course - five galloping strides (related distance)" },
+      "6-stride": { distance: 77.7, description: "Course - six galloping strides (related distance)" }
     }
   };
 
