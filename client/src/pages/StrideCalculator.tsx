@@ -125,7 +125,12 @@ export default function StrideCalculator() {
   const calculateUserSteps = (distanceMeters: number): number => {
     const strideInches = getStrideLength(userFeet, userInches);
     const strideMeters = strideInches * 0.0254; // Convert inches to meters
-    return Math.round(distanceMeters / strideMeters);
+    const steps = Math.round(distanceMeters / strideMeters);
+    
+    // Debug logging
+    console.log(`Height: ${userFeet}'${userInches}", Stride: ${strideInches}in, Distance: ${distanceMeters}m, Steps: ${steps}`);
+    
+    return steps;
   };
 
   const metersToYards = (meters: number): number => {
