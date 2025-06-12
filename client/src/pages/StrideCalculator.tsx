@@ -408,7 +408,7 @@ export default function StrideCalculator() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500">
-                  16.0hh, 15.2hh, 14.2hh, 13.2hh, 12.2hh
+                  Enter your horse's exact height for accurate pole spacing
                 </p>
               </div>
 
