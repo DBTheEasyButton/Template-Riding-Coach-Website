@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Calculator, Ruler, Users, Info } from "lucide-react";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
-type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride";
+type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";
+type HorseSize = "horses" | "14-2" | "13-2" | "12-2";
 
 interface StrideCalculation {
   distanceYards: number;
@@ -22,6 +23,7 @@ interface StrideCalculation {
 
 export default function StrideCalculator() {
   const [userHeight, setUserHeight] = useState<number>(170);
+  const [horseHeight, setHorseHeight] = useState<number>(163); // 16hh in cm
   const [distanceType, setDistanceType] = useState<DistanceType>("trot-poles");
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
@@ -60,12 +62,34 @@ export default function StrideCalculator() {
       "6-stride": { distance: 24.0, description: "Grid six strides - between larger jumps" }
     },
     "course-distances": {
-      "1-stride": { distance: 24.4, description: "Course - one galloping stride (related distance)" },
-      "2-stride": { distance: 35.0, description: "Course - two galloping strides (related distance)" },
-      "3-stride": { distance: 45.7, description: "Course - three galloping strides (related distance)" },
-      "4-stride": { distance: 56.4, description: "Course - four galloping strides (related distance)" },
-      "5-stride": { distance: 67.1, description: "Course - five galloping strides (related distance)" },
-      "6-stride": { distance: 77.7, description: "Course - six galloping strides (related distance)" }
+      "1-stride-horses": { distance: 6.5, description: "1 stride - horses (6.00-7.00m)" },
+      "1-stride-14-2": { distance: 6.4, description: "1 stride - 14'2hh ponies (5.90-6.90m)" },
+      "1-stride-13-2": { distance: 6.05, description: "1 stride - 13'2hh ponies (5.70-6.40m)" },
+      "1-stride-12-2": { distance: 5.5, description: "1 stride - 12'2hh ponies (5.20-5.80m)" },
+      "2-stride-horses": { distance: 9.85, description: "2 strides - horses (9.50-10.20m)" },
+      "2-stride-14-2": { distance: 9.7, description: "2 strides - 14'2hh ponies (9.40-10.00m)" },
+      "2-stride-13-2": { distance: 8.9, description: "2 strides - 13'2hh ponies (8.60-9.20m)" },
+      "2-stride-12-2": { distance: 7.95, description: "2 strides - 12'2hh ponies (7.70-8.20m)" },
+      "3-stride-horses": { distance: 14.25, description: "3 strides - horses (13.50-15.00m)" },
+      "3-stride-14-2": { distance: 13.25, description: "3 strides - 14'2hh ponies (12.50-14.00m)" },
+      "3-stride-13-2": { distance: 12.25, description: "3 strides - 13'2hh ponies (11.50-13.00m)" },
+      "3-stride-12-2": { distance: 11.25, description: "3 strides - 12'2hh ponies (10.50-12.00m)" },
+      "4-stride-horses": { distance: 17.75, description: "4 strides - horses (17.00-18.50m)" },
+      "4-stride-14-2": { distance: 16.35, description: "4 strides - 14'2hh ponies (15.70-17.00m)" },
+      "4-stride-13-2": { distance: 15.25, description: "4 strides - 13'2hh ponies (14.50-16.00m)" },
+      "4-stride-12-2": { distance: 13.75, description: "4 strides - 12'2hh ponies (13.00-14.50m)" },
+      "5-stride-horses": { distance: 21.5, description: "5 strides - horses (20.50-22.50m)" },
+      "5-stride-14-2": { distance: 19.75, description: "5 strides - 14'2hh ponies (19.00-20.50m)" },
+      "5-stride-13-2": { distance: 18.25, description: "5 strides - 13'2hh ponies (17.50-19.00m)" },
+      "5-stride-12-2": { distance: 16.6, description: "5 strides - 12'2hh ponies (15.70-17.50m)" },
+      "6-stride-horses": { distance: 24.75, description: "6 strides - horses (23.50-26.00m)" },
+      "6-stride-14-2": { distance: 22.75, description: "6 strides - 14'2hh ponies (22.00-23.50m)" },
+      "6-stride-13-2": { distance: 21.0, description: "6 strides - 13'2hh ponies (20.00-22.00m)" },
+      "6-stride-12-2": { distance: 19.75, description: "6 strides - 12'2hh ponies (19.00-20.50m)" },
+      "7-stride-horses": { distance: 28.5, description: "7 strides - horses (27.00-30.00m)" },
+      "7-stride-14-2": { distance: 26.0, description: "7 strides - 14'2hh ponies (25.00-27.00m)" },
+      "7-stride-13-2": { distance: 24.0, description: "7 strides - 13'2hh ponies (23.00-25.00m)" },
+      "7-stride-12-2": { distance: 22.0, description: "7 strides - 12'2hh ponies (21.00-23.00m)" }
     }
   };
 
@@ -80,17 +104,32 @@ export default function StrideCalculator() {
     return Math.round(meters * 1.094 * 10) / 10; // Convert and round to 1 decimal
   };
 
+  // Determine horse size category based on height in cm
+  const getHorseSizeFromHeight = (heightCm: number): HorseSize => {
+    if (heightCm < 128) return "12-2"; // Under 12.2hh
+    if (heightCm < 138) return "12-2"; // 12.2hh (128cm)
+    if (heightCm < 148) return "13-2"; // 13.2hh (138cm)
+    if (heightCm < 158) return "14-2"; // 14.2hh (148cm)
+    return "horses"; // 15hh and above
+  };
+
   const needsStrideSelection = () => {
     return distanceType === "canter-poles" || distanceType === "gridwork" || distanceType === "course-distances";
+  };
+
+  const needsHorseSizeSelection = () => {
+    return distanceType === "gridwork" || distanceType === "course-distances";
   };
 
   const calculateDistances = () => {
     const calculations: StrideCalculation[] = [];
     const distances = standardDistances[distanceType];
+    const horseSizeCategory = getHorseSizeFromHeight(horseHeight);
 
-    if (needsStrideSelection()) {
-      // For exercises that need stride selection, only show selected stride
-      const selectedData = distances[strideCount as keyof typeof distances] as any;
+    if (distanceType === "course-distances") {
+      // For course distances, filter by stride count and horse size
+      const keyPattern = `${strideCount}-${horseSizeCategory}`;
+      const selectedData = distances[keyPattern as keyof typeof distances] as any;
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
@@ -107,6 +146,61 @@ export default function StrideCalculator() {
           exerciseType: distanceType
         });
       }
+    } else if (distanceType === "gridwork") {
+      // For gridwork, show both horse size specific pole-to-fence and stride-based exercises
+      if (strideCount === "bounce") {
+        // Show pole-to-fence distances for horse size based on height
+        const poleToFenceKey = `pole-to-fence-${horseSizeCategory}`;
+        const poleToFenceData = distances[poleToFenceKey as keyof typeof distances] as any;
+        if (poleToFenceData) {
+          const distanceMeters = poleToFenceData.distance;
+          const distanceYards = metersToYards(distanceMeters);
+          const userSteps = calculateUserSteps(userHeight, distanceMeters);
+          
+          calculations.push({
+            distanceYards,
+            distanceMeters,
+            userSteps,
+            description: poleToFenceData.description,
+            notes: getNotesForDistanceType(distanceType),
+            exerciseType: distanceType
+          });
+        }
+      }
+      
+      // Show standard gridwork distance for selected stride
+      const selectedData = distances[strideCount as keyof typeof distances] as any;
+      if (selectedData && selectedData.distance && selectedData.description) {
+        const distanceMeters = selectedData.distance;
+        const distanceYards = metersToYards(distanceMeters);
+        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        
+        calculations.push({
+          distanceYards,
+          distanceMeters,
+          userSteps,
+          description: selectedData.description,
+          notes: getNotesForDistanceType(distanceType),
+          exerciseType: distanceType
+        });
+      }
+    } else if (needsStrideSelection()) {
+      // For canter poles
+      const selectedData = distances[strideCount as keyof typeof distances] as any;
+      if (selectedData && selectedData.distance && selectedData.description) {
+        const distanceMeters = selectedData.distance;
+        const distanceYards = metersToYards(distanceMeters);
+        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        
+        calculations.push({
+          distanceYards,
+          distanceMeters,
+          userSteps,
+          description: selectedData.description,
+          notes: getNotesForDistanceType(distanceType),
+          exerciseType: distanceType
+        });
+      }
     } else {
       // For walk/trot poles, show all variations
       Object.entries(distances as any).forEach(([key, data]: [string, any]) => {
@@ -115,14 +209,12 @@ export default function StrideCalculator() {
           const distanceYards = metersToYards(distanceMeters);
           const userSteps = calculateUserSteps(userHeight, distanceMeters);
           
-          let notes = getNotesForDistanceType(distanceType);
-
           calculations.push({
             distanceYards,
             distanceMeters,
             userSteps,
             description: data.description,
-            notes,
+            notes: getNotesForDistanceType(distanceType),
             exerciseType: distanceType
           });
         }
@@ -202,9 +294,9 @@ export default function StrideCalculator() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="height">Your Height (cm)</Label>
+                <Label htmlFor="user-height">Your Height (cm)</Label>
                 <Input
-                  id="height"
+                  id="user-height"
                   type="number"
                   value={userHeight}
                   onChange={(e) => setUserHeight(Number(e.target.value))}
@@ -214,6 +306,22 @@ export default function StrideCalculator() {
                 />
                 <p className="text-sm text-gray-500">
                   Used to calculate your personal step count
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="horse-height">Horse Height (cm)</Label>
+                <Input
+                  id="horse-height"
+                  type="number"
+                  value={horseHeight}
+                  onChange={(e) => setHorseHeight(Number(e.target.value))}
+                  placeholder="163"
+                  min="120"
+                  max="190"
+                />
+                <p className="text-sm text-gray-500">
+                  16hh = 163cm, 15hh = 152cm, 14.2hh = 148cm, 13.2hh = 138cm
                 </p>
               </div>
 
