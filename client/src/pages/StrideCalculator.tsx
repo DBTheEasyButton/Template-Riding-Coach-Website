@@ -10,7 +10,7 @@ import { Calculator, Ruler, Users, Info } from "lucide-react";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
 type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";
-type HorseSize = "horses" | "14-2" | "13-2" | "12-2";
+type HorseSize = "small-pony" | "big-pony" | "small-horse" | "big-horse";
 
 interface StrideCalculation {
   distanceYards: number;
@@ -30,25 +30,25 @@ export default function StrideCalculator() {
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
 
-  // Standard distances in meters - Based on British Equestrian Federation guidelines
+  // Standard distances in meters - Dan Bizzarro Method official guidelines
   const standardDistances = {
     "walk-poles": {
-      "collected": { distance: 0.8, description: "Walk poles - collected spacing" },
-      "standard": { distance: 0.9, description: "Walk poles - standard spacing" },
-      "extended": { distance: 1.0, description: "Walk poles - extended spacing" }
+      "small-pony": { distance: 0.825, description: "Walk poles - small pony (<13hh): 0.75-0.9m" },
+      "big-pony": { distance: 1.0, description: "Walk poles - big pony (13-14.2hh): 0.9-1.1m" },
+      "small-horse": { distance: 1.1, description: "Walk poles - small horse (14.3-16hh): 1.0-1.2m" },
+      "big-horse": { distance: 1.25, description: "Walk poles - big horse (16.1hh+): 1.1-1.4m" }
     },
     "trot-poles": {
-      "horses": { distance: 1.4, description: "Trot poles - horses (1.2-1.6m range)" },
-      "14-2": { distance: 1.3, description: "Trot poles - 14'2hh ponies (1.1-1.5m range)" },
-      "13-2": { distance: 1.2, description: "Trot poles - 13'2hh ponies (1.0-1.4m range)" },
-      "12-2": { distance: 1.1, description: "Trot poles - 12'2hh ponies (0.9-1.3m range)" }
+      "small-pony": { distance: 1.1, description: "Trot poles - small pony (<13hh): 1.0-1.2m" },
+      "big-pony": { distance: 1.275, description: "Trot poles - big pony (13-14.2hh): 1.2-1.35m" },
+      "small-horse": { distance: 1.35, description: "Trot poles - small horse (14.3-16hh): 1.25-1.45m" },
+      "big-horse": { distance: 1.475, description: "Trot poles - big horse (16.1hh+): 1.35-1.6m" }
     },
     "canter-poles": {
-      "bounce": { distance: 3.0, description: "Canter poles - bounce spacing" },
-      "1-stride": { distance: 6.0, description: "Canter poles - one stride apart" },
-      "2-stride": { distance: 9.0, description: "Canter poles - two strides apart" },
-      "3-stride": { distance: 12.0, description: "Canter poles - three strides apart" },
-      "4-stride": { distance: 15.0, description: "Canter poles - four strides apart" }
+      "small-pony": { distance: 2.4, description: "Canter poles - small pony (<13hh): 2.1-2.7m" },
+      "big-pony": { distance: 2.7, description: "Canter poles - big pony (13-14.2hh): 2.4-3.0m" },
+      "small-horse": { distance: 3.0, description: "Canter poles - small horse (14.3-16hh): 2.7-3.3m" },
+      "big-horse": { distance: 3.3, description: "Canter poles - big horse (16.1hh+): 3.0-3.6m" }
     },
     "gridwork": {
       "pole-to-fence-horses": { distance: 3.15, description: "Canter pole to fence - horses (2.80-3.50m average)" },
@@ -149,13 +149,12 @@ export default function StrideCalculator() {
     return feetInchesToCm(userFeet, userInches);
   };
 
-  // Determine horse size category based on height in cm
+  // Determine horse size category based on height in cm - Dan Bizzarro Method
   const getHorseSizeFromHeight = (heightCm: number): HorseSize => {
-    if (heightCm < 128) return "12-2"; // Under 12.2hh
-    if (heightCm < 138) return "12-2"; // 12.2hh (128cm) 
-    if (heightCm < 148) return "13-2"; // 13.2hh (138cm)
-    if (heightCm < 158) return "14-2"; // 14.2hh (148cm)
-    return "horses"; // 15hh and above
+    if (heightCm < 132) return "small-pony"; // Under 13hh (132cm)
+    if (heightCm < 149) return "big-pony"; // 13-14.2hh (132-148cm)
+    if (heightCm < 165) return "small-horse"; // 14.3-16hh (149-164cm)
+    return "big-horse"; // 16.1hh+ (165cm+)
   };
 
   // Get appropriate trot pole key based on horse size
@@ -164,7 +163,7 @@ export default function StrideCalculator() {
   };
 
   const needsStrideSelection = () => {
-    return distanceType === "canter-poles" || distanceType === "gridwork" || distanceType === "course-distances";
+    return distanceType === "gridwork" || distanceType === "course-distances";
   };
 
   const needsHorseSizeSelection = () => {
@@ -255,11 +254,9 @@ export default function StrideCalculator() {
         });
       }
     } else {
-      // For walk poles, show all variations; for trot poles, use horse size
-      if (distanceType === "trot-poles") {
-        // Use horse size category for trot poles
-        const trotPoleKey = getTrotPoleKey(horseSizeCategory);
-        const selectedData = distances[trotPoleKey as keyof typeof distances] as any;
+      // For walk, trot, and canter poles, use horse size category
+      if (distanceType === "walk-poles" || distanceType === "trot-poles" || distanceType === "canter-poles") {
+        const selectedData = distances[horseSizeCategory as keyof typeof distances] as any;
         if (selectedData && selectedData.distance && selectedData.description) {
           const distanceMeters = selectedData.distance;
           const distanceYards = metersToYards(distanceMeters);
@@ -274,24 +271,6 @@ export default function StrideCalculator() {
             exerciseType: distanceType
           });
         }
-      } else {
-        // For walk poles, show all variations
-        Object.entries(distances as any).forEach(([key, data]: [string, any]) => {
-          if (data.distance && data.description) {
-            const distanceMeters = data.distance;
-            const distanceYards = metersToYards(distanceMeters);
-            const userSteps = calculateUserSteps(distanceMeters);
-            
-            calculations.push({
-              distanceYards,
-              distanceMeters,
-              userSteps,
-              description: data.description,
-              notes: getNotesForDistanceType(distanceType),
-              exerciseType: distanceType
-            });
-          }
-        });
       }
     }
 
