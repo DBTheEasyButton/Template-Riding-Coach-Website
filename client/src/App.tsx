@@ -7,6 +7,7 @@ import Home from "@/pages/Home";
 import TermsAndConditions from "@/pages/TermsAndConditions";
 import Loyalty from "@/pages/Loyalty";
 import CompetitionChecklists from "@/pages/CompetitionChecklists";
+import StrideCalculator from "@/pages/StrideCalculator";
 import AdminClinics from "@/pages/AdminClinics";
 import AdminContacts from "@/pages/AdminContacts";
 import AdminEmailMarketing from "@/pages/AdminEmailMarketing";
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/terms-and-conditions" component={TermsAndConditions} />
       <Route path="/loyalty" component={Loyalty} />
       <Route path="/competition-checklists" component={CompetitionChecklists} />
+      <Route path="/stride-calculator" component={StrideCalculator} />
       <Route path="/admin/clinics" component={AdminClinics} />
       <Route path="/admin/contacts" component={AdminContacts} />
       <Route path="/admin/email-marketing" component={AdminEmailMarketing} />

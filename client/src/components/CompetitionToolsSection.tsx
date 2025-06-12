@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Calendar, Target, Clock } from "lucide-react";
+import { CheckCircle, Calendar, Target, Clock, Ruler, Calculator } from "lucide-react";
 
 export default function CompetitionToolsSection() {
   return (
@@ -15,7 +15,7 @@ export default function CompetitionToolsSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* One-Click Checklist Generator */}
           <Card className="bg-white border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader>
@@ -53,6 +53,48 @@ export default function CompetitionToolsSection() {
               <Link to="/competition-checklists">
                 <Button className="w-full bg-orange hover:bg-orange/90 text-white font-semibold">
                   Generate Your Checklist
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Stride Distance Calculator */}
+          <Card className="bg-white border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardHeader>
+              <div className="flex items-center mb-4">
+                <div className="p-3 bg-green-600 rounded-lg mr-4">
+                  <Ruler className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-navy text-xl">Stride Calculator</CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Precise distance measurements
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-700 mb-6">
+                Calculate exact distances for poles and jumps with measurements in yards, meters, 
+                and your personal step count based on your height.
+              </p>
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center text-sm text-gray-600">
+                  <Calculator className="w-4 h-4 mr-2 text-green-600" />
+                  Trotting poles & jumping gymnastics
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Target className="w-4 h-4 mr-2 text-green-600" />
+                  Course related distances
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Clock className="w-4 h-4 mr-2 text-green-600" />
+                  Personalized step counting
+                </div>
+              </div>
+              <Link to="/stride-calculator">
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold">
+                  Calculate Distances
                 </Button>
               </Link>
             </CardContent>
