@@ -1391,17 +1391,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/competition-checklists/generate", async (req, res) => {
     try {
-      const { competitionType, competitionName, competitionDate, location, horseName } = req.body;
+      const { discipline, competitionType, competitionName, competitionDate, location, horseName } = req.body;
       
-      if (!competitionType || !competitionName || !competitionDate || !location) {
-        return res.status(400).json({ message: "Competition details are required" });
+      if (!discipline || !competitionType) {
+        return res.status(400).json({ message: "Discipline and competition level are required" });
       }
 
       const checklist = await storage.generateChecklistForCompetition(
+        discipline,
         competitionType,
-        competitionName,
-        new Date(competitionDate),
-        location,
+        competitionName || "Training Competition",
+        competitionDate ? new Date(competitionDate) : new Date(),
+        location || "Local Venue",
         horseName
       );
       

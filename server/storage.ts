@@ -166,7 +166,7 @@ export interface IStorage {
   createCompetitionChecklist(checklist: InsertCompetitionChecklist): Promise<CompetitionChecklist>;
   updateCompetitionChecklist(id: number, updates: Partial<InsertCompetitionChecklist>): Promise<CompetitionChecklist | undefined>;
   deleteCompetitionChecklist(id: number): Promise<void>;
-  generateChecklistForCompetition(competitionType: string, competitionName: string, competitionDate: Date, location: string, horseName?: string): Promise<CompetitionChecklist>;
+  generateChecklistForCompetition(discipline: string, competitionType: string, competitionName: string, competitionDate: Date, location: string, horseName?: string): Promise<CompetitionChecklist>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1237,15 +1237,17 @@ The Dan Bizzarro Method Team`,
   }
 
   async generateChecklistForCompetition(
+    discipline: string,
     competitionType: string, 
     competitionName: string, 
     competitionDate: Date, 
     location: string, 
     horseName?: string
   ): Promise<CompetitionChecklist> {
-    const checklist = this.getChecklistTemplate(competitionType, competitionDate);
+    const checklist = this.getBeginnerChecklistTemplate(discipline, competitionType, competitionDate);
     
     const insertData: InsertCompetitionChecklist = {
+      discipline,
       competitionType,
       competitionName,
       competitionDate,
@@ -1256,6 +1258,95 @@ The Dan Bizzarro Method Team`,
     };
 
     return await this.createCompetitionChecklist(insertData);
+  }
+
+  private getBeginnerChecklistTemplate(discipline: string, competitionType: string, competitionDate: Date) {
+    const isFirstCompetition = competitionType.includes("My first ever");
+    
+    // Base checklist for all beginners with British terminology
+    let baseChecklist = {
+      "6-8 Weeks Before": [
+        { id: "entry_submission", task: "Submit competition entry online or by post", completed: false, priority: "high" },
+        { id: "insurance_check", task: "Check your insurance covers competition riding", completed: false, priority: "high" },
+        { id: "transport_arrangement", task: "Arrange horse transport (lorry or trailer)", completed: false, priority: "high" },
+        { id: "accommodation_booking", task: "Book B&B or hotel if travelling far", completed: false, priority: "medium" },
+      ],
+      "4-6 Weeks Before": [
+        { id: "fitness_program", task: "Build up horse's fitness with regular hacking", completed: false, priority: "high" },
+        { id: "equipment_check", task: "Check all tack and clean thoroughly", completed: false, priority: "medium" },
+        { id: "shoeing_schedule", task: "Book farrier for fresh shoes before competition", completed: false, priority: "medium" },
+        { id: "training_schedule", task: "Practice at home with instructor", completed: false, priority: "high" },
+      ],
+      "2-4 Weeks Before": [
+        { id: "competition_rules", task: "Read competition schedule and rules carefully", completed: false, priority: "high" },
+        { id: "course_preview", task: "Look at course plan if available online", completed: false, priority: "medium" },
+        { id: "nutrition_plan", task: "Ensure horse is on consistent feed routine", completed: false, priority: "medium" },
+        { id: "backup_equipment", task: "Pack spare stirrup leathers, reins, and girth", completed: false, priority: "low" },
+      ],
+      "1-2 Weeks Before": [
+        { id: "final_training", task: "Have final lesson with instructor", completed: false, priority: "high" },
+        { id: "equipment_packing", task: "Pack all equipment into stable bag or box", completed: false, priority: "high" },
+        { id: "travel_confirmation", task: "Confirm transport times and route", completed: false, priority: "high" },
+        { id: "emergency_contacts", task: "Have vet and farrier contact numbers ready", completed: false, priority: "medium" },
+      ],
+      "3-7 Days Before": [
+        { id: "competition_kit", task: "Lay out competition clothes and check boots", completed: false, priority: "high" },
+        { id: "horse_condition", task: "Check horse is sound and healthy", completed: false, priority: "high" },
+        { id: "times_check", task: "Check your competition times online", completed: false, priority: "high" },
+        { id: "stable_preparation", task: "Prepare stable with water buckets and hay nets", completed: false, priority: "medium" },
+      ],
+      "Competition Day": [
+        { id: "early_arrival", task: "Arrive 2 hours before your first class", completed: false, priority: "high" },
+        { id: "horse_warmup", task: "Allow 45 minutes for warming up", completed: false, priority: "high" },
+        { id: "equipment_final_check", task: "Check all tack is secure and clean", completed: false, priority: "high" },
+        { id: "course_walk", task: "Walk the course or arena carefully", completed: false, priority: "high" },
+        { id: "stay_calm", task: "Take deep breaths and enjoy the experience", completed: false, priority: "medium" },
+      ]
+    };
+
+    // Add discipline-specific tasks
+    if (discipline === "dressage") {
+      baseChecklist["2-4 Weeks Before"].push(
+        { id: "test_practice", task: "Practice your dressage test at home", completed: false, priority: "high" },
+        { id: "test_memorize", task: "Learn your test by heart", completed: false, priority: "high" }
+      );
+      baseChecklist["Competition Day"].push(
+        { id: "test_final_check", task: "Have one final read through your test", completed: false, priority: "medium" }
+      );
+    }
+
+    if (discipline === "showjumping") {
+      baseChecklist["4-6 Weeks Before"].push(
+        { id: "jumping_practice", task: "Practice jumping similar height fences", completed: false, priority: "high" }
+      );
+      baseChecklist["Competition Day"].push(
+        { id: "jump_heights", task: "Check the jump heights in warm-up", completed: false, priority: "medium" }
+      );
+    }
+
+    if (discipline === "eventing") {
+      baseChecklist["4-6 Weeks Before"].push(
+        { id: "cross_country_practice", task: "Practice over cross country fences", completed: false, priority: "high" },
+        { id: "fitness_building", task: "Build stamina with canter work", completed: false, priority: "high" }
+      );
+      baseChecklist["Competition Day"].push(
+        { id: "phase_timing", task: "Check timings for all three phases", completed: false, priority: "high" },
+        { id: "studs_check", task: "Put in road studs for cross country if needed", completed: false, priority: "medium" }
+      );
+    }
+
+    // Add extra support for first-time competitors
+    if (isFirstCompetition) {
+      baseChecklist["2-4 Weeks Before"].push(
+        { id: "visit_venue", task: "Visit the venue beforehand to familiarize yourself", completed: false, priority: "medium" },
+        { id: "support_person", task: "Arrange for experienced friend to help you", completed: false, priority: "high" }
+      );
+      baseChecklist["Competition Day"].push(
+        { id: "photo_opportunity", task: "Remember to take photos of your first competition!", completed: false, priority: "low" }
+      );
+    }
+
+    return baseChecklist;
   }
 
   private getChecklistTemplate(competitionType: string, competitionDate: Date) {
