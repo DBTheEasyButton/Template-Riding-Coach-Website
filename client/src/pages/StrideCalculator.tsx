@@ -38,10 +38,10 @@ export default function StrideCalculator() {
       "extended": { distance: 1.0, description: "Walk poles - extended spacing" }
     },
     "trot-poles": {
-      "collected": { distance: 1.2, description: "Trot poles - collected for small stride" },
-      "standard": { distance: 1.4, description: "Trot poles - standard spacing" },
-      "extended": { distance: 1.6, description: "Trot poles - extended for big stride" },
-      "young-horse": { distance: 1.3, description: "Trot poles - suitable for young horses" }
+      "horses": { distance: 1.4, description: "Trot poles - horses (1.2-1.6m range)" },
+      "14-2": { distance: 1.3, description: "Trot poles - 14'2hh ponies (1.1-1.5m range)" },
+      "13-2": { distance: 1.2, description: "Trot poles - 13'2hh ponies (1.0-1.4m range)" },
+      "12-2": { distance: 1.1, description: "Trot poles - 12'2hh ponies (0.9-1.3m range)" }
     },
     "canter-poles": {
       "bounce": { distance: 3.0, description: "Canter poles - bounce spacing" },
@@ -247,10 +247,12 @@ export default function StrideCalculator() {
         });
       }
     } else {
-      // For walk/trot poles, show all variations
-      Object.entries(distances as any).forEach(([key, data]: [string, any]) => {
-        if (data.distance && data.description) {
-          const distanceMeters = data.distance;
+      // For walk poles, show all variations; for trot poles, use horse size
+      if (distanceType === "trot-poles") {
+        // Use horse size category for trot poles
+        const selectedData = distances[horseSizeCategory as keyof typeof distances] as any;
+        if (selectedData && selectedData.distance && selectedData.description) {
+          const distanceMeters = selectedData.distance;
           const distanceYards = metersToYards(distanceMeters);
           const userSteps = calculateUserSteps(distanceMeters);
           
@@ -258,12 +260,30 @@ export default function StrideCalculator() {
             distanceYards,
             distanceMeters,
             userSteps,
-            description: data.description,
+            description: selectedData.description,
             notes: getNotesForDistanceType(distanceType),
             exerciseType: distanceType
           });
         }
-      });
+      } else {
+        // For walk poles, show all variations
+        Object.entries(distances as any).forEach(([key, data]: [string, any]) => {
+          if (data.distance && data.description) {
+            const distanceMeters = data.distance;
+            const distanceYards = metersToYards(distanceMeters);
+            const userSteps = calculateUserSteps(distanceMeters);
+            
+            calculations.push({
+              distanceYards,
+              distanceMeters,
+              userSteps,
+              description: data.description,
+              notes: getNotesForDistanceType(distanceType),
+              exerciseType: distanceType
+            });
+          }
+        });
+      }
     }
 
     setResults(calculations);
