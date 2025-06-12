@@ -331,7 +331,7 @@ export default function CompetitionChecklists() {
                           </div>
                           <div className="flex items-center text-sm text-gray-600 mb-2">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {formatDate(checklist.competitionDate.toString())}
+                            {checklist.competitionDate ? formatDate(checklist.competitionDate.toString()) : 'Date TBC'}
                           </div>
                           <div className="flex items-center text-sm text-gray-600 mb-2">
                             <MapPin className="w-4 h-4 mr-1" />
@@ -377,7 +377,7 @@ export default function CompetitionChecklists() {
                       <div className="flex flex-wrap gap-4 text-blue-100">
                         <div className="flex items-center">
                           <Calendar className="w-4 h-4 mr-1" />
-                          {formatDate(selectedChecklist.competitionDate.toString())}
+                          {selectedChecklist.competitionDate ? formatDate(selectedChecklist.competitionDate.toString()) : 'Date TBC'}
                         </div>
                         <div className="flex items-center">
                           <MapPin className="w-4 h-4 mr-1" />
