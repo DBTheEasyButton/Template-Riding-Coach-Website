@@ -1263,90 +1263,256 @@ The Dan Bizzarro Method Team`,
   private getBeginnerChecklistTemplate(discipline: string, competitionType: string, competitionDate: Date) {
     const isFirstCompetition = competitionType.includes("My first ever");
     
-    // Base checklist for all beginners with British terminology
-    let baseChecklist = {
+    if (discipline === "dressage") {
+      return this.getDressageChecklist(competitionType, isFirstCompetition);
+    } else if (discipline === "showjumping") {
+      return this.getShowJumpingChecklist(competitionType, isFirstCompetition);
+    } else if (discipline === "eventing") {
+      return this.getEventingChecklist(competitionType, isFirstCompetition);
+    }
+    
+    return this.getGenericChecklist(isFirstCompetition);
+  }
+
+  private getDressageChecklist(level: string, isFirst: boolean) {
+    const isIntroductory = level.includes("Introductory");
+    const isPreliminary = level.includes("Preliminary");
+    const isNovice = level.includes("Novice");
+    const isElementary = level.includes("Elementary");
+
+    let checklist = {
       "6-8 Weeks Before": [
-        { id: "entry_submission", task: "Submit competition entry online or by post", completed: false, priority: "high" },
-        { id: "insurance_check", task: "Check your insurance covers competition riding", completed: false, priority: "high" },
-        { id: "transport_arrangement", task: "Arrange horse transport (lorry or trailer)", completed: false, priority: "high" },
-        { id: "accommodation_booking", task: "Book B&B or hotel if travelling far", completed: false, priority: "medium" },
+        { id: "entry_submission", task: "Submit dressage entry with correct test specified", completed: false, priority: "high" },
+        { id: "test_download", task: `Download and print ${level} test sheet from British Dressage website`, completed: false, priority: "high" },
+        { id: "insurance_check", task: "Verify insurance covers affiliated dressage competitions", completed: false, priority: "high" },
+        { id: "membership_check", task: "Ensure British Dressage membership is current", completed: false, priority: "high" },
+        { id: "transport_booking", task: "Book professional horse transport or check your trailer MOT/insurance", completed: false, priority: "high" },
       ],
       "4-6 Weeks Before": [
-        { id: "fitness_program", task: "Build up horse's fitness with regular hacking", completed: false, priority: "high" },
-        { id: "equipment_check", task: "Check all tack and clean thoroughly", completed: false, priority: "medium" },
-        { id: "shoeing_schedule", task: "Book farrier for fresh shoes before competition", completed: false, priority: "medium" },
-        { id: "training_schedule", task: "Practice at home with instructor", completed: false, priority: "high" },
+        { id: "test_analysis", task: `Study ${level} test movements and scoring criteria in detail`, completed: false, priority: "high" },
+        { id: "arena_practice", task: "Set up 20x40m arena at home with correct markers (A-M)", completed: false, priority: "high" },
+        { id: "fitness_regime", task: "Begin structured flatwork sessions 4-5 times per week", completed: false, priority: "high" },
+        { id: "tack_inspection", task: "Professional saddle check and bit evaluation for comfort", completed: false, priority: "medium" },
+        { id: "shoeing_appointment", task: "Book farrier for competition shoes 5-7 days before event", completed: false, priority: "medium" },
+        { id: "lesson_booking", task: "Schedule weekly lessons with qualified dressage instructor", completed: false, priority: "high" },
       ],
       "2-4 Weeks Before": [
-        { id: "competition_rules", task: "Read competition schedule and rules carefully", completed: false, priority: "high" },
-        { id: "course_preview", task: "Look at course plan if available online", completed: false, priority: "medium" },
-        { id: "nutrition_plan", task: "Ensure horse is on consistent feed routine", completed: false, priority: "medium" },
-        { id: "backup_equipment", task: "Pack spare stirrup leathers, reins, and girth", completed: false, priority: "low" },
+        { id: "test_memorization", task: `Memorize ${level} test sequence without sheet - practice caller if needed`, completed: false, priority: "high" },
+        { id: "movement_perfection", task: "Focus on specific weak movements identified in lessons", completed: false, priority: "high" },
+        { id: "venue_research", task: "Study venue layout, warm-up areas, and parking arrangements", completed: false, priority: "medium" },
+        { id: "competition_kit", task: "Prepare: white shirt, beige/white breeches, black boots, navy jacket, stock/tie", completed: false, priority: "high" },
+        { id: "horse_turnout", task: "Practice competition braiding - book professional if needed", completed: false, priority: "medium" },
+        { id: "test_ridethrough", task: "Complete full test run-through daily in correct arena", completed: false, priority: "high" },
       ],
       "1-2 Weeks Before": [
-        { id: "final_training", task: "Have final lesson with instructor", completed: false, priority: "high" },
-        { id: "equipment_packing", task: "Pack all equipment into stable bag or box", completed: false, priority: "high" },
-        { id: "travel_confirmation", task: "Confirm transport times and route", completed: false, priority: "high" },
-        { id: "emergency_contacts", task: "Have vet and farrier contact numbers ready", completed: false, priority: "medium" },
+        { id: "final_lesson", task: "Final lesson focusing on test accuracy and presentation", completed: false, priority: "high" },
+        { id: "equipment_preparation", task: "Clean and oil all tack, prepare grooming kit and studs box", completed: false, priority: "high" },
+        { id: "route_planning", task: "Plan exact route, check traffic and allow extra travel time", completed: false, priority: "high" },
+        { id: "declaration_check", task: "Confirm start times and collect number if not posted", completed: false, priority: "high" },
+        { id: "backup_equipment", task: "Pack spare bridle, stirrup leathers, and emergency tack", completed: false, priority: "medium" },
       ],
       "3-7 Days Before": [
-        { id: "competition_kit", task: "Lay out competition clothes and check boots", completed: false, priority: "high" },
-        { id: "horse_condition", task: "Check horse is sound and healthy", completed: false, priority: "high" },
-        { id: "times_check", task: "Check your competition times online", completed: false, priority: "high" },
-        { id: "stable_preparation", task: "Prepare stable with water buckets and hay nets", completed: false, priority: "medium" },
+        { id: "final_shoeing", task: "Farrier visit - ensure shoes are secure with road studs if needed", completed: false, priority: "high" },
+        { id: "horse_health", task: "Final vet check if any concerns, ensure vaccinations current", completed: false, priority: "high" },
+        { id: "test_visualization", task: "Mental rehearsal of test sequence every evening", completed: false, priority: "medium" },
+        { id: "kit_layout", task: "Lay out complete outfit and check appearance regulations", completed: false, priority: "high" },
+        { id: "stable_prep", task: "Prepare stable with deep bed, water, hay nets for competition", completed: false, priority: "medium" },
+        { id: "time_confirmation", task: "Final check of start time and warm-up schedule", completed: false, priority: "high" },
       ],
       "Competition Day": [
-        { id: "early_arrival", task: "Arrive 2 hours before your first class", completed: false, priority: "high" },
-        { id: "horse_warmup", task: "Allow 45 minutes for warming up", completed: false, priority: "high" },
-        { id: "equipment_final_check", task: "Check all tack is secure and clean", completed: false, priority: "high" },
-        { id: "course_walk", task: "Walk the course or arena carefully", completed: false, priority: "high" },
-        { id: "stay_calm", task: "Take deep breaths and enjoy the experience", completed: false, priority: "medium" },
+        { id: "early_start", task: "Arrive 2.5 hours before test time for settlement and preparation", completed: false, priority: "high" },
+        { id: "horse_preparation", task: "Thorough grooming, quarter marking, and professional turnout", completed: false, priority: "high" },
+        { id: "arena_inspection", task: "Walk competition arena noting going and any distractions", completed: false, priority: "high" },
+        { id: "warm_up_plan", task: `Execute structured 45-min warm-up: walk, trot, canter, test movements`, completed: false, priority: "high" },
+        { id: "test_rehearsal", task: "Practice difficult transitions and movements once in warm-up", completed: false, priority: "medium" },
+        { id: "final_preparation", task: "Final tack check, adjustment, and rider preparation", completed: false, priority: "high" },
+        { id: "ring_entry", task: "Enter arena confidently, halt square at X, and enjoy your test", completed: false, priority: "high" },
       ]
     };
 
-    // Add discipline-specific tasks
-    if (discipline === "dressage") {
-      baseChecklist["2-4 Weeks Before"].push(
-        { id: "test_practice", task: "Practice your dressage test at home", completed: false, priority: "high" },
-        { id: "test_memorize", task: "Learn your test by heart", completed: false, priority: "high" }
+    if (isFirst) {
+      checklist["2-4 Weeks Before"].push(
+        { id: "venue_visit", task: "Visit competition venue beforehand to walk arena and facilities", completed: false, priority: "medium" },
+        { id: "experienced_help", task: "Arrange for experienced friend/trainer to accompany you", completed: false, priority: "high" },
+        { id: "competition_rules", task: "Read British Dressage rule book sections on conduct and dress", completed: false, priority: "medium" }
       );
-      baseChecklist["Competition Day"].push(
-        { id: "test_final_check", task: "Have one final read through your test", completed: false, priority: "medium" }
-      );
-    }
-
-    if (discipline === "showjumping") {
-      baseChecklist["4-6 Weeks Before"].push(
-        { id: "jumping_practice", task: "Practice jumping similar height fences", completed: false, priority: "high" }
-      );
-      baseChecklist["Competition Day"].push(
-        { id: "jump_heights", task: "Check the jump heights in warm-up", completed: false, priority: "medium" }
+      checklist["Competition Day"].push(
+        { id: "photo_memories", task: "Take photos with rosette and remember to enjoy the achievement!", completed: false, priority: "low" }
       );
     }
 
-    if (discipline === "eventing") {
-      baseChecklist["4-6 Weeks Before"].push(
-        { id: "cross_country_practice", task: "Practice over cross country fences", completed: false, priority: "high" },
-        { id: "fitness_building", task: "Build stamina with canter work", completed: false, priority: "high" }
-      );
-      baseChecklist["Competition Day"].push(
-        { id: "phase_timing", task: "Check timings for all three phases", completed: false, priority: "high" },
-        { id: "studs_check", task: "Put in road studs for cross country if needed", completed: false, priority: "medium" }
+    if (isIntroductory || isPreliminary) {
+      checklist["4-6 Weeks Before"].push(
+        { id: "basic_movements", task: "Master 20m circles, accurate corners, and smooth transitions", completed: false, priority: "high" }
       );
     }
 
-    // Add extra support for first-time competitors
-    if (isFirstCompetition) {
-      baseChecklist["2-4 Weeks Before"].push(
-        { id: "visit_venue", task: "Visit the venue beforehand to familiarize yourself", completed: false, priority: "medium" },
-        { id: "support_person", task: "Arrange for experienced friend to help you", completed: false, priority: "high" }
+    if (isNovice || isElementary) {
+      checklist["4-6 Weeks Before"].push(
+        { id: "advanced_movements", task: "Perfect leg yield, shoulder-in, and precise 15m circles", completed: false, priority: "high" }
       );
-      baseChecklist["Competition Day"].push(
-        { id: "photo_opportunity", task: "Remember to take photos of your first competition!", completed: false, priority: "low" }
+      checklist["2-4 Weeks Before"].push(
+        { id: "collection_practice", task: "Work on collection and medium paces required in test", completed: false, priority: "high" }
       );
     }
 
-    return baseChecklist;
+    return checklist;
+  }
+
+  private getShowJumpingChecklist(level: string, isFirst: boolean) {
+    const height = level.includes("80cm") ? "80cm" : 
+                   level.includes("90cm") ? "90cm" : 
+                   level.includes("1m") ? "1m" : 
+                   level.includes("1.10m") ? "1.10m" : "80cm";
+
+    let checklist = {
+      "6-8 Weeks Before": [
+        { id: "entry_submission", task: `Submit show jumping entry for ${height} class with correct height specified`, completed: false, priority: "high" },
+        { id: "insurance_verification", task: "Confirm insurance covers show jumping up to competition height", completed: false, priority: "high" },
+        { id: "membership_check", task: "Ensure British Showjumping membership and horse registration current", completed: false, priority: "high" },
+        { id: "transport_arrangement", task: "Book reliable transport with ramp suitable for post-competition loading", completed: false, priority: "high" },
+        { id: "height_assessment", task: `Evaluate if horse comfortably jumps ${height} at home with room to spare`, completed: false, priority: "high" },
+      ],
+      "4-6 Weeks Before": [
+        { id: "gridwork_program", task: "Begin systematic gridwork 3x weekly: bounce, one-stride, two-stride combinations", completed: false, priority: "high" },
+        { id: "fitness_jumping", task: `Build to jumping ${height} courses of 8-10 fences twice weekly`, completed: false, priority: "high" },
+        { id: "equipment_check", task: "Professional bridle, saddle check and jumping bit evaluation", completed: false, priority: "medium" },
+        { id: "studs_preparation", task: "Obtain correct grass and all-weather studs for competition surface", completed: false, priority: "medium" },
+        { id: "lesson_schedule", task: "Book weekly jumping lessons with BHSAI qualified instructor", completed: false, priority: "high" },
+        { id: "fitness_base", task: "Establish strong canter work and hill training for power", completed: false, priority: "high" },
+      ],
+      "2-4 Weeks Before": [
+        { id: "course_practice", task: `Jump full courses at ${height} focusing on rhythm and straightness`, completed: false, priority: "high" },
+        { id: "related_distances", task: "Practice related distances: 24m (1 stride), 35m (2 strides) at speed", completed: false, priority: "high" },
+        { id: "competition_simulation", task: "Practice with coloured fillers, flags, and atmosphere simulation", completed: false, priority: "medium" },
+        { id: "kit_preparation", task: "Prepare: shirt, tie, navy/black jacket, light breeches, long boots, gloves", completed: false, priority: "high" },
+        { id: "venue_research", task: "Study venue warm-up areas, surface type, and course walk timings", completed: false, priority: "medium" },
+        { id: "backup_planning", task: "Prepare alternative strategies for if horse feels sticky or fresh", completed: false, priority: "medium" },
+      ],
+      "1-2 Weeks Before": [
+        { id: "final_jumping", task: "Final jumping session at competition height - keep horse confident", completed: false, priority: "high" },
+        { id: "equipment_preparation", task: "Clean all jumping tack, prepare stud kit and first aid supplies", completed: false, priority: "high" },
+        { id: "travel_logistics", task: "Confirm transport times, route, and venue arrival procedures", completed: false, priority: "high" },
+        { id: "start_times", task: "Check start times and warm-up arena availability", completed: false, priority: "high" },
+        { id: "emergency_kit", task: "Pack emergency tack, spare reins, martingale, and comfort items", completed: false, priority: "medium" },
+      ],
+      "3-7 Days Before": [
+        { id: "shoeing_final", task: "Farrier visit - check shoes secure, fit studs for surface type", completed: false, priority: "high" },
+        { id: "horse_condition", task: "Assess horse soundness, energy levels, and appetite", completed: false, priority: "high" },
+        { id: "mental_preparation", task: "Visualize successful clear rounds and positive riding", completed: false, priority: "medium" },
+        { id: "competition_outfit", task: "Try on complete outfit, check hat safety standard (PAS015)", completed: false, priority: "high" },
+        { id: "stable_setup", task: "Prepare stable with anti-slip mats, water, and calming environment", completed: false, priority: "medium" },
+      ],
+      "Competition Day": [
+        { id: "arrival_timing", task: "Arrive 2 hours before class for settling and course walk", completed: false, priority: "high" },
+        { id: "horse_turnout", task: "Professional grooming, secure braiding, and safety equipment check", completed: false, priority: "high" },
+        { id: "course_walk", task: "Walk course twice: first for layout, second for stride counting and plan", completed: false, priority: "high" },
+        { id: "warm_up_structure", task: "Systematic warm-up: flatwork, cavaletti, practice fence, then competition height", completed: false, priority: "high" },
+        { id: "stud_insertion", task: "Insert appropriate studs 30 minutes before class", completed: false, priority: "high" },
+        { id: "final_practice", task: "Jump 2-3 fences at competition height to confirm confidence", completed: false, priority: "medium" },
+        { id: "competition_round", task: "Ride forward, straight lines, maintain rhythm, and trust your preparation", completed: false, priority: "high" },
+      ]
+    };
+
+    if (isFirst) {
+      checklist["2-4 Weeks Before"].push(
+        { id: "venue_reconnaissance", task: "Visit venue when possible to see warm-up and competition arenas", completed: false, priority: "medium" },
+        { id: "support_team", task: "Arrange experienced person to help with warm-up and course advice", completed: false, priority: "high" },
+        { id: "rules_study", task: "Learn basic BS rules: elimination, refusals, and time allowed", completed: false, priority: "medium" }
+      );
+      checklist["Competition Day"].push(
+        { id: "celebrate_achievement", task: "Regardless of result, celebrate completing your first jumping competition!", completed: false, priority: "low" }
+      );
+    }
+
+    return checklist;
+  }
+
+  private getEventingChecklist(level: string, isFirst: boolean) {
+    const phase = level.includes("80cm") ? "80cm" : 
+                  level.includes("90cm") ? "90cm" : 
+                  level.includes("100cm") ? "100cm" : 
+                  level.includes("Novice") ? "Novice" : "80cm";
+
+    let checklist = {
+      "6-8 Weeks Before": [
+        { id: "entry_submission", task: `Submit eventing entry for ${phase} level with all phases specified`, completed: false, priority: "high" },
+        { id: "insurance_comprehensive", task: "Verify insurance covers all three eventing phases including cross country", completed: false, priority: "high" },
+        { id: "membership_current", task: "Ensure BE membership, horse passport, and vaccination records current", completed: false, priority: "high" },
+        { id: "transport_planning", task: "Book transport suitable for tired horse return journey", completed: false, priority: "high" },
+        { id: "fitness_assessment", task: "Evaluate horse's current fitness for 3-phase competition demands", completed: false, priority: "high" },
+        { id: "medical_check", task: "Ensure horse's wind, heart, and soundness suitable for cross country", completed: false, priority: "high" },
+      ],
+      "4-6 Weeks Before": [
+        { id: "fitness_program", task: "Begin 3-phase fitness: dressage suppleness, jumping confidence, XC stamina", completed: false, priority: "high" },
+        { id: "cross_country_schooling", task: `School XC fences at ${phase} height: logs, ditches, water, banks`, completed: false, priority: "high" },
+        { id: "dressage_preparation", task: "Practice relevant dressage test with accuracy and calmness", completed: false, priority: "high" },
+        { id: "showjumping_practice", task: `Jump courses at ${phase} height focusing on carefulness after XC`, completed: false, priority: "high" },
+        { id: "equipment_specialist", task: "Check XC kit: body protector, medical armband, stopwatch, studs", completed: false, priority: "high" },
+        { id: "terrain_training", task: "Include hill work, varied ground conditions, and stamina building", completed: false, priority: "high" },
+      ],
+      "2-4 Weeks Before": [
+        { id: "test_memorization", task: "Learn dressage test thoroughly for accurate performance under pressure", completed: false, priority: "high" },
+        { id: "xc_course_study", task: "Study cross country course map, distances, and optimum time calculation", completed: false, priority: "high" },
+        { id: "combination_training", task: "Practice fence combinations and related distances on varied terrain", completed: false, priority: "high" },
+        { id: "speed_training", task: "Practice galloping at competition pace (400-450mpm) safely", completed: false, priority: "high" },
+        { id: "recovery_practice", task: "Simulate competition schedule: dressage, break, XC, rest, showjumping", completed: false, priority: "medium" },
+        { id: "kit_organization", task: "Organize: dressage outfit, XC colours, casual SJ clothes, safety equipment", completed: false, priority: "high" },
+      ],
+      "1-2 Weeks Before": [
+        { id: "final_schooling", task: "Final XC school focusing on confidence and partnership", completed: false, priority: "high" },
+        { id: "equipment_check", task: "Test all safety equipment: body protector, hat, medical devices", completed: false, priority: "high" },
+        { id: "schedule_planning", task: "Plan competition day timeline including phase warm-ups and breaks", completed: false, priority: "high" },
+        { id: "support_coordination", task: "Brief support crew on their roles for each phase", completed: false, priority: "high" },
+        { id: "emergency_preparation", task: "Prepare comprehensive first aid and emergency contact information", completed: false, priority: "medium" },
+      ],
+      "3-7 Days Before": [
+        { id: "final_fitness", task: "Complete final fitness assessment and soundness check", completed: false, priority: "high" },
+        { id: "shoe_preparation", task: "Farrier: secure shoes, fit all stud holes, check for loose clenches", completed: false, priority: "high" },
+        { id: "mental_preparation", task: "Visualize successful completion of all three phases", completed: false, priority: "medium" },
+        { id: "weather_monitoring", task: "Monitor weather forecast for ground conditions and clothing choices", completed: false, priority: "medium" },
+        { id: "equipment_final", task: "Final check of all phase-specific equipment and spares", completed: false, priority: "high" },
+      ],
+      "Competition Day": [
+        { id: "early_arrival", task: "Arrive 3+ hours early for multi-phase preparation and settling", completed: false, priority: "high" },
+        { id: "dressage_prep", task: "First phase: thorough warm-up, accurate test execution", completed: false, priority: "high" },
+        { id: "course_walk", task: "Walk XC course: route planning, alternative lines, safety strategies", completed: false, priority: "high" },
+        { id: "xc_preparation", task: "XC warm-up: fitness check, confidence jumps, stud insertion", completed: false, priority: "high" },
+        { id: "cross_country", task: "Ride positively forward, maintain rhythm, trust your preparation", completed: false, priority: "high" },
+        { id: "recovery_phase", task: "Cool horse systematically, check for injuries, prepare for SJ", completed: false, priority: "high" },
+        { id: "showjumping_final", task: "Final phase: careful warm-up, precise jumping to finish well", completed: false, priority: "high" },
+      ]
+    };
+
+    if (isFirst) {
+      checklist["2-4 Weeks Before"].push(
+        { id: "venue_familiarization", task: "Visit venue to walk XC course and understand the terrain", completed: false, priority: "high" },
+        { id: "experienced_support", task: "Arrange for experienced eventer to guide you through the day", completed: false, priority: "high" },
+        { id: "safety_briefing", task: "Attend BE safety briefings and understand emergency procedures", completed: false, priority: "high" }
+      );
+      checklist["Competition Day"].push(
+        { id: "completion_celebration", task: "Celebrate the massive achievement of completing your first event!", completed: false, priority: "low" }
+      );
+    }
+
+    return checklist;
+  }
+
+  private getGenericChecklist(isFirst: boolean) {
+    // Fallback basic checklist
+    return {
+      "4-6 Weeks Before": [
+        { id: "entry_submission", task: "Submit competition entry", completed: false, priority: "high" },
+        { id: "training_schedule", task: "Establish regular training routine", completed: false, priority: "high" },
+      ],
+      "1-2 Weeks Before": [
+        { id: "equipment_prep", task: "Prepare all necessary equipment", completed: false, priority: "high" },
+      ],
+      "Competition Day": [
+        { id: "arrive_early", task: "Arrive with plenty of time", completed: false, priority: "high" },
+        { id: "warm_up", task: "Complete thorough warm-up", completed: false, priority: "high" },
+      ]
+    };
   }
 
   private getChecklistTemplate(competitionType: string, competitionDate: Date) {
