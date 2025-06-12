@@ -358,6 +358,9 @@ export default function StrideCalculator() {
                         <>
                           <SelectItem value="5-stride">5 Strides</SelectItem>
                           <SelectItem value="6-stride">6 Strides</SelectItem>
+                          {distanceType === "course-distances" && (
+                            <SelectItem value="7-stride">7 Strides</SelectItem>
+                          )}
                         </>
                       )}
                     </SelectContent>
