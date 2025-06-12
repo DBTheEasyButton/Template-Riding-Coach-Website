@@ -47,7 +47,11 @@ export default function StrideCalculator() {
       "4-stride": { distance: 15.0, description: "Canter poles - four strides apart" }
     },
     "gridwork": {
-      "bounce": { distance: 3.5, description: "Grid bounce - pole to small jump (60cm) or jump to jump" },
+      "pole-to-fence-horses": { distance: 3.15, description: "Canter pole to fence - horses (2.80-3.50m average)" },
+      "pole-to-fence-14-2": { distance: 2.90, description: "Canter pole to fence - 14'2hh ponies (2.70-3.10m average)" },
+      "pole-to-fence-13-2": { distance: 2.65, description: "Canter pole to fence - 13'2hh ponies (2.40-2.90m average)" },
+      "pole-to-fence-12-2": { distance: 2.30, description: "Canter pole to fence - 12'2hh ponies (2.10-2.50m average)" },
+      "bounce": { distance: 3.5, description: "Grid bounce - jump to jump" },
       "1-stride": { distance: 7.3, description: "Grid one stride - between 80cm jumps" },
       "2-stride": { distance: 10.7, description: "Grid two strides - between 90cm jumps" },
       "3-stride": { distance: 14.0, description: "Grid three strides - between 1m jumps" },
@@ -361,7 +365,7 @@ export default function StrideCalculator() {
               <div>
                 <h3 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Gridwork</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Systematic jumping training. Mix poles and small jumps. 
+                  Systematic jumping training. Includes canter pole to fence distances for horses and ponies. 
                   Add 15cm per 30cm jump height increase to distances.
                 </p>
               </div>
