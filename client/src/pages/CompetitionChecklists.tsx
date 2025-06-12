@@ -42,6 +42,13 @@ export default function CompetitionChecklists() {
     mutationFn: async (data: typeof newChecklist) => {
       console.log("Sending checklist data:", data);
       const response = await apiRequest("POST", "/api/competition-checklists/generate", data);
+      
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error("API Error Response:", errorData);
+        throw new Error(`API Error: ${response.status} - ${errorData}`);
+      }
+      
       const result = await response.json();
       console.log("Received checklist:", result);
       return result;
@@ -70,7 +77,7 @@ export default function CompetitionChecklists() {
       console.error("Generation error:", error);
       toast({
         title: "Generation Failed",
-        description: "Failed to generate checklist. Please try again.",
+        description: `Failed to generate checklist: ${error.message}`,
         variant: "destructive",
       });
     },
@@ -324,9 +331,9 @@ export default function CompetitionChecklists() {
                           onClick={() => setSelectedChecklist(checklist)}
                         >
                           <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-navy">{checklist.competitionName}</h4>
-                            <Badge variant="outline" className="text-xs">
-                              {checklist.competitionType}
+                            <h4 className="font-semibold text-navy">{checklist.competitionName || 'Training Competition'}</h4>
+                            <Badge variant="outline" className="text-xs capitalize">
+                              {checklist.discipline ? `${checklist.discipline} - ${checklist.competitionType}` : checklist.competitionType}
                             </Badge>
                           </div>
                           <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -335,7 +342,7 @@ export default function CompetitionChecklists() {
                           </div>
                           <div className="flex items-center text-sm text-gray-600 mb-2">
                             <MapPin className="w-4 h-4 mr-1" />
-                            {checklist.location}
+                            {checklist.location || 'Location TBC'}
                           </div>
                           {checklist.horseName && (
                             <div className="flex items-center text-sm text-gray-600 mb-2">
