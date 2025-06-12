@@ -38,6 +38,7 @@ export default function Home() {
       <HeroSection />
       <TestimonialsSection />
       <ClinicsSection />
+      <CompetitionToolsSection />
       <AboutSection />
       <CoachingSection />
       <AppSection />
