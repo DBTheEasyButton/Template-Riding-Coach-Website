@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle, Clock, AlertTriangle, Calendar, MapPin, Horse, Plus, Download, Edit, Trash2 } from "lucide-react";
+import { CheckCircle, Clock, AlertTriangle, Calendar, MapPin, Plus, Download, Edit, Trash2 } from "lucide-react";
 import type { CompetitionChecklist } from "@shared/schema";
 
 export default function CompetitionChecklists() {
@@ -311,7 +311,7 @@ export default function CompetitionChecklists() {
                           </div>
                           {checklist.horseName && (
                             <div className="flex items-center text-sm text-gray-600 mb-2">
-                              <Horse className="w-4 h-4 mr-1" />
+                              <span className="w-4 h-4 mr-1">🐎</span>
                               {checklist.horseName}
                             </div>
                           )}
@@ -357,7 +357,7 @@ export default function CompetitionChecklists() {
                         </div>
                         {selectedChecklist.horseName && (
                           <div className="flex items-center">
-                            <Horse className="w-4 h-4 mr-1" />
+                            <span className="w-4 h-4 mr-1">🐎</span>
                             {selectedChecklist.horseName}
                           </div>
                         )}

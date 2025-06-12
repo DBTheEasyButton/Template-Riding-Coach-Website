@@ -6,6 +6,7 @@ import AboutSection from "@/components/AboutSection";
 import CoachingSection from "@/components/CoachingSection";
 import AppSection from "@/components/AppSection";
 import ClinicsSection from "@/components/ClinicsSection";
+import CompetitionToolsSection from "@/components/CompetitionToolsSection";
 // import TrainingVideosSection from "@/components/TrainingVideosSection";
 import PodcastSection from "@/components/PodcastSection";
 import ScheduleSection from "@/components/ScheduleSection";
