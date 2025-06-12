@@ -151,10 +151,15 @@ export default function StrideCalculator() {
   // Determine horse size category based on height in cm
   const getHorseSizeFromHeight = (heightCm: number): HorseSize => {
     if (heightCm < 128) return "12-2"; // Under 12.2hh
-    if (heightCm < 138) return "12-2"; // 12.2hh (128cm)
+    if (heightCm < 138) return "12-2"; // 12.2hh (128cm) 
     if (heightCm < 148) return "13-2"; // 13.2hh (138cm)
     if (heightCm < 158) return "14-2"; // 14.2hh (148cm)
     return "horses"; // 15hh and above
+  };
+
+  // Get appropriate trot pole key based on horse size
+  const getTrotPoleKey = (horseSizeCategory: HorseSize): string => {
+    return horseSizeCategory; // Direct mapping since keys match
   };
 
   const needsStrideSelection = () => {
@@ -170,6 +175,13 @@ export default function StrideCalculator() {
     const distances = standardDistances[distanceType];
     const horseHeightCm = getHorseHeightCm();
     const horseSizeCategory = getHorseSizeFromHeight(horseHeightCm);
+
+    // Debug logging
+    console.log("Horse feet:", horseFeet, "inches:", horseInches);
+    console.log("Horse height cm:", horseHeightCm);
+    console.log("Horse size category:", horseSizeCategory);
+    console.log("Distance type:", distanceType);
+    console.log("Available distances:", Object.keys(distances));
 
     if (distanceType === "course-distances") {
       // For course distances, filter by stride count and horse size
@@ -250,7 +262,8 @@ export default function StrideCalculator() {
       // For walk poles, show all variations; for trot poles, use horse size
       if (distanceType === "trot-poles") {
         // Use horse size category for trot poles
-        const selectedData = distances[horseSizeCategory as keyof typeof distances] as any;
+        const trotPoleKey = getTrotPoleKey(horseSizeCategory);
+        const selectedData = distances[trotPoleKey as keyof typeof distances] as any;
         if (selectedData && selectedData.distance && selectedData.description) {
           const distanceMeters = selectedData.distance;
           const distanceYards = metersToYards(distanceMeters);
