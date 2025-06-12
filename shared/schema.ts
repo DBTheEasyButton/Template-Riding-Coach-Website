@@ -433,10 +433,11 @@ export interface LoyaltyProgramWithDiscounts extends LoyaltyProgram {
 
 export const competitionChecklists = pgTable("competition_checklists", {
   id: serial("id").primaryKey(),
-  competitionType: text("competition_type").notNull(), // CCI5*, CCI4*, etc
-  competitionName: text("competition_name").notNull(),
-  competitionDate: timestamp("competition_date").notNull(),
-  location: text("location").notNull(),
+  discipline: text("discipline").notNull(), // dressage, showjumping, eventing
+  competitionType: text("competition_type").notNull(), // My first ever competition, Novice, etc
+  competitionName: text("competition_name"),
+  competitionDate: timestamp("competition_date"),
+  location: text("location"),
   horseName: text("horse_name"),
   checklist: jsonb("checklist").notNull(), // Array of checklist items with categories
   isCompleted: boolean("is_completed").default(false),

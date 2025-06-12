@@ -16,12 +16,19 @@ import type { CompetitionChecklist } from "@shared/schema";
 export default function CompetitionChecklists() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [newChecklist, setNewChecklist] = useState({
+    discipline: "",
     competitionType: "",
     competitionName: "",
     competitionDate: "",
     location: "",
     horseName: ""
   });
+
+  const disciplineOptions = {
+    dressage: ['My first ever competition', 'Introductory', 'Preliminary', 'Novice', 'Elementary'],
+    showjumping: ['My first ever competition', '80cm', '90cm', '1m', '1.10m'],
+    eventing: ['My first ever competition', '80cm', '90cm', '100cm', 'Novice']
+  };
   const [selectedChecklist, setSelectedChecklist] = useState<CompetitionChecklist | null>(null);
   
   const { toast } = useToast();
@@ -47,6 +54,7 @@ export default function CompetitionChecklists() {
       
       setSelectedChecklist(checklist);
       setNewChecklist({
+        discipline: "",
         competitionType: "",
         competitionName: "",
         competitionDate: "",
@@ -97,10 +105,10 @@ export default function CompetitionChecklists() {
   });
 
   const handleGenerate = () => {
-    if (!newChecklist.competitionType || !newChecklist.competitionName || !newChecklist.competitionDate || !newChecklist.location) {
+    if (!newChecklist.discipline || !newChecklist.competitionType) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all required fields to generate a checklist.",
+        description: "Please select discipline and competition level to generate a checklist.",
         variant: "destructive",
       });
       return;
@@ -207,39 +215,51 @@ export default function CompetitionChecklists() {
               </CardHeader>
               <CardContent className="p-6 space-y-4">
                 <div>
-                  <Label htmlFor="competitionType">Competition Level *</Label>
-                  <Select value={newChecklist.competitionType} onValueChange={(value) => 
-                    setNewChecklist({ ...newChecklist, competitionType: value })
+                  <Label htmlFor="discipline">Discipline *</Label>
+                  <Select value={newChecklist.discipline} onValueChange={(value) => 
+                    setNewChecklist({ ...newChecklist, discipline: value, competitionType: "" })
                   }>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select competition level" />
+                      <SelectValue placeholder="Select discipline" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Novice">Novice</SelectItem>
-                      <SelectItem value="Intermediate">Intermediate</SelectItem>
-                      <SelectItem value="Open Intermediate">Open Intermediate</SelectItem>
-                      <SelectItem value="CCI3*">CCI3*</SelectItem>
-                      <SelectItem value="CCI4*">CCI4*</SelectItem>
-                      <SelectItem value="CCI5*">CCI5*</SelectItem>
-                      <SelectItem value="Championship">Championship</SelectItem>
-                      <SelectItem value="BYEH">BYEH</SelectItem>
-                      <SelectItem value="Cotswold Cup">Cotswold Cup</SelectItem>
+                      <SelectItem value="dressage">Dressage</SelectItem>
+                      <SelectItem value="showjumping">Show Jumping</SelectItem>
+                      <SelectItem value="eventing">Eventing</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
+                {newChecklist.discipline && (
+                  <div>
+                    <Label htmlFor="competitionType">Level *</Label>
+                    <Select value={newChecklist.competitionType} onValueChange={(value) => 
+                      setNewChecklist({ ...newChecklist, competitionType: value })
+                    }>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {disciplineOptions[newChecklist.discipline as keyof typeof disciplineOptions]?.map((level) => (
+                          <SelectItem key={level} value={level}>{level}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
                 <div>
-                  <Label htmlFor="competitionName">Competition Name *</Label>
+                  <Label htmlFor="competitionName">Competition Name (Optional)</Label>
                   <Input
                     id="competitionName"
                     value={newChecklist.competitionName}
                     onChange={(e) => setNewChecklist({ ...newChecklist, competitionName: e.target.value })}
-                    placeholder="e.g., Badminton Horse Trials"
+                    placeholder="e.g., Area Festival, Local Championship"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="competitionDate">Competition Date *</Label>
+                  <Label htmlFor="competitionDate">Competition Date (Optional)</Label>
                   <Input
                     id="competitionDate"
                     type="date"
@@ -249,12 +269,12 @@ export default function CompetitionChecklists() {
                 </div>
 
                 <div>
-                  <Label htmlFor="location">Location *</Label>
+                  <Label htmlFor="location">Location (Optional)</Label>
                   <Input
                     id="location"
                     value={newChecklist.location}
                     onChange={(e) => setNewChecklist({ ...newChecklist, location: e.target.value })}
-                    placeholder="e.g., Badminton, England"
+                    placeholder="e.g., Local riding club, Arena name"
                   />
                 </div>
 
