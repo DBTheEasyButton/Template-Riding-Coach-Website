@@ -8,8 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, Ruler, Users, Info } from "lucide-react";
 
-type DistanceType = "poles" | "gymnastics" | "related";
-type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride";
+type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
+type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride";
 
 interface StrideCalculation {
   distanceYards: number;
@@ -17,36 +17,51 @@ interface StrideCalculation {
   userSteps: number;
   description: string;
   notes: string;
+  exerciseType?: string;
 }
 
 export default function StrideCalculator() {
   const [userHeight, setUserHeight] = useState<number>(170);
-  const [distanceType, setDistanceType] = useState<DistanceType>("gymnastics");
+  const [distanceType, setDistanceType] = useState<DistanceType>("trot-poles");
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
 
   // Standard distances in meters
   const standardDistances = {
-    poles: {
-      "bounce": { distance: 2.7, description: "Bounce poles (trotting)" },
-      "1-stride": { distance: 4.3, description: "One trot stride between poles" },
-      "2-stride": { distance: 6.0, description: "Two trot strides between poles" },
-      "3-stride": { distance: 7.6, description: "Three trot strides between poles" },
-      "4-stride": { distance: 9.1, description: "Four trot strides between poles" }
+    "walk-poles": {
+      "standard": { distance: 0.8, description: "Walk poles - standard spacing" },
+      "extended": { distance: 1.0, description: "Walk poles - extended for long stride" },
+      "collected": { distance: 0.7, description: "Walk poles - collected for short stride" }
     },
-    gymnastics: {
-      "bounce": { distance: 3.6, description: "Bounce jump (no stride)" },
-      "1-stride": { distance: 7.0, description: "One canter stride between jumps" },
-      "2-stride": { distance: 10.4, description: "Two canter strides between jumps" },
-      "3-stride": { distance: 13.7, description: "Three canter strides between jumps" },
-      "4-stride": { distance: 17.1, description: "Four canter strides between jumps" }
+    "trot-poles": {
+      "standard": { distance: 1.3, description: "Trot poles - standard spacing" },
+      "extended": { distance: 1.5, description: "Trot poles - extended for big stride" },
+      "collected": { distance: 1.1, description: "Trot poles - collected for small stride" },
+      "young-horse": { distance: 1.2, description: "Trot poles - suitable for young horses" }
     },
-    related: {
-      "1-stride": { distance: 24.0, description: "One galloping stride (course)" },
-      "2-stride": { distance: 35.0, description: "Two galloping strides (course)" },
-      "3-stride": { distance: 46.0, description: "Three galloping strides (course)" },
-      "4-stride": { distance: 57.0, description: "Four galloping strides (course)" },
-      "bounce": { distance: 24.0, description: "Related distance (short)" }
+    "canter-poles": {
+      "bounce": { distance: 2.7, description: "Canter poles - bounce spacing" },
+      "1-stride": { distance: 5.5, description: "Canter poles - one stride apart" },
+      "2-stride": { distance: 8.2, description: "Canter poles - two strides apart" },
+      "3-stride": { distance: 11.0, description: "Canter poles - three strides apart" },
+      "4-stride": { distance: 13.7, description: "Canter poles - four strides apart" }
+    },
+    "gridwork": {
+      "bounce": { distance: 3.6, description: "Grid bounce - pole to small jump or jump to jump" },
+      "1-stride": { distance: 7.0, description: "Grid one stride - pole to jump or jump to jump" },
+      "2-stride": { distance: 10.4, description: "Grid two strides - between jumps" },
+      "3-stride": { distance: 13.7, description: "Grid three strides - between jumps" },
+      "4-stride": { distance: 17.1, description: "Grid four strides - between jumps" },
+      "5-stride": { distance: 20.4, description: "Grid five strides - between jumps" },
+      "6-stride": { distance: 23.8, description: "Grid six strides - between jumps" }
+    },
+    "course-distances": {
+      "1-stride": { distance: 24.0, description: "Course - one galloping stride" },
+      "2-stride": { distance: 35.0, description: "Course - two galloping strides" },
+      "3-stride": { distance: 46.0, description: "Course - three galloping strides" },
+      "4-stride": { distance: 57.0, description: "Course - four galloping strides" },
+      "5-stride": { distance: 68.0, description: "Course - five galloping strides" },
+      "6-stride": { distance: 79.0, description: "Course - six galloping strides" }
     }
   };
 
@@ -61,68 +76,96 @@ export default function StrideCalculator() {
     return Math.round(meters * 1.094 * 10) / 10; // Convert and round to 1 decimal
   };
 
+  const needsStrideSelection = () => {
+    return distanceType === "canter-poles" || distanceType === "gridwork" || distanceType === "course-distances";
+  };
+
   const calculateDistances = () => {
     const calculations: StrideCalculation[] = [];
     const distances = standardDistances[distanceType];
 
-    if (strideCount === "bounce" && distanceType === "related") {
-      // For related distances, "bounce" doesn't make sense, so skip
-      return;
-    }
-
-    Object.entries(distances).forEach(([stride, data]) => {
-      if (stride === strideCount || strideCount === "bounce") {
-        const distanceMeters = data.distance;
+    if (needsStrideSelection()) {
+      // For exercises that need stride selection, only show selected stride
+      const selectedData = distances[strideCount as keyof typeof distances] as any;
+      if (selectedData && selectedData.distance && selectedData.description) {
+        const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
         const userSteps = calculateUserSteps(userHeight, distanceMeters);
         
-        let notes = "";
-        if (distanceType === "poles") {
-          notes = "Measured from center of pole to center of pole. Horse should trot through calmly.";
-        } else if (distanceType === "gymnastics") {
-          notes = "Measured from back of first jump to front of second jump. Adjust for jump height.";
-        } else if (distanceType === "related") {
-          notes = "Measured from back of first jump to front of second jump. Course-related distances.";
-        }
+        let notes = getNotesForDistanceType(distanceType);
 
         calculations.push({
           distanceYards,
           distanceMeters,
           userSteps,
-          description: data.description,
-          notes
+          description: selectedData.description,
+          notes,
+          exerciseType: distanceType
         });
       }
-    });
+    } else {
+      // For walk/trot poles, show all variations
+      Object.entries(distances as any).forEach(([key, data]: [string, any]) => {
+        if (data.distance && data.description) {
+          const distanceMeters = data.distance;
+          const distanceYards = metersToYards(distanceMeters);
+          const userSteps = calculateUserSteps(userHeight, distanceMeters);
+          
+          let notes = getNotesForDistanceType(distanceType);
+
+          calculations.push({
+            distanceYards,
+            distanceMeters,
+            userSteps,
+            description: data.description,
+            notes,
+            exerciseType: distanceType
+          });
+        }
+      });
+    }
 
     setResults(calculations);
+  };
+
+  const getNotesForDistanceType = (type: DistanceType): string => {
+    switch (type) {
+      case "walk-poles":
+        return "Measured from center of pole to center of pole. Horse should walk calmly with regular rhythm.";
+      case "trot-poles":
+        return "Measured from center of pole to center of pole. Maintain steady trot rhythm throughout.";
+      case "canter-poles":
+        return "Measured from center of pole to center of pole. Keep steady canter rhythm and balance.";
+      case "gridwork":
+        return "Measured from back of first element to front of second element. Adjust for jump height.";
+      case "course-distances":
+        return "Measured from back of first jump to front of second jump. Course-related distances.";
+      default:
+        return "";
+    }
   };
 
   const calculateAllDistances = () => {
     const allCalculations: StrideCalculation[] = [];
     const distances = standardDistances[distanceType];
 
-    Object.entries(distances).forEach(([stride, data]) => {
-      const distanceMeters = data.distance;
-      const distanceYards = metersToYards(distanceMeters);
-      const userSteps = calculateUserSteps(userHeight, distanceMeters);
-      
-      let notes = "";
-      if (distanceType === "poles") {
-        notes = "Measured from center of pole to center of pole.";
-      } else if (distanceType === "gymnastics") {
-        notes = "Measured from back of first jump to front of second jump.";
-      } else if (distanceType === "related") {
-        notes = "Measured from back of first jump to front of second jump.";
-      }
+    Object.entries(distances as any).forEach(([key, data]: [string, any]) => {
+      if (data.distance && data.description) {
+        const distanceMeters = data.distance;
+        const distanceYards = metersToYards(distanceMeters);
+        const userSteps = calculateUserSteps(userHeight, distanceMeters);
+        
+        let notes = getNotesForDistanceType(distanceType);
 
-      allCalculations.push({
-        distanceYards,
-        distanceMeters,
-        userSteps,
-        description: data.description,
-        notes
-      });
+        allCalculations.push({
+          distanceYards,
+          distanceMeters,
+          userSteps,
+          description: data.description,
+          notes,
+          exerciseType: distanceType
+        });
+      }
     });
 
     setResults(allCalculations);
@@ -171,34 +214,44 @@ export default function StrideCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label>Distance Type</Label>
+                <Label>Exercise Type</Label>
                 <Select value={distanceType} onValueChange={(value: DistanceType) => setDistanceType(value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="poles">Trotting Poles</SelectItem>
-                    <SelectItem value="gymnastics">Jumping Gymnastics</SelectItem>
-                    <SelectItem value="related">Course Related Distances</SelectItem>
+                    <SelectItem value="walk-poles">Walk Poles</SelectItem>
+                    <SelectItem value="trot-poles">Trot Poles</SelectItem>
+                    <SelectItem value="canter-poles">Canter Poles</SelectItem>
+                    <SelectItem value="gridwork">Gridwork Exercises</SelectItem>
+                    <SelectItem value="course-distances">Course Distances</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label>Number of Strides</Label>
-                <Select value={strideCount} onValueChange={(value: StrideCount) => setStrideCount(value)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {distanceType !== "related" && <SelectItem value="bounce">Bounce (No Stride)</SelectItem>}
-                    <SelectItem value="1-stride">1 Stride</SelectItem>
-                    <SelectItem value="2-stride">2 Strides</SelectItem>
-                    <SelectItem value="3-stride">3 Strides</SelectItem>
-                    <SelectItem value="4-stride">4 Strides</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {needsStrideSelection() && (
+                <div className="space-y-2">
+                  <Label>Number of Strides</Label>
+                  <Select value={strideCount} onValueChange={(value: StrideCount) => setStrideCount(value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bounce">Bounce (No Stride)</SelectItem>
+                      <SelectItem value="1-stride">1 Stride</SelectItem>
+                      <SelectItem value="2-stride">2 Strides</SelectItem>
+                      <SelectItem value="3-stride">3 Strides</SelectItem>
+                      <SelectItem value="4-stride">4 Strides</SelectItem>
+                      {(distanceType === "gridwork" || distanceType === "course-distances") && (
+                        <>
+                          <SelectItem value="5-stride">5 Strides</SelectItem>
+                          <SelectItem value="6-stride">6 Strides</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               <div className="flex gap-2">
                 <Button onClick={calculateDistances} className="flex-1">
@@ -275,44 +328,75 @@ export default function StrideCalculator() {
         </div>
 
         {/* Information Section */}
-        <Card className="max-w-4xl mx-auto mt-8">
+        <Card className="max-w-6xl mx-auto mt-8">
           <CardHeader>
-            <CardTitle>Important Notes</CardTitle>
+            <CardTitle>Exercise Guide & Safety Notes</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-5 gap-4">
               <div>
-                <h3 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">Trotting Poles</h3>
+                <h3 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">Walk Poles</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Measured from center to center. Start with longer distances for green horses. 
-                  Adjust based on your horse's natural stride length.
+                  Perfect for warming up and teaching rhythm. Use 4-6 poles. 
+                  Adjust spacing for collected, standard, or extended walk.
                 </p>
               </div>
               
               <div>
-                <h3 className="font-semibold mb-2 text-green-600 dark:text-green-400">Jumping Gymnastics</h3>
+                <h3 className="font-semibold mb-2 text-green-600 dark:text-green-400">Trot Poles</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Measured from back rail to front rail. Add 15cm for every 30cm increase in jump height. 
-                  Start lower and build up gradually.
+                  Build rhythm and balance. Use 4-8 poles. Start with standard spacing, 
+                  adjust for horse's natural stride and training level.
                 </p>
               </div>
               
               <div>
-                <h3 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Course Distances</h3>
+                <h3 className="font-semibold mb-2 text-orange-600 dark:text-orange-400">Canter Poles</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Standard competition distances. Vary by 1-2 meters depending on ground conditions, 
-                  jump height, and horse's natural stride.
+                  Improve canter quality and stride control. Use 3-5 poles. 
+                  Start with single poles before creating sequences.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Gridwork</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Systematic jumping training. Mix poles and small jumps. 
+                  Add 15cm per 30cm jump height increase to distances.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold mb-2 text-red-600 dark:text-red-400">Course Distances</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Competition-standard related distances. Vary ±1-2m based on 
+                  ground conditions, jump height, and horse's stride.
                 </p>
               </div>
             </div>
             
             <Separator />
             
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-              <p className="text-sm text-yellow-800 dark:text-yellow-400">
-                <strong>Safety First:</strong> Always start with poles on the ground and build up gradually. 
-                These are standard distances - adjust for your individual horse's stride length and ability level.
-              </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                <h4 className="font-semibold text-blue-800 dark:text-blue-400 mb-2">Measurement Guidelines</h4>
+                <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                  <li>• Poles: Center to center measurement</li>
+                  <li>• Gridwork: Back of first to front of second element</li>
+                  <li>• Course: Back of first jump to front of second jump</li>
+                  <li>• Use a measuring tape for accuracy</li>
+                </ul>
+              </div>
+              
+              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                <h4 className="font-semibold text-green-800 dark:text-green-400 mb-2">Safety Reminders</h4>
+                <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
+                  <li>• Always start with poles on the ground</li>
+                  <li>• Build height and complexity gradually</li>
+                  <li>• Adjust distances for individual horses</li>
+                  <li>• Consider ground conditions and footing</li>
+                </ul>
+              </div>
             </div>
           </CardContent>
         </Card>
