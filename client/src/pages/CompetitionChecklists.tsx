@@ -33,11 +33,18 @@ export default function CompetitionChecklists() {
 
   const generateMutation = useMutation({
     mutationFn: async (data: typeof newChecklist) => {
+      console.log("Sending checklist data:", data);
       const response = await apiRequest("POST", "/api/competition-checklists/generate", data);
-      return response.json();
+      const result = await response.json();
+      console.log("Received checklist:", result);
+      return result;
     },
-    onSuccess: (checklist) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/competition-checklists'] });
+    onSuccess: async (checklist) => {
+      console.log("Checklist created successfully:", checklist);
+      // Force refresh the checklists data
+      await queryClient.invalidateQueries({ queryKey: ['/api/competition-checklists'] });
+      await queryClient.refetchQueries({ queryKey: ['/api/competition-checklists'] });
+      
       setSelectedChecklist(checklist);
       setNewChecklist({
         competitionType: "",
@@ -51,7 +58,8 @@ export default function CompetitionChecklists() {
         description: "Your competition preparation checklist has been created successfully.",
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Generation error:", error);
       toast({
         title: "Generation Failed",
         description: "Failed to generate checklist. Please try again.",
@@ -174,12 +182,12 @@ export default function CompetitionChecklists() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cream to-white py-12">
+    <div className="min-h-screen bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-playfair font-bold text-navy mb-6">Competition Preparation</h1>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-          <p className="text-xl text-dark max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
             Generate comprehensive, personalized checklists for your competitions. Stay organized and never miss a crucial preparation step.
           </p>
         </div>
@@ -391,14 +399,35 @@ export default function CompetitionChecklists() {
                 </CardHeader>
                 <CardContent className="p-6">
                   {(() => {
-                    const checklistData = typeof selectedChecklist.checklist === 'string' 
-                      ? JSON.parse(selectedChecklist.checklist) 
-                      : selectedChecklist.checklist;
+                    console.log("Selected checklist raw data:", selectedChecklist);
+                    console.log("Checklist type:", typeof selectedChecklist.checklist);
+                    
+                    let checklistData;
+                    try {
+                      checklistData = typeof selectedChecklist.checklist === 'string' 
+                        ? JSON.parse(selectedChecklist.checklist) 
+                        : selectedChecklist.checklist;
+                      console.log("Parsed checklist data:", checklistData);
+                    } catch (error) {
+                      console.error("Error parsing checklist data:", error);
+                      return <div className="text-red-500">Error loading checklist data</div>;
+                    }
+
+                    if (!checklistData || typeof checklistData !== 'object') {
+                      console.error("Invalid checklist data structure:", checklistData);
+                      return <div className="text-red-500">Invalid checklist data structure</div>;
+                    }
 
                     return (
                       <div className="space-y-6">
-                        {Object.entries(checklistData).map(([categoryKey, tasks]) => (
-                          <div key={categoryKey} className="space-y-3">
+                        {Object.entries(checklistData).map(([categoryKey, tasks]) => {
+                          console.log("Processing category:", categoryKey, "with tasks:", tasks);
+                          if (!Array.isArray(tasks)) {
+                            console.warn("Tasks is not an array for category:", categoryKey, tasks);
+                            return null;
+                          }
+                          return (
+                            <div key={categoryKey} className="space-y-3">
                             <h3 className="text-xl font-playfair font-bold text-navy border-b border-gray-200 pb-2">
                               {categoryKey}
                             </h3>
@@ -433,7 +462,8 @@ export default function CompetitionChecklists() {
                               ))}
                             </div>
                           </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     );
                   })()}
