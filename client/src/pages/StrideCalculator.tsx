@@ -23,7 +23,8 @@ interface StrideCalculation {
 
 export default function StrideCalculator() {
   const [userHeight, setUserHeight] = useState<number>(170);
-  const [horseHeight, setHorseHeight] = useState<number>(163); // 16hh in cm
+  const [horseFeet, setHorseFeet] = useState<number>(16);
+  const [horseInches, setHorseInches] = useState<number>(0);
   const [distanceType, setDistanceType] = useState<DistanceType>("trot-poles");
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
@@ -104,6 +105,17 @@ export default function StrideCalculator() {
     return Math.round(meters * 1.094 * 10) / 10; // Convert and round to 1 decimal
   };
 
+  // Convert feet and inches to centimeters
+  const feetInchesToCm = (feet: number, inches: number): number => {
+    const totalInches = (feet * 12) + inches;
+    return Math.round(totalInches * 2.54);
+  };
+
+  // Get horse height in cm from feet and inches inputs
+  const getHorseHeightCm = (): number => {
+    return feetInchesToCm(horseFeet, horseInches);
+  };
+
   // Determine horse size category based on height in cm
   const getHorseSizeFromHeight = (heightCm: number): HorseSize => {
     if (heightCm < 128) return "12-2"; // Under 12.2hh
@@ -124,7 +136,8 @@ export default function StrideCalculator() {
   const calculateDistances = () => {
     const calculations: StrideCalculation[] = [];
     const distances = standardDistances[distanceType];
-    const horseSizeCategory = getHorseSizeFromHeight(horseHeight);
+    const horseHeightCm = getHorseHeightCm();
+    const horseSizeCategory = getHorseSizeFromHeight(horseHeightCm);
 
     if (distanceType === "course-distances") {
       // For course distances, filter by stride count and horse size
@@ -289,7 +302,7 @@ export default function StrideCalculator() {
                 Setup Calculator
               </CardTitle>
               <CardDescription>
-                Enter your height and select the type of distance you need to measure
+                Enter your height and your horse's height to get precise distance measurements
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -310,18 +323,35 @@ export default function StrideCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="horse-height">Horse Height (cm)</Label>
-                <Input
-                  id="horse-height"
-                  type="number"
-                  value={horseHeight}
-                  onChange={(e) => setHorseHeight(Number(e.target.value))}
-                  placeholder="163"
-                  min="120"
-                  max="190"
-                />
+                <Label htmlFor="horse-height">Horse Height</Label>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input
+                      id="horse-feet"
+                      type="number"
+                      value={horseFeet}
+                      onChange={(e) => setHorseFeet(Number(e.target.value))}
+                      placeholder="16"
+                      min="10"
+                      max="18"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Feet</p>
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      id="horse-inches"
+                      type="number"
+                      value={horseInches}
+                      onChange={(e) => setHorseInches(Number(e.target.value))}
+                      placeholder="0"
+                      min="0"
+                      max="11"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Inches</p>
+                  </div>
+                </div>
                 <p className="text-sm text-gray-500">
-                  16hh = 163cm, 15hh = 152cm, 14.2hh = 148cm, 13.2hh = 138cm
+                  16.0hh, 15.2hh, 14.2hh, 13.2hh, 12.2hh
                 </p>
               </div>
 
