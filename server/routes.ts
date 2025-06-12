@@ -15,7 +15,8 @@ import {
   insertEmailTemplateSchema,
   insertEmailCampaignSchema,
   insertEmailAutomationSchema,
-  insertGallerySchema
+  insertGallerySchema,
+  insertCompetitionChecklistSchema
 } from "@shared/schema";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -1358,6 +1359,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting news:", error);
       res.status(500).json({ message: "Failed to delete news article" });
+    }
+  });
+
+  // Competition Checklist routes
+  app.get("/api/competition-checklists", async (req, res) => {
+    try {
+      const checklists = await storage.getAllCompetitionChecklists();
+      res.json(checklists);
+    } catch (error) {
+      console.error("Error fetching competition checklists:", error);
+      res.status(500).json({ message: "Failed to fetch competition checklists" });
+    }
+  });
+
+  app.get("/api/competition-checklists/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const checklist = await storage.getCompetitionChecklist(id);
+      
+      if (!checklist) {
+        return res.status(404).json({ message: "Competition checklist not found" });
+      }
+      
+      res.json(checklist);
+    } catch (error) {
+      console.error("Error fetching competition checklist:", error);
+      res.status(500).json({ message: "Failed to fetch competition checklist" });
+    }
+  });
+
+  app.post("/api/competition-checklists/generate", async (req, res) => {
+    try {
+      const { competitionType, competitionName, competitionDate, location, horseName } = req.body;
+      
+      if (!competitionType || !competitionName || !competitionDate || !location) {
+        return res.status(400).json({ message: "Competition details are required" });
+      }
+
+      const checklist = await storage.generateChecklistForCompetition(
+        competitionType,
+        competitionName,
+        new Date(competitionDate),
+        location,
+        horseName
+      );
+      
+      res.status(201).json(checklist);
+    } catch (error) {
+      console.error("Error generating competition checklist:", error);
+      res.status(500).json({ message: "Failed to generate competition checklist" });
+    }
+  });
+
+  app.post("/api/competition-checklists", async (req, res) => {
+    try {
+      const checklistData = insertCompetitionChecklistSchema.parse(req.body);
+      const checklist = await storage.createCompetitionChecklist(checklistData);
+      res.status(201).json(checklist);
+    } catch (error) {
+      console.error("Error creating competition checklist:", error);
+      res.status(400).json({ message: "Invalid checklist data" });
+    }
+  });
+
+  app.put("/api/competition-checklists/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = insertCompetitionChecklistSchema.partial().parse(req.body);
+      const checklist = await storage.updateCompetitionChecklist(id, updates);
+      
+      if (!checklist) {
+        return res.status(404).json({ message: "Competition checklist not found" });
+      }
+      
+      res.json(checklist);
+    } catch (error) {
+      console.error("Error updating competition checklist:", error);
+      res.status(400).json({ message: "Invalid checklist data" });
+    }
+  });
+
+  app.delete("/api/competition-checklists/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCompetitionChecklist(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting competition checklist:", error);
+      res.status(500).json({ message: "Failed to delete competition checklist" });
     }
   });
 

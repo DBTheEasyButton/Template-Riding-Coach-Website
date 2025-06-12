@@ -430,3 +430,27 @@ export type ClinicWithSessions = Clinic & {
 export interface LoyaltyProgramWithDiscounts extends LoyaltyProgram {
   availableDiscounts?: LoyaltyDiscount[];
 }
+
+export const competitionChecklists = pgTable("competition_checklists", {
+  id: serial("id").primaryKey(),
+  competitionType: text("competition_type").notNull(), // CCI5*, CCI4*, etc
+  competitionName: text("competition_name").notNull(),
+  competitionDate: timestamp("competition_date").notNull(),
+  location: text("location").notNull(),
+  horseName: text("horse_name"),
+  checklist: jsonb("checklist").notNull(), // Array of checklist items with categories
+  isCompleted: boolean("is_completed").default(false),
+  completionNotes: text("completion_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertCompetitionChecklistSchema = createInsertSchema(competitionChecklists).omit({
+  id: true,
+  isCompleted: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type CompetitionChecklist = typeof competitionChecklists.$inferSelect;
+export type InsertCompetitionChecklist = z.infer<typeof insertCompetitionChecklistSchema>;

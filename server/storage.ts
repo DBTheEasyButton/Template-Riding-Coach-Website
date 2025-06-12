@@ -18,6 +18,7 @@ import {
   gallery,
   loyaltyProgram,
   loyaltyDiscounts,
+  competitionChecklists,
   type User, 
   type InsertUser,
   type Achievement,
@@ -57,7 +58,9 @@ import {
   type InsertLoyaltyProgram,
   type LoyaltyDiscount,
   type InsertLoyaltyDiscount,
-  type LoyaltyProgramWithDiscounts
+  type LoyaltyProgramWithDiscounts,
+  type CompetitionChecklist,
+  type InsertCompetitionChecklist
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
@@ -156,6 +159,14 @@ export interface IStorage {
   getLoyaltyDiscounts(loyaltyId: number): Promise<LoyaltyDiscount[]>;
   getAvailableDiscount(email: string): Promise<LoyaltyDiscount | undefined>;
   useLoyaltyDiscount(discountCode: string, registrationId: number): Promise<LoyaltyDiscount | undefined>;
+
+  // Competition Checklist System
+  getAllCompetitionChecklists(): Promise<CompetitionChecklist[]>;
+  getCompetitionChecklist(id: number): Promise<CompetitionChecklist | undefined>;
+  createCompetitionChecklist(checklist: InsertCompetitionChecklist): Promise<CompetitionChecklist>;
+  updateCompetitionChecklist(id: number, updates: Partial<InsertCompetitionChecklist>): Promise<CompetitionChecklist | undefined>;
+  deleteCompetitionChecklist(id: number): Promise<void>;
+  generateChecklistForCompetition(competitionType: string, competitionName: string, competitionDate: Date, location: string, horseName?: string): Promise<CompetitionChecklist>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1195,6 +1206,111 @@ The Dan Bizzarro Method Team`,
 
   async deleteGalleryImage(id: number): Promise<void> {
     await db.delete(gallery).where(eq(gallery.id, id));
+  }
+
+  // Competition Checklist System Implementation
+  async getAllCompetitionChecklists(): Promise<CompetitionChecklist[]> {
+    return await db.select().from(competitionChecklists).orderBy(desc(competitionChecklists.createdAt));
+  }
+
+  async getCompetitionChecklist(id: number): Promise<CompetitionChecklist | undefined> {
+    const [checklist] = await db.select().from(competitionChecklists).where(eq(competitionChecklists.id, id));
+    return checklist;
+  }
+
+  async createCompetitionChecklist(insertChecklist: InsertCompetitionChecklist): Promise<CompetitionChecklist> {
+    const [checklist] = await db.insert(competitionChecklists).values(insertChecklist).returning();
+    return checklist;
+  }
+
+  async updateCompetitionChecklist(id: number, updates: Partial<InsertCompetitionChecklist>): Promise<CompetitionChecklist | undefined> {
+    const [checklist] = await db
+      .update(competitionChecklists)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(competitionChecklists.id, id))
+      .returning();
+    return checklist;
+  }
+
+  async deleteCompetitionChecklist(id: number): Promise<void> {
+    await db.delete(competitionChecklists).where(eq(competitionChecklists.id, id));
+  }
+
+  async generateChecklistForCompetition(
+    competitionType: string, 
+    competitionName: string, 
+    competitionDate: Date, 
+    location: string, 
+    horseName?: string
+  ): Promise<CompetitionChecklist> {
+    const checklist = this.getChecklistTemplate(competitionType, competitionDate);
+    
+    const insertData: InsertCompetitionChecklist = {
+      competitionType,
+      competitionName,
+      competitionDate,
+      location,
+      horseName: horseName || 'TBC',
+      checklist: JSON.stringify(checklist),
+      completionNotes: ''
+    };
+
+    return await this.createCompetitionChecklist(insertData);
+  }
+
+  private getChecklistTemplate(competitionType: string, competitionDate: Date) {
+    const daysUntilCompetition = Math.ceil((competitionDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+    
+    const isAdvancedLevel = competitionType.includes('CCI4*') || competitionType.includes('CCI5*') || competitionType.includes('Championship');
+    
+    return {
+      "6-8 Weeks Before": [
+        { id: "entry_submission", task: "Submit competition entry", completed: false, priority: "high" },
+        { id: "accommodation_booking", task: "Book accommodation near venue", completed: false, priority: "high" },
+        { id: "transport_arrangement", task: "Arrange horse transport", completed: false, priority: "high" },
+        { id: "insurance_check", task: "Verify insurance coverage", completed: false, priority: "medium" },
+        ...(isAdvancedLevel ? [
+          { id: "international_docs", task: "Prepare international travel documents", completed: false, priority: "high" },
+          { id: "vaccination_records", task: "Update horse vaccination records", completed: false, priority: "high" }
+        ] : [])
+      ],
+      "4-6 Weeks Before": [
+        { id: "fitness_program", task: "Finalize horse fitness program", completed: false, priority: "high" },
+        { id: "equipment_check", task: "Full equipment inspection and cleaning", completed: false, priority: "medium" },
+        { id: "shoeing_schedule", task: "Schedule pre-competition shoeing", completed: false, priority: "medium" },
+        { id: "vet_checkup", task: "Pre-competition veterinary check", completed: false, priority: "high" },
+        { id: "training_schedule", task: "Intensify training schedule", completed: false, priority: "high" }
+      ],
+      "2-4 Weeks Before": [
+        { id: "competition_rules", task: "Review current competition rules", completed: false, priority: "high" },
+        { id: "course_preview", task: "Study course maps and video", completed: false, priority: "medium" },
+        { id: "nutrition_plan", task: "Finalize horse nutrition plan", completed: false, priority: "medium" },
+        { id: "backup_equipment", task: "Prepare backup equipment", completed: false, priority: "low" },
+        { id: "weather_check", task: "Monitor weather forecasts", completed: false, priority: "low" }
+      ],
+      "1-2 Weeks Before": [
+        { id: "final_training", task: "Complete final training sessions", completed: false, priority: "high" },
+        { id: "equipment_packing", task: "Pack and organize all equipment", completed: false, priority: "high" },
+        { id: "travel_confirmation", task: "Confirm all travel arrangements", completed: false, priority: "high" },
+        { id: "emergency_contacts", task: "Update emergency contact list", completed: false, priority: "medium" },
+        { id: "mental_preparation", task: "Mental preparation and visualization", completed: false, priority: "medium" }
+      ],
+      "3-7 Days Before": [
+        { id: "competition_kit", task: "Prepare competition day kit", completed: false, priority: "high" },
+        { id: "horse_condition", task: "Final horse condition assessment", completed: false, priority: "high" },
+        { id: "times_check", task: "Check competition times and schedule", completed: false, priority: "high" },
+        { id: "venue_familiarization", task: "Arrive and familiarize with venue", completed: false, priority: "medium" },
+        { id: "light_training", task: "Light training to maintain fitness", completed: false, priority: "medium" }
+      ],
+      "Competition Day": [
+        { id: "early_arrival", task: "Arrive early for preparation", completed: false, priority: "high" },
+        { id: "horse_warmup", task: "Complete horse warm-up routine", completed: false, priority: "high" },
+        { id: "equipment_final_check", task: "Final equipment check", completed: false, priority: "high" },
+        { id: "rider_preparation", task: "Rider physical and mental preparation", completed: false, priority: "high" },
+        { id: "course_walk", task: "Final course walk", completed: false, priority: "high" },
+        { id: "nutrition_hydration", task: "Maintain proper nutrition and hydration", completed: false, priority: "medium" }
+      ]
+    };
   }
 }
 
