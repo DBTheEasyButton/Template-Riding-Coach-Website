@@ -40,17 +40,9 @@ export default function CompetitionChecklists() {
 
   const generateMutation = useMutation({
     mutationFn: async (data: typeof newChecklist) => {
-      console.log("Sending checklist data:", data);
-      const response = await apiRequest("POST", "/api/competition-checklists/generate", data);
-      
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error("API Error Response:", errorData);
-        throw new Error(`API Error: ${response.status} - ${errorData}`);
-      }
-      
-      const result = await response.json();
-      console.log("Received checklist:", result);
+      console.log("Starting checklist generation with data:", data);
+      const result = await apiRequest("POST", "/api/competition-checklists/generate", data);
+      console.log("Successfully received checklist:", result);
       return result;
     },
     onSuccess: async (checklist) => {
@@ -74,10 +66,13 @@ export default function CompetitionChecklists() {
       });
     },
     onError: (error) => {
-      console.error("Generation error:", error);
+      console.error("Full generation error:", error);
+      console.error("Error stack:", error.stack);
+      console.error("Error name:", error.name);
+      console.error("Error message:", error.message);
       toast({
         title: "Generation Failed",
-        description: `Failed to generate checklist: ${error.message}`,
+        description: `Error: ${error.message || 'Unknown error occurred'}`,
         variant: "destructive",
       });
     },
