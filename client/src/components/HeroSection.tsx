@@ -17,17 +17,13 @@ export default function HeroSection() {
   ];
 
   useEffect(() => {
-    // Only preload images on desktop for better mobile performance
-    const isMobile = window.innerWidth < 768;
-    
-    if (!isMobile) {
-      images.forEach((src, index) => {
-        if (index > 0) { // Skip first image as it loads eagerly
-          const img = new Image();
-          img.src = src;
-        }
-      });
-    }
+    // Preload images for better performance
+    images.forEach((src, index) => {
+      if (index > 0) { // Skip first image as it loads eagerly
+        const img = new Image();
+        img.src = src;
+      }
+    });
 
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -59,7 +55,6 @@ export default function HeroSection() {
             className="w-full h-full object-cover"
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
-            fetchPriority={index === 0 ? "high" : "low"}
             style={{
               willChange: index === currentImageIndex ? 'auto' : 'opacity'
             }}

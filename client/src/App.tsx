@@ -38,25 +38,22 @@ function Router() {
 }
 
 function App() {
-  try {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Router />
-          <Toaster />
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  } catch (error) {
-    console.error("App render error:", error);
-    return (
-      <div className="min-h-screen bg-red-100 flex items-center justify-center">
-        <div className="text-xl text-red-600">
-          Error loading application: {String(error)}
-        </div>
-      </div>
-    );
-  }
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" 
+          rel="stylesheet" 
+        />
+        <link 
+          rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+        />
+        <Toaster />
+        <Router />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

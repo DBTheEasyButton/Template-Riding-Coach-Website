@@ -54,7 +54,7 @@ export default function TestimonialsSection() {
     <section className="py-10 bg-gradient-to-br from-orange-50 to-orange-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-6xl mx-auto overflow-hidden">
-          <div className="flex animate-scroll gap-4" style={{ willChange: 'transform' }}>
+          <div className="flex animate-scroll gap-4">
             {/* Duplicate testimonials for seamless infinite scroll */}
             {[...testimonials, ...testimonials].map((testimonial, index) => (
               <div key={`${testimonial.id}-${index}`} className="flex-shrink-0 w-48">
