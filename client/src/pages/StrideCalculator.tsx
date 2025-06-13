@@ -69,34 +69,34 @@ export default function StrideCalculator() {
       "3-stride-big-horse": { distance: 13.6, description: "Gridwork 3 strides - big horse (16.1hh+): 13.6m" }
     },
     "course-distances": {
-      "1-stride-small-pony": { distance: 5.5, description: "1 stride - small pony (<13hh): 5.2-5.8m" },
-      "1-stride-big-pony": { distance: 6.05, description: "1 stride - big pony (13-14.2hh): 5.7-6.4m" },
-      "1-stride-small-horse": { distance: 6.4, description: "1 stride - small horse (14.3-16hh): 5.9-6.9m" },
-      "1-stride-big-horse": { distance: 6.5, description: "1 stride - big horse (16.1hh+): 6.0-7.0m" },
-      "2-stride-small-pony": { distance: 7.95, description: "2 strides - small pony (<13hh): 7.7-8.2m" },
-      "2-stride-big-pony": { distance: 8.9, description: "2 strides - big pony (13-14.2hh): 8.6-9.2m" },
-      "2-stride-small-horse": { distance: 9.7, description: "2 strides - small horse (14.3-16hh): 9.4-10.0m" },
-      "2-stride-big-horse": { distance: 9.85, description: "2 strides - big horse (16.1hh+): 9.5-10.2m" },
-      "3-stride-small-pony": { distance: 11.25, description: "3 strides - small pony (<13hh): 10.5-12.0m" },
-      "3-stride-big-pony": { distance: 12.25, description: "3 strides - big pony (13-14.2hh): 11.5-13.0m" },
-      "3-stride-small-horse": { distance: 13.25, description: "3 strides - small horse (14.3-16hh): 12.5-14.0m" },
-      "3-stride-big-horse": { distance: 14.25, description: "3 strides - big horse (16.1hh+): 13.5-15.0m" },
-      "4-stride-small-pony": { distance: 13.75, description: "4 strides - small pony (<13hh): 13.0-14.5m" },
-      "4-stride-big-pony": { distance: 15.25, description: "4 strides - big pony (13-14.2hh): 14.5-16.0m" },
-      "4-stride-small-horse": { distance: 16.35, description: "4 strides - small horse (14.3-16hh): 15.7-17.0m" },
-      "4-stride-big-horse": { distance: 17.75, description: "4 strides - big horse (16.1hh+): 17.0-18.5m" },
-      "5-stride-small-pony": { distance: 16.6, description: "5 strides - small pony (<13hh): 15.7-17.5m" },
-      "5-stride-big-pony": { distance: 18.25, description: "5 strides - big pony (13-14.2hh): 17.5-19.0m" },
-      "5-stride-small-horse": { distance: 19.75, description: "5 strides - small horse (14.3-16hh): 19.0-20.5m" },
-      "5-stride-big-horse": { distance: 21.5, description: "5 strides - big horse (16.1hh+): 20.5-22.5m" },
-      "6-stride-small-pony": { distance: 19.75, description: "6 strides - small pony (<13hh): 19.0-20.5m" },
-      "6-stride-big-pony": { distance: 21.0, description: "6 strides - big pony (13-14.2hh): 20.0-22.0m" },
-      "6-stride-small-horse": { distance: 22.75, description: "6 strides - small horse (14.3-16hh): 22.0-23.5m" },
-      "6-stride-big-horse": { distance: 24.75, description: "6 strides - big horse (16.1hh+): 23.5-26.0m" },
-      "7-stride-small-pony": { distance: 22.0, description: "7 strides - small pony (<13hh): 21.0-23.0m" },
-      "7-stride-big-pony": { distance: 24.0, description: "7 strides - big pony (13-14.2hh): 23.0-25.0m" },
-      "7-stride-small-horse": { distance: 26.0, description: "7 strides - small horse (14.3-16hh): 25.0-27.0m" },
-      "7-stride-big-horse": { distance: 28.5, description: "7 strides - big horse (16.1hh+): 27.0-30.0m" }
+      "1-stride-small-pony": { distance: 6.5, description: "1 stride - small pony (<13hh): 6.5-7.2m" },
+      "1-stride-big-pony": { distance: 6.7, description: "1 stride - big pony (13-14.2hh): 6.5-7.2m" },
+      "1-stride-small-horse": { distance: 6.9, description: "1 stride - small horse (14.3-16hh): 6.5-7.2m" },
+      "1-stride-big-horse": { distance: 7.2, description: "1 stride - big horse (16.1hh+): 6.5-7.2m" },
+      "2-stride-small-pony": { distance: 10.0, description: "2 strides - small pony (<13hh): 10.0-11.0m" },
+      "2-stride-big-pony": { distance: 10.3, description: "2 strides - big pony (13-14.2hh): 10.0-11.0m" },
+      "2-stride-small-horse": { distance: 10.7, description: "2 strides - small horse (14.3-16hh): 10.0-11.0m" },
+      "2-stride-big-horse": { distance: 11.0, description: "2 strides - big horse (16.1hh+): 10.0-11.0m" },
+      "3-stride-small-pony": { distance: 13.0, description: "3 strides - small pony (<13hh): 13.0-15.0m" },
+      "3-stride-big-pony": { distance: 13.7, description: "3 strides - big pony (13-14.2hh): 13.0-15.0m" },
+      "3-stride-small-horse": { distance: 14.3, description: "3 strides - small horse (14.3-16hh): 13.0-15.0m" },
+      "3-stride-big-horse": { distance: 15.0, description: "3 strides - big horse (16.1hh+): 13.0-15.0m" },
+      "4-stride-small-pony": { distance: 16.5, description: "4 strides - small pony (<13hh): 16.5-18.5m" },
+      "4-stride-big-pony": { distance: 17.2, description: "4 strides - big pony (13-14.2hh): 16.5-18.5m" },
+      "4-stride-small-horse": { distance: 17.8, description: "4 strides - small horse (14.3-16hh): 16.5-18.5m" },
+      "4-stride-big-horse": { distance: 18.5, description: "4 strides - big horse (16.1hh+): 16.5-18.5m" },
+      "5-stride-small-pony": { distance: 20.0, description: "5 strides - small pony (<13hh): 20.0-22.0m" },
+      "5-stride-big-pony": { distance: 20.7, description: "5 strides - big pony (13-14.2hh): 20.0-22.0m" },
+      "5-stride-small-horse": { distance: 21.3, description: "5 strides - small horse (14.3-16hh): 20.0-22.0m" },
+      "5-stride-big-horse": { distance: 22.0, description: "5 strides - big horse (16.1hh+): 20.0-22.0m" },
+      "6-stride-small-pony": { distance: 23.5, description: "6 strides - small pony (<13hh): 23.5-25.5m" },
+      "6-stride-big-pony": { distance: 24.2, description: "6 strides - big pony (13-14.2hh): 23.5-25.5m" },
+      "6-stride-small-horse": { distance: 24.8, description: "6 strides - small horse (14.3-16hh): 23.5-25.5m" },
+      "6-stride-big-horse": { distance: 25.5, description: "6 strides - big horse (16.1hh+): 23.5-25.5m" },
+      "7-stride-small-pony": { distance: 27.0, description: "7 strides - small pony (<13hh): 27.0-29.0m" },
+      "7-stride-big-pony": { distance: 27.7, description: "7 strides - big pony (13-14.2hh): 27.0-29.0m" },
+      "7-stride-small-horse": { distance: 28.3, description: "7 strides - small horse (14.3-16hh): 27.0-29.0m" },
+      "7-stride-big-horse": { distance: 29.0, description: "7 strides - big horse (16.1hh+): 27.0-29.0m" }
     }
   };
 
@@ -472,7 +472,7 @@ export default function StrideCalculator() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bounce">Bounce (No Stride)</SelectItem>
+
                       <SelectItem value="1-stride">1 Stride</SelectItem>
                       <SelectItem value="2-stride">2 Strides</SelectItem>
                       <SelectItem value="3-stride">3 Strides</SelectItem>
