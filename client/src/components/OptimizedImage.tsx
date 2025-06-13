@@ -39,37 +39,15 @@ export function OptimizedImage({
 
   // Generate responsive image sources
   const getOptimizedSrc = (originalSrc: string) => {
-    if (!originalSrc.includes('/uploads/')) return originalSrc;
-    
-    const basePath = originalSrc.replace(/\.[^.]+$/, '');
-    const hasOptimized = originalSrc.includes('-optimized');
-    
-    if (hasOptimized) {
-      // Already optimized, try modern formats
-      const baseWithoutOptimized = basePath.replace('-optimized', '');
-      
-      if (supportsAVIF()) {
-        return `${baseWithoutOptimized}.avif`;
-      } else if (supportsWebP()) {
-        return `${baseWithoutOptimized}.webp`;
-      }
-    }
-    
+    // For now, just return the original src to ensure images display
+    // The optimization can be enhanced later with proper fallback handling
     return originalSrc;
   };
 
   // Generate srcset for responsive images
   const generateSrcSet = (originalSrc: string) => {
-    if (!originalSrc.includes('/uploads/')) return '';
-    
-    const basePath = originalSrc.replace(/\.[^.]+$/, '').replace('-optimized', '');
-    const extension = supportsAVIF() ? '.avif' : supportsWebP() ? '.webp' : '.jpg';
-    
-    return [
-      `${basePath}-mobile${extension} 480w`,
-      `${basePath}-tablet${extension} 768w`,
-      `${basePath}-desktop${extension} 1200w`
-    ].join(', ');
+    // Disable srcset for now to ensure images load properly
+    return '';
   };
 
   const handleError = () => {
