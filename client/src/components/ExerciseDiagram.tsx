@@ -207,10 +207,10 @@ export function ExerciseDiagram() {
                 return (
                   <rect
                     key={index}
-                    x={element.position.x - (element.width || 100) / 2}
-                    y={element.position.y}
-                    width={element.width || 100}
-                    height={element.height || 8}
+                    x={element.position.x - (element.height || 8) / 2}
+                    y={element.position.y - (element.width || 100) / 2}
+                    width={element.height || 8}
+                    height={element.width || 100}
                     fill={color}
                     rx="4"
                   />
