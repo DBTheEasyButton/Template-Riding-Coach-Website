@@ -13,6 +13,8 @@ interface OptimizationOptions {
 export class ImageOptimizer {
   private static readonly DEFAULT_QUALITY = 85;
   private static readonly DEFAULT_PROGRESSIVE = true;
+  private static readonly MAX_FILE_SIZE = 800 * 1024; // 800KB target size
+  private static readonly MIN_QUALITY = 60;
   
   static async optimizeImage(
     inputBuffer: Buffer,
@@ -21,54 +23,81 @@ export class ImageOptimizer {
     const {
       width,
       height,
-      quality = this.DEFAULT_QUALITY,
+      quality: initialQuality = this.DEFAULT_QUALITY,
       format = 'jpeg',
       progressive = this.DEFAULT_PROGRESSIVE
     } = options;
 
     const originalSize = inputBuffer.length;
+    let quality = initialQuality;
+    let attempts = 0;
+    const maxAttempts = 4;
     
-    let pipeline = sharp(inputBuffer);
+    let bestResult: { buffer: Buffer; info: sharp.OutputInfo } | null = null;
     
-    // Resize if dimensions specified
-    if (width || height) {
-      pipeline = pipeline.resize(width, height, {
-        fit: 'cover',
-        position: 'center'
-      });
+    // Iteratively optimize until file size target is met or max attempts reached
+    while (attempts < maxAttempts) {
+      let pipeline = sharp(inputBuffer);
+      
+      // Resize if dimensions specified
+      if (width || height) {
+        pipeline = pipeline.resize(width, height, {
+          fit: 'inside',
+          withoutEnlargement: true,
+          position: 'center'
+        });
+      }
+      
+      // Apply format-specific optimizations
+      switch (format) {
+        case 'jpeg':
+          pipeline = pipeline.jpeg({
+            quality,
+            progressive,
+            mozjpeg: true,
+            trellisQuantisation: true,
+            overshootDeringing: true,
+            optimizeScans: true
+          });
+          break;
+        case 'webp':
+          pipeline = pipeline.webp({
+            quality,
+            effort: 6,
+            smartSubsample: true
+          });
+          break;
+        case 'avif':
+          pipeline = pipeline.avif({
+            quality,
+            effort: 9,
+            chromaSubsampling: '4:2:0'
+          });
+          break;
+      }
+      
+      const result = await pipeline.toBuffer({ resolveWithObject: true });
+      bestResult = result;
+      
+      // Check if file size is acceptable or if we're at minimum quality
+      if (result.data.length <= this.MAX_FILE_SIZE || quality <= this.MIN_QUALITY) {
+        break;
+      }
+      
+      // Reduce quality for next attempt
+      quality = Math.max(this.MIN_QUALITY, quality - 15);
+      attempts++;
     }
     
-    // Apply format-specific optimizations
-    switch (format) {
-      case 'jpeg':
-        pipeline = pipeline.jpeg({
-          quality,
-          progressive,
-          mozjpeg: true // Use mozjpeg encoder for better compression
-        });
-        break;
-      case 'webp':
-        pipeline = pipeline.webp({
-          quality,
-          effort: 6 // Higher effort for better compression
-        });
-        break;
-      case 'avif':
-        pipeline = pipeline.avif({
-          quality,
-          effort: 9 // Maximum effort for AVIF
-        });
-        break;
+    if (!bestResult) {
+      throw new Error('Image optimization failed');
     }
-    
-    const { data: buffer, info } = await pipeline.toBuffer({ resolveWithObject: true });
-    const optimizedSize = buffer.length;
     
     return {
-      buffer,
-      info,
+      buffer: bestResult.data,
+      info: bestResult.info,
       originalSize,
-      optimizedSize
+      optimizedSize: bestResult.data.length
     };
   }
   

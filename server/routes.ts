@@ -7,6 +7,7 @@ import fs from "fs";
 import { storage } from "./storage";
 import { emailService } from "./emailService";
 import { replaceCsvEmails } from "./csvImport";
+import { ImageOptimizer } from "./imageOptimizer";
 import { 
   insertContactSchema, 
   insertClinicRegistrationSchema, 
@@ -57,106 +58,61 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Image upload endpoint with automatic resizing
+  // Enhanced image upload endpoint with advanced optimization
   app.post("/api/upload-image", upload.single('image'), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ error: 'No image file provided' });
       }
       
-      const sharp = (await import('sharp')).default;
       const originalPath = req.file.path;
       const originalSize = req.file.size;
+      const originalBuffer = await fs.promises.readFile(originalPath);
       
-      // Define max dimensions and target file size
-      const maxWidth = 1920;
-      const maxHeight = 1080;
-      const targetFileSize = 1024 * 1024; // 1MB target size
+      // Generate unique base name
+      const baseName = req.file.filename.replace(/\.[^.]+$/, '');
       
-      // Get original image metadata
-      const metadata = await sharp(originalPath).metadata();
-      let { width = maxWidth, height = maxHeight } = metadata;
+      // Create multiple optimized versions using ImageOptimizer
+      const responsiveVersions = await ImageOptimizer.createResponsiveVersions(originalBuffer, baseName);
       
-      // Calculate new dimensions while maintaining aspect ratio
-      if (width > maxWidth || height > maxHeight) {
-        const aspectRatio = width / height;
-        if (width > height) {
-          width = maxWidth;
-          height = Math.round(maxWidth / aspectRatio);
-        } else {
-          height = maxHeight;
-          width = Math.round(maxHeight * aspectRatio);
-        }
+      // Save all versions to disk
+      const savedVersions = {};
+      for (const [key, version] of Object.entries(responsiveVersions)) {
+        const filePath = path.join(uploadsDir, version.filename);
+        await fs.promises.writeFile(filePath, version.buffer);
+        savedVersions[key] = {
+          url: `/uploads/${version.filename}`,
+          size: version.buffer.length
+        };
       }
       
-      // Start with quality settings
-      let quality = 85;
-      let outputBuffer;
-      let attempts = 0;
-      const maxAttempts = 5;
+      // Also create an optimized main version for backwards compatibility
+      const mainOptimized = await ImageOptimizer.optimizeImage(originalBuffer, {
+        width: 1200,
+        quality: 85,
+        format: 'jpeg'
+      });
       
-      // Compress until file size is acceptable or max attempts reached
-      do {
-        const sharpInstance = sharp(originalPath)
-          .resize(width, height, {
-            fit: 'inside',
-            withoutEnlargement: true
-          });
-        
-        // Choose output format and apply compression
-        if (req.file.mimetype === 'image/png') {
-          outputBuffer = await sharpInstance
-            .png({ 
-              quality,
-              compressionLevel: 9,
-              palette: true
-            })
-            .toBuffer();
-        } else if (req.file.mimetype === 'image/webp') {
-          outputBuffer = await sharpInstance
-            .webp({ quality })
-            .toBuffer();
-        } else {
-          // Convert all other formats to JPEG for better compression
-          outputBuffer = await sharpInstance
-            .jpeg({ 
-              quality,
-              progressive: true,
-              mozjpeg: true
-            })
-            .toBuffer();
-        }
-        
-        // If still too large and we haven't reached minimum quality, reduce quality
-        if (outputBuffer.length > targetFileSize && quality > 30 && attempts < maxAttempts) {
-          quality -= 15;
-          attempts++;
-        } else {
-          break;
-        }
-      } while (attempts < maxAttempts);
-      
-      // Create the final filename
-      const ext = req.file.mimetype === 'image/png' ? '.png' : 
-                  req.file.mimetype === 'image/webp' ? '.webp' : '.jpg';
-      const finalFilename = req.file.filename.replace(/\.[^.]+$/, `-optimized${ext}`);
-      const finalPath = path.join(uploadsDir, finalFilename);
-      
-      // Write the optimized image
-      await sharp(outputBuffer).toFile(finalPath);
+      const mainFilename = `${baseName}-optimized.jpg`;
+      const mainPath = path.join(uploadsDir, mainFilename);
+      await fs.promises.writeFile(mainPath, mainOptimized.buffer);
       
       // Remove original file
       fs.unlinkSync(originalPath);
       
-      // Return the URL path for the optimized image
-      const imageUrl = `/uploads/${finalFilename}`;
-      res.json({ 
-        url: imageUrl,
+      // Return comprehensive response with all versions
+      res.json({
+        url: `/uploads/${mainFilename}`, // Main optimized version
         originalSize: originalSize,
-        optimizedSize: outputBuffer.length,
-        compressionRatio: ((originalSize - outputBuffer.length) / originalSize * 100).toFixed(1),
-        dimensions: { width, height }
+        optimizedSize: mainOptimized.optimizedSize,
+        compressionRatio: ImageOptimizer.calculateCompressionRatio(originalSize, mainOptimized.optimizedSize),
+        dimensions: {
+          width: mainOptimized.info.width,
+          height: mainOptimized.info.height
+        },
+        responsiveVersions: savedVersions
       });
+      
     } catch (error) {
       console.error('Image processing error:', error);
       
