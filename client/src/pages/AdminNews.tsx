@@ -13,7 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { News } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, FileText, Eye, Upload, X } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, FileText, Eye, Upload, X, Share2 } from "lucide-react";
+import { FacebookShareModal } from "@/components/FacebookShareModal";
 
 export default function AdminNews() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -21,6 +22,8 @@ export default function AdminNews() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [articleToShare, setArticleToShare] = useState<News | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -81,6 +84,11 @@ export default function AdminNews() {
       queryClient.invalidateQueries({ queryKey: ['/api/news'] });
     }
   });
+
+  const openShareModal = (article: News) => {
+    setArticleToShare(article);
+    setShareModalOpen(true);
+  };
 
   const resetForm = () => {
     setFormData({
@@ -288,6 +296,15 @@ export default function AdminNews() {
                       >
                         <Edit className="w-3 h-3" />
                         Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => createFacebookPost(news)}
+                        className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                      >
+                        <Share2 className="w-3 h-3" />
+                        Share to Facebook
                       </Button>
                       <Button
                         variant="outline"
