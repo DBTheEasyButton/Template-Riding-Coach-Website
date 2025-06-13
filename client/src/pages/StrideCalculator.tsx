@@ -66,7 +66,19 @@ export default function StrideCalculator() {
       "3-stride-small-pony": { distance: 10.8, description: "Gridwork 3 strides - small pony (<13hh): 10.8m" },
       "3-stride-big-pony": { distance: 11.6, description: "Gridwork 3 strides - big pony (13-14.2hh): 11.6m" },
       "3-stride-small-horse": { distance: 12.4, description: "Gridwork 3 strides - small horse (14.3-16hh): 12.4m" },
-      "3-stride-big-horse": { distance: 13.6, description: "Gridwork 3 strides - big horse (16.1hh+): 13.6m" }
+      "3-stride-big-horse": { distance: 13.6, description: "Gridwork 3 strides - big horse (16.1hh+): 13.6m" },
+      "4-stride-small-pony": { distance: 13.5, description: "Gridwork 4 strides - small pony (<13hh): 13.5m" },
+      "4-stride-big-pony": { distance: 14.5, description: "Gridwork 4 strides - big pony (13-14.2hh): 14.5m" },
+      "4-stride-small-horse": { distance: 15.5, description: "Gridwork 4 strides - small horse (14.3-16hh): 15.5m" },
+      "4-stride-big-horse": { distance: 17.0, description: "Gridwork 4 strides - big horse (16.1hh+): 17.0m" },
+      "5-stride-small-pony": { distance: 16.2, description: "Gridwork 5 strides - small pony (<13hh): 16.2m" },
+      "5-stride-big-pony": { distance: 17.4, description: "Gridwork 5 strides - big pony (13-14.2hh): 17.4m" },
+      "5-stride-small-horse": { distance: 18.6, description: "Gridwork 5 strides - small horse (14.3-16hh): 18.6m" },
+      "5-stride-big-horse": { distance: 20.4, description: "Gridwork 5 strides - big horse (16.1hh+): 20.4m" },
+      "6-stride-small-pony": { distance: 18.9, description: "Gridwork 6 strides - small pony (<13hh): 18.9m" },
+      "6-stride-big-pony": { distance: 20.3, description: "Gridwork 6 strides - big pony (13-14.2hh): 20.3m" },
+      "6-stride-small-horse": { distance: 21.7, description: "Gridwork 6 strides - small horse (14.3-16hh): 21.7m" },
+      "6-stride-big-horse": { distance: 23.8, description: "Gridwork 6 strides - big horse (16.1hh+): 23.8m" }
     },
     "course-distances": {
       "1-stride-small-pony": { distance: 6.5, description: "1 stride" },
