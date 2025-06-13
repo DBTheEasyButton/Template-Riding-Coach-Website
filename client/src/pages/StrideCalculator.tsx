@@ -151,7 +151,7 @@ export default function StrideCalculator() {
         return isTallUser ? "1 decent step" : "1 big step";
         
       case "canter-poles":
-        return isTallUser ? "3 decent steps" : "3 big steps";
+        return isTallUser ? "3 big steps" : "4 steps";
         
       case "gridwork":
         if (strideCount === "bounce") {
