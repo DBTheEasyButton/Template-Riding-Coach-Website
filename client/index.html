@@ -24,9 +24,22 @@
     <!-- Performance optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="preload" href="/src/assets/hero-background.jpg" as="image" type="image/jpeg">
     
-    <!-- Critical CSS inlining hint -->
+    <!-- Mobile-first image loading -->
+    <link rel="preload" href="/src/assets/hero-background.jpg" as="image" type="image/jpeg" media="(min-width: 768px)">
+    
+    <!-- Critical styles for faster rendering -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+      .loading { opacity: 0; }
+      .loaded { opacity: 1; transition: opacity 0.3s; }
+      /* Prevent layout shift */
+      nav { height: 64px; }
+      .hero-section { min-height: 100vh; }
+    </style>
+    
+    <!-- Non-critical CSS -->
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
   </head>

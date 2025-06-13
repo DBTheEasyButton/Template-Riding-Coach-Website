@@ -2,10 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile touch optimizations */
+/* Mobile performance and touch optimizations */
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Mobile-first optimization */
+  @media (max-width: 768px) {
+    /* Reduce animation complexity on mobile */
+    * {
+      animation-duration: 0.2s !important;
+      transition-duration: 0.2s !important;
+    }
+    
+    /* Optimize transforms for mobile */
+    .transform {
+      transform: translateZ(0);
+    }
+    
+    /* Reduce heavy effects on mobile */
+    .backdrop-blur-md {
+      backdrop-filter: blur(8px);
+    }
+    
+    /* Improve touch target sizes */
+    button, input, select, textarea, a {
+      min-height: 44px;
+    }
+    
+    /* Optimize image rendering */
+    img {
+      image-rendering: optimizeSpeed;
+    }
   }
   
   input[type="number"] {
@@ -20,13 +49,6 @@
   
   .touch-manipulation {
     touch-action: manipulation;
-  }
-  
-  /* Improve touch target sizes on mobile */
-  @media (max-width: 640px) {
-    button, input, select, textarea {
-      min-height: 44px;
-    }
   }
 }
 
