@@ -38,15 +38,25 @@ function Router() {
 }
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-
-        <Toaster />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
+  try {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Router />
+          <Toaster />
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  } catch (error) {
+    console.error("App render error:", error);
+    return (
+      <div className="min-h-screen bg-red-100 flex items-center justify-center">
+        <div className="text-xl text-red-600">
+          Error loading application: {String(error)}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
