@@ -15,7 +15,7 @@ type HorseSize = "small-pony" | "big-pony" | "small-horse" | "big-horse";
 interface StrideCalculation {
   distanceYards: number;
   distanceMeters: number;
-  userSteps: number;
+  userSteps: string;
   description: string;
   notes: string;
   exerciseType?: string;
@@ -121,17 +121,39 @@ export default function StrideCalculator() {
     return 32; // 6'5"+
   };
 
-  // Calculate user steps based on actual stride data
-  const calculateUserSteps = (distanceMeters: number): number => {
-    const strideInches = getStrideLength(userFeet, userInches);
-    const stepInches = strideInches / 2; // A step is half a stride
-    const stepMeters = stepInches * 0.0254; // Convert inches to meters
-    const steps = Math.round(distanceMeters / stepMeters);
+  // Simplified step calculation based on user height and exercise type
+  const calculateUserSteps = (exerciseType: DistanceType, strideCount?: StrideCount): string => {
+    const userHeightInches = (userFeet * 12) + userInches;
+    const isTallUser = userHeightInches >= 81; // 6'9" or taller
     
-    // Debug logging
-    console.log(`Height: ${userFeet}'${userInches}", Stride: ${strideInches}in, Step: ${stepInches}in, Distance: ${distanceMeters}m, Steps: ${steps}`);
-    
-    return steps;
+    switch (exerciseType) {
+      case "trot-poles":
+        return isTallUser ? "1 decent step" : "1 big step";
+        
+      case "canter-poles":
+        return isTallUser ? "3 decent steps" : "3 big steps";
+        
+      case "gridwork":
+        if (strideCount === "bounce") {
+          return isTallUser ? "3 big steps" : "4 steps";
+        } else {
+          const strideNumber = parseInt(strideCount?.split('-')[0] || "1");
+          const baseSteps = isTallUser ? 3 : 4;
+          const additionalSteps = (strideNumber - 1) * 3; // Add 3 steps per stride after bounce
+          return isTallUser ? `${baseSteps + additionalSteps} big steps` : `${baseSteps + additionalSteps} steps`;
+        }
+        
+      case "course-distances":
+        if (strideCount) {
+          const strideNumber = parseInt(strideCount?.split('-')[0] || "1");
+          const totalSteps = 2 + (strideNumber * 4) + 1; // 2 + (4 per stride) + 1
+          return isTallUser ? `${totalSteps} decent steps` : `${totalSteps} big steps`;
+        }
+        return isTallUser ? "decent steps" : "big steps";
+        
+      default:
+        return isTallUser ? "decent steps" : "big steps";
+    }
   };
 
   const metersToYards = (meters: number): number => {
@@ -191,7 +213,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(distanceMeters);
+        const userSteps = calculateUserSteps(distanceType, strideCount);
         
         let notes = getNotesForDistanceType(distanceType);
 
@@ -213,7 +235,7 @@ export default function StrideCalculator() {
         if (poleToFenceData) {
           const distanceMeters = poleToFenceData.distance;
           const distanceYards = metersToYards(distanceMeters);
-          const userSteps = calculateUserSteps(distanceMeters);
+          const userSteps = calculateUserSteps(distanceType, strideCount);
           
           calculations.push({
             distanceYards,
@@ -231,7 +253,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(distanceMeters);
+        const userSteps = calculateUserSteps(distanceType, strideCount);
         
         calculations.push({
           distanceYards,
@@ -248,7 +270,7 @@ export default function StrideCalculator() {
       if (selectedData && selectedData.distance && selectedData.description) {
         const distanceMeters = selectedData.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(distanceMeters);
+        const userSteps = calculateUserSteps(distanceType, strideCount);
         
         calculations.push({
           distanceYards,
@@ -266,7 +288,7 @@ export default function StrideCalculator() {
         if (selectedData && selectedData.distance && selectedData.description) {
           const distanceMeters = selectedData.distance;
           const distanceYards = metersToYards(distanceMeters);
-          const userSteps = calculateUserSteps(distanceMeters);
+          const userSteps = calculateUserSteps(distanceType);
           
           calculations.push({
             distanceYards,
@@ -308,7 +330,7 @@ export default function StrideCalculator() {
       if (data.distance && data.description) {
         const distanceMeters = data.distance;
         const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(distanceMeters);
+        const userSteps = calculateUserSteps(distanceType);
         
         let notes = getNotesForDistanceType(distanceType);
 
