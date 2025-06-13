@@ -69,15 +69,15 @@ export default function SponsorRotation() {
   return (
     <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm transition-all duration-500 hover:shadow-md">
       <div className="text-center">
-        <div className={`mx-auto rounded-lg overflow-hidden bg-white ${
-          currentSponsor.name === 'Sergio Grasso' || currentSponsor.name === 'Kep Italia' 
-            ? 'w-60 h-40 mb-0' 
-            : 'w-36 h-24 mb-0'
-        }`}>
+        <div className="w-60 h-40 mx-auto rounded-lg overflow-hidden bg-white mb-0 flex items-center justify-center">
           <OptimizedImage
             src={currentSponsor.logo}
             alt={`${currentSponsor.name} logo`}
-            className="w-full h-full object-contain p-1"
+            className={`object-contain p-1 ${
+              currentSponsor.name === 'Sergio Grasso' || currentSponsor.name === 'Kep Italia' 
+                ? 'w-full h-full' 
+                : 'w-3/5 h-3/5'
+            }`}
           />
         </div>
         <h4 className="font-medium text-gray-900 text-base mt-0.5 mb-1">
