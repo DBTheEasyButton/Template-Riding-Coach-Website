@@ -39,10 +39,10 @@ export default function StrideCalculator() {
       "big-horse": { distance: 0.9, description: "Walk poles - big horse (16.1hh+): 90cm" }
     },
     "trot-poles": {
-      "small-pony": { distance: 1.1, description: "Trot poles - small pony (<13hh): 1.0-1.2m" },
-      "big-pony": { distance: 1.275, description: "Trot poles - big pony (13-14.2hh): 1.2-1.35m" },
-      "small-horse": { distance: 1.35, description: "Trot poles - small horse (14.3-16hh): 1.25-1.45m" },
-      "big-horse": { distance: 1.475, description: "Trot poles - big horse (16.1hh+): 1.35-1.6m" }
+      "small-pony": { distance: 0.8, description: "Trot poles - small pony (<13hh): 80cm" },
+      "big-pony": { distance: 1.0, description: "Trot poles - big pony (13-14.2hh): 1.0m" },
+      "small-horse": { distance: 1.2, description: "Trot poles - small horse (14.3-16hh): 1.2m" },
+      "big-horse": { distance: 1.4, description: "Trot poles - big horse (16.1hh+): 1.4m" }
     },
     "canter-poles": {
       "small-pony": { distance: 2.4, description: "Canter poles - small pony (<13hh): 2.1-2.7m" },
