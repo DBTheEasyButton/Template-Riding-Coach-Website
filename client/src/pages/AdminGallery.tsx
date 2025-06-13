@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { GalleryImage } from "@shared/schema";
-import { Plus, Edit, Trash2, Upload, Eye, X } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, Eye, X, Settings } from "lucide-react";
 
 export default function AdminGallery() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -71,6 +71,16 @@ export default function AdminGallery() {
     },
     onError: (error: Error) => {
       toast({ title: "Error removing image", description: error.message, variant: "destructive" });
+    }
+  });
+
+  const optimizeImagesMutation = useMutation({
+    mutationFn: () => apiRequest("POST", "/api/optimize-images", {}),
+    onSuccess: () => {
+      toast({ title: "All images optimized successfully!" });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error optimizing images", description: error.message, variant: "destructive" });
     }
   });
 
@@ -197,10 +207,21 @@ export default function AdminGallery() {
               <h1 className="text-4xl font-bold text-navy dark:text-white mb-2">Gallery Management</h1>
               <p className="text-slate-600 dark:text-slate-300">Manage competition photos and media gallery</p>
             </div>
-            <Button onClick={() => setIsCreateOpen(true)} className="flex items-center gap-2">
-              <Plus className="w-4 h-4" />
-              Add Image
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => optimizeImagesMutation.mutate()}
+                disabled={optimizeImagesMutation.isPending}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                {optimizeImagesMutation.isPending ? 'Optimizing...' : 'Optimize All Images'}
+              </Button>
+              <Button onClick={() => setIsCreateOpen(true)} className="flex items-center gap-2">
+                <Plus className="w-4 h-4" />
+                Add Image
+              </Button>
+            </div>
           </div>
 
           {isLoading ? (
