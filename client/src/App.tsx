@@ -14,6 +14,7 @@ import AdminEmailMarketing from "@/pages/AdminEmailMarketing";
 import AdminRegistrations from "@/pages/AdminRegistrations";
 import AdminGallery from "@/pages/AdminGallery";
 import AdminNews from "@/pages/AdminNews";
+import AdminSponsors from "@/pages/AdminSponsors";
 import NewsArticle from "@/pages/NewsArticle";
 import Unsubscribe from "@/pages/Unsubscribe";
 import NotFound from "@/pages/not-found";
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/admin/registrations" component={AdminRegistrations} />
       <Route path="/admin/gallery" component={AdminGallery} />
       <Route path="/admin/news" component={AdminNews} />
+      <Route path="/admin/sponsors" component={AdminSponsors} />
       <Route path="/news/:id" component={NewsArticle} />
       <Route path="/unsubscribe" component={Unsubscribe} />
       <Route component={NotFound} />

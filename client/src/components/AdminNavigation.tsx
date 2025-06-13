@@ -62,6 +62,16 @@ export default function AdminNavigation() {
                   News
                 </Button>
               </Link>
+              <Link href="/admin/sponsors">
+                <Button 
+                  variant={location === "/admin/sponsors" ? "default" : "ghost"} 
+                  size="sm"
+                  className="flex items-center gap-2 w-full lg:w-auto"
+                >
+                  <Star className="w-4 h-4" />
+                  Sponsors
+                </Button>
+              </Link>
             </nav>
             <Link href="/" className="lg:ml-4">
               <Button variant="outline" size="sm" className="flex items-center gap-2 bg-white hover:bg-gray-50 border-2 border-orange-300">
