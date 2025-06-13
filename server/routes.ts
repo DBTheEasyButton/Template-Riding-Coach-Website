@@ -118,6 +118,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Fallback: if processing fails, return original file
       try {
+        if (!req.file) {
+          res.status(400).json({ error: 'No file uploaded' });
+          return;
+        }
         const imageUrl = `/uploads/${req.file.filename}`;
         res.json({ url: imageUrl });
       } catch (fallbackError) {
@@ -792,10 +796,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Add sheets for each clinic and discipline
       Object.entries(clinicGroups).forEach(([clinicName, disciplines]) => {
         Object.entries(disciplines).forEach(([discipline, participants]) => {
-          if (participants.length === 0) return;
+          if ((participants as any[]).length === 0) return;
 
           const sheetName = `${clinicName.substring(0, 20)} - ${discipline}`.substring(0, 31);
-          const worksheet = XLSX.utils.json_to_sheet(participants);
+          const worksheet = XLSX.utils.json_to_sheet(participants as any[]);
           
           // Auto-size columns
           const cols = [
