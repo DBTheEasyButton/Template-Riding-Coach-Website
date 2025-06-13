@@ -28,17 +28,17 @@ export default function SidebarBanners() {
       </div>
 
       {/* App Banner */}
-      <div className="bg-gradient-to-b from-orange-500 to-orange-600 text-white rounded-lg p-4 shadow-lg">
+      <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white rounded-lg p-4 shadow-lg">
         <div className="text-center">
-          <Smartphone className="w-8 h-8 mx-auto mb-2 text-orange-100" />
-          <h3 className="text-lg font-bold mb-2">Mobile App</h3>
-          <p className="text-orange-100 text-sm mb-3">
+          <Smartphone className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+          <h3 className="text-lg font-bold mb-2 text-white">Mobile App</h3>
+          <p className="text-slate-200 text-sm mb-3">
             Training tools & calculators on your phone
           </p>
           <Button 
             size="sm"
             variant="secondary"
-            className="w-full bg-white text-orange-700 hover:bg-orange-50"
+            className="w-full bg-white text-slate-800 hover:bg-slate-50"
             onClick={() => setLocation('/#app')}
           >
             Get App
