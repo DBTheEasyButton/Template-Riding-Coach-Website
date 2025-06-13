@@ -587,45 +587,75 @@ export default function StrideCalculator() {
 
         {/* Safety Notes Section */}
         <div className="mt-6 sm:mt-8">
-          <Card className="border-orange-200 dark:border-orange-800">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-orange-800 dark:text-orange-400">
-                <AlertTriangle className="h-5 w-5" />
-                Safety Notes
+          <Card className="border-l-4 border-l-red-500 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/50 dark:to-orange-950/50">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-3 text-red-700 dark:text-red-400">
+                <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-full">
+                  <AlertTriangle className="h-6 w-6" />
+                </div>
+                <span className="text-xl font-bold">Safety Guidelines</span>
               </CardTitle>
+              <CardDescription className="text-red-600 dark:text-red-300 font-medium">
+                Essential safety practices for all training exercises
+              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3 sm:space-y-4">
-              <div className="bg-orange-50 dark:bg-orange-900/20 p-3 sm:p-4 rounded-lg">
-                <ul className="space-y-2 text-sm sm:text-base text-orange-800 dark:text-orange-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
-                    Always use proper safety equipment including approved helmets and body protectors
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
-                    Start with lower heights and gradually increase as horse and rider confidence builds
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
-                    Ensure poles are properly supported and secure before beginning exercises
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
-                    Have a qualified instructor present when attempting new exercises
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
-                    Check footing conditions and ensure arena surface is suitable for the exercise
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
-                    Allow adequate warm-up time for both horse and rider before training sessions
-                  </li>
-                </ul>
+            <CardContent className="space-y-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-red-200 dark:border-red-800">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Safety Equipment:</strong> Always wear approved helmets and body protectors
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-red-200 dark:border-red-800">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Progressive Training:</strong> Start low and gradually increase difficulty
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-red-200 dark:border-red-800">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Equipment Check:</strong> Ensure all poles and jumps are secure
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-red-200 dark:border-red-800">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Qualified Supervision:</strong> Have an instructor present for new exercises
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-red-200 dark:border-red-800">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Arena Conditions:</strong> Check footing and surface suitability
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 bg-white/80 dark:bg-gray-800/60 rounded-lg border border-red-200 dark:border-red-800">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Proper Warm-up:</strong> Allow adequate preparation time
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 italic text-center">
-                These calculations are guidelines. Always prioritize safety and adapt distances based on your horse's individual stride and ability level.
-              </p>
+              
+              <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-1">Important Disclaimer</h4>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">
+                      These calculations provide guidance based on the Dan Bizzarro Method. Always adapt distances 
+                      to your horse's individual stride, ability level, and training progression. Safety must always 
+                      be the top priority in all training activities.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
