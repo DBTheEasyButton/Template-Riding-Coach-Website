@@ -66,7 +66,7 @@ import {
   type InsertCompetitionChecklist
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -177,7 +177,7 @@ export interface IStorage {
   getActiveSponsor(): Promise<Sponsor | undefined>;
   getSponsor(id: number): Promise<Sponsor | undefined>;
   createSponsor(sponsor: InsertSponsor): Promise<Sponsor>;
-  updateSponsor(id: number, updates: Partial<InsertSponsor>): Promise<Sponsor | undefined>;
+  updateSponsor(id: number, updates: Partial<Sponsor>): Promise<Sponsor | undefined>;
   deleteSponsor(id: number): Promise<void>;
   trackSponsorClick(id: number): Promise<void>;
   trackSponsorImpression(id: number): Promise<void>;
@@ -1639,7 +1639,7 @@ The Dan Bizzarro Method Team`,
     return sponsor;
   }
 
-  async updateSponsor(id: number, updates: Partial<InsertSponsor>): Promise<Sponsor | undefined> {
+  async updateSponsor(id: number, updates: Partial<Sponsor>): Promise<Sponsor | undefined> {
     const [sponsor] = await db.update(sponsors)
       .set({ ...updates, updatedAt: new Date() })
       .where(eq(sponsors.id, id))

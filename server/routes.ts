@@ -18,7 +18,8 @@ import {
   insertEmailCampaignSchema,
   insertEmailAutomationSchema,
   insertGallerySchema,
-  insertCompetitionChecklistSchema
+  insertCompetitionChecklistSchema,
+  insertSponsorSchema
 } from "@shared/schema";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -1554,6 +1555,142 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting competition checklist:", error);
       res.status(500).json({ message: "Failed to delete competition checklist" });
+    }
+  });
+
+  // Sponsor routes
+  app.get("/api/sponsors", async (req, res) => {
+    try {
+      const sponsors = await storage.getAllSponsors();
+      res.json(sponsors);
+    } catch (error) {
+      console.error("Error fetching sponsors:", error);
+      res.status(500).json({ message: "Failed to fetch sponsors" });
+    }
+  });
+
+  app.get("/api/sponsors/active", async (req, res) => {
+    try {
+      const sponsor = await storage.getActiveSponsor();
+      res.json(sponsor || null);
+    } catch (error) {
+      console.error("Error fetching active sponsor:", error);
+      res.status(500).json({ message: "Failed to fetch active sponsor" });
+    }
+  });
+
+  app.get("/api/sponsors/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const sponsor = await storage.getSponsor(id);
+      
+      if (!sponsor) {
+        return res.status(404).json({ message: "Sponsor not found" });
+      }
+      
+      res.json(sponsor);
+    } catch (error) {
+      console.error("Error fetching sponsor:", error);
+      res.status(500).json({ message: "Failed to fetch sponsor" });
+    }
+  });
+
+  app.post("/api/sponsors", upload.single('logo'), async (req, res) => {
+    try {
+      const sponsorData = insertSponsorSchema.parse(req.body);
+      
+      // Handle logo upload if provided
+      if (req.file) {
+        const fileBuffer = req.file.buffer || fs.readFileSync(req.file.path);
+        const optimizedResult = await ImageOptimizer.optimizeImage(fileBuffer, {
+          width: 200,
+          height: 200,
+          quality: 90
+        });
+        
+        const filename = `sponsor-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
+        const filePath = path.join(uploadsDir, filename);
+        fs.writeFileSync(filePath, optimizedResult.buffer);
+        
+        sponsorData.logo = `/uploads/${filename}`;
+        
+        // Clean up original file if it exists
+        if (req.file.path && fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+      }
+      
+      const sponsor = await storage.createSponsor(sponsorData);
+      res.status(201).json(sponsor);
+    } catch (error) {
+      console.error("Error creating sponsor:", error);
+      res.status(400).json({ message: "Invalid sponsor data" });
+    }
+  });
+
+  app.put("/api/sponsors/:id", upload.single('logo'), async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updates = insertSponsorSchema.partial().parse(req.body);
+      
+      // Handle logo upload if provided
+      if (req.file) {
+        const optimizedResults = await ImageOptimizer.createResponsiveVersions(
+          req.file.buffer || fs.readFileSync(req.file.path),
+          req.file.filename,
+          'news'
+        );
+        updates.logo = `/uploads/${optimizedResults.optimized.filename}`;
+        
+        // Clean up original file if it exists
+        if (req.file.path && fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+      }
+      
+      const sponsor = await storage.updateSponsor(id, updates);
+      
+      if (!sponsor) {
+        return res.status(404).json({ message: "Sponsor not found" });
+      }
+      
+      res.json(sponsor);
+    } catch (error) {
+      console.error("Error updating sponsor:", error);
+      res.status(400).json({ message: "Invalid sponsor data" });
+    }
+  });
+
+  app.delete("/api/sponsors/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSponsor(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting sponsor:", error);
+      res.status(500).json({ message: "Failed to delete sponsor" });
+    }
+  });
+
+  app.post("/api/sponsors/:id/click", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.trackSponsorClick(id);
+      res.status(200).json({ message: "Click tracked" });
+    } catch (error) {
+      console.error("Error tracking sponsor click:", error);
+      res.status(500).json({ message: "Failed to track click" });
+    }
+  });
+
+  app.post("/api/sponsors/:id/impression", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.trackSponsorImpression(id);
+      res.status(200).json({ message: "Impression tracked" });
+    } catch (error) {
+      console.error("Error tracking sponsor impression:", error);
+      res.status(500).json({ message: "Failed to track impression" });
     }
   });
 
