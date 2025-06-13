@@ -37,12 +37,12 @@ export default function SponsorRotation() {
 
   // Update current sponsor when active sponsor changes
   useEffect(() => {
-    if (activeSponsor && activeSponsor.id !== currentSponsor?.id) {
+    if (activeSponsor && (!currentSponsor || activeSponsor.id !== currentSponsor.id)) {
       setCurrentSponsor(activeSponsor);
       // Track impression when sponsor is displayed
       trackImpressionMutation.mutate(activeSponsor.id);
     }
-  }, [activeSponsor, currentSponsor?.id]);
+  }, [activeSponsor]);
 
   const handleSponsorClick = () => {
     if (currentSponsor) {
