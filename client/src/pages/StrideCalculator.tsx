@@ -585,8 +585,53 @@ export default function StrideCalculator() {
           </Card>
         </div>
 
+        {/* Safety Notes Section */}
+        <div className="mt-6 sm:mt-8">
+          <Card className="border-orange-200 dark:border-orange-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-orange-800 dark:text-orange-400">
+                <AlertTriangle className="h-5 w-5" />
+                Safety Notes
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 sm:space-y-4">
+              <div className="bg-orange-50 dark:bg-orange-900/20 p-3 sm:p-4 rounded-lg">
+                <ul className="space-y-2 text-sm sm:text-base text-orange-800 dark:text-orange-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
+                    Always use proper safety equipment including approved helmets and body protectors
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
+                    Start with lower heights and gradually increase as horse and rider confidence builds
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
+                    Ensure poles are properly supported and secure before beginning exercises
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
+                    Have a qualified instructor present when attempting new exercises
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
+                    Check footing conditions and ensure arena surface is suitable for the exercise
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 dark:text-orange-400 mt-1">•</span>
+                    Allow adequate warm-up time for both horse and rider before training sessions
+                  </li>
+                </ul>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 italic text-center">
+                These calculations are guidelines. Always prioritize safety and adapt distances based on your horse's individual stride and ability level.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Exercise Diagrams Section */}
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <ExerciseDiagram />
         </div>
 
