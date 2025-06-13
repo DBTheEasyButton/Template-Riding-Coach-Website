@@ -230,8 +230,8 @@ export class DatabaseStorage implements IStorage {
         location: "Waverton House", 
         date: new Date('2024-06-22'),
         type: "upcoming",
-        horse: "TBC",
-        level: "Intermediate",
+        horse: "Peggy",
+        level: "90",
         result: null
       },
       {
@@ -239,8 +239,8 @@ export class DatabaseStorage implements IStorage {
         location: "Aston Le Walls",
         date: new Date('2024-07-02'),
         type: "upcoming", 
-        horse: "TBC",
-        level: "Intermediate",
+        horse: "Peggy",
+        level: "5yo class",
         result: null
       },
       {
@@ -248,7 +248,7 @@ export class DatabaseStorage implements IStorage {
         location: "Upton House",
         date: new Date('2024-07-08'),
         type: "upcoming",
-        horse: "TBC", 
+        horse: "Riot", 
         level: "Intermediate",
         result: null
       },
