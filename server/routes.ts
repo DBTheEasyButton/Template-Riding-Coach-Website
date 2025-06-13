@@ -76,7 +76,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const responsiveVersions = await ImageOptimizer.createResponsiveVersions(originalBuffer, baseName);
       
       // Save all versions to disk
-      const savedVersions = {};
+      const savedVersions: Record<string, { url: string; size: number }> = {};
       for (const [key, version] of Object.entries(responsiveVersions)) {
         const filePath = path.join(uploadsDir, version.filename);
         await fs.promises.writeFile(filePath, version.buffer);
@@ -123,6 +123,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (fallbackError) {
         res.status(500).json({ error: 'Failed to upload image' });
       }
+    }
+  });
+
+  // Optimize existing images endpoint
+  app.post("/api/optimize-images", async (req, res) => {
+    try {
+      console.log('Starting image optimization process...');
+      await ImageOptimizer.optimizeExistingImages(uploadsDir);
+      res.json({ success: true, message: 'Images optimized successfully' });
+    } catch (error) {
+      console.error('Image optimization failed:', error);
+      res.status(500).json({ error: 'Failed to optimize images' });
     }
   });
 
