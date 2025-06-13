@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, Ruler, Users, Info } from "lucide-react";
+import { Calculator, Ruler, Users, Info, AlertTriangle } from "lucide-react";
 import { ExerciseDiagram } from "@/components/ExerciseDiagram";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
