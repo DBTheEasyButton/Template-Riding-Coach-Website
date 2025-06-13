@@ -7,12 +7,10 @@ import { ArrowLeft, Calendar, Share2, Facebook, Twitter, Mail } from "lucide-rea
 import { OptimizedImage } from "@/components/OptimizedImage";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useState } from "react";
 
 export default function NewsArticle() {
   const params = useParams();
   const [, setLocation] = useLocation();
-  const [showSocialShare, setShowSocialShare] = useState(false);
   
   const { data: news = [] } = useQuery<News[]>({
     queryKey: ['/api/news'],
@@ -73,15 +71,17 @@ export default function NewsArticle() {
               <Calendar className="w-3 h-3" />
               {formatDate(article.publishedAt)}
             </Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowSocialShare(true)}
-              className="flex items-center gap-2"
-            >
-              <Share2 className="w-4 h-4" />
-              Share
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank')}
+                className="flex items-center gap-1"
+              >
+                <Facebook className="w-4 h-4" />
+                Share
+              </Button>
+            </div>
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -191,16 +191,7 @@ export default function NewsArticle() {
         </section>
       </article>
 
-      {/* Social Share Modal */}
-      {showSocialShare && (
-        <SocialShare
-          isOpen={showSocialShare}
-          onClose={() => setShowSocialShare(false)}
-          title={article.title}
-          url={shareUrl}
-          description={article.excerpt}
-        />
-      )}
+
       
       <Footer />
     </div>

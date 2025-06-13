@@ -3,8 +3,10 @@ import type { News } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { useLocation } from "wouter";
 
 export default function NewsSection() {
+  const [, setLocation] = useLocation();
   const { data: news = [] } = useQuery<News[]>({
     queryKey: ['/api/news'],
   });
@@ -61,7 +63,11 @@ export default function NewsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsToDisplay.map((article, index) => (
-            <article key={article.id || index} className="bg-gradient-to-br from-cream to-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+            <article 
+              key={article.id || index} 
+              className="bg-gradient-to-br from-cream to-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+              onClick={() => setLocation(`/news/${article.slug || article.id}`)}
+            >
               <OptimizedImage 
                 src={article.image}
                 alt={article.title}
