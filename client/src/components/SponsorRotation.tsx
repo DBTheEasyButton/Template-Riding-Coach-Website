@@ -71,7 +71,7 @@ export default function SponsorRotation() {
       <div className="text-center">
         <div className={`mx-auto rounded-lg overflow-hidden bg-white ${
           currentSponsor.name === 'Sergio Grasso' || currentSponsor.name === 'Kep Italia' 
-            ? 'w-40 h-28 mb-0' 
+            ? 'w-60 h-40 mb-0' 
             : 'w-36 h-24 mb-0'
         }`}>
           <OptimizedImage
@@ -80,7 +80,7 @@ export default function SponsorRotation() {
             className="w-full h-full object-contain p-1"
           />
         </div>
-        <h4 className="font-medium text-gray-900 text-base mt-1 mb-1">
+        <h4 className="font-medium text-gray-900 text-base mt-0.5 mb-1">
           {currentSponsor.name}
         </h4>
         <p className="text-gray-600 text-xs mb-3 line-clamp-2">
