@@ -39,9 +39,9 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 50 250 L 700 250',
     measurements: [
-      { from: { x: 250, y: 244 }, to: { x: 370, y: 244 }, distance: '1.2m', label: 'Trot spacing' },
-      { from: { x: 370, y: 244 }, to: { x: 490, y: 244 }, distance: '1.2m', label: '' },
-      { from: { x: 490, y: 244 }, to: { x: 610, y: 244 }, distance: '1.2m', label: '' }
+      { from: { x: 200, y: 220 }, to: { x: 320, y: 220 }, distance: '1.2m', label: 'Trot spacing' },
+      { from: { x: 320, y: 220 }, to: { x: 440, y: 220 }, distance: '1.2m', label: '' },
+      { from: { x: 440, y: 220 }, to: { x: 560, y: 220 }, distance: '1.2m', label: '' }
     ],
     description: 'Four trot poles in straight line',
     notes: 'Start at walk, progress to trot. Keep steady rhythm and straight line.'
@@ -61,9 +61,9 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 80 250 L 650 250',
     measurements: [
-      { from: { x: 240, y: 244 }, to: { x: 320, y: 244 }, distance: '0.8m', label: 'Walk spacing' },
-      { from: { x: 320, y: 244 }, to: { x: 400, y: 244 }, distance: '0.8m', label: '' },
-      { from: { x: 400, y: 244 }, to: { x: 480, y: 244 }, distance: '0.8m', label: '' }
+      { from: { x: 200, y: 220 }, to: { x: 280, y: 220 }, distance: '0.8m', label: 'Walk spacing' },
+      { from: { x: 280, y: 220 }, to: { x: 360, y: 220 }, distance: '0.8m', label: '' },
+      { from: { x: 360, y: 220 }, to: { x: 440, y: 220 }, distance: '0.8m', label: '' }
     ],
     description: 'Five walk poles for rhythm training',
     notes: 'Perfect for warming up. Maintain steady walk rhythm throughout.'
@@ -81,8 +81,8 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 80 250 L 1050 250',
     measurements: [
-      { from: { x: 310, y: 245 }, to: { x: 620, y: 245 }, distance: '3.1m', label: 'Canter spacing' },
-      { from: { x: 620, y: 245 }, to: { x: 930, y: 245 }, distance: '3.1m', label: '' }
+      { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: 'Canter spacing' },
+      { from: { x: 560, y: 220 }, to: { x: 870, y: 220 }, distance: '3.1m', label: '' }
     ],
     description: 'Three canter poles for stride regulation',
     notes: 'Improves canter quality and stride control. Approach in balanced canter.'
@@ -100,8 +100,8 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 80 250 L 1350 250',
     measurements: [
-      { from: { x: 290, y: 245 }, to: { x: 520, y: 245 }, distance: '3.1m', label: 'Bounce' },
-      { from: { x: 600, y: 245 }, to: { x: 1140, y: 245 }, distance: '6.2m', label: 'One stride' }
+      { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: 'Bounce' },
+      { from: { x: 560, y: 220 }, to: { x: 1180, y: 220 }, distance: '6.2m', label: 'One stride' }
     ],
     description: 'Bounce to one stride grid',
     notes: 'Start with poles on ground. Gradual progression to small jumps.'
@@ -162,11 +162,7 @@ export function ExerciseDiagram() {
         {/* Diagram */}
         <div className="bg-green-50 dark:bg-green-900/10 rounded-lg p-4 overflow-x-auto">
           <svg width="900" height="500" viewBox="0 0 900 500" className="w-full h-auto">
-            {/* Ground line */}
-            <line x1="0" y1="450" x2="900" y2="450" stroke="#22C55E" strokeWidth="2" />
-            <text x="450" y="470" textAnchor="middle" className="fill-green-600 text-sm font-medium">
-              Ground Line
-            </text>
+
 
             {/* Horse path (dashed line) */}
             {currentExercise.path ? (
