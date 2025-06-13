@@ -1,76 +1,90 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Smartphone, ArrowRight, MapPin, Clock } from "lucide-react";
+import { Calendar, Smartphone, ArrowRight, ExternalLink } from "lucide-react";
 import { useLocation } from "wouter";
 
-export default function PromotionalBanners() {
+export default function SidebarBanners() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="space-y-4 mb-8">
+    <div className="space-y-4 sticky top-8">
       {/* Clinics Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-6 shadow-lg">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Calendar className="w-5 h-5" />
-              <span className="text-sm font-medium text-blue-100">UPCOMING CLINICS</span>
-            </div>
-            <h3 className="text-xl font-bold mb-2">Join Dan's Exclusive Training Clinics</h3>
-            <p className="text-blue-100 mb-3">
-              Transform your riding with personalized coaching from Dan Bizzarro. Limited spaces available.
-            </p>
-            <div className="flex items-center gap-4 text-sm text-blue-100">
-              <span className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" />
-                Multiple UK Locations
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
-                Weekend Sessions
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button 
-              variant="secondary"
-              className="bg-white text-blue-700 hover:bg-blue-50"
-              onClick={() => setLocation('/#clinics')}
-            >
-              View Clinics
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+      <div className="bg-gradient-to-b from-blue-600 to-blue-700 text-white rounded-lg p-4 shadow-lg">
+        <div className="text-center">
+          <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-100" />
+          <h3 className="text-lg font-bold mb-2">Training Clinics</h3>
+          <p className="text-blue-100 text-sm mb-3">
+            Join Dan's exclusive coaching sessions across the UK
+          </p>
+          <Button 
+            size="sm"
+            variant="secondary"
+            className="w-full bg-white text-blue-700 hover:bg-blue-50"
+            onClick={() => setLocation('/#clinics')}
+          >
+            Book Now
+            <ArrowRight className="w-3 h-3 ml-1" />
+          </Button>
         </div>
       </div>
 
       {/* App Banner */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg p-6 shadow-lg">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Smartphone className="w-5 h-5" />
-              <span className="text-sm font-medium text-orange-100">MOBILE APP</span>
-            </div>
-            <h3 className="text-xl font-bold mb-2">Dan Bizzarro Method App</h3>
-            <p className="text-orange-100 mb-3">
-              Access training tools, stride calculators, and exclusive content on your mobile device.
-            </p>
-            <div className="flex items-center gap-4 text-sm text-orange-100">
-              <span>✓ Stride Calculator</span>
-              <span>✓ Course Tools</span>
-              <span>✓ Training Videos</span>
-            </div>
+      <div className="bg-gradient-to-b from-orange-500 to-orange-600 text-white rounded-lg p-4 shadow-lg">
+        <div className="text-center">
+          <Smartphone className="w-8 h-8 mx-auto mb-2 text-orange-100" />
+          <h3 className="text-lg font-bold mb-2">Mobile App</h3>
+          <p className="text-orange-100 text-sm mb-3">
+            Training tools & calculators on your phone
+          </p>
+          <Button 
+            size="sm"
+            variant="secondary"
+            className="w-full bg-white text-orange-700 hover:bg-orange-50"
+            onClick={() => setLocation('/#app')}
+          >
+            Get App
+            <ArrowRight className="w-3 h-3 ml-1" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Example Sponsor Banner */}
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-lg mx-auto mb-2 flex items-center justify-center">
+            <span className="text-xs text-gray-500">LOGO</span>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button 
-              variant="secondary"
-              className="bg-white text-orange-700 hover:bg-orange-50"
-              onClick={() => setLocation('/#app')}
-            >
-              Learn More
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <h4 className="font-medium text-gray-900 text-sm mb-1">Sponsor Name</h4>
+          <p className="text-gray-600 text-xs mb-3">
+            Premium equestrian equipment
+          </p>
+          <Button 
+            size="sm"
+            variant="outline"
+            className="w-full text-xs"
+            onClick={() => window.open('#', '_blank')}
+          >
+            Visit Store
+            <ExternalLink className="w-3 h-3 ml-1" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Newsletter Signup Banner */}
+      <div className="bg-gradient-to-b from-gray-700 to-gray-800 text-white rounded-lg p-4 shadow-lg">
+        <div className="text-center">
+          <h3 className="text-lg font-bold mb-2">Stay Updated</h3>
+          <p className="text-gray-200 text-sm mb-3">
+            Get the latest training tips & news
+          </p>
+          <Button 
+            size="sm"
+            variant="secondary"
+            className="w-full bg-white text-gray-700 hover:bg-gray-50"
+            onClick={() => setLocation('/#newsletter')}
+          >
+            Subscribe
+            <ArrowRight className="w-3 h-3 ml-1" />
+          </Button>
         </div>
       </div>
     </div>
