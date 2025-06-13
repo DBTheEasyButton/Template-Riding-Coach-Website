@@ -69,30 +69,18 @@ export default function SponsorRotation() {
   return (
     <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm transition-all duration-500 hover:shadow-md">
       <div className="text-center">
-        <div className="w-60 h-40 mx-auto rounded-lg overflow-hidden bg-white mb-0 relative">
-          {currentSponsor.name === 'Sergio Grasso' || currentSponsor.name === 'Kep Italia' ? (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-36 h-24">
-                <OptimizedImage
-                  src={currentSponsor.logo}
-                  alt={`${currentSponsor.name} logo`}
-                  className="w-full h-full object-contain p-1"
-                />
-              </div>
+        <div className="w-60 h-32 mx-auto rounded-lg overflow-hidden bg-white mb-0 relative">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-36 h-24">
+              <OptimizedImage
+                src={currentSponsor.logo}
+                alt={`${currentSponsor.name} logo`}
+                className="w-full h-full object-contain p-1"
+              />
             </div>
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-36 h-24">
-                <OptimizedImage
-                  src={currentSponsor.logo}
-                  alt={`${currentSponsor.name} logo`}
-                  className="w-full h-full object-contain p-1"
-                />
-              </div>
-            </div>
-          )}
+          </div>
         </div>
-        <h4 className="font-medium text-gray-900 text-base mt-0.5 mb-1">
+        <h4 className="font-medium text-gray-900 text-base mt-0 mb-1">
           {currentSponsor.name}
         </h4>
         <p className="text-gray-600 text-xs mb-3 line-clamp-2">
