@@ -85,6 +85,7 @@ export interface IStorage {
   
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
+  markContactResolved(id: number): Promise<void>;
   
   getAllClinics(): Promise<ClinicWithSessions[]>;
   getClinic(id: number): Promise<Clinic | undefined>;

@@ -900,6 +900,138 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin contact management routes
+  app.get("/api/admin/contacts", async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      res.status(500).json({ message: "Failed to fetch contacts" });
+    }
+  });
+
+  app.put("/api/admin/contacts/:id/resolve", async (req, res) => {
+    try {
+      const contactId = parseInt(req.params.id);
+      await storage.markContactResolved(contactId);
+      res.json({ message: "Contact marked as resolved" });
+    } catch (error) {
+      console.error("Error resolving contact:", error);
+      res.status(500).json({ message: "Failed to resolve contact" });
+    }
+  });
+
+  app.get("/api/admin/contacts/export", async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
+      
+      // Prepare contact data for export
+      const contactData = contacts.map(contact => ({
+        'First Name': contact.firstName,
+        'Last Name': contact.lastName,
+        'Email': contact.email,
+        'Phone': contact.phone || '',
+        'Subject': contact.subject,
+        'Inquiry Type': contact.inquiryType || '',
+        'Preferred Contact': contact.preferredContact || '',
+        'Message': contact.message,
+        'Status': contact.resolved ? 'Resolved' : 'Pending',
+        'Created At': contact.createdAt ? new Date(contact.createdAt).toLocaleDateString() : ''
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(contactData);
+      
+      // Auto-size columns
+      const cols = [
+        { wch: 15 }, // First Name
+        { wch: 15 }, // Last Name
+        { wch: 25 }, // Email
+        { wch: 15 }, // Phone
+        { wch: 30 }, // Subject
+        { wch: 15 }, // Inquiry Type
+        { wch: 15 }, // Preferred Contact
+        { wch: 50 }, // Message
+        { wch: 10 }, // Status
+        { wch: 12 }  // Created At
+      ];
+      worksheet['!cols'] = cols;
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Contacts');
+
+      // Generate buffer
+      const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="contacts-${new Date().toISOString().split('T')[0]}.xlsx"`);
+      res.send(buffer);
+    } catch (error) {
+      console.error('Error exporting contacts:', error);
+      res.status(500).json({ message: 'Failed to export contacts' });
+    }
+  });
+
+  app.get("/api/admin/subscribers", async (req, res) => {
+    try {
+      const subscribers = await storage.getAllEmailSubscribers();
+      res.json(subscribers);
+    } catch (error) {
+      console.error("Error fetching subscribers:", error);
+      res.status(500).json({ message: "Failed to fetch subscribers" });
+    }
+  });
+
+  app.get("/api/admin/subscribers/export", async (req, res) => {
+    try {
+      const subscribers = await storage.getAllEmailSubscribers();
+      
+      // Create workbook
+      const workbook = XLSX.utils.book_new();
+      
+      // Prepare subscriber data for export
+      const subscriberData = subscribers.map(subscriber => ({
+        'Email': subscriber.email,
+        'First Name': subscriber.firstName || '',
+        'Last Name': subscriber.lastName || '',
+        'Status': subscriber.isActive ? 'Active' : 'Unsubscribed',
+        'Source': subscriber.subscriptionSource,
+        'Interests': Array.isArray(subscriber.interests) ? (subscriber.interests as string[]).join(', ') : '',
+        'Subscribed At': new Date(subscriber.subscribedAt).toLocaleDateString(),
+        'Unsubscribed At': subscriber.unsubscribedAt ? new Date(subscriber.unsubscribedAt).toLocaleDateString() : ''
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(subscriberData);
+      
+      // Auto-size columns
+      const cols = [
+        { wch: 25 }, // Email
+        { wch: 15 }, // First Name
+        { wch: 15 }, // Last Name
+        { wch: 12 }, // Status
+        { wch: 20 }, // Source
+        { wch: 30 }, // Interests
+        { wch: 15 }, // Subscribed At
+        { wch: 15 }  // Unsubscribed At
+      ];
+      worksheet['!cols'] = cols;
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Subscribers');
+
+      // Generate buffer
+      const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="subscribers-${new Date().toISOString().split('T')[0]}.xlsx"`);
+      res.send(buffer);
+    } catch (error) {
+      console.error('Error exporting subscribers:', error);
+      res.status(500).json({ message: 'Failed to export subscribers' });
+    }
+  });
+
   // Bulk email import for admin
   app.post("/api/admin/email-subscribers/bulk-import", async (req, res) => {
     try {

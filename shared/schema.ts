@@ -46,8 +46,12 @@ export const contacts = pgTable("contacts", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
+  phone: text("phone"),
   subject: text("subject").notNull(),
   message: text("message").notNull(),
+  inquiryType: text("inquiry_type"),
+  preferredContact: text("preferred_contact").default("email"),
+  resolved: boolean("resolved").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
