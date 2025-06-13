@@ -371,18 +371,18 @@ export default function StrideCalculator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-green-800 dark:text-green-400 mb-4">
+      <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 dark:text-green-400 mb-2 md:mb-4">
             Stride Distance Calculator
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
             Calculate precise distances for poles and jumps based on your height. 
             Get measurements in both yards and meters, plus your personal step count.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid gap-6 max-w-6xl mx-auto lg:grid-cols-2 lg:gap-8">
           {/* Input Panel */}
           <Card className="h-fit">
             <CardHeader>
@@ -394,108 +394,115 @@ export default function StrideCalculator() {
                 Enter your height and your horse's height to get precise distance measurements
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="user-height">Your Height</Label>
-                <div className="flex gap-2">
+            <CardContent className="space-y-4 sm:space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="user-height" className="text-base font-medium">Your Height</Label>
+                <div className="flex gap-3">
                   <div className="flex-1">
                     <Input
                       id="user-feet"
                       type="number"
+                      inputMode="numeric"
                       value={userFeet}
                       onChange={(e) => setUserFeet(Number(e.target.value))}
                       placeholder="5"
                       min="4"
                       max="7"
+                      className="h-12 text-lg text-center"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Feet</p>
+                    <p className="text-sm text-gray-500 mt-2 text-center">Feet</p>
                   </div>
                   <div className="flex-1">
                     <Input
                       id="user-inches"
                       type="number"
+                      inputMode="numeric"
                       value={userInches}
                       onChange={(e) => setUserInches(Number(e.target.value))}
                       placeholder="8"
                       min="0"
                       max="11"
+                      className="h-12 text-lg text-center"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Inches</p>
+                    <p className="text-sm text-gray-500 mt-2 text-center">Inches</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 text-center">
                   Used to calculate your personal step count
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="horse-height">Horse Height</Label>
-                <div className="flex gap-2">
+              <div className="space-y-3">
+                <Label htmlFor="horse-height" className="text-base font-medium">Horse Height</Label>
+                <div className="flex gap-3">
                   <div className="flex-1">
                     <Input
                       id="horse-hands"
                       type="number"
+                      inputMode="numeric"
                       value={horseHands}
                       onChange={(e) => setHorseHands(Number(e.target.value))}
                       placeholder="16"
                       min="10"
                       max="18"
+                      className="h-12 text-lg text-center"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Hands</p>
+                    <p className="text-sm text-gray-500 mt-2 text-center">Hands</p>
                   </div>
                   <div className="flex-1">
                     <Input
                       id="horse-inches"
                       type="number"
+                      inputMode="numeric"
                       value={horseInches}
                       onChange={(e) => setHorseInches(Number(e.target.value))}
                       placeholder="0"
                       min="0"
                       max="11"
+                      className="h-12 text-lg text-center"
                     />
-                    <p className="text-xs text-gray-500 mt-1">Inches</p>
+                    <p className="text-sm text-gray-500 mt-2 text-center">Inches</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 text-center">
                   Enter your horse's exact height for accurate pole spacing
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label>Exercise Type</Label>
+              <div className="space-y-3">
+                <Label className="text-base font-medium">Exercise Type</Label>
                 <Select value={distanceType} onValueChange={(value: DistanceType) => setDistanceType(value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12 text-base">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="walk-poles">Walk Poles</SelectItem>
-                    <SelectItem value="trot-poles">Trot Poles</SelectItem>
-                    <SelectItem value="canter-poles">Canter Poles</SelectItem>
-                    <SelectItem value="gridwork">Gridwork Exercises</SelectItem>
-                    <SelectItem value="course-distances">Course Distances</SelectItem>
+                    <SelectItem value="walk-poles" className="py-3 text-base">Walk Poles</SelectItem>
+                    <SelectItem value="trot-poles" className="py-3 text-base">Trot Poles</SelectItem>
+                    <SelectItem value="canter-poles" className="py-3 text-base">Canter Poles</SelectItem>
+                    <SelectItem value="gridwork" className="py-3 text-base">Gridwork Exercises</SelectItem>
+                    <SelectItem value="course-distances" className="py-3 text-base">Course Distances</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               {needsStrideSelection() && (
-                <div className="space-y-2">
-                  <Label>Number of Strides</Label>
+                <div className="space-y-3">
+                  <Label className="text-base font-medium">Number of Strides</Label>
                   <Select value={strideCount} onValueChange={(value: StrideCount) => setStrideCount(value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-12 text-base">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-
-                      <SelectItem value="1-stride">1 Stride</SelectItem>
-                      <SelectItem value="2-stride">2 Strides</SelectItem>
-                      <SelectItem value="3-stride">3 Strides</SelectItem>
-                      <SelectItem value="4-stride">4 Strides</SelectItem>
+                      <SelectItem value="1-stride" className="py-3 text-base">1 Stride</SelectItem>
+                      <SelectItem value="2-stride" className="py-3 text-base">2 Strides</SelectItem>
+                      <SelectItem value="3-stride" className="py-3 text-base">3 Strides</SelectItem>
+                      <SelectItem value="4-stride" className="py-3 text-base">4 Strides</SelectItem>
                       {(distanceType === "gridwork" || distanceType === "course-distances") && (
                         <>
-                          <SelectItem value="5-stride">5 Strides</SelectItem>
-                          <SelectItem value="6-stride">6 Strides</SelectItem>
+                          <SelectItem value="5-stride" className="py-3 text-base">5 Strides</SelectItem>
+                          <SelectItem value="6-stride" className="py-3 text-base">6 Strides</SelectItem>
                           {distanceType === "course-distances" && (
-                            <SelectItem value="7-stride">7 Strides</SelectItem>
+                            <SelectItem value="7-stride" className="py-3 text-base">7 Strides</SelectItem>
                           )}
                         </>
                       )}
@@ -504,11 +511,11 @@ export default function StrideCalculator() {
                 </div>
               )}
 
-              <div className="flex gap-2">
-                <Button onClick={calculateDistances} className="flex-1">
+              <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
+                <Button onClick={calculateDistances} className="flex-1 h-12 text-base font-medium">
                   Calculate Selected
                 </Button>
-                <Button onClick={calculateAllDistances} variant="outline" className="flex-1">
+                <Button onClick={calculateAllDistances} variant="outline" className="flex-1 h-12 text-base font-medium">
                   Show All
                 </Button>
               </div>
