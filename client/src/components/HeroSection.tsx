@@ -17,6 +17,14 @@ export default function HeroSection() {
   ];
 
   useEffect(() => {
+    // Preload images for better performance
+    images.forEach((src, index) => {
+      if (index > 0) { // Skip first image as it loads eagerly
+        const img = new Image();
+        img.src = src;
+      }
+    });
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000);
@@ -37,13 +45,20 @@ export default function HeroSection() {
       {images.map((image, index) => (
         <div
           key={index}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ${
+          className={`absolute inset-0 transition-opacity duration-1000 ${
             index === currentImageIndex ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{
-            backgroundImage: `url(${image})`
-          }}
         >
+          <img
+            src={image}
+            alt={`Hero background ${index + 1}`}
+            className="w-full h-full object-cover"
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            style={{
+              willChange: index === currentImageIndex ? 'auto' : 'opacity'
+            }}
+          />
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
       ))}

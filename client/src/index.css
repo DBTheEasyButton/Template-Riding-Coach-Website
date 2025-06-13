@@ -34,6 +34,27 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Image optimization styles */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Critical resource hints */
+.preload-hint {
+  content: '';
+}
+
+/* Intersection Observer loading optimization */
+.lazy-loading {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.lazy-loaded {
+  opacity: 1;
+}
+
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;

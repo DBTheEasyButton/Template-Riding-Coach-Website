@@ -20,6 +20,15 @@
     <meta name="twitter:title" content="Dan Bizzarro - International Event Rider" />
     <meta name="twitter:description" content="Join Dan Bizzarro's elite equestrian clinics. Professional coaching in dressage, show jumping, and cross-country from an international event rider." />
     <meta name="twitter:image" content="https://dan-bizzarro.replit.app/hero-background.jpg" />
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="preload" href="/src/assets/hero-background.jpg" as="image" type="image/jpeg">
+    
+    <!-- Critical CSS inlining hint -->
+    <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
   </head>
   <body>
     <div id="root"></div>
