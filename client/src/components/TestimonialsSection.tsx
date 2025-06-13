@@ -31,7 +31,7 @@ export default function TestimonialsSection() {
       <Star
         key={i}
         className={`w-2 h-2 ${
-          i < rating ? "text-orange-500 fill-orange-500" : "text-gray-300"
+          i < rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
         }`}
       />
     ));
