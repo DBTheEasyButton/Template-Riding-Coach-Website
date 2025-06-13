@@ -1635,12 +1635,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Handle logo upload if provided
       if (req.file) {
-        const optimizedResults = await ImageOptimizer.createResponsiveVersions(
-          req.file.buffer || fs.readFileSync(req.file.path),
-          req.file.filename,
-          'news'
-        );
-        updates.logo = `/uploads/${optimizedResults.optimized.filename}`;
+        const fileBuffer = req.file.buffer || fs.readFileSync(req.file.path);
+        const optimizedResult = await ImageOptimizer.optimizeImage(fileBuffer, {
+          width: 200,
+          height: 200,
+          quality: 90
+        });
+        
+        const filename = `sponsor-${Date.now()}-${Math.round(Math.random() * 1E9)}.jpg`;
+        const filePath = path.join(uploadsDir, filename);
+        fs.writeFileSync(filePath, optimizedResult.buffer);
+        
+        updates.logo = `/uploads/${filename}`;
         
         // Clean up original file if it exists
         if (req.file.path && fs.existsSync(req.file.path)) {

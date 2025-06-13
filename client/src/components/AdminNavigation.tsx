@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Calendar, MessageSquare, Home, Mail, Images, FileText } from "lucide-react";
+import { Calendar, MessageSquare, Home, Mail, Images, FileText, Star } from "lucide-react";
 
 export default function AdminNavigation() {
   const [location] = useLocation();
