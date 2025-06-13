@@ -350,7 +350,7 @@ export default function AdminContacts() {
                           <span>Subscribed: {formatDate(subscriber.subscribedAt)}</span>
                           <span>Source: {subscriber.subscriptionSource}</span>
                           {subscriber.interests && Array.isArray(subscriber.interests) && subscriber.interests.length > 0 && (
-                            <span>Interests: {(subscriber.interests as string[]).join(', ')}</span>
+                            <span>Interests: {subscriber.interests.map(String).join(', ')}</span>
                           )}
                         </div>
                       </div>

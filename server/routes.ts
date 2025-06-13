@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import * as XLSX from "xlsx";
 import { storage } from "./storage";
 import { emailService } from "./emailService";
 import { replaceCsvEmails } from "./csvImport";

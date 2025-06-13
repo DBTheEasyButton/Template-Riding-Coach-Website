@@ -698,6 +698,10 @@ The Dan Bizzarro Method Team`,
     return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
   }
 
+  async markContactResolved(id: number): Promise<void> {
+    await db.update(contacts).set({ resolved: true }).where(eq(contacts.id, id));
+  }
+
   async getAllClinics(): Promise<ClinicWithSessions[]> {
     const clinicsData = await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
     
