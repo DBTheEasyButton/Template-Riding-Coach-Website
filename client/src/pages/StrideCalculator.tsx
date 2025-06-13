@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, Ruler, Users, Info } from "lucide-react";
+import { ExerciseDiagram } from "@/components/ExerciseDiagram";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
 type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";
@@ -577,6 +578,10 @@ export default function StrideCalculator() {
           </Card>
         </div>
 
+        {/* Exercise Diagrams Section */}
+        <div className="mt-8">
+          <ExerciseDiagram />
+        </div>
 
       </div>
     </div>
