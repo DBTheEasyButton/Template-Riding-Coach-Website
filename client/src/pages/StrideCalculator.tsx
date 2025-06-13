@@ -549,24 +549,24 @@ export default function StrideCalculator() {
                           <Badge variant="outline">{distanceType}</Badge>
                         </div>
                         
-                        <div className="grid grid-cols-3 gap-4 mb-3">
-                          <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                          <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <div className="text-3xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
                               {result.distanceMeters}m
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">Meters</div>
                           </div>
                           
-                          <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <div className="text-3xl sm:text-2xl font-bold text-green-600 dark:text-green-400">
                               {result.distanceYards}yd
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">Yards</div>
                           </div>
                           
-                          <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 flex items-center justify-center gap-1">
-                              <Users className="h-5 w-5" />
+                          <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                            <div className="text-2xl sm:text-xl font-bold text-purple-600 dark:text-purple-400 flex items-center justify-center gap-2">
+                              <Users className="h-6 w-6 sm:h-5 sm:w-5" />
                               {result.userSteps}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">Your Steps</div>

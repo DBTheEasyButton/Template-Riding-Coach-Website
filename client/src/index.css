@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile touch optimizations */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* Improve touch target sizes on mobile */
+  @media (max-width: 640px) {
+    button, input, select, textarea {
+      min-height: 44px;
+    }
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

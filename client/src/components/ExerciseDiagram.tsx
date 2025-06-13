@@ -139,18 +139,18 @@ export function ExerciseDiagram() {
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="flex items-center gap-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             Exercise Diagrams
             <Info className="h-5 w-5 text-gray-500" />
           </CardTitle>
-          <Button onClick={generateRandomExercise} variant="outline" className="flex items-center gap-2">
+          <Button onClick={generateRandomExercise} variant="outline" className="flex items-center gap-2 h-10 text-base">
             <Shuffle className="h-4 w-4" />
             Generate Exercise
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 sm:space-y-6">
         {/* Exercise Info */}
         <div className="space-y-2">
           <h3 className={`text-xl font-semibold ${getTypeColor(currentExercise.type)}`}>
@@ -160,8 +160,8 @@ export function ExerciseDiagram() {
         </div>
 
         {/* Diagram */}
-        <div className="bg-green-50 dark:bg-green-900/10 rounded-lg p-4 overflow-x-auto">
-          <svg width="900" height="500" viewBox="0 0 900 500" className="w-full h-auto">
+        <div className="bg-green-50 dark:bg-green-900/10 rounded-lg p-2 sm:p-4 overflow-x-auto">
+          <svg width="900" height="500" viewBox="0 0 900 500" className="w-full h-auto touch-manipulation" style={{ minHeight: '250px' }}>
 
 
             {/* Horse path (dashed line) */}
@@ -296,9 +296,9 @@ export function ExerciseDiagram() {
         </div>
 
         {/* Notes */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-          <h4 className="font-semibold text-blue-800 dark:text-blue-400 mb-2">Training Notes</h4>
-          <p className="text-sm text-blue-700 dark:text-blue-300">{currentExercise.notes}</p>
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-3 sm:p-4 rounded-lg">
+          <h4 className="font-semibold text-blue-800 dark:text-blue-400 mb-3 text-base">Training Notes</h4>
+          <p className="text-sm sm:text-base text-blue-700 dark:text-blue-300 leading-relaxed">{currentExercise.notes}</p>
         </div>
       </CardContent>
     </Card>
