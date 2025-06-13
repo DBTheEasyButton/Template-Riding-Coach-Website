@@ -78,8 +78,8 @@ export default function TestimonialsSection() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2">
-                      <Avatar className="w-5 h-5">
+                    <div className="flex items-start space-x-2">
+                      <Avatar className="w-5 h-5 flex-shrink-0 mt-0.5">
                         <AvatarImage 
                           src={testimonial.imageUrl || undefined} 
                           alt={testimonial.name}
@@ -90,11 +90,11 @@ export default function TestimonialsSection() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0 flex-1">
-                        <h4 className="font-semibold text-gray-900 text-xs truncate">
+                        <h4 className="font-semibold text-gray-900 text-xs truncate leading-tight">
                           {testimonial.name}
                         </h4>
                         {testimonial.location && (
-                          <p className="text-gray-600 text-xs truncate">
+                          <p className="text-gray-600 text-xs truncate leading-tight">
                             {testimonial.location}
                           </p>
                         )}
