@@ -45,23 +45,28 @@ export default function StrideCalculator() {
       "big-horse": { distance: 1.4, description: "Trot poles - big horse (16.1hh+): 1.4m" }
     },
     "canter-poles": {
-      "small-pony": { distance: 2.4, description: "Canter poles - small pony (<13hh): 2.1-2.7m" },
-      "big-pony": { distance: 2.7, description: "Canter poles - big pony (13-14.2hh): 2.4-3.0m" },
-      "small-horse": { distance: 3.0, description: "Canter poles - small horse (14.3-16hh): 2.7-3.3m" },
-      "big-horse": { distance: 3.3, description: "Canter poles - big horse (16.1hh+): 3.0-3.6m" }
+      "small-pony": { distance: 2.7, description: "Canter poles - small pony (<13hh): 2.7m" },
+      "big-pony": { distance: 2.9, description: "Canter poles - big pony (13-14.2hh): 2.9m" },
+      "small-horse": { distance: 3.1, description: "Canter poles - small horse (14.3-16hh): 3.1m" },
+      "big-horse": { distance: 3.4, description: "Canter poles - big horse (16.1hh+): 3.4m" }
     },
     "gridwork": {
-      "pole-to-fence-horses": { distance: 3.15, description: "Canter pole to fence - horses (2.80-3.50m average)" },
-      "pole-to-fence-14-2": { distance: 2.90, description: "Canter pole to fence - 14'2hh ponies (2.70-3.10m average)" },
-      "pole-to-fence-13-2": { distance: 2.65, description: "Canter pole to fence - 13'2hh ponies (2.40-2.90m average)" },
-      "pole-to-fence-12-2": { distance: 2.30, description: "Canter pole to fence - 12'2hh ponies (2.10-2.50m average)" },
-      "bounce": { distance: 3.5, description: "Grid bounce - jump to jump" },
-      "1-stride": { distance: 7.3, description: "Grid one stride - between 80cm jumps" },
-      "2-stride": { distance: 10.7, description: "Grid two strides - between 90cm jumps" },
-      "3-stride": { distance: 14.0, description: "Grid three strides - between 1m jumps" },
-      "4-stride": { distance: 17.4, description: "Grid four strides - between 1.10m jumps" },
-      "5-stride": { distance: 20.7, description: "Grid five strides - between larger jumps" },
-      "6-stride": { distance: 24.0, description: "Grid six strides - between larger jumps" }
+      "small-pony": { distance: 2.7, description: "Gridwork bounce - small pony (<13hh): 2.7m" },
+      "big-pony": { distance: 2.9, description: "Gridwork bounce - big pony (13-14.2hh): 2.9m" },
+      "small-horse": { distance: 3.1, description: "Gridwork bounce - small horse (14.3-16hh): 3.1m" },
+      "big-horse": { distance: 3.4, description: "Gridwork bounce - big horse (16.1hh+): 3.4m" },
+      "1-stride-small-pony": { distance: 5.4, description: "Gridwork 1 stride - small pony (<13hh): 5.4m" },
+      "1-stride-big-pony": { distance: 5.8, description: "Gridwork 1 stride - big pony (13-14.2hh): 5.8m" },
+      "1-stride-small-horse": { distance: 6.2, description: "Gridwork 1 stride - small horse (14.3-16hh): 6.2m" },
+      "1-stride-big-horse": { distance: 6.8, description: "Gridwork 1 stride - big horse (16.1hh+): 6.8m" },
+      "2-stride-small-pony": { distance: 8.1, description: "Gridwork 2 strides - small pony (<13hh): 8.1m" },
+      "2-stride-big-pony": { distance: 8.7, description: "Gridwork 2 strides - big pony (13-14.2hh): 8.7m" },
+      "2-stride-small-horse": { distance: 9.3, description: "Gridwork 2 strides - small horse (14.3-16hh): 9.3m" },
+      "2-stride-big-horse": { distance: 10.2, description: "Gridwork 2 strides - big horse (16.1hh+): 10.2m" },
+      "3-stride-small-pony": { distance: 10.8, description: "Gridwork 3 strides - small pony (<13hh): 10.8m" },
+      "3-stride-big-pony": { distance: 11.6, description: "Gridwork 3 strides - big pony (13-14.2hh): 11.6m" },
+      "3-stride-small-horse": { distance: 12.4, description: "Gridwork 3 strides - small horse (14.3-16hh): 12.4m" },
+      "3-stride-big-horse": { distance: 13.6, description: "Gridwork 3 strides - big horse (16.1hh+): 13.6m" }
     },
     "course-distances": {
       "1-stride-horses": { distance: 6.5, description: "1 stride - horses (6.00-7.00m)" },
@@ -230,13 +235,12 @@ export default function StrideCalculator() {
         });
       }
     } else if (distanceType === "gridwork") {
-      // For gridwork, show both horse size specific pole-to-fence and stride-based exercises
+      // For gridwork, use horse size category and stride count
       if (strideCount === "bounce") {
-        // Show pole-to-fence distances for horse size based on height
-        const poleToFenceKey = `pole-to-fence-${horseSizeCategory}`;
-        const poleToFenceData = distances[poleToFenceKey as keyof typeof distances] as any;
-        if (poleToFenceData) {
-          const distanceMeters = poleToFenceData.distance;
+        // Show bounce distance for horse size
+        const selectedData = distances[horseSizeCategory as keyof typeof distances] as any;
+        if (selectedData && selectedData.distance && selectedData.description) {
+          const distanceMeters = selectedData.distance;
           const distanceYards = metersToYards(distanceMeters);
           const userSteps = calculateUserSteps(distanceType, strideCount);
           
@@ -244,28 +248,29 @@ export default function StrideCalculator() {
             distanceYards,
             distanceMeters,
             userSteps,
-            description: poleToFenceData.description,
+            description: selectedData.description,
             notes: getNotesForDistanceType(distanceType),
             exerciseType: distanceType
           });
         }
-      }
-      
-      // Show standard gridwork distance for selected stride
-      const selectedData = distances[strideCount as keyof typeof distances] as any;
-      if (selectedData && selectedData.distance && selectedData.description) {
-        const distanceMeters = selectedData.distance;
-        const distanceYards = metersToYards(distanceMeters);
-        const userSteps = calculateUserSteps(distanceType, strideCount);
-        
-        calculations.push({
-          distanceYards,
-          distanceMeters,
-          userSteps,
-          description: selectedData.description,
-          notes: getNotesForDistanceType(distanceType),
-          exerciseType: distanceType
-        });
+      } else {
+        // Show stride-based distance for horse size
+        const keyPattern = `${strideCount}-${horseSizeCategory}`;
+        const selectedData = distances[keyPattern as keyof typeof distances] as any;
+        if (selectedData && selectedData.distance && selectedData.description) {
+          const distanceMeters = selectedData.distance;
+          const distanceYards = metersToYards(distanceMeters);
+          const userSteps = calculateUserSteps(distanceType, strideCount);
+          
+          calculations.push({
+            distanceYards,
+            distanceMeters,
+            userSteps,
+            description: selectedData.description,
+            notes: getNotesForDistanceType(distanceType),
+            exerciseType: distanceType
+          });
+        }
       }
     } else if (needsStrideSelection()) {
       // For canter poles
