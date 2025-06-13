@@ -194,7 +194,8 @@ export default function AdminNews() {
         title: formData.title,
         excerpt: formData.excerpt, 
         content: formData.content,
-        imageUrl: imageUrl  // Send as imageUrl for server mapping
+        image: imageUrl,
+        slug: formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
       };
       
       console.log("Submitting data:", submitData);
@@ -300,7 +301,7 @@ export default function AdminNews() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => createFacebookPost(news)}
+                        onClick={() => openShareModal(news)}
                         className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
                       >
                         <Share2 className="w-3 h-3" />
@@ -480,6 +481,18 @@ export default function AdminNews() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+
+          {/* Facebook Share Modal */}
+          {articleToShare && (
+            <FacebookShareModal 
+              isOpen={shareModalOpen}
+              onClose={() => {
+                setShareModalOpen(false);
+                setArticleToShare(null);
+              }}
+              article={articleToShare}
+            />
+          )}
         </div>
       </div>
       <Footer />
