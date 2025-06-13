@@ -78,27 +78,15 @@ export default function TestimonialsSection() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2">
-                      <Avatar className="w-5 h-5 flex-shrink-0">
-                        <AvatarImage 
-                          src={testimonial.imageUrl || undefined} 
-                          alt={testimonial.name}
-                          className="object-cover"
-                        />
-                        <AvatarFallback className="bg-orange-500 text-white font-semibold text-xs">
-                          {testimonial.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="min-w-0 flex-1 -ml-7">
-                        <h4 className="font-semibold text-gray-900 text-xs truncate leading-tight">
-                          {testimonial.name}
-                        </h4>
-                        {testimonial.location && (
-                          <p className="text-gray-600 text-xs truncate leading-tight">
-                            {testimonial.location}
-                          </p>
-                        )}
-                      </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 text-xs truncate leading-tight">
+                        {testimonial.name}
+                      </h4>
+                      {testimonial.location && (
+                        <p className="text-gray-600 text-xs truncate leading-tight">
+                          {testimonial.location}
+                        </p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
