@@ -1594,39 +1594,49 @@ The Dan Bizzarro Method Team`,
   }
 
   async getActiveSponsor(): Promise<Sponsor | undefined> {
-    // Get the next sponsor to display based on rotation logic
+    // Get all active sponsors ordered by display order
     const activeSponsors = await db.select().from(sponsors)
       .where(eq(sponsors.isActive, true))
-      .orderBy(sponsors.displayOrder, sponsors.lastDisplayed);
+      .orderBy(sponsors.displayOrder);
     
     if (activeSponsors.length === 0) return undefined;
     
-    // Find sponsor that hasn't been displayed recently or the one with oldest display time
     const now = new Date();
+    
+    // Find sponsor that hasn't been displayed yet
+    const neverDisplayed = activeSponsors.find(sponsor => !sponsor.lastDisplayed);
+    if (neverDisplayed) {
+      await this.updateSponsor(neverDisplayed.id, { lastDisplayed: now });
+      return neverDisplayed;
+    }
+    
+    // Find the sponsor that was displayed longest ago and is due for rotation
+    let oldestSponsor = activeSponsors[0];
+    let oldestTime = new Date(activeSponsors[0].lastDisplayed!).getTime();
+    
     for (const sponsor of activeSponsors) {
-      if (!sponsor.lastDisplayed) {
-        // Update last displayed time
-        await this.updateSponsor(sponsor.id, { lastDisplayed: now });
-        await this.trackSponsorImpression(sponsor.id);
-        return sponsor;
-      }
-      
-      // Check if rotation duration has passed
-      const timeSinceDisplayed = now.getTime() - new Date(sponsor.lastDisplayed).getTime();
+      const lastDisplayedTime = new Date(sponsor.lastDisplayed!).getTime();
+      const timeSinceDisplayed = now.getTime() - lastDisplayedTime;
       const rotationDurationMs = sponsor.rotationDuration * 1000;
       
-      if (timeSinceDisplayed >= rotationDurationMs) {
-        await this.updateSponsor(sponsor.id, { lastDisplayed: now });
-        await this.trackSponsorImpression(sponsor.id);
-        return sponsor;
+      // If this sponsor is due for rotation and is older than current oldest
+      if (timeSinceDisplayed >= rotationDurationMs && lastDisplayedTime < oldestTime) {
+        oldestSponsor = sponsor;
+        oldestTime = lastDisplayedTime;
       }
     }
     
-    // If no sponsor is due for rotation, return the first one
-    const firstSponsor = activeSponsors[0];
-    await this.updateSponsor(firstSponsor.id, { lastDisplayed: now });
-    await this.trackSponsorImpression(firstSponsor.id);
-    return firstSponsor;
+    // Check if the oldest sponsor is due for rotation
+    const timeSinceOldest = now.getTime() - oldestTime;
+    const rotationDurationMs = oldestSponsor.rotationDuration * 1000;
+    
+    if (timeSinceOldest >= rotationDurationMs) {
+      await this.updateSponsor(oldestSponsor.id, { lastDisplayed: now });
+      return oldestSponsor;
+    }
+    
+    // If no sponsor is due yet, return the one displayed longest ago
+    return oldestSponsor;
   }
 
   async getSponsor(id: number): Promise<Sponsor | undefined> {
