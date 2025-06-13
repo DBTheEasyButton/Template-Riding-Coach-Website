@@ -19,6 +19,7 @@ import {
   loyaltyProgram,
   loyaltyDiscounts,
   competitionChecklists,
+  sponsors,
   type User, 
   type InsertUser,
   type Achievement,
@@ -48,6 +49,8 @@ import {
   type InsertEmailTemplate,
   type EmailCampaign,
   type InsertEmailCampaign,
+  type Sponsor,
+  type InsertSponsor,
   type EmailLog,
   type InsertEmailLog,
   type EmailAutomation,
@@ -168,6 +171,16 @@ export interface IStorage {
   updateCompetitionChecklist(id: number, updates: Partial<InsertCompetitionChecklist>): Promise<CompetitionChecklist | undefined>;
   deleteCompetitionChecklist(id: number): Promise<void>;
   generateChecklistForCompetition(discipline: string, competitionType: string, competitionName: string, competitionDate: Date, location: string, horseName?: string): Promise<CompetitionChecklist>;
+
+  // Sponsor System
+  getAllSponsors(): Promise<Sponsor[]>;
+  getActiveSponsor(): Promise<Sponsor | undefined>;
+  getSponsor(id: number): Promise<Sponsor | undefined>;
+  createSponsor(sponsor: InsertSponsor): Promise<Sponsor>;
+  updateSponsor(id: number, updates: Partial<InsertSponsor>): Promise<Sponsor | undefined>;
+  deleteSponsor(id: number): Promise<void>;
+  trackSponsorClick(id: number): Promise<void>;
+  trackSponsorImpression(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1573,6 +1586,87 @@ The Dan Bizzarro Method Team`,
         { id: "nutrition_hydration", task: "Maintain proper nutrition and hydration", completed: false, priority: "medium" }
       ]
     };
+  }
+
+  // Sponsor Methods
+  async getAllSponsors(): Promise<Sponsor[]> {
+    return await db.select().from(sponsors).orderBy(sponsors.displayOrder, desc(sponsors.createdAt));
+  }
+
+  async getActiveSponsor(): Promise<Sponsor | undefined> {
+    // Get the next sponsor to display based on rotation logic
+    const activeSponsors = await db.select().from(sponsors)
+      .where(eq(sponsors.isActive, true))
+      .orderBy(sponsors.displayOrder, sponsors.lastDisplayed);
+    
+    if (activeSponsors.length === 0) return undefined;
+    
+    // Find sponsor that hasn't been displayed recently or the one with oldest display time
+    const now = new Date();
+    for (const sponsor of activeSponsors) {
+      if (!sponsor.lastDisplayed) {
+        // Update last displayed time
+        await this.updateSponsor(sponsor.id, { lastDisplayed: now });
+        await this.trackSponsorImpression(sponsor.id);
+        return sponsor;
+      }
+      
+      // Check if rotation duration has passed
+      const timeSinceDisplayed = now.getTime() - new Date(sponsor.lastDisplayed).getTime();
+      const rotationDurationMs = sponsor.rotationDuration * 1000;
+      
+      if (timeSinceDisplayed >= rotationDurationMs) {
+        await this.updateSponsor(sponsor.id, { lastDisplayed: now });
+        await this.trackSponsorImpression(sponsor.id);
+        return sponsor;
+      }
+    }
+    
+    // If no sponsor is due for rotation, return the first one
+    const firstSponsor = activeSponsors[0];
+    await this.updateSponsor(firstSponsor.id, { lastDisplayed: now });
+    await this.trackSponsorImpression(firstSponsor.id);
+    return firstSponsor;
+  }
+
+  async getSponsor(id: number): Promise<Sponsor | undefined> {
+    const [sponsor] = await db.select().from(sponsors).where(eq(sponsors.id, id));
+    return sponsor;
+  }
+
+  async createSponsor(insertSponsor: InsertSponsor): Promise<Sponsor> {
+    const [sponsor] = await db.insert(sponsors).values(insertSponsor).returning();
+    return sponsor;
+  }
+
+  async updateSponsor(id: number, updates: Partial<InsertSponsor>): Promise<Sponsor | undefined> {
+    const [sponsor] = await db.update(sponsors)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(sponsors.id, id))
+      .returning();
+    return sponsor;
+  }
+
+  async deleteSponsor(id: number): Promise<void> {
+    await db.delete(sponsors).where(eq(sponsors.id, id));
+  }
+
+  async trackSponsorClick(id: number): Promise<void> {
+    await db.update(sponsors)
+      .set({ 
+        clickCount: sql`${sponsors.clickCount} + 1`,
+        updatedAt: new Date()
+      })
+      .where(eq(sponsors.id, id));
+  }
+
+  async trackSponsorImpression(id: number): Promise<void> {
+    await db.update(sponsors)
+      .set({ 
+        impressionCount: sql`${sponsors.impressionCount} + 1`,
+        updatedAt: new Date()
+      })
+      .where(eq(sponsors.id, id));
   }
 }
 

@@ -450,6 +450,22 @@ export const competitionChecklists = pgTable("competition_checklists", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const sponsors = pgTable("sponsors", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  logo: text("logo").notNull(),
+  website: text("website").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  displayOrder: integer("display_order").notNull().default(0),
+  rotationDuration: integer("rotation_duration").notNull().default(10), // seconds
+  clickCount: integer("click_count").notNull().default(0),
+  impressionCount: integer("impression_count").notNull().default(0),
+  lastDisplayed: timestamp("last_displayed"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const insertCompetitionChecklistSchema = createInsertSchema(competitionChecklists).omit({
   id: true,
   isCompleted: true,
@@ -457,5 +473,16 @@ export const insertCompetitionChecklistSchema = createInsertSchema(competitionCh
   updatedAt: true,
 });
 
+export const insertSponsorSchema = createInsertSchema(sponsors).omit({
+  id: true,
+  clickCount: true,
+  impressionCount: true,
+  lastDisplayed: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type CompetitionChecklist = typeof competitionChecklists.$inferSelect;
 export type InsertCompetitionChecklist = z.infer<typeof insertCompetitionChecklistSchema>;
+export type Sponsor = typeof sponsors.$inferSelect;
+export type InsertSponsor = z.infer<typeof insertSponsorSchema>;
