@@ -37,7 +37,7 @@ const exercisePatterns: ExercisePattern[] = [
       { type: 'pole', position: { x: 560, y: 240 }, width: 100, height: 8 },
       { type: 'finish', position: { x: 700, y: 250 } }
     ],
-    path: 'M 50 250 L 700 250',
+    path: 'M 50 240 L 700 240',
     measurements: [
       { from: { x: 200, y: 220 }, to: { x: 320, y: 220 }, distance: '1.2m', label: '' },
       { from: { x: 320, y: 220 }, to: { x: 440, y: 220 }, distance: '1.2m', label: '' },
@@ -59,7 +59,7 @@ const exercisePatterns: ExercisePattern[] = [
       { type: 'pole', position: { x: 520, y: 240 }, width: 80, height: 8 },
       { type: 'finish', position: { x: 650, y: 250 } }
     ],
-    path: 'M 80 250 L 650 250',
+    path: 'M 80 240 L 650 240',
     measurements: [
       { from: { x: 200, y: 220 }, to: { x: 280, y: 220 }, distance: '0.8m', label: '' },
       { from: { x: 280, y: 220 }, to: { x: 360, y: 220 }, distance: '0.8m', label: '' },
@@ -79,7 +79,7 @@ const exercisePatterns: ExercisePattern[] = [
       { type: 'pole', position: { x: 870, y: 240 }, width: 120, height: 10 },
       { type: 'finish', position: { x: 1050, y: 250 } }
     ],
-    path: 'M 80 250 L 1050 250',
+    path: 'M 80 240 L 1050 240',
     measurements: [
       { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: '' },
       { from: { x: 560, y: 220 }, to: { x: 870, y: 220 }, distance: '3.1m', label: '' }
@@ -98,10 +98,10 @@ const exercisePatterns: ExercisePattern[] = [
       { type: 'jump', position: { x: 1180, y: 240 }, width: 80, height: 20 },
       { type: 'finish', position: { x: 1350, y: 250 } }
     ],
-    path: 'M 80 250 L 1350 250',
+    path: 'M 80 240 L 1350 240',
     measurements: [
-      { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: 'Bounce' },
-      { from: { x: 560, y: 220 }, to: { x: 1180, y: 220 }, distance: '6.2m', label: 'One stride' }
+      { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: '' },
+      { from: { x: 560, y: 220 }, to: { x: 1180, y: 220 }, distance: '6.2m', label: '' }
     ],
     description: 'Bounce to one stride grid',
     notes: 'Start with poles on ground. Gradual progression to small jumps.'
