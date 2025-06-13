@@ -33,10 +33,10 @@ export default function StrideCalculator() {
   // Standard distances in meters - Dan Bizzarro Method official guidelines
   const standardDistances = {
     "walk-poles": {
-      "small-pony": { distance: 0.825, description: "Walk poles - small pony (<13hh): 0.75-0.9m" },
-      "big-pony": { distance: 1.0, description: "Walk poles - big pony (13-14.2hh): 0.9-1.1m" },
-      "small-horse": { distance: 1.1, description: "Walk poles - small horse (14.3-16hh): 1.0-1.2m" },
-      "big-horse": { distance: 1.25, description: "Walk poles - big horse (16.1hh+): 1.1-1.4m" }
+      "small-pony": { distance: 0.6, description: "Walk poles - small pony (<13hh): 60cm" },
+      "big-pony": { distance: 0.7, description: "Walk poles - big pony (13-14.2hh): 70cm" },
+      "small-horse": { distance: 0.8, description: "Walk poles - small horse (14.3-16hh): 80cm" },
+      "big-horse": { distance: 0.9, description: "Walk poles - big horse (16.1hh+): 90cm" }
     },
     "trot-poles": {
       "small-pony": { distance: 1.1, description: "Trot poles - small pony (<13hh): 1.0-1.2m" },
