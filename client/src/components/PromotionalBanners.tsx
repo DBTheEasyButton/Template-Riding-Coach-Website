@@ -7,7 +7,7 @@ export default function SidebarBanners() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="space-y-4 sticky top-8">
+    <div className="space-y-4 max-h-screen overflow-y-auto pb-8">
       {/* Clinics Banner */}
       <div className="bg-gradient-to-b from-blue-600 to-blue-700 text-white rounded-lg p-4 shadow-lg">
         <div className="text-center">
