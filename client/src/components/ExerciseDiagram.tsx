@@ -39,7 +39,7 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 50 250 L 700 250',
     measurements: [
-      { from: { x: 200, y: 220 }, to: { x: 320, y: 220 }, distance: '1.2m', label: 'Trot spacing' },
+      { from: { x: 200, y: 220 }, to: { x: 320, y: 220 }, distance: '1.2m', label: '' },
       { from: { x: 320, y: 220 }, to: { x: 440, y: 220 }, distance: '1.2m', label: '' },
       { from: { x: 440, y: 220 }, to: { x: 560, y: 220 }, distance: '1.2m', label: '' }
     ],
@@ -61,7 +61,7 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 80 250 L 650 250',
     measurements: [
-      { from: { x: 200, y: 220 }, to: { x: 280, y: 220 }, distance: '0.8m', label: 'Walk spacing' },
+      { from: { x: 200, y: 220 }, to: { x: 280, y: 220 }, distance: '0.8m', label: '' },
       { from: { x: 280, y: 220 }, to: { x: 360, y: 220 }, distance: '0.8m', label: '' },
       { from: { x: 360, y: 220 }, to: { x: 440, y: 220 }, distance: '0.8m', label: '' }
     ],
@@ -81,7 +81,7 @@ const exercisePatterns: ExercisePattern[] = [
     ],
     path: 'M 80 250 L 1050 250',
     measurements: [
-      { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: 'Canter spacing' },
+      { from: { x: 250, y: 220 }, to: { x: 560, y: 220 }, distance: '3.1m', label: '' },
       { from: { x: 560, y: 220 }, to: { x: 870, y: 220 }, distance: '3.1m', label: '' }
     ],
     description: 'Three canter poles for stride regulation',
