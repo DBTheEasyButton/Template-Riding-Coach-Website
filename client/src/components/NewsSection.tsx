@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export default function NewsSection() {
   const { data: news = [] } = useQuery<News[]>({
@@ -61,10 +62,11 @@ export default function NewsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {newsToDisplay.map((article, index) => (
             <article key={article.id || index} className="bg-gradient-to-br from-cream to-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <img 
+              <OptimizedImage 
                 src={article.image}
                 alt={article.title}
                 className="w-full h-48 object-cover"
+                loading="lazy"
               />
               <div className="p-6">
                 <div className="flex items-center text-sm text-medium mb-3">

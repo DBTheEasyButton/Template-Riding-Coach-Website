@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { GalleryImage } from "@shared/schema";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export default function GallerySection() {
   const { data: galleryImages = [], isLoading } = useQuery<GalleryImage[]>({
@@ -30,12 +31,11 @@ export default function GallerySection() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {galleryImages.map((image) => (
               <div key={image.id} className="group relative overflow-hidden rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-500">
-                <img 
+                <OptimizedImage 
                   src={image.imageUrl}
                   alt={image.title}
                   className="w-full h-80 object-cover"
                   loading="lazy"
-                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-4 left-4 text-white">

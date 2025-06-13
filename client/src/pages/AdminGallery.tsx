@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { GalleryImage } from "@shared/schema";
 import { Plus, Edit, Trash2, Upload, Eye, X, Settings } from "lucide-react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 
 export default function AdminGallery() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -231,13 +232,11 @@ export default function AdminGallery() {
               {images.map((image) => (
                 <Card key={image.id} className="overflow-hidden">
                   <div className="aspect-video bg-gray-100 relative">
-                    <img 
+                    <OptimizedImage 
                       src={image.imageUrl} 
                       alt={image.title}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = "/api/placeholder/400/300";
-                      }}
+                      loading="lazy"
                     />
                     <div className="absolute top-2 right-2">
                       <span className={`px-2 py-1 text-xs rounded ${
