@@ -25,18 +25,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     
+    <!-- Fonts with display=swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <!-- Mobile-first image loading -->
     <link rel="preload" href="/src/assets/hero-background.jpg" as="image" type="image/jpeg" media="(min-width: 768px)">
     
     <!-- Critical styles for faster rendering -->
     <style>
       /* Critical above-the-fold styles */
-      body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+      body { 
+        margin: 0; 
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-display: swap;
+      }
       .loading { opacity: 0; }
       .loaded { opacity: 1; transition: opacity 0.3s; }
       /* Prevent layout shift */
       nav { height: 64px; }
       .hero-section { min-height: 100vh; }
+      
+      /* Mobile performance optimizations */
+      @media (max-width: 768px) {
+        * { 
+          animation-duration: 0.2s !important;
+          transition-duration: 0.2s !important;
+        }
+        img { image-rendering: optimizeSpeed; }
+      }
     </style>
     
     <!-- Non-critical CSS -->
