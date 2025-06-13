@@ -283,6 +283,7 @@ function MainApp() {
       <Navigation />
       <HeroSection />
       <TestimonialsSection />
+      <StrideCalculatorSection />
       <ClinicsSection />
       <ContactSection />
     </div>
