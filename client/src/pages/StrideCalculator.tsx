@@ -127,6 +127,9 @@ export default function StrideCalculator() {
     const isTallUser = userHeightInches >= 81; // 6'9" or taller
     
     switch (exerciseType) {
+      case "walk-poles":
+        return isTallUser ? "1 small step" : "1 normal step";
+        
       case "trot-poles":
         return isTallUser ? "1 decent step" : "1 big step";
         
