@@ -69,7 +69,7 @@ export default function SponsorRotation() {
   return (
     <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm transition-all duration-500 hover:shadow-md">
       <div className="text-center">
-        <div className="w-16 h-16 mx-auto mb-2 rounded-lg overflow-hidden">
+        <div className="w-24 h-24 mx-auto mb-3 rounded-lg overflow-hidden bg-white p-2">
           <OptimizedImage
             src={currentSponsor.logo}
             alt={`${currentSponsor.name} logo`}
