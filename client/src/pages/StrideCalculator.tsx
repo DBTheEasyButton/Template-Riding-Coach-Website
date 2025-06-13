@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, Ruler, Users, Info, AlertTriangle } from "lucide-react";
+import { Calculator, Ruler, Users, Info, AlertTriangle, ArrowLeft } from "lucide-react";
 import { ExerciseDiagram } from "@/components/ExerciseDiagram";
+import { Link } from "wouter";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
 type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";
@@ -30,6 +31,11 @@ export default function StrideCalculator() {
   const [distanceType, setDistanceType] = useState<DistanceType>("trot-poles");
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   // Standard distances in meters - Dan Bizzarro Method official guidelines
   const standardDistances = {
@@ -372,14 +378,25 @@ export default function StrideCalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
-        <div className="text-center mb-6 md:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 dark:text-green-400 mb-2 md:mb-4">
-            Stride Distance Calculator
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
-            Calculate precise distances for poles and jumps based on your height. 
-            Get measurements in both yards and meters, plus your personal step count.
-          </p>
+        <div className="mb-6 md:mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <Link href="/">
+              <Button variant="outline" className="flex items-center gap-2 h-10 text-base">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 dark:text-green-400 mb-2 md:mb-4">
+              Stride Distance Calculator
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
+              Calculate precise distances for poles and jumps based on your height. 
+              Get measurements in both yards and meters, plus your personal step count.
+            </p>
+          </div>
         </div>
 
         <div className="grid gap-6 max-w-6xl mx-auto lg:grid-cols-2 lg:gap-8">
