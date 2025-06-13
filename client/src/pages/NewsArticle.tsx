@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, Share2, Facebook, Twitter, Mail } from "lucide-rea
 import { OptimizedImage } from "@/components/OptimizedImage";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PromotionalBanners from "@/components/PromotionalBanners";
 
 export default function NewsArticle() {
   const params = useParams();
@@ -69,6 +70,9 @@ export default function NewsArticle() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to News
         </Button>
+
+        {/* Promotional Banners */}
+        <PromotionalBanners />
 
         {/* Article Header */}
         <header className="mb-8">
