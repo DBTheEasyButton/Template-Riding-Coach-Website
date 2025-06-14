@@ -156,78 +156,80 @@ export default function Navigation() {
       
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-white border-t overflow-y-auto">
-          <div className="px-2 pt-2 pb-6 space-y-1">
-            {navItemsBefore.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavigation(item.href, item.label)}
-                className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-              >
-                {item.label}
-              </button>
-            ))}
-            
-            {/* Mobile Coaching Section */}
-            <div className="border-t pt-2 mt-2">
-              <div className="px-3 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                Coaching
-              </div>
-              {coachingSubmenu.map((item, index) => (
+        <div className="md:hidden">
+          <div className="absolute top-full left-0 right-0 bg-white border-t shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto z-50">
+            <div className="px-2 pt-2 pb-6 space-y-1">
+              {navItemsBefore.map((item) => (
                 <button
-                  key={index}
-                  onClick={() => handleSubmenuClick(item)}
-                  className="block w-full text-left px-3 py-2 pl-6 text-gray-800 hover:text-orange-500 transition-colors duration-200"
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href, item.label)}
+                  className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
                 >
                   {item.label}
                 </button>
               ))}
-            </div>
+              
+              {/* Mobile Coaching Section */}
+              <div className="border-t pt-2 mt-2">
+                <div className="px-3 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                  Coaching
+                </div>
+                {coachingSubmenu.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSubmenuClick(item)}
+                    className="block w-full text-left px-3 py-2 pl-6 text-gray-800 hover:text-orange-500 transition-colors duration-200"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
 
-            {navItemsAfter.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavigation(item.href, item.label)}
-                className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-              >
-                {item.label}
-              </button>
-            ))}
-            
-            {/* Additional mobile-only links */}
-            <div className="border-t pt-2 mt-2">
-              <Link href="/competition-checklists">
+              {navItemsAfter.map((item) => (
                 <button
-                  onClick={() => setIsMenuOpen(false)}
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href, item.label)}
                   className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
                 >
-                  Competition Checklists
+                  {item.label}
                 </button>
-              </Link>
-              <Link href="/stride-calculator">
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                >
-                  Stride Calculator
-                </button>
-              </Link>
-              <Link href="/loyalty">
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                >
-                  Loyalty Program
-                </button>
-              </Link>
-              <Link href="/terms-and-conditions">
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                >
-                  Terms & Conditions
-                </button>
-              </Link>
+              ))}
+              
+              {/* Additional mobile-only links */}
+              <div className="border-t pt-2 mt-2">
+                <Link href="/competition-checklists">
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
+                  >
+                    Competition Checklists
+                  </button>
+                </Link>
+                <Link href="/stride-calculator">
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
+                  >
+                    Stride Calculator
+                  </button>
+                </Link>
+                <Link href="/loyalty">
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
+                  >
+                    Loyalty Program
+                  </button>
+                </Link>
+                <Link href="/terms-and-conditions">
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
+                  >
+                    Terms & Conditions
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
