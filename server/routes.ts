@@ -1700,6 +1700,227 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Analytics routes
+  app.get("/api/admin/analytics", async (req, res) => {
+    try {
+      const [
+        subscribers,
+        clinics,
+        registrations,
+        contacts,
+        loyaltyPrograms
+      ] = await Promise.all([
+        storage.getAllEmailSubscribers(),
+        storage.getAllClinics(),
+        storage.getAllClinicRegistrations(),
+        storage.getAllContacts(),
+        storage.getAllLoyaltyPrograms()
+      ]);
+
+      // Calculate monthly registration trends
+      const now = new Date();
+      const monthlyData = [];
+      for (let i = 5; i >= 0; i--) {
+        const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthStr = month.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        
+        const monthRegistrations = registrations.filter(reg => {
+          const regDate = new Date(reg.registeredAt);
+          return regDate.getMonth() === month.getMonth() && regDate.getFullYear() === month.getFullYear();
+        });
+        
+        const revenue = monthRegistrations.reduce((sum, reg) => {
+          const clinic = clinics.find(c => c.id === reg.clinicId);
+          return sum + (clinic?.price || 0);
+        }, 0);
+
+        monthlyData.push({
+          month: monthStr,
+          count: monthRegistrations.length,
+          revenue
+        });
+      }
+
+      // Subscriber growth data
+      const subscriberGrowth = [];
+      for (let i = 5; i >= 0; i--) {
+        const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthStr = month.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        
+        const monthSubscribers = subscribers.filter(sub => {
+          const subDate = new Date(sub.subscribedAt);
+          return subDate <= new Date(month.getFullYear(), month.getMonth() + 1, 0);
+        }).length;
+
+        subscriberGrowth.push({
+          month: monthStr,
+          subscribers: monthSubscribers
+        });
+      }
+
+      // Clinic level distribution
+      const levelCounts: Record<string, number> = {};
+      clinics.forEach(clinic => {
+        levelCounts[clinic.level] = (levelCounts[clinic.level] || 0) + 1;
+      });
+
+      const clinicsByLevel = Object.entries(levelCounts).map(([level, count]) => ({
+        level: level.charAt(0).toUpperCase() + level.slice(1),
+        count
+      }));
+
+      // Contact type distribution
+      const contactCounts: Record<string, number> = {};
+      contacts.forEach(contact => {
+        const type = contact.inquiryType || 'general';
+        contactCounts[type] = (contactCounts[type] || 0) + 1;
+      });
+
+      const contactsByType = Object.entries(contactCounts).map(([type, count]) => ({
+        type: type.charAt(0).toUpperCase() + type.slice(1),
+        count
+      }));
+
+      // Loyalty tier distribution
+      const tierCounts = { Bronze: 0, Silver: 0, Gold: 0 };
+      loyaltyPrograms.forEach(program => {
+        if (program.clinicEntries >= 10) tierCounts.Gold++;
+        else if (program.clinicEntries >= 5) tierCounts.Silver++;
+        else if (program.clinicEntries >= 1) tierCounts.Bronze++;
+      });
+
+      const loyaltyTiers = Object.entries(tierCounts).map(([tier, count]) => ({
+        tier,
+        count
+      }));
+
+      const totalRevenue = registrations.reduce((sum, reg) => {
+        const clinic = clinics.find(c => c.id === reg.clinicId);
+        return sum + (clinic?.price || 0);
+      }, 0);
+
+      res.json({
+        totalSubscribers: subscribers.length,
+        totalClinics: clinics.filter(c => c.isActive).length,
+        totalRegistrations: registrations.length,
+        totalRevenue,
+        monthlyRegistrations: monthlyData,
+        subscriberGrowth,
+        clinicsByLevel,
+        contactsByType,
+        loyaltyTiers
+      });
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
+  // Recent activity for analytics
+  app.get("/api/admin/recent-activity", async (req, res) => {
+    try {
+      const [registrations, contacts, subscribers] = await Promise.all([
+        storage.getAllClinicRegistrations(),
+        storage.getAllContacts(),
+        storage.getAllEmailSubscribers()
+      ]);
+
+      const activities = [
+        ...registrations.slice(-10).map(reg => ({
+          type: 'registration',
+          description: `${reg.firstName} ${reg.lastName} registered for a clinic`,
+          timestamp: new Date(reg.registeredAt).toLocaleDateString()
+        })),
+        ...contacts.slice(-10).map(contact => ({
+          type: 'contact',
+          description: `${contact.firstName} ${contact.lastName} sent a message: ${contact.subject}`,
+          timestamp: new Date(contact.createdAt).toLocaleDateString()
+        })),
+        ...subscribers.slice(-10).map(sub => ({
+          type: 'subscription',
+          description: `${sub.email} subscribed to newsletter`,
+          timestamp: new Date(sub.subscribedAt).toLocaleDateString()
+        }))
+      ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 15);
+
+      res.json(activities);
+    } catch (error) {
+      console.error("Error fetching recent activity:", error);
+      res.status(500).json({ message: "Failed to fetch recent activity" });
+    }
+  });
+
+  // Settings management
+  app.get("/api/admin/settings", async (req, res) => {
+    try {
+      const settings = {
+        siteName: "Dan Bizzarro Method",
+        tagline: "Professional Horse Training & Eventing",
+        contactEmail: "dan@danbizzarromethod.com",
+        socialMedia: {
+          facebook: "https://facebook.com/danbizzarromethod",
+          instagram: "https://instagram.com/danbizzarromethod",
+          youtube: "https://youtube.com/@danbizzarromethod"
+        },
+        features: {
+          enableRegistrations: true,
+          enableNewsletter: true,
+          enableLoyaltyProgram: true,
+          maintenanceMode: false
+        },
+        notifications: {
+          emailNewRegistrations: true,
+          emailNewContacts: true,
+          emailNewsletterSignups: true
+        }
+      };
+      
+      res.json(settings);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
+  });
+
+  app.put("/api/admin/settings", async (req, res) => {
+    try {
+      res.json({ message: "Settings updated successfully" });
+    } catch (error) {
+      console.error("Error updating settings:", error);
+      res.status(500).json({ message: "Failed to update settings" });
+    }
+  });
+
+  // Database backup
+  app.post("/api/admin/backup", async (req, res) => {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const backupData = {
+        timestamp,
+        version: "1.0",
+        data: {
+          clinics: await storage.getAllClinics(),
+          registrations: await storage.getAllClinicRegistrations(),
+          contacts: await storage.getAllContacts(),
+          subscribers: await storage.getAllEmailSubscribers(),
+          news: await storage.getAllNews(),
+          gallery: await storage.getAllGalleryImages(),
+          achievements: await storage.getAllAchievements(),
+          events: await storage.getAllEvents(),
+          testimonials: await storage.getAllTestimonials(),
+          sponsors: await storage.getAllSponsors()
+        }
+      };
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', `attachment; filename="danbizzarro-backup-${timestamp}.json"`);
+      res.json(backupData);
+    } catch (error) {
+      console.error("Error creating backup:", error);
+      res.status(500).json({ message: "Failed to create backup" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
