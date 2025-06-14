@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Calendar, MessageSquare, Home, Mail, Images, FileText, Star } from "lucide-react";
+import { Calendar, MessageSquare, Home, Mail, Images, FileText, Star, BarChart3, Settings } from "lucide-react";
 
 export default function AdminNavigation() {
   const [location] = useLocation();
@@ -11,7 +11,7 @@ export default function AdminNavigation() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-4 gap-4">
           <h2 className="text-xl font-semibold text-navy dark:text-white">Admin Panel</h2>
           <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
-            <nav className="grid grid-cols-2 lg:flex lg:items-center gap-1 w-full lg:w-auto">
+            <nav className="grid grid-cols-3 lg:flex lg:items-center gap-1 w-full lg:w-auto">
               <Link href="/admin/clinics">
                 <Button 
                   variant={location === "/admin/clinics" ? "default" : "ghost"} 
@@ -70,6 +70,26 @@ export default function AdminNavigation() {
                 >
                   <Star className="w-4 h-4" />
                   Sponsors
+                </Button>
+              </Link>
+              <Link href="/admin/analytics">
+                <Button 
+                  variant={location === "/admin/analytics" ? "default" : "ghost"} 
+                  size="sm"
+                  className="flex items-center gap-2 w-full lg:w-auto"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  Analytics
+                </Button>
+              </Link>
+              <Link href="/admin/settings">
+                <Button 
+                  variant={location === "/admin/settings" ? "default" : "ghost"} 
+                  size="sm"
+                  className="flex items-center gap-2 w-full lg:w-auto"
+                >
+                  <Settings className="w-4 h-4" />
+                  Settings
                 </Button>
               </Link>
             </nav>
