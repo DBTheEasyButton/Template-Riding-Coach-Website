@@ -432,6 +432,12 @@ export default function StrideCalculator() {
                           }
                         }
                       }}
+                      onWheel={(e) => {
+                        e.preventDefault();
+                        const delta = e.deltaY > 0 ? -1 : 1;
+                        const newValue = Math.max(4, Math.min(7, userFeet + delta));
+                        setUserFeet(newValue);
+                      }}
                       placeholder="5"
                       min="4"
                       max="7"
@@ -456,6 +462,12 @@ export default function StrideCalculator() {
                             setUserInches(num);
                           }
                         }
+                      }}
+                      onWheel={(e) => {
+                        e.preventDefault();
+                        const delta = e.deltaY > 0 ? -1 : 1;
+                        const newValue = Math.max(0, Math.min(11, userInches + delta));
+                        setUserInches(newValue);
                       }}
                       placeholder="8"
                       min="0"
@@ -491,6 +503,12 @@ export default function StrideCalculator() {
                           }
                         }
                       }}
+                      onWheel={(e) => {
+                        e.preventDefault();
+                        const delta = e.deltaY > 0 ? -1 : 1;
+                        const newValue = Math.max(10, Math.min(18, horseHands + delta));
+                        setHorseHands(newValue);
+                      }}
                       placeholder="16"
                       min="10"
                       max="18"
@@ -515,6 +533,12 @@ export default function StrideCalculator() {
                             setHorseInches(num);
                           }
                         }
+                      }}
+                      onWheel={(e) => {
+                        e.preventDefault();
+                        const delta = e.deltaY > 0 ? -1 : 1;
+                        const newValue = Math.max(0, Math.min(11, horseInches + delta));
+                        setHorseInches(newValue);
                       }}
                       placeholder="0"
                       min="0"
