@@ -421,10 +421,21 @@ export default function StrideCalculator() {
                       type="number"
                       inputMode="numeric"
                       value={userFeet}
-                      onChange={(e) => setUserFeet(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || value === '-') {
+                          setUserFeet(5);
+                        } else {
+                          const num = parseInt(value, 10);
+                          if (!isNaN(num) && num >= 4 && num <= 7) {
+                            setUserFeet(num);
+                          }
+                        }
+                      }}
                       placeholder="5"
                       min="4"
                       max="7"
+                      step="1"
                       className="h-12 text-lg text-center"
                     />
                     <p className="text-sm text-gray-500 mt-2 text-center">Feet</p>
@@ -435,10 +446,21 @@ export default function StrideCalculator() {
                       type="number"
                       inputMode="numeric"
                       value={userInches}
-                      onChange={(e) => setUserInches(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || value === '-') {
+                          setUserInches(0);
+                        } else {
+                          const num = parseInt(value, 10);
+                          if (!isNaN(num) && num >= 0 && num <= 11) {
+                            setUserInches(num);
+                          }
+                        }
+                      }}
                       placeholder="8"
                       min="0"
                       max="11"
+                      step="1"
                       className="h-12 text-lg text-center"
                     />
                     <p className="text-sm text-gray-500 mt-2 text-center">Inches</p>
@@ -458,10 +480,21 @@ export default function StrideCalculator() {
                       type="number"
                       inputMode="numeric"
                       value={horseHands}
-                      onChange={(e) => setHorseHands(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || value === '-') {
+                          setHorseHands(0);
+                        } else {
+                          const num = parseInt(value, 10);
+                          if (!isNaN(num) && num >= 10 && num <= 18) {
+                            setHorseHands(num);
+                          }
+                        }
+                      }}
                       placeholder="16"
                       min="10"
                       max="18"
+                      step="1"
                       className="h-12 text-lg text-center"
                     />
                     <p className="text-sm text-gray-500 mt-2 text-center">Hands</p>
@@ -472,10 +505,21 @@ export default function StrideCalculator() {
                       type="number"
                       inputMode="numeric"
                       value={horseInches}
-                      onChange={(e) => setHorseInches(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || value === '-') {
+                          setHorseInches(0);
+                        } else {
+                          const num = parseInt(value, 10);
+                          if (!isNaN(num) && num >= 0 && num <= 11) {
+                            setHorseInches(num);
+                          }
+                        }
+                      }}
                       placeholder="0"
                       min="0"
                       max="11"
+                      step="1"
                       className="h-12 text-lg text-center"
                     />
                     <p className="text-sm text-gray-500 mt-2 text-center">Inches</p>
