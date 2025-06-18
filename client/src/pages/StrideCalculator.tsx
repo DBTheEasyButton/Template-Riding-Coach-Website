@@ -574,6 +574,7 @@ export default function StrideCalculator() {
                         const newValue = Math.max(0, Math.min(11, horseInches + delta));
                         setHorseInches(newValue);
                       }}
+                      {...handleTouchScroll(setHorseInches, horseInches, 0, 11)}
                       placeholder="0"
                       min="0"
                       max="11"
