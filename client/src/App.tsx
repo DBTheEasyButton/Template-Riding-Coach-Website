@@ -3,7 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 
 // Immediately load essential pages
 import Home from "@/pages/Home";
@@ -25,6 +25,25 @@ const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
 const AdminSettings = lazy(() => import("@/pages/AdminSettings"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
+
+// Preload popular pages on desktop for better UX
+const useDesktopPreloading = () => {
+  useEffect(() => {
+    // Check if on desktop (not mobile/tablet)
+    const isDesktop = window.innerWidth >= 1024 && !('ontouchstart' in window);
+    
+    if (isDesktop) {
+      // Preload commonly accessed pages after a short delay
+      const timer = setTimeout(() => {
+        import("@/pages/StrideCalculator");
+        import("@/pages/CompetitionChecklists");
+        import("@/pages/Loyalty");
+      }, 2000); // 2 second delay to let main page load first
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+};
 
 // Loading component for lazy-loaded pages
 const PageLoader = () => (
@@ -118,6 +137,8 @@ function Router() {
 }
 
 function App() {
+  useDesktopPreloading();
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
