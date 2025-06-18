@@ -15,9 +15,9 @@ export default function StrideCalculatorSection() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+        <div className="mb-16">
           {/* Main Calculator Card */}
-          <div className="lg:col-span-2">
+          <div>
             <Card className="bg-white border-gray-200 shadow-xl h-full">
               <CardHeader>
                 <div className="flex items-center mb-4">
@@ -70,66 +70,10 @@ export default function StrideCalculatorSection() {
             </Card>
           </div>
 
-          {/* Benefits Card */}
-          <div>
-            <Card className="bg-white border-gray-200 shadow-xl h-full">
-              <CardHeader>
-                <CardTitle className="text-navy text-xl">Why Use the Calculator?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-green-50 rounded-lg">
-                    <h4 className="font-semibold text-navy mb-2">Precision Training</h4>
-                    <p className="text-sm text-gray-600">
-                      Get exact measurements for setting up training exercises
-                    </p>
-                  </div>
-                  
-                  <div className="p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-semibold text-navy mb-2">Course Walking</h4>
-                    <p className="text-sm text-gray-600">
-                      Convert distances to your personal step count for competition preparation
-                    </p>
-                  </div>
-                  
-                  <div className="p-4 bg-orange-50 rounded-lg">
-                    <h4 className="font-semibold text-navy mb-2">Horse-Specific</h4>
-                    <p className="text-sm text-gray-600">
-                      Customized calculations based on your horse's size and stride
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+
         </div>
 
-        {/* Professional Endorsement */}
-        <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg">
-          <div className="text-center">
-            <h3 className="text-2xl font-playfair font-bold text-navy mb-4">
-              "Precision in measurement leads to precision in performance"
-            </h3>
-            <p className="text-gray-700 max-w-2xl mx-auto mb-6">
-              Dan's competition-tested approach to distance measurement, refined through years of 
-              international eventing experience. Get the same precision tools used by professional riders.
-            </p>
-            <div className="flex justify-center items-center space-x-8 text-sm text-gray-600">
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-600 rounded-full mr-2"></div>
-                <span>Used by professionals</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-600 rounded-full mr-2"></div>
-                <span>Competition tested</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-600 rounded-full mr-2"></div>
-                <span>Mobile optimized</span>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </section>
   );
