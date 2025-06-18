@@ -3,43 +3,115 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { lazy, Suspense } from "react";
+
+// Immediately load essential pages
 import Home from "@/pages/Home";
-import TermsAndConditions from "@/pages/TermsAndConditions";
-import Loyalty from "@/pages/Loyalty";
-import CompetitionChecklists from "@/pages/CompetitionChecklists";
-import StrideCalculator from "@/pages/StrideCalculator";
-import AdminClinics from "@/pages/AdminClinics";
-import AdminContacts from "@/pages/AdminContacts";
-import AdminEmailMarketing from "@/pages/AdminEmailMarketing";
-import AdminRegistrations from "@/pages/AdminRegistrations";
-import AdminGallery from "@/pages/AdminGallery";
-import AdminNews from "@/pages/AdminNews";
-import AdminSponsors from "@/pages/AdminSponsors";
-import AdminAnalytics from "@/pages/AdminAnalytics";
-import AdminSettings from "@/pages/AdminSettings";
-import NewsArticle from "@/pages/NewsArticle";
-import Unsubscribe from "@/pages/Unsubscribe";
 import NotFound from "@/pages/not-found";
+
+// Lazy load other pages to reduce initial bundle size
+const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
+const Loyalty = lazy(() => import("@/pages/Loyalty"));
+const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
+const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
+const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
+const AdminContacts = lazy(() => import("@/pages/AdminContacts"));
+const AdminEmailMarketing = lazy(() => import("@/pages/AdminEmailMarketing"));
+const AdminRegistrations = lazy(() => import("@/pages/AdminRegistrations"));
+const AdminGallery = lazy(() => import("@/pages/AdminGallery"));
+const AdminNews = lazy(() => import("@/pages/AdminNews"));
+const AdminSponsors = lazy(() => import("@/pages/AdminSponsors"));
+const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
+const AdminSettings = lazy(() => import("@/pages/AdminSettings"));
+const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
+const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
+
+// Loading component for lazy-loaded pages
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+  </div>
+);
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/terms-and-conditions" component={TermsAndConditions} />
-      <Route path="/loyalty" component={Loyalty} />
-      <Route path="/competition-checklists" component={CompetitionChecklists} />
-      <Route path="/stride-calculator" component={StrideCalculator} />
-      <Route path="/admin/clinics" component={AdminClinics} />
-      <Route path="/admin/contacts" component={AdminContacts} />
-      <Route path="/admin/email-marketing" component={AdminEmailMarketing} />
-      <Route path="/admin/registrations" component={AdminRegistrations} />
-      <Route path="/admin/gallery" component={AdminGallery} />
-      <Route path="/admin/news" component={AdminNews} />
-      <Route path="/admin/sponsors" component={AdminSponsors} />
-      <Route path="/admin/analytics" component={AdminAnalytics} />
-      <Route path="/admin/settings" component={AdminSettings} />
-      <Route path="/news/:id" component={NewsArticle} />
-      <Route path="/unsubscribe" component={Unsubscribe} />
+      <Route path="/terms-and-conditions">
+        <Suspense fallback={<PageLoader />}>
+          <TermsAndConditions />
+        </Suspense>
+      </Route>
+      <Route path="/loyalty">
+        <Suspense fallback={<PageLoader />}>
+          <Loyalty />
+        </Suspense>
+      </Route>
+      <Route path="/competition-checklists">
+        <Suspense fallback={<PageLoader />}>
+          <CompetitionChecklists />
+        </Suspense>
+      </Route>
+      <Route path="/stride-calculator">
+        <Suspense fallback={<PageLoader />}>
+          <StrideCalculator />
+        </Suspense>
+      </Route>
+      <Route path="/admin/clinics">
+        <Suspense fallback={<PageLoader />}>
+          <AdminClinics />
+        </Suspense>
+      </Route>
+      <Route path="/admin/contacts">
+        <Suspense fallback={<PageLoader />}>
+          <AdminContacts />
+        </Suspense>
+      </Route>
+      <Route path="/admin/email-marketing">
+        <Suspense fallback={<PageLoader />}>
+          <AdminEmailMarketing />
+        </Suspense>
+      </Route>
+      <Route path="/admin/registrations">
+        <Suspense fallback={<PageLoader />}>
+          <AdminRegistrations />
+        </Suspense>
+      </Route>
+      <Route path="/admin/gallery">
+        <Suspense fallback={<PageLoader />}>
+          <AdminGallery />
+        </Suspense>
+      </Route>
+      <Route path="/admin/news">
+        <Suspense fallback={<PageLoader />}>
+          <AdminNews />
+        </Suspense>
+      </Route>
+      <Route path="/admin/sponsors">
+        <Suspense fallback={<PageLoader />}>
+          <AdminSponsors />
+        </Suspense>
+      </Route>
+      <Route path="/admin/analytics">
+        <Suspense fallback={<PageLoader />}>
+          <AdminAnalytics />
+        </Suspense>
+      </Route>
+      <Route path="/admin/settings">
+        <Suspense fallback={<PageLoader />}>
+          <AdminSettings />
+        </Suspense>
+      </Route>
+      <Route path="/news/:id">
+        <Suspense fallback={<PageLoader />}>
+          <NewsArticle />
+        </Suspense>
+      </Route>
+      <Route path="/unsubscribe">
+        <Suspense fallback={<PageLoader />}>
+          <Unsubscribe />
+        </Suspense>
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );
