@@ -638,19 +638,19 @@ export default function StrideCalculator() {
                           } else {
                             const num = parseInt(value, 10);
                             if (!isNaN(num)) {
-                              setHorseInches(Math.max(0, Math.min(11, num)));
+                              setHorseInches(Math.max(0, Math.min(3, num)));
                             }
                           }
                         }}
                         onWheel={(e) => {
                           e.preventDefault();
                           const delta = e.deltaY > 0 ? -1 : 1;
-                          const newValue = Math.max(0, Math.min(11, horseInches + delta));
+                          const newValue = Math.max(0, Math.min(3, horseInches + delta));
                           setHorseInches(newValue);
                         }}
                         placeholder="0"
                         min="0"
-                        max="11"
+                        max="3"
                         step="1"
                         className="h-12 text-lg text-center flex-1"
                       />
@@ -658,8 +658,8 @@ export default function StrideCalculator() {
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => setHorseInches(Math.min(11, horseInches + 1))}
-                        disabled={horseInches >= 11}
+                        onClick={() => setHorseInches(Math.min(3, horseInches + 1))}
+                        disabled={horseInches >= 3}
                         className="h-12 w-12 flex-shrink-0"
                       >
                         +
