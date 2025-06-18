@@ -33,31 +33,50 @@ export default function StrideCalculatorSection() {
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 mb-8 text-lg">
-                  Calculate exact distances for poles and jumps with measurements in yards, meters, 
-                  and your personal step count based on your height and your horse's stride length.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="space-y-3">
-                    <div className="flex items-center text-gray-600">
-                      <Calculator className="w-5 h-5 mr-3 text-green-600" />
-                      <span>Trotting poles & jumping gymnastics</span>
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Target className="w-5 h-5 mr-3 text-green-600" />
-                      <span>Course related distances</span>
+                <div className="grid lg:grid-cols-2 gap-8 mb-8">
+                  <div>
+                    <p className="text-gray-700 mb-6 text-lg">
+                      Calculate exact distances for poles and jumps with measurements in yards, meters, 
+                      and your personal step count based on your height and your horse's stride length.
+                    </p>
+                    
+                    <div className="grid md:grid-cols-2 gap-4 mb-6">
+                      <div className="space-y-3">
+                        <div className="flex items-center text-gray-600">
+                          <Calculator className="w-5 h-5 mr-3 text-green-600" />
+                          <span>Trotting poles & jumping gymnastics</span>
+                        </div>
+                        <div className="flex items-center text-gray-600">
+                          <Target className="w-5 h-5 mr-3 text-green-600" />
+                          <span>Course related distances</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex items-center text-gray-600">
+                          <Clock className="w-5 h-5 mr-3 text-green-600" />
+                          <span>Personalized step counting</span>
+                        </div>
+                        <div className="flex items-center text-gray-600">
+                          <Ruler className="w-5 h-5 mr-3 text-green-600" />
+                          <span>Multiple measurement units</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center text-gray-600">
-                      <Clock className="w-5 h-5 mr-3 text-green-600" />
-                      <span>Personalized step counting</span>
-                    </div>
-                    <div className="flex items-center text-gray-600">
-                      <Ruler className="w-5 h-5 mr-3 text-green-600" />
-                      <span>Multiple measurement units</span>
-                    </div>
+
+                  <div>
+                    <video 
+                      className="w-full rounded-lg shadow-md"
+                      controls
+                      poster="/stride-calculator-demo.mp4"
+                      preload="metadata"
+                    >
+                      <source src="/stride-calculator-demo.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    <p className="text-sm text-gray-500 mt-2 text-center">
+                      Watch Dan demonstrate stride calculation techniques
+                    </p>
                   </div>
                 </div>
 
