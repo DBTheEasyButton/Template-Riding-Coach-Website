@@ -447,67 +447,109 @@ export default function StrideCalculator() {
                 <Label htmlFor="user-height" className="text-base font-medium">Your Height</Label>
                 <div className="flex gap-3">
                   <div className="flex-1">
-                    <Input
-                      id="user-feet"
-                      type="number"
-                      inputMode="numeric"
-                      value={userFeet || ''}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === '') {
-                          setUserFeet(0);
-                        } else {
-                          const num = parseInt(value, 10);
-                          if (!isNaN(num)) {
-                            setUserFeet(Math.max(4, Math.min(7, num)));
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setUserFeet(Math.max(4, userFeet - 1))}
+                        disabled={userFeet <= 4}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        -
+                      </Button>
+                      <Input
+                        id="user-feet"
+                        type="number"
+                        inputMode="numeric"
+                        value={userFeet || ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '') {
+                            setUserFeet(0);
+                          } else {
+                            const num = parseInt(value, 10);
+                            if (!isNaN(num)) {
+                              setUserFeet(Math.max(4, Math.min(7, num)));
+                            }
                           }
-                        }
-                      }}
-                      onWheel={(e) => {
-                        e.preventDefault();
-                        const delta = e.deltaY > 0 ? -1 : 1;
-                        const newValue = Math.max(4, Math.min(7, userFeet + delta));
-                        setUserFeet(newValue);
-                      }}
-                      {...handleTouchScroll(setUserFeet, userFeet, 4, 7)}
-                      placeholder="5"
-                      min="4"
-                      max="7"
-                      step="1"
-                      className="h-12 text-lg text-center"
-                    />
+                        }}
+                        onWheel={(e) => {
+                          e.preventDefault();
+                          const delta = e.deltaY > 0 ? -1 : 1;
+                          const newValue = Math.max(4, Math.min(7, userFeet + delta));
+                          setUserFeet(newValue);
+                        }}
+                        placeholder="5"
+                        min="4"
+                        max="7"
+                        step="1"
+                        className="h-12 text-lg text-center flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setUserFeet(Math.min(7, userFeet + 1))}
+                        disabled={userFeet >= 7}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        +
+                      </Button>
+                    </div>
                     <p className="text-sm text-gray-500 mt-2 text-center">Feet</p>
                   </div>
                   <div className="flex-1">
-                    <Input
-                      id="user-inches"
-                      type="number"
-                      inputMode="numeric"
-                      value={userInches || ''}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === '') {
-                          setUserInches(0);
-                        } else {
-                          const num = parseInt(value, 10);
-                          if (!isNaN(num)) {
-                            setUserInches(Math.max(0, Math.min(11, num)));
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setUserInches(Math.max(0, userInches - 1))}
+                        disabled={userInches <= 0}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        -
+                      </Button>
+                      <Input
+                        id="user-inches"
+                        type="number"
+                        inputMode="numeric"
+                        value={userInches || ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '') {
+                            setUserInches(0);
+                          } else {
+                            const num = parseInt(value, 10);
+                            if (!isNaN(num)) {
+                              setUserInches(Math.max(0, Math.min(11, num)));
+                            }
                           }
-                        }
-                      }}
-                      onWheel={(e) => {
-                        e.preventDefault();
-                        const delta = e.deltaY > 0 ? -1 : 1;
-                        const newValue = Math.max(0, Math.min(11, userInches + delta));
-                        setUserInches(newValue);
-                      }}
-                      {...handleTouchScroll(setUserInches, userInches, 0, 11)}
-                      placeholder="8"
-                      min="0"
-                      max="11"
-                      step="1"
-                      className="h-12 text-lg text-center"
-                    />
+                        }}
+                        onWheel={(e) => {
+                          e.preventDefault();
+                          const delta = e.deltaY > 0 ? -1 : 1;
+                          const newValue = Math.max(0, Math.min(11, userInches + delta));
+                          setUserInches(newValue);
+                        }}
+                        placeholder="8"
+                        min="0"
+                        max="11"
+                        step="1"
+                        className="h-12 text-lg text-center flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setUserInches(Math.min(11, userInches + 1))}
+                        disabled={userInches >= 11}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        +
+                      </Button>
+                    </div>
                     <p className="text-sm text-gray-500 mt-2 text-center">Inches</p>
                   </div>
                 </div>
@@ -520,67 +562,109 @@ export default function StrideCalculator() {
                 <Label htmlFor="horse-height" className="text-base font-medium">Horse Height</Label>
                 <div className="flex gap-3">
                   <div className="flex-1">
-                    <Input
-                      id="horse-hands"
-                      type="number"
-                      inputMode="numeric"
-                      value={horseHands || ''}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === '') {
-                          setHorseHands(0);
-                        } else {
-                          const num = parseInt(value, 10);
-                          if (!isNaN(num)) {
-                            setHorseHands(Math.max(10, Math.min(18, num)));
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setHorseHands(Math.max(10, horseHands - 1))}
+                        disabled={horseHands <= 10}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        -
+                      </Button>
+                      <Input
+                        id="horse-hands"
+                        type="number"
+                        inputMode="numeric"
+                        value={horseHands || ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '') {
+                            setHorseHands(0);
+                          } else {
+                            const num = parseInt(value, 10);
+                            if (!isNaN(num)) {
+                              setHorseHands(Math.max(10, Math.min(18, num)));
+                            }
                           }
-                        }
-                      }}
-                      onWheel={(e) => {
-                        e.preventDefault();
-                        const delta = e.deltaY > 0 ? -1 : 1;
-                        const newValue = Math.max(10, Math.min(18, horseHands + delta));
-                        setHorseHands(newValue);
-                      }}
-                      {...handleTouchScroll(setHorseHands, horseHands, 10, 18)}
-                      placeholder="16"
-                      min="10"
-                      max="18"
-                      step="1"
-                      className="h-12 text-lg text-center"
-                    />
+                        }}
+                        onWheel={(e) => {
+                          e.preventDefault();
+                          const delta = e.deltaY > 0 ? -1 : 1;
+                          const newValue = Math.max(10, Math.min(18, horseHands + delta));
+                          setHorseHands(newValue);
+                        }}
+                        placeholder="16"
+                        min="10"
+                        max="18"
+                        step="1"
+                        className="h-12 text-lg text-center flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setHorseHands(Math.min(18, horseHands + 1))}
+                        disabled={horseHands >= 18}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        +
+                      </Button>
+                    </div>
                     <p className="text-sm text-gray-500 mt-2 text-center">Hands</p>
                   </div>
                   <div className="flex-1">
-                    <Input
-                      id="horse-inches"
-                      type="number"
-                      inputMode="numeric"
-                      value={horseInches || ''}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (value === '') {
-                          setHorseInches(0);
-                        } else {
-                          const num = parseInt(value, 10);
-                          if (!isNaN(num)) {
-                            setHorseInches(Math.max(0, Math.min(11, num)));
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setHorseInches(Math.max(0, horseInches - 1))}
+                        disabled={horseInches <= 0}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        -
+                      </Button>
+                      <Input
+                        id="horse-inches"
+                        type="number"
+                        inputMode="numeric"
+                        value={horseInches || ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value === '') {
+                            setHorseInches(0);
+                          } else {
+                            const num = parseInt(value, 10);
+                            if (!isNaN(num)) {
+                              setHorseInches(Math.max(0, Math.min(11, num)));
+                            }
                           }
-                        }
-                      }}
-                      onWheel={(e) => {
-                        e.preventDefault();
-                        const delta = e.deltaY > 0 ? -1 : 1;
-                        const newValue = Math.max(0, Math.min(11, horseInches + delta));
-                        setHorseInches(newValue);
-                      }}
-                      {...handleTouchScroll(setHorseInches, horseInches, 0, 11)}
-                      placeholder="0"
-                      min="0"
-                      max="11"
-                      step="1"
-                      className="h-12 text-lg text-center"
-                    />
+                        }}
+                        onWheel={(e) => {
+                          e.preventDefault();
+                          const delta = e.deltaY > 0 ? -1 : 1;
+                          const newValue = Math.max(0, Math.min(11, horseInches + delta));
+                          setHorseInches(newValue);
+                        }}
+                        placeholder="0"
+                        min="0"
+                        max="11"
+                        step="1"
+                        className="h-12 text-lg text-center flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setHorseInches(Math.min(11, horseInches + 1))}
+                        disabled={horseInches >= 11}
+                        className="h-12 w-12 flex-shrink-0"
+                      >
+                        +
+                      </Button>
+                    </div>
                     <p className="text-sm text-gray-500 mt-2 text-center">Inches</p>
                   </div>
                 </div>
