@@ -451,15 +451,15 @@ export default function StrideCalculator() {
                       id="user-feet"
                       type="number"
                       inputMode="numeric"
-                      value={userFeet}
+                      value={userFeet || ''}
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (value === '' || value === '-') {
-                          setUserFeet(5);
+                        if (value === '') {
+                          setUserFeet(0);
                         } else {
                           const num = parseInt(value, 10);
-                          if (!isNaN(num) && num >= 4 && num <= 7) {
-                            setUserFeet(num);
+                          if (!isNaN(num)) {
+                            setUserFeet(Math.max(4, Math.min(7, num)));
                           }
                         }
                       }}
@@ -483,15 +483,15 @@ export default function StrideCalculator() {
                       id="user-inches"
                       type="number"
                       inputMode="numeric"
-                      value={userInches}
+                      value={userInches || ''}
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (value === '' || value === '-') {
+                        if (value === '') {
                           setUserInches(0);
                         } else {
                           const num = parseInt(value, 10);
-                          if (!isNaN(num) && num >= 0 && num <= 11) {
-                            setUserInches(num);
+                          if (!isNaN(num)) {
+                            setUserInches(Math.max(0, Math.min(11, num)));
                           }
                         }
                       }}
@@ -524,15 +524,15 @@ export default function StrideCalculator() {
                       id="horse-hands"
                       type="number"
                       inputMode="numeric"
-                      value={horseHands}
+                      value={horseHands || ''}
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (value === '' || value === '-') {
+                        if (value === '') {
                           setHorseHands(0);
                         } else {
                           const num = parseInt(value, 10);
-                          if (!isNaN(num) && num >= 10 && num <= 18) {
-                            setHorseHands(num);
+                          if (!isNaN(num)) {
+                            setHorseHands(Math.max(10, Math.min(18, num)));
                           }
                         }
                       }}
@@ -556,15 +556,15 @@ export default function StrideCalculator() {
                       id="horse-inches"
                       type="number"
                       inputMode="numeric"
-                      value={horseInches}
+                      value={horseInches || ''}
                       onChange={(e) => {
                         const value = e.target.value;
-                        if (value === '' || value === '-') {
+                        if (value === '') {
                           setHorseInches(0);
                         } else {
                           const num = parseInt(value, 10);
-                          if (!isNaN(num) && num >= 0 && num <= 11) {
-                            setHorseInches(num);
+                          if (!isNaN(num)) {
+                            setHorseInches(Math.max(0, Math.min(11, num)));
                           }
                         }
                       }}
