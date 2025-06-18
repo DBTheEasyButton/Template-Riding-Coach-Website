@@ -32,6 +32,37 @@ export default function StrideCalculator() {
   const [strideCount, setStrideCount] = useState<StrideCount>("1-stride");
   const [results, setResults] = useState<StrideCalculation[]>([]);
 
+  // Touch handling for mobile scroll functionality
+  const handleTouchScroll = (setValue: (value: number) => void, currentValue: number, min: number, max: number) => {
+    let startY = 0;
+    let isDragging = false;
+
+    return {
+      onTouchStart: (e: React.TouchEvent) => {
+        startY = e.touches[0].clientY;
+        isDragging = true;
+        e.preventDefault();
+      },
+      onTouchMove: (e: React.TouchEvent) => {
+        if (!isDragging) return;
+        const currentY = e.touches[0].clientY;
+        const deltaY = startY - currentY;
+        
+        // Sensitivity adjustment - require more movement for change
+        if (Math.abs(deltaY) > 20) {
+          const delta = deltaY > 0 ? 1 : -1;
+          const newValue = Math.max(min, Math.min(max, currentValue + delta));
+          setValue(newValue);
+          startY = currentY; // Reset for next change
+        }
+        e.preventDefault();
+      },
+      onTouchEnd: () => {
+        isDragging = false;
+      }
+    };
+  };
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -438,6 +469,7 @@ export default function StrideCalculator() {
                         const newValue = Math.max(4, Math.min(7, userFeet + delta));
                         setUserFeet(newValue);
                       }}
+                      {...handleTouchScroll(setUserFeet, userFeet, 4, 7)}
                       placeholder="5"
                       min="4"
                       max="7"
@@ -469,6 +501,7 @@ export default function StrideCalculator() {
                         const newValue = Math.max(0, Math.min(11, userInches + delta));
                         setUserInches(newValue);
                       }}
+                      {...handleTouchScroll(setUserInches, userInches, 0, 11)}
                       placeholder="8"
                       min="0"
                       max="11"
@@ -509,6 +542,7 @@ export default function StrideCalculator() {
                         const newValue = Math.max(10, Math.min(18, horseHands + delta));
                         setHorseHands(newValue);
                       }}
+                      {...handleTouchScroll(setHorseHands, horseHands, 10, 18)}
                       placeholder="16"
                       min="10"
                       max="18"
