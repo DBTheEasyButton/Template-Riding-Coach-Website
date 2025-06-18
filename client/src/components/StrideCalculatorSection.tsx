@@ -5,36 +5,39 @@ import { Ruler, Calculator, Target, Clock } from "lucide-react";
 
 export default function StrideCalculatorSection() {
   return (
-    <section id="stride-calculator" className="py-24 relative overflow-hidden">
-      {/* Background Video */}
-      <div className="absolute inset-0">
-        <video 
-          className="w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-        >
-          <source src="/stride-calculator-demo.mp4" type="video/mp4" />
-        </video>
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/60"></div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-playfair font-bold text-white mb-6">Stride Calculator</h2>
-          <div className="w-24 h-1 bg-green-500 mx-auto mb-8"></div>
-          <p className="text-xl text-white max-w-3xl mx-auto">
-            Calculate precise pole spacing and distances based on your height and your horse's measurements
-          </p>
+    <section id="stride-calculator" className="py-24 bg-gradient-to-br from-green-50 to-emerald-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header with Video Background */}
+        <div className="relative text-center mb-16 rounded-2xl overflow-hidden">
+          {/* Background Video for header only */}
+          <div className="absolute inset-0">
+            <video 
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            >
+              <source src="/stride-calculator-demo.mp4" type="video/mp4" />
+            </video>
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-black/60"></div>
+          </div>
+          
+          <div className="relative z-10 py-16">
+            <h2 className="text-5xl font-playfair font-bold text-white mb-6">Stride Calculator</h2>
+            <div className="w-24 h-1 bg-green-500 mx-auto mb-8"></div>
+            <p className="text-xl text-white max-w-3xl mx-auto">
+              Calculate precise pole spacing and distances based on your height and your horse's measurements
+            </p>
+          </div>
         </div>
 
         <div className="mb-16">
           {/* Main Calculator Card */}
           <div>
-            <Card className="bg-white/95 backdrop-blur-sm border-gray-200 shadow-xl h-full">
+            <Card className="bg-white border-gray-200 shadow-xl h-full">
               <CardHeader>
                 <div className="flex items-center mb-4">
                   <div className="p-4 bg-green-600 rounded-xl mr-6">
