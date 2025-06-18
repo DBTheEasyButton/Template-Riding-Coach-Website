@@ -1,0 +1,16 @@
+{
+  "name": "Dan Bizzarro Stride Calculator",
+  "short_name": "Stride Calc",
+  "description": "Professional equestrian stride calculator",
+  "start_url": "/stride-calculator",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
