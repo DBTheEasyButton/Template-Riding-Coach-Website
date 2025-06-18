@@ -25,7 +25,7 @@ export default function StrideCalculatorSection() {
                     <Ruler className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-navy text-3xl">Professional Stride Calculator</CardTitle>
+                    <CardTitle className="text-navy text-3xl">Stride Calculator</CardTitle>
                     <CardDescription className="text-gray-600 text-lg">
                       Precise distance measurements for training and competition
                     </CardDescription>
