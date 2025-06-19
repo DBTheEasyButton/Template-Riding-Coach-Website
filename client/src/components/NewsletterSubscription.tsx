@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import logoPath from "@assets/Dan Bizzarro Method_1749676680719.png";
+import logoPath from "@assets/Logo-trasparenteRAST_1749385353493.png";
 
 export default function NewsletterSubscription() {
   const [email, setEmail] = useState("");
