@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Download, Mail, Printer, CheckSquare, Square } from "lucide-react";
+import jsPDF from 'jspdf';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PromotionalBanners from "@/components/PromotionalBanners";
@@ -213,36 +214,188 @@ export default function PackingListGenerator() {
   };
 
   const downloadPDF = () => {
-    const text = generateChecklistText();
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'competition-packing-checklist.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 20;
+    const lineHeight = 8;
+    let yPosition = 30;
+
+    // Add title
+    pdf.setFontSize(18);
+    pdf.setFont(undefined, 'bold');
+    pdf.text('Competition Packing Checklist', margin, yPosition);
+    
+    yPosition += 15;
+    
+    // Add discipline and date info
+    pdf.setFontSize(12);
+    pdf.setFont(undefined, 'normal');
+    const selectedDiscipline = disciplines.find(d => d.id === discipline);
+    pdf.text(`Discipline: ${selectedDiscipline?.label || 'Not selected'}`, margin, yPosition);
+    yPosition += 8;
+    pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPosition);
+    
+    yPosition += 15;
+
+    filteredSections.forEach(section => {
+      // Check if we need a new page
+      if (yPosition + (section.items.length * lineHeight) + 20 > pdf.internal.pageSize.getHeight() - margin) {
+        pdf.addPage();
+        yPosition = margin;
+      }
+
+      // Section header
+      pdf.setFontSize(14);
+      pdf.setFont(undefined, 'bold');
+      pdf.text(section.title, margin, yPosition);
+      yPosition += 10;
+      
+      // Section items with checkboxes
+      pdf.setFontSize(11);
+      pdf.setFont(undefined, 'normal');
+      
+      section.items.forEach(item => {
+        // Draw checkbox
+        const checkboxSize = 4;
+        const checkboxX = margin;
+        const checkboxY = yPosition - 3;
+        
+        // Draw checkbox square
+        pdf.rect(checkboxX, checkboxY, checkboxSize, checkboxSize);
+        
+        // If item is checked, add checkmark
+        if (checkedItems.includes(item.id)) {
+          pdf.setFontSize(8);
+          pdf.text('✓', checkboxX + 0.5, checkboxY + 3);
+          pdf.setFontSize(11);
+        }
+        
+        // Add item text
+        pdf.text(item.name, checkboxX + checkboxSize + 5, yPosition);
+        
+        yPosition += lineHeight;
+        
+        // Check if we need a new page
+        if (yPosition > pdf.internal.pageSize.getHeight() - margin) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+      });
+      
+      yPosition += 8; // Extra space between sections
+    });
+
+    // Add footer
+    const pageCount = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.text(`Page ${i} of ${pageCount} - Dan Bizzarro Method`, margin, pdf.internal.pageSize.getHeight() - 10);
+    }
+
+    pdf.save('competition-packing-checklist.pdf');
   };
 
   const printChecklist = () => {
-    const text = generateChecklistText();
     const printWindow = window.open('', '_blank');
     if (printWindow) {
-      printWindow.document.write(`
+      const selectedDiscipline = disciplines.find(d => d.id === discipline);
+      
+      let printContent = `
         <html>
           <head>
             <title>Competition Packing Checklist</title>
             <style>
-              body { font-family: Arial, sans-serif; margin: 20px; }
-              pre { font-family: Arial, sans-serif; white-space: pre-wrap; }
+              body { 
+                font-family: Arial, sans-serif; 
+                margin: 20px; 
+                line-height: 1.6;
+              }
+              .header {
+                text-align: center;
+                margin-bottom: 30px;
+                border-bottom: 2px solid #333;
+                padding-bottom: 10px;
+              }
+              .section {
+                margin-bottom: 25px;
+              }
+              .section-title {
+                font-size: 16px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: #333;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 3px;
+              }
+              .checkbox-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+                padding-left: 10px;
+              }
+              .checkbox {
+                width: 15px;
+                height: 15px;
+                border: 2px solid #333;
+                margin-right: 10px;
+                display: inline-block;
+                position: relative;
+              }
+              .checkbox.checked::after {
+                content: '✓';
+                position: absolute;
+                left: 2px;
+                top: -2px;
+                font-size: 12px;
+                font-weight: bold;
+              }
+              .footer {
+                margin-top: 40px;
+                text-align: center;
+                font-size: 12px;
+                color: #666;
+                border-top: 1px solid #ccc;
+                padding-top: 10px;
+              }
             </style>
           </head>
           <body>
-            <pre>${text}</pre>
+            <div class="header">
+              <h1>Competition Packing Checklist</h1>
+              <p><strong>Discipline:</strong> ${selectedDiscipline?.label || 'Not selected'}</p>
+              <p><strong>Generated:</strong> ${new Date().toLocaleDateString()}</p>
+            </div>
+      `;
+
+      filteredSections.forEach(section => {
+        printContent += `
+          <div class="section">
+            <div class="section-title">${section.title}</div>
+        `;
+        
+        section.items.forEach(item => {
+          const isChecked = checkedItems.includes(item.id);
+          printContent += `
+            <div class="checkbox-item">
+              <span class="checkbox ${isChecked ? 'checked' : ''}"></span>
+              <span>${item.name}</span>
+            </div>
+          `;
+        });
+        
+        printContent += `</div>`;
+      });
+
+      printContent += `
+            <div class="footer">
+              Dan Bizzarro Method - Competition Preparation
+            </div>
           </body>
         </html>
-      `);
+      `;
+
+      printWindow.document.write(printContent);
       printWindow.document.close();
       printWindow.print();
     }
