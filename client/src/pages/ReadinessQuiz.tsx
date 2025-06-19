@@ -54,13 +54,13 @@ const questions: QuizQuestion[] = [
     ]
   },
   {
-    id: "dressage",
-    question: "Can you ride a dressage test for this level without major issues?",
+    id: "fitness",
+    question: "How do you work on your horse's fitness?",
     options: [
-      { value: "not_yet", label: "Not yet", score: 1 },
-      { value: "mostly", label: "Mostly", score: 2 },
-      { value: "yes_basic", label: "Yes, but not competitively", score: 3 },
-      { value: "competitive", label: "Yes, and aiming to score well", score: 4 }
+      { value: "uphill", label: "Uphill canter work weekly", score: 4 },
+      { value: "flat", label: "Flat field canter work weekly", score: 3 },
+      { value: "already_fit", label: "No specific canter work; horse is already fit", score: 2 },
+      { value: "no_canter", label: "No canter work at all", score: 1 }
     ]
   },
   {
