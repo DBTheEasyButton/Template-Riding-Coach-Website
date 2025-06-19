@@ -107,7 +107,7 @@ export default function NewsletterSubscription() {
             </Button>
           </form>
 
-          <p className="text-xs text-gray-300 text-center mt-4">
+          <p className="text-xs text-gray-600 text-center mt-4">
             We respect your privacy. Unsubscribe at any time.
           </p>
         </div>
