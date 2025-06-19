@@ -106,7 +106,7 @@ const packingSections: PackingSection[] = [
     title: "Yard & Tackroom Kit",
     items: [
       { id: "spare-tack", name: "Spare tack (girth, reins, stirrup leathers)", required: true },
-      { id: "tack-cloths", name: "Tack cleaning cloths", required: true },
+      { id: "tack-kit", name: "Tack cleaning kit", required: true },
       { id: "mounting-block", name: "Mounting/plaiting block", required: true },
       { id: "muck-tools", name: "Muck-out tools", required: true, conditions: ["overnight"] }
     ]
