@@ -24,13 +24,13 @@ const levels = [
 
 const questions: QuizQuestion[] = [
   {
-    id: "dressage",
-    question: "Can you ride a dressage test for this level without major issues?",
+    id: "fitness",
+    question: "How do you work on your horse's fitness?",
     options: [
-      { value: "never_tried", label: "Haven't attempted the test yet", score: 1 },
-      { value: "struggle", label: "Can complete but with major mistakes", score: 2 },
-      { value: "decent", label: "Generally accurate with minor errors", score: 3 },
-      { value: "confident", label: "Consistently accurate and flowing", score: 4 }
+      { value: "uphill", label: "Uphill canter work weekly", score: 4 },
+      { value: "flat", label: "Flat field canter work weekly", score: 3 },
+      { value: "already_fit", label: "No specific canter work; horse is already fit", score: 2 },
+      { value: "no_canter", label: "No canter work at all", score: 1 }
     ]
   },
   {
@@ -54,13 +54,13 @@ const questions: QuizQuestion[] = [
     ]
   },
   {
-    id: "fitness",
-    question: "How do you work on your horse's fitness?",
+    id: "dressage",
+    question: "Can you ride a dressage test for this level without major issues?",
     options: [
-      { value: "uphill", label: "Uphill canter work weekly", score: 4 },
-      { value: "flat", label: "Flat field canter work weekly", score: 3 },
-      { value: "already_fit", label: "No specific canter work; horse is already fit", score: 2 },
-      { value: "no_canter", label: "No canter work at all", score: 1 }
+      { value: "not_yet", label: "Not yet", score: 1 },
+      { value: "mostly", label: "Mostly", score: 2 },
+      { value: "yes_basic", label: "Yes, but not competitively", score: 3 },
+      { value: "competitive", label: "Yes, and aiming to score well", score: 4 }
     ]
   },
   {
@@ -325,17 +325,17 @@ export default function ReadinessQuiz() {
         <div className="pt-24 pb-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg border border-white/20">
-                <h1 className="text-3xl font-playfair font-bold text-navy mb-4">
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8">
+                <h1 className="text-3xl font-playfair font-bold text-white mb-4">
                   Readiness Assessment for {selectedLevel}
                 </h1>
-                <div className="w-full bg-gray-200 rounded-full h-4 mb-2">
+                <div className="w-full bg-white/30 rounded-full h-3 mb-2">
                   <div 
-                    className="bg-gradient-to-r from-blue-500 to-green-500 rounded-full h-4 transition-all duration-500 ease-out"
+                    className="bg-white rounded-full h-3 transition-all duration-500 ease-out"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
-                <p className="text-gray-700 text-sm font-medium">
+                <p className="text-white/90 text-sm">
                   Question {currentQuestionIndex + 1} of {questions.length}
                 </p>
               </div>
