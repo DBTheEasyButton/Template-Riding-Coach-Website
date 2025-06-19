@@ -695,31 +695,31 @@ export default function ClinicsSection() {
               </Card>
 
               {/* Packing List Generator Banner */}
-              <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-1 bg-orange-600 rounded-lg flex items-center justify-center">
-                      <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                      </svg>
+              <Link href="/packing-list-generator" className="block">
+                <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-1 bg-orange-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
+                        <CardDescription className="text-sm">Competition preparation made easy</CardDescription>
+                      </div>
                     </div>
-                    <div>
-                      <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
-                      <CardDescription className="text-sm">Competition preparation made easy</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Generate a personalized packing checklist for your competition based on discipline and needs.
-                  </p>
-                  <Link href="/packing-list-generator">
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-sm text-gray-600 mb-4">
+                      Generate a personalized packing checklist for your competition based on discipline and needs.
+                    </p>
                     <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
                       Create Checklist
                     </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
           </div>
         </div>
