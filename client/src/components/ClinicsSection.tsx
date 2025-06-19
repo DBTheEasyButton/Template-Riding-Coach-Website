@@ -462,12 +462,20 @@ export default function ClinicsSection() {
               </Link>
             </div>
           </div>
-          <Link href="/terms-and-conditions">
-            <Button variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white">
-              <FileText className="w-4 h-4 mr-2" />
-              Clinic Terms & Conditions
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/terms-and-conditions">
+              <Button variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white">
+                <FileText className="w-4 h-4 mr-2" />
+                Clinic Terms & Conditions
+              </Button>
+            </Link>
+            <Button 
+              onClick={() => window.open('https://wa.me/447767291713', '_blank')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Book a Private Lesson
             </Button>
-          </Link>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
