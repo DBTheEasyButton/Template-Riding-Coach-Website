@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Download, Mail, Printer, CheckSquare, Square } from "lucide-react";
+import { Download, Mail, Printer, CheckSquare, Square, Plus, X } from "lucide-react";
 import jsPDF from 'jspdf';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -32,9 +33,7 @@ const disciplines = [
 ];
 
 const extraOptions = [
-  { id: "plaiting", label: "I plan to plait" },
-  { id: "overnight", label: "I'm staying overnight" },
-  { id: "groom", label: "I'm taking a groom/helper" }
+  { id: "overnight", label: "I'm stabling overnight at the competition" }
 ];
 
 const packingSections: PackingSection[] = [
@@ -52,7 +51,10 @@ const packingSections: PackingSection[] = [
       { id: "dressage-hat", name: "Dressage/show jumping hat", required: true, conditions: ["eventing", "combined"] },
       { id: "xc-hat", name: "Cross-country hat", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
       { id: "body-protector", name: "Body protector", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
-      { id: "eventing-watch", name: "Eventing watch (optional)", required: false, conditions: ["eventing"] }
+      { id: "eventing-watch", name: "Eventing watch (optional)", required: false, conditions: ["eventing"] },
+      { id: "whip", name: "Show whip", required: true },
+      { id: "spurs", name: "Spurs (if used)", required: false },
+      { id: "medical-armband", name: "Medical armband (if required)", required: false, conditions: ["eventing", "arena-eventing", "hunter-trials"] }
     ]
   },
   {
@@ -143,6 +145,8 @@ export default function PackingListGenerator() {
   const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [customItems, setCustomItems] = useState<Record<string, string[]>>({});
+  const [newItemInputs, setNewItemInputs] = useState<Record<string, string>>({});
   const [currentStep, setCurrentStep] = useState<'disciplines' | 'extras' | 'checklist'>('disciplines');
 
   const handleDisciplineChange = (disciplineId: string, checked: boolean) => {
@@ -169,6 +173,34 @@ export default function PackingListGenerator() {
     }
   };
 
+  const addCustomItem = (sectionTitle: string) => {
+    const itemText = newItemInputs[sectionTitle]?.trim();
+    if (itemText) {
+      setCustomItems(prev => ({
+        ...prev,
+        [sectionTitle]: [...(prev[sectionTitle] || []), itemText]
+      }));
+      setNewItemInputs(prev => ({
+        ...prev,
+        [sectionTitle]: ""
+      }));
+    }
+  };
+
+  const removeCustomItem = (sectionTitle: string, itemIndex: number) => {
+    setCustomItems(prev => ({
+      ...prev,
+      [sectionTitle]: prev[sectionTitle]?.filter((_, index) => index !== itemIndex) || []
+    }));
+  };
+
+  const handleNewItemInputChange = (sectionTitle: string, value: string) => {
+    setNewItemInputs(prev => ({
+      ...prev,
+      [sectionTitle]: value
+    }));
+  };
+
   const getFilteredItems = () => {
     const allConditions = [...selectedDisciplines, ...selectedExtras];
     
@@ -178,9 +210,17 @@ export default function PackingListGenerator() {
         return item.conditions.some(condition => allConditions.includes(condition));
       });
       
+      // Add custom items for this section
+      const customSectionItems = (customItems[section.title] || []).map((itemName, index) => ({
+        id: `custom-${section.title}-${index}`,
+        name: itemName,
+        required: false,
+        isCustom: true
+      }));
+      
       return {
         ...section,
-        items: filteredItems
+        items: [...filteredItems, ...customSectionItems]
       };
     }).filter(section => section.items.length > 0);
   };
@@ -689,13 +729,52 @@ export default function PackingListGenerator() {
                             />
                             <Label 
                               htmlFor={item.id} 
-                              className={`cursor-pointer ${checkedItems.includes(item.id) ? 'line-through text-gray-500' : ''} ${!item.required ? 'text-gray-600 italic' : ''}`}
+                              className={`cursor-pointer flex-1 ${checkedItems.includes(item.id) ? 'line-through text-gray-500' : ''} ${!item.required ? 'text-gray-600 italic' : ''}`}
                             >
                               {item.name}
                             </Label>
+                            {item.isCustom && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeCustomItem(section.title, parseInt(item.id.split('-')[2]))}
+                                className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                              >
+                                <X className="w-3 h-3" />
+                              </Button>
+                            )}
                           </div>
                         ))}
                       </div>
+                      
+                      {/* Add custom item input */}
+                      <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex gap-2">
+                          <Input
+                            placeholder={`Add your own ${section.title.toLowerCase()} item...`}
+                            value={newItemInputs[section.title] || ""}
+                            onChange={(e) => handleNewItemInputChange(section.title, e.target.value)}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                addCustomItem(section.title);
+                              }
+                            }}
+                            className="flex-1"
+                          />
+                          <Button
+                            onClick={() => addCustomItem(section.title)}
+                            disabled={!newItemInputs[section.title]?.trim()}
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Add items specific to your needs
+                        </p>
+                      </div>
+                      
                       {sectionIndex < filteredSections.length - 1 && <Separator className="mt-4" />}
                     </div>
                   ))}
