@@ -437,34 +437,55 @@ export default function ReadinessQuiz() {
                   </p>
 
                   <div>
-                    <h3 className="text-xl font-semibold text-navy mb-4">Recommendations:</h3>
-                    <ul className="space-y-2">
+                    <h3 className="text-xl font-semibold text-navy mb-6">Your Personalized Action Plan:</h3>
+                    <div className="space-y-4">
                       {results.recommendations.map((rec, index) => (
-                        <li key={index} className="flex items-start">
-                          <div className={`w-2 h-2 rounded-full ${results.color.replace('text-', 'bg-')} mt-2 mr-3 flex-shrink-0`}></div>
-                          <span className="text-gray-700">
-                            {typeof rec === 'string' ? (
-                              rec
-                            ) : (
-                              <>
-                                {rec.text}
-                                <a 
-                                  href={rec.link.url} 
-                                  className="text-blue-600 hover:text-blue-800 underline font-medium"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    window.location.href = rec.link.url;
-                                  }}
-                                >
-                                  {rec.link.text}
-                                </a>
-                                {rec.continuation}
-                              </>
-                            )}
-                          </span>
-                        </li>
+                        <div key={index} className={`p-4 rounded-lg border-l-4 ${results.color.replace('text-', 'border-')} bg-gray-50`}>
+                          <div className="flex items-start">
+                            <div className={`w-6 h-6 rounded-full ${results.color.replace('text-', 'bg-')} flex items-center justify-center mr-3 flex-shrink-0 mt-1`}>
+                              <span className="text-white text-sm font-bold">{index + 1}</span>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-gray-800 leading-relaxed">
+                                {typeof rec === 'string' ? (
+                                  rec
+                                ) : (
+                                  <>
+                                    {rec.text}
+                                    <a 
+                                      href={rec.link.url} 
+                                      className="text-blue-600 hover:text-blue-800 underline font-medium"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        window.location.href = rec.link.url;
+                                      }}
+                                    >
+                                      {rec.link.text}
+                                    </a>
+                                    {rec.continuation}
+                                  </>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
+                    
+                    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0">
+                          <Target className="w-5 h-5 text-blue-600 mt-1" />
+                        </div>
+                        <div className="ml-3">
+                          <h4 className="text-blue-800 font-semibold mb-1">Remember:</h4>
+                          <p className="text-blue-700 text-sm">
+                            Take your time with each recommendation. Consistency in training is more valuable than rushing to compete. 
+                            Every successful partnership is built step by step!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex justify-center space-x-4 pt-6">
