@@ -57,7 +57,7 @@ export default function NewsletterSubscription() {
           <img 
             src={logoPath} 
             alt="Dan Bizzarro Method" 
-            className="h-16 w-auto mx-auto mb-6"
+            className="h-10 w-auto mx-auto mb-6"
           />
           <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
             Stay Connected with Dan Bizzarro Method
