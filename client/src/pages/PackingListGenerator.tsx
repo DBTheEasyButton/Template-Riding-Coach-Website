@@ -102,9 +102,9 @@ const packingSections: PackingSection[] = [
       { id: "hoof-pick", name: "Hoof pick", required: true },
       { id: "water-bucket", name: "Water bucket & sponge", required: true },
       { id: "wash-bucket", name: "Wash bucket", required: true },
+      { id: "hay-net", name: "Hay net", required: true },
       { id: "feed", name: "Feed", required: true, conditions: ["overnight"] },
-      { id: "treats", name: "Treats/snacks (optional)", required: false },
-      { id: "plaiting-kit", name: "Plaiting kit", required: true, conditions: ["plaiting"] }
+      { id: "treats", name: "Treats/snacks (optional)", required: false }
     ]
   },
   {
