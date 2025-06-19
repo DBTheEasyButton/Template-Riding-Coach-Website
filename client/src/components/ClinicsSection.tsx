@@ -650,7 +650,7 @@ export default function ClinicsSection() {
                 </CardHeader>
                 <CardContent className="pt-0">
                   <p className="text-sm text-gray-600 mb-4">
-                    Calculate precise distances for poles, gymnastics, and combinations to build confidence and technique.
+                    Make sure you set up pole, grid work and jumping exercises properly to build confidence and technique.
                   </p>
                   <Link href="/stride-calculator">
                     <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
