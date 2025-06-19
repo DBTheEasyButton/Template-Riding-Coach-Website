@@ -129,14 +129,17 @@ export default function ReadinessQuiz() {
 
     const generatePersonalizedAdvice = (level: string) => {
       let advice = [];
+      let hasIncludedFitnessTest = false;
 
       // Fitness-specific advice
       if (fitnessAnswer === 'no_canter') {
         advice.push("Starting a fitness routine is crucial - try introducing canter work gradually. Begin with short sessions and build up slowly. Your horse needs to be fit enough to canter for the duration of your cross-country course without getting tired.");
       } else if (fitnessAnswer === 'already_fit') {
         advice.push("It's great that your horse is fit! Try cantering for the same amount of time your cross-country course will take and see how both you and your horse feel afterward. This will give you a realistic idea of your actual fitness level.");
+        hasIncludedFitnessTest = true;
       } else if (fitnessAnswer === 'flat') {
-        advice.push("Flat canter work is a good start! If possible, try to incorporate some uphill work as it really builds strength and stamina. Also test yourself - can you canter for the full duration of your target course time?");
+        advice.push("Flat canter work is a good start! If possible, try to incorporate some uphill work as it really builds strength and stamina. Test yourself by cantering for the full duration of your target course time to check your fitness level.");
+        hasIncludedFitnessTest = true;
       }
 
       // Cross-country confidence advice
@@ -153,11 +156,13 @@ export default function ReadinessQuiz() {
         advice.push("Don't worry - every successful rider has been where you are now! Take your time building up each element. Consider starting at a slightly lower level to build confidence, then work your way up.");
       }
 
-      // Always include the fitness test suggestion unless they're already very confident
-      if (crossCountryAnswer === 'confident' && fitnessAnswer === 'uphill') {
-        advice.push("Since you're feeling confident, do a final fitness check: canter your horse for the duration of your target cross-country course time and see how you both feel. This is the best way to know if you're truly ready!");
-      } else {
-        advice.push("Here's a great test: try cantering your horse for the same amount of time your cross-country course will take. If you or your horse feel tired or stressed, you'll know exactly what to work on!");
+      // Only include fitness test if not already mentioned above
+      if (!hasIncludedFitnessTest) {
+        if (crossCountryAnswer === 'confident' && fitnessAnswer === 'uphill') {
+          advice.push("Since you're feeling confident, do a final fitness check: canter your horse for the duration of your target cross-country course time and see how you both feel. This is the best way to know if you're truly ready!");
+        } else {
+          advice.push("Here's a great test: try cantering your horse for the same amount of time your cross-country course will take. If you or your horse feel tired or stressed, you'll know exactly what to work on!");
+        }
       }
 
       return advice;
