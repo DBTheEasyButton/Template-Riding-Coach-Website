@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
