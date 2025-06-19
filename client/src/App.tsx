@@ -15,6 +15,7 @@ const Loyalty = lazy(() => import("@/pages/Loyalty"));
 const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
 const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
 const ReadinessQuiz = lazy(() => import("@/pages/ReadinessQuiz"));
+const PackingListGenerator = lazy(() => import("@/pages/PackingListGenerator"));
 const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
 const AdminContacts = lazy(() => import("@/pages/AdminContacts"));
 const AdminEmailMarketing = lazy(() => import("@/pages/AdminEmailMarketing"));
@@ -80,6 +81,11 @@ function Router() {
       <Route path="/readiness-quiz">
         <Suspense fallback={<PageLoader />}>
           <ReadinessQuiz />
+        </Suspense>
+      </Route>
+      <Route path="/packing-list-generator">
+        <Suspense fallback={<PageLoader />}>
+          <PackingListGenerator />
         </Suspense>
       </Route>
       <Route path="/admin/clinics">

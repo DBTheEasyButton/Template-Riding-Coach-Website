@@ -1,0 +1,193 @@
+Packing List Generator
+Goal: Create an interactive tool that generates a personalized packing checklist for riders based on discipline(s) and optional preferences.
+
+1. Frontend (User Interface)
+A. Step 1 – Select Discipline(s)
+Type: Multi-select checkboxes
+Options:
+
+Dressage
+
+Show Jumping
+
+Eventing / Cross Country
+
+Combined Training / Arena Eventing
+
+➡️ Logic: If “Eventing” is selected, it should include gear for all three phases (dressage, SJ, XC) and extra detail for riders and horses.
+
+B. Step 2 – Optional Extras
+Type: Checkboxes
+Options:
+
+I plan to plait
+
+I'm staying overnight
+
+I'm taking a groom/helper
+
+C. Step 3 – Display Custom Checklist
+Dynamically generate and display a checklist based on selected options
+
+Each checklist item appears under grouped headings (Rider Gear, Horse Gear, Yard Kit, etc.)
+
+Optional: Let users tick off each item (interactive)
+
+Buttons:
+
+Download PDF
+
+Email checklist to self
+
+Print
+
+2. Backend / Logic Rules
+A. Checklist Sections & Items
+Rider Gear (always include)
+Show jacket
+
+Stock/tie + pin
+
+White shirt
+
+Light-coloured breeches
+
+Gloves (if Dressage or Eventing selected)
+
+Hairnet & show socks
+
+Competition boots
+
+Number bib
+
+If Eventing is selected:
+
+Dressage/show jumping hat
+
+Cross-country hat
+
+Body protector
+
+Eventing watch (optional)
+
+Horse Gear
+Dressage (if Dressage or Eventing selected):
+
+Dressage bridle
+
+Dressage saddle
+
+Dressage numnah
+
+Dressage saddle pad
+
+Girth
+
+Show Jumping (if Show Jumping, Combined, or Eventing selected):
+
+Jumping saddle
+
+Jumping bridle
+
+Martingale (if used)
+
+Jumping boots (tendon/fetlock)
+
+Overreach boots
+
+Jumping numnah
+
+Jumping saddle pad
+
+Cross Country (if Eventing selected):
+
+Cross-country bridle and bit
+
+Cross-country saddle (usually same as SJ)
+
+Breastplate
+
+Cross-country boots
+
+Overreach boots
+
+Studs and stud kit (always use studs)
+
+Other Horse Kit (always include)
+Headcollar & lead rope
+
+Passport
+
+Rugs (stable, fleece, cooler)
+
+Travel boots
+
+Tail guard
+
+Grooming kit
+
+Hoof pick
+
+Water bucket & sponge
+
+Wash bucket
+
+Feed (if “staying overnight” is selected)
+
+Treats/snacks (optional)
+
+Plaiting kit (if selected)
+
+Yard & Tackroom Kit
+Spare tack (girth, reins, stirrup leathers)
+
+Tack cleaning cloths
+
+Mounting/plaiting block
+
+Muck-out tools (if staying overnight)
+
+Helper/Groom Extras (if selected)
+Clipboard with schedule
+
+Pen or marker
+
+First aid kit
+
+Folding chair
+
+Phone charger or power bank
+
+Overnight Extras (if selected)
+Bedding
+
+Hay & feed
+
+Feed bucket & scoop
+
+Head torch
+
+Spare clothes
+
+Toiletries
+
+Extension lead
+
+Lunge line
+
+3. Export & Output Options
+Display:
+
+Organized into collapsible or clearly marked sections
+
+Option to tick off items as packed
+
+Option to hide/show optional items (e.g. studs, plaiting kit)
+
+Export Options:
+
+Download checklist as PDF (grouped by section)
+
+Email checklist (basic form + export to user email)
+
+Print-friendly format
