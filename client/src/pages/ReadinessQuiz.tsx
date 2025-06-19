@@ -145,9 +145,9 @@ export default function ReadinessQuiz() {
 
       // Show jumping specific advice
       if (jumpingAnswer === 'rails_stops') {
-        advice.push("Show jumping needs significant improvement. Focus on gymnastics and grids to build your horse's confidence and technique. Start with simple pole work, then progress to small jumps. Practice at home until you can consistently jump clear rounds before considering competition.");
+        advice.push("Show jumping needs significant improvement. Focus on gymnastics and grids to build your horse's confidence and technique. Start with simple pole work, then progress to small jumps. Practice regularly in different arenas with colorful, spooky fences - if your horse doesn't feel confident in training, he won't be confident at competition. Vary your training environments to build true reliability.");
       } else if (jumpingAnswer === 'sometimes') {
-        advice.push("Your show jumping consistency needs work. Try setting up simple courses at home and practice riding the same track repeatedly until both you and your horse can navigate it smoothly every time. Focus on rhythm and straightness between fences.");
+        advice.push("Your show jumping consistency needs work. Practice in different arenas with various fence types including colorful, spooky obstacles. Set up courses both at home and away - competition fences will be more intimidating than your familiar training jumps. If your horse doesn't feel confident with spooky fences in training, he won't be confident at competition. Focus on rhythm and straightness between fences.");
       }
 
       // Dressage specific advice with app links
