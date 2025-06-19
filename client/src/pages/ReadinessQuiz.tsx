@@ -48,29 +48,28 @@ const questions: QuizQuestion[] = [
     question: "Has your horse jumped cross-country in the last month?",
     options: [
       { value: "confident", label: "Yes, confidently over all fences", score: 4 },
-      { value: "spooking", label: "Yes, but spooking or stopping at several fences", score: 2 },
-      { value: "green", label: "Yes, but horse felt green and unsure", score: 2 },
-      { value: "no_recent", label: "No, no recent cross-country jumping", score: 1 }
+      { value: "some_fences", label: "Yes, but struggles with some fence types", score: 2 },
+      { value: "no_recent", label: "No, not in the last month", score: 1 }
     ]
   },
   {
     id: "dressage",
-    question: "Can you ride a dressage test for this level without major issues?",
+    question: "How consistent is your dressage at the target level?",
     options: [
-      { value: "not_yet", label: "Not yet", score: 1 },
-      { value: "mostly", label: "Mostly", score: 2 },
-      { value: "yes_basic", label: "Yes, but not competitively", score: 3 },
-      { value: "competitive", label: "Yes, and aiming to score well", score: 4 }
+      { value: "confident", label: "Consistently performs well in all movements", score: 4 },
+      { value: "mostly", label: "Most movements good, some need work", score: 3 },
+      { value: "basics", label: "Basic movements fine, struggling with harder ones", score: 2 },
+      { value: "needs_work", label: "Still working on most movements", score: 1 }
     ]
   },
   {
     id: "rider_confidence",
-    question: "How do you feel about riding at this level?",
+    question: "How confident do you feel about competing at this level?",
     options: [
-      { value: "nervous", label: "Nervous and not ready", score: 1 },
-      { value: "close", label: "Close but not fully confident", score: 2 },
-      { value: "cautious", label: "Confident but cautious", score: 3 },
-      { value: "ready", label: "Totally ready and excited", score: 4 }
+      { value: "very_confident", label: "Very confident and excited", score: 4 },
+      { value: "mostly_confident", label: "Mostly confident with some nerves", score: 3 },
+      { value: "nervous", label: "Quite nervous but want to try", score: 2 },
+      { value: "not_ready", label: "Don't feel ready yet", score: 1 }
     ]
   }
 ];
@@ -141,43 +140,6 @@ export default function ReadinessQuiz() {
       } else if (fitnessAnswer === 'flat') {
         advice.push("Flat canter work is a good start! If possible, try to incorporate some uphill work as it really builds strength and stamina. Test yourself by cantering for the full duration of your target course time to check your fitness level.");
         hasIncludedFitnessTest = true;
-      }
-
-      // Show jumping specific advice
-      if (jumpingAnswer === 'rails_stops') {
-        advice.push({
-          text: "Show jumping needs significant improvement. Focus on gymnastics and grids to build your horse's confidence and technique. Start with simple pole work, then progress to small jumps. Use our ",
-          link: { text: "Stride Calculator", url: "/stride-calculator" },
-          continuation: " to set up your exercises with the correct distances - proper spacing is crucial for building confidence and technique. Practice regularly in different arenas with colorful, spooky fences - if your horse doesn't feel confident in training, he won't be confident at competition."
-        });
-      } else if (jumpingAnswer === 'sometimes') {
-        advice.push({
-          text: "Your show jumping consistency needs work. Set up gymnastics and grid exercises at home using our ",
-          link: { text: "Stride Calculator", url: "/stride-calculator" },
-          continuation: " to ensure proper distances. Practice in different arenas with various fence types including colorful, spooky obstacles. Competition fences will be more intimidating than your familiar training jumps - if your horse doesn't feel confident with spooky fences in training, he won't be confident at competition."
-        });
-      }
-
-      // Dressage specific advice with app links
-      const dressageAnswer = answers['dressage'];
-      if (dressageAnswer === 'not_yet') {
-        advice.push({
-          text: "Dressage fundamentals need attention before competing. Work on basic movements like accurate circles, transitions, and straightness. The ",
-          link: { text: "Dan Bizzarro Method app", url: "/#app" },
-          continuation: " offers access to audio lessons you can listen whilst riding in your arena whenever suits you (it really feels like Dan is there teaching! You don't believe it? Try it for free!). Consider lessons with a dressage instructor to establish proper basics."
-        });
-      } else if (dressageAnswer === 'mostly') {
-        advice.push({
-          text: "Polish your dressage work by practicing the specific test movements regularly. The ",
-          link: { text: "Dan Bizzarro Method app", url: "/#app" },
-          continuation: " offers access to audio lessons you can listen whilst riding in your arena whenever suits you (it really feels like Dan is there teaching! You don't believe it? Try it for free!). Focus on accuracy, rhythm, and smooth transitions."
-        });
-      } else if (dressageAnswer === 'yes_basic') {
-        advice.push({
-          text: "Great dressage foundation! To take your performance to the competitive level, try the ",
-          link: { text: "Dan Bizzarro Method app", url: "/#app" },
-          continuation: " which offers access to audio lessons you can listen whilst riding in your arena whenever suits you (it really feels like Dan is there teaching! You don't believe it? Try it for free!)."
-        });
       }
 
       // Cross-country confidence advice
@@ -323,83 +285,76 @@ export default function ReadinessQuiz() {
       <div className={`min-h-screen bg-gradient-to-br ${questionColors[currentQuestionIndex]} transition-all duration-700`}>
         <Navigation />
         <div className="pt-24 pb-16">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8">
-                <h1 className="text-3xl font-playfair font-bold text-white mb-4">
-                  Readiness Assessment for {selectedLevel}
-                </h1>
-                <div className="w-full bg-white/30 rounded-full h-3 mb-2">
-                  <div 
-                    className="bg-white rounded-full h-3 transition-all duration-500 ease-out"
-                    style={{ width: `${progress}%` }}
-                  ></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Main Content */}
+              <div className="lg:col-span-3">
+                <div className="text-center mb-8">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8">
+                    <h1 className="text-3xl font-playfair font-bold text-white mb-4">
+                      Readiness Assessment for {selectedLevel}
+                    </h1>
+                    <div className="w-full bg-white/30 rounded-full h-3 mb-2">
+                      <div 
+                        className="bg-white rounded-full h-3 transition-all duration-500 ease-out"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-white/90 text-sm">
+                      Question {currentQuestionIndex + 1} of {questions.length}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-white/90 text-sm">
-                  Question {currentQuestionIndex + 1} of {questions.length}
-                </p>
-              </div>
-            </div>
 
-            <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 transform animate-in slide-in-from-bottom-5 duration-500">
-              <CardHeader className="text-center pb-4">
-                <CardDescription className="text-xl font-semibold text-gray-700 mt-6">
-                  {currentQuestion.question}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <RadioGroup
-                  value={answers[currentQuestion.id] || ""}
-                  onValueChange={(value) => handleAnswerChange(currentQuestion.id, value)}
-                  className="space-y-4"
-                >
-                  {currentQuestion.options.map((option, optionIndex) => {
-                    const optionColors = [
-                      'hover:bg-purple-50 border-purple-200',
-                      'hover:bg-blue-50 border-blue-200', 
-                      'hover:bg-green-50 border-green-200',
-                      'hover:bg-orange-50 border-orange-200'
-                    ];
-                    
-                    return (
-                      <div key={option.value} className={`border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 transform hover:scale-102 ${optionColors[optionIndex]} ${answers[currentQuestion.id] === option.value ? 'ring-2 ring-offset-2 ring-purple-500 bg-purple-50' : ''}`}>
-                        <div className="flex items-center space-x-3">
-                          <RadioGroupItem 
-                            value={option.value} 
-                            id={`${currentQuestion.id}-${option.value}`}
-                            className="text-purple-600"
-                          />
-                          <Label 
-                            htmlFor={`${currentQuestion.id}-${option.value}`}
-                            className="flex-1 cursor-pointer text-lg font-medium text-gray-700"
-                          >
+                <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0">
+                  <CardHeader>
+                    <CardTitle className="text-2xl text-navy text-center mb-6">
+                      {currentQuestion.question}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <RadioGroup
+                      value={answers[currentQuestion.id] || ""}
+                      onValueChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                      className="space-y-4"
+                    >
+                      {currentQuestion.options.map((option, index) => (
+                        <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                          <RadioGroupItem value={option.value} id={option.value} />
+                          <Label htmlFor={option.value} className="cursor-pointer text-base leading-relaxed">
                             {option.label}
                           </Label>
                         </div>
+                      ))}
+                    </RadioGroup>
+
+                    {answers[currentQuestion.id] && (
+                      <div className="mt-6 text-center">
+                        <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-700 text-sm">
+                          {isLastQuestion ? "Calculating your results..." : "Moving to next question..."}
+                        </div>
                       </div>
-                    );
-                  })}
-                </RadioGroup>
+                    )}
+                  </CardContent>
+                </Card>
 
-                {answers[currentQuestion.id] && (
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium animate-in fade-in duration-300">
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      {isLastQuestion ? "Calculating your results..." : "Moving to next question..."}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                <div className="flex justify-center mt-8">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setCurrentStep('level')}
+                    className="bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30"
+                  >
+                    Change Level
+                  </Button>
+                </div>
+              </div>
 
-            <div className="flex justify-center mt-8">
-              <Button 
-                variant="outline" 
-                onClick={() => setCurrentStep('level')}
-                className="bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30"
-              >
-                Change Level
-              </Button>
+              {/* Sidebar with Promotional Banners */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-8">
+                  <PromotionalBanners />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -408,111 +363,110 @@ export default function ReadinessQuiz() {
     );
   }
 
-  const results = getResults();
-  const ResultIcon = results.icon;
+  // Results step
+  if (currentStep === 'results') {
+    const results = getResults();
+    const ResultIcon = results.icon;
+    
+    return (
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        <div className="pt-24 pb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Assessment Header */}
+            <div className="text-center mb-8">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-6">
+                <h1 className="text-3xl font-playfair font-bold mb-2">
+                  Readiness Assessment for {selectedLevel}
+                </h1>
+                <p className="text-blue-100">Assessment Complete</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Main Content */}
+              <div className="lg:col-span-3">
+                <Card className={`${results.bgColor} ${results.borderColor} border-2`}>
+                  <CardHeader className="text-center">
+                    <div className="flex justify-center mb-4">
+                      <ResultIcon className={`w-16 h-16 ${results.color}`} />
+                    </div>
+                    <CardTitle className={`text-3xl ${results.color}`}>
+                      {results.level}
+                    </CardTitle>
+                    <CardDescription className="text-lg">
+                      Assessment Results for {selectedLevel}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <p className="text-lg text-gray-700 text-center">
+                      {results.message}
+                    </p>
 
-  return (
-    <div className="min-h-screen bg-white">
-      <Navigation />
-      <div className="pt-24 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Main Content */}
-            <div className="lg:col-span-3">
-              <Card className={`${results.bgColor} ${results.borderColor} border-2`}>
-                <CardHeader className="text-center">
-                  <div className="flex justify-center mb-4">
-                    <ResultIcon className={`w-16 h-16 ${results.color}`} />
-                  </div>
-                  <CardTitle className={`text-3xl ${results.color}`}>
-                    {results.level}
-                  </CardTitle>
-                  <CardDescription className="text-lg">
-                    Assessment Results for {selectedLevel}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <p className="text-lg text-gray-700 text-center">
-                    {results.message}
-                  </p>
-
-                  <div>
-                    <h3 className="text-xl font-semibold text-navy mb-6">Your Personalized Action Plan:</h3>
-                    <div className="space-y-4">
-                      {results.recommendations.map((rec, index) => (
-                        <div key={index} className={`p-4 rounded-lg border-l-4 ${results.color.replace('text-', 'border-')} bg-gray-50`}>
-                          <div className="flex items-start">
-                            <div className={`w-6 h-6 rounded-full ${results.color.replace('text-', 'bg-')} flex items-center justify-center mr-3 flex-shrink-0 mt-1`}>
-                              <span className="text-white text-sm font-bold">{index + 1}</span>
-                            </div>
-                            <div className="flex-1">
-                              <p className="text-gray-800 leading-relaxed">
-                                {typeof rec === 'string' ? (
-                                  rec
-                                ) : (
-                                  <>
-                                    {rec.text}
-                                    <a 
-                                      href={rec.link.url} 
-                                      className="text-blue-600 hover:text-blue-800 underline font-medium"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        window.location.href = rec.link.url;
-                                      }}
-                                    >
-                                      {rec.link.text}
-                                    </a>
-                                    {rec.continuation}
-                                  </>
-                                )}
-                              </p>
+                    <div>
+                      <h3 className="text-xl font-semibold text-navy mb-6">Your Personalized Action Plan:</h3>
+                      <div className="space-y-4">
+                        {results.recommendations.map((rec, index) => (
+                          <div key={index} className={`p-4 rounded-lg border-l-4 ${results.color.replace('text-', 'border-')} bg-gray-50`}>
+                            <div className="flex items-start">
+                              <div className={`w-6 h-6 rounded-full ${results.color.replace('text-', 'bg-')} flex items-center justify-center mr-3 flex-shrink-0 mt-1`}>
+                                <span className="text-white text-sm font-bold">{index + 1}</span>
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-gray-800 leading-relaxed">
+                                  {rec}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex items-start">
-                        <div className="flex-shrink-0">
-                          <Target className="w-5 h-5 text-blue-600 mt-1" />
-                        </div>
-                        <div className="ml-3">
-                          <h4 className="text-blue-800 font-semibold mb-1">Remember:</h4>
-                          <p className="text-blue-700 text-sm">
-                            Take your time with each recommendation. Consistency in training is more valuable than rushing to compete. 
-                            Every successful partnership is built step by step!
-                          </p>
+                        ))}
+                      </div>
+                      
+                      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="flex items-start">
+                          <div className="flex-shrink-0">
+                            <Target className="w-5 h-5 text-blue-600 mt-1" />
+                          </div>
+                          <div className="ml-3">
+                            <h4 className="text-blue-800 font-semibold mb-1">Remember:</h4>
+                            <p className="text-blue-700 text-sm">
+                              Take your time with each recommendation. Consistency in training is more valuable than rushing to compete. 
+                              Every successful partnership is built step by step!
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex justify-center space-x-4 pt-6">
-                    <Button variant="outline" onClick={resetQuiz}>
-                      Take Quiz Again
-                    </Button>
-                    <Button 
-                      className="bg-green-600 hover:bg-green-700"
-                      onClick={() => window.location.href = "/#clinics"}
-                    >
-                      Book Training Session
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                    <div className="flex justify-center space-x-4 pt-6">
+                      <Button variant="outline" onClick={resetQuiz}>
+                        Take Quiz Again
+                      </Button>
+                      <Button 
+                        className="bg-green-600 hover:bg-green-700"
+                        onClick={() => window.location.href = "/#clinics"}
+                      >
+                        Book Training Session
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
 
-            {/* Sidebar with Promotional Banners */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-8">
-                <PromotionalBanners />
+              {/* Sidebar with Promotional Banners */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-8">
+                  <PromotionalBanners />
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  );
+    );
+  }
+
+  // Default return - should never reach here  
+  return null;
 }
