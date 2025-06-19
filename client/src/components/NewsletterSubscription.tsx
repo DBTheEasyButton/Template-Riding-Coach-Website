@@ -51,7 +51,7 @@ export default function NewsletterSubscription() {
   };
 
   return (
-    <section className="py-16 bg-gray-100">
+    <section className="py-16 bg-gray-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <img 
@@ -75,7 +75,7 @@ export default function NewsletterSubscription() {
                 placeholder="First Name (optional)"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-orange focus:ring-orange"
+                className="w-full bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500"
               />
             </div>
             <div>
@@ -85,7 +85,7 @@ export default function NewsletterSubscription() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-orange focus:ring-orange"
+                className="w-full bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500"
               />
             </div>
             <Button
