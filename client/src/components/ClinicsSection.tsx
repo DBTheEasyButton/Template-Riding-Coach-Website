@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target, ClipboardList } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
@@ -698,10 +698,8 @@ export default function ClinicsSection() {
               <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-1 bg-orange-600 rounded-lg flex items-center justify-center min-w-[40px] min-h-[40px]">
-                      <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                      </svg>
+                    <div className="p-2 bg-orange-600 rounded-lg flex items-center justify-center w-10 h-10">
+                      <ClipboardList className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
