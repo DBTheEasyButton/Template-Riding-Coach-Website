@@ -54,16 +54,6 @@ const questions: QuizQuestion[] = [
     ]
   },
   {
-    id: "rider_confidence",
-    question: "How do you feel about riding at this level?",
-    options: [
-      { value: "nervous", label: "Nervous and not ready", score: 1 },
-      { value: "close", label: "Close but not fully confident", score: 2 },
-      { value: "cautious", label: "Confident but cautious", score: 3 },
-      { value: "ready", label: "Totally ready and excited", score: 4 }
-    ]
-  },
-  {
     id: "dressage",
     question: "Can you ride a dressage test for this level without major issues?",
     options: [
@@ -71,6 +61,16 @@ const questions: QuizQuestion[] = [
       { value: "mostly", label: "Mostly", score: 2 },
       { value: "yes_basic", label: "Yes, but not competitively", score: 3 },
       { value: "competitive", label: "Yes, and aiming to score well", score: 4 }
+    ]
+  },
+  {
+    id: "rider_confidence",
+    question: "How do you feel about riding at this level?",
+    options: [
+      { value: "nervous", label: "Nervous and not ready", score: 1 },
+      { value: "close", label: "Close but not fully confident", score: 2 },
+      { value: "cautious", label: "Confident but cautious", score: 3 },
+      { value: "ready", label: "Totally ready and excited", score: 4 }
     ]
   }
 ];
@@ -343,15 +343,7 @@ export default function ReadinessQuiz() {
 
             <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 transform animate-in slide-in-from-bottom-5 duration-500">
               <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">
-                    {currentQuestionIndex < 3 ? "🐎" : "👤"}
-                  </span>
-                </div>
-                <CardTitle className="text-2xl text-navy mb-2">
-                  {currentQuestionIndex < 3 ? "Horse Questions" : "Rider Questions"}
-                </CardTitle>
-                <CardDescription className="text-xl font-semibold text-gray-700">
+                <CardDescription className="text-xl font-semibold text-gray-700 mt-6">
                   {currentQuestion.question}
                 </CardDescription>
               </CardHeader>
