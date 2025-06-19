@@ -24,23 +24,23 @@ const levels = [
 
 const questions: QuizQuestion[] = [
   {
-    id: "fitness",
-    question: "How do you work on your horse's fitness?",
+    id: "dressage",
+    question: "How consistent is your dressage at the target level?",
     options: [
-      { value: "uphill", label: "Uphill canter work weekly", score: 4 },
-      { value: "flat", label: "Flat field canter work weekly", score: 3 },
-      { value: "already_fit", label: "No specific canter work; horse is already fit", score: 2 },
-      { value: "no_canter", label: "No canter work at all", score: 1 }
+      { value: "confident", label: "Consistently performs well in all movements", score: 4 },
+      { value: "mostly", label: "Most movements good, some need work", score: 3 },
+      { value: "basics", label: "Basic movements fine, struggling with harder ones", score: 2 },
+      { value: "needs_work", label: "Still working on most movements", score: 1 }
     ]
   },
   {
     id: "jumping",
     question: "Can you jump a clear round at your target height in training?",
     options: [
-      { value: "rails_stops", label: "Often have rails down or stops", score: 1 },
-      { value: "sometimes", label: "Sometimes clear, but not consistent", score: 2 },
+      { value: "confident", label: "Confidently clear every time", score: 4 },
       { value: "usually", label: "Usually clear without stops", score: 3 },
-      { value: "confident", label: "Confidently clear every time", score: 4 }
+      { value: "sometimes", label: "Sometimes clear, but not consistent", score: 2 },
+      { value: "rails_stops", label: "Often have rails down or stops", score: 1 }
     ]
   },
   {
@@ -53,13 +53,13 @@ const questions: QuizQuestion[] = [
     ]
   },
   {
-    id: "dressage",
-    question: "How consistent is your dressage at the target level?",
+    id: "fitness",
+    question: "How do you work on your horse's fitness?",
     options: [
-      { value: "confident", label: "Consistently performs well in all movements", score: 4 },
-      { value: "mostly", label: "Most movements good, some need work", score: 3 },
-      { value: "basics", label: "Basic movements fine, struggling with harder ones", score: 2 },
-      { value: "needs_work", label: "Still working on most movements", score: 1 }
+      { value: "uphill", label: "Uphill canter work weekly", score: 4 },
+      { value: "flat", label: "Flat field canter work weekly", score: 3 },
+      { value: "already_fit", label: "No specific canter work; horse is already fit", score: 2 },
+      { value: "no_canter", label: "No canter work at all", score: 1 }
     ]
   },
   {
