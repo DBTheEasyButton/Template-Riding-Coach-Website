@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target, ClipboardList } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target, CheckSquare } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
@@ -699,7 +699,7 @@ export default function ClinicsSection() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-orange-600 rounded-lg flex items-center justify-center w-10 h-10">
-                      <ClipboardList className="w-6 h-6 text-white" />
+                      <CheckSquare className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
