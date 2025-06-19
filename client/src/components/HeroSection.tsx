@@ -73,7 +73,7 @@ export default function HeroSection() {
         <div className="flex justify-center opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
           <Button 
             onClick={() => scrollToSection('#clinics')}
-            className="bg-orange hover:bg-orange/90 text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+            className="bg-navy hover:bg-navy/90 text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
           >
             BOOK A LESSON OR A CLINIC
           </Button>
