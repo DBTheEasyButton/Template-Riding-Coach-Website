@@ -156,19 +156,19 @@ export default function ReadinessQuiz() {
         advice.push({
           text: "Dressage fundamentals need attention before competing. Work on basic movements like accurate circles, transitions, and straightness. The ",
           link: { text: "Dan Bizzarro Method app", url: "/#app" },
-          continuation: " has excellent dressage training modules that can help you master the basics systematically. Consider lessons with a dressage instructor to establish proper basics."
+          continuation: " offers access to audio lessons you can listen whilst riding in your arena whenever suits you (it really feels like Dan is there teaching! You don't believe it? Try it for free!). Consider lessons with a dressage instructor to establish proper basics."
         });
       } else if (dressageAnswer === 'mostly') {
         advice.push({
           text: "Polish your dressage work by practicing the specific test movements regularly. The ",
           link: { text: "Dan Bizzarro Method app", url: "/#app" },
-          continuation: " offers advanced dressage techniques that can help refine your performance. Focus on accuracy, rhythm, and smooth transitions. Record yourself riding the test to identify areas needing improvement."
+          continuation: " offers access to audio lessons you can listen whilst riding in your arena whenever suits you (it really feels like Dan is there teaching! You don't believe it? Try it for free!). Focus on accuracy, rhythm, and smooth transitions."
         });
       } else if (dressageAnswer === 'yes_basic') {
         advice.push({
           text: "Great dressage foundation! To take your performance to the competitive level, try the ",
           link: { text: "Dan Bizzarro Method app", url: "/#app" },
-          continuation: " for advanced training techniques that can help you score better in competitions."
+          continuation: " which offers access to audio lessons you can listen whilst riding in your arena whenever suits you (it really feels like Dan is there teaching! You don't believe it? Try it for free!)."
         });
       }
 
