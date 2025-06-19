@@ -669,8 +669,12 @@ export default function ClinicsSection() {
               <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-green-600 rounded-lg">
-                      <Users className="w-5 h-5 text-white" />
+                    <div className="p-1 bg-green-600 rounded-lg flex items-center justify-center">
+                      <img 
+                        src="/thumbs-up-icon.png" 
+                        alt="Thumbs up icon" 
+                        className="w-8 h-8 filter brightness-0 invert"
+                      />
                     </div>
                     <div>
                       <CardTitle className="text-lg text-navy">Readiness Quiz</CardTitle>
