@@ -18,7 +18,7 @@ import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 import MobileRegistrationFlow from "@/components/MobileRegistrationFlow";
-import walkingIconPath from "@assets/Person walking_1750318650016.png";
+// Import removed - using direct path instead
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
@@ -642,7 +642,7 @@ export default function ClinicsSection() {
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-600 rounded-lg">
                       <img 
-                        src={walkingIconPath} 
+                        src="/walking-icon.png" 
                         alt="Walking icon" 
                         className="w-5 h-5 filter brightness-0 invert"
                       />
