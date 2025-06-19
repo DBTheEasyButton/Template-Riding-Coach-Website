@@ -478,7 +478,10 @@ export default function ClinicsSection() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <div className="grid md:grid-cols-2 gap-8">
           {clinics.map((clinic) => (
             <Card key={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
               <div className="relative overflow-hidden">
@@ -620,13 +623,70 @@ export default function ClinicsSection() {
               </CardFooter>
             </Card>
           ))}
-        </div>
+            </div>
 
-        {clinics.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No clinics scheduled at the moment. Check back soon for new dates!</p>
+            {clinics.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">No clinics scheduled at the moment. Check back soon for new dates!</p>
+              </div>
+            )}
           </div>
-        )}
+
+          {/* Sidebar with Tool Banners */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8 space-y-6">
+              {/* Stride Calculator Banner */}
+              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-600 rounded-lg">
+                      <Calendar className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg text-navy">Stride Calculator</CardTitle>
+                      <CardDescription className="text-sm">Perfect your distances</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Calculate precise distances for poles, gymnastics, and combinations to build confidence and technique.
+                  </p>
+                  <Link href="/stride-calculator">
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                      Use Calculator
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Readiness Quiz Banner */}
+              <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-600 rounded-lg">
+                      <Users className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg text-navy">Readiness Quiz</CardTitle>
+                      <CardDescription className="text-sm">Check your competition prep</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Take our interactive quiz to assess if you and your horse are ready for your target competition level.
+                  </p>
+                  <Link href="/readiness-quiz">
+                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                      Take Quiz
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
 
         <Dialog open={isRegistrationOpen && !isMobileFlow} onOpenChange={setIsRegistrationOpen}>
           <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
