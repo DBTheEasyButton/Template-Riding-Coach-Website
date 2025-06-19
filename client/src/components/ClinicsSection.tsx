@@ -640,11 +640,11 @@ export default function ClinicsSection() {
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg flex items-center justify-center">
+                    <div className="p-1 bg-white rounded-lg flex items-center justify-center">
                       <img 
                         src="/stride-calculator-icon.png" 
                         alt="Stride Calculator icon" 
-                        className="w-10 h-10"
+                        className="w-8 h-8"
                       />
                     </div>
                     <div>
@@ -669,11 +669,11 @@ export default function ClinicsSection() {
               <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg flex items-center justify-center">
+                    <div className="p-1 bg-white rounded-lg flex items-center justify-center">
                       <img 
                         src="/readiness-quiz-icon.png" 
                         alt="Readiness Quiz icon" 
-                        className="w-10 h-10"
+                        className="w-8 h-8"
                       />
                     </div>
                     <div>
