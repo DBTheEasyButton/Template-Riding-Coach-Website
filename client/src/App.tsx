@@ -54,6 +54,7 @@ const PageLoader = () => (
 );
 
 function Router() {
+  console.log('Router component rendered');
   return (
     <Switch>
       <Route path="/" component={Home} />

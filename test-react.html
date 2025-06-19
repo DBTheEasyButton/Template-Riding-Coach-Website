@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React Test</title>
+</head>
+<body>
+    <div id="test">Testing React...</div>
+    <script>
+        console.log('Page loaded');
+        fetch('/api/testimonials')
+            .then(r => r.json())
+            .then(d => console.log('API works:', d.length, 'testimonials'))
+            .catch(e => console.error('API error:', e));
+    </script>
+</body>
+</html>
