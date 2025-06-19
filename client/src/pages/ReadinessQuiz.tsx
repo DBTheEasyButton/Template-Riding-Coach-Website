@@ -145,9 +145,17 @@ export default function ReadinessQuiz() {
 
       // Show jumping specific advice
       if (jumpingAnswer === 'rails_stops') {
-        advice.push("Show jumping needs significant improvement. Focus on gymnastics and grids to build your horse's confidence and technique. Start with simple pole work, then progress to small jumps. Practice regularly in different arenas with colorful, spooky fences - if your horse doesn't feel confident in training, he won't be confident at competition. Vary your training environments to build true reliability.");
+        advice.push({
+          text: "Show jumping needs significant improvement. Focus on gymnastics and grids to build your horse's confidence and technique. Start with simple pole work, then progress to small jumps. Use our ",
+          link: { text: "Stride Calculator", url: "/stride-calculator" },
+          continuation: " to set up your exercises with the correct distances - proper spacing is crucial for building confidence and technique. Practice regularly in different arenas with colorful, spooky fences - if your horse doesn't feel confident in training, he won't be confident at competition."
+        });
       } else if (jumpingAnswer === 'sometimes') {
-        advice.push("Your show jumping consistency needs work. Practice in different arenas with various fence types including colorful, spooky obstacles. Set up courses both at home and away - competition fences will be more intimidating than your familiar training jumps. If your horse doesn't feel confident with spooky fences in training, he won't be confident at competition. Focus on rhythm and straightness between fences.");
+        advice.push({
+          text: "Your show jumping consistency needs work. Set up gymnastics and grid exercises at home using our ",
+          link: { text: "Stride Calculator", url: "/stride-calculator" },
+          continuation: " to ensure proper distances. Practice in different arenas with various fence types including colorful, spooky obstacles. Competition fences will be more intimidating than your familiar training jumps - if your horse doesn't feel confident with spooky fences in training, he won't be confident at competition."
+        });
       }
 
       // Dressage specific advice with app links
