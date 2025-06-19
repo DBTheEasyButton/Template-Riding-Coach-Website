@@ -108,6 +108,48 @@ export default function ReadinessQuiz() {
     const maxScore = questions.length * 4;
     const percentage = (score / maxScore) * 100;
 
+    // Check specific answers for personalized advice
+    const fitnessAnswer = answers['fitness'];
+    const crossCountryAnswer = answers['cross_country'];
+    const jumpingAnswer = answers['jumping'];
+    const confidenceAnswer = answers['rider_confidence'];
+
+    const generatePersonalizedAdvice = (level: string) => {
+      let advice = [];
+
+      // Fitness-specific advice
+      if (fitnessAnswer === 'no_canter') {
+        advice.push("Starting a fitness routine is crucial - try introducing canter work gradually. Begin with short sessions and build up slowly. Your horse needs to be fit enough to canter for the duration of your cross-country course without getting tired.");
+      } else if (fitnessAnswer === 'already_fit') {
+        advice.push("It's great that your horse is fit! Try cantering for the same amount of time your cross-country course will take and see how both you and your horse feel afterward. This will give you a realistic idea of your actual fitness level.");
+      } else if (fitnessAnswer === 'flat') {
+        advice.push("Flat canter work is a good start! If possible, try to incorporate some uphill work as it really builds strength and stamina. Also test yourself - can you canter for the full duration of your target course time?");
+      }
+
+      // Cross-country confidence advice
+      if (crossCountryAnswer !== 'confident') {
+        advice.push("Cross-country confidence is absolutely essential! Keep practicing different types of fences until both you and your horse feel completely comfortable with every variety. Remember, everything becomes more challenging at a competition, so you want to feel rock-solid at home first. Consider working with a coach to build this confidence systematically.");
+      }
+
+      // General encouragement and practical tips
+      if (level === "Highly Ready") {
+        advice.push("You're doing brilliantly! Keep up your current routine and maybe add some competition simulation exercises - practice under pressure, with time constraints, or in different environments to prepare for competition day nerves.");
+      } else if (level === "Almost Ready") {
+        advice.push("You're so close! Focus on consistency in your training. Maybe try a schooling competition or hunter trial to get a feel for the competition environment without the pressure.");
+      } else {
+        advice.push("Don't worry - every successful rider has been where you are now! Take your time building up each element. Consider starting at a slightly lower level to build confidence, then work your way up.");
+      }
+
+      // Always include the fitness test suggestion unless they're already very confident
+      if (crossCountryAnswer === 'confident' && fitnessAnswer === 'uphill') {
+        advice.push("Since you're feeling confident, do a final fitness check: canter your horse for the duration of your target cross-country course time and see how you both feel. This is the best way to know if you're truly ready!");
+      } else {
+        advice.push("Here's a great test: try cantering your horse for the same amount of time your cross-country course will take. If you or your horse feel tired or stressed, you'll know exactly what to work on!");
+      }
+
+      return advice;
+    };
+
     if (percentage >= 80) {
       return {
         level: "Highly Ready",
@@ -115,13 +157,8 @@ export default function ReadinessQuiz() {
         color: "text-green-600",
         bgColor: "bg-green-50",
         borderColor: "border-green-200",
-        message: `Excellent! You and your horse appear well-prepared for ${selectedLevel}. You're demonstrating consistent training, confidence, and experience across all areas.`,
-        recommendations: [
-          "Continue your current training routine",
-          "Consider entering a competition at this level",
-          "Focus on fine-tuning for competitive performance",
-          "Maintain regular fitness and jumping work"
-        ]
+        message: `Fantastic! You and your horse are looking really well-prepared for ${selectedLevel}. You're showing great consistency in training and confidence across all areas - that's exactly what you need for a successful competition.`,
+        recommendations: generatePersonalizedAdvice("Highly Ready")
       };
     } else if (percentage >= 60) {
       return {
@@ -130,14 +167,8 @@ export default function ReadinessQuiz() {
         color: "text-orange-600",
         bgColor: "bg-orange-50",
         borderColor: "border-orange-200",
-        message: `You're close to being ready for ${selectedLevel}! There are a few areas that could use some additional preparation.`,
-        recommendations: [
-          "Focus on consistency in training sessions",
-          "Increase cross-country exposure if needed",
-          "Work on building confidence in weaker areas",
-          "Consider a schooling competition first",
-          "Continue fitness work with your horse"
-        ]
+        message: `You're really close to being ready for ${selectedLevel}! You've got a solid foundation, and with just a bit more preparation in a few key areas, you'll be set for success.`,
+        recommendations: generatePersonalizedAdvice("Almost Ready")
       };
     } else {
       return {
@@ -146,15 +177,8 @@ export default function ReadinessQuiz() {
         color: "text-red-600",
         bgColor: "bg-red-50",
         borderColor: "border-red-200",
-        message: `Take your time building up to ${selectedLevel}. More preparation will help ensure a positive and safe experience for both you and your horse.`,
-        recommendations: [
-          "Establish a regular fitness routine for your horse",
-          "Practice jumping at current level consistently",
-          "Get more cross-country experience",
-          "Work with an instructor to build confidence",
-          "Master dressage movements for your current level",
-          "Consider starting at a lower level first"
-        ]
+        message: `You're on the right track, but there's some important groundwork to lay before tackling ${selectedLevel}. Take your time with this preparation - it's all about building a strong, confident partnership with your horse.`,
+        recommendations: generatePersonalizedAdvice("Needs More Preparation")
       };
     }
   };
