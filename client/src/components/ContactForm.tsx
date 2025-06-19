@@ -236,21 +236,7 @@ export default function ContactForm() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Clinic Booking</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600 mb-4">
-              Interested in hosting a clinic? We travel worldwide to bring the Dan Bizzarro Method to riders of all levels.
-            </p>
-            <Button variant="outline" className="w-full">
-              <a href="/clinics" className="flex items-center gap-2">
-                View Available Clinics
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
+
       </div>
     </div>
   );
