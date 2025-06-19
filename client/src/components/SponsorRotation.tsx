@@ -53,9 +53,9 @@ export default function SponsorRotation() {
 
   if (isLoading || !currentSponsor) {
     return (
-      <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm overflow-hidden">
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
         <div className="text-center">
-          <div className="w-full h-24 bg-gray-100 rounded-lg mx-auto mb-3 flex items-center justify-center animate-pulse">
+          <div className="w-full h-20 bg-gray-100 rounded-lg mx-auto mb-2 flex items-center justify-center animate-pulse">
             <span className="text-xs text-gray-500">Loading...</span>
           </div>
           <div className="h-4 bg-gray-200 rounded mb-1 animate-pulse"></div>
@@ -67,21 +67,21 @@ export default function SponsorRotation() {
   }
 
   return (
-    <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm transition-all duration-500 hover:shadow-md overflow-hidden">
+    <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm transition-all duration-500 hover:shadow-md">
       <div className="text-center">
-        <div className="w-full h-24 mx-auto rounded-lg overflow-hidden bg-gray-50 mb-3 relative flex items-center justify-center">
-          <div className="max-w-full max-h-full p-2">
+        <div className="w-full h-20 mx-auto rounded-lg overflow-hidden bg-white mb-2 relative">
+          <div className="absolute inset-0 flex items-center justify-center p-2">
             <OptimizedImage
               src={currentSponsor.logo}
               alt={`${currentSponsor.name} logo`}
-              className="max-w-full max-h-full object-contain"
+              className="w-full h-full object-contain"
             />
           </div>
         </div>
-        <h4 className="font-medium text-gray-900 text-sm mb-1 truncate">
+        <h4 className="font-medium text-gray-900 text-sm mb-1">
           {currentSponsor.name}
         </h4>
-        <p className="text-gray-600 text-xs mb-3 line-clamp-2 px-1">
+        <p className="text-gray-600 text-xs mb-3 line-clamp-2">
           {currentSponsor.description}
         </p>
         <Button 
