@@ -214,86 +214,108 @@ export default function PackingListGenerator() {
   };
 
   const downloadPDF = () => {
-    const pdf = new jsPDF();
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const margin = 20;
-    const lineHeight = 8;
-    let yPosition = 30;
+    try {
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      const lineHeight = 8;
+      let yPosition = 30;
 
-    // Add title
-    pdf.setFontSize(18);
-    pdf.setFont(undefined, 'bold');
-    pdf.text('Competition Packing Checklist', margin, yPosition);
-    
-    yPosition += 15;
-    
-    // Add discipline and date info
-    pdf.setFontSize(12);
-    pdf.setFont(undefined, 'normal');
-    const selectedDiscipline = disciplines.find(d => d.id === discipline);
-    pdf.text(`Discipline: ${selectedDiscipline?.label || 'Not selected'}`, margin, yPosition);
-    yPosition += 8;
-    pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPosition);
-    
-    yPosition += 15;
-
-    filteredSections.forEach(section => {
-      // Check if we need a new page
-      if (yPosition + (section.items.length * lineHeight) + 20 > pdf.internal.pageSize.getHeight() - margin) {
-        pdf.addPage();
-        yPosition = margin;
-      }
-
-      // Section header
-      pdf.setFontSize(14);
-      pdf.setFont(undefined, 'bold');
-      pdf.text(section.title, margin, yPosition);
-      yPosition += 10;
+      // Add title
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Competition Packing Checklist', margin, yPosition);
       
-      // Section items with checkboxes
-      pdf.setFontSize(11);
-      pdf.setFont(undefined, 'normal');
+      yPosition += 15;
       
-      section.items.forEach(item => {
-        // Draw checkbox
-        const checkboxSize = 4;
-        const checkboxX = margin;
-        const checkboxY = yPosition - 3;
-        
-        // Draw checkbox square
-        pdf.rect(checkboxX, checkboxY, checkboxSize, checkboxSize);
-        
-        // If item is checked, add checkmark
-        if (checkedItems.includes(item.id)) {
-          pdf.setFontSize(8);
-          pdf.text('✓', checkboxX + 0.5, checkboxY + 3);
-          pdf.setFontSize(11);
-        }
-        
-        // Add item text
-        pdf.text(item.name, checkboxX + checkboxSize + 5, yPosition);
-        
-        yPosition += lineHeight;
-        
+      // Add discipline and date info
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      const selectedDisciplineLabels = selectedDisciplines.map(d => 
+        disciplines.find(disc => disc.id === d)?.label || d
+      ).join(', ');
+      pdf.text(`Discipline: ${selectedDisciplineLabels}`, margin, yPosition);
+      yPosition += 8;
+      pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPosition);
+      
+      yPosition += 15;
+
+      filteredSections.forEach(section => {
         // Check if we need a new page
-        if (yPosition > pdf.internal.pageSize.getHeight() - margin) {
+        if (yPosition + (section.items.length * lineHeight) + 20 > pageHeight - margin) {
           pdf.addPage();
           yPosition = margin;
         }
+
+        // Section header
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(section.title, margin, yPosition);
+        yPosition += 10;
+        
+        // Section items with checkboxes
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'normal');
+        
+        section.items.forEach(item => {
+          // Check if we need a new page
+          if (yPosition > pageHeight - margin - 10) {
+            pdf.addPage();
+            yPosition = margin;
+          }
+
+          // Draw checkbox
+          const checkboxSize = 4;
+          const checkboxX = margin;
+          const checkboxY = yPosition - 3;
+          
+          // Draw checkbox square
+          pdf.rect(checkboxX, checkboxY, checkboxSize, checkboxSize, 'S');
+          
+          // If item is checked, add checkmark
+          if (checkedItems.includes(item.id)) {
+            pdf.setFontSize(8);
+            pdf.text('✓', checkboxX + 0.8, checkboxY + 2.8);
+            pdf.setFontSize(11);
+          }
+          
+          // Add item text with word wrapping
+          const maxWidth = pageWidth - margin - checkboxSize - 10;
+          const textLines = pdf.splitTextToSize(item.name, maxWidth);
+          pdf.text(textLines, margin + checkboxSize + 5, yPosition);
+          
+          yPosition += lineHeight * Math.max(1, textLines.length);
+        });
+        
+        yPosition += 8; // Extra space between sections
       });
-      
-      yPosition += 8; // Extra space between sections
-    });
 
-    // Add footer
-    const pageCount = pdf.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(8);
-      pdf.text(`Page ${i} of ${pageCount} - Dan Bizzarro Method`, margin, pdf.internal.pageSize.getHeight() - 10);
+      // Add footer to all pages
+      const pageCount = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Page ${i} of ${pageCount} - Dan Bizzarro Method`, margin, pageHeight - 10);
+      }
+
+      pdf.save('competition-packing-checklist.pdf');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      // Fallback to text download
+      const text = generateChecklistText();
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'competition-packing-checklist.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert('PDF generation failed. Downloaded as text file instead.');
     }
-
-    pdf.save('competition-packing-checklist.pdf');
   };
 
   const printChecklist = () => {
