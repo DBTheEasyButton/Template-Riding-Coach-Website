@@ -415,72 +415,79 @@ export default function ReadinessQuiz() {
     <div className="min-h-screen bg-white">
       <Navigation />
       <div className="pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className={`${results.bgColor} ${results.borderColor} border-2`}>
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-4">
-                <ResultIcon className={`w-16 h-16 ${results.color}`} />
-              </div>
-              <CardTitle className={`text-3xl ${results.color}`}>
-                {results.level}
-              </CardTitle>
-              <CardDescription className="text-lg">
-                Assessment Results for {selectedLevel}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <p className="text-lg text-gray-700 text-center">
-                {results.message}
-              </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-3">
+              <Card className={`${results.bgColor} ${results.borderColor} border-2`}>
+                <CardHeader className="text-center">
+                  <div className="flex justify-center mb-4">
+                    <ResultIcon className={`w-16 h-16 ${results.color}`} />
+                  </div>
+                  <CardTitle className={`text-3xl ${results.color}`}>
+                    {results.level}
+                  </CardTitle>
+                  <CardDescription className="text-lg">
+                    Assessment Results for {selectedLevel}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <p className="text-lg text-gray-700 text-center">
+                    {results.message}
+                  </p>
 
-              <div>
-                <h3 className="text-xl font-semibold text-navy mb-4">Recommendations:</h3>
-                <ul className="space-y-2">
-                  {results.recommendations.map((rec, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className={`w-2 h-2 rounded-full ${results.color.replace('text-', 'bg-')} mt-2 mr-3 flex-shrink-0`}></div>
-                      <span className="text-gray-700">
-                        {typeof rec === 'string' ? (
-                          rec
-                        ) : (
-                          <>
-                            {rec.text}
-                            <a 
-                              href={rec.link.url} 
-                              className="text-blue-600 hover:text-blue-800 underline font-medium"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                window.location.href = rec.link.url;
-                              }}
-                            >
-                              {rec.link.text}
-                            </a>
-                            {rec.continuation}
-                          </>
-                        )}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-navy mb-4">Recommendations:</h3>
+                    <ul className="space-y-2">
+                      {results.recommendations.map((rec, index) => (
+                        <li key={index} className="flex items-start">
+                          <div className={`w-2 h-2 rounded-full ${results.color.replace('text-', 'bg-')} mt-2 mr-3 flex-shrink-0`}></div>
+                          <span className="text-gray-700">
+                            {typeof rec === 'string' ? (
+                              rec
+                            ) : (
+                              <>
+                                {rec.text}
+                                <a 
+                                  href={rec.link.url} 
+                                  className="text-blue-600 hover:text-blue-800 underline font-medium"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    window.location.href = rec.link.url;
+                                  }}
+                                >
+                                  {rec.link.text}
+                                </a>
+                                {rec.continuation}
+                              </>
+                            )}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-              <div className="flex justify-center space-x-4 pt-6">
-                <Button variant="outline" onClick={resetQuiz}>
-                  Take Quiz Again
-                </Button>
-                <Button 
-                  className="bg-green-600 hover:bg-green-700"
-                  onClick={() => window.location.href = "/#clinics"}
-                >
-                  Book Training Session
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="flex justify-center space-x-4 pt-6">
+                    <Button variant="outline" onClick={resetQuiz}>
+                      Take Quiz Again
+                    </Button>
+                    <Button 
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={() => window.location.href = "/#clinics"}
+                    >
+                      Book Training Session
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-          {/* Promotional Banners */}
-          <div className="mt-12">
-            <PromotionalBanners />
+            {/* Sidebar with Promotional Banners */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-8">
+                <PromotionalBanners />
+              </div>
+            </div>
           </div>
         </div>
       </div>
