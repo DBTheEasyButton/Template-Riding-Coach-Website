@@ -7,6 +7,7 @@ import CoachingSection from "@/components/CoachingSection";
 import AppSection from "@/components/AppSection";
 import ClinicsSection from "@/components/ClinicsSection";
 import StrideCalculatorSection from "@/components/StrideCalculatorSection";
+import ReadinessQuizSection from "@/components/ReadinessQuizSection";
 // import TrainingVideosSection from "@/components/TrainingVideosSection";
 import PodcastSection from "@/components/PodcastSection";
 import ScheduleSection from "@/components/ScheduleSection";
@@ -39,6 +40,7 @@ export default function Home() {
       <TestimonialsSection />
       <ClinicsSection />
       <StrideCalculatorSection />
+      <ReadinessQuizSection />
       <AboutSection />
       <CoachingSection />
       <AppSection />
