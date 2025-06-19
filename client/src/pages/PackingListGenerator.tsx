@@ -25,8 +25,10 @@ interface PackingSection {
 const disciplines = [
   { id: "dressage", label: "Dressage" },
   { id: "showjumping", label: "Show Jumping" },
-  { id: "eventing", label: "Eventing / Cross Country" },
-  { id: "combined", label: "Combined Training / Arena Eventing" }
+  { id: "eventing", label: "Eventing" },
+  { id: "combined", label: "Combined Training" },
+  { id: "arena-eventing", label: "Arena Eventing" },
+  { id: "hunter-trials", label: "Hunter Trials" }
 ];
 
 const extraOptions = [
@@ -43,47 +45,47 @@ const packingSections: PackingSection[] = [
       { id: "stock-tie", name: "Stock/tie + pin", required: true },
       { id: "white-shirt", name: "White shirt", required: true },
       { id: "light-breeches", name: "Light-coloured breeches", required: true },
-      { id: "gloves", name: "Gloves", required: true, conditions: ["dressage", "eventing"] },
+      { id: "gloves", name: "Gloves", required: true, conditions: ["dressage", "eventing", "combined"] },
       { id: "hairnet", name: "Hairnet & show socks", required: true },
       { id: "competition-boots", name: "Competition boots", required: true },
       { id: "number-bib", name: "Number bib", required: true },
-      { id: "dressage-hat", name: "Dressage/show jumping hat", required: true, conditions: ["eventing"] },
-      { id: "xc-hat", name: "Cross-country hat", required: true, conditions: ["eventing"] },
-      { id: "body-protector", name: "Body protector", required: true, conditions: ["eventing"] },
+      { id: "dressage-hat", name: "Dressage/show jumping hat", required: true, conditions: ["eventing", "combined"] },
+      { id: "xc-hat", name: "Cross-country hat", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
+      { id: "body-protector", name: "Body protector", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
       { id: "eventing-watch", name: "Eventing watch (optional)", required: false, conditions: ["eventing"] }
     ]
   },
   {
     title: "Horse Gear - Dressage",
     items: [
-      { id: "dressage-bridle", name: "Dressage bridle", required: true, conditions: ["dressage", "eventing"] },
-      { id: "dressage-saddle", name: "Dressage saddle", required: true, conditions: ["dressage", "eventing"] },
-      { id: "dressage-numnah", name: "Dressage numnah", required: true, conditions: ["dressage", "eventing"] },
-      { id: "dressage-pad", name: "Dressage saddle pad", required: true, conditions: ["dressage", "eventing"] },
-      { id: "dressage-girth", name: "Girth", required: true, conditions: ["dressage", "eventing"] }
+      { id: "dressage-bridle", name: "Dressage bridle", required: true, conditions: ["dressage", "eventing", "combined"] },
+      { id: "dressage-saddle", name: "Dressage saddle", required: true, conditions: ["dressage", "eventing", "combined"] },
+      { id: "dressage-numnah", name: "Dressage numnah", required: true, conditions: ["dressage", "eventing", "combined"] },
+      { id: "dressage-pad", name: "Dressage saddle pad", required: true, conditions: ["dressage", "eventing", "combined"] },
+      { id: "dressage-girth", name: "Girth", required: true, conditions: ["dressage", "eventing", "combined"] }
     ]
   },
   {
     title: "Horse Gear - Show Jumping",
     items: [
-      { id: "jumping-saddle", name: "Jumping saddle", required: true, conditions: ["showjumping", "combined", "eventing"] },
-      { id: "jumping-bridle", name: "Jumping bridle", required: true, conditions: ["showjumping", "combined", "eventing"] },
-      { id: "martingale", name: "Martingale (if used)", required: false, conditions: ["showjumping", "combined", "eventing"] },
-      { id: "jumping-boots", name: "Jumping boots (tendon/fetlock)", required: true, conditions: ["showjumping", "combined", "eventing"] },
-      { id: "sj-overreach", name: "Overreach boots", required: true, conditions: ["showjumping", "combined", "eventing"] },
-      { id: "jumping-numnah", name: "Jumping numnah", required: true, conditions: ["showjumping", "combined", "eventing"] },
-      { id: "jumping-pad", name: "Jumping saddle pad", required: true, conditions: ["showjumping", "combined", "eventing"] }
+      { id: "jumping-saddle", name: "Jumping saddle", required: true, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] },
+      { id: "jumping-bridle", name: "Jumping bridle", required: true, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] },
+      { id: "martingale", name: "Martingale (if used)", required: false, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] },
+      { id: "jumping-boots", name: "Jumping boots (tendon/fetlock)", required: true, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] },
+      { id: "sj-overreach", name: "Overreach boots", required: true, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] },
+      { id: "jumping-numnah", name: "Jumping numnah", required: true, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] },
+      { id: "jumping-pad", name: "Jumping saddle pad", required: true, conditions: ["showjumping", "combined", "eventing", "arena-eventing", "hunter-trials"] }
     ]
   },
   {
     title: "Horse Gear - Cross Country",
     items: [
-      { id: "xc-bridle", name: "Cross-country bridle and bit", required: true, conditions: ["eventing"] },
-      { id: "xc-saddle", name: "Cross-country saddle (usually same as SJ)", required: true, conditions: ["eventing"] },
-      { id: "breastplate", name: "Breastplate", required: true, conditions: ["eventing"] },
-      { id: "xc-boots", name: "Cross-country boots", required: true, conditions: ["eventing"] },
-      { id: "xc-overreach", name: "Overreach boots", required: true, conditions: ["eventing"] },
-      { id: "studs", name: "Studs and stud kit (always use studs)", required: true, conditions: ["eventing"] }
+      { id: "xc-bridle", name: "Cross-country bridle and bit", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
+      { id: "xc-saddle", name: "Cross-country saddle (usually same as SJ)", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
+      { id: "breastplate", name: "Breastplate", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
+      { id: "xc-boots", name: "Cross-country boots", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
+      { id: "xc-overreach", name: "Overreach boots", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] },
+      { id: "studs", name: "Studs and stud kit (always use studs)", required: true, conditions: ["eventing", "arena-eventing", "hunter-trials"] }
     ]
   },
   {
@@ -542,7 +544,7 @@ export default function PackingListGenerator() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                   {disciplines.map((discipline) => (
                     <div key={discipline.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-blue-50 transition-colors">
                       <Checkbox
