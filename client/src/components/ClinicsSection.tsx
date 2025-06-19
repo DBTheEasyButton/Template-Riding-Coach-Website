@@ -698,8 +698,8 @@ export default function ClinicsSection() {
               <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange-600 rounded-lg flex items-center justify-center w-10 h-10">
-                      <CheckSquare className="w-6 h-6 text-white" />
+                    <div className="p-2 bg-orange-600 rounded-lg flex items-center justify-center w-10 h-10" style={{backgroundColor: '#ea580c'}}>
+                      <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
@@ -712,7 +712,7 @@ export default function ClinicsSection() {
                     Generate a personalized packing checklist for your competition based on discipline and needs.
                   </p>
                   <Link href="/packing-list-generator">
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium">
+                    <Button className="w-full text-white font-medium" style={{backgroundColor: '#ea580c', borderColor: '#ea580c'}}>
                       Create Checklist
                     </Button>
                   </Link>
