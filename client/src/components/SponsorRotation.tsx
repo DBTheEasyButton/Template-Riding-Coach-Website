@@ -55,7 +55,7 @@ export default function SponsorRotation() {
     return (
       <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
         <div className="text-center">
-          <div className="w-full h-20 bg-gray-100 rounded-lg mx-auto mb-2 flex items-center justify-center animate-pulse">
+          <div className="w-full h-16 bg-gray-100 rounded-lg mx-auto mb-2 flex items-center justify-center animate-pulse">
             <span className="text-xs text-gray-500">Loading...</span>
           </div>
           <div className="h-4 bg-gray-200 rounded mb-1 animate-pulse"></div>
@@ -69,12 +69,12 @@ export default function SponsorRotation() {
   return (
     <div className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm transition-all duration-500 hover:shadow-md">
       <div className="text-center">
-        <div className="w-full h-20 mx-auto rounded-lg overflow-hidden bg-white mb-2 relative">
-          <div className="absolute inset-0 flex items-center justify-center p-2">
+        <div className="w-full h-16 mx-auto rounded-lg overflow-hidden bg-white mb-2 relative">
+          <div className="absolute inset-0 flex items-center justify-center p-3">
             <OptimizedImage
               src={currentSponsor.logo}
               alt={`${currentSponsor.name} logo`}
-              className="w-full h-full object-contain"
+              className="max-w-full max-h-full object-contain"
             />
           </div>
         </div>
