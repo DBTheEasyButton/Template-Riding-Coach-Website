@@ -142,6 +142,21 @@ export default function ReadinessQuiz() {
         hasIncludedFitnessTest = true;
       }
 
+      // Show jumping specific advice
+      if (jumpingAnswer === 'rails_stops') {
+        advice.push("Show jumping needs significant improvement. Focus on gymnastics and grids to build your horse's confidence and technique. Start with simple pole work, then progress to small jumps. Practice at home until you can consistently jump clear rounds before considering competition.");
+      } else if (jumpingAnswer === 'sometimes') {
+        advice.push("Your show jumping consistency needs work. Try setting up simple courses at home and practice riding the same track repeatedly until both you and your horse can navigate it smoothly every time. Focus on rhythm and straightness between fences.");
+      }
+
+      // Dressage specific advice
+      const dressageAnswer = answers['dressage'];
+      if (dressageAnswer === 'not_yet') {
+        advice.push("Dressage fundamentals need attention before competing. Work on basic movements like accurate circles, transitions, and straightness. Consider lessons with a dressage instructor to establish proper basics. You need to be comfortable with all required movements for your level.");
+      } else if (dressageAnswer === 'mostly') {
+        advice.push("Polish your dressage work by practicing the specific test movements regularly. Focus on accuracy, rhythm, and smooth transitions. Record yourself riding the test to identify areas needing improvement.");
+      }
+
       // Cross-country confidence advice
       if (crossCountryAnswer !== 'confident') {
         advice.push("Cross-country confidence is absolutely essential! Keep practicing different types of fences until both you and your horse feel completely comfortable with every variety. Remember, everything becomes more challenging at a competition, so you want to feel rock-solid at home first. Consider working with a coach to build this confidence systematically.");
