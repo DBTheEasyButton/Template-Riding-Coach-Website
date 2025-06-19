@@ -640,7 +640,11 @@ export default function ClinicsSection() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-600 rounded-lg">
-                      <Calendar className="w-5 h-5 text-white" />
+                      <img 
+                        src="/attached_assets/Person walking_1750318650016.png" 
+                        alt="Walking icon" 
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
                     </div>
                     <div>
                       <CardTitle className="text-lg text-navy">Stride Calculator</CardTitle>
