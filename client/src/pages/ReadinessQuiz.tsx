@@ -78,15 +78,28 @@ export default function ReadinessQuiz() {
   const [selectedLevel, setSelectedLevel] = useState<string>("");
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentStep, setCurrentStep] = useState<'level' | 'questions' | 'results'>('level');
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showResults, setShowResults] = useState(false);
 
   const handleLevelSelect = (level: string) => {
     setSelectedLevel(level);
     setCurrentStep('questions');
+    setCurrentQuestionIndex(0);
   };
 
   const handleAnswerChange = (questionId: string, value: string) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
+    
+    // Auto-advance to next question after a short delay
+    setTimeout(() => {
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+      } else {
+        // All questions answered, show results
+        setCurrentStep('results');
+        setShowResults(true);
+      }
+    }, 500);
   };
 
   const calculateScore = () => {
@@ -192,11 +205,20 @@ export default function ReadinessQuiz() {
     setSelectedLevel("");
     setAnswers({});
     setCurrentStep('level');
+    setCurrentQuestionIndex(0);
     setShowResults(false);
   };
 
   const allQuestionsAnswered = questions.every(q => answers[q.id]);
-  const progress = (Object.keys(answers).length / questions.length) * 100;
+  const progress = ((currentQuestionIndex + (answers[questions[currentQuestionIndex]?.id] ? 1 : 0)) / questions.length) * 100;
+  
+  const questionColors = [
+    'from-purple-500 to-pink-500',
+    'from-blue-500 to-cyan-500', 
+    'from-green-500 to-emerald-500',
+    'from-orange-500 to-red-500',
+    'from-indigo-500 to-purple-500'
+  ];
 
   if (currentStep === 'level') {
     return (
@@ -222,17 +244,24 @@ export default function ReadinessQuiz() {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
-                  {levels.map(level => (
-                    <Button
-                      key={level.value}
-                      variant="outline"
-                      size="lg"
-                      className="h-16 text-lg hover:bg-green-50 hover:border-green-300"
-                      onClick={() => handleLevelSelect(level.value)}
-                    >
-                      {level.label}
-                    </Button>
-                  ))}
+                  {levels.map((level, index) => {
+                    const colors = [
+                      'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600',
+                      'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600',
+                      'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600',
+                      'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
+                    ];
+                    return (
+                      <Button
+                        key={level.value}
+                        size="lg"
+                        className={`h-16 text-lg text-white font-semibold transform transition-all duration-200 hover:scale-105 ${colors[index]}`}
+                        onClick={() => handleLevelSelect(level.value)}
+                      >
+                        {level.label}
+                      </Button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -244,65 +273,98 @@ export default function ReadinessQuiz() {
   }
 
   if (currentStep === 'questions') {
+    const currentQuestion = questions[currentQuestionIndex];
+    const isLastQuestion = currentQuestionIndex === questions.length - 1;
+    
     return (
-      <div className="min-h-screen bg-white">
+      <div className={`min-h-screen bg-gradient-to-br ${questionColors[currentQuestionIndex]} transition-all duration-700`}>
         <Navigation />
         <div className="pt-24 pb-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-playfair font-bold text-navy mb-2">
-                Readiness Assessment for {selectedLevel}
-              </h1>
-              <Progress value={progress} className="max-w-md mx-auto" />
-              <p className="text-sm text-gray-500 mt-2">
-                {Object.keys(answers).length} of {questions.length} questions completed
-              </p>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8">
+                <h1 className="text-3xl font-playfair font-bold text-white mb-4">
+                  Readiness Assessment for {selectedLevel}
+                </h1>
+                <div className="w-full bg-white/30 rounded-full h-3 mb-2">
+                  <div 
+                    className="bg-white rounded-full h-3 transition-all duration-500 ease-out"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <p className="text-white/90 text-sm">
+                  Question {currentQuestionIndex + 1} of {questions.length}
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-8">
-              {questions.map((question, index) => (
-                <Card key={question.id}>
-                  <CardHeader>
-                    <CardTitle className="text-lg">
-                      {index < 3 ? "Horse Questions" : "Rider Questions"} - Question {index + 1}
-                    </CardTitle>
-                    <CardDescription className="text-base font-medium">
-                      {question.question}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <RadioGroup
-                      value={answers[question.id] || ""}
-                      onValueChange={(value) => handleAnswerChange(question.id, value)}
-                    >
-                      {question.options.map(option => (
-                        <div key={option.value} className="flex items-center space-x-2 py-2">
-                          <RadioGroupItem value={option.value} id={`${question.id}-${option.value}`} />
+            <Card className="bg-white/95 backdrop-blur-sm shadow-2xl border-0 transform animate-in slide-in-from-bottom-5 duration-500">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-white">
+                    {currentQuestionIndex < 3 ? "🐎" : "👤"}
+                  </span>
+                </div>
+                <CardTitle className="text-2xl text-navy mb-2">
+                  {currentQuestionIndex < 3 ? "Horse Questions" : "Rider Questions"}
+                </CardTitle>
+                <CardDescription className="text-xl font-semibold text-gray-700">
+                  {currentQuestion.question}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RadioGroup
+                  value={answers[currentQuestion.id] || ""}
+                  onValueChange={(value) => handleAnswerChange(currentQuestion.id, value)}
+                  className="space-y-4"
+                >
+                  {currentQuestion.options.map((option, optionIndex) => {
+                    const optionColors = [
+                      'hover:bg-purple-50 border-purple-200',
+                      'hover:bg-blue-50 border-blue-200', 
+                      'hover:bg-green-50 border-green-200',
+                      'hover:bg-orange-50 border-orange-200'
+                    ];
+                    
+                    return (
+                      <div key={option.value} className={`border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 transform hover:scale-102 ${optionColors[optionIndex]} ${answers[currentQuestion.id] === option.value ? 'ring-2 ring-offset-2 ring-purple-500 bg-purple-50' : ''}`}>
+                        <div className="flex items-center space-x-3">
+                          <RadioGroupItem 
+                            value={option.value} 
+                            id={`${currentQuestion.id}-${option.value}`}
+                            className="text-purple-600"
+                          />
                           <Label 
-                            htmlFor={`${question.id}-${option.value}`}
-                            className="flex-1 cursor-pointer text-base"
+                            htmlFor={`${currentQuestion.id}-${option.value}`}
+                            className="flex-1 cursor-pointer text-lg font-medium text-gray-700"
                           >
                             {option.label}
                           </Label>
                         </div>
-                      ))}
-                    </RadioGroup>
-                  </CardContent>
-                </Card>
-              ))}
+                      </div>
+                    );
+                  })}
+                </RadioGroup>
 
-              <div className="flex justify-center space-x-4">
-                <Button variant="outline" onClick={() => setCurrentStep('level')}>
-                  Change Level
-                </Button>
-                <Button 
-                  onClick={handleShowResults}
-                  disabled={!allQuestionsAnswered}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  Get My Results
-                </Button>
-              </div>
+                {answers[currentQuestion.id] && (
+                  <div className="mt-6 text-center">
+                    <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium animate-in fade-in duration-300">
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      {isLastQuestion ? "Calculating your results..." : "Moving to next question..."}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <div className="flex justify-center mt-8">
+              <Button 
+                variant="outline" 
+                onClick={() => setCurrentStep('level')}
+                className="bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30"
+              >
+                Change Level
+              </Button>
             </div>
           </div>
         </div>
