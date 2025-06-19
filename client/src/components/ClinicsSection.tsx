@@ -479,9 +479,95 @@ export default function ClinicsSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Tool Banners */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {/* Stride Calculator Banner */}
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center">
+                  <img 
+                    src="/stride-calculator-icon-final.png" 
+                    alt="Stride Calculator icon" 
+                    className="w-10 h-10 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <CardTitle className="text-lg text-navy">Stride Calculator</CardTitle>
+                  <CardDescription className="text-sm">Perfect your distances</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-gray-600 mb-4">
+                Make sure you set up pole, grid work and jumping exercises properly to build confidence and technique.
+              </p>
+              <Link href="/stride-calculator">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Use Calculator
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Readiness Quiz Banner */}
+          <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center">
+                  <img 
+                    src="/readiness-quiz-icon-final.png" 
+                    alt="Readiness Quiz icon" 
+                    className="w-10 h-10 rounded-lg"
+                  />
+                </div>
+                <div>
+                  <CardTitle className="text-lg text-navy">Readiness Quiz</CardTitle>
+                  <CardDescription className="text-sm">Check your competition prep</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-gray-600 mb-4">
+                Take our interactive quiz to assess if you and your horse are ready for your target competition level.
+              </p>
+              <Link href="/readiness-quiz">
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  Take Quiz
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Packing List Generator Banner */}
+          <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-600 rounded-lg flex items-center justify-center w-10 h-10" style={{backgroundColor: '#dc2626'}}>
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
+                  <CardDescription className="text-sm">Competition preparation made easy</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-gray-600 mb-4">
+                Generate a personalized packing checklist for your competition based on discipline and needs.
+              </p>
+              <Link href="/packing-list-generator">
+                <Button className="w-full text-white font-medium" style={{backgroundColor: '#dc2626', borderColor: '#dc2626'}}>
+                  Create Checklist
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="w-full">
             <div className="grid md:grid-cols-2 gap-8">
           {clinics.map((clinic) => (
             <Card key={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
@@ -633,93 +719,7 @@ export default function ClinicsSection() {
             )}
           </div>
 
-          {/* Sidebar with Tool Banners */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-8 space-y-6">
-              {/* Stride Calculator Banner */}
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center">
-                      <img 
-                        src="/stride-calculator-icon-final.png" 
-                        alt="Stride Calculator icon" 
-                        className="w-10 h-10 rounded-lg"
-                      />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg text-navy">Stride Calculator</CardTitle>
-                      <CardDescription className="text-sm">Perfect your distances</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Make sure you set up pole, grid work and jumping exercises properly to build confidence and technique.
-                  </p>
-                  <Link href="/stride-calculator">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                      Use Calculator
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
 
-              {/* Readiness Quiz Banner */}
-              <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center">
-                      <img 
-                        src="/readiness-quiz-icon-final.png" 
-                        alt="Readiness Quiz icon" 
-                        className="w-10 h-10 rounded-lg"
-                      />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg text-navy">Readiness Quiz</CardTitle>
-                      <CardDescription className="text-sm">Check your competition prep</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Take our interactive quiz to assess if you and your horse are ready for your target competition level.
-                  </p>
-                  <Link href="/readiness-quiz">
-                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-                      Take Quiz
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              {/* Packing List Generator Banner */}
-              <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-red-600 rounded-lg flex items-center justify-center w-10 h-10" style={{backgroundColor: '#dc2626'}}>
-                      <FileText className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
-                      <CardDescription className="text-sm">Competition preparation made easy</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Generate a personalized packing checklist for your competition based on discipline and needs.
-                  </p>
-                  <Link href="/packing-list-generator">
-                    <Button className="w-full text-white font-medium" style={{backgroundColor: '#dc2626', borderColor: '#dc2626'}}>
-                      Create Checklist
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </div>
 
         <Dialog open={isRegistrationOpen && !isMobileFlow} onOpenChange={setIsRegistrationOpen}>
