@@ -51,7 +51,7 @@ export default function NewsletterSubscription() {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-r from-navy to-navy-dark">
+    <section className="py-16 bg-gray-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <img 
@@ -59,10 +59,10 @@ export default function NewsletterSubscription() {
             alt="Dan Bizzarro Method" 
             className="h-16 w-auto mx-auto mb-6"
           />
-          <h2 className="text-3xl font-playfair font-bold text-white mb-4">
+          <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
             Stay Connected with Dan Bizzarro Method
           </h2>
-          <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Get exclusive training tips, clinic announcements, and updates on Dan's competitive journey delivered straight to your inbox.
           </p>
         </div>
