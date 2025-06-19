@@ -73,8 +73,8 @@ export default function Navigation() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-gray-900/95 backdrop-blur-md' : 'bg-gray-800/90 backdrop-blur-md'
-    } border-b border-gray-700/50`}>
+      isScrolled ? 'bg-gray-200/95 backdrop-blur-md' : 'bg-gray-100/90 backdrop-blur-md'
+    } border-b border-gray-300/50`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
@@ -93,7 +93,7 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-white hover:text-orange-400 transition-all duration-300 font-medium relative px-3 py-2 rounded-lg hover:bg-orange-400/20 hover:scale-105"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105"
                 >
                   {item.label}
                 </button>
@@ -105,7 +105,7 @@ export default function Navigation() {
                 onMouseEnter={() => setIsCoachingDropdownOpen(true)}
                 onMouseLeave={() => setIsCoachingDropdownOpen(false)}
               >
-                <button className="text-white hover:text-orange-400 transition-all duration-300 font-medium flex items-center px-3 py-2 rounded-lg hover:bg-orange-400/20 hover:scale-105">
+                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105">
                   Coaching
                   <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-300 ${isCoachingDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -146,7 +146,7 @@ export default function Navigation() {
               variant="ghost"
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-orange-400"
+              className="text-gray-800 hover:text-orange-500"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -157,7 +157,7 @@ export default function Navigation() {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
-          <div className="absolute top-full left-0 right-0 bg-gray-800 border-t border-gray-700 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto z-50">
+          <div className="absolute top-full left-0 right-0 bg-gray-100 border-t border-gray-300 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto z-50">
             <div className="px-2 pt-2 pb-6 space-y-1">
               {navItemsBefore.map((item) => (
                 <button
@@ -171,7 +171,7 @@ export default function Navigation() {
               
               {/* Mobile Coaching Section */}
               <div className="border-t pt-2 mt-2">
-                <div className="px-3 py-2 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                <div className="px-3 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wider">
                   Coaching
                 </div>
                 {coachingSubmenu.map((item, index) => (
