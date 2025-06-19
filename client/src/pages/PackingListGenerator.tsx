@@ -213,7 +213,7 @@ export default function PackingListGenerator() {
     return text;
   };
 
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
     try {
       const pdf = new jsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
@@ -226,14 +226,32 @@ export default function PackingListGenerator() {
       pdf.setFillColor(25, 56, 97); // Navy blue background
       pdf.rect(0, 0, pageWidth, 50, 'F');
 
-      // Add logo area (placeholder for now)
-      pdf.setFillColor(255, 255, 255); // White background for logo
-      pdf.rect(margin, 10, 40, 30, 'F');
-      pdf.setFontSize(8);
-      pdf.setTextColor(25, 56, 97);
-      pdf.text('Dan Bizzarro', margin + 2, 20);
-      pdf.text('Eventing', margin + 2, 27);
-      pdf.text('Method', margin + 2, 34);
+      // Load and add logo
+      try {
+        const logoResponse = await fetch('/logo.png');
+        if (logoResponse.ok) {
+          const logoBlob = await logoResponse.blob();
+          const logoDataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(logoBlob);
+          });
+          
+          // Add logo to PDF
+          pdf.addImage(logoDataUrl as string, 'PNG', margin, 10, 30, 30);
+        } else {
+          throw new Error('Logo not found');
+        }
+      } catch (logoError) {
+        // Fallback text if logo fails to load
+        pdf.setFillColor(255, 255, 255); // White background for logo
+        pdf.rect(margin, 10, 40, 30, 'F');
+        pdf.setFontSize(8);
+        pdf.setTextColor(25, 56, 97);
+        pdf.text('Dan Bizzarro', margin + 2, 20);
+        pdf.text('Eventing', margin + 2, 27);
+        pdf.text('Method', margin + 2, 34);
+      }
 
       // Add title
       pdf.setFontSize(20);
@@ -641,7 +659,7 @@ export default function PackingListGenerator() {
                 </div>
 
                 <div className="flex gap-2 mb-6">
-                  <Button onClick={downloadPDF} variant="outline" size="sm">
+                  <Button onClick={() => downloadPDF()} variant="outline" size="sm">
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>
