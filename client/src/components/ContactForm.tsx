@@ -229,7 +229,7 @@ export default function ContactForm() {
               <MapPin className="w-4 h-4 text-gray-600" />
               <div>
                 <p className="font-medium">Location</p>
-                <p className="text-gray-600">Based in Tuscany, Italy</p>
+                <p className="text-gray-600">Based in Ascott-Under-Wychwood (Oxfordshire)</p>
                 <p className="text-sm text-gray-500">Available for clinics worldwide</p>
               </div>
             </div>
