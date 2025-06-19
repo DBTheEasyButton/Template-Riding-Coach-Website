@@ -88,6 +88,11 @@ function Router() {
           <PackingListGenerator />
         </Suspense>
       </Route>
+      <Route path="/packing-list">
+        <Suspense fallback={<PageLoader />}>
+          <PackingListGenerator />
+        </Suspense>
+      </Route>
       <Route path="/admin/clinics">
         <Suspense fallback={<PageLoader />}>
           <AdminClinics />
