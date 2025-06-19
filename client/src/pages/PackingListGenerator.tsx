@@ -220,84 +220,155 @@ export default function PackingListGenerator() {
       const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 20;
       const lineHeight = 8;
-      let yPosition = 30;
+      let yPosition = 25;
+
+      // Add header background color
+      pdf.setFillColor(25, 56, 97); // Navy blue background
+      pdf.rect(0, 0, pageWidth, 50, 'F');
+
+      // Add logo area (placeholder for now)
+      pdf.setFillColor(255, 255, 255); // White background for logo
+      pdf.rect(margin, 10, 40, 30, 'F');
+      pdf.setFontSize(8);
+      pdf.setTextColor(25, 56, 97);
+      pdf.text('Dan Bizzarro', margin + 2, 20);
+      pdf.text('Eventing', margin + 2, 27);
+      pdf.text('Method', margin + 2, 34);
 
       // Add title
-      pdf.setFontSize(18);
+      pdf.setFontSize(20);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Competition Packing Checklist', margin, yPosition);
+      pdf.setTextColor(255, 255, 255); // White text
+      pdf.text('Competition Packing Checklist', margin + 50, 30);
       
-      yPosition += 15;
+      // Reset text color for content
+      pdf.setTextColor(0, 0, 0);
+      yPosition = 65;
       
-      // Add discipline and date info
+      // Add discipline and date info with colored background
+      pdf.setFillColor(240, 248, 255); // Light blue background
+      pdf.rect(margin, yPosition - 5, pageWidth - 2 * margin, 20, 'F');
+      
       pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'normal');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(25, 56, 97); // Navy text
       const selectedDisciplineLabels = selectedDisciplines.map(d => 
         disciplines.find(disc => disc.id === d)?.label || d
       ).join(', ');
-      pdf.text(`Discipline: ${selectedDisciplineLabels}`, margin, yPosition);
-      yPosition += 8;
-      pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPosition);
+      pdf.text(`Discipline: ${selectedDisciplineLabels}`, margin + 5, yPosition + 5);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin + 5, yPosition + 12);
       
-      yPosition += 15;
+      pdf.setTextColor(0, 0, 0); // Reset to black
+      yPosition += 30;
 
-      filteredSections.forEach(section => {
+      filteredSections.forEach((section, sectionIndex) => {
         // Check if we need a new page
-        if (yPosition + (section.items.length * lineHeight) + 20 > pageHeight - margin) {
+        if (yPosition + (section.items.length * lineHeight) + 25 > pageHeight - margin) {
           pdf.addPage();
-          yPosition = margin;
+          // Add header to new page
+          pdf.setFillColor(25, 56, 97);
+          pdf.rect(0, 0, pageWidth, 25, 'F');
+          pdf.setFontSize(10);
+          pdf.setTextColor(255, 255, 255);
+          pdf.text('Dan Bizzarro Method - Competition Packing Checklist', margin, 15);
+          pdf.setTextColor(0, 0, 0);
+          yPosition = 35;
         }
 
-        // Section header
+        // Section header with colored background
+        const sectionColors = [
+          [76, 175, 80],   // Green
+          [33, 150, 243],  // Blue  
+          [255, 152, 0],   // Orange
+          [156, 39, 176],  // Purple
+          [255, 87, 34]    // Red-orange
+        ];
+        const colorIndex = sectionIndex % sectionColors.length;
+        const [r, g, b] = sectionColors[colorIndex];
+        
+        pdf.setFillColor(r, g, b);
+        pdf.rect(margin, yPosition - 2, pageWidth - 2 * margin, 12, 'F');
+        
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(section.title, margin, yPosition);
-        yPosition += 10;
+        pdf.setTextColor(255, 255, 255); // White text on colored background
+        pdf.text(section.title, margin + 5, yPosition + 6);
+        
+        pdf.setTextColor(0, 0, 0); // Reset to black
+        yPosition += 15;
         
         // Section items with checkboxes
         pdf.setFontSize(11);
         pdf.setFont('helvetica', 'normal');
         
-        section.items.forEach(item => {
+        section.items.forEach((item, itemIndex) => {
           // Check if we need a new page
-          if (yPosition > pageHeight - margin - 10) {
+          if (yPosition > pageHeight - margin - 15) {
             pdf.addPage();
-            yPosition = margin;
+            // Add header to new page
+            pdf.setFillColor(25, 56, 97);
+            pdf.rect(0, 0, pageWidth, 25, 'F');
+            pdf.setFontSize(10);
+            pdf.setTextColor(255, 255, 255);
+            pdf.text('Dan Bizzarro Method - Competition Packing Checklist', margin, 15);
+            pdf.setTextColor(0, 0, 0);
+            yPosition = 35;
           }
 
-          // Draw checkbox
+          // Alternating row colors for better readability
+          if (itemIndex % 2 === 0) {
+            pdf.setFillColor(248, 249, 250); // Light gray
+            pdf.rect(margin, yPosition - 2, pageWidth - 2 * margin, lineHeight, 'F');
+          }
+
+          // Draw checkbox with colored border
           const checkboxSize = 4;
-          const checkboxX = margin;
+          const checkboxX = margin + 5;
           const checkboxY = yPosition - 3;
           
-          // Draw checkbox square
+          pdf.setDrawColor(r, g, b); // Use section color for checkbox border
+          pdf.setLineWidth(0.5);
           pdf.rect(checkboxX, checkboxY, checkboxSize, checkboxSize, 'S');
           
           // If item is checked, add checkmark
           if (checkedItems.includes(item.id)) {
             pdf.setFontSize(8);
+            pdf.setTextColor(r, g, b);
             pdf.text('✓', checkboxX + 0.8, checkboxY + 2.8);
+            pdf.setTextColor(0, 0, 0);
             pdf.setFontSize(11);
           }
           
           // Add item text with word wrapping
-          const maxWidth = pageWidth - margin - checkboxSize - 10;
+          const maxWidth = pageWidth - margin - checkboxSize - 15;
           const textLines = pdf.splitTextToSize(item.name, maxWidth);
-          pdf.text(textLines, margin + checkboxSize + 5, yPosition);
+          pdf.text(textLines, margin + checkboxSize + 10, yPosition);
           
           yPosition += lineHeight * Math.max(1, textLines.length);
         });
         
-        yPosition += 8; // Extra space between sections
+        yPosition += 12; // Extra space between sections
       });
 
       // Add footer to all pages
       const pageCount = pdf.internal.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
         pdf.setPage(i);
+        
+        // Footer background
+        pdf.setFillColor(25, 56, 97);
+        pdf.rect(0, pageHeight - 20, pageWidth, 20, 'F');
+        
         pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
-        pdf.text(`Page ${i} of ${pageCount} - Dan Bizzarro Method`, margin, pageHeight - 10);
+        pdf.setTextColor(255, 255, 255);
+        pdf.text(`Page ${i} of ${pageCount}`, margin, pageHeight - 8);
+        pdf.text('Dan Bizzarro Method', pageWidth - margin - 40, pageHeight - 8);
+        
+        // Add website
+        pdf.setFontSize(7);
+        pdf.text('www.danbizzarromethod.com', pageWidth - margin - 50, pageHeight - 3);
       }
 
       pdf.save('competition-packing-checklist.pdf');
