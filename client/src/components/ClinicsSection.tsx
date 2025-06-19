@@ -640,12 +640,11 @@ export default function ClinicsSection() {
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-lg flex items-center justify-center">
+                    <div className="p-1 bg-white rounded-lg flex items-center justify-center">
                       <img 
                         src="/walking-icon.png" 
                         alt="Walking icon" 
-                        className="w-5 h-5"
-                        style={{ maxWidth: '20px', maxHeight: '20px' }}
+                        className="w-8 h-8"
                       />
                     </div>
                     <div>
