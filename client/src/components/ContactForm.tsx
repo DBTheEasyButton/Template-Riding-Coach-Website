@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -232,29 +232,6 @@ export default function ContactForm() {
                 <p className="text-gray-600">Based in Ascott-Under-Wychwood (Oxfordshire)</p>
                 <p className="text-sm text-gray-500">Available for clinics worldwide</p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-blue-600" />
-              Response Times
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div>
-              <p className="font-medium">General Inquiries</p>
-              <p className="text-sm text-gray-600">24-48 hours</p>
-            </div>
-            <div>
-              <p className="font-medium">Clinic Bookings</p>
-              <p className="text-sm text-gray-600">Same day response</p>
-            </div>
-            <div>
-              <p className="font-medium">Urgent Matters</p>
-              <p className="text-sm text-gray-600">Call directly for immediate assistance</p>
             </div>
           </CardContent>
         </Card>
