@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, AlertTriangle, Target } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import PromotionalBanners from "@/components/PromotionalBanners";
 
 interface QuizQuestion {
   id: string;
@@ -149,12 +150,26 @@ export default function ReadinessQuiz() {
         advice.push("Your show jumping consistency needs work. Try setting up simple courses at home and practice riding the same track repeatedly until both you and your horse can navigate it smoothly every time. Focus on rhythm and straightness between fences.");
       }
 
-      // Dressage specific advice
+      // Dressage specific advice with app links
       const dressageAnswer = answers['dressage'];
       if (dressageAnswer === 'not_yet') {
-        advice.push("Dressage fundamentals need attention before competing. Work on basic movements like accurate circles, transitions, and straightness. Consider lessons with a dressage instructor to establish proper basics. You need to be comfortable with all required movements for your level.");
+        advice.push({
+          text: "Dressage fundamentals need attention before competing. Work on basic movements like accurate circles, transitions, and straightness. The ",
+          link: { text: "Dan Bizzarro Method app", url: "/#app" },
+          continuation: " has excellent dressage training modules that can help you master the basics systematically. Consider lessons with a dressage instructor to establish proper basics."
+        });
       } else if (dressageAnswer === 'mostly') {
-        advice.push("Polish your dressage work by practicing the specific test movements regularly. Focus on accuracy, rhythm, and smooth transitions. Record yourself riding the test to identify areas needing improvement.");
+        advice.push({
+          text: "Polish your dressage work by practicing the specific test movements regularly. The ",
+          link: { text: "Dan Bizzarro Method app", url: "/#app" },
+          continuation: " offers advanced dressage techniques that can help refine your performance. Focus on accuracy, rhythm, and smooth transitions. Record yourself riding the test to identify areas needing improvement."
+        });
+      } else if (dressageAnswer === 'yes_basic') {
+        advice.push({
+          text: "Great dressage foundation! To take your performance to the competitive level, try the ",
+          link: { text: "Dan Bizzarro Method app", url: "/#app" },
+          continuation: " for advanced training techniques that can help you score better in competitions."
+        });
       }
 
       // Cross-country confidence advice
@@ -424,7 +439,26 @@ export default function ReadinessQuiz() {
                   {results.recommendations.map((rec, index) => (
                     <li key={index} className="flex items-start">
                       <div className={`w-2 h-2 rounded-full ${results.color.replace('text-', 'bg-')} mt-2 mr-3 flex-shrink-0`}></div>
-                      <span className="text-gray-700">{rec}</span>
+                      <span className="text-gray-700">
+                        {typeof rec === 'string' ? (
+                          rec
+                        ) : (
+                          <>
+                            {rec.text}
+                            <a 
+                              href={rec.link.url} 
+                              className="text-blue-600 hover:text-blue-800 underline font-medium"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href = rec.link.url;
+                              }}
+                            >
+                              {rec.link.text}
+                            </a>
+                            {rec.continuation}
+                          </>
+                        )}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -443,6 +477,11 @@ export default function ReadinessQuiz() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Promotional Banners */}
+          <div className="mt-12">
+            <PromotionalBanners />
+          </div>
         </div>
       </div>
       <Footer />
