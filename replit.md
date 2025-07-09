@@ -8,6 +8,13 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Admin News Management Fix (January 17, 2025)
+- ✅ **Fixed article creation button** - Create Article dialog now opens correctly
+- ✅ **Fixed article update functionality** - Update Article button now processes changes properly
+- ✅ **Improved error handling** for image uploads and form submission
+- ✅ **Enhanced debugging** for better troubleshooting of admin interface issues
+- ✅ **Optimized dialog state management** for smoother user experience
+
 ### SEO Optimization Implementation (January 17, 2025)
 - ✅ **Complete SEO audit and implementation**
 - ✅ **Dynamic page titles and meta descriptions** for all pages
