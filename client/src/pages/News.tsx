@@ -4,8 +4,8 @@ import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { SEOHead } from "@/components/SEOHead";
-import { StructuredData } from "@/components/StructuredData";
+import SEOHead from "@/components/SEOHead";
+import StructuredData from "@/components/StructuredData";
 import { Calendar, ArrowRight } from "lucide-react";
 
 export default function NewsPage() {
