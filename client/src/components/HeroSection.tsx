@@ -40,30 +40,32 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background images carousel */}
-      {images.map((image, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <img
-            src={image}
-            alt={`Hero background ${index + 1}`}
-            className="w-full h-full object-cover"
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            style={{
-              willChange: index === currentImageIndex ? 'auto' : 'opacity'
-            }}
-          />
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
-      ))}
-      
-      <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-100">
+      {/* Container that matches navigation width */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full relative">
+        {/* Background images carousel - constrained to navigation width */}
+        {images.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img
+              src={image}
+              alt={`Hero background ${index + 1}`}
+              className="w-full h-full object-cover rounded-lg"
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              style={{
+                willChange: index === currentImageIndex ? 'auto' : 'opacity'
+              }}
+            />
+            <div className="absolute inset-0 bg-black/40 rounded-lg"></div>
+          </div>
+        ))}
+        
+        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 h-full flex flex-col justify-center">
         <h1 className="text-6xl md:text-8xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
           Dan Bizzarro
         </h1>
@@ -78,12 +80,13 @@ export default function HeroSection() {
             BOOK A LESSON OR A CLINIC
           </Button>
         </div>
-      </div>
-      
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-        <button onClick={() => scrollToSection('#about')} className="block">
-          <ChevronDown className="w-6 h-6" />
-        </button>
+        </div>
+        
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+          <button onClick={() => scrollToSection('#about')} className="block">
+            <ChevronDown className="w-6 h-6" />
+          </button>
+        </div>
       </div>
     </section>
   );
