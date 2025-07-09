@@ -8,11 +8,7 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
-### News Navigation & Admin Management Fix (January 17, 2025)
-- ✅ **Fixed News navigation behavior** - News menu item now scrolls to news section on homepage
-- ✅ **Maintained dedicated News page** - /news route available for SEO and "View All News" functionality
-- ✅ **Fixed navigation routing** - Used wouter router instead of window.location for smooth navigation
-- ✅ **Enhanced news browsing** - Added proper news page with SEO optimization
+### Admin News Management Fix (January 17, 2025)
 - ✅ **Fixed article creation button** - Create Article dialog now opens correctly
 - ✅ **Fixed article update functionality** - Update Article button now processes changes properly
 - ✅ **Improved error handling** for image uploads and form submission

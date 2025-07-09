@@ -90,10 +90,7 @@ export default function NewsSection() {
         </div>
 
         <div className="text-center mt-12">
-          <Button 
-            onClick={() => setLocation("/news")}
-            className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
-          >
+          <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105">
             View All News
           </Button>
         </div>
