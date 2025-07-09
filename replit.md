@@ -8,6 +8,12 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Security Vulnerability Patch (January 17, 2025)
+- ✅ **Critical security fix** - Patched CVE-2025-30208 vulnerability in Vite
+- ✅ **Vite upgrade** from version 5.4.14 to 5.4.15 (security patched version)
+- ✅ **SEOHead component export fix** - Resolved import/export naming issue
+- ✅ **Application stability verified** - All functionality tested post-upgrade
+
 ### Admin News Management Fix (January 17, 2025)
 - ✅ **Fixed article creation button** - Create Article dialog now opens correctly
 - ✅ **Fixed article update functionality** - Update Article button now processes changes properly
