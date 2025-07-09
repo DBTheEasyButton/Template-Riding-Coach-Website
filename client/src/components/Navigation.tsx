@@ -8,7 +8,7 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCoachingDropdownOpen, setIsCoachingDropdownOpen] = useState(false);
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,19 +42,13 @@ export default function Navigation() {
   const handleNavigation = (href: string, label: string) => {
     if (label === "Home") {
       // Always navigate to home page
-      window.location.href = "/";
-      return;
-    }
-    
-    if (label === "News") {
-      // Navigate to dedicated news page
-      window.location.href = "/news";
+      setLocation("/");
       return;
     }
     
     if (location !== "/") {
       // If not on home page, go to home first then scroll
-      window.location.href = "/" + href;
+      setLocation("/" + href);
       return;
     }
     
