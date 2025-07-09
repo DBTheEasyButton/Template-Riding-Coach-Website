@@ -16,6 +16,8 @@ import SponsorsSection from "@/components/SponsorsSection";
 import ContactSection from "@/components/ContactSection";
 import NewsletterSubscription from "@/components/NewsletterSubscription";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
+import StructuredData, { organizationData, websiteData } from "@/components/StructuredData";
 
 export default function Home() {
   useEffect(() => {
@@ -34,6 +36,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Dan Bizzarro Method - Professional Eventing Coaching & Training"
+        description="Expert eventing coaching from international event rider Dan Bizzarro. Stride calculator, readiness assessments, and professional equestrian training in Oxfordshire."
+        keywords="eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, professional rider training"
+        canonical="https://dan-bizzarro.replit.app/"
+      />
+      <StructuredData type="Organization" data={organizationData} />
+      <StructuredData type="Website" data={websiteData} />
+      
       <Navigation />
       <HeroSection />
       <TestimonialsSection />

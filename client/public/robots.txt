@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /stride-calculator
+Allow: /readiness-quiz
+Allow: /packing-list-generator
+Allow: /competition-checklists
+Allow: /terms-and-conditions
+
+# Block admin areas
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://dan-bizzarro.replit.app/sitemap.xml

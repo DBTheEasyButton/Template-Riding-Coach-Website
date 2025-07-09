@@ -10,6 +10,8 @@ import jsPDF from 'jspdf';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PromotionalBanners from "@/components/PromotionalBanners";
+import SEOHead from "@/components/SEOHead";
+import StructuredData from "@/components/StructuredData";
 
 interface PackingItem {
   id: string;
@@ -561,9 +563,30 @@ export default function PackingListGenerator() {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
+  const packingListStructuredData = {
+    name: "Competition Packing List Generator",
+    description: "Professional tool to generate personalized competition packing checklists for equestrian events",
+    url: "https://dan-bizzarro.replit.app/packing-list-generator",
+    provider: {
+      "@type": "Organization",
+      name: "Dan Bizzarro Method"
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: "Equestrians, Competition Riders"
+    }
+  };
+
   if (currentStep === 'disciplines') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <SEOHead 
+          title="Competition Packing List Generator - Equestrian Checklist Tool | Dan Bizzarro Method"
+          description="Generate personalized competition packing checklists for dressage, show jumping, eventing, and other equestrian disciplines. Never forget essential gear again."
+          keywords="competition packing list, equestrian checklist, eventing gear, competition preparation, horse show packing, dressage equipment"
+          canonical="https://dan-bizzarro.replit.app/packing-list-generator"
+        />
+        <StructuredData type="Service" data={packingListStructuredData} />
         <Navigation />
         <div className="pt-24 pb-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -8,6 +8,8 @@ import { CheckCircle, AlertTriangle, Target } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PromotionalBanners from "@/components/PromotionalBanners";
+import SEOHead from "@/components/SEOHead";
+import StructuredData from "@/components/StructuredData";
 
 interface QuizQuestion {
   id: string;
@@ -225,9 +227,30 @@ export default function ReadinessQuiz() {
     'from-indigo-500 to-purple-500'
   ];
 
+  const readinessQuizStructuredData = {
+    name: "Eventing Readiness Assessment",
+    description: "Professional quiz to assess your readiness for eventing competitions",
+    url: "https://dan-bizzarro.replit.app/readiness-quiz",
+    provider: {
+      "@type": "Organization", 
+      name: "Dan Bizzarro Method"
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: "Event Riders, Equestrians"
+    }
+  };
+
   if (currentStep === 'level') {
     return (
       <div className="min-h-screen bg-white">
+        <SEOHead 
+          title="Eventing Readiness Quiz - Competition Assessment | Dan Bizzarro Method"
+          description="Professional eventing readiness assessment. Evaluate your dressage, jumping, and cross-country skills for BE80, BE90, BE100, and Novice competitions."
+          keywords="eventing quiz, competition readiness, BE80, BE90, BE100, novice eventing, horse competition assessment, eventing preparation"
+          canonical="https://dan-bizzarro.replit.app/readiness-quiz"
+        />
+        <StructuredData type="Course" data={readinessQuizStructuredData} />
         <Navigation />
         <div className="pt-24 pb-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

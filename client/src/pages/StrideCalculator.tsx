@@ -10,6 +10,8 @@ import { Calculator, Ruler, Users, Info, AlertTriangle, ArrowLeft } from "lucide
 import { ExerciseDiagram } from "@/components/ExerciseDiagram";
 import { Link } from "wouter";
 import { standardDistances, getStrideLength } from "@/data/strideData";
+import SEOHead from "@/components/SEOHead";
+import StructuredData from "@/components/StructuredData";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
 type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";
@@ -268,8 +270,29 @@ export default function StrideCalculator() {
     setResults(allCalculations);
   };
 
+  const strideCalculatorStructuredData = {
+    name: "Equestrian Stride Calculator",
+    description: "Professional stride distance calculator for horse training and course design",
+    url: "https://dan-bizzarro.replit.app/stride-calculator",
+    provider: {
+      "@type": "Organization",
+      name: "Dan Bizzarro Method"
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: "Equestrians, Horse Trainers, Course Designers"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <SEOHead 
+        title="Stride Calculator - Professional Equestrian Distance Tool | Dan Bizzarro Method"
+        description="Calculate precise stride distances for horse training. Professional tool for poles, jumps, and course design with measurements in yards and meters."
+        keywords="stride calculator, horse training, equestrian distances, pole distances, jump distances, course design, eventing calculator"
+        canonical="https://dan-bizzarro.replit.app/stride-calculator"
+      />
+      <StructuredData type="Service" data={strideCalculatorStructuredData} />
       <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
         <div className="mb-6 md:mb-8">
           <div className="flex items-center justify-between mb-4">
