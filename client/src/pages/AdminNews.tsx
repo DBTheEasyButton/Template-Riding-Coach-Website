@@ -244,7 +244,11 @@ export default function AdminNews() {
               <h1 className="text-4xl font-bold text-navy dark:text-white mb-2">News & Blog Management</h1>
               <p className="text-slate-600 dark:text-slate-300">Create and manage news articles and blog posts</p>
             </div>
-            <Button onClick={() => setIsCreateOpen(true)} className="flex items-center gap-2">
+            <Button onClick={() => {
+              console.log("Create Article button clicked");
+              setIsCreateOpen(true);
+              console.log("isCreateOpen set to true");
+            }} className="flex items-center gap-2">
               <Plus className="w-4 h-4" />
               Create Article
             </Button>
@@ -324,7 +328,9 @@ export default function AdminNews() {
           )}
 
           {/* Create/Edit Dialog */}
+          {console.log("Dialog render - isCreateOpen:", isCreateOpen, "editingNews:", editingNews)}
           <Dialog open={isCreateOpen || !!editingNews} onOpenChange={(open) => {
+            console.log("Dialog onOpenChange called with:", open);
             if (!open) {
               setIsCreateOpen(false);
               setEditingNews(null);
