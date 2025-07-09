@@ -46,6 +46,12 @@ export default function Navigation() {
       return;
     }
     
+    if (label === "News") {
+      // Navigate to dedicated news page
+      window.location.href = "/news";
+      return;
+    }
+    
     if (location !== "/") {
       // If not on home page, go to home first then scroll
       window.location.href = "/" + href;
