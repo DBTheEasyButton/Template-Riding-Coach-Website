@@ -144,11 +144,13 @@ export default function Navigation() {
           <div className="lg:hidden">
             <Button
               variant="ghost"
-              size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-800 hover:text-orange-500"
+              className="text-gray-800 hover:text-orange-500 flex items-center space-x-2 px-3 py-2"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <span className="text-sm font-medium">
+                {isMenuOpen ? "CLOSE" : "MENU"}
+              </span>
             </Button>
           </div>
         </div>
