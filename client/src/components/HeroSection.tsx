@@ -92,7 +92,7 @@ export default function HeroSection() {
             <img 
               src={facebookLogo} 
               alt="Follow Dan Bizzarro on Facebook" 
-              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl"
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl bg-white"
             />
           </a>
           <a 
@@ -104,7 +104,7 @@ export default function HeroSection() {
             <img 
               src={instagramLogo} 
               alt="Follow Dan Bizzarro on Instagram" 
-              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl"
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl bg-white"
             />
           </a>
         </div>
