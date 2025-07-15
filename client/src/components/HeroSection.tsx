@@ -5,8 +5,8 @@ import heroImagePath from "@assets/hero-background.jpg";
 import dressageImage from "@assets/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import crossCountryImage from "@assets/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
 import showJumpingImage from "@assets/Riot Boekelo sj 2022_1749504436583.jpg";
-import facebookLogo from "@assets/facebook-logo.png";
-import instagramLogo from "@assets/instagram-logo.png";
+import facebookLogo from "@assets/Facebook logo_1752563260842.png";
+import instagramLogo from "@assets/Instagram logo_1752563260842.jpg";
 
 export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
