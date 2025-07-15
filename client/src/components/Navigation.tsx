@@ -75,25 +75,25 @@ export default function Navigation() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-gray-200/95 backdrop-blur-md' : 'bg-gray-100/90 backdrop-blur-md'
     } border-b border-gray-300/50`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 xl:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex-shrink-0">
             <Link href="/">
               <img 
                 src={logoPath} 
                 alt="Dan Bizzarro Eventing" 
-                className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                className="h-10 sm:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </Link>
           </div>
           
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          <div className="hidden lg:block">
+            <div className="ml-4 xl:ml-10 flex items-baseline space-x-4 xl:space-x-6 2xl:space-x-8">
               {navItemsBefore.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-2 xl:px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105 text-sm xl:text-base"
                 >
                   {item.label}
                 </button>
@@ -105,7 +105,7 @@ export default function Navigation() {
                 onMouseEnter={() => setIsCoachingDropdownOpen(true)}
                 onMouseLeave={() => setIsCoachingDropdownOpen(false)}
               >
-                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105">
+                <button className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium flex items-center px-2 xl:px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105 text-sm xl:text-base">
                   Coaching
                   <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-300 ${isCoachingDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -133,7 +133,7 @@ export default function Navigation() {
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href, item.label)}
-                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105"
+                  className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium px-2 xl:px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105 text-sm xl:text-base"
                 >
                   {item.label}
                 </button>
@@ -141,7 +141,7 @@ export default function Navigation() {
             </div>
           </div>
           
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="icon"
@@ -156,7 +156,7 @@ export default function Navigation() {
       
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <div className="absolute top-full left-0 right-0 bg-gray-100 border-t border-gray-300 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto z-50">
             <div className="px-2 pt-2 pb-6 space-y-1">
               {navItemsBefore.map((item) => (
