@@ -5,6 +5,8 @@ import heroImagePath from "@assets/hero-background.jpg";
 import dressageImage from "@assets/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import crossCountryImage from "@assets/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
 import showJumpingImage from "@assets/Riot Boekelo sj 2022_1749504436583.jpg";
+import facebookLogo from "@assets/facebook-logo.png";
+import instagramLogo from "@assets/instagram-logo.png";
 
 export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -77,6 +79,34 @@ export default function HeroSection() {
           >
             BOOK A LESSON OR A CLINIC
           </Button>
+        </div>
+        
+        {/* Social Media Icons */}
+        <div className="flex justify-center space-x-6 opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.8s'}}>
+          <a 
+            href="https://www.facebook.com/DanBizzarro" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="transform hover:scale-110 transition-all duration-300"
+          >
+            <img 
+              src={facebookLogo} 
+              alt="Follow Dan Bizzarro on Facebook" 
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl"
+            />
+          </a>
+          <a 
+            href="https://www.instagram.com/danbizzarro/?hl=en-gb" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="transform hover:scale-110 transition-all duration-300"
+          >
+            <img 
+              src={instagramLogo} 
+              alt="Follow Dan Bizzarro on Instagram" 
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl"
+            />
+          </a>
         </div>
       </div>
       
