@@ -5,8 +5,8 @@ import heroImagePath from "@assets/hero-background.jpg";
 import dressageImage from "@assets/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import crossCountryImage from "@assets/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
 import showJumpingImage from "@assets/Riot Boekelo sj 2022_1749504436583.jpg";
-import facebookLogo from "@assets/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (5)_1752563784849.png";
-import instagramLogo from "@assets/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (6)_1752563784848.png";
+import facebookLogo from "@assets/Facebook logo_1752563260842.png";
+import instagramLogo from "@assets/Instagram logo_1752563260842.jpg";
 
 export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -89,13 +89,11 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             className="transform hover:scale-110 transition-all duration-300"
           >
-            <div 
-              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${facebookLogo})`,
-                backgroundSize: 'contain'
-              }}
-              aria-label="Follow Dan Bizzarro on Facebook"
+            <img 
+              src={facebookLogo} 
+              alt="Follow Dan Bizzarro on Facebook" 
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl object-contain"
+              style={{ imageRendering: 'crisp-edges' }}
             />
           </a>
           <a 
@@ -104,13 +102,11 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             className="transform hover:scale-110 transition-all duration-300"
           >
-            <div 
-              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${instagramLogo})`,
-                backgroundSize: 'contain'
-              }}
-              aria-label="Follow Dan Bizzarro on Instagram"
+            <img 
+              src={instagramLogo} 
+              alt="Follow Dan Bizzarro on Instagram" 
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl object-contain"
+              style={{ imageRendering: 'crisp-edges' }}
             />
           </a>
         </div>
