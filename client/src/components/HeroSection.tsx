@@ -89,10 +89,13 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             className="transform hover:scale-110 transition-all duration-300"
           >
-            <img 
-              src={facebookLogo} 
-              alt="Follow Dan Bizzarro on Facebook" 
-              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl"
+            <div 
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url(${facebookLogo})`,
+                backgroundSize: 'contain'
+              }}
+              aria-label="Follow Dan Bizzarro on Facebook"
             />
           </a>
           <a 
@@ -101,10 +104,13 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             className="transform hover:scale-110 transition-all duration-300"
           >
-            <img 
-              src={instagramLogo} 
-              alt="Follow Dan Bizzarro on Instagram" 
-              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl"
+            <div 
+              className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl bg-cover bg-center bg-no-repeat"
+              style={{
+                backgroundImage: `url(${instagramLogo})`,
+                backgroundSize: 'contain'
+              }}
+              aria-label="Follow Dan Bizzarro on Instagram"
             />
           </a>
         </div>
