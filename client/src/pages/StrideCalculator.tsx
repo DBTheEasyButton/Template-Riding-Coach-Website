@@ -339,7 +339,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setUserFeet(Math.max(4, userFeet - 1))}
                         disabled={userFeet <= 4}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         -
                       </Button>
@@ -347,6 +348,7 @@ export default function StrideCalculator() {
                         id="user-feet"
                         type="number"
                         inputMode="numeric"
+                        pattern="[0-9]*"
                         value={userFeet.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -359,11 +361,19 @@ export default function StrideCalculator() {
                             }
                           }
                         }}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                          const target = e.currentTarget;
+                          target.value = target.value.replace(/[^0-9]/g, '');
+                        }}
                         placeholder="5"
                         min="4"
                         max="7"
                         step="1"
-                        className="h-12 text-lg text-center flex-1"
+                        className="h-12 text-lg text-center flex-1 touch-manipulation"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                       />
                       <Button
                         type="button"
@@ -371,7 +381,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setUserFeet(Math.min(7, userFeet + 1))}
                         disabled={userFeet >= 7}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         +
                       </Button>
@@ -386,7 +397,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setUserInches(Math.max(0, userInches - 1))}
                         disabled={userInches <= 0}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         -
                       </Button>
@@ -394,6 +406,7 @@ export default function StrideCalculator() {
                         id="user-inches"
                         type="number"
                         inputMode="numeric"
+                        pattern="[0-9]*"
                         value={userInches.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -406,11 +419,19 @@ export default function StrideCalculator() {
                             }
                           }
                         }}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                          const target = e.currentTarget;
+                          target.value = target.value.replace(/[^0-9]/g, '');
+                        }}
                         placeholder="8"
                         min="0"
                         max="11"
                         step="1"
-                        className="h-12 text-lg text-center flex-1"
+                        className="h-12 text-lg text-center flex-1 touch-manipulation"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                       />
                       <Button
                         type="button"
@@ -418,7 +439,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setUserInches(Math.min(11, userInches + 1))}
                         disabled={userInches >= 11}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         +
                       </Button>
@@ -442,7 +464,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setHorseHands(Math.max(10, horseHands - 1))}
                         disabled={horseHands <= 10}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         -
                       </Button>
@@ -450,6 +473,7 @@ export default function StrideCalculator() {
                         id="horse-hands"
                         type="number"
                         inputMode="numeric"
+                        pattern="[0-9]*"
                         value={horseHands.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -462,11 +486,19 @@ export default function StrideCalculator() {
                             }
                           }
                         }}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                          const target = e.currentTarget;
+                          target.value = target.value.replace(/[^0-9]/g, '');
+                        }}
                         placeholder="16"
                         min="10"
                         max="18"
                         step="1"
-                        className="h-12 text-lg text-center flex-1"
+                        className="h-12 text-lg text-center flex-1 touch-manipulation"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                       />
                       <Button
                         type="button"
@@ -474,7 +506,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setHorseHands(Math.min(18, horseHands + 1))}
                         disabled={horseHands >= 18}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         +
                       </Button>
@@ -489,7 +522,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setHorseInches(Math.max(0, horseInches - 1))}
                         disabled={horseInches <= 0}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         -
                       </Button>
@@ -497,6 +531,7 @@ export default function StrideCalculator() {
                         id="horse-inches"
                         type="number"
                         inputMode="numeric"
+                        pattern="[0-9]*"
                         value={horseInches.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -509,11 +544,19 @@ export default function StrideCalculator() {
                             }
                           }
                         }}
+                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
+                          const target = e.currentTarget;
+                          target.value = target.value.replace(/[^0-9]/g, '');
+                        }}
                         placeholder="0"
                         min="0"
                         max="3"
                         step="1"
-                        className="h-12 text-lg text-center flex-1"
+                        className="h-12 text-lg text-center flex-1 touch-manipulation"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                       />
                       <Button
                         type="button"
@@ -521,7 +564,8 @@ export default function StrideCalculator() {
                         size="sm"
                         onClick={() => setHorseInches(Math.min(3, horseInches + 1))}
                         disabled={horseInches >= 3}
-                        className="h-12 w-12 flex-shrink-0"
+                        className="h-12 w-12 flex-shrink-0 touch-manipulation"
+                        onTouchStart={(e) => e.preventDefault()}
                       >
                         +
                       </Button>

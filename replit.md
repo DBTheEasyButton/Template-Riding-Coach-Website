@@ -8,6 +8,15 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Mobile Input Functionality Fix (January 20, 2025)
+- ✅ **Fixed mobile input issues** in the Stride/Distance Calculator
+- ✅ **Enhanced mobile touch support** with proper touch-action and user-select properties
+- ✅ **Added numeric input optimization** with pattern="[0-9]*" for better mobile keyboards
+- ✅ **Improved button touch handling** with preventDefault on touchstart for better responsiveness
+- ✅ **Added mobile CSS optimizations** including font-size fixes to prevent zoom on iOS input focus
+- ✅ **Enhanced input validation** with onInput handlers for real-time numeric filtering
+- ✅ **Added autocomplete and autocorrect disabling** for cleaner mobile experience
+
 ### Security Vulnerability Patch (January 17, 2025)
 - ✅ **Critical security fix** - Patched CVE-2025-30208 vulnerability in Vite
 - ✅ **Vite upgrade** from version 5.4.14 to 5.4.15 (security patched version)
