@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, Ruler, Users, Info, AlertTriangle, ArrowLeft } from "lucide-react";
 import { ExerciseDiagram } from "@/components/ExerciseDiagram";
+import { MobileNumericInput } from "@/components/MobileNumericInput";
 import { Link } from "wouter";
 import { standardDistances, getStrideLength } from "@/data/strideData";
 import SEOHead from "@/components/SEOHead";
@@ -344,36 +345,15 @@ export default function StrideCalculator() {
                       >
                         -
                       </Button>
-                      <Input
+                      <MobileNumericInput
                         id="user-feet"
-                        type="number"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={userFeet.toString()}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === '') {
-                            setUserFeet(4);
-                          } else {
-                            const num = parseInt(value, 10);
-                            if (!isNaN(num) && num >= 4 && num <= 7) {
-                              setUserFeet(num);
-                            }
-                          }
-                        }}
-                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                          const target = e.currentTarget;
-                          target.value = target.value.replace(/[^0-9]/g, '');
-                        }}
+                        value={userFeet}
+                        onChange={setUserFeet}
+                        min={4}
+                        max={7}
                         placeholder="5"
-                        min="4"
-                        max="7"
-                        step="1"
-                        className="h-12 text-lg text-center flex-1 touch-manipulation"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
+                        className="flex-1"
+                        label="User height in feet"
                       />
                       <Button
                         type="button"
@@ -402,36 +382,15 @@ export default function StrideCalculator() {
                       >
                         -
                       </Button>
-                      <Input
+                      <MobileNumericInput
                         id="user-inches"
-                        type="number"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={userInches.toString()}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === '') {
-                            setUserInches(0);
-                          } else {
-                            const num = parseInt(value, 10);
-                            if (!isNaN(num) && num >= 0 && num <= 11) {
-                              setUserInches(num);
-                            }
-                          }
-                        }}
-                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                          const target = e.currentTarget;
-                          target.value = target.value.replace(/[^0-9]/g, '');
-                        }}
+                        value={userInches}
+                        onChange={setUserInches}
+                        min={0}
+                        max={11}
                         placeholder="8"
-                        min="0"
-                        max="11"
-                        step="1"
-                        className="h-12 text-lg text-center flex-1 touch-manipulation"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
+                        className="flex-1"
+                        label="User height in inches"
                       />
                       <Button
                         type="button"
@@ -469,36 +428,15 @@ export default function StrideCalculator() {
                       >
                         -
                       </Button>
-                      <Input
+                      <MobileNumericInput
                         id="horse-hands"
-                        type="number"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={horseHands.toString()}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === '') {
-                            setHorseHands(10);
-                          } else {
-                            const num = parseInt(value, 10);
-                            if (!isNaN(num) && num >= 10 && num <= 18) {
-                              setHorseHands(num);
-                            }
-                          }
-                        }}
-                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                          const target = e.currentTarget;
-                          target.value = target.value.replace(/[^0-9]/g, '');
-                        }}
+                        value={horseHands}
+                        onChange={setHorseHands}
+                        min={10}
+                        max={18}
                         placeholder="16"
-                        min="10"
-                        max="18"
-                        step="1"
-                        className="h-12 text-lg text-center flex-1 touch-manipulation"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
+                        className="flex-1"
+                        label="Horse height in hands"
                       />
                       <Button
                         type="button"
@@ -527,36 +465,15 @@ export default function StrideCalculator() {
                       >
                         -
                       </Button>
-                      <Input
+                      <MobileNumericInput
                         id="horse-inches"
-                        type="number"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={horseInches.toString()}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === '') {
-                            setHorseInches(0);
-                          } else {
-                            const num = parseInt(value, 10);
-                            if (!isNaN(num) && num >= 0 && num <= 3) {
-                              setHorseInches(num);
-                            }
-                          }
-                        }}
-                        onInput={(e: React.FormEvent<HTMLInputElement>) => {
-                          const target = e.currentTarget;
-                          target.value = target.value.replace(/[^0-9]/g, '');
-                        }}
+                        value={horseInches}
+                        onChange={setHorseInches}
+                        min={0}
+                        max={3}
                         placeholder="0"
-                        min="0"
-                        max="3"
-                        step="1"
-                        className="h-12 text-lg text-center flex-1 touch-manipulation"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        autoCapitalize="off"
-                        spellCheck="false"
+                        className="flex-1"
+                        label="Horse height in inches"
                       />
                       <Button
                         type="button"
