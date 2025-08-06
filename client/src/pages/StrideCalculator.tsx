@@ -347,23 +347,17 @@ export default function StrideCalculator() {
                         id="user-feet"
                         type="number"
                         inputMode="numeric"
-                        value={userFeet || ''}
+                        value={userFeet.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === '') {
-                            setUserFeet(0);
+                            setUserFeet(4);
                           } else {
                             const num = parseInt(value, 10);
-                            if (!isNaN(num)) {
-                              setUserFeet(Math.max(4, Math.min(7, num)));
+                            if (!isNaN(num) && num >= 4 && num <= 7) {
+                              setUserFeet(num);
                             }
                           }
-                        }}
-                        onWheel={(e) => {
-                          e.preventDefault();
-                          const delta = e.deltaY > 0 ? -1 : 1;
-                          const newValue = Math.max(4, Math.min(7, userFeet + delta));
-                          setUserFeet(newValue);
                         }}
                         placeholder="5"
                         min="4"
@@ -400,23 +394,17 @@ export default function StrideCalculator() {
                         id="user-inches"
                         type="number"
                         inputMode="numeric"
-                        value={userInches || ''}
+                        value={userInches.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === '') {
                             setUserInches(0);
                           } else {
                             const num = parseInt(value, 10);
-                            if (!isNaN(num)) {
-                              setUserInches(Math.max(0, Math.min(11, num)));
+                            if (!isNaN(num) && num >= 0 && num <= 11) {
+                              setUserInches(num);
                             }
                           }
-                        }}
-                        onWheel={(e) => {
-                          e.preventDefault();
-                          const delta = e.deltaY > 0 ? -1 : 1;
-                          const newValue = Math.max(0, Math.min(11, userInches + delta));
-                          setUserInches(newValue);
                         }}
                         placeholder="8"
                         min="0"
@@ -462,23 +450,17 @@ export default function StrideCalculator() {
                         id="horse-hands"
                         type="number"
                         inputMode="numeric"
-                        value={horseHands || ''}
+                        value={horseHands.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === '') {
-                            setHorseHands(0);
+                            setHorseHands(10);
                           } else {
                             const num = parseInt(value, 10);
-                            if (!isNaN(num)) {
-                              setHorseHands(Math.max(10, Math.min(18, num)));
+                            if (!isNaN(num) && num >= 10 && num <= 18) {
+                              setHorseHands(num);
                             }
                           }
-                        }}
-                        onWheel={(e) => {
-                          e.preventDefault();
-                          const delta = e.deltaY > 0 ? -1 : 1;
-                          const newValue = Math.max(10, Math.min(18, horseHands + delta));
-                          setHorseHands(newValue);
                         }}
                         placeholder="16"
                         min="10"
@@ -515,23 +497,17 @@ export default function StrideCalculator() {
                         id="horse-inches"
                         type="number"
                         inputMode="numeric"
-                        value={horseInches || ''}
+                        value={horseInches.toString()}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === '') {
                             setHorseInches(0);
                           } else {
                             const num = parseInt(value, 10);
-                            if (!isNaN(num)) {
-                              setHorseInches(Math.max(0, Math.min(3, num)));
+                            if (!isNaN(num) && num >= 0 && num <= 3) {
+                              setHorseInches(num);
                             }
                           }
-                        }}
-                        onWheel={(e) => {
-                          e.preventDefault();
-                          const delta = e.deltaY > 0 ? -1 : 1;
-                          const newValue = Math.max(0, Math.min(3, horseInches + delta));
-                          setHorseInches(newValue);
                         }}
                         placeholder="0"
                         min="0"
