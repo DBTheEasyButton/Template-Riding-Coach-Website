@@ -41,7 +41,7 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 - ✅ **Open Graph and Twitter Cards** for social media optimization
 
 ### Previous Updates
-- ✅ **Dan Bizzarro Method App section** hidden per user request (January 20, 2025)
+- ✅ **Dan Bizzarro Method App section** hidden from homepage and navigation menu per user request (January 20, 2025)
 - ✅ **Newsletter section** logo made 40% smaller for better proportions
 - ✅ **Contact location** updated from Tuscany, Italy to Ascott-Under-Wychwood (Oxfordshire)
 - ✅ **Response Times section** eliminated from contact form
