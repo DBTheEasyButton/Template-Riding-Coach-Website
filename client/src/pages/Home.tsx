@@ -51,7 +51,8 @@ export default function Home() {
       <ClinicsSection />
       <AboutSection />
       <CoachingSection />
-      <AppSection />
+      {/* Dan Bizzarro Method App Section hidden per user request */}
+      {/* <AppSection /> */}
       {/* Training Videos Section temporarily hidden */}
       <PodcastSection />
       <ScheduleSection />
