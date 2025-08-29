@@ -28,8 +28,8 @@ export default function SidebarBanners() {
         </div>
       </div>
 
-      {/* App Banner */}
-      <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white rounded-lg p-4 shadow-lg">
+      {/* App Banner - Hidden per user request */}
+      {/* <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white rounded-lg p-4 shadow-lg">
         <div className="text-center">
           <Smartphone className="w-8 h-8 mx-auto mb-2 text-slate-300" />
           <h3 className="text-lg font-bold mb-2 text-white">Mobile App</h3>
@@ -46,7 +46,7 @@ export default function SidebarBanners() {
             <ArrowRight className="w-3 h-3 ml-1" />
           </Button>
         </div>
-      </div>
+      </div> */}
 
       {/* Interactive Sponsor Rotation */}
       <SponsorRotation />
