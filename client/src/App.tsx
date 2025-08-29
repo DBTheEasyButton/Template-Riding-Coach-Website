@@ -54,101 +54,36 @@ const PageLoader = () => (
   </div>
 );
 
+// Hidden/Blank page component
+const HiddenPage = () => (
+  <div className="min-h-screen bg-white">
+    {/* Content hidden per user request */}
+  </div>
+);
+
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/terms-and-conditions">
-        <Suspense fallback={<PageLoader />}>
-          <TermsAndConditions />
-        </Suspense>
-      </Route>
-      <Route path="/loyalty">
-        <Suspense fallback={<PageLoader />}>
-          <Loyalty />
-        </Suspense>
-      </Route>
-      <Route path="/competition-checklists">
-        <Suspense fallback={<PageLoader />}>
-          <CompetitionChecklists />
-        </Suspense>
-      </Route>
-      <Route path="/stride-calculator">
-        <Suspense fallback={<PageLoader />}>
-          <StrideCalculator />
-        </Suspense>
-      </Route>
-      <Route path="/readiness-quiz">
-        <Suspense fallback={<PageLoader />}>
-          <ReadinessQuiz />
-        </Suspense>
-      </Route>
-      <Route path="/packing-list-generator">
-        <Suspense fallback={<PageLoader />}>
-          <PackingListGenerator />
-        </Suspense>
-      </Route>
-      <Route path="/packing-list">
-        <Suspense fallback={<PageLoader />}>
-          <PackingListGenerator />
-        </Suspense>
-      </Route>
-      <Route path="/admin/clinics">
-        <Suspense fallback={<PageLoader />}>
-          <AdminClinics />
-        </Suspense>
-      </Route>
-      <Route path="/admin/contacts">
-        <Suspense fallback={<PageLoader />}>
-          <AdminContacts />
-        </Suspense>
-      </Route>
-      <Route path="/admin/email-marketing">
-        <Suspense fallback={<PageLoader />}>
-          <AdminEmailMarketing />
-        </Suspense>
-      </Route>
-      <Route path="/admin/registrations">
-        <Suspense fallback={<PageLoader />}>
-          <AdminRegistrations />
-        </Suspense>
-      </Route>
-      <Route path="/admin/gallery">
-        <Suspense fallback={<PageLoader />}>
-          <AdminGallery />
-        </Suspense>
-      </Route>
-      <Route path="/admin/news">
-        <Suspense fallback={<PageLoader />}>
-          <AdminNews />
-        </Suspense>
-      </Route>
-      <Route path="/admin/sponsors">
-        <Suspense fallback={<PageLoader />}>
-          <AdminSponsors />
-        </Suspense>
-      </Route>
-      <Route path="/admin/analytics">
-        <Suspense fallback={<PageLoader />}>
-          <AdminAnalytics />
-        </Suspense>
-      </Route>
-      <Route path="/admin/settings">
-        <Suspense fallback={<PageLoader />}>
-          <AdminSettings />
-        </Suspense>
-      </Route>
-      <Route path="/news/:id">
-        <Suspense fallback={<PageLoader />}>
-          <NewsArticle />
-        </Suspense>
-      </Route>
-      <Route path="/unsubscribe">
-        <Suspense fallback={<PageLoader />}>
-          <Unsubscribe />
-        </Suspense>
-      </Route>
-      <Route component={NotFound} />
+      <Route path="/" component={HiddenPage} />
+      <Route path="/terms-and-conditions" component={HiddenPage} />
+      <Route path="/loyalty" component={HiddenPage} />
+      <Route path="/competition-checklists" component={HiddenPage} />
+      <Route path="/stride-calculator" component={HiddenPage} />
+      <Route path="/readiness-quiz" component={HiddenPage} />
+      <Route path="/packing-list-generator" component={HiddenPage} />
+      <Route path="/packing-list" component={HiddenPage} />
+      <Route path="/admin/clinics" component={HiddenPage} />
+      <Route path="/admin/contacts" component={HiddenPage} />
+      <Route path="/admin/email-marketing" component={HiddenPage} />
+      <Route path="/admin/registrations" component={HiddenPage} />
+      <Route path="/admin/gallery" component={HiddenPage} />
+      <Route path="/admin/news" component={HiddenPage} />
+      <Route path="/admin/sponsors" component={HiddenPage} />
+      <Route path="/admin/analytics" component={HiddenPage} />
+      <Route path="/admin/settings" component={HiddenPage} />
+      <Route path="/news/:id" component={HiddenPage} />
+      <Route path="/unsubscribe" component={HiddenPage} />
+      <Route component={HiddenPage} />
     </Switch>
   );
 }

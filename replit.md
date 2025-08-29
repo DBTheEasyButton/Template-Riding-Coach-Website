@@ -8,6 +8,13 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Application Content Hidden (January 23, 2025)
+- ✅ **Hidden all Dan Bizzarro Method content** from public display
+- ✅ **Preserved application structure** - no files were deleted
+- ✅ **Replaced all routes with blank pages** showing only white background
+- ✅ **Maintained functionality** - application runs but shows no visible content
+- ✅ **Chat widget remains functional** for support purposes
+
 ### Mobile Input Functionality Fix (January 20, 2025)
 - ✅ **Fixed mobile input issues** in the Stride/Distance Calculator
 - ✅ **Enhanced mobile touch support** with proper touch-action and user-select properties
