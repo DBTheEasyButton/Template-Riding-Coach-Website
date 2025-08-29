@@ -57,12 +57,8 @@ export default function AdminEmailMarketing() {
 </p>`;
     
     // Add app and podcast promotion sections
-    const appPromotion = `
-<div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 25px; margin: 20px 0; border-radius: 12px; text-align: center;">
-  <h3 style="color: white; margin: 0 0 15px 0; font-size: 20px;">📱 Download the Dan Bizzarro Method App</h3>
-  <p style="color: white; margin: 0 0 20px 0; font-size: 14px; opacity: 0.9;">Access exclusive training content, track your progress, and connect with our community anywhere, anytime.</p>
-  <a href="https://apps.apple.com/app/dan-bizzarro-method" style="background: white; color: #f97316; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 700; display: inline-block; font-size: 16px;">Download on App Store</a>
-</div>`;
+    // App promotion section hidden per user request
+    const appPromotion = ``;
 
     const podcastPromotion = `
 <div style="background: #f8fafc; border: 2px solid #e2e8f0; padding: 25px; margin: 20px 0; border-radius: 12px;">
