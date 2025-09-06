@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Smartphone, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
 import SponsorRotation from "@/components/SponsorRotation";
 
@@ -28,25 +28,6 @@ export default function SidebarBanners() {
         </div>
       </div>
 
-      {/* App Banner - Hidden per user request */}
-      {/* <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white rounded-lg p-4 shadow-lg">
-        <div className="text-center">
-          <Smartphone className="w-8 h-8 mx-auto mb-2 text-slate-300" />
-          <h3 className="text-lg font-bold mb-2 text-white">Mobile App</h3>
-          <p className="text-slate-200 text-sm mb-3">
-            Training tools & calculators on your phone
-          </p>
-          <Button 
-            size="sm"
-            variant="secondary"
-            className="w-full bg-white text-slate-800 hover:bg-slate-50"
-            onClick={() => setLocation('/#app')}
-          >
-            Get App
-            <ArrowRight className="w-3 h-3 ml-1" />
-          </Button>
-        </div>
-      </div> */}
 
       {/* Interactive Sponsor Rotation */}
       <SponsorRotation />
