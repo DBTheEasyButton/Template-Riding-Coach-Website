@@ -501,9 +501,6 @@ export class DatabaseStorage implements IStorage {
                 <li>Updates on Dan's competitive journey</li>
                 <li>Special offers on training videos and courses</li>
               </ul>
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="https://www.danbizzarromethod.com/app" style="background: #f97316; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px;">Download Our App</a>
-              </div>
               <p>Best regards,<br>The Dan Bizzarro Method Team</p>
             </div>
           </div>
@@ -511,8 +508,6 @@ export class DatabaseStorage implements IStorage {
         textContent: `Welcome {{firstName}}!
 
 Thank you for joining the Dan Bizzarro Method community. You'll now receive exclusive training tips, clinic announcements, competition updates, and special offers.
-
-Download our app: https://www.danbizzarromethod.com/app
 
 Best regards,
 The Dan Bizzarro Method Team`,
