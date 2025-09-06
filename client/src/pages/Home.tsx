@@ -4,7 +4,6 @@ import HeroSection from "@/components/HeroSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import AboutSection from "@/components/AboutSection";
 import CoachingSection from "@/components/CoachingSection";
-import AppSection from "@/components/AppSection";
 import ClinicsSection from "@/components/ClinicsSection";
 
 // import TrainingVideosSection from "@/components/TrainingVideosSection";
@@ -51,8 +50,6 @@ export default function Home() {
       <ClinicsSection />
       <AboutSection />
       <CoachingSection />
-      {/* Dan Bizzarro Method App Section hidden per user request */}
-      {/* <AppSection /> */}
       {/* Training Videos Section temporarily hidden */}
       <PodcastSection />
       <ScheduleSection />
