@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Award, Users, Target, Star, Video, Smartphone } from "lucide-react";
+import { Award, Users, Target, Star, Video } from "lucide-react";
 import coachingImage1 from "@assets/1_1749388256611.jpg";
 import coachingImage2 from "@assets/2_1749388256612.jpg";
 
@@ -27,12 +27,6 @@ export default function CoachingSection() {
       title: "Remote Lessons",
       description: "Virtual coaching sessions allowing you to receive expert guidance from anywhere in the world."
     },
-    // Dan Bizzarro Method App service card hidden per user request
-    // {
-    //   icon: <Smartphone className="w-8 h-8" />,
-    //   title: "Dan Bizzarro Method App",
-    //   description: "Audio lessons and training content accessible through Dan's exclusive mobile application."
-    // }
   ];
 
   return (
@@ -152,14 +146,6 @@ export default function CoachingSection() {
             >
               Book a Private Lesson
             </Button>
-            {/* Dan Bizzarro Method App download button hidden per user request */}
-            {/* <Button 
-              onClick={() => window.open('https://apps.apple.com/gb/app/dan-bizzarro-method/id6451109275', '_blank')}
-              variant="outline"
-              className="border-2 border-navy text-navy hover:bg-navy hover:text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
-            >
-              Download the Dan Bizzarro Method App
-            </Button> */}
           </div>
         </div>
       </div>
