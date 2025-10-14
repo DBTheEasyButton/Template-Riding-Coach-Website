@@ -20,6 +20,7 @@ import {
   loyaltyDiscounts,
   competitionChecklists,
   sponsors,
+  ghlContacts,
   type User, 
   type InsertUser,
   type Achievement,
@@ -63,7 +64,9 @@ import {
   type InsertLoyaltyDiscount,
   type LoyaltyProgramWithDiscounts,
   type CompetitionChecklist,
-  type InsertCompetitionChecklist
+  type InsertCompetitionChecklist,
+  type GhlContact,
+  type InsertGhlContact
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql } from "drizzle-orm";
@@ -181,6 +184,15 @@ export interface IStorage {
   deleteSponsor(id: number): Promise<void>;
   trackSponsorClick(id: number): Promise<void>;
   trackSponsorImpression(id: number): Promise<void>;
+
+  // Go High Level Integration
+  getAllGhlContacts(): Promise<GhlContact[]>;
+  getGhlContact(id: number): Promise<GhlContact | undefined>;
+  getGhlContactByGhlId(ghlId: string): Promise<GhlContact | undefined>;
+  createGhlContact(contact: InsertGhlContact): Promise<GhlContact>;
+  updateGhlContact(id: number, updates: Partial<InsertGhlContact>): Promise<GhlContact | undefined>;
+  deleteGhlContact(id: number): Promise<void>;
+  syncGhlContacts(locationId: string): Promise<number>; // Returns count of synced contacts
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1672,6 +1684,128 @@ The Dan Bizzarro Method Team`,
         updatedAt: new Date()
       })
       .where(eq(sponsors.id, id));
+  }
+
+  // Go High Level Integration Methods
+  async getAllGhlContacts(): Promise<GhlContact[]> {
+    return await db.select().from(ghlContacts).orderBy(desc(ghlContacts.lastSyncedAt));
+  }
+
+  async getGhlContact(id: number): Promise<GhlContact | undefined> {
+    const result = await db.select().from(ghlContacts).where(eq(ghlContacts.id, id)).limit(1);
+    return result[0];
+  }
+
+  async getGhlContactByGhlId(ghlId: string): Promise<GhlContact | undefined> {
+    const result = await db.select().from(ghlContacts).where(eq(ghlContacts.ghlId, ghlId)).limit(1);
+    return result[0];
+  }
+
+  async createGhlContact(contact: InsertGhlContact): Promise<GhlContact> {
+    const result = await db.insert(ghlContacts).values(contact).returning();
+    return result[0];
+  }
+
+  async updateGhlContact(id: number, updates: Partial<InsertGhlContact>): Promise<GhlContact | undefined> {
+    const result = await db.update(ghlContacts)
+      .set({ ...updates, lastSyncedAt: new Date() })
+      .where(eq(ghlContacts.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteGhlContact(id: number): Promise<void> {
+    await db.delete(ghlContacts).where(eq(ghlContacts.id, id));
+  }
+
+  async syncGhlContacts(locationId: string): Promise<number> {
+    const apiKey = process.env.GHL_API_KEY;
+    if (!apiKey) {
+      throw new Error('GHL_API_KEY not configured');
+    }
+
+    let syncedCount = 0;
+    let startAfterId: string | undefined;
+    const limit = 100; // Maximum allowed by GHL API
+
+    try {
+      do {
+        // Build query parameters
+        const params = new URLSearchParams({
+          locationId,
+          limit: limit.toString()
+        });
+        
+        if (startAfterId) {
+          params.append('startAfterId', startAfterId);
+        }
+
+        // Fetch contacts from Go High Level API
+        const response = await fetch(
+          `https://services.leadconnectorhq.com/contacts/?${params}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Version': '2021-07-28',
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`GHL API error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.contacts && Array.isArray(data.contacts)) {
+          for (const contact of data.contacts) {
+            // Check if contact already exists
+            const existing = await this.getGhlContactByGhlId(contact.id);
+            
+            const contactData: InsertGhlContact = {
+              ghlId: contact.id,
+              locationId: contact.locationId || locationId,
+              firstName: contact.firstName || null,
+              lastName: contact.lastName || null,
+              email: contact.email || null,
+              phone: contact.phone || null,
+              timezone: contact.timezone || null,
+              country: contact.country || null,
+              source: contact.source || null,
+              dateAdded: contact.dateAdded ? new Date(contact.dateAdded) : null,
+              tags: contact.tags || [],
+              customFields: contact.customFields || null,
+              attributions: contact.attributions || null,
+              businessId: contact.businessId || null,
+              lastSyncedAt: new Date()
+            };
+
+            if (existing) {
+              await this.updateGhlContact(existing.id, contactData);
+            } else {
+              await this.createGhlContact(contactData);
+            }
+            
+            syncedCount++;
+          }
+
+          // Set up pagination for next batch
+          if (data.contacts.length === limit) {
+            startAfterId = data.contacts[data.contacts.length - 1].id;
+          } else {
+            startAfterId = undefined; // No more pages
+          }
+        } else {
+          startAfterId = undefined;
+        }
+      } while (startAfterId);
+
+      return syncedCount;
+    } catch (error) {
+      console.error('Error syncing GHL contacts:', error);
+      throw error;
+    }
   }
 }
 

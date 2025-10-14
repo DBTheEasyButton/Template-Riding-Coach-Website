@@ -1700,6 +1700,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Go High Level Integration routes
+  app.get("/api/ghl/contacts", async (req, res) => {
+    try {
+      const contacts = await storage.getAllGhlContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching GHL contacts:", error);
+      res.status(500).json({ message: "Failed to fetch GHL contacts" });
+    }
+  });
+
+  app.post("/api/ghl/sync", async (req, res) => {
+    try {
+      const { locationId } = req.body;
+      
+      if (!locationId) {
+        return res.status(400).json({ message: "Location ID is required" });
+      }
+
+      const syncedCount = await storage.syncGhlContacts(locationId);
+      res.json({ 
+        message: `Successfully synced ${syncedCount} contacts from Go High Level`,
+        count: syncedCount 
+      });
+    } catch (error) {
+      console.error("Error syncing GHL contacts:", error);
+      res.status(500).json({ 
+        message: error instanceof Error ? error.message : "Failed to sync GHL contacts" 
+      });
+    }
+  });
+
+  app.delete("/api/ghl/contacts/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteGhlContact(id);
+      res.status(200).json({ message: "GHL contact deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting GHL contact:", error);
+      res.status(500).json({ message: "Failed to delete GHL contact" });
+    }
+  });
+
   // Analytics routes
   app.get("/api/admin/analytics", async (req, res) => {
     try {

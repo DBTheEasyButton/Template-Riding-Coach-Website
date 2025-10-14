@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Calendar, MessageSquare, Home, Mail, Images, FileText, Star, BarChart3, Settings } from "lucide-react";
+import { Calendar, MessageSquare, Home, Mail, Images, FileText, Star, BarChart3, Settings, Globe } from "lucide-react";
 
 export default function AdminNavigation() {
   const [location] = useLocation();
@@ -70,6 +70,16 @@ export default function AdminNavigation() {
                 >
                   <Star className="w-4 h-4" />
                   Sponsors
+                </Button>
+              </Link>
+              <Link href="/admin/ghl">
+                <Button 
+                  variant={location === "/admin/ghl" ? "default" : "ghost"} 
+                  size="sm"
+                  className="flex items-center gap-2 w-full lg:w-auto"
+                >
+                  <Globe className="w-4 h-4" />
+                  Go High Level
                 </Button>
               </Link>
               <Link href="/admin/analytics">

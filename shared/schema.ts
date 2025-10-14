@@ -486,3 +486,32 @@ export type CompetitionChecklist = typeof competitionChecklists.$inferSelect;
 export type InsertCompetitionChecklist = z.infer<typeof insertCompetitionChecklistSchema>;
 export type Sponsor = typeof sponsors.$inferSelect;
 export type InsertSponsor = z.infer<typeof insertSponsorSchema>;
+
+// Go High Level Contacts
+export const ghlContacts = pgTable("ghl_contacts", {
+  id: serial("id").primaryKey(),
+  ghlId: text("ghl_id").notNull().unique(), // Go High Level contact ID
+  locationId: text("location_id").notNull(), // GHL Location/Sub-account ID
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  email: text("email"),
+  phone: text("phone"),
+  timezone: text("timezone"),
+  country: text("country"),
+  source: text("source"), // Form or entry source
+  dateAdded: timestamp("date_added"), // When contact was added to GHL
+  tags: text("tags").array(), // GHL tags
+  customFields: jsonb("custom_fields"), // GHL custom fields as JSON
+  attributions: jsonb("attributions"), // GHL attribution data
+  businessId: text("business_id"),
+  lastSyncedAt: timestamp("last_synced_at").notNull().defaultNow(), // When we last synced from GHL
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertGhlContactSchema = createInsertSchema(ghlContacts).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type GhlContact = typeof ghlContacts.$inferSelect;
+export type InsertGhlContact = z.infer<typeof insertGhlContactSchema>;

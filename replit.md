@@ -8,6 +8,15 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Go High Level Integration (October 14, 2025)
+- ✅ **Go High Level API Integration** - Connected to GHL API for contact management
+- ✅ **Database Schema** - Added ghl_contacts table to store synced contact data
+- ✅ **Backend API Routes** - Created endpoints for fetching and syncing GHL contacts
+- ✅ **Admin Interface** - Built /admin/ghl page for viewing and managing GHL contacts
+- ✅ **Automatic Sync** - Implemented pagination support to sync all contacts from GHL
+- ✅ **Contact Details** - Stores email, phone, tags, custom fields, and attribution data
+- ✅ **Secure API Key Management** - GHL_API_KEY stored securely in environment variables
+
 ### Mobile Input Functionality Fix (January 20, 2025)
 - ✅ **Fixed mobile input issues** in the Stride/Distance Calculator
 - ✅ **Enhanced mobile touch support** with proper touch-action and user-select properties
