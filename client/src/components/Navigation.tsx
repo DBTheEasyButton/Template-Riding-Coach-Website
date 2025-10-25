@@ -25,7 +25,6 @@ export default function Navigation() {
   ];
 
   const navItemsAfter = [
-    { href: "#schedule", label: "Schedule" },
     { href: "#gallery", label: "Gallery" },
     { href: "#news", label: "News" },
     { href: "#contact", label: "Contact" },

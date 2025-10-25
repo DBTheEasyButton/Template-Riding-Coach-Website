@@ -8,6 +8,11 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Competition Schedule Section Removed (October 25, 2025)
+- ✅ **Competition Schedule section removed** - Deleted ScheduleSection component from homepage
+- ✅ **Navigation updated** - Removed "Schedule" link from main navigation menu
+- ✅ **Component cleanup** - Deleted ScheduleSection.tsx component file
+
 ### Go High Level Integration (October 14, 2025)
 - ✅ **Go High Level API Integration** - Connected to GHL API for contact management
 - ✅ **Database Schema** - Added ghl_contacts table to store synced contact data
