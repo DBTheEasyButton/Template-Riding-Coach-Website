@@ -10,6 +10,11 @@ import Home from "@/pages/Home";
 import NotFound from "@/pages/not-found";
 
 // Lazy load other pages to reduce initial bundle size
+const About = lazy(() => import("@/pages/About"));
+const Services = lazy(() => import("@/pages/Services"));
+const Gallery = lazy(() => import("@/pages/Gallery"));
+const News = lazy(() => import("@/pages/News"));
+const Contact = lazy(() => import("@/pages/Contact"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
 const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
@@ -59,6 +64,31 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/about">
+        <Suspense fallback={<PageLoader />}>
+          <About />
+        </Suspense>
+      </Route>
+      <Route path="/services">
+        <Suspense fallback={<PageLoader />}>
+          <Services />
+        </Suspense>
+      </Route>
+      <Route path="/gallery">
+        <Suspense fallback={<PageLoader />}>
+          <Gallery />
+        </Suspense>
+      </Route>
+      <Route path="/news">
+        <Suspense fallback={<PageLoader />}>
+          <News />
+        </Suspense>
+      </Route>
+      <Route path="/contact">
+        <Suspense fallback={<PageLoader />}>
+          <Contact />
+        </Suspense>
+      </Route>
       <Route path="/terms-and-conditions">
         <Suspense fallback={<PageLoader />}>
           <TermsAndConditions />

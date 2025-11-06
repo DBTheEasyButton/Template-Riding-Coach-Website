@@ -20,42 +20,44 @@ export default function Navigation() {
   }, []);
 
   const navItemsBefore = [
-    { href: "#home", label: "Home" },
-    { href: "#about", label: "About" },
+    { href: "/", label: "Home", isPage: true },
+    { href: "/about", label: "About", isPage: true },
   ];
 
   const navItemsAfter = [
-    { href: "#gallery", label: "Gallery" },
-    { href: "#news", label: "News" },
-    { href: "#contact", label: "Contact" },
+    { href: "/services", label: "Services", isPage: true },
+    { href: "/gallery", label: "Gallery", isPage: true },
+    { href: "/news", label: "News", isPage: true },
+    { href: "/contact", label: "Contact", isPage: true },
   ];
 
   const coachingSubmenu = [
     { href: "#clinics", label: "Clinics" },
     { href: "#coaching", label: "Training with Dan" },
-    { href: "#training-videos", label: "Training Videos" },
     { href: "#podcast", label: "Our Equestrian Life Podcast" },
   ];
 
-  const handleNavigation = (href: string, label: string) => {
-    if (label === "Home") {
-      // Always navigate to home page
-      window.location.href = "/";
+  const handleNavigation = (href: string, label: string, isPage?: boolean) => {
+    setIsMenuOpen(false);
+    setIsCoachingDropdownOpen(false);
+    
+    if (isPage) {
+      // Use client-side routing for page navigation
+      window.location.href = href;
       return;
     }
     
+    // For hash/anchor navigation
     if (location !== "/") {
-      // If not on home page, go to home first then scroll
+      // Navigate to home page with hash
       window.location.href = "/" + href;
       return;
     }
     
-    // On home page, scroll to section
+    // Scroll to section on current page
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-      setIsCoachingDropdownOpen(false);
     }
   };
 
@@ -90,7 +92,7 @@ export default function Navigation() {
               {navItemsBefore.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => handleNavigation(item.href, item.label)}
+                  onClick={() => handleNavigation(item.href, item.label, item.isPage)}
                   className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium relative px-2 xl:px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105 text-sm xl:text-base"
                 >
                   {item.label}
@@ -130,7 +132,7 @@ export default function Navigation() {
               {navItemsAfter.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => handleNavigation(item.href, item.label)}
+                  onClick={() => handleNavigation(item.href, item.label, item.isPage)}
                   className="text-gray-800 hover:text-orange-500 transition-all duration-300 font-medium px-2 xl:px-3 py-2 rounded-lg hover:bg-orange-50 hover:scale-105 text-sm xl:text-base"
                 >
                   {item.label}
@@ -162,7 +164,7 @@ export default function Navigation() {
               {navItemsBefore.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => handleNavigation(item.href, item.label)}
+                  onClick={() => handleNavigation(item.href, item.label, item.isPage)}
                   className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
                 >
                   {item.label}
@@ -188,7 +190,7 @@ export default function Navigation() {
               {navItemsAfter.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => handleNavigation(item.href, item.label)}
+                  onClick={() => handleNavigation(item.href, item.label, item.isPage)}
                   className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
                 >
                   {item.label}
