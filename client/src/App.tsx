@@ -15,6 +15,14 @@ const Services = lazy(() => import("@/pages/Services"));
 const Gallery = lazy(() => import("@/pages/Gallery"));
 const News = lazy(() => import("@/pages/News"));
 const Contact = lazy(() => import("@/pages/Contact"));
+
+// Service-specific pages
+const PrivateLessons = lazy(() => import("@/pages/services/PrivateLessons"));
+const GroupClinics = lazy(() => import("@/pages/services/GroupClinics"));
+const RemoteCoaching = lazy(() => import("@/pages/services/RemoteCoaching"));
+const Dressage = lazy(() => import("@/pages/services/Dressage"));
+const ShowJumping = lazy(() => import("@/pages/services/ShowJumping"));
+const CrossCountry = lazy(() => import("@/pages/services/CrossCountry"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
 const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
@@ -72,6 +80,36 @@ function Router() {
       <Route path="/services">
         <Suspense fallback={<PageLoader />}>
           <Services />
+        </Suspense>
+      </Route>
+      <Route path="/services/private-lessons">
+        <Suspense fallback={<PageLoader />}>
+          <PrivateLessons />
+        </Suspense>
+      </Route>
+      <Route path="/services/group-clinics">
+        <Suspense fallback={<PageLoader />}>
+          <GroupClinics />
+        </Suspense>
+      </Route>
+      <Route path="/services/remote-coaching">
+        <Suspense fallback={<PageLoader />}>
+          <RemoteCoaching />
+        </Suspense>
+      </Route>
+      <Route path="/services/dressage">
+        <Suspense fallback={<PageLoader />}>
+          <Dressage />
+        </Suspense>
+      </Route>
+      <Route path="/services/show-jumping">
+        <Suspense fallback={<PageLoader />}>
+          <ShowJumping />
+        </Suspense>
+      </Route>
+      <Route path="/services/cross-country">
+        <Suspense fallback={<PageLoader />}>
+          <CrossCountry />
         </Suspense>
       </Route>
       <Route path="/gallery">

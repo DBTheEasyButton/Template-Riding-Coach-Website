@@ -19,7 +19,8 @@ export default function Services() {
         "Individual attention",
         "Flexible scheduling",
         "Progress tracking"
-      ]
+      ],
+      url: "/services/private-lessons"
     },
     {
       icon: <Calendar className="w-8 h-8" />,
@@ -30,7 +31,8 @@ export default function Services() {
         "All three eventing disciplines",
         "Small group sizes",
         "Competition preparation"
-      ]
+      ],
+      url: "/services/group-clinics"
     },
     {
       icon: <Video className="w-8 h-8" />,
@@ -41,7 +43,8 @@ export default function Services() {
         "Online consultations",
         "Worldwide availability",
         "Flexible feedback"
-      ]
+      ],
+      url: "/services/remote-coaching"
     },
   ];
 
@@ -49,17 +52,20 @@ export default function Services() {
     {
       title: "Flat Work & Dressage",
       description: "Develop foundation skills, improve balance, and achieve harmony with your horse through classical dressage training.",
-      icon: <Target className="w-12 h-12" />
+      icon: <Target className="w-12 h-12" />,
+      url: "/services/dressage"
     },
     {
       title: "Show Jumping",
       description: "Build confidence over fences, refine technique, and master course strategy for competitive success.",
-      icon: <Award className="w-12 h-12" />
+      icon: <Award className="w-12 h-12" />,
+      url: "/services/show-jumping"
     },
     {
       title: "Cross Country",
       description: "Tackle natural obstacles with boldness and precision, developing partnership and trust at speed.",
-      icon: <Target className="w-12 h-12" />
+      icon: <Target className="w-12 h-12" />,
+      url: "/services/cross-country"
     }
   ];
 
@@ -183,7 +189,7 @@ export default function Services() {
             {coachingServices.map((service, index) => (
               <div 
                 key={index} 
-                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col"
                 data-testid={`service-${service.title.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <div className="text-orange mb-4 flex justify-center">
@@ -191,7 +197,7 @@ export default function Services() {
                 </div>
                 <h3 className="text-2xl font-playfair font-bold mb-3 text-navy text-center">{service.title}</h3>
                 <p className="text-dark text-center mb-6 leading-relaxed">{service.description}</p>
-                <ul className="space-y-3">
+                <ul className="space-y-3 mb-6 flex-grow">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start text-dark">
                       <span className="text-orange mr-2">✓</span>
@@ -199,6 +205,14 @@ export default function Services() {
                     </li>
                   ))}
                 </ul>
+                <Link href={service.url}>
+                  <Button 
+                    className="w-full bg-orange hover:bg-orange/90 text-white rounded-full transition-all duration-300"
+                    data-testid={`button-learn-more-${service.title.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             ))}
           </div>
@@ -222,13 +236,21 @@ export default function Services() {
             {disciplines.map((discipline, index) => (
               <div 
                 key={index} 
-                className="text-center p-8 bg-gray-50 rounded-2xl hover:bg-orange/10 transition-all duration-300"
+                className="text-center p-8 bg-gray-50 rounded-2xl hover:bg-orange/10 transition-all duration-300 flex flex-col"
               >
                 <div className="text-orange mb-4 flex justify-center">
                   {discipline.icon}
                 </div>
                 <h3 className="text-2xl font-playfair font-bold mb-4 text-navy">{discipline.title}</h3>
-                <p className="text-dark leading-relaxed">{discipline.description}</p>
+                <p className="text-dark leading-relaxed mb-6 flex-grow">{discipline.description}</p>
+                <Link href={discipline.url}>
+                  <Button 
+                    className="w-full bg-navy hover:bg-slate-800 text-white rounded-full transition-all duration-300"
+                    data-testid={`button-learn-more-${discipline.title.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`}
+                  >
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             ))}
           </div>

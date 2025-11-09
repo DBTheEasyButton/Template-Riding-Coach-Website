@@ -8,6 +8,15 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Individual Service Pages (November 6, 2025)
+- ✅ **Created 6 dedicated service pages** - Each service now has its own detailed page
+- ✅ **Coaching format pages** - Private Lessons, Group Clinics, and Remote Coaching
+- ✅ **Discipline pages** - Dressage, Show Jumping, and Cross Country
+- ✅ **SEO optimized** - Unique meta tags, titles, and descriptions for each service
+- ✅ **Updated navigation** - Services page now links to individual service pages
+- ✅ **Sitemap updated** - All service pages added with priority 0.8
+- ✅ **Consistent structure** - Hero sections, features, benefits, and CTAs on all pages
+
 ### Google Analytics & Search Console Integration (November 6, 2025)
 - ✅ **Google Analytics 4 added** - Integrated GA4 tracking code (ID: G-92ED9H6CZP)
 - ✅ **PageView tracking enabled** - Automatic page view tracking across all pages
@@ -108,6 +117,14 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 - **Gallery (/gallery):** Photo gallery with lightbox functionality for viewing images
 - **News (/news):** Blog-style news page with featured articles and grid layout
 - **Contact (/contact):** Contact information, form, location details, and social media links
+
+### Individual Service Pages
+- **Private Lessons (/services/private-lessons):** One-on-one personalized instruction
+- **Group Clinics (/services/group-clinics):** Multi-day intensive training programs
+- **Remote Coaching (/services/remote-coaching):** Virtual coaching and video analysis
+- **Flat Work & Dressage (/services/dressage):** Foundation training and test preparation
+- **Show Jumping (/services/show-jumping):** Technique refinement and course strategy
+- **Cross Country (/services/cross-country):** Natural obstacles and terrain riding
 
 ### Tool Pages
 - **Stride Calculator:** Professional tool for equestrian distance calculations
