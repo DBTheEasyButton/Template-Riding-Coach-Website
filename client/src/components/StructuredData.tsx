@@ -38,8 +38,8 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
 // Common structured data configurations
 export const organizationData = {
   name: "Dan Bizzarro Method",
-  url: "https://dan-bizzarro.replit.app",
-  logo: "https://dan-bizzarro.replit.app/attached_assets/Logo-trasparenteRAST_1749385353493.png",
+  url: "https://danbizzarromethod.com",
+  logo: "https://danbizzarromethod.com/attached_assets/Logo-trasparenteRAST_1749385353493.png",
   description: "Professional eventing coaching and horse training services by international event rider Dan Bizzarro",
   address: {
     "@type": "PostalAddress",
@@ -63,12 +63,12 @@ export const organizationData = {
 
 export const websiteData = {
   name: "Dan Bizzarro Method",
-  url: "https://dan-bizzarro.replit.app",
+  url: "https://danbizzarromethod.com",
   description: "Professional eventing coaching, stride calculator, and competition preparation tools",
   publisher: organizationData,
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://dan-bizzarro.replit.app?q={search_term_string}",
+    target: "https://danbizzarromethod.com?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 };
