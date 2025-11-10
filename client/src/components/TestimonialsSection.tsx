@@ -2,8 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Testimonial } from "@shared/schema";
+import StructuredData from "@/components/StructuredData";
 
 export default function TestimonialsSection() {
   const { data: testimonials = [], isLoading } = useQuery<Testimonial[]>({
@@ -12,6 +13,39 @@ export default function TestimonialsSection() {
 
   const [hoveredTestimonial, setHoveredTestimonial] = useState<Testimonial | null>(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
+
+  // Calculate average rating for aggregate review schema
+  const averageRating = testimonials.length > 0 
+    ? testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length 
+    : 5;
+
+  // Create structured data for aggregate reviews
+  const reviewsStructuredData = testimonials.length > 0 ? {
+    "@type": "Product",
+    "name": "Dan Bizzarro Method Coaching Services",
+    "description": "Professional eventing coaching services including private lessons, show-jumping clinics, and virtual riding lessons",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": averageRating.toFixed(1),
+      "reviewCount": testimonials.length,
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": testimonials.slice(0, 10).map(testimonial => ({
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "name": testimonial.name
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": testimonial.rating,
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "reviewBody": testimonial.content
+    }))
+  } : null;
 
   const handleTestimonialHover = (testimonial: Testimonial, event: React.MouseEvent) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -52,6 +86,7 @@ export default function TestimonialsSection() {
 
   return (
     <section className="py-3 bg-gradient-to-br from-orange-50 to-orange-100">
+      {reviewsStructuredData && <StructuredData type="Product" data={reviewsStructuredData} />}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-6xl mx-auto overflow-hidden">
           <div className="flex animate-scroll gap-4">

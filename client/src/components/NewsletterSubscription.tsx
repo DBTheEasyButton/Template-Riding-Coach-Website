@@ -60,10 +60,10 @@ export default function NewsletterSubscription() {
             className="h-10 w-auto mx-auto mb-6"
           />
           <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
-            Stay Connected with Dan Bizzarro Method
+            Get Free Training Tips & Early Access to Clinics
           </h2>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Get exclusive training tips, clinic announcements, and updates on Dan's competitive journey delivered straight to your inbox.
+            Subscribe to receive exclusive training tips, early access to show-jumping and cross country clinics, competition insights, and updates on Dan's Olympic journey—delivered straight to your inbox.
           </p>
         </div>
 

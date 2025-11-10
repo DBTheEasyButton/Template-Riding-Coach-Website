@@ -53,7 +53,12 @@ export default function HeroSection() {
         >
           <img
             src={image}
-            alt={`Hero background ${index + 1}`}
+            alt={
+              index === 0 ? "Dan Bizzarro eventing competition" :
+              index === 1 ? "Dressage training session with Dan Bizzarro" :
+              index === 2 ? "Cross country coaching over natural obstacles" :
+              "Show jumping training clinic"
+            }
             className="w-full h-full object-cover"
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
@@ -66,12 +71,12 @@ export default function HeroSection() {
       ))}
       
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-        <h1 className="text-6xl md:text-8xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-          Dan Bizzarro
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.4s'}}>
+        <h1 className="text-4xl md:text-6xl font-inter font-light mb-6 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.2s'}}>
           International Event Rider & Coach
-        </h2>
+        </h1>
+        <p className="text-6xl md:text-8xl font-playfair font-bold mb-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+          Dan Bizzarro
+        </p>
         <div className="flex justify-center opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
           <Button 
             onClick={() => scrollToSection('#clinics')}
