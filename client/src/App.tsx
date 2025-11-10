@@ -87,7 +87,7 @@ function Router() {
           <PrivateLessons />
         </Suspense>
       </Route>
-      <Route path="/services/group-clinics">
+      <Route path="/coaching/clinics">
         <Suspense fallback={<PageLoader />}>
           <GroupClinics />
         </Suspense>

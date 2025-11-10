@@ -118,7 +118,7 @@ export default function Home() {
               <div className="text-orange mb-4 flex justify-center">
                 <Award className="w-12 h-12" />
               </div>
-              <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Group Clinics</h3>
+              <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Clinics</h3>
               <p className="text-dark leading-relaxed">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300">

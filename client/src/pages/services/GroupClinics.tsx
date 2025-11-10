@@ -40,7 +40,7 @@ export default function GroupClinics() {
         title="Show Jumping, Polework & Cross Country Clinics | Dan Bizzarro Method"
         description="Join our show-jumping clinic, polework clinic, and cross country clinic in Oxfordshire. Expert eventing coach Dan Bizzarro offers competition preparation clinics and single-day training for all levels."
         keywords="show-jumping clinic, polework clinic, cross country clinic, competition preparation clinic, eventing coach, equestrian lessons Oxfordshire, Dan Bizzarro Method, show jumping coach"
-        canonical="https://dan-bizzarro.replit.app/services/group-clinics"
+        canonical="https://dan-bizzarro.replit.app/coaching/clinics"
       />
       
       <Navigation />
@@ -56,7 +56,7 @@ export default function GroupClinics() {
               </div>
             </div>
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              Group Clinics
+              Clinics
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
               Show jumping, polework & cross country training for all levels

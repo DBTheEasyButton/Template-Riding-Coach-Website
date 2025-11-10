@@ -8,6 +8,12 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Clinics Page URL Update (November 10, 2025)
+- ✅ **Renamed "Group Clinics" to "Clinics"** - Simplified naming for better clarity
+- ✅ **Updated URL structure** - Changed from `/services/group-clinics` to `/coaching/clinics`
+- ✅ **Updated all internal links** - Services page, Home page, and navigation now point to new URL
+- ✅ **SEO metadata updated** - Canonical URL updated to reflect new path structure
+
 ### SEO & Content Optimization for Dual Audience (November 10, 2025)
 - ✅ **Balanced messaging for dual audience** - Content now appeals to both amateur riders (riding for enjoyment) and competitive riders (beginner to international level)
 - ✅ **Target keyword optimization** - Naturally integrated all primary keywords across service pages:

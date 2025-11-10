@@ -24,7 +24,7 @@ export default function Services() {
     },
     {
       icon: <Calendar className="w-8 h-8" />,
-      title: "Group Clinics",
+      title: "Clinics",
       description: "Group training sessions combining technical instruction with competitive preparation strategies.",
       features: [
         "Multi-day intensive training",
@@ -32,7 +32,7 @@ export default function Services() {
         "Small group sizes",
         "Competition preparation"
       ],
-      url: "/services/group-clinics"
+      url: "/coaching/clinics"
     },
     {
       icon: <Video className="w-8 h-8" />,
