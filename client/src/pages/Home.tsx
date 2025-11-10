@@ -127,7 +127,7 @@ export default function Home() {
                 <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Clinics</h3>
                 <p className="text-dark leading-relaxed mb-4">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
                 <span className="text-orange font-semibold group-hover:underline inline-flex items-center">
-                  Join our show-jumping clinics <ArrowRight className="ml-2 w-4 h-4" />
+                  Join Dan's clinics <ArrowRight className="ml-2 w-4 h-4" />
                 </span>
               </div>
             </Link>
