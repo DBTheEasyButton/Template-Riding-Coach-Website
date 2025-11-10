@@ -25,7 +25,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Frontend:** React.js with TypeScript, Tailwind CSS for styling, Wouter for client-side routing, React Hook Form with Zod for form validation, TanStack Query for data fetching and state management.
 - **Backend:** Express.js.
 - **Database:** PostgreSQL.
-- **SEO:** Dynamic meta tag management (SEOHead component), JSON-LD structured data (StructuredData component), robots.txt, sitemap.xml, and web app manifest for PWA capabilities. Comprehensive technical and content SEO optimizations are implemented, including canonical URLs, Open Graph, and Twitter Cards.
+- **SEO:** Dynamic meta tag management (SEOHead component), JSON-LD structured data (StructuredData component), robots.txt, sitemap.xml, and web app manifest for PWA capabilities. All canonical URLs point to danbizzarromethod.com (not replit.app domain). Comprehensive technical and content SEO optimizations are implemented, including canonical URLs, Open Graph, and Twitter Cards. Home page features unique title: "Dan Bizzarro Method – International Eventing Coach & Training Clinics" and description highlighting Olympic-shortlisted credentials.
 
 **Feature Specifications:**
 - **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement. Mobile registration forms now display available spaces for each session.
