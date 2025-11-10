@@ -4,7 +4,7 @@ import podcastLogo from "@assets/Podcast Logo_1749499160253.png";
 
 export default function PodcastSection() {
   return (
-    <section id="podcast" className="py-24 bg-gray-50 text-dark">
+    <section id="podcast" className="py-7 bg-gray-50 text-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-playfair font-bold mb-6 text-navy">Our Equestrian Life Podcast</h2>

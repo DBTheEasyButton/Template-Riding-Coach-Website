@@ -39,7 +39,7 @@ export default function TestimonialsSection() {
 
   if (isLoading) {
     return (
-      <section className="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
+      <section className="py-6 bg-gradient-to-br from-orange-50 to-orange-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
@@ -51,7 +51,7 @@ export default function TestimonialsSection() {
   }
 
   return (
-    <section className="py-10 bg-gradient-to-br from-orange-50 to-orange-100">
+    <section className="py-3 bg-gradient-to-br from-orange-50 to-orange-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative max-w-6xl mx-auto overflow-hidden">
           <div className="flex animate-scroll gap-4">
