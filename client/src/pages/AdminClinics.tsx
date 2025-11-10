@@ -35,9 +35,7 @@ export default function AdminClinics() {
     image: "",
     isActive: true,
     hasMultipleSessions: false,
-    clinicType: "single",
-    crossCountryMaxParticipants: "12",
-    showJumpingMaxParticipants: "12"
+    clinicType: "single"
   });
 
   const [sessions, setSessions] = useState([
@@ -46,6 +44,7 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
+      maxParticipants: 12,
       requirements: ""
     }
   ]);
@@ -124,15 +123,14 @@ export default function AdminClinics() {
       image: "",
       isActive: true,
       hasMultipleSessions: false,
-      clinicType: "single",
-      crossCountryMaxParticipants: "12",
-      showJumpingMaxParticipants: "12"
+      clinicType: "single"
     });
     setSessions([{
       sessionName: "",
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
+      maxParticipants: 12,
       requirements: ""
     }]);
     setMissingFields([]);
@@ -144,6 +142,7 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
+      maxParticipants: 12,
       requirements: ""
     };
     setSessions([...sessions, newSession]);
@@ -254,9 +253,7 @@ export default function AdminClinics() {
       image: freshClinic.image || "",
       isActive: freshClinic.isActive !== undefined ? freshClinic.isActive : true,
       hasMultipleSessions: freshClinic.hasMultipleSessions || false,
-      clinicType: freshClinic.clinicType || "single",
-      crossCountryMaxParticipants: freshClinic.crossCountryMaxParticipants?.toString() || "12",
-      showJumpingMaxParticipants: freshClinic.showJumpingMaxParticipants?.toString() || "12"
+      clinicType: freshClinic.clinicType || "single"
     };
     
     console.log('Setting form data:', newFormData);
@@ -269,6 +266,7 @@ export default function AdminClinics() {
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
         price: session.price ? Math.round(session.price / 100) : 80,
+        maxParticipants: session.maxParticipants || 12,
         requirements: session.requirements || ""
       }));
       console.log('Setting sessions:', existingSessions);
@@ -279,6 +277,7 @@ export default function AdminClinics() {
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
+        maxParticipants: 12,
         requirements: ""
       }]);
     }
@@ -307,9 +306,7 @@ export default function AdminClinics() {
       image: clinic.image,
       isActive: true, // Default new clinic to active
       hasMultipleSessions: clinic.hasMultipleSessions || false,
-      clinicType: clinic.clinicType || "single",
-      crossCountryMaxParticipants: clinic.crossCountryMaxParticipants?.toString() || "12",
-      showJumpingMaxParticipants: clinic.showJumpingMaxParticipants?.toString() || "12"
+      clinicType: clinic.clinicType || "single"
     });
     
     // Copy session data if it exists
@@ -319,6 +316,7 @@ export default function AdminClinics() {
         discipline: session.discipline,
         skillLevel: session.skillLevel,
         price: session.price / 100, // Convert from cents to pounds for form display
+        maxParticipants: session.maxParticipants || 12,
         requirements: session.requirements || ""
       }));
       setSessions(clonedSessions);
@@ -329,6 +327,7 @@ export default function AdminClinics() {
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
+        maxParticipants: 12,
         requirements: ""
       }]);
     }
@@ -387,8 +386,6 @@ export default function AdminClinics() {
       endDate: endDate,
       price: formData.clinicType === 'single' ? Number(formData.price) : 0,
       maxParticipants: Number(formData.maxParticipants),
-      crossCountryMaxParticipants: formData.hasMultipleSessions ? Number(formData.crossCountryMaxParticipants) : undefined,
-      showJumpingMaxParticipants: formData.hasMultipleSessions ? Number(formData.showJumpingMaxParticipants) : undefined,
       sessions: formData.hasMultipleSessions ? sessions : []
     };
 
@@ -814,6 +811,18 @@ export default function AdminClinics() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
+                        <Label>Max Participants</Label>
+                        <Input
+                          type="number"
+                          value={session.maxParticipants}
+                          onChange={(e) => updateSession(index, 'maxParticipants', parseInt(e.target.value) || 12)}
+                          placeholder="12"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="grid gap-2">
                         <Label>Price (£) *</Label>
                         <Input
                           type="text"
@@ -855,15 +864,14 @@ export default function AdminClinics() {
                           <p className="text-sm text-red-500">Price is required</p>
                         )}
                       </div>
-                    </div>
-                    
-                    <div className="grid gap-2">
-                      <Label>Requirements</Label>
-                      <Input
-                        value={session.requirements}
-                        onChange={(e) => updateSession(index, 'requirements', e.target.value)}
-                        placeholder="e.g., Own horse required, Suitable for green horses"
-                      />
+                      <div className="grid gap-2">
+                        <Label>Requirements</Label>
+                        <Input
+                          value={session.requirements}
+                          onChange={(e) => updateSession(index, 'requirements', e.target.value)}
+                          placeholder="e.g., Own horse required"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -875,23 +883,20 @@ export default function AdminClinics() {
                   </Button>
                 </div>
                 
-                {/* Overall Max Participants for Multi-Session Clinics */}
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+                {/* Total Max Participants for Multi-Session Clinics */}
+                <div className="pt-4 border-t">
                   <div className="grid gap-2">
-                    <Label>Cross Country Max Participants (All Classes)</Label>
+                    <Label htmlFor="totalMaxParticipants">Total Clinic Max Participants (Optional)</Label>
                     <Input
+                      id="totalMaxParticipants"
                       type="number"
-                      value={formData.crossCountryMaxParticipants}
-                      onChange={(e) => setFormData({ ...formData, crossCountryMaxParticipants: e.target.value })}
+                      value={formData.maxParticipants}
+                      onChange={(e) => setFormData({ ...formData, maxParticipants: e.target.value })}
+                      placeholder="Overall capacity for entire clinic"
                     />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label>Show Jumping Max Participants (All Classes)</Label>
-                    <Input
-                      type="number"
-                      value={formData.showJumpingMaxParticipants}
-                      onChange={(e) => setFormData({ ...formData, showJumpingMaxParticipants: e.target.value })}
-                    />
+                    <p className="text-sm text-gray-500">
+                      Set an overall cap for the entire clinic across all sessions. Leave blank or set high if you want individual session limits only.
+                    </p>
                   </div>
                 </div>
               </div>
