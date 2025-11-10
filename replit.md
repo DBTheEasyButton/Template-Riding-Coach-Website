@@ -28,7 +28,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **SEO:** Dynamic meta tag management (SEOHead component), JSON-LD structured data (StructuredData component), robots.txt, sitemap.xml, and web app manifest for PWA capabilities. Comprehensive technical and content SEO optimizations are implemented, including canonical URLs, Open Graph, and Twitter Cards.
 
 **Feature Specifications:**
-- **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement.
+- **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement. Mobile registration forms now display available spaces for each session.
 - **Interactive Tools:**
     - **Readiness Quiz:** An interactive assessment with a specific question order.
     - **Stride Calculator:** A professional tool for equestrian distance calculations.
