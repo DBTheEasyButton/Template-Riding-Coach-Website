@@ -230,7 +230,7 @@ export default function ReadinessQuiz() {
   const readinessQuizStructuredData = {
     name: "Eventing Readiness Assessment",
     description: "Professional quiz to assess your readiness for eventing competitions",
-    url: "https://dan-bizzarro.replit.app/readiness-quiz",
+    url: "https://danbizzarromethod.com/readiness-quiz",
     provider: {
       "@type": "Organization", 
       name: "Dan Bizzarro Method"
@@ -248,7 +248,7 @@ export default function ReadinessQuiz() {
           title="Eventing Readiness Quiz - Competition Assessment | Dan Bizzarro Method"
           description="Professional eventing readiness assessment. Evaluate your dressage, jumping, and cross-country skills for BE80, BE90, BE100, and Novice competitions."
           keywords="eventing quiz, competition readiness, BE80, BE90, BE100, novice eventing, horse competition assessment, eventing preparation"
-          canonical="https://dan-bizzarro.replit.app/readiness-quiz"
+          canonical="https://danbizzarromethod.com/readiness-quiz"
         />
         <StructuredData type="Course" data={readinessQuizStructuredData} />
         <Navigation />

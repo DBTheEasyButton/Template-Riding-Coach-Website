@@ -274,7 +274,7 @@ export default function StrideCalculator() {
   const strideCalculatorStructuredData = {
     name: "Equestrian Stride Calculator",
     description: "Professional stride distance calculator for horse training and course design",
-    url: "https://dan-bizzarro.replit.app/stride-calculator",
+    url: "https://danbizzarromethod.com/stride-calculator",
     provider: {
       "@type": "Organization",
       name: "Dan Bizzarro Method"
@@ -291,7 +291,7 @@ export default function StrideCalculator() {
         title="Stride Calculator - Professional Equestrian Distance Tool | Dan Bizzarro Method"
         description="Calculate precise stride distances for horse training. Professional tool for poles, jumps, and course design with measurements in yards and meters."
         keywords="stride calculator, horse training, equestrian distances, pole distances, jump distances, course design, eventing calculator"
-        canonical="https://dan-bizzarro.replit.app/stride-calculator"
+        canonical="https://danbizzarromethod.com/stride-calculator"
       />
       <StructuredData type="Service" data={strideCalculatorStructuredData} />
       <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">

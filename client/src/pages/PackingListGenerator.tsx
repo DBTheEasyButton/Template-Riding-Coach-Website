@@ -566,7 +566,7 @@ export default function PackingListGenerator() {
   const packingListStructuredData = {
     name: "Competition Packing List Generator",
     description: "Professional tool to generate personalized competition packing checklists for equestrian events",
-    url: "https://dan-bizzarro.replit.app/packing-list-generator",
+    url: "https://danbizzarromethod.com/packing-list-generator",
     provider: {
       "@type": "Organization",
       name: "Dan Bizzarro Method"
@@ -584,7 +584,7 @@ export default function PackingListGenerator() {
           title="Competition Packing List Generator - Equestrian Checklist Tool | Dan Bizzarro Method"
           description="Generate personalized competition packing checklists for dressage, show jumping, eventing, and other equestrian disciplines. Never forget essential gear again."
           keywords="competition packing list, equestrian checklist, eventing gear, competition preparation, horse show packing, dressage equipment"
-          canonical="https://dan-bizzarro.replit.app/packing-list-generator"
+          canonical="https://danbizzarromethod.com/packing-list-generator"
         />
         <StructuredData type="Service" data={packingListStructuredData} />
         <Navigation />
