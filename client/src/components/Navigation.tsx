@@ -196,42 +196,6 @@ export default function Navigation() {
                   {item.label}
                 </button>
               ))}
-              
-              {/* Additional mobile-only links */}
-              <div className="border-t pt-2 mt-2">
-                <Link href="/competition-checklists">
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                  >
-                    Competition Checklists
-                  </button>
-                </Link>
-                <Link href="/stride-calculator">
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                  >
-                    Stride Calculator
-                  </button>
-                </Link>
-                <Link href="/loyalty">
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                  >
-                    Loyalty Program
-                  </button>
-                </Link>
-                <Link href="/terms-and-conditions">
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block w-full text-left px-3 py-2 text-gray-800 hover:text-orange-500 transition-colors duration-200"
-                  >
-                    Terms & Conditions
-                  </button>
-                </Link>
-              </div>
             </div>
           </div>
         </div>
