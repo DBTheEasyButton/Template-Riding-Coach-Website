@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import ClinicsSection from "@/components/ClinicsSection";
 import { Button } from "@/components/ui/button";
 import { Calendar, Check, Users, Award, Target } from "lucide-react";
 
@@ -13,24 +14,6 @@ export default function GroupClinics() {
     "Competition preparation focus",
     "Structured lesson progression",
     "Group camaraderie and learning"
-  ];
-
-  const clinicFormats = [
-    {
-      title: "Weekend Clinics",
-      description: "Two-day intensive training covering multiple disciplines",
-      duration: "Saturday & Sunday"
-    },
-    {
-      title: "Multi-Day Events",
-      description: "Extended training camps with comprehensive instruction",
-      duration: "3-5 days"
-    },
-    {
-      title: "Discipline-Specific",
-      description: "Focused clinics on dressage, jumping, or cross-country",
-      duration: "1-2 days"
-    }
   ];
 
   const benefits = [
@@ -117,36 +100,6 @@ export default function GroupClinics() {
         </div>
       </section>
 
-      {/* Clinic Formats Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Clinic Formats
-            </h2>
-            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {clinicFormats.map((format, index) => (
-              <div 
-                key={index} 
-                className="bg-white rounded-2xl p-8 shadow-lg"
-                data-testid={`clinic-format-${format.title.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                <h3 className="text-2xl font-playfair font-bold text-navy mb-3 text-center">{format.title}</h3>
-                <div className="text-center mb-4">
-                  <span className="inline-block bg-orange/10 text-orange px-4 py-2 rounded-full text-sm font-semibold">
-                    {format.duration}
-                  </span>
-                </div>
-                <p className="text-dark leading-relaxed text-center">{format.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Benefits Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -177,67 +130,14 @@ export default function GroupClinics() {
         </div>
       </section>
 
-      {/* Typical Schedule Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Typical Weekend Clinic Schedule
-            </h2>
-            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-          </div>
+      {/* Divider */}
+      <div className="border-t-4 border-orange"></div>
 
-          <div className="max-w-3xl mx-auto space-y-4">
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <div className="flex items-start">
-                <div className="bg-orange text-white rounded-lg px-4 py-2 mr-4 font-semibold min-w-[100px] text-center">
-                  Saturday AM
-                </div>
-                <div>
-                  <h4 className="font-bold text-navy mb-1">Flat Work & Dressage</h4>
-                  <p className="text-dark">Foundation work, balance, and technical development</p>
-                </div>
-              </div>
-            </div>
+      {/* Upcoming Clinics Section */}
+      <ClinicsSection />
 
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <div className="flex items-start">
-                <div className="bg-orange text-white rounded-lg px-4 py-2 mr-4 font-semibold min-w-[100px] text-center">
-                  Saturday PM
-                </div>
-                <div>
-                  <h4 className="font-bold text-navy mb-1">Show Jumping</h4>
-                  <p className="text-dark">Technique, course strategy, and building confidence</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <div className="flex items-start">
-                <div className="bg-orange text-white rounded-lg px-4 py-2 mr-4 font-semibold min-w-[100px] text-center">
-                  Sunday AM
-                </div>
-                <div>
-                  <h4 className="font-bold text-navy mb-1">Cross-Country</h4>
-                  <p className="text-dark">Natural obstacles, terrain riding, and tactical training</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <div className="flex items-start">
-                <div className="bg-orange text-white rounded-lg px-4 py-2 mr-4 font-semibold min-w-[100px] text-center">
-                  Sunday PM
-                </div>
-                <div>
-                  <h4 className="font-bold text-navy mb-1">Competition Preparation</h4>
-                  <p className="text-dark">Integrated training and strategic planning</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
 
       {/* CTA Section */}
       <section className="py-20 bg-navy text-white">
