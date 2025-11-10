@@ -21,20 +21,20 @@ export default function Navigation() {
 
   const navItemsBefore = [
     { href: "/", label: "Home", isPage: true },
-    { href: "/about", label: "About", isPage: true },
+    { href: "/about", label: "About Dan", isPage: true },
   ];
 
   const navItemsAfter = [
-    { href: "/services", label: "Services", isPage: true },
-    { href: "/gallery", label: "Gallery", isPage: true },
+    { href: "#podcast", label: "Podcast" },
     { href: "/news", label: "News", isPage: true },
+    { href: "/gallery", label: "Gallery", isPage: true },
     { href: "/contact", label: "Contact", isPage: true },
   ];
 
   const coachingSubmenu = [
     { href: "#clinics", label: "Clinics" },
-    { href: "#coaching", label: "Training with Dan" },
-    { href: "#podcast", label: "Our Equestrian Life Podcast" },
+    { href: "/services/private-lessons", label: "In Person Lessons", isPage: true },
+    { href: "/services/remote-coaching", label: "Virtual Lessons", isPage: true },
   ];
 
   const handleNavigation = (href: string, label: string, isPage?: boolean) => {
@@ -67,7 +67,7 @@ export default function Navigation() {
       setIsCoachingDropdownOpen(false);
       setIsMenuOpen(false);
     } else if (item.href) {
-      handleNavigation(item.href, item.label);
+      handleNavigation(item.href, item.label, item.isPage);
     }
   };
 
