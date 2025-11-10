@@ -11,7 +11,7 @@ export default function About() {
         title="About Dan Bizzarro - International Event Rider | Dan Bizzarro Method"
         description="Meet Dan Bizzarro, an international event rider based in Oxfordshire. 20+ years experience, Olympic shortlisted rider, and Nations Cup medalist. Learn about Dan's journey from Italy to becoming a professional eventing coach."
         keywords="Dan Bizzarro, international event rider, eventing coach, William Fox-Pitt, Italian eventing, Olympic eventing, Nations Cup, professional rider, Oxfordshire equestrian"
-        canonical="https://dan-bizzarro.replit.app/about"
+        canonical="https://danbizzarromethod.com/about"
       />
       
       <Navigation />

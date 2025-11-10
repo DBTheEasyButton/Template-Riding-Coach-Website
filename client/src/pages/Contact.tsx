@@ -11,7 +11,7 @@ export default function Contact() {
         title="Contact Dan Bizzarro - Eventing Coach in Oxfordshire | Dan Bizzarro Method"
         description="Get in touch with Dan Bizzarro for eventing coaching, clinic bookings, or inquiries. Based in Ascott-Under-Wychwood, Oxfordshire. Phone, email, and WhatsApp contact options available."
         keywords="contact Dan Bizzarro, eventing coach contact, Oxfordshire horse trainer, clinic booking, private lesson inquiry, equestrian coaching contact"
-        canonical="https://dan-bizzarro.replit.app/contact"
+        canonical="https://danbizzarromethod.com/contact"
       />
       
       <Navigation />

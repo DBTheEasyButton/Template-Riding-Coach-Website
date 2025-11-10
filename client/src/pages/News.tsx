@@ -30,7 +30,7 @@ export default function News() {
         title="Latest Eventing News & Updates | Dan Bizzarro Method"
         description="Stay updated with Dan Bizzarro's latest competition results, training insights, clinic announcements, and equestrian news from Oxfordshire and international events."
         keywords="eventing news, Dan Bizzarro updates, competition results, equestrian blog, training tips, clinic announcements, international eventing"
-        canonical="https://dan-bizzarro.replit.app/news"
+        canonical="https://danbizzarromethod.com/news"
       />
       
       <Navigation />

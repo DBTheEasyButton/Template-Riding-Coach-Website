@@ -19,7 +19,7 @@ export default function Gallery() {
         title="Photo Gallery - Eventing Action & Training | Dan Bizzarro Method"
         description="Browse Dan Bizzarro's eventing photo gallery. Competition photos, training sessions, and behind-the-scenes images from international events and clinics in Oxfordshire."
         keywords="eventing photos, equestrian gallery, horse training images, competition photography, Dan Bizzarro gallery, eventing action shots"
-        canonical="https://dan-bizzarro.replit.app/gallery"
+        canonical="https://danbizzarromethod.com/gallery"
       />
       
       <Navigation />

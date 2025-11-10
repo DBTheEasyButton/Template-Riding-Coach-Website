@@ -44,10 +44,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Dan Bizzarro Method - Professional Eventing Coaching & Training"
-        description="Expert eventing coaching from international event rider Dan Bizzarro. Stride calculator, readiness assessments, and professional equestrian training in Oxfordshire."
+        title="Dan Bizzarro Method – International Eventing Coach & Training Clinics"
+        description="Join Olympic-shortlisted event rider Dan Bizzarro for private lessons, show-jumping clinics, pole work clinics, cross-country coaching and online training. Build confidence and prepare for competitions."
         keywords="eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, professional rider training"
-        canonical="https://dan-bizzarro.replit.app/"
+        canonical="https://danbizzarromethod.com/"
       />
       <StructuredData type="Organization" data={organizationData} />
       <StructuredData type="Website" data={websiteData} />
