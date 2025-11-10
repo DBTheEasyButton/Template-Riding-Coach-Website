@@ -30,8 +30,6 @@ const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
 const ReadinessQuiz = lazy(() => import("@/pages/ReadinessQuiz"));
 const PackingListGenerator = lazy(() => import("@/pages/PackingListGenerator"));
 const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
-const AdminContacts = lazy(() => import("@/pages/AdminContacts"));
-const AdminEmailMarketing = lazy(() => import("@/pages/AdminEmailMarketing"));
 const AdminRegistrations = lazy(() => import("@/pages/AdminRegistrations"));
 const AdminGallery = lazy(() => import("@/pages/AdminGallery"));
 const AdminNews = lazy(() => import("@/pages/AdminNews"));
@@ -165,16 +163,6 @@ function Router() {
       <Route path="/admin/clinics">
         <Suspense fallback={<PageLoader />}>
           <AdminClinics />
-        </Suspense>
-      </Route>
-      <Route path="/admin/contacts">
-        <Suspense fallback={<PageLoader />}>
-          <AdminContacts />
-        </Suspense>
-      </Route>
-      <Route path="/admin/email-marketing">
-        <Suspense fallback={<PageLoader />}>
-          <AdminEmailMarketing />
         </Suspense>
       </Route>
       <Route path="/admin/registrations">
