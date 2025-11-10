@@ -8,38 +8,38 @@ import { Calendar, Check, Users, Award, Target } from "lucide-react";
 
 export default function GroupClinics() {
   const features = [
-    "Fun, relaxed single-day sessions",
-    "Pole work, jumping, and flatwork options",
-    "Small group sizes for personalized attention",
-    "Focus on confidence and enjoyment",
-    "Perfect for amateur riders of all levels",
-    "Supportive group atmosphere and learning together"
+    "Single-day training sessions for all levels",
+    "Show-jumping, polework, and cross country options",
+    "Small group sizes for individual attention",
+    "Suitable for amateur riders and competitors",
+    "Competition preparation and confidence building",
+    "Expert instruction from international eventing coach"
   ];
 
   const benefits = [
     {
       icon: <Users className="w-6 h-6" />,
-      title: "Friendly Group Environment",
-      description: "Enjoy riding with like-minded people in a relaxed, supportive atmosphere"
+      title: "Learn Together",
+      description: "Train alongside riders at your level in a supportive group environment"
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "Build Your Confidence",
-      description: "Develop skills at your own pace with encouragement and positive feedback"
+      title: "Expert Coaching",
+      description: "Develop your skills with guidance from an experienced eventing coach"
     },
     {
       icon: <Target className="w-6 h-6" />,
-      title: "Have More Fun",
-      description: "Rediscover the joy of riding and enjoy the journey, not just the destination"
+      title: "Achieve Your Goals",
+      description: "Whether competing or riding for pleasure, reach your personal objectives"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Group Riding Clinics - Fun, Friendly Sessions | Dan Bizzarro"
-        description="Join Dan Bizzarro's welcoming group clinics in Oxfordshire. Single-day sessions covering pole work, jumping, and flatwork. Perfect for amateur riders building confidence and having fun."
-        keywords="riding clinics, group lessons, pole work clinics, jumping clinics, flatwork training, Oxfordshire equestrian, confidence building, amateur riders, fun riding sessions"
+        title="Show Jumping, Polework & Cross Country Clinics | Dan Bizzarro Method"
+        description="Join our show-jumping clinic, polework clinic, and cross country clinic in Oxfordshire. Expert eventing coach Dan Bizzarro offers competition preparation clinics and single-day training for all levels."
+        keywords="show-jumping clinic, polework clinic, cross country clinic, competition preparation clinic, eventing coach, equestrian lessons Oxfordshire, Dan Bizzarro Method, show jumping coach"
         canonical="https://dan-bizzarro.replit.app/services/group-clinics"
       />
       
@@ -59,7 +59,7 @@ export default function GroupClinics() {
               Group Clinics
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Fun, friendly sessions to build confidence and enjoy your riding
+              Show jumping, polework & cross country training for all levels
             </p>
           </div>
         </div>
@@ -71,17 +71,17 @@ export default function GroupClinics() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-                Relaxed, Enjoyable Learning
+                Expert Training in Oxfordshire
               </h2>
               <div className="w-24 h-1 bg-orange mb-8"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Group clinics are designed for amateur riders who want to improve their skills and have fun doing it! Whether you're interested in pole work, jumping, or flatwork, these single-day sessions provide a friendly, supportive environment to learn and grow.
+                Our group clinics offer specialized training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels—whether you ride for pleasure or competition.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                With small group sizes, you'll get plenty of individual attention while enjoying the camaraderie of riding with others. No pressure, no stress—just quality instruction and lots of encouragement.
+                Each clinic focuses on the Dan Bizzarro Method, combining technical instruction with practical application. With small group sizes, you receive personalized feedback while benefiting from watching fellow riders tackle similar challenges.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Most riders join simply to build their confidence, feel more secure in the saddle, and rediscover the joy of riding. You don't need to compete to benefit—just come ready to learn and have a great time!
+                Our equestrian lessons in Oxfordshire cater to both amateur riders building confidence and competitors preparing for events. From foundational polework clinics to advanced show-jumping and cross country sessions, there's a clinic designed for your goals.
               </p>
             </div>
 
@@ -146,7 +146,7 @@ export default function GroupClinics() {
             Join Our Next Clinic
           </h2>
           <p className="text-xl mb-8 text-gray-200">
-            View upcoming clinic dates and secure your spot for intensive training
+            Book your Competition Preparation Clinic or join a training session for all levels
           </p>
           <Link href="/#clinics">
             <Button 

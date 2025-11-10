@@ -111,22 +111,22 @@ export default function Home() {
               <div className="text-orange mb-4 flex justify-center">
                 <Users className="w-12 h-12" />
               </div>
-              <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Private Lessons</h3>
-              <p className="text-dark leading-relaxed">Personalized one-on-one sessions focused on building your confidence and enjoying your riding</p>
+              <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Private Horse Riding Lessons</h3>
+              <p className="text-dark leading-relaxed">Expert one-on-one coaching in Oxfordshire for all levels—from amateur riders to competitors</p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300">
               <div className="text-orange mb-4 flex justify-center">
                 <Award className="w-12 h-12" />
               </div>
               <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Group Clinics</h3>
-              <p className="text-dark leading-relaxed">Fun single-day sessions including pole work, jumping, and flatwork for riders of all levels</p>
+              <p className="text-dark leading-relaxed">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300">
               <div className="text-orange mb-4 flex justify-center">
                 <Target className="w-12 h-12" />
               </div>
-              <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Remote Coaching</h3>
-              <p className="text-dark leading-relaxed">Supportive virtual sessions with video analysis to help you improve at your own pace</p>
+              <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Virtual Riding Lessons</h3>
+              <p className="text-dark leading-relaxed">Remote equestrian coaching with video analysis—train anywhere, anytime</p>
             </div>
           </div>
 

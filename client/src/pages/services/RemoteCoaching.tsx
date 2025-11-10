@@ -7,12 +7,12 @@ import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
 
 export default function RemoteCoaching() {
   const features = [
-    "Friendly video analysis of your riding",
-    "Supportive online consultations via video call",
-    "Available worldwide - get help from anywhere",
-    "Encouraging feedback and practical advice",
-    "Simple tips and suggestions you can use right away",
-    "Ongoing support between sessions"
+    "Professional video analysis of your riding technique",
+    "Live online consultations via video call",
+    "Available worldwide - train from anywhere",
+    "Personalized feedback tailored to your level",
+    "Actionable training recommendations",
+    "Ongoing support for continuous improvement"
   ];
 
   const howItWorks = [
@@ -41,27 +41,27 @@ export default function RemoteCoaching() {
   const benefits = [
     {
       icon: <Globe className="w-6 h-6" />,
-      title: "Learn From Home",
-      description: "Get supportive coaching no matter where you're located"
+      title: "Train Anywhere",
+      description: "Access expert coaching regardless of your location"
     },
     {
       icon: <Video className="w-6 h-6" />,
-      title: "Helpful Feedback",
-      description: "Clear, easy-to-understand analysis of your riding to help you improve"
+      title: "Detailed Analysis",
+      description: "Comprehensive video review with clear, actionable feedback"
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
-      title: "Friendly Support",
-      description: "Stay in touch and ask questions anytime between sessions"
+      title: "Continuous Support",
+      description: "Ongoing guidance and communication between sessions"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Remote Riding Coaching - Friendly Online Video Analysis | Dan Bizzarro"
-        description="Supportive remote coaching from Dan Bizzarro. Video analysis, online consultations, and encouraging feedback from anywhere in the world. Perfect for amateur riders seeking flexible coaching."
-        keywords="remote coaching, online riding lessons, video analysis, virtual riding coach, online horse training, worldwide coaching, video consultation, amateur riders"
+        title="Virtual Riding Lessons - Train Anywhere, Anytime | Dan Bizzarro Method"
+        description="Learn from home with our virtual riding lessons. Remote equestrian coaching provides personalized feedback and clear guidance from international eventing coach Dan Bizzarro."
+        keywords="virtual riding lessons, remote equestrian coaching, online horse training, video analysis, Dan Bizzarro Method, eventing coach, show jumping coach, cross country coach"
         canonical="https://dan-bizzarro.replit.app/services/remote-coaching"
       />
       
@@ -78,10 +78,10 @@ export default function RemoteCoaching() {
               </div>
             </div>
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              Remote Coaching
+              Virtual Riding Lessons
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Supportive coaching from anywhere in the world
+              Train anywhere, anytime with remote equestrian coaching
             </p>
           </div>
         </div>
@@ -93,17 +93,17 @@ export default function RemoteCoaching() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-                Expert Guidance, Anywhere
+                What Are Virtual Riding Lessons?
               </h2>
               <div className="w-24 h-1 bg-orange mb-8"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Can't make it to Oxfordshire? No problem! Remote coaching lets you work with Dan from wherever you are, getting helpful feedback and encouragement through video analysis and online chats.
+                Virtual riding lessons combine modern technology with expert coaching to bring the Dan Bizzarro Method to riders worldwide. Using video analysis and online consultations, you receive personalized feedback from an international eventing coach without geographical limitations.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Simply send Dan a video of your riding, and he'll review it with a friendly eye, offering practical suggestions and tips to help you improve. Then you can hop on a video call to chat through his feedback and ask any questions.
+                This remote equestrian coaching format works perfectly whether you're an amateur rider building confidence or a competitor preparing for events. Simply record your riding session, submit the video, and receive detailed analysis followed by a live video consultation to discuss your progress.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                This relaxed, flexible format is perfect for busy amateur riders, those who live further away, or anyone who wants ongoing support and encouragement between lessons. It's coaching that fits around your life!
+                As an experienced eventing coach, show jumping coach, and cross country coach, Dan provides comprehensive guidance across all disciplines—from beginner to international level—all from the comfort of your own training facility.
               </p>
             </div>
 
@@ -127,7 +127,7 @@ export default function RemoteCoaching() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              How It Works
+              How to Get Started
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
@@ -157,7 +157,7 @@ export default function RemoteCoaching() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Why Remote Coaching?
+              Benefits of Remote Equestrian Coaching
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
@@ -220,10 +220,10 @@ export default function RemoteCoaching() {
       <section className="py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
-            Start Remote Coaching Today
+            Start Your Virtual Riding Lessons Today
           </h2>
           <p className="text-xl mb-8 text-gray-200">
-            Get expert guidance no matter where you're located
+            Experience the Dan Bizzarro Method from anywhere in the world
           </p>
           <Link href="/contact">
             <Button 

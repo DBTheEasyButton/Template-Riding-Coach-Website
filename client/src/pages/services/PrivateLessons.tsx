@@ -7,19 +7,19 @@ import { Users, Check, Calendar, Target, Award } from "lucide-react";
 
 export default function PrivateLessons() {
   const features = [
-    "Personalized sessions designed around your goals",
-    "Individual attention in a supportive environment",
-    "Flexible scheduling to fit your busy life",
-    "Encouragement and positive feedback",
-    "Optional video analysis to track your progress",
-    "Practical tips you can practice between sessions"
+    "Customized training plans for your specific goals",
+    "One-on-one coaching from experienced eventing coach",
+    "Flexible scheduling to suit your availability",
+    "Show jumping, cross country, and flatwork instruction",
+    "Video analysis to track technique and progress",
+    "Suitable for beginners through advanced competitors"
   ];
 
   const benefits = [
     {
       icon: <Target className="w-6 h-6" />,
-      title: "Build Confidence",
-      description: "One-on-one attention helps you progress at your own pace in a relaxed setting"
+      title: "Personalized Attention",
+      description: "Focused coaching tailored to your experience level and objectives"
     },
     {
       icon: <Calendar className="w-6 h-6" />,
@@ -28,17 +28,17 @@ export default function PrivateLessons() {
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "Your Goals Matter",
-      description: "Whether competing or just riding for fun, we'll work on what's important to you"
+      title: "All Levels Welcome",
+      description: "From amateur riders to international competitors—training for every goal"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Private Riding Lessons - Build Confidence & Have Fun | Dan Bizzarro"
-        description="Friendly, personalized riding lessons in Oxfordshire with Dan Bizzarro. Tailored to your goals, whether competing or riding for enjoyment. Supportive coaching for amateur riders of all levels."
-        keywords="private riding lessons, one-on-one coaching, confidence building, riding for fun, amateur riders, flatwork lessons, pole work, jumping lessons, Oxfordshire"
+        title="Private Horse Riding Lessons in Oxfordshire | Dan Bizzarro Method"
+        description="Expert private horse riding lessons in Oxfordshire with international eventing coach Dan Bizzarro. Personalized training from beginner to advanced levels in show jumping, cross country, and dressage."
+        keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalized training"
         canonical="https://dan-bizzarro.replit.app/services/private-lessons"
       />
       
@@ -55,10 +55,10 @@ export default function PrivateLessons() {
               </div>
             </div>
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              Private Lessons
+              Private Horse Riding Lessons
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Personalized coaching to build your confidence and enjoy your riding
+              Expert coaching in Oxfordshire for all levels
             </p>
           </div>
         </div>
@@ -70,17 +70,17 @@ export default function PrivateLessons() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-                Tailored to You
+                Expert One-on-One Coaching
               </h2>
               <div className="w-24 h-1 bg-orange mb-8"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Private lessons with Dan are all about helping you feel more confident and have fun in the saddle. Every session is tailored to your specific goals, experience level, and what you'd like to work on with your horse.
+                Our private horse riding lessons in Oxfordshire offer personalized instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, Dan brings over 20 years of experience to every session.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Whether you're looking to improve your flatwork, build confidence over poles and jumps, or simply enjoy hacking out more, Dan's supportive approach helps you progress at your own pace without any pressure.
+                Whether you're an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. Training covers all aspects of equestrian education—from foundational flatwork to advanced competition preparation.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Most of Dan's students are amateur riders who ride for the love of it. With over 20 years of experience, Dan knows how to make lessons enjoyable while helping you develop skills and confidence in a relaxed, friendly environment.
+                These equestrian lessons in Oxfordshire welcome riders from complete beginners to international level competitors. Dan's approach balances technical excellence with an encouraging, supportive environment that makes learning enjoyable while achieving measurable results.
               </p>
             </div>
 

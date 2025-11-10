@@ -8,6 +8,28 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### SEO & Content Optimization for Dual Audience (November 10, 2025)
+- ✅ **Balanced messaging for dual audience** - Content now appeals to both amateur riders (riding for enjoyment) and competitive riders (beginner to international level)
+- ✅ **Target keyword optimization** - Naturally integrated all primary keywords across service pages:
+  - Dan Bizzarro Method
+  - show-jumping clinic, polework clinic, cross country clinic
+  - Private Horse Riding Lessons, Virtual Riding Lessons
+  - Remote Equestrian Coaching
+  - Equestrian Lessons Oxfordshire
+  - Show Jumping Coach, Eventing Coach, Cross Country Coach
+  - Competition Preparation Clinic
+- ✅ **Virtual Riding Lessons page restructured** - Following SEO best practices with optimized headings:
+  - "What Are Virtual Riding Lessons?"
+  - "Benefits of Remote Equestrian Coaching"
+  - "How to Get Started"
+- ✅ **Service page updates** - All coaching pages now feature:
+  - Professional yet welcoming tone
+  - Explicit welcome to both amateur and competitive riders
+  - Natural keyword integration without stuffing
+  - Clear value propositions for all skill levels
+- ✅ **Home page service cards updated** - Optimized titles and descriptions with target keywords
+- ✅ **Single-day clinic emphasis** - Content updated to reflect that most clinics are one-day sessions
+
 ### Flexible Multi-Session Clinic Management (November 10, 2025)
 - ✅ **Deprecated hardcoded discipline-specific max participants** - Removed crossCountryMaxParticipants and showJumpingMaxParticipants fields from admin interface
 - ✅ **Added flexible per-session max participants** - Each session now has its own configurable max participant limit
@@ -113,6 +135,9 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 - **Quiz Structure:** Specific question order starting with dressage consistency
 - **Contact Form:** Simplified without response times or clinic booking sections
 - **Branding:** Blue logo throughout, consistent sizing and placement
+- **Target Audience:** Dual focus on amateur riders (riding for pleasure) and competitive riders (beginner to international level)
+- **Clinic Format:** Emphasis on single-day sessions; polework, show jumping, and cross country specialties
+- **SEO Keywords:** Dan Bizzarro Method, show-jumping/polework/cross country clinics, Private Horse Riding Lessons, Virtual Riding Lessons, Remote Equestrian Coaching, Equestrian Lessons Oxfordshire, Show Jumping/Eventing/Cross Country Coach
 
 ## Project Architecture
 
