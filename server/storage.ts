@@ -193,6 +193,7 @@ export interface IStorage {
   updateGhlContact(id: number, updates: Partial<InsertGhlContact>): Promise<GhlContact | undefined>;
   deleteGhlContact(id: number): Promise<void>;
   syncGhlContacts(locationId: string): Promise<number>; // Returns count of synced contacts
+  createOrUpdateGhlContactInApi(firstName: string, email: string, tags: string[]): Promise<{ success: boolean; contactId?: string; message?: string }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1856,6 +1857,93 @@ The Dan Bizzarro Method Team`,
     } catch (error) {
       console.error('Error syncing GHL contacts:', error);
       throw error;
+    }
+  }
+
+  async createOrUpdateGhlContactInApi(firstName: string, email: string, tags: string[]): Promise<{ success: boolean; contactId?: string; message?: string }> {
+    const apiKey = process.env.GHL_API_KEY;
+    const locationId = process.env.GHL_LOCATION_ID;
+
+    if (!apiKey) {
+      throw new Error('GHL_API_KEY not configured');
+    }
+
+    if (!locationId) {
+      throw new Error('GHL_LOCATION_ID not configured');
+    }
+
+    try {
+      // Create or update contact in Go High Level
+      const response = await fetch(
+        'https://services.leadconnectorhq.com/contacts/',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            locationId,
+            email,
+            firstName,
+            tags,
+            source: 'Website Newsletter'
+          })
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('GHL API error:', errorData);
+        return {
+          success: false,
+          message: `GHL API error: ${response.status} ${response.statusText}`
+        };
+      }
+
+      const data = await response.json();
+      
+      // Store the contact in local database for tracking
+      if (data.contact && data.contact.id) {
+        const existing = await this.getGhlContactByGhlId(data.contact.id);
+        
+        const contactData: InsertGhlContact = {
+          ghlId: data.contact.id,
+          locationId: data.contact.locationId || locationId,
+          firstName: data.contact.firstName || firstName,
+          lastName: data.contact.lastName || null,
+          email: data.contact.email || email,
+          phone: data.contact.phone || null,
+          timezone: data.contact.timezone || null,
+          country: data.contact.country || null,
+          source: 'Website Newsletter',
+          dateAdded: data.contact.dateAdded ? new Date(data.contact.dateAdded) : new Date(),
+          tags: data.contact.tags || tags,
+          customFields: data.contact.customFields || null,
+          attributions: data.contact.attributions || null,
+          businessId: data.contact.businessId || null,
+          lastSyncedAt: new Date()
+        };
+
+        if (existing) {
+          await this.updateGhlContact(existing.id, contactData);
+        } else {
+          await this.createGhlContact(contactData);
+        }
+      }
+
+      return {
+        success: true,
+        contactId: data.contact?.id,
+        message: 'Contact created/updated successfully in Go High Level'
+      };
+    } catch (error) {
+      console.error('Error creating/updating GHL contact:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error occurred'
+      };
     }
   }
 }

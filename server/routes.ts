@@ -867,13 +867,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Email is required" });
       }
 
+      if (!firstName) {
+        return res.status(400).json({ message: "First name is required" });
+      }
+
+      // Subscribe to email list
       const success = await emailService.subscribeToNewsletter(email, firstName, lastName, "newsletter");
       
-      if (success) {
-        res.json({ message: "Successfully subscribed to newsletter" });
-      } else {
-        res.status(500).json({ message: "Failed to subscribe to newsletter" });
+      if (!success) {
+        return res.status(500).json({ message: "Failed to subscribe to newsletter" });
       }
+
+      // Create or update contact in Go High Level with Newsletter tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(firstName, email, ["Newsletter"]);
+        
+        if (!ghlResult.success) {
+          console.warn("GHL contact creation failed:", ghlResult.message);
+          // Continue even if GHL fails - newsletter subscription still succeeded
+        }
+      } catch (ghlError) {
+        console.error("Error creating GHL contact:", ghlError);
+        // Continue even if GHL fails - newsletter subscription still succeeded
+      }
+
+      res.json({ message: "Successfully subscribed to newsletter" });
     } catch (error) {
       console.error("Error subscribing to newsletter:", error);
       res.status(500).json({ message: "Failed to subscribe to newsletter" });
