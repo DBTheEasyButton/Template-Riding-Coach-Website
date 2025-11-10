@@ -99,7 +99,7 @@ export default function Home() {
       <section id="coaching" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Show-Jumping Clinics, Private Lessons & Virtual Riding Lessons</h2>
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Clinics, Private Lessons & Virtual Riding Lessons</h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
             <p className="text-xl text-dark max-w-3xl mx-auto">
               Professional eventing instruction across all three disciplines
@@ -124,7 +124,7 @@ export default function Home() {
                 <div className="text-orange mb-4 flex justify-center">
                   <Award className="w-12 h-12" aria-hidden="true" />
                 </div>
-                <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Show-Jumping Clinics</h3>
+                <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Clinics</h3>
                 <p className="text-dark leading-relaxed mb-4">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
                 <span className="text-orange font-semibold group-hover:underline inline-flex items-center">
                   Join our show-jumping clinics <ArrowRight className="ml-2 w-4 h-4" />
