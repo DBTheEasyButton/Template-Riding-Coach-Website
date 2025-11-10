@@ -74,8 +74,9 @@ export const clinics = pgTable("clinics", {
   // Enhanced fields for multi-session support
   hasMultipleSessions: boolean("has_multiple_sessions").notNull().default(false),
   clinicType: text("clinic_type").notNull().default("single"), // single, multi-session, combo
-  crossCountryMaxParticipants: integer("cross_country_max_participants").default(12),
-  showJumpingMaxParticipants: integer("show_jumping_max_participants").default(12)
+  // Deprecated: use maxParticipants for total clinic cap and session-level maxParticipants instead
+  crossCountryMaxParticipants: integer("cross_country_max_participants"),
+  showJumpingMaxParticipants: integer("show_jumping_max_participants")
 });
 
 export const clinicSessions = pgTable("clinic_sessions", {
