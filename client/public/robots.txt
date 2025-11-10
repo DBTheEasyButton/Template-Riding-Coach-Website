@@ -12,4 +12,4 @@ Allow: /terms-and-conditions
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://dan-bizzarro.replit.app/sitemap.xml
+Sitemap: https://danbizzarromethod.com/sitemap.xml
