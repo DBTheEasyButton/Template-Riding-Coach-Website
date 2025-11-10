@@ -63,7 +63,7 @@ export default function NewsletterSubscription() {
             Get Free Training Tips & Early Access to Clinics
           </h2>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Subscribe to receive exclusive training tips, early access to show-jumping and cross country clinics, competition insights, and updates on Dan's Olympic journey—delivered straight to your inbox.
+            Subscribe to receive exclusive training tips, early access to clinics, competition insights, and updates on Dan's behind the scenes, delivered straight to your inbox.
           </p>
         </div>
 
