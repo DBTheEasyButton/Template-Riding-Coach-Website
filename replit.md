@@ -8,6 +8,15 @@ A comprehensive digital platform for the Dan Bizzarro Method, offering innovativ
 
 ## Recent Changes
 
+### Flexible Multi-Session Clinic Management (November 10, 2025)
+- ✅ **Deprecated hardcoded discipline-specific max participants** - Removed crossCountryMaxParticipants and showJumpingMaxParticipants fields from admin interface
+- ✅ **Added flexible per-session max participants** - Each session now has its own configurable max participant limit
+- ✅ **Added total clinic max participants field** - Multi-session clinics can now set an overall capacity limit
+- ✅ **Backward compatible schema changes** - Old fields made optional to maintain compatibility with existing data
+- ✅ **Updated backend routes** - Now use session.maxParticipants from form data instead of hardcoded values
+- ⚠️ **Known limitation:** Session-level capacity checking not yet implemented in registration route - currently only enforces overall clinic capacity
+- 📝 **Future enhancement needed:** Add per-session capacity validation in the registration flow to prevent overbooking individual sessions
+
 ### Individual Service Pages (November 6, 2025)
 - ✅ **Created 6 dedicated service pages** - Each service now has its own detailed page
 - ✅ **Coaching format pages** - Private Lessons, Group Clinics, and Remote Coaching
