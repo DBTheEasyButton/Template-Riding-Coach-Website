@@ -15,6 +15,15 @@ export default function NewsletterSubscription() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!firstName.trim()) {
+      toast({
+        title: "First Name Required",
+        description: "Please enter your first name",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!email) {
       toast({
         title: "Email Required",
@@ -29,7 +38,7 @@ export default function NewsletterSubscription() {
     try {
       await apiRequest("POST", "/api/newsletter/subscribe", {
         email,
-        firstName: firstName || undefined
+        firstName
       });
 
       toast({
@@ -72,10 +81,12 @@ export default function NewsletterSubscription() {
             <div>
               <Input
                 type="text"
-                placeholder="First Name (optional)"
+                placeholder="First Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                required
                 className="w-full bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500"
+                data-testid="input-first-name"
               />
             </div>
             <div>
