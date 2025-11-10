@@ -7,11 +7,11 @@ import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
 
 export default function RemoteCoaching() {
   const features = [
-    "Video analysis of your riding sessions",
-    "Online consultations via video call",
-    "Worldwide availability - train from anywhere",
-    "Flexible feedback and personalized advice",
-    "Written training plans and recommendations",
+    "Friendly video analysis of your riding",
+    "Supportive online consultations via video call",
+    "Available worldwide - get help from anywhere",
+    "Encouraging feedback and practical advice",
+    "Simple tips and suggestions you can use right away",
     "Ongoing support between sessions"
   ];
 
@@ -41,27 +41,27 @@ export default function RemoteCoaching() {
   const benefits = [
     {
       icon: <Globe className="w-6 h-6" />,
-      title: "Train Anywhere",
-      description: "Access world-class coaching no matter where you're located"
+      title: "Learn From Home",
+      description: "Get supportive coaching no matter where you're located"
     },
     {
       icon: <Video className="w-6 h-6" />,
-      title: "Detailed Analysis",
-      description: "Slow-motion review and frame-by-frame feedback on technique"
+      title: "Helpful Feedback",
+      description: "Clear, easy-to-understand analysis of your riding to help you improve"
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
-      title: "Ongoing Support",
-      description: "Continuous communication and guidance between sessions"
+      title: "Friendly Support",
+      description: "Stay in touch and ask questions anytime between sessions"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Remote Eventing Coaching - Online Video Analysis & Consultations | Dan Bizzarro"
-        description="Expert remote coaching from international event rider Dan Bizzarro. Video analysis, online consultations, and personalized feedback from anywhere in the world. Train with Dan regardless of location."
-        keywords="remote coaching, online horse training, video analysis, virtual riding lessons, eventing coach online, worldwide coaching, video consultation, distance learning"
+        title="Remote Riding Coaching - Friendly Online Video Analysis | Dan Bizzarro"
+        description="Supportive remote coaching from Dan Bizzarro. Video analysis, online consultations, and encouraging feedback from anywhere in the world. Perfect for amateur riders seeking flexible coaching."
+        keywords="remote coaching, online riding lessons, video analysis, virtual riding coach, online horse training, worldwide coaching, video consultation, amateur riders"
         canonical="https://dan-bizzarro.replit.app/services/remote-coaching"
       />
       
@@ -81,7 +81,7 @@ export default function RemoteCoaching() {
               Remote Coaching
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              World-class instruction from anywhere in the world
+              Supportive coaching from anywhere in the world
             </p>
           </div>
         </div>
@@ -97,13 +97,13 @@ export default function RemoteCoaching() {
               </h2>
               <div className="w-24 h-1 bg-orange mb-8"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Distance doesn't have to limit your access to world-class coaching. Remote coaching allows you to work with Dan regardless of your location, receiving expert analysis and personalized guidance through modern technology.
+                Can't make it to Oxfordshire? No problem! Remote coaching lets you work with Dan from wherever you are, getting helpful feedback and encouragement through video analysis and online chats.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Through detailed video analysis and live online consultations, Dan can identify areas for improvement, refine technique, and develop comprehensive training strategies tailored to your goals.
+                Simply send Dan a video of your riding, and he'll review it with a friendly eye, offering practical suggestions and tips to help you improve. Then you can hop on a video call to chat through his feedback and ask any questions.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                This flexible format is perfect for riders with busy schedules, those in remote locations, or anyone seeking ongoing support between in-person sessions.
+                This relaxed, flexible format is perfect for busy amateur riders, those who live further away, or anyone who wants ongoing support and encouragement between lessons. It's coaching that fits around your life!
               </p>
             </div>
 

@@ -8,38 +8,38 @@ import { Calendar, Check, Users, Award, Target } from "lucide-react";
 
 export default function GroupClinics() {
   const features = [
-    "Multi-day intensive training programs",
-    "All three eventing disciplines covered",
-    "Small group sizes for quality instruction",
-    "Competition preparation focus",
-    "Structured lesson progression",
-    "Group camaraderie and learning"
+    "Fun, relaxed single-day sessions",
+    "Pole work, jumping, and flatwork options",
+    "Small group sizes for personalized attention",
+    "Focus on confidence and enjoyment",
+    "Perfect for amateur riders of all levels",
+    "Supportive group atmosphere and learning together"
   ];
 
   const benefits = [
     {
       icon: <Users className="w-6 h-6" />,
-      title: "Learn from Others",
-      description: "Watch and learn from fellow riders facing similar challenges"
+      title: "Friendly Group Environment",
+      description: "Enjoy riding with like-minded people in a relaxed, supportive atmosphere"
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "Comprehensive Training",
-      description: "Cover all three phases in an intensive, structured program"
+      title: "Build Your Confidence",
+      description: "Develop skills at your own pace with encouragement and positive feedback"
     },
     {
       icon: <Target className="w-6 h-6" />,
-      title: "Competition Ready",
-      description: "Prepare for upcoming events with focused, goal-oriented training"
+      title: "Have More Fun",
+      description: "Rediscover the joy of riding and enjoy the journey, not just the destination"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Group Eventing Clinics - Multi-Day Training Programs | Dan Bizzarro"
-        description="Join Dan Bizzarro's intensive group clinics in Oxfordshire. Multi-day training covering dressage, show jumping, and cross-country. Small groups, comprehensive instruction, and competition preparation."
-        keywords="eventing clinics, group training, multi-day clinics, dressage clinics, show jumping clinics, cross country training, Oxfordshire equestrian clinics, competition preparation"
+        title="Group Riding Clinics - Fun, Friendly Sessions | Dan Bizzarro"
+        description="Join Dan Bizzarro's welcoming group clinics in Oxfordshire. Single-day sessions covering pole work, jumping, and flatwork. Perfect for amateur riders building confidence and having fun."
+        keywords="riding clinics, group lessons, pole work clinics, jumping clinics, flatwork training, Oxfordshire equestrian, confidence building, amateur riders, fun riding sessions"
         canonical="https://dan-bizzarro.replit.app/services/group-clinics"
       />
       
@@ -59,7 +59,7 @@ export default function GroupClinics() {
               Group Clinics
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Intensive multi-day training for comprehensive development
+              Fun, friendly sessions to build confidence and enjoy your riding
             </p>
           </div>
         </div>
@@ -71,17 +71,17 @@ export default function GroupClinics() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-                Immersive Training Experience
+                Relaxed, Enjoyable Learning
               </h2>
               <div className="w-24 h-1 bg-orange mb-8"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Group clinics provide an intensive, comprehensive training experience that accelerates your development across all three eventing disciplines. Train alongside riders of similar levels while benefiting from Dan's expert instruction.
+                Group clinics are designed for amateur riders who want to improve their skills and have fun doing it! Whether you're interested in pole work, jumping, or flatwork, these single-day sessions provide a friendly, supportive environment to learn and grow.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                With small group sizes, you receive quality individual attention while also learning from watching others. This unique format combines the best of both private and group instruction.
+                With small group sizes, you'll get plenty of individual attention while enjoying the camaraderie of riding with others. No pressure, no stress—just quality instruction and lots of encouragement.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Whether preparing for competition season or seeking to improve specific skills, clinics offer structured progression and intensive practice that delivers measurable results.
+                Most riders join simply to build their confidence, feel more secure in the saddle, and rediscover the joy of riding. You don't need to compete to benefit—just come ready to learn and have a great time!
               </p>
             </div>
 

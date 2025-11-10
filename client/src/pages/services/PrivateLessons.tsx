@@ -7,19 +7,19 @@ import { Users, Check, Calendar, Target, Award } from "lucide-react";
 
 export default function PrivateLessons() {
   const features = [
-    "Customized training plans tailored to your goals",
-    "Individual attention and immediate feedback",
-    "Flexible scheduling to fit your calendar",
-    "Progress tracking and performance analysis",
-    "Video analysis of your sessions",
-    "Personalized homework and practice routines"
+    "Personalized sessions designed around your goals",
+    "Individual attention in a supportive environment",
+    "Flexible scheduling to fit your busy life",
+    "Encouragement and positive feedback",
+    "Optional video analysis to track your progress",
+    "Practical tips you can practice between sessions"
   ];
 
   const benefits = [
     {
       icon: <Target className="w-6 h-6" />,
-      title: "Focused Improvement",
-      description: "One-on-one attention means every minute is dedicated to your development"
+      title: "Build Confidence",
+      description: "One-on-one attention helps you progress at your own pace in a relaxed setting"
     },
     {
       icon: <Calendar className="w-6 h-6" />,
@@ -28,17 +28,17 @@ export default function PrivateLessons() {
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "Personalized Goals",
-      description: "Training plans designed specifically for your competitive aspirations"
+      title: "Your Goals Matter",
+      description: "Whether competing or just riding for fun, we'll work on what's important to you"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Private Riding Lessons - One-on-One Eventing Coaching | Dan Bizzarro"
-        description="Personalized private riding lessons in Oxfordshire with international event rider Dan Bizzarro. Customized training plans, flexible scheduling, and expert instruction across all eventing disciplines."
-        keywords="private riding lessons, one-on-one coaching, personalized training, eventing lessons, dressage lessons, show jumping coaching, cross country training, Oxfordshire"
+        title="Private Riding Lessons - Build Confidence & Have Fun | Dan Bizzarro"
+        description="Friendly, personalized riding lessons in Oxfordshire with Dan Bizzarro. Tailored to your goals, whether competing or riding for enjoyment. Supportive coaching for amateur riders of all levels."
+        keywords="private riding lessons, one-on-one coaching, confidence building, riding for fun, amateur riders, flatwork lessons, pole work, jumping lessons, Oxfordshire"
         canonical="https://dan-bizzarro.replit.app/services/private-lessons"
       />
       
@@ -58,7 +58,7 @@ export default function PrivateLessons() {
               Private Lessons
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Personalized one-on-one instruction for rapid progress
+              Personalized coaching to build your confidence and enjoy your riding
             </p>
           </div>
         </div>
@@ -74,13 +74,13 @@ export default function PrivateLessons() {
               </h2>
               <div className="w-24 h-1 bg-orange mb-8"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Private lessons with Dan offer the ultimate in personalized instruction. Every session is designed around your specific riding goals, experience level, and your horse's unique needs.
+                Private lessons with Dan are all about helping you feel more confident and have fun in the saddle. Every session is tailored to your specific goals, experience level, and what you'd like to work on with your horse.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Whether you're preparing for your first competition, working through a specific challenge, or aiming for international success, Dan's expert guidance ensures you make the most of every training session.
+                Whether you're looking to improve your flatwork, build confidence over poles and jumps, or simply enjoy hacking out more, Dan's supportive approach helps you progress at your own pace without any pressure.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                With over 20 years of international competition experience, Dan brings a wealth of knowledge to each lesson, helping you develop the skills and confidence needed to excel in all three eventing disciplines.
+                Most of Dan's students are amateur riders who ride for the love of it. With over 20 years of experience, Dan knows how to make lessons enjoyable while helping you develop skills and confidence in a relaxed, friendly environment.
               </p>
             </div>
 

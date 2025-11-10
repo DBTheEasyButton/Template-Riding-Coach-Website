@@ -112,21 +112,21 @@ export default function Home() {
                 <Users className="w-12 h-12" />
               </div>
               <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Private Lessons</h3>
-              <p className="text-dark leading-relaxed">One-on-one personalized instruction tailored to your goals and experience level</p>
+              <p className="text-dark leading-relaxed">Personalized one-on-one sessions focused on building your confidence and enjoying your riding</p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300">
               <div className="text-orange mb-4 flex justify-center">
                 <Award className="w-12 h-12" />
               </div>
               <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Group Clinics</h3>
-              <p className="text-dark leading-relaxed">Multi-day intensive training combining technical instruction with competition prep</p>
+              <p className="text-dark leading-relaxed">Fun single-day sessions including pole work, jumping, and flatwork for riders of all levels</p>
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300">
               <div className="text-orange mb-4 flex justify-center">
                 <Target className="w-12 h-12" />
               </div>
               <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Remote Coaching</h3>
-              <p className="text-dark leading-relaxed">Virtual coaching sessions allowing expert guidance from anywhere in the world</p>
+              <p className="text-dark leading-relaxed">Supportive virtual sessions with video analysis to help you improve at your own pace</p>
             </div>
           </div>
 
