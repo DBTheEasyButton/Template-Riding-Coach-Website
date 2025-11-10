@@ -58,7 +58,7 @@ export default function Dressage() {
         title="Dressage Training - Flat Work & Competition Prep | Dan Bizzarro"
         description="Expert dressage and flat work training in Oxfordshire with Dan Bizzarro. Classical principles, test preparation, and technical development for eventers at all levels. Improve your dressage scores."
         keywords="dressage training, flat work coaching, eventing dressage, dressage test preparation, classical dressage, lateral work, collection, Oxfordshire dressage coach"
-        canonical="https://dan-bizzarro.replit.app/coaching/dressage"
+        canonical="https://danbizzarromethod.com/coaching/dressage"
       />
       
       <Navigation />

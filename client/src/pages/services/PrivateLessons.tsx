@@ -39,7 +39,7 @@ export default function PrivateLessons() {
         title="Private Horse Riding Lessons in Oxfordshire | Dan Bizzarro Method"
         description="Expert private horse riding lessons in Oxfordshire with international eventing coach Dan Bizzarro. Personalized training from beginner to advanced levels in show jumping, cross country, and dressage."
         keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalized training"
-        canonical="https://dan-bizzarro.replit.app/coaching/private-lessons"
+        canonical="https://danbizzarromethod.com/coaching/private-lessons"
       />
       
       <Navigation />

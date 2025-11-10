@@ -75,7 +75,7 @@ export default function Services() {
         title="Eventing Coaching Services - Private Lessons & Clinics | Dan Bizzarro Method"
         description="Professional eventing coaching in Oxfordshire. Private lessons, group clinics, and remote coaching across dressage, show jumping, and cross country. From beginners to international competitors."
         keywords="eventing coaching, private riding lessons, equestrian clinics, dressage coaching, show jumping lessons, cross country training, Oxfordshire horse training, remote coaching"
-        canonical="https://dan-bizzarro.replit.app/coaching"
+        canonical="https://danbizzarromethod.com/coaching"
       />
       
       <Navigation />
