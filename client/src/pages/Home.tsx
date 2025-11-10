@@ -62,8 +62,11 @@ export default function Home() {
       <TestimonialsSection />
       <ClinicsSection />
       
+      {/* Divider */}
+      <div className="border-t-4 border-orange"></div>
+      
       {/* About Preview Section */}
-      <section id="about" className="py-6 bg-white">
+      <section id="about" className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
@@ -94,8 +97,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
+
       {/* Services Preview Section */}
-      <section id="coaching" className="py-6 bg-gray-50">
+      <section id="coaching" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Coaching Services</h2>
@@ -141,8 +147,11 @@ export default function Home() {
 
       <PodcastSection />
 
+      {/* Divider */}
+      <div className="border-t-4 border-orange"></div>
+
       {/* Gallery Preview Section */}
-      <section id="gallery" className="py-6 bg-gray-50">
+      <section id="gallery" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Gallery</h2>
@@ -180,8 +189,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
+
       {/* News Preview Section */}
-      <section id="news" className="py-6 bg-white">
+      <section id="news" className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Latest News</h2>
@@ -227,8 +239,11 @@ export default function Home() {
       <SponsorsSection />
       <NewsletterSubscription />
       
+      {/* Divider */}
+      <div className="border-t-4 border-orange"></div>
+      
       {/* Contact CTA Section */}
-      <section id="contact" className="py-6 bg-navy text-white">
+      <section id="contact" className="py-12 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
             Ready to Start Your Journey?
