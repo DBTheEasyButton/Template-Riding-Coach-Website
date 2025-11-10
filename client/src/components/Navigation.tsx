@@ -33,8 +33,8 @@ export default function Navigation() {
 
   const coachingSubmenu = [
     { href: "#clinics", label: "Clinics" },
-    { href: "/services/private-lessons", label: "In Person Lessons", isPage: true },
-    { href: "/services/remote-coaching", label: "Virtual Lessons", isPage: true },
+    { href: "/coaching/private-lessons", label: "In Person Lessons", isPage: true },
+    { href: "/coaching/remote-coaching", label: "Virtual Lessons", isPage: true },
   ];
 
   const handleNavigation = (href: string, label: string, isPage?: boolean) => {

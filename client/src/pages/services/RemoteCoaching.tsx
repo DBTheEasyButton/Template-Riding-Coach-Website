@@ -62,7 +62,7 @@ export default function RemoteCoaching() {
         title="Virtual Riding Lessons - Train Anywhere, Anytime | Dan Bizzarro Method"
         description="Learn from home with our virtual riding lessons. Remote equestrian coaching provides personalized feedback and clear guidance from international eventing coach Dan Bizzarro."
         keywords="virtual riding lessons, remote equestrian coaching, online horse training, video analysis, Dan Bizzarro Method, eventing coach, show jumping coach, cross country coach"
-        canonical="https://dan-bizzarro.replit.app/services/remote-coaching"
+        canonical="https://dan-bizzarro.replit.app/coaching/remote-coaching"
       />
       
       <Navigation />

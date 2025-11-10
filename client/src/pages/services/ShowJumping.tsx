@@ -58,7 +58,7 @@ export default function ShowJumping() {
         title="Show Jumping Training - Technique & Course Strategy | Dan Bizzarro"
         description="Expert show jumping coaching in Oxfordshire with Dan Bizzarro. Improve technique, build confidence, and master course strategy. Training for all levels from novice to international competition."
         keywords="show jumping coaching, jumping technique, course strategy, grid work, eventing jumping, competition preparation, confidence building, Oxfordshire show jumping"
-        canonical="https://dan-bizzarro.replit.app/services/show-jumping"
+        canonical="https://dan-bizzarro.replit.app/coaching/show-jumping"
       />
       
       <Navigation />

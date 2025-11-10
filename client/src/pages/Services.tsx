@@ -20,7 +20,7 @@ export default function Services() {
         "Flexible scheduling",
         "Progress tracking"
       ],
-      url: "/services/private-lessons"
+      url: "/coaching/private-lessons"
     },
     {
       icon: <Calendar className="w-8 h-8" />,
@@ -44,7 +44,7 @@ export default function Services() {
         "Worldwide availability",
         "Flexible feedback"
       ],
-      url: "/services/remote-coaching"
+      url: "/coaching/remote-coaching"
     },
   ];
 
@@ -53,19 +53,19 @@ export default function Services() {
       title: "Flat Work & Dressage",
       description: "Develop foundation skills, improve balance, and achieve harmony with your horse through classical dressage training.",
       icon: <Target className="w-12 h-12" />,
-      url: "/services/dressage"
+      url: "/coaching/dressage"
     },
     {
       title: "Show Jumping",
       description: "Build confidence over fences, refine technique, and master course strategy for competitive success.",
       icon: <Award className="w-12 h-12" />,
-      url: "/services/show-jumping"
+      url: "/coaching/show-jumping"
     },
     {
       title: "Cross Country",
       description: "Tackle natural obstacles with boldness and precision, developing partnership and trust at speed.",
       icon: <Target className="w-12 h-12" />,
-      url: "/services/cross-country"
+      url: "/coaching/cross-country"
     }
   ];
 
@@ -75,7 +75,7 @@ export default function Services() {
         title="Eventing Coaching Services - Private Lessons & Clinics | Dan Bizzarro Method"
         description="Professional eventing coaching in Oxfordshire. Private lessons, group clinics, and remote coaching across dressage, show jumping, and cross country. From beginners to international competitors."
         keywords="eventing coaching, private riding lessons, equestrian clinics, dressage coaching, show jumping lessons, cross country training, Oxfordshire horse training, remote coaching"
-        canonical="https://dan-bizzarro.replit.app/services"
+        canonical="https://dan-bizzarro.replit.app/coaching"
       />
       
       <Navigation />

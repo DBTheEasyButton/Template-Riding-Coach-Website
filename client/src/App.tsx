@@ -11,7 +11,7 @@ import NotFound from "@/pages/not-found";
 
 // Lazy load other pages to reduce initial bundle size
 const About = lazy(() => import("@/pages/About"));
-const Services = lazy(() => import("@/pages/Services"));
+const Coaching = lazy(() => import("@/pages/Services"));
 const Gallery = lazy(() => import("@/pages/Gallery"));
 const News = lazy(() => import("@/pages/News"));
 const Contact = lazy(() => import("@/pages/Contact"));
@@ -77,12 +77,12 @@ function Router() {
           <About />
         </Suspense>
       </Route>
-      <Route path="/services">
+      <Route path="/coaching">
         <Suspense fallback={<PageLoader />}>
-          <Services />
+          <Coaching />
         </Suspense>
       </Route>
-      <Route path="/services/private-lessons">
+      <Route path="/coaching/private-lessons">
         <Suspense fallback={<PageLoader />}>
           <PrivateLessons />
         </Suspense>
@@ -92,22 +92,22 @@ function Router() {
           <GroupClinics />
         </Suspense>
       </Route>
-      <Route path="/services/remote-coaching">
+      <Route path="/coaching/remote-coaching">
         <Suspense fallback={<PageLoader />}>
           <RemoteCoaching />
         </Suspense>
       </Route>
-      <Route path="/services/dressage">
+      <Route path="/coaching/dressage">
         <Suspense fallback={<PageLoader />}>
           <Dressage />
         </Suspense>
       </Route>
-      <Route path="/services/show-jumping">
+      <Route path="/coaching/show-jumping">
         <Suspense fallback={<PageLoader />}>
           <ShowJumping />
         </Suspense>
       </Route>
-      <Route path="/services/cross-country">
+      <Route path="/coaching/cross-country">
         <Suspense fallback={<PageLoader />}>
           <CrossCountry />
         </Suspense>

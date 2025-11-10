@@ -58,7 +58,7 @@ export default function CrossCountry() {
         title="Cross Country Training - Natural Obstacles & Speed Work | Dan Bizzarro"
         description="Expert cross-country coaching in Oxfordshire with Dan Bizzarro. Build confidence, master natural obstacles, and develop the partnership and boldness needed for eventing success. Train smart and safe."
         keywords="cross country training, eventing cross country, natural obstacles, terrain riding, water complex, banks, ditches, competition preparation, Oxfordshire cross country"
-        canonical="https://dan-bizzarro.replit.app/services/cross-country"
+        canonical="https://dan-bizzarro.replit.app/coaching/cross-country"
       />
       
       <Navigation />
