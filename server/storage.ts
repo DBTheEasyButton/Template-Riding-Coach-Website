@@ -771,8 +771,59 @@ The Dan Bizzarro Method Team`,
   }
 
   async createClinicRegistration(insertRegistration: InsertClinicRegistration): Promise<ClinicRegistration> {
-    const [registration] = await db.insert(clinicRegistrations).values(insertRegistration).returning();
-    return registration;
+    return await db.transaction(async (tx) => {
+      // Lock and check clinic capacity
+      const [clinic] = await tx.select()
+        .from(clinics)
+        .where(eq(clinics.id, insertRegistration.clinicId))
+        .for('update');
+      
+      if (!clinic) {
+        throw new Error("Clinic not found");
+      }
+      
+      if (clinic.currentParticipants >= clinic.maxParticipants) {
+        throw new Error("Clinic is full");
+      }
+      
+      // Lock and check session capacity if this is a multi-session clinic
+      if (insertRegistration.sessionId) {
+        const [session] = await tx.select()
+          .from(clinicSessions)
+          .where(eq(clinicSessions.id, insertRegistration.sessionId))
+          .for('update');
+        
+        if (!session) {
+          throw new Error("Session not found");
+        }
+        
+        // Verify session belongs to the target clinic (prevent tampered requests)
+        if (session.clinicId !== insertRegistration.clinicId) {
+          throw new Error("Session does not belong to this clinic");
+        }
+        
+        if (session.currentParticipants >= session.maxParticipants) {
+          throw new Error("Session is full");
+        }
+        
+        // Increment session participant count
+        await tx.update(clinicSessions)
+          .set({ currentParticipants: sql`${clinicSessions.currentParticipants} + 1` })
+          .where(eq(clinicSessions.id, insertRegistration.sessionId));
+      }
+      
+      // Increment clinic participant count
+      await tx.update(clinics)
+        .set({ currentParticipants: sql`${clinics.currentParticipants} + 1` })
+        .where(eq(clinics.id, insertRegistration.clinicId));
+      
+      // Create the registration
+      const [registration] = await tx.insert(clinicRegistrations)
+        .values(insertRegistration)
+        .returning();
+      
+      return registration;
+    });
   }
 
   async getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]> {

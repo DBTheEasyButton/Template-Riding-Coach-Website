@@ -295,10 +295,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      if (clinic.currentParticipants >= clinic.maxParticipants) {
-        return res.status(400).json({ message: "Clinic is full" });
-      }
-      
+      // Create registration (capacity checks are handled atomically in the storage layer)
       const registration = await storage.createClinicRegistration(validatedData);
       
       // Calculate clinic price for loyalty tracking
@@ -344,6 +341,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(registration);
     } catch (error) {
       console.error("Error creating clinic registration:", error);
+      
+      // Handle specific capacity errors from storage layer
+      if (error instanceof Error) {
+        if (error.message === "Clinic is full") {
+          return res.status(400).json({ message: "Clinic is full" });
+        }
+        if (error.message === "Session is full") {
+          return res.status(400).json({ message: "The selected session is full. Please choose a different session or join the waitlist." });
+        }
+        if (error.message === "Clinic not found" || error.message === "Session not found") {
+          return res.status(404).json({ message: error.message });
+        }
+      }
+      
       res.status(400).json({ message: "Invalid registration data" });
     }
   });
