@@ -145,10 +145,13 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="border-t-4 border-orange"></div>
+
       <PodcastSection />
 
       {/* Divider */}
-      <div className="border-t-4 border-orange"></div>
+      <div className="border-t-4 border-navy"></div>
 
       {/* Gallery Preview Section */}
       <section id="gallery" className="py-12 bg-gray-50">
