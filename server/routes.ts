@@ -407,7 +407,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             discipline: session.discipline,
             skillLevel: session.skillLevel,
             price: session.price ? Math.round(session.price * 100) : 8000,
-            maxParticipants: 8, // Default value, actual limits controlled by clinic-level settings
+            maxParticipants: session.maxParticipants || 12,
             currentParticipants: 0,
             requirements: session.requirements || null
           });
@@ -511,7 +511,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             discipline: session.discipline || "jumping",
             skillLevel: session.skillLevel || "90cm",
             price: session.price ? Math.round(session.price * 100) : 8000,
-            maxParticipants: 12,
+            maxParticipants: session.maxParticipants || 12,
             currentParticipants: 0,
             requirements: session.requirements || null
           });
