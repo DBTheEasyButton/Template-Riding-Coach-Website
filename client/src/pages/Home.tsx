@@ -4,7 +4,6 @@ import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ClinicsSection from "@/components/ClinicsSection";
-import PodcastSection from "@/components/PodcastSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import NewsletterSubscription from "@/components/NewsletterSubscription";
 import Footer from "@/components/Footer";
@@ -12,7 +11,7 @@ import SEOHead from "@/components/SEOHead";
 import StructuredData, { organizationData, websiteData } from "@/components/StructuredData";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import type { GalleryImage, News } from "@shared/schema";
+import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/13_1749386080915.jpg";
@@ -29,10 +28,6 @@ export default function Home() {
       }, 100);
     }
   }, []);
-
-  const { data: galleryImages = [] } = useQuery<GalleryImage[]>({
-    queryKey: ["/api/gallery"],
-  });
 
   const { data: news = [] } = useQuery<News[]>({
     queryKey: ['/api/news'],
@@ -147,53 +142,6 @@ export default function Home() {
 
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
-
-      <PodcastSection />
-
-      {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
-
-      {/* Gallery Preview Section */}
-      <section id="gallery" className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Gallery</h2>
-            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-            <p className="text-xl text-dark max-w-3xl mx-auto">
-              Capturing the precision, power, and partnership of world-class eventing
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {galleryImages.slice(0, 6).map((image) => (
-              <div key={image.id} className="group relative overflow-hidden rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-500">
-                <OptimizedImage 
-                  src={image.imageUrl}
-                  alt={image.title}
-                  className="w-full h-80 object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="font-semibold">{image.title}</h3>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Link href="/gallery">
-              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-view-full-gallery">
-                View Full Gallery <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
 
       {/* News Preview Section */}
       <section id="news" className="py-12 bg-white">
