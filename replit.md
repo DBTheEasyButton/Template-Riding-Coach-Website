@@ -40,4 +40,8 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Google Analytics 4:** For website traffic and user behavior analytics.
 - **Google Search Console:** For site ownership verification and search performance monitoring.
 - **Meta Pixel (Facebook Pixel):** For advertising campaign tracking and conversion events.
-- **Go High Level (GHL) API:** Integrated for contact management and synchronization, storing data in a `ghl_contacts` table.
+- **Go High Level (GHL) API:** Integrated for contact management and synchronization:
+  - Newsletter subscriptions automatically create/update contacts in GHL with a "Newsletter" tag
+  - Contact data stored in `ghl_contacts` table for tracking and synchronization
+  - Requires environment variables: `GHL_API_KEY` and `GHL_LOCATION_ID`
+  - Admin interface available for syncing contacts from GHL to local database
