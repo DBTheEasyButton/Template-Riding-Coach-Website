@@ -245,14 +245,18 @@ export default function CrossCountry() {
           <p className="text-xl mb-8 text-gray-200">
             Build confidence and master natural obstacles with expert coaching
           </p>
-          <Link href="/contact">
+          <a 
+            href="https://wa.me/447767291713?text=Hi%20Dan%2C%20I'd%20like%20to%20book%20a%20cross%20country%20session." 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             <Button 
               className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
               data-testid="button-book-xc"
             >
               Book Your Session
             </Button>
-          </Link>
+          </a>
         </div>
       </section>
 

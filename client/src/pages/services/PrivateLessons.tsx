@@ -179,14 +179,18 @@ export default function PrivateLessons() {
           <p className="text-xl mb-8 text-gray-200">
             Book your first private lesson and experience personalized coaching that delivers results
           </p>
-          <Link href="/contact">
+          <a 
+            href="https://wa.me/447767291713?text=Hi%20Dan%2C%20I'd%20like%20to%20book%20a%20private%20lesson." 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             <Button 
               className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
               data-testid="button-book-lesson"
             >
               Book Your Lesson
             </Button>
-          </Link>
+          </a>
         </div>
       </section>
 
