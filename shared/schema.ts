@@ -88,7 +88,7 @@ export const clinicSessions = pgTable("clinic_sessions", {
   discipline: text("discipline").notNull(), // jumping, cross-country, dressage, polework, gridwork
   skillLevel: text("skill_level").notNull(), // 70cm/80cm, 90cm, 1m, 1.10m, beginner, intermediate, experienced
   price: integer("price").notNull(), // in euros
-  maxParticipants: integer("max_participants").notNull(),
+  maxParticipants: integer("max_participants"), // Optional - not mandatory
   currentParticipants: integer("current_participants").notNull().default(0),
   requirements: text("requirements"), // "Own horse required", "Suitable for green horses", etc.
   createdAt: timestamp("created_at").notNull().defaultNow(),

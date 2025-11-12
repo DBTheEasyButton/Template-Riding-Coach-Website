@@ -519,19 +519,6 @@ export default function ClinicsSection() {
                       {clinic.location}
                     </a>
                   </div>
-                  <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
-                    <Users className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
-                    <span className="transition-colors duration-300 group-hover:text-navy">
-                      {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                        ? (() => {
-                            const currentParticipants = clinic.sessions.reduce((total, session) => total + session.currentParticipants, 0);
-                            const maxParticipants = (clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12);
-                            return `${currentParticipants}/${maxParticipants} participants`;
-                          })()
-                        : `${clinic.currentParticipants}/${clinic.maxParticipants} participants`
-                      }
-                    </span>
-                  </div>
                   <div className="flex items-center text-sm text-dark transition-all duration-300 group-hover:translate-x-1">
                     <PoundSterling className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                     <span className="font-bold text-xl text-orange transition-all duration-300 group-hover:text-2xl group-hover:text-navy">
@@ -773,8 +760,9 @@ export default function ClinicsSection() {
                   <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Session Selection</h3>
                   <div className="space-y-3">
                     {selectedClinic.sessions.map((session) => {
-                      const isFull = session.currentParticipants >= session.maxParticipants;
-                      const spotsRemaining = session.maxParticipants - session.currentParticipants;
+                      const maxParticipants = session.maxParticipants;
+                      const isFull = maxParticipants !== null && session.currentParticipants >= maxParticipants;
+                      const spotsRemaining = maxParticipants !== null ? maxParticipants - session.currentParticipants : null;
                       
                       return (
                         <div key={session.id} className={`flex items-center space-x-3 p-3 border rounded-lg ${isFull ? 'bg-gray-50 border-gray-300' : 'border-gray-200'}`}>
@@ -796,13 +784,13 @@ export default function ClinicsSection() {
                                 {session.sessionName}
                               </label>
                               {isFull && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">FULL</span>}
-                              {!isFull && spotsRemaining <= 2 && <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">{spotsRemaining} spots left</span>}
+                              {!isFull && spotsRemaining !== null && spotsRemaining <= 2 && <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">{spotsRemaining} spots left</span>}
                             </div>
                             <p className={`text-sm ${isFull ? 'text-gray-400' : 'text-gray-600'}`}>
                               {session.discipline} • {session.skillLevel}
                             </p>
                             <p className={`text-sm ${isFull ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {session.currentParticipants}/{session.maxParticipants} participants • £{(session.price / 100).toFixed(0)}
+                              £{(session.price / 100).toFixed(0)}
                             </p>
                             {session.requirements && (
                               <p className="text-xs text-blue-600 mt-1">

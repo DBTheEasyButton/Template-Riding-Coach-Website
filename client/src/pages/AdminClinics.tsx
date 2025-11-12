@@ -44,7 +44,7 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 12,
+      maxParticipants: "" as number | "",
       requirements: ""
     }
   ]);
@@ -130,7 +130,7 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 12,
+      maxParticipants: "" as number | "",
       requirements: ""
     }]);
     setMissingFields([]);
@@ -142,7 +142,7 @@ export default function AdminClinics() {
       discipline: "jumping",
       skillLevel: "90cm",
       price: 80,
-      maxParticipants: 12,
+      maxParticipants: "" as number | "",
       requirements: ""
     };
     setSessions([...sessions, newSession]);
@@ -232,8 +232,6 @@ export default function AdminClinics() {
     
     const freshClinic = freshClinics.find((c: any) => c.id === clinic.id) || clinic;
     
-    console.log('Editing clinic with fresh data:', freshClinic);
-    
     // Force dialog to re-render with fresh data
     setDialogKey(prev => prev + 1);
     setEditingClinic(freshClinic);
@@ -256,7 +254,6 @@ export default function AdminClinics() {
       clinicType: freshClinic.clinicType || "single"
     };
     
-    console.log('Setting form data:', newFormData);
     setFormData(newFormData);
     
     // Load existing session data if available
@@ -266,10 +263,9 @@ export default function AdminClinics() {
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
         price: session.price ? Math.round(session.price / 100) : 80,
-        maxParticipants: session.maxParticipants || 12,
+        maxParticipants: session.maxParticipants ?? "",
         requirements: session.requirements || ""
       }));
-      console.log('Setting sessions:', existingSessions);
       setSessions(existingSessions);
     } else {
       setSessions([{
@@ -277,7 +273,7 @@ export default function AdminClinics() {
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
-        maxParticipants: 12,
+        maxParticipants: "" as number | "",
         requirements: ""
       }]);
     }
@@ -316,7 +312,7 @@ export default function AdminClinics() {
         discipline: session.discipline,
         skillLevel: session.skillLevel,
         price: session.price / 100, // Convert from cents to pounds for form display
-        maxParticipants: session.maxParticipants || 12,
+        maxParticipants: session.maxParticipants ?? "",
         requirements: session.requirements || ""
       }));
       setSessions(clonedSessions);
@@ -327,7 +323,7 @@ export default function AdminClinics() {
         discipline: "jumping",
         skillLevel: "90cm",
         price: 80,
-        maxParticipants: 12,
+        maxParticipants: "" as number | "",
         requirements: ""
       }]);
     }
@@ -379,11 +375,15 @@ export default function AdminClinics() {
     const endDate = formData.endDate 
       ? new Date(formData.endDate + 'T00:00:00') 
       : new Date(formData.date + 'T00:00:00');
+    const entryClosingDate = formData.entryClosingDate
+      ? new Date(formData.entryClosingDate + 'T00:00:00')
+      : null;
 
     const submitData = {
       ...formData,
       date: startDate,
       endDate: endDate,
+      entryClosingDate: entryClosingDate,
       price: formData.clinicType === 'single' ? Number(formData.price) : 0,
       maxParticipants: Number(formData.maxParticipants),
       sessions: formData.hasMultipleSessions ? sessions : []
@@ -811,12 +811,12 @@ export default function AdminClinics() {
                         </Select>
                       </div>
                       <div className="grid gap-2">
-                        <Label>Max Participants</Label>
+                        <Label>Max Participants (Optional)</Label>
                         <Input
                           type="number"
                           value={session.maxParticipants}
-                          onChange={(e) => updateSession(index, 'maxParticipants', parseInt(e.target.value) || 12)}
-                          placeholder="12"
+                          onChange={(e) => updateSession(index, 'maxParticipants', e.target.value ? parseInt(e.target.value) : "")}
+                          placeholder="Leave empty for unlimited"
                         />
                       </div>
                     </div>

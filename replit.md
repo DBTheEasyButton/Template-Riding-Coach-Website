@@ -28,13 +28,13 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **SEO:** Dynamic meta tag management (SEOHead component), JSON-LD structured data (StructuredData component), robots.txt, sitemap.xml, and web app manifest for PWA capabilities. All canonical URLs point to danbizzarromethod.com (not replit.app domain). Comprehensive technical and content SEO optimizations are implemented, including canonical URLs, Open Graph, and Twitter Cards. Home page features unique title: "Dan Bizzarro Method – International Eventing Coach & Training Clinics" and description highlighting Olympic-shortlisted credentials.
 
 **Feature Specifications:**
-- **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement. Mobile registration forms now display available spaces for each session.
+- **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement. **Privacy-focused design:** session max participant numbers are hidden from public view; only admins see capacity details. Public users see "FULL" or "spots left" warnings without revealing exact capacity numbers.
 - **Interactive Tools:**
     - **Readiness Quiz:** An interactive assessment with a specific question order.
     - **Stride Calculator:** A professional tool for equestrian distance calculations.
     - **Packing List Generator:** A customizable checklist creation tool with custom item input.
 - **Main Pages:** Home, About, Coaching, Gallery, News, and Contact pages, all designed for independent ranking and improved user experience.
-- **Admin Interface:** Includes functionality for managing news articles and Go High Level contacts.
+- **Admin Interface:** Includes functionality for managing clinics (with Entry Closing Date tracking), news articles, and Go High Level contact synchronization. Contact and Email Marketing admin pages removed as GHL handles all contact management directly.
 
 ## External Dependencies
 - **Google Analytics 4:** For website traffic and user behavior analytics.
