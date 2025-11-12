@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Target, Check, Award, TrendingUp } from "lucide-react";
+import dressageHeroImage from "@assets/FB_IMG_1665518864028_1762982625089.jpg";
 
 export default function Dressage() {
   const features = [
@@ -64,8 +65,13 @@ export default function Dressage() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] bg-gradient-to-r from-orange-600 to-orange-500">
-        <div className="absolute inset-0 bg-black/30"></div>
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <img 
+          src={dressageHeroImage} 
+          alt="Dan Bizzarro competing in dressage"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
