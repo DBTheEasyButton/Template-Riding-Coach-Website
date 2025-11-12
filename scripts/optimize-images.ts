@@ -30,6 +30,11 @@ const imagesToOptimize = [
     input: 'DBCLINIC-56_1762982883601.JPG',
     output: 'cross-country-clinic',
     description: 'Cross country clinic teaching image'
+  },
+  {
+    input: 'DBCLINIC-11_1762982965143.JPG',
+    output: 'show-jumping-clinic',
+    description: 'Show jumping clinic teaching image'
   }
 ];
 

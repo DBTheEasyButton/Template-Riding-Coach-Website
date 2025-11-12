@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Award, Check, Zap, TrendingUp } from "lucide-react";
 import showJumpingHeroJpg from "@assets/optimized/show-jumping-hero.jpg";
 import showJumpingHeroWebp from "@assets/optimized/show-jumping-hero.webp";
+import showJumpingClinicJpg from "@assets/optimized/show-jumping-clinic.jpg";
+import showJumpingClinicWebp from "@assets/optimized/show-jumping-clinic.webp";
 
 export default function ShowJumping() {
   const features = [
@@ -98,7 +100,7 @@ export default function ShowJumping() {
             <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Our professional show jumping coaching in Oxfordshire combines technical precision with boldness and partnership. As an experienced show jumping coach and international eventing coach, Dan Bizzarro's systematic approach develops both horse and rider, creating the confidence and jumping technique needed for competitive success in eventing and show jumping.
@@ -111,16 +113,28 @@ export default function ShowJumping() {
               </p>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-playfair font-bold text-navy mb-6">Training Focus</h3>
-              <ul className="space-y-4">
-                {features.map((feature, index) => (
-                  <li key={index} className="flex items-start text-dark">
-                    <Check className="w-5 h-5 text-orange mr-3 mt-1 flex-shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="space-y-6">
+              <picture>
+                <source srcSet={showJumpingClinicWebp} type="image/webp" />
+                <img 
+                  src={showJumpingClinicJpg} 
+                  alt="Dan Bizzarro teaching show jumping at clinic"
+                  className="w-full rounded-2xl shadow-lg"
+                  loading="lazy"
+                />
+              </picture>
+              
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <h3 className="text-2xl font-playfair font-bold text-navy mb-6">Training Focus</h3>
+                <ul className="space-y-4">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-dark">
+                      <Check className="w-5 h-5 text-orange mr-3 mt-1 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
