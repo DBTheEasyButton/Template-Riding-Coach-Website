@@ -456,7 +456,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Process all allowed fields - allow empty strings to clear old data
       const allowedFields = [
-        'title', 'description', 'date', 'endDate', 'location', 'price', 
+        'title', 'description', 'date', 'endDate', 'entryClosingDate', 'location', 'price', 
         'maxParticipants', 'level', 'type', 'image', 'isActive',
         'hasMultipleSessions', 'clinicType', 'crossCountryMaxParticipants', 
         'showJumpingMaxParticipants'
@@ -502,6 +502,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } else if (cleanedData.endDate === '' || cleanedData.endDate === null) {
         delete cleanedData.endDate; // Don't update with empty values
+      }
+      
+      // Convert entryClosingDate to proper Date object
+      if (cleanedData.entryClosingDate && typeof cleanedData.entryClosingDate === 'string' && cleanedData.entryClosingDate.trim() !== '') {
+        try {
+          const dateStr = cleanedData.entryClosingDate.includes('T') ? cleanedData.entryClosingDate : `${cleanedData.entryClosingDate}T23:59:59.000Z`;
+          const parsedDate = new Date(dateStr);
+          if (!isNaN(parsedDate.getTime())) {
+            cleanedData.entryClosingDate = parsedDate;
+          } else {
+            delete cleanedData.entryClosingDate; // Remove invalid date
+          }
+        } catch (e) {
+          delete cleanedData.entryClosingDate; // Remove invalid date
+        }
+      } else if (cleanedData.entryClosingDate === '' || cleanedData.entryClosingDate === null) {
+        cleanedData.entryClosingDate = null; // Allow clearing the date field
       }
       
       // Convert price to number and then to cents
