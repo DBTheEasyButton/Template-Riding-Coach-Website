@@ -70,12 +70,15 @@ export default function PrivateLessons() {
       {/* Overview Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Expert One-on-One Coaching
+            </h2>
+            <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
+          </div>
+          
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6 text-center">
-                Expert One-on-One Coaching
-              </h2>
-              <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Our private horse riding lessons in Oxfordshire offer personalized instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, Dan brings over 20 years of experience to every session.
               </p>

@@ -164,12 +164,15 @@ export default function GroupClinics() {
       {/* Overview Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Expert Training in Oxfordshire
+            </h2>
+            <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
+          </div>
+          
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6 text-center">
-                Expert Training in Oxfordshire
-              </h2>
-              <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Our group clinics offer specialized training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels—whether you ride for pleasure or competition.
               </p>
