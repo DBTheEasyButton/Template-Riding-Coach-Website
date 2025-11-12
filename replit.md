@@ -28,7 +28,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **SEO:** Dynamic meta tag management (SEOHead component), JSON-LD structured data (StructuredData component), robots.txt, sitemap.xml, and web app manifest for PWA capabilities. All canonical URLs point to danbizzarromethod.com (not replit.app domain). Comprehensive technical and content SEO optimizations are implemented, including canonical URLs, Open Graph, and Twitter Cards. Home page features unique title: "Dan Bizzarro Method – International Eventing Coach & Training Clinics" and description highlighting Olympic-shortlisted credentials.
 
 **Feature Specifications:**
-- **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement. **Privacy-focused design:** session max participant numbers are hidden from public view; only admins see capacity details. Public users see "FULL" or "spots left" warnings without revealing exact capacity numbers.
+- **Coaching Section:** Renamed from "Services" to "Coaching" with updated URL structure (`/coaching/*`). Includes dedicated pages for Private Lessons, Clinics (formerly Group Clinics), Remote Coaching, Dressage, Show Jumping, and Cross Country, all optimized for SEO and dual audience appeal. Flexible clinic management allows per-session and total clinic max participants with transaction-based capacity enforcement. **Privacy-focused design:** session max participant numbers are hidden from public view; only admins see capacity details. Public users see "FULL" or "spots left" warnings without revealing exact capacity numbers. **Clinic Registration Form:** Removed "Experience Level" field; "Horse Name" is now mandatory for all clinic registrations and syncs to GHL as a custom field.
 - **Interactive Tools:**
     - **Readiness Quiz:** An interactive assessment with a specific question order.
     - **Stride Calculator:** A professional tool for equestrian distance calculations.
@@ -42,6 +42,9 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Meta Pixel (Facebook Pixel):** For advertising campaign tracking and conversion events.
 - **Go High Level (GHL) API:** Integrated for contact management and synchronization:
   - Newsletter subscriptions automatically create/update contacts in GHL with a "Newsletter" tag
+  - Clinic registrations automatically create/update contacts in GHL with:
+    - "Clinic Registration" tag
+    - Custom field `horse_name` containing the participant's horse name
   - Contact data stored in `ghl_contacts` table for tracking and synchronization
   - Requires environment variables: `GHL_API_KEY` and `GHL_LOCATION_ID`
   - Admin interface available for syncing contacts from GHL to local database
