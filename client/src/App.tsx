@@ -23,6 +23,7 @@ const RemoteCoaching = lazy(() => import("@/pages/services/RemoteCoaching"));
 const Dressage = lazy(() => import("@/pages/services/Dressage"));
 const ShowJumping = lazy(() => import("@/pages/services/ShowJumping"));
 const CrossCountry = lazy(() => import("@/pages/services/CrossCountry"));
+const Polework = lazy(() => import("@/pages/services/Polework"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
 const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
@@ -108,6 +109,11 @@ function Router() {
       <Route path="/coaching/cross-country">
         <Suspense fallback={<PageLoader />}>
           <CrossCountry />
+        </Suspense>
+      </Route>
+      <Route path="/coaching/polework">
+        <Suspense fallback={<PageLoader />}>
+          <Polework />
         </Suspense>
       </Route>
       <Route path="/gallery">

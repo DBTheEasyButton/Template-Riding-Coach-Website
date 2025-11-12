@@ -126,6 +126,14 @@ export default function Footer() {
                   Cross Country
                 </Link>
               </li>
+              <li>
+                <Link 
+                  href="/coaching/polework"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Polework
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
