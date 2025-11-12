@@ -111,7 +111,7 @@ export default function GroupClinics() {
                   key={clinic.id}
                   className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
-                  <div className="bg-gradient-to-r from-orange to-orange/80 p-4 text-white">
+                  <div className="p-4 text-white" style={{ background: 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)' }}>
                     <h3 className="text-xl font-playfair font-bold mb-1 line-clamp-2">{clinic.title}</h3>
                     <div className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
