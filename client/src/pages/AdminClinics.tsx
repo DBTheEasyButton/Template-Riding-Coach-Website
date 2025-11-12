@@ -665,7 +665,7 @@ export default function AdminClinics() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="single">Single Session</SelectItem>
-                  <SelectItem value="multi-session">Multi-Session (Show Jumping + Cross Country)</SelectItem>
+                  <SelectItem value="multi-session">Multi-Session</SelectItem>
                   <SelectItem value="combo">Combo Day</SelectItem>
                 </SelectContent>
               </Select>
