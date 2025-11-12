@@ -724,7 +724,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               lastName: promotedParticipant.lastName,
               email: promotedParticipant.email,
               phone: promotedParticipant.phone,
-              experienceLevel: promotedParticipant.experienceLevel,
               horseName: promotedParticipant.horseName || undefined,
               specialRequests: promotedParticipant.specialRequests || undefined,
               emergencyContact: "To be provided", // Waitlist entries don't have emergency contact info
@@ -831,7 +830,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         acc[clinic.title][discipline].push({
           'Rider Name': `${reg.firstName} ${reg.lastName}`,
           'Horse Name': reg.horseName || 'N/A',
-          'Experience Level': reg.experienceLevel,
           'Special Requests': reg.specialRequests || 'None',
           'Email': reg.email,
           'Phone': reg.phone,
@@ -858,7 +856,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const cols = [
             { wch: 20 }, // Rider Name
             { wch: 20 }, // Horse Name
-            { wch: 15 }, // Experience Level
             { wch: 30 }, // Special Requests
             { wch: 25 }, // Email
             { wch: 15 }, // Phone
