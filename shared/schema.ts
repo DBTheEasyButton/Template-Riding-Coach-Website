@@ -102,7 +102,6 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
-  experienceLevel: text("experience_level"), // Made optional - no longer required
   horseName: text("horse_name").notNull(), // Made mandatory
   specialRequests: text("special_requests"),
   emergencyContact: text("emergency_contact").notNull(),
@@ -125,7 +124,6 @@ export const clinicWaitlist = pgTable("clinic_waitlist", {
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
-  experienceLevel: text("experience_level").notNull(),
   horseName: text("horse_name"),
   specialRequests: text("special_requests"),
   position: integer("position").notNull(), // position in waitlist
