@@ -499,7 +499,7 @@ export default function ClinicsSection() {
               onClick={() => window.open('https://wa.me/447767291713', '_blank')}
               className="bg-green-600 hover:bg-green-700 text-white"
             >
-              Book a Virtual Lesson
+              Book a Live Virtual Lesson
             </Button>
             <Button 
               onClick={() => window.open('https://wa.me/447767291713', '_blank')}

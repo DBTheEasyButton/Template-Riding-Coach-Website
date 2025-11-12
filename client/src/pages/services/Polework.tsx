@@ -103,7 +103,7 @@ export default function Polework() {
                 Our professional polework training in Oxfordshire combines systematic pole exercises with expert coaching to develop rhythm, balance, and jumping technique. As an international eventing coach, Dan Bizzarro uses grid work and gymnastic pole exercises to create confident, adjustable horses and riders across all eventing disciplines.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Polework coaching is available in multiple formats: specialized polework clinics for group learning, private lessons for personalized grid work instruction, and virtual coaching sessions where you submit video for detailed pole exercise analysis. This flexibility ensures every rider—from complete beginners to international competitors—can access expert pole work training.
+                Polework coaching is available in multiple formats: specialized polework clinics for group learning, private lessons for personalized grid work instruction, and live virtual coaching sessions where Dan watches you in real-time via video systems like Pivo while you wear earbuds to hear his coaching. This flexibility ensures every rider—from complete beginners to international competitors—can access expert pole work training.
               </p>
               <p className="text-lg text-dark leading-relaxed">
                 Whether you're an amateur rider building foundational balance through ground poles or a competitive eventer refining jumping technique with advanced gymnastic grids, our equestrian polework coaching in Oxfordshire delivers systematic training that improves rhythm, suppleness, and overall performance in dressage, show jumping, and cross country.
@@ -239,9 +239,9 @@ export default function Polework() {
                   <Zap className="w-6 h-6" />
                 </div>
               </div>
-              <h3 className="text-2xl font-playfair font-bold text-navy mb-4 text-center">Virtual Polework Coaching</h3>
+              <h3 className="text-2xl font-playfair font-bold text-navy mb-4 text-center">Live Virtual Polework</h3>
               <p className="text-dark mb-4 text-center leading-relaxed">
-                Submit video of your pole work sessions for expert analysis and feedback
+                Dan coaches you live via video (like Pivo) while you ride. Hear him through earbuds in real-time
               </p>
               <p className="text-2xl font-playfair font-bold text-navy mb-4 text-center">£80 per session</p>
               <div className="text-center">

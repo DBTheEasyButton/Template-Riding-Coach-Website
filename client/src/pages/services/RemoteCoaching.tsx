@@ -8,34 +8,34 @@ import virtualLessonHeroImage from "@assets/optimized/Generated Image November 1
 
 export default function RemoteCoaching() {
   const features = [
-    "Professional video analysis of your riding technique",
-    "Live online consultations via video call",
+    "Live coaching via video systems like Pivo",
+    "Real-time feedback as you ride",
     "Available worldwide - train from anywhere",
-    "Personalized feedback tailored to your level",
-    "Actionable training recommendations",
-    "Ongoing support for continuous improvement"
+    "Wear earbuds to hear coaching while you ride",
+    "Dan watches you live on his laptop",
+    "Personalized instruction tailored to your level"
   ];
 
   const howItWorks = [
     {
       step: "1",
-      title: "Record Your Session",
-      description: "Film your training session from multiple angles for comprehensive analysis"
+      title: "Setup Your System",
+      description: "Use a video system like Pivo that tracks you as you ride and streams live video"
     },
     {
       step: "2",
-      title: "Upload & Submit",
-      description: "Send your video along with specific questions or areas of focus"
+      title: "Connect Online",
+      description: "Join a video call with Dan where he can see you and your horse in real-time"
     },
     {
       step: "3",
-      title: "Expert Analysis",
-      description: "Dan reviews your footage and provides detailed feedback and recommendations"
+      title: "Wear Earbuds",
+      description: "Put in wireless earbuds so you can hear Dan's coaching as you ride"
     },
     {
       step: "4",
-      title: "Video Consultation",
-      description: "Schedule a live video call to discuss findings and next steps"
+      title: "Ride & Learn",
+      description: "Dan coaches you live, watching on his laptop and giving immediate feedback"
     }
   ];
 
@@ -43,26 +43,26 @@ export default function RemoteCoaching() {
     {
       icon: <Globe className="w-6 h-6" />,
       title: "Train Anywhere",
-      description: "Access expert coaching regardless of your location"
+      description: "Access live expert coaching regardless of your location"
     },
     {
       icon: <Video className="w-6 h-6" />,
-      title: "Detailed Analysis",
-      description: "Comprehensive video review with clear, actionable feedback"
+      title: "Real-Time Coaching",
+      description: "Get immediate feedback as you ride, just like an in-person lesson"
     },
     {
       icon: <MessageSquare className="w-6 h-6" />,
-      title: "Continuous Support",
-      description: "Ongoing guidance and communication between sessions"
+      title: "Live Communication",
+      description: "Two-way conversation during your session for instant guidance"
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Virtual Riding Lessons - Train Anywhere, Anytime | Dan Bizzarro Method"
-        description="Learn from home with our virtual riding lessons. Remote equestrian coaching provides personalized feedback and clear guidance from international eventing coach Dan Bizzarro."
-        keywords="virtual riding lessons, remote equestrian coaching, online horse training, video analysis, Dan Bizzarro Method, eventing coach, show jumping coach, cross country coach"
+        title="Virtual Riding Lessons - Live Online Coaching | Dan Bizzarro Method"
+        description="Train from anywhere with live virtual riding lessons using Pivo. Real-time remote equestrian coaching from international eventing coach Dan Bizzarro via video call while you ride."
+        keywords="virtual riding lessons, remote equestrian coaching, online horse training, live video coaching, Pivo equestrian, Dan Bizzarro Method, eventing coach, show jumping coach, cross country coach, live riding lessons"
         canonical="https://danbizzarromethod.com/coaching/remote-coaching"
       />
       
@@ -84,7 +84,7 @@ export default function RemoteCoaching() {
               Virtual Riding Lessons
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 mb-6">
-              Train anywhere, anytime with remote equestrian coaching
+              Live coaching from anywhere using video technology like Pivo
             </p>
             <a
               href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20virtual%20riding%20lesson"
@@ -112,17 +112,17 @@ export default function RemoteCoaching() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Virtual riding lessons combine modern technology with expert coaching to bring the Dan Bizzarro Method to riders worldwide. Using video analysis and online consultations, you receive personalized feedback from an international eventing coach without geographical limitations.
+                Virtual riding lessons use live video technology like Pivo to bring the Dan Bizzarro Method directly to riders worldwide. Dan watches you and your horse in real-time on his laptop while you wear earbuds to hear his coaching as you ride—just like an in-person lesson, but from anywhere in the world.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                This remote equestrian coaching format works perfectly whether you're an amateur rider building confidence or a competitor preparing for events. Simply record your riding session, submit the video, and receive detailed analysis followed by a live video consultation to discuss your progress.
+                This remote equestrian coaching format uses systems like Pivo that automatically track and follow you as you ride, streaming live video to Dan. You hear his voice through wireless earbuds, receiving immediate corrections, encouragement, and technical guidance exactly when you need it. It's truly live coaching—not video submission and feedback.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                As an experienced eventing coach, show jumping coach, and cross country coach, Dan provides comprehensive guidance across all disciplines—from beginner to international level—all from the comfort of your own training facility.
+                Whether you're an amateur rider building confidence or a competitor preparing for events, Dan provides real-time instruction across all disciplines—dressage, show jumping, cross country, and polework—from beginner to international level, all from your own training facility.
               </p>
               <div className="bg-orange/10 border-l-4 border-orange p-6 rounded-r-lg">
                 <p className="text-2xl font-playfair font-bold text-navy mb-2">£80 per session</p>
-                <p className="text-dark">Video analysis + live online consultation</p>
+                <p className="text-dark">Live virtual coaching with real-time feedback</p>
               </div>
             </div>
 
@@ -146,7 +146,7 @@ export default function RemoteCoaching() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              How to Get Started
+              How Live Virtual Lessons Work
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
@@ -176,7 +176,7 @@ export default function RemoteCoaching() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Benefits of Remote Equestrian Coaching
+              Benefits of Live Virtual Coaching
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
@@ -201,36 +201,49 @@ export default function RemoteCoaching() {
         </div>
       </section>
 
-      {/* Video Tips Section */}
+      {/* Equipment Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Video Recording Tips
+              Equipment You'll Need
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
 
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h4 className="font-bold text-navy mb-3">Camera Position</h4>
-              <p className="text-dark">Record from the long side of the arena at rider height for optimal viewing angle</p>
+              <h4 className="font-bold text-navy mb-3">Video System</h4>
+              <p className="text-dark">A device like Pivo that tracks and follows you, streaming live video (smartphone or tablet compatible)</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h4 className="font-bold text-navy mb-3">Lighting</h4>
-              <p className="text-dark">Film during daylight hours or in well-lit indoor arenas for clear visibility</p>
+              <h4 className="font-bold text-navy mb-3">Wireless Earbuds</h4>
+              <p className="text-dark">Any Bluetooth earbuds that stay secure while riding so you can hear Dan's coaching</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h4 className="font-bold text-navy mb-3">Video Length</h4>
-              <p className="text-dark">Capture 10-15 minutes of focused work showing the areas you want feedback on</p>
+              <h4 className="font-bold text-navy mb-3">Stable Internet</h4>
+              <p className="text-dark">Reliable WiFi or mobile data connection at your training facility for live video streaming</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h4 className="font-bold text-navy mb-3">File Format</h4>
-              <p className="text-dark">MP4 or MOV formats work best for easy sharing and review</p>
+              <h4 className="font-bold text-navy mb-3">Video Call App</h4>
+              <p className="text-dark">Zoom, FaceTime, WhatsApp video, or similar platform for the live coaching session</p>
             </div>
+          </div>
+          
+          <div className="mt-8 text-center">
+            <p className="text-dark text-lg">
+              <a 
+                href="https://pivoequestrian.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-orange hover:text-orange/80 font-semibold underline"
+              >
+                Learn more about Pivo equestrian systems
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -239,10 +252,10 @@ export default function RemoteCoaching() {
       <section className="py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
-            Start Your Virtual Riding Lessons Today
+            Start Live Virtual Lessons Today
           </h2>
           <p className="text-xl mb-8 text-gray-200">
-            Experience the Dan Bizzarro Method from anywhere in the world
+            Experience real-time coaching from anywhere in the world—£80 per session
           </p>
           <a 
             href="https://wa.me/447767291713?text=Hi%20Dan%2C%20I'd%20like%20to%20get%20started%20with%20virtual%20riding%20lessons." 
