@@ -62,8 +62,40 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Auto-fill data lookup by email
+  const lookupByEmail = async (email: string) => {
+    if (!email || !email.includes('@')) return;
+    
+    setIsLookingUpEmail(true);
+    try {
+      const response = await fetch(`/api/clinics/lookup-by-email/${encodeURIComponent(email)}`);
+      if (response.ok) {
+        const data = await response.json();
+        setRegistrationData(prev => ({
+          ...prev,
+          firstName: data.firstName || prev.firstName,
+          lastName: data.lastName || prev.lastName,
+          phone: data.phone || prev.phone,
+          horseName: data.horseName || prev.horseName,
+          emergencyContact: data.emergencyContact || prev.emergencyContact,
+          emergencyPhone: data.emergencyPhone || prev.emergencyPhone,
+          medicalConditions: data.medicalConditions || prev.medicalConditions
+        }));
+        toast({
+          title: "Welcome back!",
+          description: "We've pre-filled your details from your last registration.",
+        });
+      }
+    } catch (error) {
+      // Silently fail - it just means no previous registration
+    } finally {
+      setIsLookingUpEmail(false);
+    }
+  };
 
   // Load saved client data
   useEffect(() => {
@@ -315,6 +347,12 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   type="email"
                   value={registrationData.email}
                   onChange={(e) => updateRegistrationData('email', e.target.value)}
+                  onBlur={(e) => {
+                    const email = e.target.value.trim();
+                    if (email && email.includes('@')) {
+                      lookupByEmail(email);
+                    }
+                  }}
                   className={`mt-2 h-12 text-base ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
                   placeholder="your.email@example.com"
                   autoComplete="email"

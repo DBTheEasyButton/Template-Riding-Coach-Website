@@ -170,9 +170,42 @@ export default function ClinicsSection() {
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [hasSavedData, setHasSavedData] = useState(false);
+  const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Auto-fill data lookup by email
+  const lookupByEmail = async (email: string) => {
+    if (!email || !email.includes('@')) return;
+    
+    setIsLookingUpEmail(true);
+    try {
+      const response = await fetch(`/api/clinics/lookup-by-email/${encodeURIComponent(email)}`);
+      if (response.ok) {
+        const data = await response.json();
+        setRegistrationData(prev => ({
+          ...prev,
+          firstName: data.firstName || prev.firstName,
+          lastName: data.lastName || prev.lastName,
+          phone: data.phone || prev.phone,
+          horseName: data.horseName || prev.horseName,
+          emergencyContact: data.emergencyContact || prev.emergencyContact,
+          emergencyPhone: data.emergencyPhone || prev.emergencyPhone,
+          medicalConditions: data.medicalConditions || prev.medicalConditions
+        }));
+        setHasSavedData(true);
+        toast({
+          title: "Welcome back!",
+          description: "We've pre-filled your details from your last registration.",
+        });
+      }
+    } catch (error) {
+      // Silently fail - it just means no previous registration
+    } finally {
+      setIsLookingUpEmail(false);
+    }
+  };
 
   // Load saved client data from localStorage on component mount
   useEffect(() => {
@@ -849,6 +882,12 @@ export default function ClinicsSection() {
                     type="email"
                     value={registrationData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
+                    onBlur={(e) => {
+                      const email = e.target.value.trim();
+                      if (email && email.includes('@')) {
+                        lookupByEmail(email);
+                      }
+                    }}
                     placeholder="john@example.com"
                     className={formErrors.email ? "border-red-500" : ""}
                   />
