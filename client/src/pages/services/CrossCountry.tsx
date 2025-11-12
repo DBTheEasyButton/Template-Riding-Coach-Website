@@ -83,7 +83,7 @@ export default function CrossCountry() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              The Heart of Eventing
+              Expert Cross Country Coaching in Oxfordshire
             </h2>
             <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
           </div>
@@ -91,13 +91,13 @@ export default function CrossCountry() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Cross-country is where eventing truly comes alive—the thrill of galloping across varied terrain, the challenge of natural obstacles, and the deep partnership between horse and rider. Dan's training builds both the technical skills and mental confidence needed to tackle cross-country courses safely and successfully.
+                Our expert cross country coaching in Oxfordshire brings eventing to life—the thrill of galloping across varied terrain, the challenge of natural obstacles, and the deep partnership between horse and rider. As an international eventing coach and cross country specialist, Dan Bizzarro's training builds both the technical skills and mental confidence needed to tackle cross-country courses safely and successfully.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Training focuses on developing boldness without recklessness, teaching you to read terrain, manage speed, and make smart decisions at pace. Every session strengthens the trust and communication that forms the foundation of safe, successful cross-country riding.
+                Our cross country training focuses on developing boldness without recklessness, teaching you to read terrain, manage speed, and make smart tactical decisions at pace. Every equestrian lesson strengthens the trust and communication that forms the foundation of safe, successful cross-country riding—from water complexes and banks to ditches and technical combinations.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                From novice-level introductions to advanced international courses, the training emphasizes progressive development, ensuring both horse and rider gain experience and confidence at the appropriate pace for their level.
+                From novice-level introductions to advanced international eventing courses, our cross country coaching in Oxfordshire emphasizes progressive development, ensuring both horse and rider gain experience and confidence at the appropriate pace. Whether you're an amateur rider building cross country skills or a competitive eventer preparing for advanced courses, our training delivers results.
               </p>
             </div>
 

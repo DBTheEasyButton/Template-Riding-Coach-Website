@@ -83,7 +83,7 @@ export default function Dressage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              The Foundation of Everything
+              Expert Dressage Coaching in Oxfordshire
             </h2>
             <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
           </div>
@@ -91,13 +91,13 @@ export default function Dressage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Dressage is the cornerstone of eventing success. Strong flat work creates balance, suppleness, and communication that carries through to jumping and cross-country performance. Dan's classical training approach builds a solid foundation while preparing you for competitive success.
+                Our expert dressage training in Oxfordshire provides the foundation for eventing success. As an international eventing coach, Dan Bizzarro delivers specialist flat work coaching that creates balance, suppleness, and communication—essential skills that carry through to jumping and cross-country performance. This classical dressage training approach builds a solid foundation while preparing you for competitive success.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Whether you're working on basic test movements or refining advanced collection, every session focuses on developing harmony between horse and rider. This technical mastery translates directly into improved dressage scores and better overall eventing results.
+                Whether you're working on basic dressage test movements or refining advanced collection, every private dressage lesson focuses on developing harmony between horse and rider. Our equestrian coaching in Oxfordshire emphasizes the technical mastery that translates directly into improved dressage scores and better overall eventing results.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Training emphasizes correct basics: rhythm, relaxation, contact, impulsion, straightness, and collection—the classical training scale that produces consistent, competitive performances.
+                Our dressage coaching emphasizes the classical training scale: rhythm, relaxation, contact, impulsion, straightness, and collection—proven fundamentals that produce consistent, competitive performances for amateur riders and international competitors alike.
               </p>
             </div>
 

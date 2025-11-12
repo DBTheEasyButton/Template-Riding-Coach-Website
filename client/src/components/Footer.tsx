@@ -42,44 +42,89 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <button 
-                  onClick={() => scrollToSection('#about')}
+                <Link 
+                  href="/about"
                   className="text-gray-300 hover:text-orange transition-colors"
                 >
                   About
-                </button>
+                </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('#achievements')}
-                  className="text-gray-300 hover:text-orange transition-colors"
-                >
-                  Achievements
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => scrollToSection('#schedule')}
-                  className="text-gray-300 hover:text-orange transition-colors"
-                >
-                  Schedule
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => scrollToSection('#gallery')}
+                <Link 
+                  href="/gallery"
                   className="text-gray-300 hover:text-orange transition-colors"
                 >
                   Gallery
-                </button>
+                </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => scrollToSection('#news')}
+                <Link 
+                  href="/news"
                   className="text-gray-300 hover:text-orange transition-colors"
                 >
                   News
-                </button>
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/contact"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Coaching</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link 
+                  href="/coaching/private-lessons"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Private Lessons
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/coaching/clinics"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Clinics
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/coaching/remote-coaching"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Virtual Lessons
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/coaching/dressage"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Dressage
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/coaching/show-jumping"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Show Jumping
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/coaching/cross-country"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Cross Country
+                </Link>
               </li>
             </ul>
           </div>

@@ -83,7 +83,7 @@ export default function ShowJumping() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Jump with Precision
+              Expert Show Jumping Coaching in Oxfordshire
             </h2>
             <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
           </div>
@@ -91,13 +91,13 @@ export default function ShowJumping() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Show jumping is where technical precision meets boldness and partnership. Dan's systematic approach develops both horse and rider, creating the confidence and technique needed for competitive success.
+                Our professional show jumping coaching in Oxfordshire combines technical precision with boldness and partnership. As an experienced show jumping coach and international eventing coach, Dan Bizzarro's systematic approach develops both horse and rider, creating the confidence and jumping technique needed for competitive success in eventing and show jumping.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Training progresses methodically from fundamental grid work through complex technical courses. Each session builds on the last, developing the adjustability, carefulness, and scope required at every level of eventing.
+                Show jumping training progresses methodically from fundamental grid work and polework through complex technical courses. Each private show jumping lesson builds on the last, developing the adjustability, carefulness, and scope required at every level—from novice competitors to advanced eventers preparing for championship courses.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Whether you're working on consistency at lower heights or preparing for championship-level courses, the focus remains on creating a confident, careful jumping partnership that consistently delivers clear rounds.
+                Whether you're an amateur rider working on consistency at lower heights or a competitive eventer preparing for championship-level show jumping, our equestrian coaching in Oxfordshire focuses on creating a confident, careful jumping partnership that consistently delivers clear rounds.
               </p>
             </div>
 
