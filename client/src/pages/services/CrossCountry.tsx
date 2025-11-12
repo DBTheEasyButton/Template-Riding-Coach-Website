@@ -72,7 +72,7 @@ export default function CrossCountry() {
     },
     {
       question: "What is course walking and why is it important?",
-      answer: "Cross country course walking is essential preparation where you analyze each obstacle, assess terrain and footing, plan your lines and speeds, identify options and alternatives, and make tactical decisions. Dan teaches riders to walk professionally—understanding fence design, terrain challenges, optimal lines, and where to take time or make it up. Good course walking can make the difference between a clear round and problems, helping you ride smart and safe."
+      answer: "Cross country course walking is essential preparation where you analyse each obstacle, assess terrain and footing, plan your lines and speeds, identify options and alternatives, and make tactical decisions. Dan teaches riders to walk professionally—understanding fence design, terrain challenges, optimal lines, and where to take time or make it up. Good course walking can make the difference between a clear round and problems, helping you ride smart and safe."
     },
     {
       question: "How fast should I go cross country?",

@@ -43,7 +43,7 @@ export default function ShowJumping() {
     {
       icon: <Award className="w-6 h-6" />,
       title: "Clear Rounds",
-      description: "Reduce rails and time faults for better competition results"
+      description: "Reduce poles and time faults for better competition results"
     },
     {
       icon: <Zap className="w-6 h-6" />,
@@ -59,8 +59,8 @@ export default function ShowJumping() {
 
   const faqs = [
     {
-      question: "How can I stop knocking down rails in show jumping?",
-      answer: "Knocking rails usually stems from several factors: rider position (getting ahead or behind the movement), pace issues (too fast or too slow), poor line or distance, or lack of horse carefulness. Dan addresses all these areas through systematic training—improving your position, developing better rhythm, teaching you to see distances, and using gymnastic exercises to improve your horse's technique and carefulness. Consistent, correct training produces cleaner rounds."
+      question: "How can I stop knocking down poles in show jumping?",
+      answer: "Knocking poles usually stems from several factors: rider position (getting ahead or behind the movement), pace issues (too fast or too slow), poor line or distance, or lack of horse carefulness. Dan addresses all these areas through systematic training—improving your position, developing better rhythm, teaching you to see distances, and using gymnastic exercises to improve your horse's technique and carefulness. Consistent, correct training produces cleaner rounds."
     },
     {
       question: "What is grid work and how does it help?",
@@ -68,7 +68,7 @@ export default function ShowJumping() {
     },
     {
       question: "How do I learn to see distances to jumps?",
-      answer: "Seeing distances comes from developing rhythm, understanding stride length, and gaining experience. Dan teaches riders to establish consistent rhythm first, then gradually develops distance awareness through progressive exercises. Counting strides, working over ground poles, riding related distances, and analyzing courses all contribute. Most importantly, Dan teaches you to trust your horse's rhythm and avoid micromanaging—good rhythm produces good distances more reliably than trying to 'find' every stride."
+      answer: "Seeing distances comes from developing rhythm, understanding stride length, and gaining experience. Dan teaches riders to establish consistent rhythm first, then gradually develops distance awareness through progressive exercises. Counting strides, working over ground poles, riding related distances, and analysing courses all contribute. Most importantly, Dan teaches you to trust your horse's rhythm and avoid micromanaging—good rhythm produces good distances more reliably than trying to 'find' every stride."
     },
     {
       question: "Do you teach show jumping at all levels?",
@@ -84,11 +84,11 @@ export default function ShowJumping() {
     },
     {
       question: "How do I walk a show jumping course effectively?",
-      answer: "Course walking is a crucial skill Dan teaches all competitive riders. It involves analyzing each fence, planning your lines and turns, counting strides in related distances, identifying potential problems, and creating a riding plan. Dan teaches you to walk like a professional—understanding jump design, terrain, footing, and how to set up each fence for success. Good course walking directly improves competition results."
+      answer: "Course walking is a crucial skill Dan teaches all competitive riders. It involves analysing each fence, planning your lines and turns, counting strides in related distances, identifying potential problems, and creating a riding plan. Dan teaches you to walk like a professional—understanding jump design, terrain, footing, and how to set up each fence for success. Good course walking directly improves competition results."
     },
     {
       question: "What's the difference between show jumping and cross country jumping?",
-      answer: "Show jumping uses colorful, moveable fences in an enclosed arena, ridden at a controlled pace with precision and accuracy prioritized. Cross country uses fixed natural obstacles across varying terrain, ridden at speed with boldness and trust emphasized. However, both require good technique, rider position, and horse training. Skills developed in show jumping—rhythm, straightness, adjustability—directly benefit cross country performance. Dan coaches both disciplines for well-rounded training."
+      answer: "Show jumping uses colourful, moveable fences in an enclosed arena, ridden at a controlled pace with precision and accuracy prioritised. Cross country uses fixed natural obstacles across varying terrain, ridden at speed with boldness and trust emphasised. However, both require good technique, rider position, and horse training. Skills developed in show jumping—rhythm, straightness, adjustability—directly benefit cross country performance. Dan coaches both disciplines for well-rounded training."
     },
     {
       question: "How often should I have show jumping lessons?",

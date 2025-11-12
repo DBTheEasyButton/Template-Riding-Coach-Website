@@ -68,7 +68,7 @@ export default function GroupClinics() {
     },
     {
       question: "What skill levels attend your clinics?",
-      answer: "Clinics cater to all levels from beginners to advanced competitors. Each clinic day typically has multiple sessions organized by skill level—for example, beginner/novice sessions, intermediate sessions, and advanced sessions. When registering, you select the session that matches your current experience level. This ensures everyone rides with others at a similar ability, creating a supportive and effective learning environment."
+      answer: "Clinics cater to all levels from beginners to advanced competitors. Each clinic day typically has multiple sessions organised by skill level—for example, beginner/novice sessions, intermediate sessions, and advanced sessions. When registering, you select the session that matches your current experience level. This ensures everyone rides with others at a similar ability, creating a supportive and effective learning environment."
     },
     {
       question: "How many riders are in each clinic session?",
@@ -100,7 +100,7 @@ export default function GroupClinics() {
     },
     {
       question: "What is your cancellation policy for clinics?",
-      answer: "Cancellation policies vary by clinic and are detailed in the Terms & Conditions when you register. Generally, cancellations made well in advance may receive refunds or credit toward future clinics, while late cancellations may forfeit payment. This policy ensures fairness to all participants and allows us to plan appropriately. Specific details are always provided before you complete your registration."
+      answer: "Cancellation policies vary by clinic and are detailed in the Terms & Conditions when you register. Generally, cancellations made well in advance may receive refunds or credit towards future clinics, while late cancellations may forfeit payment. This policy ensures fairness to all participants and allows us to plan appropriately. Specific details are always provided before you complete your registration."
     },
     {
       question: "Can spectators attend clinics?",
