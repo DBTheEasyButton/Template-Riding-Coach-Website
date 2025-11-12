@@ -225,6 +225,9 @@ export default function Dressage() {
           <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
             Improve Your Dressage Scores
           </h2>
+          <p className="text-3xl font-playfair font-bold text-orange mb-4">
+            £80 per private session
+          </p>
           <p className="text-xl mb-8 text-gray-200">
             Book a session and start mastering the foundation of eventing
           </p>

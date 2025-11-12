@@ -244,6 +244,9 @@ export default function ShowJumping() {
           <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
             Jump Clear and Confident
           </h2>
+          <p className="text-3xl font-playfair font-bold text-orange mb-4">
+            £80 per private session
+          </p>
           <p className="text-xl mb-8 text-gray-200">
             Book a session and start improving your show jumping performance
           </p>
