@@ -969,7 +969,7 @@ export default function ClinicsSection() {
                     id="specialRequests"
                     value={registrationData.specialRequests}
                     onChange={(e) => handleInputChange('specialRequests', e.target.value)}
-                    placeholder="Any special requirements, goals for the clinic, or questions..."
+                    placeholder="Please include your preferred session times and any specific goals or requests for the clinic..."
                     rows={3}
                   />
                 </div>

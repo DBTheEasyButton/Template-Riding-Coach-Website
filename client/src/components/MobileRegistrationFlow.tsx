@@ -432,7 +432,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   value={registrationData.specialRequests}
                   onChange={(e) => updateRegistrationData('specialRequests', e.target.value)}
                   className="mt-1 h-20"
-                  placeholder="Any special requirements or requests..."
+                  placeholder="Please include your preferred session times and any specific goals or requests..."
                 />
               </div>
 
