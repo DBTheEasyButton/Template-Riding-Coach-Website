@@ -1095,8 +1095,8 @@ export default function ClinicsSection() {
                 <Button
                   type="submit"
                   onClick={submitRegistration}
-                  disabled={createPaymentIntentMutation.isPending}
-                  className="bg-navy hover:bg-slate-800 text-white"
+                  disabled={createPaymentIntentMutation.isPending || !registrationData.agreeToTerms}
+                  className="bg-navy hover:bg-slate-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {createPaymentIntentMutation.isPending ? (
                     <>
