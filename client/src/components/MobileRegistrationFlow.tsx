@@ -458,9 +458,9 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                     <Label htmlFor="agreeToTerms" className="text-sm cursor-pointer">
                       I agree to the{' '}
                       <a href="/terms-and-conditions" target="_blank" className="text-blue-600 hover:underline">
-                        Terms & Conditions
+                        Clinic Terms and Conditions
                       </a>{' '}
-                      including email marketing consent and photography/video usage rights.
+                      and understand the risks involved in equestrian activities. I also consent to photos and videos being taken during the clinic which may be used on Dan Bizzarro's social media, website, and promotional materials.
                     </Label>
                   </div>
                 </div>
