@@ -794,7 +794,7 @@ export default function ClinicsSection() {
                             </p>
                             {session.requirements && (
                               <p className="text-xs text-blue-600 mt-1">
-                                Requirements: {session.requirements}
+                                {session.requirements}
                               </p>
                             )}
                           </div>
