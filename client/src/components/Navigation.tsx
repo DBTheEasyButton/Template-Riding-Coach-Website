@@ -71,6 +71,18 @@ export default function Navigation() {
     }
   };
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    setIsCoachingDropdownOpen(false);
+    
+    // Navigate to home page
+    window.location.href = "/";
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-gray-200/95 backdrop-blur-md' : 'bg-gray-100/90 backdrop-blur-md'
@@ -78,13 +90,13 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 xl:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex-shrink-0">
-            <Link href="/">
+            <a href="/" onClick={handleLogoClick}>
               <img 
                 src={logoPath} 
                 alt="Dan Bizzarro Eventing" 
                 className="h-10 sm:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
-            </Link>
+            </a>
           </div>
           
           <div className="hidden lg:block">
