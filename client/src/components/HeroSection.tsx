@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 import heroImagePath from "@assets/hero-background.jpg";
 import dressageImage from "@assets/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import crossCountryImage from "@assets/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
@@ -77,13 +78,31 @@ export default function HeroSection() {
         <p className="text-6xl md:text-8xl font-playfair font-bold mb-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
           Dan Bizzarro
         </p>
-        <div className="flex justify-center opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
-          <Button 
-            onClick={() => scrollToSection('#clinics')}
-            className="bg-navy hover:bg-navy text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110"
-          >
-            BOOK A LESSON OR A CLINIC
-          </Button>
+        <div className="flex flex-col md:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
+          <Link href="/coaching/private-lessons">
+            <Button 
+              className="bg-navy hover:bg-slate-800 text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
+              data-testid="button-book-private-lesson"
+            >
+              BOOK A PRIVATE LESSON
+            </Button>
+          </Link>
+          <Link href="/coaching/clinics">
+            <Button 
+              className="bg-orange hover:bg-orange/90 text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
+              data-testid="button-book-clinic"
+            >
+              BOOK A CLINIC
+            </Button>
+          </Link>
+          <Link href="/coaching/remote-coaching">
+            <Button 
+              className="bg-navy hover:bg-slate-800 text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
+              data-testid="button-book-virtual-lesson"
+            >
+              BOOK A VIRTUAL LESSON
+            </Button>
+          </Link>
         </div>
         
         {/* Social Media Icons */}
