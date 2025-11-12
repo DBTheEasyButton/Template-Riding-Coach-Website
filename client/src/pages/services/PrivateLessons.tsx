@@ -57,11 +57,6 @@ export default function PrivateLessons() {
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
-            <div className="flex justify-center mb-4">
-              <div className="bg-white/20 p-4 rounded-full">
-                <Users className="w-12 h-12 text-white" />
-              </div>
-            </div>
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Private Horse Riding Lessons
             </h1>
