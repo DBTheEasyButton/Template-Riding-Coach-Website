@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Target, Check, Zap, Heart, Shield } from "lucide-react";
-import crossCountryHeroImage from "@assets/cross-country-saumur-riot.jpg";
+import crossCountryHeroImage from "@assets/optimized/cross-country-hero.jpg";
+import crossCountryClinicImage from "@assets/optimized/cross-country-clinic.jpg";
 
 export default function CrossCountry() {
   const features = [
@@ -94,7 +95,7 @@ export default function CrossCountry() {
             <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Our expert cross country coaching in Oxfordshire brings eventing to life—the thrill of galloping across varied terrain, the challenge of natural obstacles, and the deep partnership between horse and rider. As an international eventing coach and cross country specialist, Dan Bizzarro's training builds both the technical skills and mental confidence needed to tackle cross-country courses safely and successfully.
@@ -107,16 +108,25 @@ export default function CrossCountry() {
               </p>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-playfair font-bold text-navy mb-6">Training Focus</h3>
-              <ul className="space-y-4">
-                {features.map((feature, index) => (
-                  <li key={index} className="flex items-start text-dark">
-                    <Check className="w-5 h-5 text-orange mr-3 mt-1 flex-shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="space-y-6">
+              <img 
+                src={crossCountryClinicImage} 
+                alt="Dan Bizzarro teaching cross country at clinic"
+                className="w-full rounded-2xl shadow-lg"
+                loading="lazy"
+              />
+              
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <h3 className="text-2xl font-playfair font-bold text-navy mb-6">Training Focus</h3>
+                <ul className="space-y-4">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-dark">
+                      <Check className="w-5 h-5 text-orange mr-3 mt-1 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

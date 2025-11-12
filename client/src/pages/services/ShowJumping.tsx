@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Award, Check, Zap, TrendingUp } from "lucide-react";
-import showJumpingHeroImage from "@assets/IMG-20241014-WA0007_1762982708175.jpg";
+import showJumpingHeroImage from "@assets/optimized/show-jumping-hero.jpg";
 
 export default function ShowJumping() {
   const features = [

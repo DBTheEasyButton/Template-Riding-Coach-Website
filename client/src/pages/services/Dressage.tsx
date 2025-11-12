@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Target, Check, Award, TrendingUp } from "lucide-react";
-import dressageHeroImage from "@assets/FB_IMG_1665518864028_1762982625089.jpg";
+import dressageHeroImage from "@assets/optimized/dressage-hero.jpg";
 
 export default function Dressage() {
   const features = [
