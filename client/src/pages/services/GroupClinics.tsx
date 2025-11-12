@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import ClinicsSection from "@/components/ClinicsSection";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Calendar, Check, Users, Award, Target, MapPin, Clock } from "lucide-react";
 import clinicsHeroImage from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
 import { useQuery } from "@tanstack/react-query";
@@ -53,6 +54,57 @@ export default function GroupClinics() {
       icon: <Target className="w-6 h-6" />,
       title: "Achieve Your Goals",
       description: "Whether competing or riding for pleasure, reach your personal objectives"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "How much do clinics cost and how do I register?",
+      answer: "Clinic pricing varies depending on the session and format. Most clinics are structured with multiple sessions throughout the day for different skill levels. Registration is done online through this website with secure payment via Stripe. You'll select which session(s) you want to attend based on your level and goals. Once registered, you'll receive confirmation and all details for the clinic day."
+    },
+    {
+      question: "What types of clinics do you offer?",
+      answer: "We offer show jumping clinics, polework clinics, and cross country clinics in Oxfordshire. Each clinic focuses on specific skills—show jumping clinics work on technique and course work, polework clinics develop rhythm and balance through gymnastic exercises, and cross country clinics build confidence over natural obstacles. All clinics are designed as single-day training sessions with multiple sessions for different experience levels."
+    },
+    {
+      question: "What skill levels attend your clinics?",
+      answer: "Clinics cater to all levels from beginners to advanced competitors. Each clinic day typically has multiple sessions organized by skill level—for example, beginner/novice sessions, intermediate sessions, and advanced sessions. When registering, you select the session that matches your current experience level. This ensures everyone rides with others at a similar ability, creating a supportive and effective learning environment."
+    },
+    {
+      question: "How many riders are in each clinic session?",
+      answer: "We keep group sizes small to ensure individual attention from Dan. Most sessions have 4-8 riders, depending on the specific clinic and discipline. This allows Dan to work with each rider personally while still providing the benefits of group learning—watching others, shared feedback, and a supportive atmosphere. The smaller group size distinguishes our clinics from larger group lessons."
+    },
+    {
+      question: "Where are clinics held?",
+      answer: "Clinics are held at various locations around Oxfordshire and surrounding areas. The specific venue is listed for each clinic on the registration page. Most clinics take place at facilities with excellent arenas and jump courses suitable for the discipline being taught. Location details, including Google Maps links, are provided when you view clinic information."
+    },
+    {
+      question: "How long does a clinic session last?",
+      answer: "Each session typically lasts 60-90 minutes, providing ample time for warm-up, focused instruction, and skill development without overworking horses. A full clinic day usually includes 3-5 sessions at different times, allowing you to choose which session(s) fit your schedule and level. Some riders attend multiple sessions if they want more intensive training."
+    },
+    {
+      question: "What should I bring to a clinic?",
+      answer: "Bring your horse properly groomed and with appropriate tack for the discipline (jumping tack for show jumping/polework, cross country equipment for XC clinics). Your horse should have proper protective boots or wraps. You'll need a properly fitted riding helmet (safety-certified), riding boots, gloves if preferred, and water for both you and your horse. Dan will provide expert coaching and may use video analysis during the session."
+    },
+    {
+      question: "Can I register for multiple sessions in one clinic?",
+      answer: "Yes! Many riders register for multiple sessions throughout the clinic day if they want more intensive training or if they have multiple horses. When registering, you can select as many sessions as you'd like to attend. Each session is separately bookable, giving you flexibility to create your ideal training day. Attending multiple sessions provides great value for dedicated riders."
+    },
+    {
+      question: "What if my horse is young or inexperienced?",
+      answer: "Young and inexperienced horses are welcome at appropriate skill-level sessions. When registering, choose the beginner or novice session that matches your horse's experience. Dan is experienced in working with young horses and will ensure exercises are suitable for their development level. The group format actually helps young horses by exposing them to other horses in a controlled training environment."
+    },
+    {
+      question: "Do I earn loyalty rewards for attending clinics?",
+      answer: "Yes! The Dan Bizzarro Method offers a loyalty rewards program for clinic participants. You earn points for every clinic you attend, and after every 5 clinic registrations, you receive a 15% discount code for future clinics. It's our way of rewarding dedicated riders who regularly train with us. You can check your loyalty status and points on the website."
+    },
+    {
+      question: "What is your cancellation policy for clinics?",
+      answer: "Cancellation policies vary by clinic and are detailed in the Terms & Conditions when you register. Generally, cancellations made well in advance may receive refunds or credit toward future clinics, while late cancellations may forfeit payment. This policy ensures fairness to all participants and allows us to plan appropriately. Specific details are always provided before you complete your registration."
+    },
+    {
+      question: "Can spectators attend clinics?",
+      answer: "Spectator policies vary by venue. Some locations welcome spectators to watch and learn, while others have restrictions due to space or facility rules. When you register for a clinic, spectator information will be provided. Many riders find it beneficial to bring friends or family who can video their session or help with their horse."
     }
   ];
 
@@ -237,6 +289,38 @@ export default function GroupClinics() {
 
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Frequently Asked Questions
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+            <p className="text-lg text-dark">
+              Everything you need to know about our show jumping, polework, and cross country clinics
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem 
+                key={index} 
+                value={`item-${index}`}
+                className="bg-white rounded-lg border border-gray-200 px-6"
+              >
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-navy pr-4">{faq.question}</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-dark leading-relaxed pt-2">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-navy text-white">

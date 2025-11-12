@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Users, Check, Calendar, Target, Award } from "lucide-react";
 import privateLessonHeroImage from "@assets/optimized/DBCLINIC-28_1762927604781.jpg";
 import privateLessonClinicJpg from "@assets/optimized/private-lessons-clinic.jpg";
@@ -33,6 +34,57 @@ export default function PrivateLessons() {
       icon: <Award className="w-6 h-6" />,
       title: "All Levels Welcome",
       description: "From amateur riders to international competitors—training for every goal"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "How much do private horse riding lessons cost in Oxfordshire?",
+      answer: "Private riding lessons with Dan Bizzarro cost £80 per session. This includes personalized one-on-one coaching in dressage, show jumping, cross country, or polework, tailored to your specific goals and experience level. Each session is customized to help you and your horse progress effectively."
+    },
+    {
+      question: "What experience level do I need for private riding lessons?",
+      answer: "Private lessons are suitable for all levels, from complete beginners to international competitors. Whether you're an amateur rider building confidence or a competitive eventer preparing for advanced competitions, Dan tailors the coaching to your current ability and goals. Beginners receive foundational instruction, while experienced riders work on refining technique and competition preparation."
+    },
+    {
+      question: "Where do private riding lessons take place?",
+      answer: "Private riding lessons are held in Ascott-Under-Wychwood, Oxfordshire, at Crown Farm. The facility offers excellent training facilities for dressage, show jumping, and polework. For riders outside the local area, virtual lessons are also available using live video technology like Pivo."
+    },
+    {
+      question: "How do I book a private riding lesson with Dan Bizzarro?",
+      answer: "You can book a private lesson by contacting Dan via WhatsApp at +44 7767 291713 or by clicking the 'Book a Lesson' button on this page. Lessons are scheduled based on availability and can be arranged at times that suit your schedule. Dan offers flexible booking to accommodate your training needs."
+    },
+    {
+      question: "What disciplines can I learn in private lessons?",
+      answer: "Private lessons cover all three eventing disciplines: dressage (flatwork), show jumping, and cross country. You can also focus specifically on polework and gymnastic grid exercises. Dan provides expert coaching in whichever discipline you want to improve, whether you're training for a specific competition or building overall riding skills."
+    },
+    {
+      question: "Can I bring my own horse to private lessons?",
+      answer: "Yes, private lessons are conducted with your own horse. This allows Dan to work specifically with your partnership and address the unique strengths and challenges of your horse-and-rider combination. Training your own horse ensures the skills you develop translate directly to your competitions and regular riding."
+    },
+    {
+      question: "How long is a private riding lesson?",
+      answer: "Each private riding lesson is typically 45-60 minutes, providing focused coaching time without overworking horse or rider. The exact duration may vary depending on the specific training focus and your horse's fitness level. Dan ensures each session is productive and appropriate for your training goals."
+    },
+    {
+      question: "Do you offer private lessons for young or nervous horses?",
+      answer: "Yes, Dan has extensive experience working with young horses and nervous or sensitive horses. Private lessons provide the ideal environment for horses that need extra patience, careful introduction to new obstacles, or confidence building. The one-on-one format allows Dan to work at your horse's pace without group pressure."
+    },
+    {
+      question: "Can I have regular weekly private lessons?",
+      answer: "Absolutely! Many riders schedule regular weekly or fortnightly private lessons to maintain consistent progress. Regular lessons help build a strong training foundation and allow Dan to track your development over time. Contact Dan to discuss setting up a regular lesson schedule that fits your availability."
+    },
+    {
+      question: "What should I bring to my private riding lesson?",
+      answer: "Bring your horse properly tacked up and ready to ride, your riding helmet (properly fitted and safety-certified), appropriate riding boots, and gloves if preferred. For jumping lessons, your horse should have appropriate jump boots or wraps. Dan will provide expert guidance and may use video analysis, so no additional equipment is needed from you."
+    },
+    {
+      question: "Are private lessons better than group clinics?",
+      answer: "Private lessons and group clinics each offer unique benefits. Private lessons provide 100% individualized attention, flexible scheduling, and coaching tailored specifically to your goals and challenges. They're ideal for riders wanting intensive one-on-one instruction, working on specific issues, or those with horses that need individual attention. Group clinics offer a more affordable option and the opportunity to learn from watching other riders. Many riders benefit from combining both formats."
+    },
+    {
+      question: "Can I get help preparing for a specific competition?",
+      answer: "Yes, private lessons are excellent for competition preparation. Dan can help you prepare for specific events by working on required movements, jumping courses similar to what you'll face, or building confidence for cross country obstacles. Tell Dan about your upcoming competition, and he'll tailor the lesson to ensure you and your horse are ready to perform your best."
     }
   ];
 
@@ -194,6 +246,38 @@ export default function PrivateLessons() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Frequently Asked Questions
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+            <p className="text-lg text-dark">
+              Everything you need to know about private riding lessons in Oxfordshire
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem 
+                key={index} 
+                value={`item-${index}`}
+                className="bg-white rounded-lg border border-gray-200 px-6"
+              >
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-navy pr-4">{faq.question}</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-dark leading-relaxed pt-2">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 
