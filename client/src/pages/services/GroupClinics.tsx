@@ -5,6 +5,7 @@ import SEOHead from "@/components/SEOHead";
 import ClinicsSection from "@/components/ClinicsSection";
 import { Button } from "@/components/ui/button";
 import { Calendar, Check, Users, Award, Target } from "lucide-react";
+import clinicsHeroImage from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
 
 export default function GroupClinics() {
   const features = [
@@ -46,8 +47,15 @@ export default function GroupClinics() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] bg-gradient-to-r from-navy to-slate-700">
-        <div className="absolute inset-0 bg-black/30"></div>
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <img
+          src={clinicsHeroImage}
+          alt="Dan Bizzarro coaching group clinic with riders and horses"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <div className="flex justify-center mb-4">
