@@ -72,7 +72,7 @@ export default function GroupClinics() {
     },
     {
       question: "How many riders are in each clinic session?",
-      answer: "We keep group sizes small to ensure individual attention from Dan. Most sessions have 4-8 riders, depending on the specific clinic and discipline. This allows Dan to work with each rider personally while still providing the benefits of group learning—watching others, shared feedback, and a supportive atmosphere. The smaller group size distinguishes our clinics from larger group lessons."
+      answer: "We keep group sizes small to ensure individual attention from Dan. Most sessions have a maximum of 3-4 riders, depending on the specific clinic and discipline. This allows Dan to work with each rider personally while still providing the benefits of group learning—watching others, shared feedback, and a supportive atmosphere. The smaller group size distinguishes our clinics from larger group lessons."
     },
     {
       question: "Where are clinics held?",
