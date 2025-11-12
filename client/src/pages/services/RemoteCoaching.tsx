@@ -7,6 +7,17 @@ import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
 import virtualLessonHeroImage from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 
 export default function RemoteCoaching() {
+  const pivoLink = (
+    <a 
+      href="https://pivoequestrian.com" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="text-orange hover:text-orange/80 font-semibold underline"
+    >
+      Pivo
+    </a>
+  );
+
   const features = [
     "Live coaching via video systems like Pivo",
     "Real-time feedback as you ride",
@@ -20,7 +31,8 @@ export default function RemoteCoaching() {
     {
       step: "1",
       title: "Setup Your System",
-      description: "Use a video system like Pivo that tracks you as you ride and streams live video"
+      description: "Use a video system like Pivo that tracks you as you ride and streams live video",
+      isPivoMention: true
     },
     {
       step: "2",
@@ -84,7 +96,15 @@ export default function RemoteCoaching() {
               Virtual Riding Lessons
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 mb-6">
-              Live coaching from anywhere using video technology like Pivo
+              Live coaching from anywhere using video technology like{" "}
+              <a 
+                href="https://pivoequestrian.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-orange hover:text-orange/80 font-bold underline"
+              >
+                Pivo
+              </a>
             </p>
             <a
               href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20virtual%20riding%20lesson"
@@ -112,10 +132,28 @@ export default function RemoteCoaching() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Virtual riding lessons use live video technology like Pivo to bring the Dan Bizzarro Method directly to riders worldwide. Dan watches you and your horse in real-time on his laptop while you wear earbuds to hear his coaching as you ride—just like an in-person lesson, but from anywhere in the world.
+                Virtual riding lessons use live video technology like{" "}
+                <a 
+                  href="https://pivoequestrian.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-orange hover:text-orange/80 font-semibold underline"
+                >
+                  Pivo
+                </a>
+                {" "}to bring the Dan Bizzarro Method directly to riders worldwide. Dan watches you and your horse in real-time on his laptop while you wear earbuds to hear his coaching as you ride—just like an in-person lesson, but from anywhere in the world.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                This remote equestrian coaching format uses systems like Pivo that automatically track and follow you as you ride, streaming live video to Dan. You hear his voice through wireless earbuds, receiving immediate corrections, encouragement, and technical guidance exactly when you need it. It's truly live coaching—not video submission and feedback.
+                This remote equestrian coaching format uses systems like{" "}
+                <a 
+                  href="https://pivoequestrian.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-orange hover:text-orange/80 font-semibold underline"
+                >
+                  Pivo
+                </a>
+                {" "}that automatically track and follow you as you ride, streaming live video to Dan. You hear his voice through wireless earbuds, receiving immediate corrections, encouragement, and technical guidance exactly when you need it. It's truly live coaching—not video submission and feedback.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Whether you're an amateur rider building confidence or a competitor preparing for events, Dan provides real-time instruction across all disciplines—dressage, show jumping, cross country, and polework—from beginner to international level, all from your own training facility.
@@ -164,7 +202,24 @@ export default function RemoteCoaching() {
                   </div>
                 </div>
                 <h3 className="text-xl font-playfair font-bold text-navy mb-3">{item.title}</h3>
-                <p className="text-dark leading-relaxed">{item.description}</p>
+                <p className="text-dark leading-relaxed">
+                  {item.step === "1" ? (
+                    <>
+                      Use a video system like{" "}
+                      <a 
+                        href="https://pivoequestrian.com" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-orange hover:text-orange/80 font-semibold underline"
+                      >
+                        Pivo
+                      </a>
+                      {" "}that tracks you as you ride and streams live video
+                    </>
+                  ) : (
+                    item.description
+                  )}
+                </p>
               </div>
             ))}
           </div>
@@ -214,7 +269,18 @@ export default function RemoteCoaching() {
           <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl p-6 shadow-md">
               <h4 className="font-bold text-navy mb-3">Video System</h4>
-              <p className="text-dark">A device like Pivo that tracks and follows you, streaming live video (smartphone or tablet compatible)</p>
+              <p className="text-dark">
+                A device like{" "}
+                <a 
+                  href="https://pivoequestrian.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-orange hover:text-orange/80 font-semibold underline"
+                >
+                  Pivo
+                </a>
+                {" "}that tracks and follows you, streaming live video (smartphone or tablet compatible)
+              </p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-md">
