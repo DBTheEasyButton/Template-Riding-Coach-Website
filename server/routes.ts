@@ -214,6 +214,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Lookup previous registration data by email for auto-fill
+  app.get("/api/clinics/lookup-by-email/:email", async (req, res) => {
+    try {
+      const email = decodeURIComponent(req.params.email).toLowerCase().trim();
+      if (!email || !email.includes('@')) {
+        return res.status(400).json({ message: "Invalid email address" });
+      }
+      
+      const allRegistrations = await storage.getAllClinicRegistrations();
+      // Find the most recent registration for this email
+      const userRegistrations = allRegistrations
+        .filter(reg => reg.email.toLowerCase().trim() === email)
+        .sort((a, b) => new Date(b.registeredAt).getTime() - new Date(a.registeredAt).getTime());
+      
+      if (userRegistrations.length === 0) {
+        return res.status(404).json({ message: "No previous registration found" });
+      }
+      
+      const latestReg = userRegistrations[0];
+      
+      // Return only the fields that should be auto-filled (no sensitive data)
+      const autoFillData = {
+        firstName: latestReg.firstName,
+        lastName: latestReg.lastName,
+        email: latestReg.email,
+        phone: latestReg.phone,
+        horseName: latestReg.horseName,
+        emergencyContact: latestReg.emergencyContact,
+        emergencyPhone: latestReg.emergencyPhone,
+        medicalConditions: latestReg.medicalConditions || ''
+      };
+      
+      res.json(autoFillData);
+    } catch (error) {
+      console.error("Error looking up registration:", error);
+      res.status(500).json({ message: "Failed to lookup registration" });
+    }
+  });
+
   // Create payment intent for clinic registration
   app.post("/api/clinics/:id/create-payment-intent", async (req, res) => {
     try {
