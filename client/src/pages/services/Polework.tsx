@@ -151,7 +151,7 @@ export default function Polework() {
                 Our professional polework training in Oxfordshire combines systematic pole exercises with expert coaching to develop rhythm, balance, and jumping technique. As an international eventing coach, Dan Bizzarro uses grid work and gymnastic pole exercises to create confident, adjustable horses and riders across all eventing disciplines.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Polework coaching is available in multiple formats: specialized polework clinics for group learning, private lessons for personalized grid work instruction, and live virtual coaching sessions where Dan watches you in real-time via video systems like{" "}
+                Polework coaching is available in multiple formats: specialised polework clinics for group learning, private lessons for personalised grid work instruction, and live virtual coaching sessions where Dan watches you in real-time via video systems like{" "}
                 <a 
                   href="https://pivoequestrian.com" 
                   target="_blank" 

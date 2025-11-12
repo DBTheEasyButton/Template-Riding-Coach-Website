@@ -22,7 +22,7 @@ export default function PrivateLessons() {
   const benefits = [
     {
       icon: <Target className="w-6 h-6" />,
-      title: "Personalized Attention",
+      title: "Personalised Attention",
       description: "Focused coaching tailored to your experience level and objectives"
     },
     {
@@ -40,7 +40,7 @@ export default function PrivateLessons() {
   const faqs = [
     {
       question: "How much do private horse riding lessons cost in Oxfordshire?",
-      answer: "Private riding lessons with Dan Bizzarro cost £80 per session. This includes personalized one-on-one coaching in dressage, show jumping, cross country, or polework, tailored to your specific goals and experience level. Each session is customized to help you and your horse progress effectively."
+      answer: "Private riding lessons with Dan Bizzarro cost £80 per session. This includes personalised one-on-one coaching in dressage, show jumping, cross country, or polework, tailored to your specific goals and experience level. Each session is customised to help you and your horse progress effectively."
     },
     {
       question: "What experience level do I need for private riding lessons?",
@@ -92,8 +92,8 @@ export default function PrivateLessons() {
     <div className="min-h-screen bg-white">
       <SEOHead 
         title="Private Horse Riding Lessons in Oxfordshire | Dan Bizzarro Method"
-        description="Expert private horse riding lessons in Oxfordshire with international eventing coach Dan Bizzarro. Personalized training from beginner to advanced levels in show jumping, cross country, and dressage."
-        keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalized training"
+        description="Expert private horse riding lessons in Oxfordshire with international eventing coach Dan Bizzarro. Personalised training from beginner to advanced levels in show jumping, cross country, and dressage."
+        keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalised training"
         canonical="https://danbizzarromethod.com/coaching/private-lessons"
       />
       
@@ -143,7 +143,7 @@ export default function PrivateLessons() {
           <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our private horse riding lessons in Oxfordshire offer personalized instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, Dan brings over 20 years of experience to every session.
+                Our private horse riding lessons in Oxfordshire offer personalised instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, Dan brings over 20 years of experience to every session.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Whether you're an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. Training covers all aspects of equestrian education—from foundational flatwork to advanced competition preparation.
@@ -153,7 +153,7 @@ export default function PrivateLessons() {
               </p>
               <div className="bg-orange/10 border-l-4 border-orange p-6 rounded-r-lg">
                 <p className="text-2xl font-playfair font-bold text-navy mb-2">£80 per session</p>
-                <p className="text-dark">Personalized coaching for you and your horse</p>
+                <p className="text-dark">Personalised coaching for you and your horse</p>
               </div>
             </div>
 

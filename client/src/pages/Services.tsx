@@ -13,9 +13,9 @@ export default function Services() {
     {
       icon: <Users className="w-8 h-8" />,
       title: "Private Lessons",
-      description: "One-on-one personalized instruction tailored to your specific riding goals and experience level.",
+      description: "One-on-one personalised instruction tailored to your specific riding goals and experience level.",
       features: [
-        "Customized training plans",
+        "Customised training plans",
         "Individual attention",
         "Flexible scheduling",
         "Progress tracking"
@@ -111,7 +111,7 @@ export default function Services() {
                 Dan offers comprehensive instruction across all three eventing disciplines: <strong>flat work</strong> for foundation and dressage development, <strong>jumping</strong> for technique and confidence, and <strong>cross-country</strong> for boldness and precision over natural obstacles.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Whether you're just starting your equestrian journey or aiming for international competition, Dan's personalized approach ensures every rider reaches their full potential.
+                Whether you're just starting your equestrian journey or aiming for international competition, Dan's personalised approach ensures every rider reaches their full potential.
               </p>
               
               <div className="grid grid-cols-2 gap-6">
@@ -138,7 +138,7 @@ export default function Services() {
               <div className="relative">
                 <img 
                   src={coachingImage1} 
-                  alt="Dan Bizzarro coaching flat work - personalized instruction in the arena" 
+                  alt="Dan Bizzarro coaching flat work - personalised instruction in the arena" 
                   className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                 />
                 <div className="absolute -bottom-6 -left-6 bg-orange text-white p-6 rounded-xl shadow-xl max-w-[200px]">

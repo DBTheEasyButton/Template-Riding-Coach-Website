@@ -231,11 +231,11 @@ export default function StrideCalculator() {
   const getNotesForDistanceType = (type: DistanceType): string => {
     switch (type) {
       case "walk-poles":
-        return "Measured from center of pole to center of pole. Horse should walk calmly with regular rhythm.";
+        return "Measured from centre of pole to centre of pole. Horse should walk calmly with regular rhythm.";
       case "trot-poles":
-        return "Measured from center of pole to center of pole. Maintain steady trot rhythm throughout.";
+        return "Measured from centre of pole to centre of pole. Maintain steady trot rhythm throughout.";
       case "canter-poles":
-        return "Measured from center of pole to center of pole. Keep steady canter rhythm and balance.";
+        return "Measured from centre of pole to centre of pole. Keep steady canter rhythm and balance.";
       case "gridwork":
         return "Measured from back of first element to front of second element. Adjust for jump height.";
       case "course-distances":

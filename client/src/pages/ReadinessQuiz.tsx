@@ -259,7 +259,7 @@ export default function ReadinessQuiz() {
                 Eventing Readiness Quiz
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Assess your preparation for your target eventing level with personalized feedback and recommendations.
+                Assess your preparation for your target eventing level with personalised feedback and recommendations.
               </p>
             </div>
 

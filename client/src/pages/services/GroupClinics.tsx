@@ -226,10 +226,10 @@ export default function GroupClinics() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our group clinics offer specialized training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels—whether you ride for pleasure or competition.
+                Our group clinics offer specialised training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels—whether you ride for pleasure or competition.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Each clinic focuses on the Dan Bizzarro Method, combining technical instruction with practical application. With small group sizes, you receive personalized feedback while benefiting from watching fellow riders tackle similar challenges.
+                Each clinic focuses on the Dan Bizzarro Method, combining technical instruction with practical application. With small group sizes, you receive personalised feedback while benefiting from watching fellow riders tackle similar challenges.
               </p>
               <p className="text-lg text-dark leading-relaxed">
                 Our equestrian lessons in Oxfordshire cater to both amateur riders building confidence and competitors preparing for events. From foundational polework clinics to advanced show-jumping and cross country sessions, there's a clinic designed for your goals.

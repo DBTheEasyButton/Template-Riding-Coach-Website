@@ -198,7 +198,7 @@ export default function CompetitionChecklists() {
           <h1 className="text-5xl font-playfair font-bold text-navy mb-6">Competition Preparation</h1>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Generate comprehensive, personalized checklists for your competitions. Stay organized and never miss a crucial preparation step.
+            Generate comprehensive, personalised checklists for your competitions. Stay organised and never miss a crucial preparation step.
           </p>
         </div>
 

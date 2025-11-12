@@ -94,7 +94,7 @@ export default function Dressage() {
     },
     {
       question: "Do I need special dressage tack for lessons?",
-      answer: "No special tack is required for dressage lessons with Dan. Your regular training saddle and bridle are fine. Competition dressage requires specific tack (dressage saddle, double bridle for advanced levels), but for training, comfort and fit are more important than equipment type. Dan focuses on developing your riding and your horse's training, which matters far more than having specialized equipment."
+      answer: "No special tack is required for dressage lessons with Dan. Your regular training saddle and bridle are fine. Competition dressage requires specific tack (dressage saddle, double bridle for advanced levels), but for training, comfort and fit are more important than equipment type. Dan focuses on developing your riding and your horse's training, which matters far more than having specialised equipment."
     }
   ];
 
