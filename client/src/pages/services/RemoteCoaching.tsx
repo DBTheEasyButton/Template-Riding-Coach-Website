@@ -108,9 +108,13 @@ export default function RemoteCoaching() {
               <p className="text-lg text-dark leading-relaxed mb-6">
                 This remote equestrian coaching format works perfectly whether you're an amateur rider building confidence or a competitor preparing for events. Simply record your riding session, submit the video, and receive detailed analysis followed by a live video consultation to discuss your progress.
               </p>
-              <p className="text-lg text-dark leading-relaxed">
+              <p className="text-lg text-dark leading-relaxed mb-6">
                 As an experienced eventing coach, show jumping coach, and cross country coach, Dan provides comprehensive guidance across all disciplines—from beginner to international level—all from the comfort of your own training facility.
               </p>
+              <div className="bg-orange/10 border-l-4 border-orange p-6 rounded-r-lg">
+                <p className="text-2xl font-playfair font-bold text-navy mb-2">£80 per session</p>
+                <p className="text-dark">Video analysis + live online consultation</p>
+              </div>
             </div>
 
             <div className="bg-gray-50 rounded-2xl p-8">

@@ -5,6 +5,8 @@ import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Users, Check, Calendar, Target, Award } from "lucide-react";
 import privateLessonHeroImage from "@assets/optimized/DBCLINIC-28_1762927604781.jpg";
+import privateLessonClinicJpg from "@assets/optimized/private-lessons-clinic.jpg";
+import privateLessonClinicWebp from "@assets/optimized/private-lessons-clinic.webp";
 
 export default function PrivateLessons() {
   const features = [
@@ -77,7 +79,7 @@ export default function PrivateLessons() {
             <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Our private horse riding lessons in Oxfordshire offer personalized instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, Dan brings over 20 years of experience to every session.
@@ -85,21 +87,37 @@ export default function PrivateLessons() {
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Whether you're an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. Training covers all aspects of equestrian education—from foundational flatwork to advanced competition preparation.
               </p>
-              <p className="text-lg text-dark leading-relaxed">
+              <p className="text-lg text-dark leading-relaxed mb-6">
                 These equestrian lessons in Oxfordshire welcome riders from complete beginners to international level competitors. Dan's approach balances technical excellence with an encouraging, supportive environment that makes learning enjoyable while achieving measurable results.
               </p>
+              <div className="bg-orange/10 border-l-4 border-orange p-6 rounded-r-lg">
+                <p className="text-2xl font-playfair font-bold text-navy mb-2">£80 per session</p>
+                <p className="text-dark">Personalized coaching for you and your horse</p>
+              </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-playfair font-bold text-navy mb-6">What's Included</h3>
-              <ul className="space-y-4">
-                {features.map((feature, index) => (
-                  <li key={index} className="flex items-start text-dark">
-                    <Check className="w-5 h-5 text-orange mr-3 mt-1 flex-shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="space-y-6">
+              <picture>
+                <source srcSet={privateLessonClinicWebp} type="image/webp" />
+                <img 
+                  src={privateLessonClinicJpg} 
+                  alt="Dan Bizzarro teaching private riding lesson"
+                  className="w-full rounded-2xl shadow-lg"
+                  loading="lazy"
+                />
+              </picture>
+              
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <h3 className="text-2xl font-playfair font-bold text-navy mb-6">What's Included</h3>
+                <ul className="space-y-4">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-dark">
+                      <Check className="w-5 h-5 text-orange mr-3 mt-1 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
