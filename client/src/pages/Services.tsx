@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Award, Users, Target, Video, Calendar } from "lucide-react";
-import coachingImage1 from "@assets/1_1749388256611.jpg";
-import coachingImage2 from "@assets/2_1749388256612.jpg";
+import coachingImage1 from "@assets/optimized/1_1749388256611.jpg";
+import coachingImage2 from "@assets/optimized/2_1749388256612.jpg";
 
 export default function Services() {
 

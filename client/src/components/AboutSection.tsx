@@ -1,5 +1,5 @@
-import danPhotoPath from "@assets/13_1749386080915.jpg";
-import danWithHorsesPath from "@assets/11_1749504952106.jpg";
+import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
+import danWithHorsesPath from "@assets/optimized/11_1749504952106.jpg";
 
 export default function AboutSection() {
   return (

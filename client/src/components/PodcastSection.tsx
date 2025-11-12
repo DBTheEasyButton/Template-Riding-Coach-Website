@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play, Headphones, Users, Star, ExternalLink } from "lucide-react";
-import podcastLogo from "@assets/Podcast Logo_1749499160253.png";
+import podcastLogo from "@assets/optimized/Podcast Logo_1749499160253.png";
 
 export default function PodcastSection() {
   return (

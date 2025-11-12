@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
-import virtualLessonHeroImage from "@assets/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
+import virtualLessonHeroImage from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 
 export default function RemoteCoaching() {
   const features = [
@@ -74,6 +74,8 @@ export default function RemoteCoaching() {
           src={virtualLessonHeroImage}
           alt="Virtual riding lesson session with online coaching"
           className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">

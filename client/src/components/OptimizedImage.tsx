@@ -37,16 +37,18 @@ export function OptimizedImage({
     return canvas.toDataURL('image/avif').indexOf('data:image/avif') === 0;
   };
 
+  // Get WebP version path (if it exists in optimized folder)
+  const getWebPSrc = (originalSrc: string) => {
+    return originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+  };
+
   // Generate responsive image sources
   const getOptimizedSrc = (originalSrc: string) => {
-    // For now, just return the original src to ensure images display
-    // The optimization can be enhanced later with proper fallback handling
     return originalSrc;
   };
 
   // Generate srcset for responsive images
   const generateSrcSet = (originalSrc: string) => {
-    // Disable srcset for now to ensure images load properly
     return '';
   };
 
@@ -68,23 +70,30 @@ export function OptimizedImage({
   }, [src]);
 
   const srcSet = generateSrcSet(src);
+  const webpSrc = getWebPSrc(currentSrc);
 
   return (
-    <img
-      src={currentSrc}
-      srcSet={srcSet || undefined}
-      sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
-      alt={alt}
-      className={className}
-      width={width}
-      height={height}
-      loading={loading}
-      onError={handleError}
-      style={{
-        maxWidth: '100%',
-        height: 'auto'
-      }}
-    />
+    <picture>
+      {/* Serve WebP to browsers that support it */}
+      <source srcSet={webpSrc} type="image/webp" />
+      {/* Fallback to original format */}
+      <img
+        src={currentSrc}
+        srcSet={srcSet || undefined}
+        sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        alt={alt}
+        className={className}
+        width={width}
+        height={height}
+        loading={loading}
+        decoding="async"
+        onError={handleError}
+        style={{
+          maxWidth: '100%',
+          height: 'auto'
+        }}
+      />
+    </picture>
   );
 }
 

@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import heroImagePath from "@assets/hero-background.jpg";
-import dressageImage from "@assets/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
-import crossCountryImage from "@assets/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
-import showJumpingImage from "@assets/Riot Boekelo sj 2022_1749504436583.jpg";
-import facebookLogo from "@assets/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (5)_1752564178859.png";
-import instagramLogo from "@assets/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (7)_1752564178858.png";
+import heroImagePath from "@assets/optimized/hero-background.jpg";
+import dressageImage from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
+import crossCountryImage from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
+import showJumpingImage from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.jpg";
+import facebookLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (5)_1752564178859.png";
+import instagramLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (7)_1752564178858.png";
 
 export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
