@@ -26,7 +26,6 @@ interface RegistrationData {
   lastName: string;
   email: string;
   phone: string;
-  experienceLevel: string;
   horseName: string;
   specialRequests: string;
   emergencyContact: string;
@@ -53,7 +52,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     lastName: '',
     email: '',
     phone: '',
-    experienceLevel: 'intermediate', // Default for mobile flow
     horseName: '',
     specialRequests: '',
     emergencyContact: '',
@@ -183,7 +181,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         lastName: registrationData.lastName,
         email: registrationData.email,
         phone: registrationData.phone,
-        experienceLevel: registrationData.experienceLevel,
         horseName: registrationData.horseName || undefined,
         specialRequests: registrationData.specialRequests || undefined,
         emergencyContact: registrationData.emergencyContact,
@@ -200,7 +197,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         lastName: registrationData.lastName,
         email: registrationData.email,
         phone: registrationData.phone,
-        experienceLevel: registrationData.experienceLevel,
         horseName: registrationData.horseName,
         emergencyContact: registrationData.emergencyContact,
         emergencyPhone: registrationData.emergencyPhone,
