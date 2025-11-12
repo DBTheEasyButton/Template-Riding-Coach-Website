@@ -4,10 +4,31 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import ClinicsSection from "@/components/ClinicsSection";
 import { Button } from "@/components/ui/button";
-import { Calendar, Check, Users, Award, Target } from "lucide-react";
+import { Calendar, Check, Users, Award, Target, MapPin, Clock } from "lucide-react";
 import clinicsHeroImage from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
+import { useQuery } from "@tanstack/react-query";
+import type { Clinic } from "@shared/schema";
 
 export default function GroupClinics() {
+  const { data: clinics = [] } = useQuery<Clinic[]>({
+    queryKey: ['/api/clinics'],
+  });
+
+  // Get next 3 upcoming clinics
+  const upcomingClinics = clinics
+    .filter(clinic => new Date(clinic.date) >= new Date())
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 3);
+
+  const formatDate = (date: string | Date) => {
+    return new Date(date).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
   const features = [
     "Single-day training sessions for all levels",
     "Show-jumping, polework, and cross country options",
@@ -72,6 +93,68 @@ export default function GroupClinics() {
           </div>
         </div>
       </section>
+
+      {/* Next 3 Upcoming Clinics */}
+      {upcomingClinics.length > 0 && (
+        <section className="py-12 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-playfair font-bold text-navy mb-2">
+                Upcoming Clinics
+              </h2>
+              <p className="text-gray-600">Join us at our next training sessions</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {upcomingClinics.map((clinic) => (
+                <div 
+                  key={clinic.id}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="bg-gradient-to-r from-orange to-orange/80 p-4 text-white">
+                    <h3 className="text-xl font-playfair font-bold mb-1">{clinic.title}</h3>
+                    <div className="flex items-center text-sm">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      {formatDate(clinic.date)}
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 space-y-3">
+                    <div className="flex items-start text-sm text-gray-600">
+                      <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-orange" />
+                      <span>{clinic.location}</span>
+                    </div>
+                    
+                    <p className="text-gray-700 text-sm line-clamp-2">{clinic.description}</p>
+                    
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+                      <div className="text-2xl font-bold text-orange">
+                        £{clinic.price}
+                      </div>
+                      <Link href="#clinics">
+                        <Button 
+                          size="sm"
+                          className="bg-navy hover:bg-slate-800 text-white"
+                          onClick={() => {
+                            setTimeout(() => {
+                              const element = document.getElementById('clinics');
+                              if (element) {
+                                element.scrollIntoView({ behavior: 'smooth' });
+                              }
+                            }, 100);
+                          }}
+                        >
+                          Register
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Overview Section */}
       <section className="py-20 bg-white">
