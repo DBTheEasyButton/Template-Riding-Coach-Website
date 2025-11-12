@@ -81,7 +81,7 @@ export default function HeroSection() {
         <div className="flex flex-col md:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
           <Link href="/coaching/private-lessons">
             <Button 
-              className="bg-navy hover:bg-slate-800 text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
+              className="bg-navy text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
               data-testid="button-book-private-lesson"
             >
               BOOK A PRIVATE LESSON
@@ -89,7 +89,7 @@ export default function HeroSection() {
           </Link>
           <Link href="/coaching/clinics">
             <Button 
-              className="bg-orange hover:bg-orange/90 text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
+              className="bg-orange text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
               data-testid="button-book-clinic"
             >
               BOOK A CLINIC
@@ -97,7 +97,7 @@ export default function HeroSection() {
           </Link>
           <Link href="/coaching/remote-coaching">
             <Button 
-              className="bg-navy hover:bg-slate-800 text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
+              className="bg-navy text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
               data-testid="button-book-virtual-lesson"
             >
               BOOK A VIRTUAL LESSON
