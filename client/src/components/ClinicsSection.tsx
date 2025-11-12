@@ -492,25 +492,12 @@ export default function ClinicsSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               
-              <CardHeader className="transition-transform duration-300 group-hover:translate-y-1 pb-2">
-                <CardTitle className="text-2xl font-playfair text-navy font-bold transition-colors duration-300 group-hover:text-orange line-clamp-2">{clinic.title}</CardTitle>
-                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-2 mt-2">{clinic.description}</CardDescription>
+              <CardHeader className="transition-transform duration-300 group-hover:translate-y-1">
+                <CardTitle className="text-xl font-playfair text-navy font-bold transition-colors duration-300 group-hover:text-orange">{clinic.title}</CardTitle>
+                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-3">{clinic.description}</CardDescription>
               </CardHeader>
               
-              <CardContent className="transition-transform duration-300 group-hover:translate-y-1 flex-grow pt-0">
-                <div className="bg-orange/10 border border-orange/30 rounded-lg p-3 mb-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-navy">Price:</span>
-                    <span className="font-bold text-2xl text-orange">
-                      {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
-                        ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
-                        : clinic.price > 0 
-                          ? `£${(clinic.price / 100).toFixed(0)}`
-                          : 'Price TBA'
-                      }
-                    </span>
-                  </div>
-                </div>
+              <CardContent className="transition-transform duration-300 group-hover:translate-y-1 flex-grow">
               </CardContent>
               
               <CardFooter className="flex flex-col gap-4 transition-transform duration-300 group-hover:translate-y-2">
@@ -529,6 +516,17 @@ export default function ClinicsSection() {
                     >
                       {clinic.location}
                     </a>
+                  </div>
+                  <div className="flex items-center text-sm text-dark transition-all duration-300 group-hover:translate-x-1">
+                    <PoundSterling className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                    <span className="font-bold text-xl text-orange transition-all duration-300 group-hover:text-2xl group-hover:text-navy">
+                      {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                        ? `from £${(Math.min(...clinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
+                        : clinic.price > 0 
+                          ? `£${(clinic.price / 100).toFixed(0)}`
+                          : 'Price TBA'
+                      }
+                    </span>
                   </div>
                   {clinic.entryClosingDate && (
                     <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
