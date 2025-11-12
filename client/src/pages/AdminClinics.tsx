@@ -482,9 +482,9 @@ export default function AdminClinics() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
-                          {clinic.hasMultipleSessions 
-                            ? `${(clinic.showJumpingMaxParticipants || 12) + (clinic.crossCountryMaxParticipants || 12)} max`
-                            : `${clinic.maxParticipants} max`
+                          {clinic.maxParticipants > 0 
+                            ? `${clinic.maxParticipants} max`
+                            : 'Unlimited'
                           }
                         </div>
                       </div>

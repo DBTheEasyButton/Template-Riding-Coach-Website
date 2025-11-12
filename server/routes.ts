@@ -548,6 +548,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Recreate sessions if provided (old sessions already deleted in updateClinic)
       if (sessions && Array.isArray(sessions)) {
         for (const session of sessions) {
+          // Properly handle maxParticipants: convert to number, allow null for unlimited
+          let sessionMaxParticipants = null;
+          if (session.maxParticipants !== undefined && session.maxParticipants !== "" && session.maxParticipants !== null) {
+            sessionMaxParticipants = parseInt(session.maxParticipants.toString());
+          }
+          
           await storage.createClinicSession({
             clinicId: updatedClinic.id,
             sessionName: session.sessionName || "",
@@ -556,7 +562,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             discipline: session.discipline || "jumping",
             skillLevel: session.skillLevel || "90cm",
             price: session.price ? Math.round(session.price * 100) : 8000,
-            maxParticipants: session.maxParticipants || 12,
+            maxParticipants: sessionMaxParticipants,
             currentParticipants: 0,
             requirements: session.requirements || null
           });
