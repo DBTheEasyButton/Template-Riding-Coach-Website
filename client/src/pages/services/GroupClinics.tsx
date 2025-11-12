@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { Clinic } from "@shared/schema";
 
 export default function GroupClinics() {
-  const { data: clinics = [] } = useQuery<Clinic[]>({
+  const { data: clinics = [] } = useQuery<any[]>({
     queryKey: ['/api/clinics'],
   });
 
@@ -112,7 +112,7 @@ export default function GroupClinics() {
                   className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
                   <div className="bg-gradient-to-r from-orange to-orange/80 p-4 text-white">
-                    <h3 className="text-xl font-playfair font-bold mb-1">{clinic.title}</h3>
+                    <h3 className="text-xl font-playfair font-bold mb-1 line-clamp-2">{clinic.title}</h3>
                     <div className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
                       {formatDate(clinic.date)}
@@ -129,7 +129,12 @@ export default function GroupClinics() {
                     
                     <div className="flex items-center justify-between pt-3 border-t border-gray-200">
                       <div className="text-2xl font-bold text-orange">
-                        £{clinic.price}
+                        {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+                          ? `from £${(Math.min(...clinic.sessions.map((s: any) => s.price)) / 100).toFixed(0)}`
+                          : clinic.price > 0 
+                            ? `£${(clinic.price / 100).toFixed(0)}`
+                            : 'Price TBA'
+                        }
                       </div>
                       <Link href="#clinics">
                         <Button 
