@@ -157,7 +157,6 @@ export default function ClinicsSection() {
     lastName: '',
     email: '',
     phone: '',
-    experienceLevel: '',
     horseName: '',
     specialRequests: '',
     emergencyContact: '',
@@ -243,7 +242,6 @@ export default function ClinicsSection() {
         lastName: registrationData.lastName,
         email: registrationData.email,
         phone: registrationData.phone,
-        experienceLevel: registrationData.experienceLevel,
         horseName: registrationData.horseName,
         emergencyContact: registrationData.emergencyContact,
         emergencyPhone: registrationData.emergencyPhone,
@@ -262,7 +260,6 @@ export default function ClinicsSection() {
         lastName: '',
         email: '',
         phone: '',
-        experienceLevel: '',
         horseName: '',
         specialRequests: '',
         emergencyContact: '',
@@ -343,7 +340,6 @@ export default function ClinicsSection() {
       lastName: '',
       email: '',
       phone: '',
-      experienceLevel: '',
       horseName: '',
       specialRequests: '',
       emergencyContact: '',
@@ -368,7 +364,7 @@ export default function ClinicsSection() {
       errors.email = "Please enter a valid email address";
     }
     if (!registrationData.phone.trim()) errors.phone = "Phone number is required";
-    if (!registrationData.experienceLevel) errors.experienceLevel = "Experience level is required";
+    if (!registrationData.horseName.trim()) errors.horseName = "Horse name is required";
     if (!registrationData.emergencyContact.trim()) errors.emergencyContact = "Emergency contact is required";
     if (!registrationData.emergencyPhone.trim()) errors.emergencyPhone = "Emergency phone is required";
     if (!registrationData.agreeToTerms) errors.agreeToTerms = "You must agree to the terms and conditions";
@@ -398,8 +394,7 @@ export default function ClinicsSection() {
       lastName: registrationData.lastName,
       email: registrationData.email,
       phone: registrationData.phone,
-      experienceLevel: registrationData.experienceLevel,
-      horseName: registrationData.horseName || undefined,
+      horseName: registrationData.horseName,
       specialRequests: registrationData.specialRequests || undefined,
       emergencyContact: registrationData.emergencyContact,
       emergencyPhone: registrationData.emergencyPhone,
@@ -937,34 +932,21 @@ export default function ClinicsSection() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Riding Information</h3>
                 <div>
-                  <Label htmlFor="experienceLevel">Experience Level *</Label>
-                  <Select value={registrationData.experienceLevel} onValueChange={(value) => handleInputChange('experienceLevel', value)}>
-                    <SelectTrigger className={formErrors.experienceLevel ? "border-red-500" : ""}>
-                      <SelectValue placeholder="Select your experience level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="beginner">Beginner (New to eventing)</SelectItem>
-                      <SelectItem value="intermediate">Intermediate (Competing up to 90cm)</SelectItem>
-                      <SelectItem value="advanced">Advanced (Competing 1m+)</SelectItem>
-                      <SelectItem value="professional">Professional</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {formErrors.experienceLevel && (
-                    <p className="text-sm text-red-500 mt-1 flex items-center">
-                      <AlertCircle className="w-4 h-4 mr-1" />
-                      {formErrors.experienceLevel}
-                    </p>
-                  )}
-                </div>
-                
-                <div>
-                  <Label htmlFor="horseName">Horse Name (optional)</Label>
+                  <Label htmlFor="horseName">Horse Name *</Label>
                   <Input
                     id="horseName"
                     value={registrationData.horseName}
                     onChange={(e) => handleInputChange('horseName', e.target.value)}
                     placeholder="Your horse's name"
+                    className={formErrors.horseName ? "border-red-500" : ""}
+                    data-testid="input-horse-name"
                   />
+                  {formErrors.horseName && (
+                    <p className="text-sm text-red-500 mt-1 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" />
+                      {formErrors.horseName}
+                    </p>
+                  )}
                 </div>
                 
                 <div>
