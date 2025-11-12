@@ -62,6 +62,7 @@ export const clinics = pgTable("clinics", {
   date: timestamp("date").notNull(),
   endDate: timestamp("end_date").notNull(),
   location: text("location").notNull(),
+  googleMapsLink: text("google_maps_link"), // Google Maps link for clinic location
   maxParticipants: integer("max_participants").notNull(),
   currentParticipants: integer("current_participants").notNull().default(0),
   price: integer("price").notNull(), // in euros

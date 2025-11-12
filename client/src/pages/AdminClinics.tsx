@@ -28,6 +28,7 @@ export default function AdminClinics() {
     endDate: "",
     entryClosingDate: "",
     location: "",
+    googleMapsLink: "",
     price: "",
     maxParticipants: "12",
     type: "dressage",
@@ -116,6 +117,7 @@ export default function AdminClinics() {
       endDate: "",
       entryClosingDate: "",
       location: "",
+      googleMapsLink: "",
       price: "",
       maxParticipants: "12",
       type: "dressage",
@@ -244,6 +246,7 @@ export default function AdminClinics() {
       endDate: freshClinic.endDate ? new Date(freshClinic.endDate).toISOString().split('T')[0] : "",
       entryClosingDate: freshClinic.entryClosingDate ? new Date(freshClinic.entryClosingDate).toISOString().split('T')[0] : "",
       location: freshClinic.location || "",
+      googleMapsLink: freshClinic.googleMapsLink || "",
       price: freshClinic.price?.toString() || "",
       maxParticipants: freshClinic.maxParticipants?.toString() || "12",
       type: freshClinic.type || "dressage",
@@ -295,6 +298,7 @@ export default function AdminClinics() {
       endDate: clinic.endDate ? new Date(new Date(clinic.endDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
       entryClosingDate: clinic.entryClosingDate ? new Date(new Date(clinic.entryClosingDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
       location: clinic.location,
+      googleMapsLink: clinic.googleMapsLink || "",
       price: clinic.price.toString(),
       maxParticipants: clinic.maxParticipants.toString(),
       type: clinic.type,
@@ -635,6 +639,17 @@ export default function AdminClinics() {
               {missingFields.includes('location') && (
                 <p className="text-sm text-red-500">Location is required</p>
               )}
+            </div>
+            
+            <div className="grid gap-2">
+              <Label htmlFor="googleMapsLink">Google Maps Link</Label>
+              <Input
+                id="googleMapsLink"
+                value={formData.googleMapsLink || ''}
+                onChange={(e) => setFormData({ ...formData, googleMapsLink: e.target.value })}
+                placeholder="https://maps.app.goo.gl/..."
+              />
+              <p className="text-sm text-gray-500">Paste the Google Maps link for this clinic location</p>
             </div>
             
             <div className="grid gap-2">
