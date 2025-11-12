@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, statSync } from 'fs';
 import { join } from 'path';
 
 const ATTACHED_ASSETS_DIR = join(process.cwd(), 'attached_assets');
@@ -13,50 +13,91 @@ if (!existsSync(OPTIMIZED_DIR)) {
 const imagesToOptimize = [
   {
     input: 'FB_IMG_1665518864028_1762982625089.jpg',
-    output: 'dressage-hero.jpg',
+    output: 'dressage-hero',
     description: 'Dressage hero image'
   },
   {
     input: 'IMG-20241014-WA0007_1762982708175.jpg',
-    output: 'show-jumping-hero.jpg',
+    output: 'show-jumping-hero',
     description: 'Show jumping hero image'
   },
   {
     input: 'cross-country-saumur-riot.jpg',
-    output: 'cross-country-hero.jpg',
+    output: 'cross-country-hero',
     description: 'Cross country hero image'
   },
   {
     input: 'DBCLINIC-56_1762982883601.JPG',
-    output: 'cross-country-clinic.jpg',
+    output: 'cross-country-clinic',
     description: 'Cross country clinic teaching image'
   }
 ];
 
-async function optimizeImage(inputName: string, outputName: string, description: string) {
+async function optimizeImage(inputName: string, outputBaseName: string, description: string) {
   const inputPath = join(ATTACHED_ASSETS_DIR, inputName);
-  const outputPath = join(OPTIMIZED_DIR, outputName);
+  const outputJpgPath = join(OPTIMIZED_DIR, `${outputBaseName}.jpg`);
+  const outputWebpPath = join(OPTIMIZED_DIR, `${outputBaseName}.webp`);
+  const tempJpgPath = join(OPTIMIZED_DIR, `${outputBaseName}.temp.jpg`);
+  const tempWebpPath = join(OPTIMIZED_DIR, `${outputBaseName}.temp.webp`);
 
   if (!existsSync(inputPath)) {
     console.error(`❌ Input file not found: ${inputPath}`);
     return;
   }
 
+  const inputSize = statSync(inputPath).size;
+
   try {
-    const info = await sharp(inputPath)
-      .resize(2000, undefined, {
-        withoutEnlargement: true,
-        fit: 'inside'
-      })
+    const image = sharp(inputPath).resize(2000, undefined, {
+      withoutEnlargement: true,
+      fit: 'inside'
+    });
+
+    // Try JPEG with adaptive quality
+    const jpegQuality = inputSize > 500000 ? 75 : 80;
+    const tempJpegInfo = await image.clone()
       .jpeg({ 
-        quality: 85,
+        quality: jpegQuality,
         progressive: true,
         mozjpeg: true
       })
-      .toFile(outputPath);
+      .toFile(tempJpgPath);
 
-    console.log(`✅ ${description}: ${inputName} → ${outputName}`);
-    console.log(`   Original size would be reduced to: ${Math.round(info.size / 1024)}KB`);
+    // ALWAYS keep whichever is smaller - no tolerance
+    const { renameSync, unlinkSync, copyFileSync } = await import('fs');
+    if (tempJpegInfo.size < inputSize) {
+      renameSync(tempJpgPath, outputJpgPath);
+    } else {
+      unlinkSync(tempJpgPath);
+      copyFileSync(inputPath, outputJpgPath);
+      console.log(`   Keeping original JPEG (smaller than optimized)`);
+    }
+
+    const finalJpegSize = statSync(outputJpgPath).size;
+
+    // Try WebP with quality that targets being smaller than JPEG
+    const webpQuality = inputSize > 500000 ? 70 : 80;
+    const tempWebpInfo = await image.clone()
+      .webp({ 
+        quality: webpQuality,
+        effort: 4
+      })
+      .toFile(tempWebpPath);
+
+    // Only keep WebP if it's smaller than the JPEG
+    if (tempWebpInfo.size < finalJpegSize) {
+      renameSync(tempWebpPath, outputWebpPath);
+      console.log(`✅ ${description}:`);
+      console.log(`   Original: ${Math.round(inputSize / 1024)}KB`);
+      console.log(`   JPEG: ${Math.round(finalJpegSize / 1024)}KB`);
+      console.log(`   WebP: ${Math.round(tempWebpInfo.size / 1024)}KB ✨ (${Math.round((1 - tempWebpInfo.size/finalJpegSize) * 100)}% smaller)`);
+    } else {
+      unlinkSync(tempWebpPath);
+      console.log(`✅ ${description}:`);
+      console.log(`   Original: ${Math.round(inputSize / 1024)}KB`);
+      console.log(`   JPEG: ${Math.round(finalJpegSize / 1024)}KB`);
+      console.log(`   WebP: Skipped (would be larger than JPEG)`);
+    }
   } catch (error) {
     console.error(`❌ Error optimizing ${inputName}:`, error);
   }

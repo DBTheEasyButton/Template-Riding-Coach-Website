@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Target, Check, Award, TrendingUp } from "lucide-react";
-import dressageHeroImage from "@assets/optimized/dressage-hero.jpg";
+import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
+import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
 
 export default function Dressage() {
   const features = [
@@ -66,11 +67,14 @@ export default function Dressage() {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <img 
-          src={dressageHeroImage} 
-          alt="Dan Bizzarro competing in dressage"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+        <picture>
+          <source srcSet={dressageHeroWebp} type="image/webp" />
+          <img 
+            src={dressageHeroJpg} 
+            alt="Dan Bizzarro competing in dressage"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </picture>
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">

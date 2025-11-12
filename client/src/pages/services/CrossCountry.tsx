@@ -4,8 +4,10 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Target, Check, Zap, Heart, Shield } from "lucide-react";
-import crossCountryHeroImage from "@assets/optimized/cross-country-hero.jpg";
-import crossCountryClinicImage from "@assets/optimized/cross-country-clinic.jpg";
+import crossCountryHeroJpg from "@assets/optimized/cross-country-hero.jpg";
+import crossCountryHeroWebp from "@assets/optimized/cross-country-hero.webp";
+import crossCountryClinicJpg from "@assets/optimized/cross-country-clinic.jpg";
+import crossCountryClinicWebp from "@assets/optimized/cross-country-clinic.webp";
 
 export default function CrossCountry() {
   const features = [
@@ -67,11 +69,14 @@ export default function CrossCountry() {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <img 
-          src={crossCountryHeroImage} 
-          alt="Dan Bizzarro cross country at CCI Saumur"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+        <picture>
+          <source srcSet={crossCountryHeroWebp} type="image/webp" />
+          <img 
+            src={crossCountryHeroJpg} 
+            alt="Dan Bizzarro cross country at CCI Saumur"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </picture>
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
@@ -109,12 +114,15 @@ export default function CrossCountry() {
             </div>
 
             <div className="space-y-6">
-              <img 
-                src={crossCountryClinicImage} 
-                alt="Dan Bizzarro teaching cross country at clinic"
-                className="w-full rounded-2xl shadow-lg"
-                loading="lazy"
-              />
+              <picture>
+                <source srcSet={crossCountryClinicWebp} type="image/webp" />
+                <img 
+                  src={crossCountryClinicJpg} 
+                  alt="Dan Bizzarro teaching cross country at clinic"
+                  className="w-full rounded-2xl shadow-lg"
+                  loading="lazy"
+                />
+              </picture>
               
               <div className="bg-gray-50 rounded-2xl p-8">
                 <h3 className="text-2xl font-playfair font-bold text-navy mb-6">Training Focus</h3>

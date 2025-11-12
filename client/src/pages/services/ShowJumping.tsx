@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Award, Check, Zap, TrendingUp } from "lucide-react";
-import showJumpingHeroImage from "@assets/optimized/show-jumping-hero.jpg";
+import showJumpingHeroJpg from "@assets/optimized/show-jumping-hero.jpg";
+import showJumpingHeroWebp from "@assets/optimized/show-jumping-hero.webp";
 
 export default function ShowJumping() {
   const features = [
@@ -66,11 +67,14 @@ export default function ShowJumping() {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <img 
-          src={showJumpingHeroImage} 
-          alt="Dan Bizzarro show jumping at international competition"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+        <picture>
+          <source srcSet={showJumpingHeroWebp} type="image/webp" />
+          <img 
+            src={showJumpingHeroJpg} 
+            alt="Dan Bizzarro show jumping at international competition"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </picture>
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
