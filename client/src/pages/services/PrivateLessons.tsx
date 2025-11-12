@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Users, Check, Calendar, Target, Award } from "lucide-react";
+import privateLessonHeroImage from "@assets/DBCLINIC-28_1762927604781.jpg";
 
 export default function PrivateLessons() {
   const features = [
@@ -45,8 +46,13 @@ export default function PrivateLessons() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] bg-gradient-to-r from-orange-600 to-orange-500">
-        <div className="absolute inset-0 bg-black/30"></div>
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <img
+          src={privateLessonHeroImage}
+          alt="Dan Bizzarro coaching private riding lesson in Oxfordshire"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <div className="flex justify-center mb-4">
