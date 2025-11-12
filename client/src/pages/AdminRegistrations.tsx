@@ -19,7 +19,6 @@ interface Registration {
   lastName: string;
   email: string;
   phone: string;
-  experienceLevel: string;
   horseName?: string;
   specialRequests?: string;
   emergencyContact: string;
@@ -204,7 +203,6 @@ export default function AdminRegistrations() {
                       <TableRow>
                         <TableHead>Participant</TableHead>
                         <TableHead>Horse</TableHead>
-                        <TableHead>Level</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Registered</TableHead>
                         <TableHead>Actions</TableHead>
@@ -224,7 +222,6 @@ export default function AdminRegistrations() {
                             <div className="text-sm text-gray-500">{registration.email}</div>
                           </TableCell>
                           <TableCell>{registration.horseName || "N/A"}</TableCell>
-                          <TableCell>{registration.experienceLevel}</TableCell>
                           <TableCell>{getStatusBadge(registration.status)}</TableCell>
                           <TableCell>{format(new Date(registration.registeredAt), "dd/MM/yyyy")}</TableCell>
                           <TableCell>
@@ -280,21 +277,22 @@ export default function AdminRegistrations() {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="font-medium">Phone</Label>
-                    <p>{selectedRegistration.phone}</p>
-                  </div>
-                  <div>
-                    <Label className="font-medium">Experience Level</Label>
-                    <p>{selectedRegistration.experienceLevel}</p>
-                  </div>
+                <div>
+                  <Label className="font-medium">Phone</Label>
+                  <p>{selectedRegistration.phone}</p>
                 </div>
 
                 {selectedRegistration.horseName && (
                   <div>
                     <Label className="font-medium">Horse Name</Label>
                     <p>{selectedRegistration.horseName}</p>
+                  </div>
+                )}
+                
+                {selectedRegistration.specialRequests && (
+                  <div>
+                    <Label className="font-medium">Special Requests & Preferences</Label>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedRegistration.specialRequests}</p>
                   </div>
                 )}
 
