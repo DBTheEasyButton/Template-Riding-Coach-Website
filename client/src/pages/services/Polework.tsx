@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Zap, TrendingUp, Calendar } from "lucide-react";
 
 export default function Polework() {
@@ -49,6 +50,53 @@ export default function Polework() {
       icon: <TrendingUp className="w-6 h-6" />,
       title: "Progressive Development",
       description: "Systematic training from basic poles to advanced gymnastic exercises"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "What is polework and how does it help horse training?",
+      answer: "Polework involves riding over ground poles, raised poles, and pole combinations to develop rhythm, balance, strength, suppleness, and jumping technique. Poles provide visual and physical challenges that encourage horses to engage their muscles, improve coordination, and develop better movement patterns. For riders, polework improves timing, position, and feel. It's incredibly versatile—beneficial for dressage horses, jumpers, eventers, and horses at all levels from green youngsters to experienced competitors."
+    },
+    {
+      question: "Is polework suitable for horses that don't jump?",
+      answer: "Absolutely! Polework benefits all horses, regardless of whether they jump. Dressage horses use polework to develop engagement, improve rhythm, and build strength. Flatwork horses benefit from the variety and physical demands poles provide. Even pleasure horses become more balanced and athletic through pole exercises. Dan designs polework sessions appropriate for any discipline and any horse's job—jumping experience not required."
+    },
+    {
+      question: "How is polework different from regular jumping?",
+      answer: "Polework uses ground poles and raised poles rather than full jumps, making it lower impact, less physically demanding, and lower risk. Horses can do more repetitions without fatigue or stress. Polework focuses on developing quality movement, rhythm, and technique rather than height or scope. It's excellent for building foundations, strengthening muscles, maintaining fitness, and providing variety. Many horses that can't jump full courses due to age, soundness, or experience level can still benefit enormously from polework."
+    },
+    {
+      question: "What are gymnastic grid exercises?",
+      answer: "Gymnastic grids are sequences of ground poles or low fences set at specific distances that guide the horse through without requiring rider adjustment. Grids teach horses to think, react, adjust their stride, and develop better jumping technique. For riders, grids improve position, timing, and feel without the pressure of decision-making. Dan uses progressive grid work as a foundation for all jumping training, developing skills that translate directly to course work and cross country."
+    },
+    {
+      question: "Can polework help with rhythm problems?",
+      answer: "Yes! Polework is one of the most effective tools for developing rhythm. The poles create consistent visual references that help horses find and maintain tempo. Regular spacing between poles encourages steady rhythm. Riders develop better feel for consistent pace. Dan designs pole exercises specifically targeting rhythm issues—whether horses rush, slow down, or lack consistency. Progressive polework builds the muscle memory and mental understanding for reliable rhythm in all gaits."
+    },
+    {
+      question: "Is polework suitable for young or green horses?",
+      answer: "Polework is ideal for young and green horses! It provides controlled, systematic introduction to obstacles, develops coordination and balance, builds confidence through achievable challenges, strengthens muscles safely, and teaches horses to think and problem-solve. Dan uses polework to develop young horses' foundations without the physical demands of full jumping. Starting horses correctly with polework creates confident, capable athletes ready for more advanced work."
+    },
+    {
+      question: "How often should I do polework training?",
+      answer: "Polework can be incorporated more frequently than full jumping sessions because it's lower impact. Many horses benefit from polework 2-3 times per week as part of varied training. The exact frequency depends on your horse's fitness, your training goals, and what other work you're doing. Dan helps riders design balanced training programs that include polework alongside flatwork and jumping, ensuring horses stay fresh, sound, and progressing."
+    },
+    {
+      question: "Can I learn polework through virtual lessons?",
+      answer: "Yes! Polework is excellent for virtual lessons using live video systems like Pivo. Dan can clearly see the quality of movement, rhythm, and technique through video, and coach you in real-time through earbuds. Setting up basic pole patterns is straightforward, making polework accessible for home training with virtual coaching. This makes expert polework instruction available to riders worldwide, regardless of location."
+    },
+    {
+      question: "Do I need special equipment for polework?",
+      answer: "The basic equipment needed is simple—ground poles (usually 8-12 feet long), pole supports or blocks if you want to raise them, and a safe arena or working area. Most riders already have access to poles at their yard. Dan can design effective exercises with minimal equipment. As you progress, additional poles allow more complex patterns, but you can achieve excellent results with just 4-6 poles to start."
+    },
+    {
+      question: "How does polework improve jumping technique?",
+      answer: "Polework develops the fundamental qualities good jumpers need: rhythm for consistent approach, balance for clean takeoff, suppleness for better bascule, strength for powerful jump, adjustability for various distances, and confidence for bold jumping. Gymnastic grid exercises specifically teach horses to round over poles, engage their hindquarters, and use their bodies athletically—all directly translating to better jumping form. Polework provides maximum technique benefit with minimal physical stress."
+    },
+    {
+      question: "Can polework help with confidence issues?",
+      answer: "Definitely! Polework provides achievable challenges that build confidence incrementally. Horses learn they can handle obstacles safely, develop problem-solving skills, gain physical strength that creates confidence, and experience success regularly. For nervous horses or riders, polework offers a controlled, low-stress way to develop boldness. Dan uses progressive polework to rebuild confidence in horses that have lost trust, creating positive experiences that carry forward to more challenging work."
     }
   ];
 
@@ -271,6 +319,38 @@ export default function Polework() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Frequently Asked Questions
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+            <p className="text-lg text-dark">
+              Everything you need to know about polework and gymnastic grid training
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem 
+                key={index} 
+                value={`item-${index}`}
+                className="bg-white rounded-lg border border-gray-200 px-6"
+              >
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-navy pr-4">{faq.question}</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-dark leading-relaxed pt-2">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 

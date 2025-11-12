@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Award, TrendingUp } from "lucide-react";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
@@ -51,6 +52,49 @@ export default function Dressage() {
       icon: <TrendingUp className="w-6 h-6" />,
       title: "Progressive Training",
       description: "Systematic development from novice through advanced levels"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "Why is dressage important for eventers?",
+      answer: "Dressage is the foundation phase of eventing and accounts for a significant portion of your overall score. Strong dressage scores give you a competitive advantage going into show jumping and cross country. More importantly, dressage training develops balance, rhythm, suppleness, and obedience—qualities that directly improve your horse's jumping ability and cross country performance. A well-trained dressage horse is safer, more responsive, and more enjoyable to ride across all three phases."
+    },
+    {
+      question: "How can I improve my dressage scores?",
+      answer: "Improving dressage scores requires consistent training focusing on the fundamentals: rhythm, suppleness, contact, impulsion, straightness, and collection. Dan works with riders on accurate test riding, proper geometry, correct transitions, and developing quality gaits. Video analysis helps identify areas for improvement. Most importantly, training should develop your horse's way of going, not just teach test movements. Better scores come from better training, not just test practice."
+    },
+    {
+      question: "What dressage levels does Dan coach?",
+      answer: "Dan coaches dressage from novice through advanced levels, working with both amateur riders building foundation skills and competitive eventers preparing for specific tests. Whether you're working on introductory tests or advanced movements, Dan tailors coaching to your current level and competitive goals. The training principles remain consistent across levels—only the complexity of movements changes."
+    },
+    {
+      question: "Do you offer dressage coaching in clinics or just private lessons?",
+      answer: "Dressage coaching is available in both private lessons and group clinics. Private lessons provide individualized attention perfect for test preparation and addressing specific training challenges. Group clinics offer valuable opportunities to watch other riders, learn from shared feedback, and benefit from Dan's expert instruction at a more accessible price point. Many riders combine both formats—clinics for regular training and private lessons for competition preparation."
+    },
+    {
+      question: "Can virtual lessons work for dressage training?",
+      answer: "Absolutely! Dressage is particularly well-suited to virtual lessons using live video technology like Pivo. Dan can see your position, your horse's way of going, the quality of gaits, and the accuracy of movements through the video feed. You hear his coaching in real-time through earbuds, allowing him to provide immediate corrections and guidance. Many riders successfully improve their dressage through virtual coaching, making expert instruction accessible regardless of location."
+    },
+    {
+      question: "What is the 'training scale' or 'pyramid of training'?",
+      answer: "The training scale (also called pyramid of training) is the systematic progression of dressage training: rhythm, suppleness, contact, impulsion, straightness, and collection. Each level builds on the previous one—you can't have true collection without first establishing rhythm and suppleness. Dan uses these classical principles to develop horses progressively and correctly, ensuring long-term soundness and performance. Understanding this progression helps riders train more effectively and avoid common training mistakes."
+    },
+    {
+      question: "How do I prepare for a specific dressage test?",
+      answer: "Test preparation involves first ensuring your horse can perform all required movements correctly, then practicing the test for accuracy, geometry, and flow. Dan helps riders understand what judges are looking for, improve transitions, develop better geometry, and present movements effectively. However, good test riding comes from good training—Dan focuses on developing your horse's overall way of going rather than just drilling test movements. This approach produces better scores and happier horses."
+    },
+    {
+      question: "What is lateral work and why is it important?",
+      answer: "Lateral work includes movements like leg-yield, shoulder-in, travers, renvers, and half-pass where the horse moves forward and sideways simultaneously. These exercises develop suppleness, engagement, straightness, and the ability to move off the rider's leg. Lateral work is essential for advanced dressage, but it also improves jumping horses by enhancing their adjustability, balance, and responsiveness. Dan teaches lateral work progressively, ensuring horses understand and perform movements correctly."
+    },
+    {
+      question: "How can dressage help my show jumping and cross country?",
+      answer: "Dressage training creates a more balanced, responsive, and adjustable horse—all crucial for jumping success. Better rhythm and balance mean better jumping technique. Improved suppleness allows horses to move more athletically over fences. Enhanced responsiveness to the aids gives riders better control of pace and line. Collection and extension developed in dressage directly translate to adjustability needed for show jumping combinations and cross country terrain. Dressage makes better jumpers."
+    },
+    {
+      question: "Do I need special dressage tack for lessons?",
+      answer: "No special tack is required for dressage lessons with Dan. Your regular training saddle and bridle are fine. Competition dressage requires specific tack (dressage saddle, double bridle for advanced levels), but for training, comfort and fit are more important than equipment type. Dan focuses on developing your riding and your horse's training, which matters far more than having specialized equipment."
     }
   ];
 
@@ -216,6 +260,38 @@ export default function Dressage() {
               <p className="text-dark">Progressive training methods to develop young horses with correct foundation and long-term soundness</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Frequently Asked Questions
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+            <p className="text-lg text-dark">
+              Everything you need to know about dressage and flatwork training
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem 
+                key={index} 
+                value={`item-${index}`}
+                className="bg-white rounded-lg border border-gray-200 px-6"
+              >
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="font-semibold text-navy pr-4">{faq.question}</span>
+                </AccordionTrigger>
+                <AccordionContent className="text-dark leading-relaxed pt-2">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 
