@@ -1069,6 +1069,8 @@ export default function ClinicsSection() {
                         <span className="text-orange hover:underline font-medium">Clinic Terms and Conditions</span>
                       </Link>
                       {' '}and understand the risks involved in equestrian activities. I also consent to photos and videos being taken during the clinic which may be used on Dan Bizzarro's social media, website, and promotional materials. *
+                      <br /><br />
+                      <strong>Data Privacy:</strong> Your contact details (name, email, phone, horse name, emergency contact, and medical information) will be securely stored to facilitate clinic registration and pre-fill your information for future bookings. This data is used solely for clinic management, emergency purposes, and to improve your booking experience. We will not share your personal information with third parties without your consent. You can request to view, update, or delete your data at any time by contacting us.
                     </Label>
                     {formErrors.agreeToTerms && (
                       <p className="text-sm text-red-500 flex items-center">
