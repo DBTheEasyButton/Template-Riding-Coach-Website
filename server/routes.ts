@@ -724,7 +724,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               lastName: promotedParticipant.lastName,
               email: promotedParticipant.email,
               phone: promotedParticipant.phone,
-              horseName: promotedParticipant.horseName || undefined,
+              horseName: promotedParticipant.horseName || "To be provided",
               specialRequests: promotedParticipant.specialRequests || undefined,
               emergencyContact: "To be provided", // Waitlist entries don't have emergency contact info
               emergencyPhone: "To be provided",

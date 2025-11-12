@@ -100,8 +100,8 @@ export default function AdminRegistrations() {
 
   // Group registrations by clinic
   const groupedRegistrations = registrations.reduce((groups, registration) => {
-    const clinic = clinics.find((c: any) => c.id === registration.clinicId);
-    const clinicName = clinic ? clinic.name : `Clinic ${registration.clinicId}`;
+    const clinic = (clinics as any[]).find((c: any) => c.id === registration.clinicId);
+    const clinicName = clinic ? clinic.title : `Clinic ${registration.clinicId}`;
     
     if (!groups[clinicName]) {
       groups[clinicName] = [];
