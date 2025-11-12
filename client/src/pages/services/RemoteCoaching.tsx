@@ -83,9 +83,18 @@ export default function RemoteCoaching() {
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Virtual Riding Lessons
             </h1>
-            <p className="text-xl md:text-2xl text-gray-100">
+            <p className="text-xl md:text-2xl text-gray-100 mb-6">
               Train anywhere, anytime with remote equestrian coaching
             </p>
+            <a
+              href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20virtual%20riding%20lesson"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+              data-testid="button-book-lesson"
+            >
+              Book a Lesson
+            </a>
           </div>
         </div>
       </section>
