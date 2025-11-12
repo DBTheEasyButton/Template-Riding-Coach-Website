@@ -193,7 +193,14 @@ export interface IStorage {
   updateGhlContact(id: number, updates: Partial<InsertGhlContact>): Promise<GhlContact | undefined>;
   deleteGhlContact(id: number): Promise<void>;
   syncGhlContacts(locationId: string): Promise<number>; // Returns count of synced contacts
-  createOrUpdateGhlContactInApi(firstName: string, email: string, tags: string[]): Promise<{ success: boolean; contactId?: string; message?: string }>;
+  createOrUpdateGhlContactInApi(
+    email: string,
+    firstName: string,
+    lastName?: string,
+    phone?: string,
+    tags?: string[],
+    customFields?: Record<string, any>
+  ): Promise<{ success: boolean; contactId?: string; message?: string }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1860,7 +1867,14 @@ The Dan Bizzarro Method Team`,
     }
   }
 
-  async createOrUpdateGhlContactInApi(firstName: string, email: string, tags: string[]): Promise<{ success: boolean; contactId?: string; message?: string }> {
+  async createOrUpdateGhlContactInApi(
+    email: string,
+    firstName: string,
+    lastName?: string,
+    phone?: string,
+    tags: string[] = [],
+    customFields?: Record<string, any>
+  ): Promise<{ success: boolean; contactId?: string; message?: string }> {
     const apiKey = process.env.GHL_API_KEY;
     const locationId = process.env.GHL_LOCATION_ID;
 
@@ -1873,6 +1887,27 @@ The Dan Bizzarro Method Team`,
     }
 
     try {
+      // Build the request body with optional fields
+      const requestBody: any = {
+        locationId,
+        email,
+        firstName,
+        tags,
+        source: 'Website Clinic Registration'
+      };
+
+      if (lastName) {
+        requestBody.lastName = lastName;
+      }
+
+      if (phone) {
+        requestBody.phone = phone;
+      }
+
+      if (customFields) {
+        requestBody.customFields = customFields;
+      }
+
       // Create or update contact in Go High Level
       const response = await fetch(
         'https://services.leadconnectorhq.com/contacts/',
@@ -1883,13 +1918,7 @@ The Dan Bizzarro Method Team`,
             'Version': '2021-07-28',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            locationId,
-            email,
-            firstName,
-            tags,
-            source: 'Website Newsletter'
-          })
+          body: JSON.stringify(requestBody)
         }
       );
 
@@ -1912,15 +1941,15 @@ The Dan Bizzarro Method Team`,
           ghlId: data.contact.id,
           locationId: data.contact.locationId || locationId,
           firstName: data.contact.firstName || firstName,
-          lastName: data.contact.lastName || null,
+          lastName: data.contact.lastName || lastName || null,
           email: data.contact.email || email,
-          phone: data.contact.phone || null,
+          phone: data.contact.phone || phone || null,
           timezone: data.contact.timezone || null,
           country: data.contact.country || null,
-          source: 'Website Newsletter',
+          source: 'Website Clinic Registration',
           dateAdded: data.contact.dateAdded ? new Date(data.contact.dateAdded) : new Date(),
           tags: data.contact.tags || tags,
-          customFields: data.contact.customFields || null,
+          customFields: data.contact.customFields || customFields || null,
           attributions: data.contact.attributions || null,
           businessId: data.contact.businessId || null,
           lastSyncedAt: new Date()

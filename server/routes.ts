@@ -338,6 +338,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Don't fail the registration if email subscription fails
       }
       
+      // Create or update contact in Go High Level with horse name custom field
+      try {
+        await storage.createOrUpdateGhlContactInApi(
+          registration.email,
+          registration.firstName,
+          registration.lastName || undefined,
+          registration.phone || undefined,
+          ['Clinic Registration'],
+          { horse_name: registration.horseName }
+        );
+        console.log(`Created/updated GHL contact for clinic registration: ${registration.email}`);
+      } catch (error) {
+        console.error("Failed to create/update GHL contact:", error);
+        // Don't fail the registration if GHL sync fails
+      }
+      
       res.status(201).json(registration);
     } catch (error) {
       console.error("Error creating clinic registration:", error);
@@ -880,7 +896,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create or update contact in Go High Level with Newsletter tag
       try {
-        const ghlResult = await storage.createOrUpdateGhlContactInApi(firstName, email, ["Newsletter"]);
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(email, firstName, undefined, undefined, ["Newsletter"]);
         
         if (!ghlResult.success) {
           console.warn("GHL contact creation failed:", ghlResult.message);
