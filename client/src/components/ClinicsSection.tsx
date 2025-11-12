@@ -495,12 +495,12 @@ export default function ClinicsSection() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/terms-and-conditions">
-              <Button variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white">
-                <FileText className="w-4 h-4 mr-2" />
-                Clinic Terms & Conditions
-              </Button>
-            </Link>
+            <Button 
+              onClick={() => window.open('https://wa.me/447767291713', '_blank')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Book a Virtual Lesson
+            </Button>
             <Button 
               onClick={() => window.open('https://wa.me/447767291713', '_blank')}
               className="bg-green-600 hover:bg-green-700 text-white"
@@ -542,7 +542,7 @@ export default function ClinicsSection() {
                   <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
                     <MapPin className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                     <a 
-                      href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
+                      href={clinic.googleMapsLink || `https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="hover:text-orange underline transition-colors duration-300 group-hover:text-navy"
