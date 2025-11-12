@@ -136,22 +136,27 @@ export default function GroupClinics() {
                             : 'Price TBA'
                         }
                       </div>
-                      <Link href="#clinics">
-                        <Button 
-                          size="sm"
-                          className="bg-navy hover:bg-slate-800 text-white"
-                          onClick={() => {
-                            setTimeout(() => {
-                              const element = document.getElementById('clinics');
-                              if (element) {
-                                element.scrollIntoView({ behavior: 'smooth' });
-                              }
-                            }, 100);
-                          }}
-                        >
-                          Register
-                        </Button>
-                      </Link>
+                      <Button 
+                        size="sm"
+                        className="bg-navy hover:bg-slate-800 text-white"
+                        onClick={() => {
+                          // Scroll to clinics section
+                          const element = document.getElementById('clinics');
+                          if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                          }
+                          
+                          // Trigger registration for this clinic after scroll
+                          setTimeout(() => {
+                            const registerButton = document.querySelector(`[data-clinic-id="${clinic.id}"] button:not([disabled])`) as HTMLButtonElement;
+                            if (registerButton && registerButton.textContent?.includes('Register')) {
+                              registerButton.click();
+                            }
+                          }, 600);
+                        }}
+                      >
+                        Register
+                      </Button>
                     </div>
                   </div>
                 </div>

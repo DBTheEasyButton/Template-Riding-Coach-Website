@@ -482,7 +482,7 @@ export default function ClinicsSection() {
           <div className="lg:col-span-3">
             <div className="grid md:grid-cols-2 gap-8">
           {clinics.map((clinic) => (
-            <Card key={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
+            <Card key={clinic.id} data-clinic-id={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
               <div className="relative overflow-hidden">
                 <img 
                   src={clinic.image}
