@@ -1,9 +1,14 @@
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+
 export default function TermsAndConditions() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white shadow-lg rounded-lg p-8">
-          <h1 className="text-3xl font-bold text-navy mb-8">Clinic Terms and Conditions</h1>
+    <div className="min-h-screen bg-gray-50">
+      <Navigation />
+      <div className="py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="bg-white shadow-lg rounded-lg p-8">
+            <h1 className="text-3xl font-bold text-navy mb-8">Clinic Terms and Conditions</h1>
           
           <div className="space-y-8 text-gray-700">
             {/* Registration and Payment */}
@@ -180,5 +185,7 @@ export default function TermsAndConditions() {
         </div>
       </div>
     </div>
+    <Footer />
+  </div>
   );
 }
