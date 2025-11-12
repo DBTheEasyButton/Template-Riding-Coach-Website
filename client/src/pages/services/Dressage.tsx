@@ -83,10 +83,10 @@ export default function Dressage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6 text-center">
                 The Foundation of Everything
               </h2>
-              <div className="w-24 h-1 bg-orange mb-8"></div>
+              <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Dressage is the cornerstone of eventing success. Strong flat work creates balance, suppleness, and communication that carries through to jumping and cross-country performance. Dan's classical training approach builds a solid foundation while preparing you for competitive success.
               </p>

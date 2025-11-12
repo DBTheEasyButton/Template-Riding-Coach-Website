@@ -83,10 +83,10 @@ export default function CrossCountry() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6 text-center">
                 The Heart of Eventing
               </h2>
-              <div className="w-24 h-1 bg-orange mb-8"></div>
+              <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Cross-country is where eventing truly comes alive—the thrill of galloping across varied terrain, the challenge of natural obstacles, and the deep partnership between horse and rider. Dan's training builds both the technical skills and mental confidence needed to tackle cross-country courses safely and successfully.
               </p>

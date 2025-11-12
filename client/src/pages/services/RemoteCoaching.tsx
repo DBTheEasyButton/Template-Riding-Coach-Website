@@ -95,10 +95,10 @@ export default function RemoteCoaching() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6 text-center">
                 What Are Virtual Riding Lessons?
               </h2>
-              <div className="w-24 h-1 bg-orange mb-8"></div>
+              <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Virtual riding lessons combine modern technology with expert coaching to bring the Dan Bizzarro Method to riders worldwide. Using video analysis and online consultations, you receive personalized feedback from an international eventing coach without geographical limitations.
               </p>

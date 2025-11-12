@@ -83,10 +83,10 @@ export default function ShowJumping() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6 text-center">
                 Jump with Precision
               </h2>
-              <div className="w-24 h-1 bg-orange mb-8"></div>
+              <div className="w-24 h-1 bg-orange mb-8 mx-auto"></div>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Show jumping is where technical precision meets boldness and partnership. Dan's systematic approach develops both horse and rider, creating the confidence and technique needed for competitive success.
               </p>
