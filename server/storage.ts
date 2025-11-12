@@ -770,14 +770,17 @@ The Dan Bizzarro Method Team`,
   }
 
   async deleteClinic(id: number): Promise<void> {
-    // Delete all registrations for this clinic first (cascade delete)
-    await db.delete(clinicRegistrations).where(eq(clinicRegistrations.clinicId, id));
-    
-    // Delete all sessions for this clinic
-    await db.delete(clinicSessions).where(eq(clinicSessions.clinicId, id));
-    
-    // Now delete the clinic itself
-    await db.delete(clinics).where(eq(clinics.id, id));
+    // Use transaction to ensure all deletions succeed or none do
+    await db.transaction(async (tx) => {
+      // Delete all registrations for this clinic first (cascade delete)
+      await tx.delete(clinicRegistrations).where(eq(clinicRegistrations.clinicId, id));
+      
+      // Delete all sessions for this clinic
+      await tx.delete(clinicSessions).where(eq(clinicSessions.clinicId, id));
+      
+      // Now delete the clinic itself
+      await tx.delete(clinics).where(eq(clinics.id, id));
+    });
   }
 
   async createClinicSession(insertSession: InsertClinicSession): Promise<ClinicSession> {

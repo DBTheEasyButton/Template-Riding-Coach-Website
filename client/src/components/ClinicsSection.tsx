@@ -206,9 +206,12 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const { data: clinics = [] } = useQuery<ClinicWithSessions[]>({
+  const { data: allClinics = [] } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/clinics'],
   });
+
+  // Filter to only show future clinics
+  const clinics = allClinics.filter(clinic => new Date(clinic.date) >= new Date());
 
   // Create payment intent mutation
   const createPaymentIntentMutation = useMutation({
