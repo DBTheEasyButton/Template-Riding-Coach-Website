@@ -20,6 +20,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - Clean, professional layout with a focus on readability and accessibility.
 - Mobile-optimized UI for all interactive tools and content.
 - Consistent branding with a blue logo and light grey navigation.
+- **Accessibility Compliance:** Site-wide accessibility improvements including proper heading hierarchy (no level skips), descriptive alt attributes for all meaningful images, semantic HTML structure, and WCAG 2.1 compliance for screen reader users and assistive technology.
 
 **Technical Implementations:**
 - **Frontend:** React.js with TypeScript, Tailwind CSS for styling, Wouter for client-side routing, React Hook Form with Zod for form validation, TanStack Query for data fetching and state management.
@@ -34,7 +35,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
     - **Stride Calculator:** A professional tool for equestrian distance calculations.
     - **Packing List Generator:** A customizable checklist creation tool with custom item input.
 - **Main Pages:** Home, About, Coaching, Gallery, News, Podcast, and Contact pages, all designed for independent ranking and improved user experience.
-- **Podcast:** "Our Equestrian Life" podcast hosted by Dan Bizzarro features industry experts, accomplished riders, and passionate equestrian enthusiasts. PodcastSection component (id="podcast") renders on Home page with podcast logo, description, and links to Spotify and Apple Podcasts. Dedicated `/podcast` page provides full podcast information with SEO optimization (canonical URL: https://danbizzarromethod.com/podcast, title: "Our Equestrian Life Podcast | Dan Bizzarro Method"). Navigation links directly to `/podcast` page for better user experience and SEO.
+- **Podcast:** "Our Equestrian Life" podcast hosted by Dan Bizzarro features industry experts, accomplished riders, and passionate equestrian enthusiasts. PodcastSection component (id="podcast") renders on Home page with podcast logo, description, and links to Spotify and Apple Podcasts. Dedicated `/podcast` page provides full podcast information with SEO optimization (canonical URL: https://danbizzarromethod.com/podcast, title: "Our Equestrian Life Podcast | Dan Bizzarro Method"). Navigation links directly to `/podcast` page for better user experience and SEO. **Accessibility:** Proper heading hierarchy (H1 > H2, no H4/H5), descriptive alt text for podcast artwork, semantic HTML structure.
 - **Admin Interface:** Includes functionality for managing clinics (with Entry Closing Date tracking), news articles, and Go High Level contact synchronization. Contact and Email Marketing admin pages removed as GHL handles all contact management directly.
 
 ## External Dependencies
