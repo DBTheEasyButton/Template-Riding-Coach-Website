@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ClinicsSection from "@/components/ClinicsSection";
+import PodcastSection from "@/components/PodcastSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import NewsletterSubscription from "@/components/NewsletterSubscription";
 import Footer from "@/components/Footer";
@@ -202,6 +203,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
+
+      <PodcastSection />
 
       <SponsorsSection />
       <NewsletterSubscription />

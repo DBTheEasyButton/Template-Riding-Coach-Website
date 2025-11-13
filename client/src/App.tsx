@@ -14,6 +14,7 @@ const About = lazy(() => import("@/pages/About"));
 const Coaching = lazy(() => import("@/pages/Services"));
 const Gallery = lazy(() => import("@/pages/Gallery"));
 const News = lazy(() => import("@/pages/News"));
+const Podcast = lazy(() => import("@/pages/Podcast"));
 const Contact = lazy(() => import("@/pages/Contact"));
 
 // Service-specific pages
@@ -124,6 +125,11 @@ function Router() {
       <Route path="/news">
         <Suspense fallback={<PageLoader />}>
           <News />
+        </Suspense>
+      </Route>
+      <Route path="/podcast">
+        <Suspense fallback={<PageLoader />}>
+          <Podcast />
         </Suspense>
       </Route>
       <Route path="/contact">
