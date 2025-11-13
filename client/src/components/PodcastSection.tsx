@@ -44,6 +44,7 @@ export default function PodcastSection() {
             <Button 
               onClick={() => window.open('https://open.spotify.com/show/2KiQE9pq1onqkGv0Pm14p4', '_blank')}
               className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              data-testid="button-spotify-home"
             >
               <Play className="w-5 h-5 mr-2" />
               Listen on Spotify
@@ -52,6 +53,7 @@ export default function PodcastSection() {
               onClick={() => window.open('https://podcasts.apple.com/gb/podcast/our-equestrian-life/id1720429214', '_blank')}
               variant="outline"
               className="border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              data-testid="button-apple-podcasts-home"
             >
               <Headphones className="w-5 h-5 mr-2" />
               Listen on Apple Podcasts
