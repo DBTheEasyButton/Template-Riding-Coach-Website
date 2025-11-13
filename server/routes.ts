@@ -25,7 +25,20 @@ import {
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Validate that the STRIPE_SECRET_KEY is actually a secret key (not publishable)
+const stripeKey = process.env.STRIPE_SECRET_KEY;
+if (stripeKey.startsWith('pk_')) {
+  console.error('ERROR: STRIPE_SECRET_KEY contains a publishable key (pk_). It must be a secret key (sk_).');
+  throw new Error('Invalid Stripe configuration: STRIPE_SECRET_KEY must start with sk_ not pk_');
+}
+
+if (!stripeKey.startsWith('sk_')) {
+  console.error('WARNING: STRIPE_SECRET_KEY does not start with sk_. Key prefix:', stripeKey.substring(0, 7));
+}
+
+console.log('Stripe initialized with key type:', stripeKey.substring(0, 7));
+const stripe = new Stripe(stripeKey);
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(process.cwd(), 'client', 'public', 'uploads');
