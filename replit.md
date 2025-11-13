@@ -33,7 +33,8 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
     - **Readiness Quiz:** An interactive assessment with a specific question order.
     - **Stride Calculator:** A professional tool for equestrian distance calculations.
     - **Packing List Generator:** A customizable checklist creation tool with custom item input.
-- **Main Pages:** Home, About, Coaching, Gallery, News, and Contact pages, all designed for independent ranking and improved user experience.
+- **Main Pages:** Home, About, Coaching, Gallery, News, Podcast, and Contact pages, all designed for independent ranking and improved user experience.
+- **Podcast:** "Our Equestrian Life" podcast hosted by Dan Bizzarro features industry experts, accomplished riders, and passionate equestrian enthusiasts. PodcastSection component (id="podcast") renders on Home page with podcast logo, description, and links to Spotify and Apple Podcasts. Dedicated `/podcast` page provides full podcast information with SEO optimization (canonical URL: https://danbizzarromethod.com/podcast, title: "Our Equestrian Life Podcast | Dan Bizzarro Method"). Navigation links directly to `/podcast` page for better user experience and SEO.
 - **Admin Interface:** Includes functionality for managing clinics (with Entry Closing Date tracking), news articles, and Go High Level contact synchronization. Contact and Email Marketing admin pages removed as GHL handles all contact management directly.
 
 ## External Dependencies
