@@ -50,4 +50,4 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
   - Contact data stored in `ghl_contacts` table for tracking and synchronization
   - Requires environment variables: `GHL_API_KEY` and `GHL_LOCATION_ID`
   - Admin interface available for syncing contacts from GHL to local database
-- **Stripe Payment Integration:** Fully configured for clinic registrations with server-side payment validation, Stripe Elements (PaymentElement), and Express Checkout support (Apple Pay/Google Pay). Server validates API key types on startup and uses test keys: `STRIPE_SECRET_KEY` (sk_test) and `VITE_STRIPE_PUBLIC_KEY` (pk_test).
+- **Stripe Payment Integration:** Fully configured for clinic registrations with server-side payment validation, Stripe Elements (PaymentElement), and Express Checkout support (Apple Pay/Google Pay). Server validates API key types on startup. Required environment secrets: `STRIPE_SECRET_KEY` (server-side secret key, format: sk_test_* or sk_live_*) and `VITE_STRIPE_PUBLIC_KEY` (frontend publishable key, format: pk_test_* or pk_live_*).
