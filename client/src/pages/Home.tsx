@@ -8,7 +8,7 @@ import SponsorsSection from "@/components/SponsorsSection";
 import NewsletterSubscription from "@/components/NewsletterSubscription";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
-import StructuredData, { organizationData, websiteData } from "@/components/StructuredData";
+import StructuredData, { organizationData, websiteData, localBusinessData } from "@/components/StructuredData";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
@@ -51,6 +51,7 @@ export default function Home() {
       />
       <StructuredData type="Organization" data={organizationData} />
       <StructuredData type="Website" data={websiteData} />
+      <StructuredData type="LocalBusiness" data={localBusinessData} />
       
       <Navigation />
       <HeroSection />
