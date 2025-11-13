@@ -33,7 +33,7 @@ export default function PodcastSection() {
           <div className="relative flex justify-center">
             <img 
               src={podcastLogo} 
-              alt="Our Equestrian Life Podcast" 
+              alt="Our Equestrian Life Podcast cover artwork featuring Dan Bizzarro's equestrian podcast logo" 
               className="w-full max-w-md rounded-2xl shadow-2xl"
             />
           </div>
@@ -62,13 +62,13 @@ export default function PodcastSection() {
         </div>
 
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
-          <h4 className="text-2xl font-playfair font-bold mb-6 text-navy text-center">What You'll Discover</h4>
+          <h3 className="text-2xl font-playfair font-bold mb-6 text-navy text-center">What You'll Discover</h3>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="bg-orange/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Users className="w-8 h-8 text-orange" />
               </div>
-              <h5 className="text-lg font-semibold mb-2 text-navy">Industry Experts</h5>
+              <p className="text-lg font-semibold mb-2 text-navy">Industry Experts</p>
               <p className="text-dark text-sm">Learn from accomplished riders and industry professionals who share their expertise and insights.</p>
             </div>
             
@@ -76,7 +76,7 @@ export default function PodcastSection() {
               <div className="bg-orange/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <Star className="w-8 h-8 text-orange" />
               </div>
-              <h5 className="text-lg font-semibold mb-2 text-navy">Personal Stories</h5>
+              <p className="text-lg font-semibold mb-2 text-navy">Personal Stories</p>
               <p className="text-dark text-sm">Discover inspiring journeys and experiences from passionate equestrian enthusiasts.</p>
             </div>
             
@@ -84,7 +84,7 @@ export default function PodcastSection() {
               <div className="bg-orange/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <ExternalLink className="w-8 h-8 text-orange" />
               </div>
-              <h5 className="text-lg font-semibold mb-2 text-navy">Deep Knowledge</h5>
+              <p className="text-lg font-semibold mb-2 text-navy">Deep Knowledge</p>
               <p className="text-dark text-sm">Gain a deeper understanding of the equestrian way of life through engaging conversations.</p>
             </div>
           </div>

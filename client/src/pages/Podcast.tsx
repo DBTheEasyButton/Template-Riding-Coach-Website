@@ -75,7 +75,7 @@ export default function Podcast() {
             <div className="relative flex justify-center">
               <img 
                 src={podcastLogo} 
-                alt="Our Equestrian Life Podcast Cover" 
+                alt="Our Equestrian Life Podcast cover artwork featuring Dan Bizzarro's equestrian podcast logo" 
                 className="w-full max-w-md rounded-2xl shadow-2xl"
                 loading="eager"
               />
