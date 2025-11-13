@@ -39,7 +39,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link 
@@ -76,7 +76,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Coaching</h4>
+            <h3 className="font-semibold mb-4">Coaching</h3>
             <ul className="space-y-2">
               <li>
                 <Link 
@@ -137,7 +137,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
+            <h3 className="font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-300">
               <li>United Kingdom</li>
               <li>dan@danbizzarromethod.com</li>

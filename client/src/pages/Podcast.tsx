@@ -84,13 +84,13 @@ export default function Podcast() {
 
           {/* What You'll Discover Section */}
           <div className="bg-gray-50 rounded-2xl p-12">
-            <h3 className="text-3xl font-playfair font-bold mb-12 text-navy text-center">What You'll Discover</h3>
+            <h2 className="text-3xl font-playfair font-bold mb-12 text-navy text-center">What You'll Discover</h2>
             <div className="grid md:grid-cols-3 gap-12">
               <div className="text-center">
                 <div className="bg-orange/10 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
                   <Users className="w-10 h-10 text-orange" />
                 </div>
-                <h4 className="text-xl font-semibold mb-3 text-navy">Industry Experts</h4>
+                <p className="text-xl font-semibold mb-3 text-navy">Industry Experts</p>
                 <p className="text-dark leading-relaxed">Learn from accomplished riders and industry professionals who share their expertise and insights from years of experience in the equestrian world.</p>
               </div>
               
@@ -98,7 +98,7 @@ export default function Podcast() {
                 <div className="bg-orange/10 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
                   <Star className="w-10 h-10 text-orange" />
                 </div>
-                <h4 className="text-xl font-semibold mb-3 text-navy">Personal Stories</h4>
+                <p className="text-xl font-semibold mb-3 text-navy">Personal Stories</p>
                 <p className="text-dark leading-relaxed">Discover inspiring journeys and experiences from passionate equestrian enthusiasts who share their unique paths in the riding world.</p>
               </div>
               
@@ -106,7 +106,7 @@ export default function Podcast() {
                 <div className="bg-orange/10 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
                   <ExternalLink className="w-10 h-10 text-orange" />
                 </div>
-                <h4 className="text-xl font-semibold mb-3 text-navy">Deep Knowledge</h4>
+                <p className="text-xl font-semibold mb-3 text-navy">Deep Knowledge</p>
                 <p className="text-dark leading-relaxed">Gain a deeper understanding of the equestrian way of life through engaging conversations covering training, competition, and horsemanship.</p>
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function Podcast() {
 
           {/* Subscribe Section */}
           <div className="mt-20 bg-navy text-white rounded-2xl p-12 text-center">
-            <h3 className="text-3xl font-playfair font-bold mb-4">Never Miss an Episode</h3>
+            <h2 className="text-3xl font-playfair font-bold mb-4">Never Miss an Episode</h2>
             <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
               Subscribe to Our Equestrian Life on your favourite podcast platform and join our growing community of equestrian enthusiasts.
             </p>
