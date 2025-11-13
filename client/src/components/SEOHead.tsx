@@ -82,16 +82,26 @@ function SEOHead({
     updateTwitterMeta('twitter:image', ogImage);
     
     // Add preload link for hero image (LCP optimization)
+    // Remove existing preload link if present
+    const existingPreload = document.querySelector('link[rel="preload"][as="image"][data-hero-preload]');
+    if (existingPreload) {
+      existingPreload.remove();
+    }
+
     if (preloadImage) {
-      let preloadLink = document.querySelector('link[rel="preload"][as="image"]');
-      if (!preloadLink) {
-        preloadLink = document.createElement('link');
-        preloadLink.setAttribute('rel', 'preload');
-        preloadLink.setAttribute('as', 'image');
-        document.head.appendChild(preloadLink);
-      }
+      const preloadLink = document.createElement('link');
+      preloadLink.setAttribute('rel', 'preload');
+      preloadLink.setAttribute('as', 'image');
       preloadLink.setAttribute('href', preloadImage);
       preloadLink.setAttribute('fetchpriority', 'high');
+      preloadLink.setAttribute('data-hero-preload', 'true');
+      
+      // Add type for WebP preload
+      if (preloadImage.endsWith('.webp')) {
+        preloadLink.setAttribute('type', 'image/webp');
+      }
+      
+      document.head.appendChild(preloadLink);
     }
     
   }, [title, description, keywords, canonical, ogImage, preloadImage]);

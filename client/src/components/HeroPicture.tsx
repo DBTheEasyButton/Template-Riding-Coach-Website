@@ -1,3 +1,5 @@
+import type { ImgHTMLAttributes } from 'react';
+
 interface HeroPictureProps {
   jpegSrc: string;
   webpSrc: string;
@@ -15,18 +17,20 @@ export default function HeroPicture({
   priority = false,
   className = ''
 }: HeroPictureProps) {
+  const imgProps: ImgHTMLAttributes<HTMLImageElement> = {
+    src: jpegSrc,
+    alt,
+    className,
+    loading,
+    decoding: 'async',
+    ...(priority && { fetchpriority: 'high' })
+  };
+
   return (
     <picture>
       <source srcSet={webpSrc} type="image/webp" />
       <source srcSet={jpegSrc} type="image/jpeg" />
-      <img
-        src={jpegSrc}
-        alt={alt}
-        className={className}
-        loading={loading}
-        decoding="async"
-        fetchPriority={priority ? 'high' : 'auto'}
-      />
+      <img {...imgProps} />
     </picture>
   );
 }
