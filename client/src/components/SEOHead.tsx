@@ -6,6 +6,7 @@ interface SEOHeadProps {
   keywords?: string;
   canonical?: string;
   ogImage?: string;
+  preloadImage?: string;
 }
 
 function SEOHead({ 
@@ -13,7 +14,8 @@ function SEOHead({
   description = "Expert eventing coaching from international event rider Dan Bizzarro. Stride calculator, readiness assessments, and professional equestrian training in Oxfordshire.",
   keywords = "eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, stride calculator, eventing quiz, competition preparation",
   canonical,
-  ogImage = "/hero-background.jpg"
+  ogImage = "/hero-background.jpg",
+  preloadImage
 }: SEOHeadProps) {
   
   useEffect(() => {
@@ -79,7 +81,20 @@ function SEOHead({
     updateTwitterMeta('twitter:description', description);
     updateTwitterMeta('twitter:image', ogImage);
     
-  }, [title, description, keywords, canonical, ogImage]);
+    // Add preload link for hero image (LCP optimization)
+    if (preloadImage) {
+      let preloadLink = document.querySelector('link[rel="preload"][as="image"]');
+      if (!preloadLink) {
+        preloadLink = document.createElement('link');
+        preloadLink.setAttribute('rel', 'preload');
+        preloadLink.setAttribute('as', 'image');
+        document.head.appendChild(preloadLink);
+      }
+      preloadLink.setAttribute('href', preloadImage);
+      preloadLink.setAttribute('fetchpriority', 'high');
+    }
+    
+  }, [title, description, keywords, canonical, ogImage, preloadImage]);
   
   return null;
 }

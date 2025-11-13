@@ -16,6 +16,7 @@ import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
+import heroImageWebp from "@assets/optimized/hero-background.webp";
 
 export default function Home() {
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function Home() {
         description="Join Olympic-shortlisted event rider Dan Bizzarro for private lessons, show-jumping clinics, pole work clinics, cross-country coaching and online training. Build confidence and prepare for competitions."
         keywords="eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, professional rider training"
         canonical="https://danbizzarromethod.com/"
+        preloadImage={heroImageWebp}
       />
       <StructuredData type="Organization" data={organizationData} />
       <StructuredData type="Website" data={websiteData} />

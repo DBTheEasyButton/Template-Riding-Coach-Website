@@ -2,10 +2,15 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import heroImagePath from "@assets/optimized/hero-background.jpg";
-import dressageImage from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
-import crossCountryImage from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
-import showJumpingImage from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.jpg";
+import HeroPicture from "@/components/HeroPicture";
+import heroImageJpg from "@assets/optimized/hero-background.jpg";
+import heroImageWebp from "@assets/optimized/hero-background.webp";
+import dressageImageJpg from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
+import dressageImageWebp from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.webp";
+import crossCountryImageJpg from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
+import crossCountryImageWebp from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.webp";
+import showJumpingImageJpg from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.jpg";
+import showJumpingImageWebp from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.webp";
 import facebookLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (5)_1752564178859.png";
 import instagramLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (7)_1752564178858.png";
 
@@ -13,21 +18,29 @@ export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const images = [
-    heroImagePath,
-    dressageImage,
-    crossCountryImage,
-    showJumpingImage
+    { 
+      jpegSrc: heroImageJpg,
+      webpSrc: heroImageWebp,
+      alt: "Dan Bizzarro eventing competition"
+    },
+    { 
+      jpegSrc: dressageImageJpg,
+      webpSrc: dressageImageWebp,
+      alt: "Dressage training session with Dan Bizzarro"
+    },
+    { 
+      jpegSrc: crossCountryImageJpg,
+      webpSrc: crossCountryImageWebp,
+      alt: "Cross country coaching over natural obstacles"
+    },
+    { 
+      jpegSrc: showJumpingImageJpg,
+      webpSrc: showJumpingImageWebp,
+      alt: "Show jumping training clinic"
+    }
   ];
 
   useEffect(() => {
-    // Preload images for better performance
-    images.forEach((src, index) => {
-      if (index > 0) { // Skip first image as it loads eagerly
-        const img = new Image();
-        img.src = src;
-      }
-    });
-
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000);
@@ -52,20 +65,13 @@ export default function HeroSection() {
             index === currentImageIndex ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <img
-            src={image}
-            alt={
-              index === 0 ? "Dan Bizzarro eventing competition" :
-              index === 1 ? "Dressage training session with Dan Bizzarro" :
-              index === 2 ? "Cross country coaching over natural obstacles" :
-              "Show jumping training clinic"
-            }
-            className="w-full h-full object-cover"
+          <HeroPicture
+            jpegSrc={image.jpegSrc}
+            webpSrc={image.webpSrc}
+            alt={image.alt}
             loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            style={{
-              willChange: index === currentImageIndex ? 'auto' : 'opacity'
-            }}
+            priority={index === 0}
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
