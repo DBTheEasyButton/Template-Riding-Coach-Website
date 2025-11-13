@@ -9,7 +9,7 @@ export default function TermsAndConditions() {
         title="Clinic Terms & Conditions | Dan Bizzarro Method"
         description="Review our clinic terms and conditions including registration, payment, cancellation policy, safety requirements, and liability information for Dan Bizzarro Method equestrian clinics."
         keywords="clinic terms, booking policy, cancellation policy, equestrian clinic terms, Dan Bizzarro clinics, safety requirements"
-        canonical="https://danbizzarromethod.com/terms"
+        canonical="https://danbizzarromethod.com/terms-and-conditions"
       />
       <Navigation />
       <div className="py-12">
