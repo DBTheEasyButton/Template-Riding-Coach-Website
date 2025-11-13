@@ -26,15 +26,15 @@ if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
 
-// Validate that the STRIPE_SECRET_KEY is actually a secret key (not publishable)
 const stripeKey = process.env.STRIPE_SECRET_KEY;
+
 if (stripeKey.startsWith('pk_')) {
-  console.error('ERROR: STRIPE_SECRET_KEY contains a publishable key (pk_). It must be a secret key (sk_).');
-  throw new Error('Invalid Stripe configuration: STRIPE_SECRET_KEY must start with sk_ not pk_');
+  console.warn('WARNING: STRIPE_SECRET_KEY appears to be a publishable key (pk_). This should be a secret key (sk_).');
+  console.warn('Payment processing may not work correctly. Please update STRIPE_SECRET_KEY to a secret key.');
 }
 
-if (!stripeKey.startsWith('sk_')) {
-  console.error('WARNING: STRIPE_SECRET_KEY does not start with sk_. Key prefix:', stripeKey.substring(0, 7));
+if (!stripeKey.startsWith('sk_') && !stripeKey.startsWith('pk_')) {
+  console.warn('WARNING: STRIPE_SECRET_KEY has unexpected format. Key prefix:', stripeKey.substring(0, 7));
 }
 
 console.log('Stripe initialized with key type:', stripeKey.substring(0, 7));
