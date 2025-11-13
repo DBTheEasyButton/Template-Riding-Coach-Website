@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <img 
               src={logoPath} 
-              alt="Dan Bizzarro Eventing" 
+              alt="Dan Bizzarro Method - International Eventing Coach & Training" 
               className="h-16 w-auto mb-4"
             />
             <p className="text-slate-300 mb-6 leading-relaxed">

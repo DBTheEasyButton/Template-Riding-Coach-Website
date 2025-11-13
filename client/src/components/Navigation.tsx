@@ -93,7 +93,7 @@ export default function Navigation() {
             <a href="/" onClick={handleLogoClick}>
               <img 
                 src={logoPath} 
-                alt="Dan Bizzarro Eventing" 
+                alt="Dan Bizzarro Method - International Eventing Coach & Training" 
                 className="h-10 sm:h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
               />
             </a>

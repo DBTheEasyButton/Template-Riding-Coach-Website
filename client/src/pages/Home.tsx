@@ -86,7 +86,7 @@ export default function Home() {
             <div className="relative">
               <img 
                 src={danPhotoPath} 
-                alt="Dan Bizzarro with his horse" 
+                alt="International eventing coach Dan Bizzarro with his competition horse, showcasing their partnership and training expertise" 
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
