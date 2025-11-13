@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Users, Check, Calendar, Target, Award } from "lucide-react";
-import privateLessonHeroImage from "@assets/optimized/DBCLINIC-28_1762927604781.jpg";
+import privateLessonHeroJpg from "@assets/optimized/DBCLINIC-28_1762927604781.jpg";
+import privateLessonHeroWebp from "@assets/optimized/DBCLINIC-28_1762927604781.webp";
 import privateLessonClinicJpg from "@assets/optimized/private-lessons-clinic.jpg";
 import privateLessonClinicWebp from "@assets/optimized/private-lessons-clinic.webp";
 
@@ -95,18 +97,20 @@ export default function PrivateLessons() {
         description="Expert private horse riding lessons in Oxfordshire with international eventing coach Dan Bizzarro. Personalised training from beginner to advanced levels in show jumping, cross country, and dressage."
         keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalised training"
         canonical="https://danbizzarromethod.com/coaching/private-lessons"
+        preloadImage={privateLessonHeroWebp}
       />
       
       <Navigation />
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <img
-          src={privateLessonHeroImage}
+        <HeroPicture
+          jpegSrc={privateLessonHeroJpg}
+          webpSrc={privateLessonHeroWebp}
           alt="Dan Bizzarro coaching private riding lesson in Oxfordshire"
-          className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
-          decoding="async"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
