@@ -139,9 +139,28 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-300">
+              <li>Crown Farm</li>
+              <li>Ascott-Under-Wychwood</li>
+              <li>Oxfordshire OX7</li>
               <li>United Kingdom</li>
-              <li>dan@danbizzarromethod.com</li>
-              <li>WhatsApp for Private Lessons</li>
+              <li className="pt-2">
+                <a 
+                  href="tel:+447767291713" 
+                  className="hover:text-orange transition-colors"
+                  data-testid="link-footer-phone"
+                >
+                  +44 7767 291713
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="mailto:dan@danbizzarromethod.com" 
+                  className="hover:text-orange transition-colors"
+                  data-testid="link-footer-email"
+                >
+                  dan@danbizzarromethod.com
+                </a>
+              </li>
             </ul>
           </div>
         </div>

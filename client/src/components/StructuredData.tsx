@@ -43,8 +43,10 @@ export const organizationData = {
   description: "Professional eventing coaching and horse training services by international event rider Dan Bizzarro",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Crown Farm",
     addressLocality: "Ascott-Under-Wychwood",
     addressRegion: "Oxfordshire",
+    postalCode: "OX7",
     addressCountry: "GB"
   },
   contactPoint: {
@@ -73,7 +75,7 @@ export const localBusinessData = {
   email: "dan@danbizzarromethod.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Ascott-Under-Wychwood",
+    streetAddress: "Crown Farm",
     addressLocality: "Ascott-Under-Wychwood",
     addressRegion: "Oxfordshire",
     postalCode: "OX7",

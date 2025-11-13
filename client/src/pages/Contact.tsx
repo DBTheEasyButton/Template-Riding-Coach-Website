@@ -59,6 +59,7 @@ export default function Contact() {
               <a 
                 href="tel:+447767291713" 
                 className="text-2xl font-bold text-orange hover:text-orange/80 transition"
+                data-testid="link-phone"
               >
                 +44 7767 291713
               </a>
@@ -73,10 +74,11 @@ export default function Contact() {
               </div>
               <h3 className="font-semibold text-navy mb-2 text-xl">Email</h3>
               <a 
-                href="mailto:info@danbizzarro.com" 
+                href="mailto:dan@danbizzarromethod.com" 
                 className="text-lg text-dark hover:text-orange transition break-all"
+                data-testid="link-email"
               >
-                info@danbizzarro.com
+                dan@danbizzarromethod.com
               </a>
             </div>
 
@@ -89,8 +91,10 @@ export default function Contact() {
               </div>
               <h3 className="font-semibold text-navy mb-2 text-xl">Location</h3>
               <p className="text-dark">
+                Crown Farm<br />
                 Ascott-Under-Wychwood<br />
-                Oxfordshire, UK
+                Oxfordshire OX7<br />
+                United Kingdom
               </p>
             </div>
           </div>
@@ -125,7 +129,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-playfair font-bold text-navy mb-4">Find Us</h2>
-            <p className="text-dark">Crown Farm, Ascott-Under-Wychwood, Oxfordshire</p>
+            <p className="text-dark">Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom</p>
           </div>
           <div className="rounded-2xl overflow-hidden shadow-lg">
             <iframe
