@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CheckCircle, AlertCircle, Mail } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import SEOHead from "@/components/SEOHead";
 
 export default function Unsubscribe() {
   const [email, setEmail] = useState("");
@@ -60,6 +61,11 @@ export default function Unsubscribe() {
   if (isUnsubscribed) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
+        <SEOHead 
+          title="Unsubscribed Successfully | Dan Bizzarro Method"
+          description="You have successfully unsubscribed from Dan Bizzarro Method email communications."
+          canonical="https://danbizzarromethod.com/unsubscribe"
+        />
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -89,6 +95,11 @@ export default function Unsubscribe() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
+      <SEOHead 
+        title="Unsubscribe from Emails | Dan Bizzarro Method"
+        description="Manage your email preferences and unsubscribe from Dan Bizzarro Method communications."
+        canonical="https://danbizzarromethod.com/unsubscribe"
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />

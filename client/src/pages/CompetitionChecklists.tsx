@@ -40,13 +40,10 @@ export default function CompetitionChecklists() {
 
   const generateMutation = useMutation({
     mutationFn: async (data: typeof newChecklist) => {
-      console.log("Starting checklist generation with data:", data);
       const result = await apiRequest("POST", "/api/competition-checklists/generate", data);
-      console.log("Successfully received checklist:", result);
       return result;
     },
     onSuccess: async (checklist) => {
-      console.log("Checklist created successfully:", checklist);
       // Force refresh the checklists data
       await queryClient.invalidateQueries({ queryKey: ['/api/competition-checklists'] });
       await queryClient.refetchQueries({ queryKey: ['/api/competition-checklists'] });
@@ -426,15 +423,11 @@ export default function CompetitionChecklists() {
                 </CardHeader>
                 <CardContent className="p-6">
                   {(() => {
-                    console.log("Selected checklist raw data:", selectedChecklist);
-                    console.log("Checklist type:", typeof selectedChecklist.checklist);
-                    
                     let checklistData;
                     try {
                       checklistData = typeof selectedChecklist.checklist === 'string' 
                         ? JSON.parse(selectedChecklist.checklist) 
                         : selectedChecklist.checklist;
-                      console.log("Parsed checklist data:", checklistData);
                     } catch (error) {
                       console.error("Error parsing checklist data:", error);
                       return <div className="text-red-500">Error loading checklist data</div>;
@@ -448,9 +441,7 @@ export default function CompetitionChecklists() {
                     return (
                       <div className="space-y-6">
                         {Object.entries(checklistData).map(([categoryKey, tasks]) => {
-                          console.log("Processing category:", categoryKey, "with tasks:", tasks);
                           if (!Array.isArray(tasks)) {
-                            console.warn("Tasks is not an array for category:", categoryKey, tasks);
                             return null;
                           }
                           return (

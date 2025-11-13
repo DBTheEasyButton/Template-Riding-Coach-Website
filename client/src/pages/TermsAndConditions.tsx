@@ -1,9 +1,16 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 
 export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead 
+        title="Clinic Terms & Conditions | Dan Bizzarro Method"
+        description="Review our clinic terms and conditions including registration, payment, cancellation policy, safety requirements, and liability information for Dan Bizzarro Method equestrian clinics."
+        keywords="clinic terms, booking policy, cancellation policy, equestrian clinic terms, Dan Bizzarro clinics, safety requirements"
+        canonical="https://danbizzarromethod.com/terms"
+      />
       <Navigation />
       <div className="py-12">
         <div className="max-w-4xl mx-auto px-4">
