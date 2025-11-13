@@ -98,6 +98,7 @@ export default function PrivateLessons() {
         keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalised training"
         canonical="https://danbizzarromethod.com/coaching/private-lessons"
         preloadImage={privateLessonHeroWebp}
+        preloadImageJpeg={privateLessonHeroJpg}
       />
       
       <Navigation />

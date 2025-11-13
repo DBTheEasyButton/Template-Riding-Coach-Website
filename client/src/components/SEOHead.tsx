@@ -7,6 +7,7 @@ interface SEOHeadProps {
   canonical?: string;
   ogImage?: string;
   preloadImage?: string;
+  preloadImageJpeg?: string;
 }
 
 function SEOHead({ 
@@ -15,7 +16,8 @@ function SEOHead({
   keywords = "eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, stride calculator, eventing quiz, competition preparation",
   canonical,
   ogImage = "/hero-background.jpg",
-  preloadImage
+  preloadImage,
+  preloadImageJpeg
 }: SEOHeadProps) {
   
   useEffect(() => {
@@ -81,30 +83,38 @@ function SEOHead({
     updateTwitterMeta('twitter:description', description);
     updateTwitterMeta('twitter:image', ogImage);
     
-    // Add preload link for hero image (LCP optimization)
-    // Remove existing preload link if present
-    const existingPreload = document.querySelector('link[rel="preload"][as="image"][data-hero-preload]');
-    if (existingPreload) {
-      existingPreload.remove();
+    // Add preload links for hero image (LCP optimization)
+    // Remove existing preload links if present
+    const existingPreloads = document.querySelectorAll('link[rel="preload"][as="image"][data-hero-preload]');
+    existingPreloads.forEach(link => link.remove());
+
+    // Preload WebP version (for modern browsers)
+    if (preloadImage) {
+      const webpPreload = document.createElement('link');
+      webpPreload.setAttribute('rel', 'preload');
+      webpPreload.setAttribute('as', 'image');
+      webpPreload.setAttribute('href', preloadImage);
+      webpPreload.setAttribute('fetchpriority', 'high');
+      webpPreload.setAttribute('data-hero-preload', 'true');
+      if (preloadImage.endsWith('.webp')) {
+        webpPreload.setAttribute('type', 'image/webp');
+      }
+      document.head.appendChild(webpPreload);
     }
 
-    if (preloadImage) {
-      const preloadLink = document.createElement('link');
-      preloadLink.setAttribute('rel', 'preload');
-      preloadLink.setAttribute('as', 'image');
-      preloadLink.setAttribute('href', preloadImage);
-      preloadLink.setAttribute('fetchpriority', 'high');
-      preloadLink.setAttribute('data-hero-preload', 'true');
-      
-      // Add type for WebP preload
-      if (preloadImage.endsWith('.webp')) {
-        preloadLink.setAttribute('type', 'image/webp');
-      }
-      
-      document.head.appendChild(preloadLink);
+    // Preload JPEG fallback (for browsers without WebP support)
+    if (preloadImageJpeg) {
+      const jpegPreload = document.createElement('link');
+      jpegPreload.setAttribute('rel', 'preload');
+      jpegPreload.setAttribute('as', 'image');
+      jpegPreload.setAttribute('href', preloadImageJpeg);
+      jpegPreload.setAttribute('fetchpriority', 'high');
+      jpegPreload.setAttribute('data-hero-preload', 'true');
+      jpegPreload.setAttribute('type', 'image/jpeg');
+      document.head.appendChild(jpegPreload);
     }
     
-  }, [title, description, keywords, canonical, ogImage, preloadImage]);
+  }, [title, description, keywords, canonical, ogImage, preloadImage, preloadImageJpeg]);
   
   return null;
 }

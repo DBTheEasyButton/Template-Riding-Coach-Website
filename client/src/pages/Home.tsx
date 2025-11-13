@@ -17,6 +17,7 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
+import heroImageJpg from "@assets/optimized/hero-background.jpg";
 
 export default function Home() {
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function Home() {
         keywords="eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, professional rider training"
         canonical="https://danbizzarromethod.com/"
         preloadImage={heroImageWebp}
+        preloadImageJpeg={heroImageJpg}
       />
       <StructuredData type="Organization" data={organizationData} />
       <StructuredData type="Website" data={websiteData} />
