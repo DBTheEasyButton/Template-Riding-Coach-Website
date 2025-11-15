@@ -20,15 +20,12 @@ function escapeHtml(text: string): string {
 }
 
 export function injectSEOMetadata(html: string, requestPath: string): string {
-  // Normalize path: remove trailing slash (except for root)
-  const normalizedPath = requestPath === '/' ? '/' : requestPath.replace(/\/$/, '');
+  // Normalize path: remove query params, hash, and trailing slash (except for root)
+  let normalizedPath = requestPath.split('?')[0].split('#')[0];
+  normalizedPath = normalizedPath === '/' ? '/' : normalizedPath.replace(/\/$/, '');
   
   // Get SEO config for this route
-  const config = seoConfig[normalizedPath];
-  
-  // If no config found, try without query params
-  const pathWithoutQuery = normalizedPath.split('?')[0];
-  const configToUse = config || seoConfig[pathWithoutQuery] || seoConfig['/'];
+  const configToUse = seoConfig[normalizedPath] || seoConfig['/'];
   
   if (!configToUse) {
     console.warn(`No SEO config found for path: ${normalizedPath}, using fallback`);
@@ -134,24 +131,40 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
  * Only intercepts HTML content for known routes
  */
 export function seoMiddleware(req: Request, res: Response, next: NextFunction) {
+  // Get the original URL before Vite rewrites it
+  const requestUrl = req.originalUrl || req.url;
+  
   // Only process GET requests for HTML pages (not API routes, static assets, etc.)
-  if (req.method !== 'GET' || req.path.startsWith('/api') || req.path.includes('.')) {
+  if (req.method !== 'GET' || requestUrl.startsWith('/api') || requestUrl.includes('.')) {
     return next();
   }
   
-  // Store original res.send
+  // Store original res.send and res.end
   const originalSend = res.send;
+  const originalEnd = res.end;
   
   // Override res.send to inject SEO metadata
   res.send = function (this: Response, data: any) {
     // Only process HTML responses
     if (typeof data === 'string' && data.includes('<!DOCTYPE html>')) {
-      // Inject SEO metadata based on request path
-      data = injectSEOMetadata(data, req.path);
+      // Inject SEO metadata based on original request URL (before Vite rewrite)
+      data = injectSEOMetadata(data, requestUrl);
     }
     
     // Call original send with modified data
     return originalSend.call(this, data);
+  } as any;
+  
+  // Override res.end to inject SEO metadata (Vite uses res.end instead of res.send)
+  res.end = function (this: Response, chunk?: any, encodingOrCb?: any, cb?: any) {
+    // Only process HTML responses
+    if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html>')) {
+      // Inject SEO metadata based on original request URL (before Vite rewrite)
+      chunk = injectSEOMetadata(chunk, requestUrl);
+    }
+    
+    // Call original end with modified data
+    return originalEnd.call(this, chunk, encodingOrCb, cb);
   } as any;
   
   next();

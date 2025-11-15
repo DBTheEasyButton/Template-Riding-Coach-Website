@@ -147,11 +147,11 @@ export const seoConfig: Record<string, PageSEOConfig> = {
   },
 
   // Interactive Tools
-  '/quiz': {
+  '/readiness-quiz': {
     title: 'Eventing Readiness Quiz | Assess Your Competition Preparation',
     description: 'Take our free eventing readiness quiz to assess your preparation for competition. Evaluate your training, horse fitness, mental readiness, and competitive goals with expert guidance from Dan Bizzarro.',
     keywords: 'eventing quiz, readiness assessment, competition preparation, eventing readiness, horse competition quiz, training assessment, competition readiness test, Dan Bizzarro quiz',
-    canonicalPath: '/quiz',
+    canonicalPath: '/readiness-quiz',
     h1: 'Eventing Readiness Quiz',
     ogImage: '/hero-background.jpg'
   },
