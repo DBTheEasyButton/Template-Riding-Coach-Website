@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Award, TrendingUp } from "lucide-react";
@@ -111,14 +112,14 @@ export default function Dressage() {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <picture>
-          <source srcSet={dressageHeroWebp} type="image/webp" />
-          <img 
-            src={dressageHeroJpg} 
-            alt="Dan Bizzarro competing in dressage"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
-        </picture>
+        <HeroPicture
+          jpegSrc={dressageHeroJpg}
+          webpSrc={dressageHeroWebp}
+          alt="Dan Bizzarro competing in dressage"
+          loading="eager"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
