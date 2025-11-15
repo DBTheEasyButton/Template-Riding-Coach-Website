@@ -8,6 +8,7 @@ interface SEOHeadProps {
   ogImage?: string;
   preloadImage?: string;
   preloadImageJpeg?: string;
+  schemas?: Array<Record<string, any>>;
 }
 
 function SEOHead({ 
@@ -17,7 +18,8 @@ function SEOHead({
   canonical,
   ogImage = "/hero-background.jpg",
   preloadImage,
-  preloadImageJpeg
+  preloadImageJpeg,
+  schemas = []
 }: SEOHeadProps) {
   
   useEffect(() => {
@@ -113,8 +115,23 @@ function SEOHead({
       jpegPreload.setAttribute('type', 'image/jpeg');
       document.head.appendChild(jpegPreload);
     }
+
+    // Inject structured data schemas
+    // Remove existing page-specific schemas (excluding Organization, Website, LocalBusiness)
+    const existingSchemas = document.querySelectorAll('script[type="application/ld+json"][data-page-schema]');
+    existingSchemas.forEach(script => script.remove());
+
+    // Add new schemas
+    schemas.forEach((schema, index) => {
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.setAttribute('data-page-schema', 'true');
+      script.setAttribute('data-schema-index', String(index));
+      script.innerHTML = JSON.stringify(schema, null, 2);
+      document.head.appendChild(script);
+    });
     
-  }, [title, description, keywords, canonical, ogImage, preloadImage, preloadImageJpeg]);
+  }, [title, description, keywords, canonical, ogImage, preloadImage, preloadImageJpeg, schemas]);
   
   return null;
 }
