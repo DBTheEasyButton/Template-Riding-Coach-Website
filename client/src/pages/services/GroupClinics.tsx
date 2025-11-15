@@ -11,8 +11,8 @@ import clinicsHeroJpg from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
 import clinicsHeroWebp from "@assets/optimized/DBCLINIC-83_1762928005686.webp";
 import { useQuery } from "@tanstack/react-query";
 import type { Clinic } from "@shared/schema";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
 export default function GroupClinics() {
   const seoConfig = getSEOConfig('/coaching/clinics');

@@ -6,8 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import type { GalleryImage } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { X } from "lucide-react";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function Gallery() {
   const seoConfig = getSEOConfig('/gallery');

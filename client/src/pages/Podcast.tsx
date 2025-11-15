@@ -4,8 +4,8 @@ import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Play, Headphones, Users, Star, ExternalLink, Calendar } from "lucide-react";
 import podcastLogo from "@assets/optimized/Podcast Logo_1749499160253.png";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function Podcast() {
   const seoConfig = getSEOConfig('/podcast');

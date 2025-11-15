@@ -8,8 +8,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
 import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
 export default function RemoteCoaching() {
   const seoConfig = getSEOConfig('/coaching/remote-coaching');

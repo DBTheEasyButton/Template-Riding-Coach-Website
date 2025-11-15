@@ -13,8 +13,8 @@ import { Link } from "wouter";
 import { standardDistances, getStrideLength } from "@/data/strideData";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
 type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";

@@ -10,8 +10,8 @@ import showJumpingHeroJpg from "@assets/optimized/show-jumping-hero.jpg";
 import showJumpingHeroWebp from "@assets/optimized/show-jumping-hero.webp";
 import showJumpingClinicJpg from "@assets/optimized/show-jumping-clinic.jpg";
 import showJumpingClinicWebp from "@assets/optimized/show-jumping-clinic.webp";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
 export default function ShowJumping() {
   const seoConfig = getSEOConfig('/coaching/show-jumping');

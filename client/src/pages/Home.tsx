@@ -18,7 +18,7 @@ import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 export default function Home() {
   useEffect(() => {

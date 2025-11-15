@@ -8,8 +8,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Target, Check, Zap, TrendingUp, Calendar } from "lucide-react";
 import poleworkHeroJpg from "@assets/optimized/polework-hero.jpg";
 import poleworkHeroWebp from "@assets/optimized/polework-hero.webp";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
 export default function Polework() {
   const seoConfig = getSEOConfig('/coaching/polework');

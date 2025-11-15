@@ -3,8 +3,8 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import NewsletterSubscription from "@/components/NewsletterSubscription";
 import { Instagram, Facebook, Twitter, Youtube, Phone, Mail, MapPin } from "lucide-react";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function Contact() {
   const seoConfig = getSEOConfig('/contact');

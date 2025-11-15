@@ -12,8 +12,8 @@ import Footer from "@/components/Footer";
 import PromotionalBanners from "@/components/PromotionalBanners";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 interface PackingItem {
   id: string;

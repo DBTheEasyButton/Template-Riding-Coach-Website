@@ -6,8 +6,8 @@ import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import danWithHorsesPath from "@assets/optimized/11_1749504952106.jpg";
 import aboutDanHeroJpg from "@assets/optimized/about-dan-hero.jpg";
 import aboutDanHeroWebp from "@assets/optimized/about-dan-hero.webp";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function About() {
   const seoConfig = getSEOConfig('/about');

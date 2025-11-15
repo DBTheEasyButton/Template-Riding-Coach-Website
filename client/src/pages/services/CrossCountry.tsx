@@ -10,8 +10,8 @@ import crossCountryHeroJpg from "@assets/optimized/cross-country-hero.jpg";
 import crossCountryHeroWebp from "@assets/optimized/cross-country-hero.webp";
 import crossCountryClinicJpg from "@assets/optimized/cross-country-clinic.jpg";
 import crossCountryClinicWebp from "@assets/optimized/cross-country-clinic.webp";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
 export default function CrossCountry() {
   const seoConfig = getSEOConfig('/coaching/cross-country');

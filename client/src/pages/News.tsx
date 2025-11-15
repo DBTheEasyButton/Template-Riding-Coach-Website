@@ -6,8 +6,8 @@ import type { News as NewsType } from "@shared/schema";
 import { Calendar, ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { useLocation } from "wouter";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function News() {
   const seoConfig = getSEOConfig('/news');

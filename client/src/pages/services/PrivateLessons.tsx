@@ -10,8 +10,8 @@ import privateLessonHeroJpg from "@assets/optimized/DBCLINIC-28_1762927604781.jp
 import privateLessonHeroWebp from "@assets/optimized/DBCLINIC-28_1762927604781.webp";
 import privateLessonClinicJpg from "@assets/optimized/private-lessons-clinic.jpg";
 import privateLessonClinicWebp from "@assets/optimized/private-lessons-clinic.webp";
-import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
-import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
 export default function PrivateLessons() {
   const seoConfig = getSEOConfig('/coaching/private-lessons');
