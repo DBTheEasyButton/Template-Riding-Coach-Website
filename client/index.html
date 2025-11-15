@@ -52,29 +52,38 @@
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
     
-    <!-- Meta Pixel Code -->
+    <!-- Deferred Analytics Scripts (loaded after page interactive) -->
     <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '2686265668375791');
-    fbq('track', 'PageView');
-    </script>
-    <!-- End Meta Pixel Code -->
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-92ED9H6CZP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-92ED9H6CZP');
+      // Lazy load Meta Pixel after page becomes interactive
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '2686265668375791');
+          fbq('track', 'PageView');
+        }, 1000);
+      });
+      
+      // Lazy load Google Analytics after page becomes interactive
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var gtagScript = document.createElement('script');
+          gtagScript.async = true;
+          gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-92ED9H6CZP';
+          document.head.appendChild(gtagScript);
+          
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-92ED9H6CZP');
+        }, 1000);
+      });
     </script>
   </head>
   <body>
@@ -86,11 +95,28 @@
     <script type="module" src="/src/main.tsx"></script>
     <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
-    <!-- Lead Connector Chat Widget -->
-    <script 
-      src="https://widgets.leadconnectorhq.com/loader.js"  
-      data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" 
-      data-widget-id="687ea32fde5e24006e414bf2"   > 
+    <!-- Lead Connector Chat Widget (Lazy Loaded) -->
+    <script>
+      // Lazy load chat widget after user interaction or 3 seconds
+      var chatLoaded = false;
+      function loadChatWidget() {
+        if (chatLoaded) return;
+        chatLoaded = true;
+        var chatScript = document.createElement('script');
+        chatScript.src = 'https://widgets.leadconnectorhq.com/loader.js';
+        chatScript.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
+        chatScript.setAttribute('data-widget-id', '687ea32fde5e24006e414bf2');
+        document.body.appendChild(chatScript);
+      }
+      
+      // Load on scroll, mousemove, or after 3 seconds
+      ['scroll', 'mousemove', 'touchstart'].forEach(function(event) {
+        window.addEventListener(event, function() {
+          setTimeout(loadChatWidget, 1000);
+        }, { once: true });
+      });
+      
+      setTimeout(loadChatWidget, 3000);
     </script>
   </body>
 </html>

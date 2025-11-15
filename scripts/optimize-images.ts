@@ -12,19 +12,34 @@ if (!existsSync(OPTIMIZED_DIR)) {
 
 const imagesToOptimize = [
   {
+    input: 'optimized/about-dan-hero.jpg',
+    output: 'about-dan-hero',
+    description: 'About Dan hero image (CRITICAL: 5.6MB → target <200KB)'
+  },
+  {
+    input: 'optimized/hero-background.jpg',
+    output: 'hero-background',
+    description: 'Home page hero background (419KB → target <150KB)'
+  },
+  {
+    input: 'optimized/cross-country-hero.jpg',
+    output: 'cross-country-hero',
+    description: 'Cross country hero image (511KB → target <200KB)'
+  },
+  {
+    input: 'optimized/show-jumping-hero.jpg',
+    output: 'show-jumping-hero',
+    description: 'Show jumping hero image (302KB → target <150KB)'
+  },
+  {
     input: 'FB_IMG_1665518864028_1762982625089.jpg',
     output: 'dressage-hero',
     description: 'Dressage hero image'
   },
   {
     input: 'IMG-20241014-WA0007_1762982708175.jpg',
-    output: 'show-jumping-hero',
-    description: 'Show jumping hero image'
-  },
-  {
-    input: 'cross-country-saumur-riot.jpg',
-    output: 'cross-country-hero',
-    description: 'Cross country hero image'
+    output: 'show-jumping-hero-alt',
+    description: 'Show jumping hero image alternative'
   },
   {
     input: 'DBCLINIC-56_1762982883601.JPG',
@@ -58,13 +73,16 @@ async function optimizeImage(inputName: string, outputBaseName: string, descript
   const inputSize = statSync(inputPath).size;
 
   try {
-    const image = sharp(inputPath).resize(2000, undefined, {
+    // More aggressive compression for very large files
+    const maxWidth = inputSize > 3000000 ? 1600 : 1920;
+    const jpegQuality = inputSize > 3000000 ? 70 : inputSize > 500000 ? 75 : 80;
+    
+    const image = sharp(inputPath).resize(maxWidth, undefined, {
       withoutEnlargement: true,
       fit: 'inside'
     });
 
     // Try JPEG with adaptive quality
-    const jpegQuality = inputSize > 500000 ? 75 : 80;
     const tempJpegInfo = await image.clone()
       .jpeg({ 
         quality: jpegQuality,
