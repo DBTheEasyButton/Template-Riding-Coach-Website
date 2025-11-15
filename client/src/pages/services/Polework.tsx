@@ -182,6 +182,27 @@ export default function Polework() {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-12 bg-orange/5">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h3 className="text-2xl md:text-3xl font-playfair font-bold text-navy mb-4">
+            Transform Your Training with Polework
+          </h3>
+          <p className="text-lg text-dark mb-6">
+            Build rhythm, balance, and technique through expert grid work
+          </p>
+          <a
+            href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20polework%20coaching%20session"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+            data-testid="button-book-polework-cta"
+          >
+            Book a Lesson
+          </a>
+        </div>
+      </section>
+
       {/* Focus Areas Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
