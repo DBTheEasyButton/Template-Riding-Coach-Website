@@ -10,8 +10,13 @@ import crossCountryHeroJpg from "@assets/optimized/cross-country-hero.jpg";
 import crossCountryHeroWebp from "@assets/optimized/cross-country-hero.webp";
 import crossCountryClinicJpg from "@assets/optimized/cross-country-clinic.jpg";
 import crossCountryClinicWebp from "@assets/optimized/cross-country-clinic.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function CrossCountry() {
+  const seoConfig = getSEOConfig('/coaching/cross-country');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/cross-country', seoConfig.h1);
+  
   const features = [
     "Natural obstacle training and technique",
     "Speed and terrain management",
@@ -101,13 +106,22 @@ export default function CrossCountry() {
     }
   ];
 
+  const schemas = [
+    coachingServices.crossCountry,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Cross Country Training - Natural Obstacles & Speed Work | Dan Bizzarro"
-        description="Expert cross-country coaching in Oxfordshire with Dan Bizzarro. Build confidence, master natural obstacles, and develop the partnership and boldness needed for eventing success. Train smart and safe."
-        keywords="cross country training, eventing cross country, natural obstacles, terrain riding, water complex, banks, ditches, competition preparation, Oxfordshire cross country"
-        canonical="https://danbizzarromethod.com/coaching/cross-country"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={crossCountryHeroWebp}
+        preloadImageJpeg={crossCountryHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

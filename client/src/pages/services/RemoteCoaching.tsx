@@ -8,8 +8,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
 import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function RemoteCoaching() {
+  const seoConfig = getSEOConfig('/coaching/remote-coaching');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/remote-coaching', seoConfig.h1);
+  
   const pivoLink = (
     <a 
       href="https://pivoequestrian.com" 
@@ -123,13 +128,22 @@ export default function RemoteCoaching() {
     }
   ];
 
+  const schemas = [
+    coachingServices.remoteCoaching,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Virtual Riding Lessons - Live Online Coaching | Dan Bizzarro Method"
-        description="Train from anywhere with live virtual riding lessons using Pivo. Real-time remote equestrian coaching from international eventing coach Dan Bizzarro via video call while you ride."
-        keywords="virtual riding lessons, remote equestrian coaching, online horse training, live video coaching, Pivo equestrian, Dan Bizzarro Method, eventing coach, show jumping coach, cross country coach, live riding lessons"
-        canonical="https://danbizzarromethod.com/coaching/remote-coaching"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={virtualLessonHeroWebp}
+        preloadImageJpeg={virtualLessonHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

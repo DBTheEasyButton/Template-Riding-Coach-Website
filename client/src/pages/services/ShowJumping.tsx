@@ -10,8 +10,13 @@ import showJumpingHeroJpg from "@assets/optimized/show-jumping-hero.jpg";
 import showJumpingHeroWebp from "@assets/optimized/show-jumping-hero.webp";
 import showJumpingClinicJpg from "@assets/optimized/show-jumping-clinic.jpg";
 import showJumpingClinicWebp from "@assets/optimized/show-jumping-clinic.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function ShowJumping() {
+  const seoConfig = getSEOConfig('/coaching/show-jumping');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/show-jumping', seoConfig.h1);
+  
   const features = [
     "Jumping technique and form refinement",
     "Course strategy and walking practice",
@@ -101,13 +106,22 @@ export default function ShowJumping() {
     }
   ];
 
+  const schemas = [
+    coachingServices.showJumping,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Show Jumping Training - Technique & Course Strategy | Dan Bizzarro"
-        description="Expert show jumping coaching in Oxfordshire with Dan Bizzarro. Improve technique, build confidence, and master course strategy. Training for all levels from novice to international competition."
-        keywords="show jumping coaching, jumping technique, course strategy, grid work, eventing jumping, competition preparation, confidence building, Oxfordshire show jumping"
-        canonical="https://danbizzarromethod.com/coaching/show-jumping"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={showJumpingHeroWebp}
+        preloadImageJpeg={showJumpingHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

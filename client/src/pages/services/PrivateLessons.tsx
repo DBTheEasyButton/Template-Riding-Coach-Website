@@ -10,8 +10,13 @@ import privateLessonHeroJpg from "@assets/optimized/DBCLINIC-28_1762927604781.jp
 import privateLessonHeroWebp from "@assets/optimized/DBCLINIC-28_1762927604781.webp";
 import privateLessonClinicJpg from "@assets/optimized/private-lessons-clinic.jpg";
 import privateLessonClinicWebp from "@assets/optimized/private-lessons-clinic.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function PrivateLessons() {
+  const seoConfig = getSEOConfig('/coaching/private-lessons');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/private-lessons', seoConfig.h1);
+  
   const features = [
     "Customized training plans for your specific goals",
     "One-on-one coaching from experienced eventing coach",
@@ -90,15 +95,22 @@ export default function PrivateLessons() {
     }
   ];
 
+  const schemas = [
+    coachingServices.privateLessons,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Private Horse Riding Lessons in Oxfordshire | Dan Bizzarro Method"
-        description="Expert private horse riding lessons in Oxfordshire with international eventing coach Dan Bizzarro. Personalised training from beginner to advanced levels in show jumping, cross country, and dressage."
-        keywords="private horse riding lessons, equestrian lessons Oxfordshire, show jumping coach, eventing coach, cross country coach, Dan Bizzarro Method, one-on-one coaching, personalised training"
-        canonical="https://danbizzarromethod.com/coaching/private-lessons"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
         preloadImage={privateLessonHeroWebp}
         preloadImageJpeg={privateLessonHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

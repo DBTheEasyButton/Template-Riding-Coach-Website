@@ -11,8 +11,13 @@ import clinicsHeroJpg from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
 import clinicsHeroWebp from "@assets/optimized/DBCLINIC-83_1762928005686.webp";
 import { useQuery } from "@tanstack/react-query";
 import type { Clinic } from "@shared/schema";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function GroupClinics() {
+  const seoConfig = getSEOConfig('/coaching/clinics');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/clinics', seoConfig.h1);
+  
   const { data: clinics = [] } = useQuery<any[]>({
     queryKey: ['/api/clinics'],
   });
@@ -110,13 +115,22 @@ export default function GroupClinics() {
     }
   ];
 
+  const schemas = [
+    coachingServices.clinics,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Show Jumping, Polework & Cross Country Clinics | Dan Bizzarro Method"
-        description="Join our show-jumping clinic, polework clinic, and cross country clinic in Oxfordshire. Expert eventing coach Dan Bizzarro offers competition preparation clinics and single-day training for all levels."
-        keywords="show-jumping clinic, polework clinic, cross country clinic, competition preparation clinic, eventing coach, equestrian lessons Oxfordshire, Dan Bizzarro Method, show jumping coach"
-        canonical="https://danbizzarromethod.com/coaching/clinics"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={clinicsHeroWebp}
+        preloadImageJpeg={clinicsHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

@@ -8,8 +8,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Target, Check, Award, TrendingUp } from "lucide-react";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function Dressage() {
+  const seoConfig = getSEOConfig('/coaching/dressage');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/dressage', seoConfig.h1);
+  
   const features = [
     "Classical training principles and foundation",
     "Balance, rhythm, and suppleness development",
@@ -99,13 +104,22 @@ export default function Dressage() {
     }
   ];
 
+  const schemas = [
+    coachingServices.dressage,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Dressage Training - Flat Work & Competition Prep | Dan Bizzarro"
-        description="Expert dressage and flat work training in Oxfordshire with Dan Bizzarro. Classical principles, test preparation, and technical development for eventers at all levels. Improve your dressage scores."
-        keywords="dressage training, flat work coaching, eventing dressage, dressage test preparation, classical dressage, lateral work, collection, Oxfordshire dressage coach"
-        canonical="https://danbizzarromethod.com/coaching/dressage"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={dressageHeroWebp}
+        preloadImageJpeg={dressageHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

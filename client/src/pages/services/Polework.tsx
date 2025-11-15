@@ -8,8 +8,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Target, Check, Zap, TrendingUp, Calendar } from "lucide-react";
 import poleworkHeroJpg from "@assets/optimized/polework-hero.jpg";
 import poleworkHeroWebp from "@assets/optimized/polework-hero.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@/utils/schemaHelpers";
 
 export default function Polework() {
+  const seoConfig = getSEOConfig('/coaching/polework');
+  const breadcrumbs = getBreadcrumbsFromPath('/coaching/polework', seoConfig.h1);
+  
   const features = [
     "Ground pole exercises for rhythm and balance",
     "Raised poles for strength and engagement",
@@ -103,13 +108,22 @@ export default function Polework() {
     }
   ];
 
+  const schemas = [
+    coachingServices.polework,
+    createBreadcrumbSchema(breadcrumbs),
+    createFAQSchema(faqs)
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Polework Training - Grid Work & Gymnastic Exercises | Dan Bizzarro"
-        description="Expert polework and grid work coaching in Oxfordshire with Dan Bizzarro. Build rhythm, balance, and jumping technique through gymnastic pole exercises. Available in clinics, private lessons, and virtual coaching for all levels."
-        keywords="polework training, pole work, grid work, gymnastic jumping, ground poles, raised poles, eventing poles, show jumping poles, pole exercises, equestrian gymnastics, rhythm training, balance exercises, Oxfordshire polework coach, polework clinics"
-        canonical="https://danbizzarromethod.com/coaching/polework"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={poleworkHeroWebp}
+        preloadImageJpeg={poleworkHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />
