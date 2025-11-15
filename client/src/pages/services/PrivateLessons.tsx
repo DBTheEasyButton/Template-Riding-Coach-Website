@@ -129,7 +129,7 @@ export default function PrivateLessons() {
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              Private Horse Riding Lessons
+              Private Horse Riding Lessons in Oxfordshire
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 mb-6">
               Expert coaching in Oxfordshire for all levels

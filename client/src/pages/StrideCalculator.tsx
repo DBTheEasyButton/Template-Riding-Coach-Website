@@ -314,7 +314,7 @@ export default function StrideCalculator() {
           
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 dark:text-green-400 mb-2 md:mb-4">
-              Stride Distance Calculator
+              Horse Stride Calculator
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
               Calculate precise distances for poles and jumps based on your height. 

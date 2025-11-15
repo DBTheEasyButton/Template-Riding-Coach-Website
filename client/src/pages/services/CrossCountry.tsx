@@ -140,7 +140,7 @@ export default function CrossCountry() {
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              Cross Country
+              Cross-Country Riding Lessons
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 mb-6">
               Be confident, have fun, and jump boldly across country
