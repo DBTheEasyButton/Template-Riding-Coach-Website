@@ -1,8 +1,11 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import HeroPicture from "@/components/HeroPicture";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import danWithHorsesPath from "@assets/optimized/11_1749504952106.jpg";
+import aboutDanHeroJpg from "@assets/optimized/about-dan-hero.jpg";
+import aboutDanHeroWebp from "@assets/optimized/about-dan-hero.webp";
 
 export default function About() {
   return (
@@ -17,7 +20,15 @@ export default function About() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] bg-gradient-to-r from-gray-900 to-gray-700">
+      <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+        <HeroPicture
+          jpegSrc={aboutDanHeroJpg}
+          webpSrc={aboutDanHeroWebp}
+          alt="Dan Bizzarro professional eventing coach at clinic in Oxfordshire"
+          loading="eager"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
