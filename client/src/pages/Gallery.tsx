@@ -6,8 +6,14 @@ import { useQuery } from "@tanstack/react-query";
 import type { GalleryImage } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { X } from "lucide-react";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 export default function Gallery() {
+  const seoConfig = getSEOConfig('/gallery');
+  const breadcrumbs = getBreadcrumbsFromPath('/gallery', seoConfig.h1);
+  const schemas = [createBreadcrumbSchema(breadcrumbs)];
+
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const { data: galleryImages = [], isLoading } = useQuery<GalleryImage[]>({
     queryKey: ["/api/gallery"],
@@ -16,10 +22,11 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Photo Gallery - Eventing Action & Training | Dan Bizzarro Method"
-        description="Browse Dan Bizzarro's eventing photo gallery. Competition photos, training sessions, and behind-the-scenes images from international events and clinics in Oxfordshire."
-        keywords="eventing photos, equestrian gallery, horse training images, competition photography, Dan Bizzarro gallery, eventing action shots"
-        canonical="https://danbizzarromethod.com/gallery"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        schemas={schemas}
       />
       
       <Navigation />

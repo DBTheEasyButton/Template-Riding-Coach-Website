@@ -3,15 +3,22 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import NewsletterSubscription from "@/components/NewsletterSubscription";
 import { Instagram, Facebook, Twitter, Youtube, Phone, Mail, MapPin } from "lucide-react";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 export default function Contact() {
+  const seoConfig = getSEOConfig('/contact');
+  const breadcrumbs = getBreadcrumbsFromPath('/contact', seoConfig.h1);
+  const schemas = [createBreadcrumbSchema(breadcrumbs)];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Stay Connected - Subscribe to Newsletter | Dan Bizzarro Method"
-        description="Subscribe to Dan Bizzarro's newsletter for exclusive training tips, early clinic access, and eventing insights. Contact us in Ascott-Under-Wychwood, Oxfordshire via phone, email, or WhatsApp."
-        keywords="Dan Bizzarro newsletter, eventing training tips, clinic updates, equestrian newsletter, Oxfordshire coach contact, Dan Bizzarro contact"
-        canonical="https://danbizzarromethod.com/contact"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        schemas={schemas}
       />
       
       <Navigation />

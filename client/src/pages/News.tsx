@@ -6,8 +6,14 @@ import type { News as NewsType } from "@shared/schema";
 import { Calendar, ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { useLocation } from "wouter";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 export default function News() {
+  const seoConfig = getSEOConfig('/news');
+  const breadcrumbs = getBreadcrumbsFromPath('/news', seoConfig.h1);
+  const schemas = [createBreadcrumbSchema(breadcrumbs)];
+
   const [, setLocation] = useLocation();
   const { data: news = [], isLoading } = useQuery<NewsType[]>({
     queryKey: ['/api/news'],
@@ -27,10 +33,11 @@ export default function News() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Latest Eventing News & Updates | Dan Bizzarro Method"
-        description="Stay updated with Dan Bizzarro's latest competition results, training insights, clinic announcements, and equestrian news from Oxfordshire and international events."
-        keywords="eventing news, Dan Bizzarro updates, competition results, equestrian blog, training tips, clinic announcements, international eventing"
-        canonical="https://danbizzarromethod.com/news"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        schemas={schemas}
       />
       
       <Navigation />

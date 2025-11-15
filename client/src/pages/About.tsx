@@ -6,15 +6,24 @@ import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import danWithHorsesPath from "@assets/optimized/11_1749504952106.jpg";
 import aboutDanHeroJpg from "@assets/optimized/about-dan-hero.jpg";
 import aboutDanHeroWebp from "@assets/optimized/about-dan-hero.webp";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 export default function About() {
+  const seoConfig = getSEOConfig('/about');
+  const breadcrumbs = getBreadcrumbsFromPath('/about', seoConfig.h1);
+  const schemas = [createBreadcrumbSchema(breadcrumbs)];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="About Dan Bizzarro - International Event Rider | Dan Bizzarro Method"
-        description="Meet Dan Bizzarro, an international event rider based in Oxfordshire. 20+ years experience, Olympic shortlisted rider, and Nations Cup medalist. Learn about Dan's journey from Italy to becoming a professional eventing coach."
-        keywords="Dan Bizzarro, international event rider, eventing coach, William Fox-Pitt, Italian eventing, Olympic eventing, Nations Cup, professional rider, Oxfordshire equestrian"
-        canonical="https://danbizzarromethod.com/about"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        preloadImage={aboutDanHeroWebp}
+        preloadImageJpeg={aboutDanHeroJpg}
+        schemas={schemas}
       />
       
       <Navigation />

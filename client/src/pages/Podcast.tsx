@@ -4,15 +4,22 @@ import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Play, Headphones, Users, Star, ExternalLink, Calendar } from "lucide-react";
 import podcastLogo from "@assets/optimized/Podcast Logo_1749499160253.png";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 export default function Podcast() {
+  const seoConfig = getSEOConfig('/podcast');
+  const breadcrumbs = getBreadcrumbsFromPath('/podcast', seoConfig.h1);
+  const schemas = [createBreadcrumbSchema(breadcrumbs)];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Our Equestrian Life Podcast | Dan Bizzarro Method"
-        description="Listen to Our Equestrian Life podcast hosted by Dan Bizzarro. Featuring industry experts, accomplished riders, and passionate equestrian enthusiasts sharing their stories and knowledge."
-        keywords="equestrian podcast, horse riding podcast, eventing podcast, Dan Bizzarro podcast, Our Equestrian Life, horse training podcast"
-        canonical="https://danbizzarromethod.com/podcast"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        schemas={schemas}
       />
       
       <Navigation />
