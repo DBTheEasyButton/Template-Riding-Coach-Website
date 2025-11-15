@@ -38,56 +38,56 @@ export const seoConfig: Record<string, PageSEOConfig> = {
 
   // Coaching Pages
   '/coaching/private-lessons': {
-    title: 'Private Horse Riding Lessons | Dan Bizzarro Method',
-    description: 'One-to-one private riding lessons with Olympic-shortlisted international event rider Dan Bizzarro. Personalised coaching for all levels from beginner to advanced in dressage, show jumping, and cross country. Based in Oxfordshire, UK.',
-    keywords: 'private horse riding lessons, private eventing coach, one-to-one riding lessons, personalised equestrian coaching, Oxfordshire riding lessons, dressage lessons, show jumping lessons, cross country lessons, Dan Bizzarro private coaching',
+    title: 'Private Horse Riding Lessons in Oxfordshire | Dan Bizzarro Method',
+    description: 'Book one-to-one horse riding lessons with Olympic-shortlisted event rider Dan Bizzarro in Ascott-Under-Wychwood, Oxfordshire. Tailored coaching for beginners to advanced riders in dressage, show jumping and cross country.',
+    keywords: 'private horse riding lessons, private eventing coach, one-to-one riding lessons, personalised equestrian coaching, Oxfordshire riding lessons, dressage lessons, show jumping lessons, cross country lessons, Dan Bizzarro private coaching, Ascott-Under-Wychwood',
     canonicalPath: '/coaching/private-lessons',
-    h1: 'Private Riding Lessons',
+    h1: 'Private Horse Riding Lessons in Oxfordshire',
     ogImage: '/hero-background.jpg'
   },
 
   '/coaching/clinics': {
-    title: 'Horse Riding Clinics | Show Jumping, Polework & Cross Country | Dan Bizzarro',
-    description: 'Join Dan Bizzarro\'s professional riding clinics in Oxfordshire. Specialising in show jumping, pole work, cross country, and gymnastic jumping exercises. Single-day intensive sessions for riders of all levels from beginner to international.',
+    title: 'Eventing Clinics & Group Riding Lessons in Oxfordshire | Dan Bizzarro Method',
+    description: 'Join our show-jumping, pole work and cross-country clinics in Oxfordshire. Small group sessions led by Dan Bizzarro help riders build confidence, refine technique and prepare for competitions.',
     keywords: 'horse riding clinics, show jumping clinics, polework clinics, cross country clinics, eventing clinics, gymnastic jumping, grid work exercises, group riding lessons, Dan Bizzarro clinics, Oxfordshire riding clinics',
     canonicalPath: '/coaching/clinics',
-    h1: 'Coaching Clinics',
+    h1: 'Eventing Clinics & Group Riding Lessons',
     ogImage: '/hero-background.jpg'
   },
 
   '/coaching/remote-coaching': {
-    title: 'Virtual Riding Lessons & Remote Equestrian Coaching | Dan Bizzarro Method',
-    description: 'Professional remote equestrian coaching with Olympic-shortlisted event rider Dan Bizzarro. Video analysis, personalised training plans, and virtual lessons for riders worldwide. Expert guidance from anywhere in the world.',
-    keywords: 'virtual riding lessons, remote equestrian coaching, online horse training, video riding analysis, virtual eventing coach, online dressage lessons, remote show jumping coaching, worldwide riding instruction, Dan Bizzarro virtual coaching',
+    title: 'Virtual Riding Lessons – Live Online Coaching with Dan Bizzarro',
+    description: 'Train from anywhere with live virtual riding lessons using Pivo or your preferred video system. Get instant feedback from Dan Bizzarro and improve your dressage, show-jumping or cross-country skills.',
+    keywords: 'virtual riding lessons, remote equestrian coaching, online horse training, video riding analysis, virtual eventing coach, online dressage lessons, remote show jumping coaching, worldwide riding instruction, Dan Bizzarro virtual coaching, Pivo lessons',
     canonicalPath: '/coaching/remote-coaching',
-    h1: 'Remote Coaching',
+    h1: 'Virtual Riding Lessons',
     ogImage: '/hero-background.jpg'
   },
 
   '/coaching/dressage': {
-    title: 'Dressage Coaching & Training | Dan Bizzarro Method',
-    description: 'Expert dressage coaching from international event rider Dan Bizzarro. Improve suppleness, rhythm, balance, and precision for competition success. Private lessons and clinics available in Oxfordshire for all levels.',
-    keywords: 'dressage coaching, dressage training, dressage lessons, eventing dressage, competition dressage, dressage technique, flatwork training, Dan Bizzarro dressage, Oxfordshire dressage coach',
+    title: 'Dressage Coaching in Oxfordshire | Improve Your Scores',
+    description: 'Develop rhythm, suppleness and balance with expert dressage coaching in Oxfordshire. Learn classical techniques and prepare for eventing tests with Dan Bizzarro Method.',
+    keywords: 'dressage coaching, dressage training, dressage lessons, eventing dressage, competition dressage, dressage technique, flatwork training, Dan Bizzarro dressage, Oxfordshire dressage coach, improve dressage scores',
     canonicalPath: '/coaching/dressage',
     h1: 'Dressage Coaching',
     ogImage: '/hero-background.jpg'
   },
 
   '/coaching/show-jumping': {
-    title: 'Show Jumping Coaching | Eventing & Competition Training | Dan Bizzarro',
-    description: 'Professional show jumping coaching with Olympic-shortlisted event rider Dan Bizzarro. Master jumping technique, gridwork, related distances, and course riding. Private lessons and clinics in Oxfordshire for all levels.',
-    keywords: 'show jumping coaching, show jumping lessons, eventing show jumping, jumping technique, gridwork exercises, show jumping clinics, competition jumping, Dan Bizzarro show jumping, Oxfordshire jumping coach',
+    title: 'Show Jumping Coaching in Oxfordshire | Jump Clear with Confidence',
+    description: 'Master grid work, course walking and jump technique with show-jumping coaching from Dan Bizzarro Method. Suitable for riders from BE80 to international level.',
+    keywords: 'show jumping coaching, show jumping lessons, eventing show jumping, jumping technique, gridwork exercises, show jumping clinics, competition jumping, Dan Bizzarro show jumping, Oxfordshire jumping coach, BE80 to international',
     canonicalPath: '/coaching/show-jumping',
     h1: 'Show Jumping Coaching',
     ogImage: '/hero-background.jpg'
   },
 
   '/coaching/cross-country': {
-    title: 'Cross Country Coaching | Eventing Training | Dan Bizzarro Method',
-    description: 'Expert cross country coaching from international event rider Dan Bizzarro. Build confidence and skills over natural obstacles, tackle technical questions, and master competition courses. Private lessons and clinics in Oxfordshire.',
-    keywords: 'cross country coaching, cross country training, eventing cross country, cross country lessons, XC coaching, natural obstacles, cross country technique, competition XC, Dan Bizzarro cross country, Oxfordshire XC coach',
+    title: 'Cross-Country Riding Lessons | Build Boldness & Safety',
+    description: 'Learn how to tackle water complexes, ditches and banks with confidence. Cross-country coaching in Oxfordshire with Dan Bizzarro Method helps you read terrain and ride boldly.',
+    keywords: 'cross country coaching, cross country training, eventing cross country, cross country lessons, XC coaching, natural obstacles, cross country technique, competition XC, Dan Bizzarro cross country, Oxfordshire XC coach, water complexes, ditches, banks',
     canonicalPath: '/coaching/cross-country',
-    h1: 'Cross Country Coaching',
+    h1: 'Cross-Country Riding Lessons',
     ogImage: '/hero-background.jpg'
   },
 
@@ -129,11 +129,11 @@ export const seoConfig: Record<string, PageSEOConfig> = {
   },
 
   '/news': {
-    title: 'News & Updates | Dan Bizzarro Method',
-    description: 'Latest news, updates, and insights from Dan Bizzarro Method. Read about upcoming clinics, competition results, training tips, and equestrian industry news from our Oxfordshire coaching base.',
-    keywords: 'Dan Bizzarro news, eventing news, clinic updates, competition results, training tips, equestrian blog, riding advice, coaching updates, Oxfordshire equestrian news',
+    title: 'Eventing News & Tips | Dan Bizzarro Method',
+    description: 'Latest eventing news, training tips, and insights from Dan Bizzarro Method. Read about upcoming clinics, competition results, coaching advice, and equestrian industry news from our Oxfordshire coaching base.',
+    keywords: 'Dan Bizzarro news, eventing news, clinic updates, competition results, training tips, equestrian blog, riding advice, coaching updates, Oxfordshire equestrian news, eventing tips',
     canonicalPath: '/news',
-    h1: 'News & Updates',
+    h1: 'Eventing News & Tips',
     ogImage: '/hero-background.jpg'
   },
 
@@ -148,20 +148,20 @@ export const seoConfig: Record<string, PageSEOConfig> = {
 
   // Interactive Tools
   '/readiness-quiz': {
-    title: 'Eventing Readiness Quiz | Assess Your Competition Preparation',
-    description: 'Take our free eventing readiness quiz to assess your preparation for competition. Evaluate your training, horse fitness, mental readiness, and competitive goals with expert guidance from Dan Bizzarro.',
-    keywords: 'eventing quiz, readiness assessment, competition preparation, eventing readiness, horse competition quiz, training assessment, competition readiness test, Dan Bizzarro quiz',
+    title: 'Eventing Readiness Quiz – Assess Your Competition Prep',
+    description: 'Take our eventing readiness quiz to see if you and your horse are prepared for competition. Identify strengths and areas for improvement before your next event.',
+    keywords: 'eventing quiz, readiness assessment, competition preparation, eventing readiness, horse competition quiz, training assessment, competition readiness test, Dan Bizzarro quiz, competition prep',
     canonicalPath: '/readiness-quiz',
     h1: 'Eventing Readiness Quiz',
     ogImage: '/hero-background.jpg'
   },
 
   '/stride-calculator': {
-    title: 'Equestrian Stride Calculator | Show Jumping Distance Tool',
-    description: 'Professional stride calculator for show jumping and cross country course design. Calculate distances between fences, related lines, and gymnastic grids. Essential tool for riders, trainers, and course designers.',
-    keywords: 'stride calculator, equestrian distance calculator, show jumping distances, related distances, gymnastic grid calculator, fence spacing, course design tool, jumping distances, eventing stride calculator',
+    title: 'Horse Stride Calculator for Jumping Distances | Dan Bizzarro Method',
+    description: 'Use our free horse stride calculator to measure distances between jumps and plan your show-jumping course. Suitable for riders of all levels.',
+    keywords: 'stride calculator, equestrian distance calculator, show jumping distances, related distances, gymnastic grid calculator, fence spacing, course design tool, jumping distances, eventing stride calculator, horse stride calculator',
     canonicalPath: '/stride-calculator',
-    h1: 'Stride Calculator',
+    h1: 'Horse Stride Calculator',
     ogImage: '/hero-background.jpg'
   },
 
