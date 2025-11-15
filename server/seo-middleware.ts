@@ -128,7 +128,7 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
 
 /**
  * Express middleware to inject SEO metadata into HTML responses
- * Only intercepts HTML content for known routes
+ * Handles both string payloads (development/Vite) and streamed responses (production/sendFile)
  */
 export function seoMiddleware(req: Request, res: Response, next: NextFunction) {
   // Get the original URL before Vite rewrites it
@@ -139,9 +139,35 @@ export function seoMiddleware(req: Request, res: Response, next: NextFunction) {
     return next();
   }
   
-  // Store original res.send and res.end
+  // Store original methods
   const originalSend = res.send;
   const originalEnd = res.end;
+  const originalWrite = res.write;
+  
+  // Buffer to accumulate streamed chunks
+  let chunks: Buffer[] = [];
+  let isHtmlResponse = false;
+  
+  // Override res.write to capture streamed chunks
+  res.write = function (this: Response, chunk: any, encodingOrCb?: any, cb?: any): boolean {
+    // Check if this is HTML content by looking at Content-Type or chunk content
+    if (!isHtmlResponse && typeof chunk === 'string' && chunk.includes('<!DOCTYPE html>')) {
+      isHtmlResponse = true;
+    }
+    
+    if (isHtmlResponse) {
+      // Buffer chunks for later processing
+      if (typeof chunk === 'string') {
+        chunks.push(Buffer.from(chunk));
+      } else if (Buffer.isBuffer(chunk)) {
+        chunks.push(chunk);
+      }
+      return true; // Pretend we wrote it
+    }
+    
+    // Not HTML, pass through
+    return originalWrite.call(this, chunk, encodingOrCb, cb);
+  } as any;
   
   // Override res.send to inject SEO metadata
   res.send = function (this: Response, data: any) {
@@ -149,18 +175,35 @@ export function seoMiddleware(req: Request, res: Response, next: NextFunction) {
     if (typeof data === 'string' && data.includes('<!DOCTYPE html>')) {
       // Inject SEO metadata based on original request URL (before Vite rewrite)
       data = injectSEOMetadata(data, requestUrl);
+    } else if (Buffer.isBuffer(data)) {
+      const str = data.toString('utf-8');
+      if (str.includes('<!DOCTYPE html>')) {
+        data = Buffer.from(injectSEOMetadata(str, requestUrl));
+      }
     }
     
     // Call original send with modified data
     return originalSend.call(this, data);
   } as any;
   
-  // Override res.end to inject SEO metadata (Vite uses res.end instead of res.send)
+  // Override res.end to inject SEO metadata
   res.end = function (this: Response, chunk?: any, encodingOrCb?: any, cb?: any) {
-    // Only process HTML responses
+    // If we buffered chunks, process them now
+    if (chunks.length > 0) {
+      const htmlContent = Buffer.concat(chunks).toString('utf-8');
+      const modifiedHtml = injectSEOMetadata(htmlContent, requestUrl);
+      chunks = []; // Clear buffer
+      return originalEnd.call(this, modifiedHtml, encodingOrCb, cb);
+    }
+    
+    // Handle direct string or buffer payloads
     if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html>')) {
-      // Inject SEO metadata based on original request URL (before Vite rewrite)
       chunk = injectSEOMetadata(chunk, requestUrl);
+    } else if (Buffer.isBuffer(chunk)) {
+      const str = chunk.toString('utf-8');
+      if (str.includes('<!DOCTYPE html>')) {
+        chunk = Buffer.from(injectSEOMetadata(str, requestUrl));
+      }
     }
     
     // Call original end with modified data
