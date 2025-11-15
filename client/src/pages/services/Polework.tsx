@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Zap, TrendingUp, Calendar } from "lucide-react";
+import poleworkHeroJpg from "@assets/optimized/polework-hero.jpg";
+import poleworkHeroWebp from "@assets/optimized/polework-hero.webp";
 
 export default function Polework() {
   const features = [
@@ -112,8 +115,16 @@ export default function Polework() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] bg-gradient-to-r from-navy to-slate-700">
-        <div className="absolute inset-0 bg-black/30"></div>
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <HeroPicture
+          jpegSrc={poleworkHeroJpg}
+          webpSrc={poleworkHeroWebp}
+          alt="Colorful polework training with horse and rider in Oxfordshire arena"
+          loading="eager"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
