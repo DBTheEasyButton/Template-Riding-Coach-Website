@@ -18,6 +18,7 @@ import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
 
 export default function Home() {
   useEffect(() => {
@@ -44,13 +45,15 @@ export default function Home() {
     });
   };
 
+  const seoConfig = getSEOConfig('/');
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Dan Bizzarro Method – International Eventing Coach & Training Clinics"
-        description="Join Olympic-shortlisted event rider Dan Bizzarro for private lessons, show-jumping clinics, pole work clinics, cross-country coaching and online training. Build confidence and prepare for competitions."
-        keywords="eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, professional rider training"
-        canonical="https://danbizzarromethod.com/"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
         preloadImage={heroImageWebp}
         preloadImageJpeg={heroImageJpg}
       />
