@@ -5,6 +5,8 @@ import { Link } from "wouter";
 import HeroPicture from "@/components/HeroPicture";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
+import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
+import carouselClinic2Webp from "@assets/optimized/carousel-clinic-2.webp";
 import dressageImageJpg from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import dressageImageWebp from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.webp";
 import crossCountryImageJpg from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
@@ -22,6 +24,11 @@ export default function HeroSection() {
       jpegSrc: heroImageJpg,
       webpSrc: heroImageWebp,
       alt: "Dan Bizzarro eventing competition"
+    },
+    { 
+      jpegSrc: carouselClinic2Jpg,
+      webpSrc: carouselClinic2Webp,
+      alt: "Dan Bizzarro coaching clinic with riders and horses"
     },
     { 
       jpegSrc: dressageImageJpg,
