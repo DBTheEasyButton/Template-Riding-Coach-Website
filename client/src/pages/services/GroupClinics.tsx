@@ -3,10 +3,12 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import ClinicsSection from "@/components/ClinicsSection";
+import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Calendar, Check, Users, Award, Target, MapPin, Clock } from "lucide-react";
-import clinicsHeroImage from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
+import clinicsHeroJpg from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
+import clinicsHeroWebp from "@assets/optimized/DBCLINIC-83_1762928005686.webp";
 import { useQuery } from "@tanstack/react-query";
 import type { Clinic } from "@shared/schema";
 
@@ -121,12 +123,13 @@ export default function GroupClinics() {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <img
-          src={clinicsHeroImage}
+        <HeroPicture
+          jpegSrc={clinicsHeroJpg}
+          webpSrc={clinicsHeroWebp}
           alt="Dan Bizzarro coaching group clinic with riders and horses"
-          className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
-          decoding="async"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
