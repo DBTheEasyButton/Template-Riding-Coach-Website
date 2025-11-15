@@ -12,6 +12,8 @@ import Footer from "@/components/Footer";
 import PromotionalBanners from "@/components/PromotionalBanners";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 interface PackingItem {
   id: string;
@@ -563,6 +565,10 @@ export default function PackingListGenerator() {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
+  const seoConfig = getSEOConfig('/packing-list-generator');
+  const breadcrumbs = getBreadcrumbsFromPath('/packing-list-generator', seoConfig.h1);
+  const seoSchemas = [createBreadcrumbSchema(breadcrumbs)];
+
   const packingListStructuredData = {
     name: "Competition Packing List Generator",
     description: "Professional tool to generate personalised competition packing checklists for equestrian events",
@@ -581,10 +587,11 @@ export default function PackingListGenerator() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <SEOHead 
-          title="Competition Packing List Generator - Equestrian Checklist Tool | Dan Bizzarro Method"
-          description="Generate personalised competition packing checklists for dressage, show jumping, eventing, and other equestrian disciplines. Never forget essential gear again."
-          keywords="competition packing list, equestrian checklist, eventing gear, competition preparation, horse show packing, dressage equipment"
-          canonical="https://danbizzarromethod.com/packing-list-generator"
+          title={seoConfig.title}
+          description={seoConfig.description}
+          keywords={seoConfig.keywords}
+          canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+          schemas={seoSchemas}
         />
         <StructuredData type="Service" data={packingListStructuredData} />
         <Navigation />

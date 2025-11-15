@@ -10,6 +10,8 @@ import Footer from "@/components/Footer";
 import PromotionalBanners from "@/components/PromotionalBanners";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 interface QuizQuestion {
   id: string;
@@ -227,6 +229,10 @@ export default function ReadinessQuiz() {
     'from-indigo-500 to-purple-500'
   ];
 
+  const seoConfig = getSEOConfig('/readiness-quiz');
+  const breadcrumbs = getBreadcrumbsFromPath('/readiness-quiz', seoConfig.h1);
+  const schemas = [createBreadcrumbSchema(breadcrumbs)];
+
   const readinessQuizStructuredData = {
     name: "Eventing Readiness Assessment",
     description: "Professional quiz to assess your readiness for eventing competitions",
@@ -245,10 +251,11 @@ export default function ReadinessQuiz() {
     return (
       <div className="min-h-screen bg-white">
         <SEOHead 
-          title="Eventing Readiness Quiz - Competition Assessment | Dan Bizzarro Method"
-          description="Professional eventing readiness assessment. Evaluate your dressage, jumping, and cross-country skills for BE80, BE90, BE100, and Novice competitions."
-          keywords="eventing quiz, competition readiness, BE80, BE90, BE100, novice eventing, horse competition assessment, eventing preparation"
-          canonical="https://danbizzarromethod.com/readiness-quiz"
+          title={seoConfig.title}
+          description={seoConfig.description}
+          keywords={seoConfig.keywords}
+          canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+          schemas={schemas}
         />
         <StructuredData type="Course" data={readinessQuizStructuredData} />
         <Navigation />

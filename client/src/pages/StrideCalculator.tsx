@@ -13,6 +13,8 @@ import { Link } from "wouter";
 import { standardDistances, getStrideLength } from "@/data/strideData";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
+import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@/utils/schemaHelpers";
 
 type DistanceType = "walk-poles" | "trot-poles" | "canter-poles" | "gridwork" | "course-distances";
 type StrideCount = "bounce" | "1-stride" | "2-stride" | "3-stride" | "4-stride" | "5-stride" | "6-stride" | "7-stride";
@@ -271,6 +273,10 @@ export default function StrideCalculator() {
     setResults(allCalculations);
   };
 
+  const seoConfig = getSEOConfig('/stride-calculator');
+  const breadcrumbs = getBreadcrumbsFromPath('/stride-calculator', seoConfig.h1);
+  const seoSchemas = [createBreadcrumbSchema(breadcrumbs)];
+
   const strideCalculatorStructuredData = {
     name: "Equestrian Stride Calculator",
     description: "Professional stride distance calculator for horse training and course design",
@@ -288,10 +294,11 @@ export default function StrideCalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
       <SEOHead 
-        title="Stride Calculator - Professional Equestrian Distance Tool | Dan Bizzarro Method"
-        description="Calculate precise stride distances for horse training. Professional tool for poles, jumps, and course design with measurements in yards and meters."
-        keywords="stride calculator, horse training, equestrian distances, pole distances, jump distances, course design, eventing calculator"
-        canonical="https://danbizzarromethod.com/stride-calculator"
+        title={seoConfig.title}
+        description={seoConfig.description}
+        keywords={seoConfig.keywords}
+        canonical={getCanonicalUrl(seoConfig.canonicalPath)}
+        schemas={seoSchemas}
       />
       <StructuredData type="Service" data={strideCalculatorStructuredData} />
       <div className="container mx-auto px-3 py-4 sm:px-4 sm:py-6 md:py-8">
