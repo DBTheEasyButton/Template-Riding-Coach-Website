@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
-import virtualLessonHeroImage from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
+import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
+import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
 
 export default function RemoteCoaching() {
   const pivoLink = (
@@ -134,12 +136,13 @@ export default function RemoteCoaching() {
       
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
-        <img
-          src={virtualLessonHeroImage}
+        <HeroPicture
+          jpegSrc={virtualLessonHeroJpg}
+          webpSrc={virtualLessonHeroWebp}
           alt="Virtual riding lesson session with online coaching"
-          className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
-          decoding="async"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
