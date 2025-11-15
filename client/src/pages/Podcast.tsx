@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Play, Headphones, Users, Star, ExternalLink, Calendar } from "lucide-react";
-import podcastLogo from "@assets/optimized/Podcast Logo_1749499160253.png";
+import podcastLogo from "@assets/optimized/podcast-logo-optimized.png";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
