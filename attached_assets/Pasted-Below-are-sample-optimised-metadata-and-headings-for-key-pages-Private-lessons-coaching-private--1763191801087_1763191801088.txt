@@ -1,0 +1,83 @@
+Below are sample optimised metadata and headings for key pages:
+
+Private lessons (/coaching/private-lessons)
+
+<title>Private Horse Riding Lessons in Oxfordshire | Dan Bizzarro Method</title>
+
+<meta name="description" content="Book one‑to‑one horse riding lessons with Olympic‑shortlisted event rider Dan Bizzarro in Ascott‑Under‑Wychwood, Oxfordshire. Tailored coaching for beginners to advanced riders in dressage, show jumping and cross country.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/coaching/private-lessons"/>
+
+<h1>Private Horse Riding Lessons in Oxfordshire</h1>
+
+Clinics (/coaching/clinics)
+
+<title>Eventing Clinics & Group Riding Lessons in Oxfordshire | Dan Bizzarro Method</title>
+
+<meta name="description" content="Join our show‑jumping, pole work and cross‑country clinics in Oxfordshire. Small group sessions led by Dan Bizzarro help riders build confidence, refine technique and prepare for competitions.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/coaching/clinics"/>
+
+<h1>Eventing Clinics & Group Riding Lessons</h1>
+
+Remote coaching (/coaching/remote-coaching)
+
+<title>Virtual Riding Lessons – Live Online Coaching with Dan Bizzarro</title>
+
+<meta name="description" content="Train from anywhere with live virtual riding lessons using Pivo or your preferred video system. Get instant feedback from Dan Bizzarro and improve your dressage, show‑jumping or cross‑country skills.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/coaching/remote-coaching"/>
+
+<h1>Virtual Riding Lessons</h1>
+
+Dressage (/coaching/dressage)
+
+<title>Dressage Coaching in Oxfordshire | Improve Your Scores</title>
+
+<meta name="description" content="Develop rhythm, suppleness and balance with expert dressage coaching in Oxfordshire. Learn classical techniques and prepare for eventing tests with Dan Bizzarro Method.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/coaching/dressage"/>
+
+<h1>Dressage Coaching</h1>
+
+Show jumping (/coaching/show-jumping)
+
+<title>Show Jumping Coaching in Oxfordshire | Jump Clear with Confidence</title>
+
+<meta name="description" content="Master grid work, course walking and jump technique with show‑jumping coaching from Dan Bizzarro Method. Suitable for riders from BE80 to international level.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/coaching/show-jumping"/>
+
+<h1>Show Jumping Coaching</h1>
+
+Cross country (/coaching/cross-country)
+
+<title>Cross‑Country Riding Lessons | Build Boldness & Safety</title>
+
+<meta name="description" content="Learn how to tackle water complexes, ditches and banks with confidence. Cross‑country coaching in Oxfordshire with Dan Bizzarro Method helps you read terrain and ride boldly." >
+
+<link rel="canonical" href="https://danbizzarromethod.com/coaching/cross-country"/>
+
+<h1>Cross‑Country Riding Lessons</h1>
+
+Stride calculator (/stride-calculator)
+
+<title>Horse Stride Calculator for Jumping Distances | Dan Bizzarro Method</title>
+
+<meta name="description" content="Use our free horse stride calculator to measure distances between jumps and plan your show‑jumping course. Suitable for riders of all levels.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/stride-calculator"/>
+
+<h1>Horse Stride Calculator</h1>
+
+Readiness quiz (/readiness-quiz)
+
+<title>Eventing Readiness Quiz – Assess Your Competition Prep</title>
+
+<meta name="description" content="Take our eventing readiness quiz to see if you and your horse are prepared for competition. Identify strengths and areas for improvement before your next event.">
+
+<link rel="canonical" href="https://danbizzarromethod.com/readiness-quiz"/>
+
+<h1>Eventing Readiness Quiz</h1>
+
+News/blog (/news) – use a template such as <title>Eventing News & Tips | Dan Bizzarro Method</title> and include article summaries and Article schema for each post.
