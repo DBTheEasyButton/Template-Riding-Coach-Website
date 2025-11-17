@@ -494,6 +494,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Failed to create/update GHL contact:", error);
         // Don't fail the registration if GHL sync fails
       }
+
+      // Send confirmation email based on whether this is first-time or returning client
+      try {
+        // Check if this is their first clinic (before the current registration)
+        const allRegistrations = await storage.getAllClinicRegistrations();
+        const userRegistrations = allRegistrations.filter(r => r.email === registration.email);
+        const isFirstClinic = userRegistrations.length === 1; // Only the current registration
+
+        // Get loyalty program data (referral code and points)
+        const loyaltyProgram = await storage.getLoyaltyProgram(registration.email);
+        
+        if (loyaltyProgram) {
+          const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          });
+
+          const referralCode = loyaltyProgram.referralCode || 'PENDING';
+
+          if (isFirstClinic) {
+            // Send first-time clinic confirmation
+            await emailService.sendFirstTimeClinicConfirmation(
+              registration.email,
+              registration.firstName,
+              clinic.title,
+              clinicDate,
+              referralCode
+            );
+            console.log(`Sent first-time clinic confirmation email to ${registration.email}`);
+          } else {
+            // Send returning client confirmation
+            await emailService.sendReturningClinicConfirmation(
+              registration.email,
+              registration.firstName,
+              clinic.title,
+              clinicDate,
+              referralCode,
+              loyaltyProgram.points
+            );
+            console.log(`Sent returning clinic confirmation email to ${registration.email}`);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to send clinic confirmation email:", error);
+        // Don't fail the registration if email sending fails
+      }
+
+      // Send referral bonus notification if bonus was awarded
+      if (registrationData.referralCode) {
+        try {
+          const referralValidation = await storage.validateReferralCode(registrationData.referralCode);
+          const isNew = await storage.isNewClient(registration.email);
+          
+          if (referralValidation.valid && isNew && referralValidation.referrerEmail) {
+            // Get the referrer's updated loyalty info
+            const referrerLoyalty = await storage.getLoyaltyProgram(referralValidation.referrerEmail);
+            
+            if (referrerLoyalty) {
+              await emailService.sendReferralBonusNotification(
+                referralValidation.referrerEmail,
+                referrerLoyalty.firstName,
+                `${registration.firstName} ${registration.lastName || ''}`.trim(),
+                20,
+                referrerLoyalty.points
+              );
+              console.log(`Sent referral bonus notification to ${referralValidation.referrerEmail}`);
+            }
+          }
+        } catch (error) {
+          console.error("Failed to send referral bonus notification:", error);
+          // Don't fail the registration if email sending fails
+        }
+      }
       
       res.status(201).json(registration);
     } catch (error) {
