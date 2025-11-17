@@ -389,6 +389,11 @@ export const loyaltyProgram = pgTable("loyalty_program", {
   lastClinicDate: timestamp("last_clinic_date"),
   loyaltyTier: text("loyalty_tier").notNull().default("bronze"), // bronze, silver, gold
   isActive: boolean("is_active").notNull().default(true),
+  // Points & Referral System
+  points: integer("points").notNull().default(0),
+  referralCode: text("referral_code").unique(),
+  usedReferralCode: text("used_referral_code"),
+  lastResetDate: timestamp("last_reset_date"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -400,11 +405,34 @@ export const loyaltyDiscounts = pgTable("loyalty_discounts", {
   discountType: text("discount_type").notNull(), // percentage, fixed_amount
   discountValue: integer("discount_value").notNull(), // percentage (0-100) or amount in pence
   minimumEntries: integer("minimum_entries").notNull().default(5),
+  pointsRequired: integer("points_required"), // 50, 100, 150, etc.
   isUsed: boolean("is_used").notNull().default(false),
   usedAt: timestamp("used_at"),
   expiresAt: timestamp("expires_at").notNull(),
   clinicRegistrationId: integer("clinic_registration_id").references(() => clinicRegistrations.id),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const referrals = pgTable("referrals", {
+  id: serial("id").primaryKey(),
+  referrerId: integer("referrer_id").notNull().references(() => loyaltyProgram.id),
+  refereeEmail: text("referee_email").notNull(),
+  bonusPoints: integer("bonus_points").notNull().default(20),
+  isNewClient: boolean("is_new_client").notNull().default(false),
+  clinicRegistrationId: integer("clinic_registration_id").references(() => clinicRegistrations.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const loyaltyProgramArchive = pgTable("loyalty_program_archive", {
+  id: serial("id").primaryKey(),
+  loyaltyId: integer("loyalty_id").notNull(),
+  email: text("email").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  points: integer("points").notNull(),
+  rank: integer("rank").notNull(),
+  resetPeriod: text("reset_period").notNull(), // "2025-H1" (Jan-Jun), "2025-H2" (Jul-Dec)
+  archivedAt: timestamp("archived_at").notNull().defaultNow(),
 });
 
 export const insertLoyaltyProgramSchema = createInsertSchema(loyaltyProgram).omit({
@@ -420,10 +448,24 @@ export const insertLoyaltyDiscountSchema = createInsertSchema(loyaltyDiscounts).
   createdAt: true,
 });
 
+export const insertReferralSchema = createInsertSchema(referrals).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertLoyaltyProgramArchiveSchema = createInsertSchema(loyaltyProgramArchive).omit({
+  id: true,
+  archivedAt: true,
+});
+
 export type LoyaltyProgram = typeof loyaltyProgram.$inferSelect;
 export type InsertLoyaltyProgram = z.infer<typeof insertLoyaltyProgramSchema>;
 export type LoyaltyDiscount = typeof loyaltyDiscounts.$inferSelect;
 export type InsertLoyaltyDiscount = z.infer<typeof insertLoyaltyDiscountSchema>;
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = z.infer<typeof insertReferralSchema>;
+export type LoyaltyProgramArchive = typeof loyaltyProgramArchive.$inferSelect;
+export type InsertLoyaltyProgramArchive = z.infer<typeof insertLoyaltyProgramArchiveSchema>;
 
 // Extended type for clinics with sessions
 export type ClinicWithSessions = Clinic & {
