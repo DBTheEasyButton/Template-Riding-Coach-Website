@@ -524,9 +524,9 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
-                <Label htmlFor="referralCode" className="text-sm font-medium text-gray-700">Referral Code (Optional)</Label>
-                <p className="text-xs text-gray-600 mt-1 mb-2">
-                  Have a referral code? Enter it to help your friend earn rewards!
+                <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
+                <p className="text-xs text-gray-700 mt-1 mb-2">
+                  They'll earn 20 bonus points and you'll start earning points too.
                 </p>
                 <div className="relative">
                   <Input
