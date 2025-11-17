@@ -582,6 +582,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                     id="agreeToTerms"
                     checked={registrationData.agreeToTerms}
                     onCheckedChange={(checked) => updateRegistrationData('agreeToTerms', checked)}
+                    data-testid="checkbox-agree-to-terms"
                   />
                   <div className="flex-1">
                     <Label htmlFor="agreeToTerms" className="text-sm cursor-pointer leading-relaxed">
@@ -687,6 +688,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                 variant="outline"
                 onClick={prevStep}
                 className="flex-1 h-12 text-base"
+                data-testid="button-prev-step"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -697,6 +699,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
               onClick={nextStep}
               disabled={currentStep === 3 && !registrationData.agreeToTerms}
               className="flex-1 h-12 text-base font-semibold"
+              data-testid="button-next-step"
             >
               {currentStep === 3 ? 'Review & Pay' : 'Continue'}
               <ChevronRight className="w-5 h-5 ml-2" />
