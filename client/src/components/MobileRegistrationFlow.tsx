@@ -34,6 +34,7 @@ interface RegistrationData {
   agreeToTerms: boolean;
   paymentMethod: string;
   discountCode?: string;
+  referralCode?: string;
 }
 
 const STEPS = [
@@ -179,9 +180,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
   // Payment intent mutation
   const createPaymentIntentMutation = useMutation({
     mutationFn: async () => {
-      const payload = clinic?.hasMultipleSessions 
+      const payload: { sessionIds?: number[]; discountCode?: string } = clinic?.hasMultipleSessions 
         ? { sessionIds: selectedSessions }
         : {};
+      
+      // Include discount code if provided
+      if (registrationData.discountCode) {
+        payload.discountCode = registrationData.discountCode;
+      }
       
       return await apiRequest('POST', `/api/clinics/${clinic?.id}/create-payment-intent`, payload);
     },
@@ -220,6 +226,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         medicalConditions: registrationData.medicalConditions || undefined,
         paymentMethod: registrationData.paymentMethod,
         agreeToTerms: registrationData.agreeToTerms,
+        referralCode: registrationData.referralCode || undefined,
       });
     },
     onSuccess: () => {
@@ -482,6 +489,21 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   onChange={(e) => updateRegistrationData('medicalConditions', e.target.value)}
                   className="mt-1 h-20"
                   placeholder="Any medical conditions we should know about..."
+                />
+              </div>
+
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                <Label htmlFor="referralCode" className="text-sm font-medium text-gray-700">Referral Code (Optional)</Label>
+                <p className="text-xs text-gray-600 mt-1 mb-2">
+                  Have a referral code? Enter it to help your friend earn rewards!
+                </p>
+                <Input
+                  id="referralCode"
+                  data-testid="input-referral-code"
+                  value={registrationData.referralCode || ''}
+                  onChange={(e) => updateRegistrationData('referralCode', e.target.value.toUpperCase())}
+                  placeholder="DBM-XXXXX"
+                  className="mt-1"
                 />
               </div>
 

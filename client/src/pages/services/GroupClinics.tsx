@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import ClinicsSection from "@/components/ClinicsSection";
+import LoyaltyLeaderboard from "@/components/LoyaltyLeaderboard";
 import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -324,6 +325,26 @@ export default function GroupClinics() {
 
       {/* Upcoming Clinics Section */}
       <ClinicsSection />
+
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
+
+      {/* Loyalty Leaderboard Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-4">
+              Earn Rewards with Every Clinic!
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-6"></div>
+            <p className="text-lg text-dark max-w-3xl mx-auto">
+              Join our loyalty program! Earn 10 points per clinic entry and bonus points for referring friends. 
+              Every 50 points unlocks a 20% discount code. The top 5 riders win prizes every six months!
+            </p>
+          </div>
+          <LoyaltyLeaderboard />
+        </div>
+      </section>
 
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
