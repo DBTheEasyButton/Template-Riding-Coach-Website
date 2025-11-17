@@ -45,5 +45,5 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Google Analytics 4:** For website traffic and user behavior analytics.
 - **Google Search Console:** For site ownership verification and search performance monitoring.
 - **Meta Pixel (Facebook Pixel):** For advertising campaign tracking and conversion events.
-- **Go High Level (GHL) API:** Integrated for contact management and synchronization, including newsletter subscriptions and clinic registrations. Requires `GHL_API_KEY` and `GHL_LOCATION_ID`.
+- **Go High Level (GHL) API:** Integrated for contact management, synchronization, and automated email communications. Used for newsletter subscriptions, clinic registrations, and three automated email types: (1) First-time clinic confirmation (welcome, referral code, timing info), (2) Returning client confirmation (timing, points balance, referral reminder), and (3) Referral bonus notification (points earned, leaderboard link). Requires `GHL_API_KEY` and `GHL_LOCATION_ID`.
 - **Stripe Payment Integration:** Configured for clinic registrations with server-side payment validation, Stripe Elements, and Express Checkout (Apple Pay/Google Pay). Requires `STRIPE_SECRET_KEY` and `VITE_STRIPE_PUBLIC_KEY`.
