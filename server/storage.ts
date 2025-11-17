@@ -18,6 +18,8 @@ import {
   gallery,
   loyaltyProgram,
   loyaltyDiscounts,
+  referrals,
+  loyaltyProgramArchive,
   competitionChecklists,
   sponsors,
   ghlContacts,
@@ -62,6 +64,10 @@ import {
   type InsertLoyaltyProgram,
   type LoyaltyDiscount,
   type InsertLoyaltyDiscount,
+  type Referral,
+  type InsertReferral,
+  type LoyaltyProgramArchive,
+  type InsertLoyaltyProgramArchive,
   type LoyaltyProgramWithDiscounts,
   type CompetitionChecklist,
   type InsertCompetitionChecklist,
@@ -166,6 +172,19 @@ export interface IStorage {
   getLoyaltyDiscounts(loyaltyId: number): Promise<LoyaltyDiscount[]>;
   getAvailableDiscount(email: string): Promise<LoyaltyDiscount | undefined>;
   useLoyaltyDiscount(discountCode: string, registrationId: number): Promise<LoyaltyDiscount | undefined>;
+  
+  // Points & Referral System
+  generateUniqueReferralCode(): Promise<string>;
+  validateReferralCode(code: string): Promise<{ valid: boolean; referrerId?: number; referrerEmail?: string }>;
+  isNewClient(email: string): Promise<boolean>;
+  awardPoints(email: string, points: number, reason: string): Promise<LoyaltyProgram | undefined>;
+  trackReferral(referrerId: number, refereeEmail: string, isNewClient: boolean, registrationId: number): Promise<void>;
+  checkPointsMilestone(loyaltyId: number, points: number): Promise<void>;
+  generateDiscount20Percent(loyaltyId: number, pointsRequired: number): Promise<LoyaltyDiscount>;
+  getLeaderboard(limit?: number): Promise<Array<{ rank: number; firstName: string; lastInitial: string; points: number }>>;
+  archiveTopWinners(resetPeriod: string): Promise<void>;
+  resetAllPoints(): Promise<void>;
+  getDiscountByCode(code: string): Promise<LoyaltyDiscount | undefined>;
 
   // Competition Checklist System
   getAllCompetitionChecklists(): Promise<CompetitionChecklist[]>;
@@ -1273,6 +1292,208 @@ The Dan Bizzarro Method Team`,
       .where(eq(loyaltyDiscounts.discountCode, discountCode))
       .returning();
 
+    return discount;
+  }
+
+  // Points & Referral System Implementation
+  async generateUniqueReferralCode(): Promise<string> {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No confusing chars like I, O, 0, 1
+    let code: string;
+    let isUnique = false;
+
+    while (!isUnique) {
+      code = 'DBM-';
+      for (let i = 0; i < 5; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      const existing = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.referralCode, code));
+      isUnique = existing.length === 0;
+    }
+
+    return code!;
+  }
+
+  async validateReferralCode(code: string): Promise<{ valid: boolean; referrerId?: number; referrerEmail?: string }> {
+    const [program] = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.referralCode, code));
+    
+    if (!program) {
+      return { valid: false };
+    }
+
+    return {
+      valid: true,
+      referrerId: program.id,
+      referrerEmail: program.email
+    };
+  }
+
+  async isNewClient(email: string): Promise<boolean> {
+    const registrations = await db.select().from(clinicRegistrations).where(eq(clinicRegistrations.email, email));
+    return registrations.length === 0;
+  }
+
+  async awardPoints(email: string, points: number, reason: string): Promise<LoyaltyProgram | undefined> {
+    let program = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email)).then(rows => rows[0]);
+    
+    if (!program) {
+      // Create new loyalty program entry with referral code
+      const referralCode = await this.generateUniqueReferralCode();
+      const [emailParts] = email.split('@');
+      const [newProgram] = await db
+        .insert(loyaltyProgram)
+        .values({
+          email,
+          firstName: emailParts,
+          lastName: '',
+          clinicEntries: 0,
+          totalSpent: 0,
+          points,
+          referralCode,
+        })
+        .returning();
+      program = newProgram;
+    } else {
+      const newPoints = program.points + points;
+      
+      [program] = await db
+        .update(loyaltyProgram)
+        .set({
+          points: newPoints,
+          updatedAt: new Date(),
+        })
+        .where(eq(loyaltyProgram.email, email))
+        .returning();
+
+      // Check if user has reached a milestone for discount generation
+      await this.checkPointsMilestone(program.id, newPoints);
+    }
+
+    console.log(`Awarded ${points} points to ${email} for: ${reason}. Total points: ${program.points}`);
+    return program;
+  }
+
+  async trackReferral(referrerId: number, refereeEmail: string, isNewClient: boolean, registrationId: number): Promise<void> {
+    await db.insert(referrals).values({
+      referrerId,
+      refereeEmail,
+      bonusPoints: 20,
+      isNewClient,
+      clinicRegistrationId: registrationId,
+    });
+  }
+
+  async checkPointsMilestone(loyaltyId: number, points: number): Promise<void> {
+    // Check if user has reached 50, 100, 150, etc. points
+    const milestones = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500];
+    
+    for (const milestone of milestones) {
+      if (points >= milestone) {
+        // Check if discount for this milestone already exists
+        const existingDiscounts = await db
+          .select()
+          .from(loyaltyDiscounts)
+          .where(eq(loyaltyDiscounts.loyaltyId, loyaltyId));
+
+        const hasDiscountForMilestone = existingDiscounts.some(d => d.pointsRequired === milestone);
+        
+        if (!hasDiscountForMilestone) {
+          // Generate new 20% discount for this milestone
+          await this.generateDiscount20Percent(loyaltyId, milestone);
+        }
+      }
+    }
+  }
+
+  async generateDiscount20Percent(loyaltyId: number, pointsRequired: number): Promise<LoyaltyDiscount> {
+    const [program] = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.id, loyaltyId));
+    
+    if (!program) {
+      throw new Error('Loyalty program not found');
+    }
+
+    const expiresAt = new Date();
+    expiresAt.setMonth(expiresAt.getMonth() + 12); // 12 months expiry
+
+    // Generate unique discount code
+    const discountCode = `DBM20-${program.firstName.substring(0, 4).toUpperCase()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+
+    const [discount] = await db.insert(loyaltyDiscounts).values({
+      loyaltyId: program.id,
+      discountCode,
+      discountType: 'percentage',
+      discountValue: 20,
+      minimumEntries: 0,
+      pointsRequired,
+      expiresAt,
+    }).returning();
+
+    // Send email with discount code to the user
+    const { emailService } = await import('./emailService');
+    await emailService.sendLoyaltyDiscountEmail(program.email, discountCode);
+
+    console.log(`Generated 20% discount code ${discountCode} for ${program.email} at ${pointsRequired} points`);
+    return discount;
+  }
+
+  async getLeaderboard(limit: number = 5): Promise<Array<{ rank: number; firstName: string; lastInitial: string; points: number }>> {
+    const topUsers = await db
+      .select()
+      .from(loyaltyProgram)
+      .where(eq(loyaltyProgram.isActive, true))
+      .orderBy(desc(loyaltyProgram.points))
+      .limit(limit);
+
+    return topUsers.map((user, index) => ({
+      rank: index + 1,
+      firstName: user.firstName,
+      lastInitial: user.lastName.charAt(0).toUpperCase() || '',
+      points: user.points,
+    }));
+  }
+
+  async archiveTopWinners(resetPeriod: string): Promise<void> {
+    const topUsers = await db
+      .select()
+      .from(loyaltyProgram)
+      .where(eq(loyaltyProgram.isActive, true))
+      .orderBy(desc(loyaltyProgram.points))
+      .limit(5);
+
+    for (let i = 0; i < topUsers.length; i++) {
+      const user = topUsers[i];
+      await db.insert(loyaltyProgramArchive).values({
+        loyaltyId: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        points: user.points,
+        rank: i + 1,
+        resetPeriod,
+      });
+    }
+
+    console.log(`Archived top 5 winners for ${resetPeriod}`);
+  }
+
+  async resetAllPoints(): Promise<void> {
+    await db
+      .update(loyaltyProgram)
+      .set({
+        points: 0,
+        lastResetDate: new Date(),
+        updatedAt: new Date(),
+      });
+
+    console.log('Reset all loyalty points to 0');
+  }
+
+  async getDiscountByCode(code: string): Promise<LoyaltyDiscount | undefined> {
+    const [discount] = await db
+      .select()
+      .from(loyaltyDiscounts)
+      .where(eq(loyaltyDiscounts.discountCode, code));
+    
     return discount;
   }
 
