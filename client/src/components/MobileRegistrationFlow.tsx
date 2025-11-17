@@ -64,6 +64,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
+  const [isValidatingReferral, setIsValidatingReferral] = useState(false);
+  const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -95,6 +97,35 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
       // Silently fail - it just means no previous registration
     } finally {
       setIsLookingUpEmail(false);
+    }
+  };
+
+  // Validate referral code
+  const validateReferralCode = async (code: string) => {
+    if (!code || code.trim().length === 0) {
+      setReferralValidation(null);
+      return;
+    }
+
+    setIsValidatingReferral(true);
+    try {
+      const response = await fetch('/api/loyalty/referral/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ referralCode: code.trim() })
+      });
+
+      const data = await response.json();
+      
+      if (data.valid) {
+        setReferralValidation({ valid: true, message: 'Valid referral code!' });
+      } else {
+        setReferralValidation({ valid: false, message: 'Invalid referral code' });
+      }
+    } catch (error) {
+      setReferralValidation({ valid: false, message: 'Error validating code' });
+    } finally {
+      setIsValidatingReferral(false);
     }
   };
 
@@ -497,14 +528,52 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                 <p className="text-xs text-gray-600 mt-1 mb-2">
                   Have a referral code? Enter it to help your friend earn rewards!
                 </p>
-                <Input
-                  id="referralCode"
-                  data-testid="input-referral-code"
-                  value={registrationData.referralCode || ''}
-                  onChange={(e) => updateRegistrationData('referralCode', e.target.value.toUpperCase())}
-                  placeholder="DBM-XXXXX"
-                  className="mt-1"
-                />
+                <div className="relative">
+                  <Input
+                    id="referralCode"
+                    data-testid="input-referral-code"
+                    value={registrationData.referralCode || ''}
+                    onChange={(e) => {
+                      const value = e.target.value.toUpperCase();
+                      updateRegistrationData('referralCode', value);
+                      // Clear validation when user types
+                      setReferralValidation(null);
+                    }}
+                    onBlur={(e) => {
+                      const code = e.target.value.trim();
+                      if (code) {
+                        validateReferralCode(code);
+                      }
+                    }}
+                    placeholder="DBM-XXXXX"
+                    className={`mt-1 ${
+                      referralValidation?.valid === false ? 'border-red-500 bg-red-50' : 
+                      referralValidation?.valid === true ? 'border-green-500 bg-green-50' : ''
+                    }`}
+                  />
+                  {isValidatingReferral && (
+                    <div className="absolute right-3 top-4">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    </div>
+                  )}
+                </div>
+                {referralValidation && (
+                  <p className={`text-xs mt-2 flex items-center gap-1 ${
+                    referralValidation.valid ? 'text-green-600' : 'text-red-600'
+                  }`} data-testid="referral-validation-message">
+                    {referralValidation.valid ? (
+                      <>
+                        <Check className="w-3 h-3" />
+                        {referralValidation.message}
+                      </>
+                    ) : (
+                      <>
+                        <AlertTriangle className="w-3 h-3" />
+                        {referralValidation.message}
+                      </>
+                    )}
+                  </p>
+                )}
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg">
