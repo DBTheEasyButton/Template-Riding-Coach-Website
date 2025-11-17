@@ -270,7 +270,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/clinics/:id/create-payment-intent", async (req, res) => {
     try {
       const clinicId = parseInt(req.params.id);
-      const { sessionIds } = req.body;
+      const { sessionIds, discountCode } = req.body;
       
       const clinic = await storage.getClinic(clinicId);
       if (!clinic) {
@@ -293,6 +293,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Single session clinic
         amount = clinic.price;
       }
+
+      // NEW: Apply discount code if provided
+      let discountApplied = false;
+      let discountAmount = 0;
+      if (discountCode) {
+        try {
+          const discount = await storage.getDiscountByCode(discountCode);
+          
+          if (discount) {
+            // Validate discount
+            const isExpired = new Date(discount.expiresAt) < new Date();
+            
+            if (discount.isUsed) {
+              return res.status(400).json({ message: "This discount code has already been used" });
+            }
+            
+            if (isExpired) {
+              return res.status(400).json({ message: "This discount code has expired" });
+            }
+
+            // Apply 20% discount
+            if (discount.discountType === 'percentage' && discount.discountValue === 20) {
+              discountAmount = Math.round(amount * 0.20);
+              amount = amount - discountAmount;
+              discountApplied = true;
+              console.log(`Applied 20% discount (${discountCode}): £${discountAmount/100} off`);
+            }
+          } else {
+            return res.status(400).json({ message: "Invalid discount code" });
+          }
+        } catch (error) {
+          console.error('Error applying discount:', error);
+          return res.status(400).json({ message: "Error validating discount code" });
+        }
+      }
       
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount), // Amount is already in cents
@@ -303,10 +338,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata: {
           clinicId: clinicId.toString(),
           sessionIds: sessionIds ? JSON.stringify(sessionIds) : null,
+          discountCode: discountCode || null,
+          discountApplied: discountApplied.toString(),
+          discountAmount: discountAmount.toString(),
         },
       });
       
-      res.json({ clientSecret: paymentIntent.client_secret });
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        discountApplied,
+        discountAmount,
+        finalAmount: amount
+      });
     } catch (error) {
       console.error("Error creating payment intent:", error);
       res.status(500).json({ message: "Failed to create payment intent" });
@@ -360,15 +403,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
         clinicPrice = session?.price || clinic.price;
       }
 
-      // Track clinic entry in loyalty program
+      // Track clinic entry in loyalty program (old system - will be phased out)
       try {
-        const loyaltyProgram = await storage.incrementClinicEntries(registration.email, clinicPrice);
-        if (loyaltyProgram && loyaltyProgram.clinicEntries % 5 === 0 && loyaltyProgram.clinicEntries >= 5) {
-          console.log(`Loyalty discount generated for ${registration.email} after ${loyaltyProgram.clinicEntries} entries`);
-        }
+        await storage.incrementClinicEntries(registration.email, clinicPrice);
       } catch (error) {
-        console.error('Failed to update loyalty program:', error);
-        // Don't fail the registration if loyalty tracking fails
+        console.error('Failed to update old loyalty program:', error);
+      }
+
+      // NEW: Award 10 points for clinic entry
+      try {
+        await storage.awardPoints(registration.email, 10, `Clinic registration: ${clinic.title}`);
+        console.log(`Awarded 10 points to ${registration.email} for clinic entry`);
+      } catch (error) {
+        console.error('Failed to award clinic entry points:', error);
+      }
+
+      // NEW: Handle referral code if provided
+      if (registrationData.referralCode) {
+        try {
+          const referralValidation = await storage.validateReferralCode(registrationData.referralCode);
+          
+          if (referralValidation.valid && referralValidation.referrerId && referralValidation.referrerEmail) {
+            // Check if this is a new client
+            const isNew = await storage.isNewClient(registration.email);
+            
+            // Track the referral in the database
+            await storage.trackReferral(
+              referralValidation.referrerId,
+              registration.email,
+              isNew,
+              registration.id
+            );
+
+            // Only award bonus points if the referee is a new client
+            if (isNew) {
+              await storage.awardPoints(
+                referralValidation.referrerEmail,
+                20,
+                `Referral bonus: ${registration.firstName} ${registration.lastName}`
+              );
+              console.log(`Awarded 20 referral bonus points to ${referralValidation.referrerEmail} for new client ${registration.email}`);
+            } else {
+              console.log(`No referral bonus awarded - ${registration.email} is an existing client`);
+            }
+
+            // Store the used referral code in the loyalty program for audit
+            await storage.updateLoyaltyProgram(registration.email, {
+              usedReferralCode: registrationData.referralCode
+            });
+          } else {
+            console.log(`Invalid referral code provided: ${registrationData.referralCode}`);
+          }
+        } catch (error) {
+          console.error('Failed to process referral code:', error);
+          // Don't fail the registration if referral processing fails
+        }
       }
       
       // Automatically subscribe participant to email list if not already subscribed
@@ -1438,6 +1527,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error using loyalty discount:", error);
       res.status(500).json({ message: "Failed to use discount" });
+    }
+  });
+
+  // NEW: Leaderboard endpoint
+  app.get("/api/loyalty/leaderboard", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 5;
+      const leaderboard = await storage.getLeaderboard(limit);
+      res.json(leaderboard);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+      res.status(500).json({ message: "Failed to fetch leaderboard" });
+    }
+  });
+
+  // NEW: Validate referral code
+  app.post("/api/loyalty/referral/validate", async (req, res) => {
+    try {
+      const { referralCode } = req.body;
+      
+      if (!referralCode) {
+        return res.status(400).json({ message: "Referral code required" });
+      }
+      
+      const validation = await storage.validateReferralCode(referralCode);
+      res.json(validation);
+    } catch (error) {
+      console.error("Error validating referral code:", error);
+      res.status(500).json({ message: "Failed to validate referral code" });
     }
   });
 

@@ -164,6 +164,7 @@ export interface IStorage {
   deleteGalleryImage(id: number): Promise<void>;
 
   // Loyalty Program System
+  getAllLoyaltyPrograms(): Promise<LoyaltyProgram[]>;
   getLoyaltyProgram(email: string): Promise<LoyaltyProgramWithDiscounts | undefined>;
   createLoyaltyProgram(program: InsertLoyaltyProgram): Promise<LoyaltyProgram>;
   updateLoyaltyProgram(email: string, updates: Partial<InsertLoyaltyProgram>): Promise<LoyaltyProgram | undefined>;
@@ -1162,6 +1163,10 @@ The Dan Bizzarro Method Team`,
   }
 
   // Loyalty Program Methods
+  async getAllLoyaltyPrograms(): Promise<LoyaltyProgram[]> {
+    return await db.select().from(loyaltyProgram).orderBy(desc(loyaltyProgram.points));
+  }
+
   async getLoyaltyProgram(email: string): Promise<LoyaltyProgramWithDiscounts | undefined> {
     const [program] = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email));
     if (!program) return undefined;
