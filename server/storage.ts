@@ -2163,6 +2163,19 @@ The Dan Bizzarro Method Team`,
       if (!response.ok) {
         const errorData = await response.json();
         console.error('GHL API error:', errorData);
+        
+        // Check if this is a duplicate contact error - GHL returns the existing contactId
+        if (response.status === 400 && 
+            errorData.message?.includes('duplicated contact') && 
+            errorData.meta?.contactId) {
+          console.log('Duplicate contact detected, using existing contactId:', errorData.meta.contactId);
+          return {
+            success: true,
+            contactId: errorData.meta.contactId,
+            message: 'Using existing contact from Go High Level'
+          };
+        }
+        
         return {
           success: false,
           message: `GHL API error: ${response.status} ${response.statusText}`
