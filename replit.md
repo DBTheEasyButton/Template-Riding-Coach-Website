@@ -39,7 +39,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Main Pages:** Home, About, Coaching, Gallery, News, Podcast, and Contact pages, designed for independent ranking and user experience.
 - **Podcast:** "Our Equestrian Life" podcast, integrated on the Home page and a dedicated `/podcast` page with SEO optimization.
 - **Admin Interface:** Manages clinics, news articles, and Go High Level contact synchronization.
-- **Points and Referral System:** A loyalty program with bi-annual prizes and automatic rewards. Clients earn points per clinic entry, and referrers earn bonus points for new client sign-ups. Discount codes are automatically generated at 50-point milestones. Features a public, privacy-protected leaderboard and bi-annual point resets with winner archiving. Real-time referral code validation is provided.
+- **Points and Referral System:** A loyalty programme with bi-annual prizes and automatic rewards. Clients earn points per clinic entry, and referrers earn bonus points for new client sign-ups. Discount codes are automatically generated at 50-point milestones. Features a public, privacy-protected leaderboard. Points first reset on 30 June 2025, then bi-annually (30 June & 31 December) with winner archiving. Real-time referral code validation is provided.
 
 ## External Dependencies
 - **Google Analytics 4:** For website traffic and user behavior analytics.

@@ -104,7 +104,7 @@ export default function Loyalty() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-dark text-sm">
-                    The <strong>top 5 riders</strong> at the end of June and December win special prizes! Points reset bi-annually.
+                    The <strong>top 5 riders</strong> win special prizes! First reset 30 June 2025, then bi-annually (June & December).
                   </p>
                 </CardContent>
               </Card>
@@ -165,8 +165,8 @@ export default function Loyalty() {
                 Live Leaderboard
               </h2>
               <p className="text-dark max-w-2xl mx-auto">
-                See where you rank! The top 5 riders at the end of each period (30 June & 31 December) win prizes. 
-                Points reset bi-annually to give everyone a fresh start.
+                See where you rank! The top 5 riders at the end of each period win prizes. 
+                Points will first reset on 30 June 2025, then bi-annually (30 June & 31 December) thereafter.
               </p>
             </div>
             <LoyaltyLeaderboard />

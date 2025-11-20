@@ -338,8 +338,8 @@ export default function GroupClinics() {
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-6"></div>
             <p className="text-lg text-dark max-w-3xl mx-auto">
-              Join our loyalty program! Earn 10 points per clinic entry and bonus points for referring friends. 
-              Every 50 points unlocks a 20% discount code. The top 5 riders win prizes every six months!
+              Join our loyalty programme! Earn 10 points per clinic entry and bonus points for referring friends. 
+              Every 50 points unlocks a 20% discount code. The top 5 riders win prizes—first reset 30 June 2025, then bi-annually!
             </p>
           </div>
           <LoyaltyLeaderboard />
