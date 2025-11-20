@@ -485,7 +485,7 @@ export default function ClinicsSection() {
               <div className="text-orange text-2xl">🎯</div>
               <div className="text-center">
                 <p className="font-semibold text-navy mb-1">Earn Rewards with Every Clinic!</p>
-                <p className="text-sm text-dark">Get 15% discount codes after every 5 clinic registrations</p>
+                <p className="text-sm text-dark">10 points per clinic • 20% discount at 50 points • Bi-annual prizes for top 5 riders</p>
               </div>
               <Link href="/loyalty">
                 <Button variant="outline" size="sm" className="border-orange text-orange hover:bg-orange hover:text-white">
