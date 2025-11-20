@@ -185,11 +185,11 @@ export const seoConfig: Record<string, PageSEOConfig> = {
   },
 
   '/loyalty': {
-    title: 'Loyalty Rewards Programme | Dan Bizzarro Method',
-    description: 'Join the Dan Bizzarro Method loyalty programme and earn rewards with every clinic booking. Get stamps for attending clinics and unlock exclusive benefits.',
-    keywords: 'loyalty programme, clinic rewards, loyalty stamps, coaching rewards, Dan Bizzarro loyalty, clinic benefits',
+    title: 'Loyalty Points Programme | Earn Rewards & Discounts | Dan Bizzarro Method',
+    description: 'Earn 10 points per clinic, unlock 20% discount codes at 50 points, and compete for bi-annual prizes. Share your referral code to earn 20 bonus points when friends join!',
+    keywords: 'loyalty programme, clinic rewards, loyalty points, coaching rewards, Dan Bizzarro loyalty, clinic benefits, referral rewards, discount codes, equestrian loyalty programme, rider rewards',
     canonicalPath: '/loyalty',
-    h1: 'Loyalty Rewards',
+    h1: 'Loyalty Rewards Programme',
     ogImage: '/hero-background.jpg'
   }
 };

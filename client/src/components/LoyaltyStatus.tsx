@@ -4,8 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Gift, Star, Trophy, Calendar } from "lucide-react";
+import { Gift, Star, Trophy, Calendar, Copy, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoyaltyStatusProps {
   email: string;
@@ -20,6 +21,8 @@ interface LoyaltyProgram {
   totalSpent: number;
   loyaltyTier: string;
   lastClinicDate: string;
+  points: number;
+  referralCode: string;
   availableDiscounts?: LoyaltyDiscount[];
 }
 
@@ -35,6 +38,8 @@ interface LoyaltyDiscount {
 
 export function LoyaltyStatus({ email }: LoyaltyStatusProps) {
   const [showDiscounts, setShowDiscounts] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const { data: loyaltyProgram, isLoading } = useQuery<LoyaltyProgram>({
     queryKey: ['/api/loyalty', email],
@@ -57,26 +62,38 @@ export function LoyaltyStatus({ email }: LoyaltyStatusProps) {
 
   if (!loyaltyProgram) {
     return (
-      <Card className="w-full max-w-md border-dashed">
+      <Card className="w-full max-w-md border-dashed border-2 border-orange/30">
         <CardContent className="p-6 text-center">
-          <Star className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Join Our Loyalty Program</h3>
-          <p className="text-sm text-gray-600">
-            Register for your first clinic to start earning rewards!
+          <Star className="mx-auto h-12 w-12 text-orange mb-4" />
+          <h3 className="text-lg font-semibold text-navy mb-2">Join Our Loyalty Programme</h3>
+          <p className="text-sm text-dark">
+            Register for your first clinic to start earning points and rewards!
           </p>
         </CardContent>
       </Card>
     );
   }
 
-  const getNextRewardEntries = () => {
-    const nextMilestone = Math.ceil(loyaltyProgram.clinicEntries / 5) * 5;
-    return nextMilestone === loyaltyProgram.clinicEntries ? nextMilestone + 5 : nextMilestone;
+  const getNextRewardPoints = () => {
+    const nextMilestone = Math.ceil(loyaltyProgram.points / 50) * 50;
+    return nextMilestone === loyaltyProgram.points ? nextMilestone + 50 : nextMilestone;
   };
 
   const getProgressPercentage = () => {
-    const remainder = loyaltyProgram.clinicEntries % 5;
-    return (remainder / 5) * 100;
+    const remainder = loyaltyProgram.points % 50;
+    return (remainder / 50) * 100;
+  };
+
+  const copyReferralCode = () => {
+    if (loyaltyProgram.referralCode) {
+      navigator.clipboard.writeText(loyaltyProgram.referralCode);
+      setCopied(true);
+      toast({
+        title: "Copied!",
+        description: "Referral code copied to clipboard",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const getTierIcon = (tier: string) => {
@@ -106,10 +123,10 @@ export function LoyaltyStatus({ email }: LoyaltyStatusProps) {
   };
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="pb-3">
+    <Card className="w-full max-w-md shadow-lg border-orange/20">
+      <CardHeader className="pb-3 bg-gradient-to-r from-orange/5 to-orange/10">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Loyalty Status</CardTitle>
+          <CardTitle className="text-lg text-navy">Your Loyalty Status</CardTitle>
           <Badge className={`capitalize ${getTierColor(loyaltyProgram.loyaltyTier)}`}>
             <span className="flex items-center gap-1">
               {getTierIcon(loyaltyProgram.loyaltyTier)}
@@ -117,83 +134,113 @@ export function LoyaltyStatus({ email }: LoyaltyStatusProps) {
             </span>
           </Badge>
         </div>
-        <CardDescription>
-          Track your clinic entries and earn rewards
+        <CardDescription className="text-dark">
+          Hello, {loyaltyProgram.firstName}! Track your points and rewards
         </CardDescription>
       </CardHeader>
       
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6 pt-6">
+        {/* Points Display */}
+        <div className="bg-orange/5 rounded-lg p-4 text-center">
+          <p className="text-sm text-dark mb-1">Total Points</p>
+          <p className="text-4xl font-bold text-orange" data-testid="text-total-points">{loyaltyProgram.points}</p>
+          <p className="text-xs text-gray-600 mt-1">{loyaltyProgram.clinicEntries} clinic{loyaltyProgram.clinicEntries !== 1 ? 's' : ''} attended</p>
+        </div>
+
+        {/* Referral Code */}
+        {loyaltyProgram.referralCode && (
+          <div className="border border-orange/20 rounded-lg p-4">
+            <p className="text-sm text-dark mb-2 font-medium">Your Referral Code</p>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 bg-gray-100 px-3 py-2 rounded text-center font-mono text-lg font-bold text-navy">
+                {loyaltyProgram.referralCode}
+              </code>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={copyReferralCode}
+                className="border-orange text-orange hover:bg-orange hover:text-white"
+                data-testid="button-copy-referral"
+              >
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              </Button>
+            </div>
+            <p className="text-xs text-gray-600 mt-2 text-center">
+              Share with friends to earn 20 bonus points each!
+            </p>
+          </div>
+        )}
+
+        {/* Stats */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span>Clinic Entries</span>
-            <span className="font-medium">{loyaltyProgram.clinicEntries}</span>
+            <span className="text-dark">Total Spent</span>
+            <span className="font-medium text-navy">{formatPrice(loyaltyProgram.totalSpent)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span>Total Spent</span>
-            <span className="font-medium">{formatPrice(loyaltyProgram.totalSpent)}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span>Last Clinic</span>
-            <span className="font-medium">
-              {new Date(loyaltyProgram.lastClinicDate).toLocaleDateString()}
+            <span className="text-dark">Last Clinic</span>
+            <span className="font-medium text-navy">
+              {new Date(loyaltyProgram.lastClinicDate).toLocaleDateString('en-GB')}
             </span>
           </div>
         </div>
 
+        {/* Progress to Next Discount */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span>Progress to Next Reward</span>
-            <span className="font-medium">
-              {loyaltyProgram.clinicEntries % 5}/5
+            <span className="text-dark">Progress to Next Discount</span>
+            <span className="font-medium text-navy">
+              {loyaltyProgram.points % 50}/{50} points
             </span>
           </div>
-          <Progress value={getProgressPercentage()} className="h-2" />
+          <Progress value={getProgressPercentage()} className="h-2 bg-gray-200" />
           <p className="text-xs text-gray-600 text-center">
-            {5 - (loyaltyProgram.clinicEntries % 5)} more entries for 15% discount
+            {50 - (loyaltyProgram.points % 50)} more points for 20% discount code!
           </p>
         </div>
 
+        {/* Available Discounts */}
         {loyaltyProgram.availableDiscounts && loyaltyProgram.availableDiscounts.length > 0 && (
           <Dialog open={showDiscounts} onOpenChange={setShowDiscounts}>
             <DialogTrigger asChild>
               <Button 
-                variant="outline" 
-                className="w-full"
+                className="w-full bg-orange hover:bg-orange/90 text-white"
                 onClick={() => setShowDiscounts(true)}
+                data-testid="button-view-rewards"
               >
                 <Gift className="h-4 w-4 mr-2" />
-                View Available Rewards ({loyaltyProgram.availableDiscounts.length})
+                View Available Discount Codes ({loyaltyProgram.availableDiscounts.length})
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle>Your Available Rewards</DialogTitle>
+                <DialogTitle className="text-navy">Your Available Discount Codes</DialogTitle>
                 <DialogDescription>
-                  Use these discount codes during clinic registration
+                  Use these codes during clinic registration to save money
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-3">
                 {loyaltyProgram.availableDiscounts.map((discount) => (
-                  <Card key={discount.id}>
+                  <Card key={discount.id} className="border-orange/20">
                     <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
+                      <div className="flex justify-between items-start mb-3">
                         <div>
-                          <h4 className="font-medium text-lg">
+                          <h4 className="font-bold text-2xl text-orange">
                             {discount.discountValue}% OFF
                           </h4>
-                          <p className="text-sm text-gray-600">
-                            Code: <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                          <p className="text-sm text-dark mt-1">
+                            Code: <span className="font-mono bg-orange/10 px-2 py-1 rounded font-bold text-navy">
                               {discount.discountCode}
                             </span>
                           </p>
                         </div>
-                        <Badge variant="secondary">
+                        <Badge variant="secondary" className="bg-gray-100">
                           <Calendar className="h-3 w-3 mr-1" />
-                          {new Date(discount.expiresAt).toLocaleDateString()}
+                          Expires {new Date(discount.expiresAt).toLocaleDateString('en-GB')}
                         </Badge>
                       </div>
-                      <p className="text-xs text-gray-500">
-                        Earned after {discount.minimumEntries} clinic entries
+                      <p className="text-xs text-gray-600">
+                        Earned with {discount.minimumEntries || ((loyaltyProgram.points / 10) * 10)} points
                       </p>
                     </CardContent>
                   </Card>
