@@ -207,6 +207,13 @@ export default function TermsAndConditions() {
                 </div>
 
                 <div>
+                  <h4 className="font-semibold text-navy mb-3">Data Privacy</h4>
+                  <p className="text-sm text-dark bg-gray-50 p-4 rounded-lg mb-4">
+                    Your contact details (name, email, phone, horse name, emergency contact, and medical information) will be securely stored to facilitate clinic registration and pre-fill your information for future bookings. This data is used solely for clinic management, emergency purposes, and to improve your booking experience. We will not share your personal information with third parties without your consent. You can request to view, update, or delete your data at any time by contacting us.
+                  </p>
+                </div>
+
+                <div>
                   <h4 className="font-semibold text-navy mb-3">Data Processing and Storage</h4>
                   <ul className="space-y-2 list-disc ml-6 text-sm">
                     <li>Personal information collected during registration will be used for clinic management, communication, and marketing purposes</li>
