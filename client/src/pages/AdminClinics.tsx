@@ -272,6 +272,7 @@ export default function AdminClinics() {
     // Load existing session data if available
     if (freshClinic.sessions && freshClinic.sessions.length > 0) {
       const existingSessions = freshClinic.sessions.map((session: any) => ({
+        id: session.id, // CRITICAL: Include session ID for updates
         sessionName: session.sessionName || "",
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
