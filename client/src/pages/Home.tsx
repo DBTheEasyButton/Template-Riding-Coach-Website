@@ -141,38 +141,38 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <Link href="/coaching/private-lessons" className="group">
-              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2">
+            <Link href="/coaching/private-lessons" className="group h-full">
+              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
                 <div className="text-orange mb-4 flex justify-center">
                   <Users className="w-12 h-12" aria-hidden="true" />
                 </div>
                 <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Private Horse Riding Lessons</h3>
-                <p className="text-dark leading-relaxed mb-4">Expert one-on-one coaching in Oxfordshire for all levels—from amateur riders to competitors</p>
-                <span className="text-orange font-semibold group-hover:underline inline-flex items-center">
+                <p className="text-dark leading-relaxed mb-4 flex-grow">Expert one-on-one coaching in Oxfordshire for all levels—from amateur riders to competitors</p>
+                <span className="text-orange font-semibold group-hover:underline inline-flex items-center justify-center">
                   Learn about private horse riding lessons <ArrowRight className="ml-2 w-4 h-4" />
                 </span>
               </div>
             </Link>
-            <Link href="/coaching/clinics" className="group">
-              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2">
+            <Link href="/coaching/clinics" className="group h-full">
+              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
                 <div className="text-orange mb-4 flex justify-center">
                   <Award className="w-12 h-12" aria-hidden="true" />
                 </div>
                 <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Clinics</h3>
-                <p className="text-dark leading-relaxed mb-4">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
-                <span className="text-orange font-semibold group-hover:underline inline-flex items-center">
+                <p className="text-dark leading-relaxed mb-4 flex-grow">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
+                <span className="text-orange font-semibold group-hover:underline inline-flex items-center justify-center">
                   Join Dan's clinics <ArrowRight className="ml-2 w-4 h-4" />
                 </span>
               </div>
             </Link>
-            <Link href="/coaching/remote-coaching" className="group">
-              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2">
+            <Link href="/coaching/remote-coaching" className="group h-full">
+              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
                 <div className="text-orange mb-4 flex justify-center">
                   <Target className="w-12 h-12" aria-hidden="true" />
                 </div>
                 <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Virtual Riding Lessons</h3>
-                <p className="text-dark leading-relaxed mb-4">Remote equestrian coaching with video analysis—train anywhere, anytime</p>
-                <span className="text-orange font-semibold group-hover:underline inline-flex items-center">
+                <p className="text-dark leading-relaxed mb-4 flex-grow">Remote equestrian coaching with video analysis—train anywhere, anytime</p>
+                <span className="text-orange font-semibold group-hover:underline inline-flex items-center justify-center">
                   Discover virtual riding lessons <ArrowRight className="ml-2 w-4 h-4" />
                 </span>
               </div>

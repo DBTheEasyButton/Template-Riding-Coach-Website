@@ -174,7 +174,7 @@ export default function GroupClinics() {
               {upcomingClinics.map((clinic) => (
                 <div 
                   key={clinic.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
                 >
                   <div className="p-4 text-white" style={{ background: 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)' }}>
                     <h3 className="text-xl font-playfair font-bold mb-1 line-clamp-2">{clinic.title}</h3>
@@ -184,15 +184,15 @@ export default function GroupClinics() {
                     </div>
                   </div>
                   
-                  <div className="p-4 space-y-3">
-                    <div className="flex items-start text-sm text-gray-600">
+                  <div className="p-4 flex flex-col flex-grow">
+                    <div className="flex items-start text-sm text-gray-600 mb-3">
                       <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-orange" />
                       <span>{clinic.location}</span>
                     </div>
                     
-                    <p className="text-gray-700 text-sm line-clamp-2">{clinic.description}</p>
+                    <p className="text-gray-700 text-sm line-clamp-2 mb-3 flex-grow">{clinic.description}</p>
                     
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-200 mt-auto">
                       <div className="text-2xl font-bold text-orange">
                         {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
                           ? `from £${(Math.min(...clinic.sessions.map((s: any) => s.price)) / 100).toFixed(0)}`
