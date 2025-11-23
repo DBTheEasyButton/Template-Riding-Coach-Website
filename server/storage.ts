@@ -785,7 +785,7 @@ The Dan Bizzarro Method Team`,
     // Attach sessions to clinics
     const clinicsWithSessions: ClinicWithSessions[] = clinicsData.map(clinic => ({
       ...clinic,
-      sessions: clinic.hasMultipleSessions ? (sessionsByClinicId.get(clinic.id) || []) : []
+      sessions: clinic.hasMultipleSessions ? (sessionsByClinicId.get(clinic.id) ?? []) : []
     }));
     
     return clinicsWithSessions;
