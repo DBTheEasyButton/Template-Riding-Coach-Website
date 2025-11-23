@@ -45,7 +45,8 @@ import { CSS } from "@dnd-kit/utilities";
 
 interface ClinicRegistration {
   id: number;
-  riderName: string;
+  firstName: string;
+  lastName: string;
   horseName: string;
   skillLevel?: string;
   groupId?: number | null;
@@ -96,7 +97,7 @@ function ParticipantCard({
       className="p-3 bg-white border border-gray-200 rounded-lg cursor-move hover:border-blue-400 transition-colors"
       data-testid={`participant-card-${participant.id}`}
     >
-      <div className="font-medium text-sm">{participant.riderName}</div>
+      <div className="font-medium text-sm">{participant.firstName} {participant.lastName}</div>
       <div className="text-xs text-gray-600">{participant.horseName}</div>
       {participant.skillLevel && (
         <div className="text-xs text-gray-500 mt-1 capitalize">
