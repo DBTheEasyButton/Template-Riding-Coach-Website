@@ -12,6 +12,11 @@ if (!existsSync(OPTIMIZED_DIR)) {
 
 const imagesToOptimize = [
   {
+    input: 'optimized/carousel-clinic-2.jpg',
+    output: 'carousel-clinic-2',
+    description: 'Homepage carousel clinic image (CRITICAL: 5.8MB → target <200KB)'
+  },
+  {
     input: 'optimized/about-dan-hero.jpg',
     output: 'about-dan-hero',
     description: 'About Dan hero image (CRITICAL: 5.6MB → target <200KB)'
