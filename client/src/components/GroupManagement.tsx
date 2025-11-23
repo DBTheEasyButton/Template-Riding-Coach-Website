@@ -134,7 +134,7 @@ function GroupCard({
 
   return (
     <Card 
-      className={`mb-4 transition-colors border-2 ${isOver ? 'ring-2 ring-blue-400 bg-blue-50 border-blue-400' : 'border-gray-300'}`}
+      className={`transition-colors border-2 ${isOver ? 'ring-2 ring-blue-400 bg-blue-50 border-blue-400' : 'border-gray-300'}`}
       data-testid={`group-card-${group.id}`}
     >
       <CardHeader className="pb-3 bg-gray-50">
@@ -466,7 +466,7 @@ export default function GroupManagement({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               Manage Groups - {sessionName}
@@ -501,14 +501,16 @@ export default function GroupManagement({
             >
               <UnassignedParticipants participants={unassignedParticipants} />
 
-              {groups.map((group) => (
-                <GroupCard
-                  key={group.id}
-                  group={group}
-                  onEdit={setEditingGroup}
-                  onDelete={(id) => deleteGroupMutation.mutate(id)}
-                />
-              ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {groups.map((group) => (
+                  <GroupCard
+                    key={group.id}
+                    group={group}
+                    onEdit={setEditingGroup}
+                    onDelete={(id) => deleteGroupMutation.mutate(id)}
+                  />
+                ))}
+              </div>
 
               <DragOverlay>
                 {activeParticipant && (
