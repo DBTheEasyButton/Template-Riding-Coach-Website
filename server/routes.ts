@@ -790,6 +790,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Handle session updates - only update sessions WITHOUT existing registrations
+      console.log('=== SESSION UPDATE DEBUG ===');
+      console.log('Sessions received:', JSON.stringify(sessions, null, 2));
       const skippedSessions: string[] = [];
       if (sessions && Array.isArray(sessions)) {
         for (const session of sessions) {
