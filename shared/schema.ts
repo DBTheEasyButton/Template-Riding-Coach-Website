@@ -262,6 +262,8 @@ export const insertClinicSchema = createInsertSchema(clinics).omit({
   id: true,
   currentParticipants: true,
   createdAt: true,
+}).extend({
+  googleMapsLink: z.string().min(1, "Google Maps Link is required"),
 });
 
 export const insertClinicRegistrationSchema = createInsertSchema(clinicRegistrations).omit({

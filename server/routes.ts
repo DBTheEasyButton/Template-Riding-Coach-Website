@@ -677,7 +677,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Process all allowed fields - allow empty strings to clear old data
       const allowedFields = [
-        'title', 'description', 'date', 'endDate', 'entryClosingDate', 'location', 'price', 
+        'title', 'description', 'date', 'endDate', 'entryClosingDate', 'location', 'googleMapsLink', 'price', 
         'maxParticipants', 'level', 'type', 'image', 'isActive',
         'hasMultipleSessions', 'clinicType', 'crossCountryMaxParticipants', 
         'showJumpingMaxParticipants'
@@ -758,6 +758,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (cleanedData.showJumpingMaxParticipants !== undefined) {
         cleanedData.showJumpingMaxParticipants = parseInt(cleanedData.showJumpingMaxParticipants.toString());
       }
+      
+      // Validate required fields
+      if (cleanedData.googleMapsLink !== undefined && (!cleanedData.googleMapsLink || !cleanedData.googleMapsLink.trim())) {
+        return res.status(400).json({ message: "Google Maps Link is required" });
+      }
+      
       // Extract sessions from the update data (sessions are not modified during clinic updates)
       const { sessions, ...clinicUpdateData } = updateData;
       
