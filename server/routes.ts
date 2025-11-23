@@ -209,7 +209,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Use optimized upcoming clinics query if requested
       if (req.query.upcoming === 'true') {
-        const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+        let limit: number | undefined = undefined;
+        
+        // Validate and parse limit parameter
+        if (req.query.limit) {
+          const parsedLimit = parseInt(req.query.limit as string);
+          if (!isNaN(parsedLimit) && parsedLimit > 0) {
+            limit = parsedLimit;
+          }
+        }
+        
         clinics = await storage.getUpcomingClinics(limit);
       } else {
         clinics = await storage.getAllClinics();
