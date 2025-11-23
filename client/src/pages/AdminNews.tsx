@@ -172,11 +172,41 @@ export default function AdminNews() {
   };
 
   const handleSubmit = async () => {
+    console.log("handleSubmit called", { editingNews, formData });
+    
+    if (!formData.title.trim()) {
+      toast({ 
+        title: "Title required", 
+        description: "Please enter a title for the article.", 
+        variant: "destructive" 
+      });
+      return;
+    }
+    
+    if (!formData.excerpt.trim()) {
+      toast({ 
+        title: "Excerpt required", 
+        description: "Please enter an excerpt for the article.", 
+        variant: "destructive" 
+      });
+      return;
+    }
+    
+    if (!formData.content.trim()) {
+      toast({ 
+        title: "Content required", 
+        description: "Please enter content for the article.", 
+        variant: "destructive" 
+      });
+      return;
+    }
+    
     try {
       let imageUrl = formData.image;
       
       // Upload image if one is selected
       if (selectedImage) {
+        console.log("Uploading new image...");
         imageUrl = await uploadImage(selectedImage);
       }
       
@@ -198,15 +228,20 @@ export default function AdminNews() {
         slug: formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
       };
       
+      console.log("Submitting data:", { editingNews: !!editingNews, submitData });
+      
       if (editingNews) {
+        console.log("Calling updateMutation with ID:", editingNews.id);
         updateMutation.mutate({ id: editingNews.id, data: submitData });
       } else {
+        console.log("Calling createMutation");
         createMutation.mutate(submitData);
       }
     } catch (error) {
+      console.error("Submit error:", error);
       toast({ 
         title: "Upload failed", 
-        description: "Failed to upload image. Please try again.", 
+        description: error instanceof Error ? error.message : "Failed to upload image. Please try again.", 
         variant: "destructive" 
       });
     }
