@@ -781,7 +781,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Google Maps Link is required" });
       }
       
-      // Extract sessions from the update data (sessions are not modified during clinic updates)
+      // Extract sessions from the update data
       const { sessions, ...clinicUpdateData } = updateData;
       
       const updatedClinic = await storage.updateClinic(clinicId, cleanedData);
@@ -789,10 +789,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Clinic not found" });
       }
       
-      // Note: Sessions are NOT recreated during clinic updates to preserve existing registrations
-      // Session management (add/edit/delete) should be done through separate endpoints if needed
+      // Handle session updates - only update sessions WITHOUT existing registrations
+      const skippedSessions: string[] = [];
+      if (sessions && Array.isArray(sessions)) {
+        for (const session of sessions) {
+          if (session.id) {
+            // Check if this session has any registrations
+            const hasRegistrations = await storage.hasSessionRegistrations(session.id);
+            
+            if (!hasRegistrations) {
+              // Safe to update - no registrations exist
+              const sessionUpdates: any = {};
+              
+              if (session.sessionName !== undefined) sessionUpdates.sessionName = session.sessionName;
+              if (session.discipline !== undefined) sessionUpdates.discipline = session.discipline;
+              if (session.skillLevel !== undefined) sessionUpdates.skillLevel = session.skillLevel;
+              if (session.requirements !== undefined) sessionUpdates.requirements = session.requirements;
+              
+              // Handle price conversion
+              // Frontend sends prices in pounds (£), we convert to pence for storage
+              // Example: User enters £80 → we store 8000 pence
+              if (session.price !== undefined) {
+                const priceInPounds = parseFloat(session.price.toString());
+                if (Number.isFinite(priceInPounds) && priceInPounds >= 0) {
+                  sessionUpdates.price = Math.round(priceInPounds * 100);
+                }
+              }
+              
+              // Handle maxParticipants with validation
+              if (session.maxParticipants !== undefined) {
+                const maxParts = parseInt(session.maxParticipants.toString());
+                if (Number.isFinite(maxParts) && maxParts > 0) {
+                  sessionUpdates.maxParticipants = maxParts;
+                }
+              }
+              
+              await storage.updateClinicSession(session.id, sessionUpdates);
+            } else {
+              // Track sessions that couldn't be updated due to existing registrations
+              skippedSessions.push(session.sessionName || `Session ${session.id}`);
+            }
+          }
+        }
+      }
       
-      res.json(updatedClinic);
+      // Include feedback about skipped sessions if any
+      const response: any = { ...updatedClinic };
+      if (skippedSessions.length > 0) {
+        response.warning = `The following sessions could not be updated because they have existing registrations: ${skippedSessions.join(', ')}`;
+      }
+      
+      res.json(response);
     } catch (error) {
       console.error("Error updating clinic:", error);
       res.status(400).json({ message: "Invalid clinic data" });
