@@ -248,7 +248,7 @@ export default function AdminClinics() {
       entryClosingDate: freshClinic.entryClosingDate ? new Date(freshClinic.entryClosingDate).toISOString().split('T')[0] : "",
       location: freshClinic.location || "",
       googleMapsLink: freshClinic.googleMapsLink || "",
-      price: freshClinic.price?.toString() || "",
+      price: freshClinic.price ? (freshClinic.price / 100).toString() : "",
       maxParticipants: freshClinic.maxParticipants?.toString() || "12",
       type: freshClinic.type || "dressage",
       level: freshClinic.level || "intermediate",
