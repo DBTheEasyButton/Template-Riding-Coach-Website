@@ -98,10 +98,21 @@ export const clinicSessions = pgTable("clinic_sessions", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const clinicGroups = pgTable("clinic_groups", {
+  id: serial("id").primaryKey(),
+  sessionId: integer("session_id").notNull().references(() => clinicSessions.id, { onDelete: 'cascade' }),
+  groupName: text("group_name").notNull(), // "Group 1", "Beginner Group", "Advanced Group"
+  skillLevel: text("skill_level"), // Optional: 70cm, 90cm, 1m, etc. for filtering
+  maxParticipants: integer("max_participants"), // Optional: limit per group
+  displayOrder: integer("display_order").notNull().default(0), // For sorting groups
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const clinicRegistrations = pgTable("clinic_registrations", {
   id: serial("id").primaryKey(),
   clinicId: integer("clinic_id").notNull().references(() => clinics.id),
   sessionId: integer("session_id").references(() => clinicSessions.id), // Optional for backward compatibility
+  groupId: integer("group_id").references(() => clinicGroups.id, { onDelete: 'set null' }), // Group assignment
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
@@ -283,6 +294,11 @@ export const insertClinicSessionSchema = createInsertSchema(clinicSessions).omit
   currentParticipants: z.number().default(0),
 });
 
+export const insertClinicGroupSchema = createInsertSchema(clinicGroups).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertClinicWaitlistSchema = createInsertSchema(clinicWaitlist).omit({
   id: true,
   position: true,
@@ -361,6 +377,8 @@ export type ClinicWaitlist = typeof clinicWaitlist.$inferSelect;
 export type InsertClinicWaitlist = z.infer<typeof insertClinicWaitlistSchema>;
 export type ClinicSession = typeof clinicSessions.$inferSelect;
 export type InsertClinicSession = z.infer<typeof insertClinicSessionSchema>;
+export type ClinicGroup = typeof clinicGroups.$inferSelect;
+export type InsertClinicGroup = z.infer<typeof insertClinicGroupSchema>;
 export type TrainingVideo = typeof trainingVideos.$inferSelect;
 export type InsertTrainingVideo = z.infer<typeof insertTrainingVideoSchema>;
 export type Testimonial = typeof testimonials.$inferSelect;
