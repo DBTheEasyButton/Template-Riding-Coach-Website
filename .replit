@@ -124,4 +124,3 @@ integrations = ["javascript_stripe:1.0.0"]
 [userenv]
 
 [userenv.shared]
-VITE_STRIPE_PUBLIC_KEY = "pk_live_51SQfR3LCTuHLbN4fQ1LUlCoM5SKdfWUhajXNiVUJ9b8x2erj78rBatMY3f6dH16odjnx0nGrFIKtPMXtd4pbwXbM00rYaogzx8"
