@@ -6,6 +6,7 @@ import {
   contacts,
   clinics,
   clinicSessions,
+  clinicGroups,
   clinicRegistrations,
   clinicWaitlist,
   trainingVideos,
@@ -38,6 +39,8 @@ import {
   type ClinicWithSessions,
   type ClinicSession,
   type InsertClinicSession,
+  type ClinicGroup,
+  type InsertClinicGroup,
   type ClinicRegistration,
   type InsertClinicRegistration,
   type ClinicWaitlist,
@@ -75,7 +78,7 @@ import {
   type InsertGhlContact
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -107,6 +110,16 @@ export interface IStorage {
   createClinicSession(session: InsertClinicSession): Promise<ClinicSession>;
   updateClinicSession(sessionId: number, updates: Partial<InsertClinicSession>): Promise<ClinicSession | undefined>;
   hasSessionRegistrations(sessionId: number): Promise<boolean>;
+  
+  // Group Management
+  createClinicGroup(group: InsertClinicGroup): Promise<ClinicGroup>;
+  getSessionGroups(sessionId: number): Promise<ClinicGroup[]>;
+  updateClinicGroup(groupId: number, updates: Partial<InsertClinicGroup>): Promise<ClinicGroup | undefined>;
+  deleteClinicGroup(groupId: number): Promise<void>;
+  moveParticipantToGroup(registrationId: number, groupId: number | null): Promise<void>;
+  getGroupParticipants(groupId: number): Promise<ClinicRegistration[]>;
+  getSessionRegistrations(sessionId: number, confirmedOnly?: boolean): Promise<ClinicRegistration[]>;
+  autoOrganizeGroups(sessionId: number): Promise<ClinicGroup[]>;
   
   createClinicRegistration(registration: InsertClinicRegistration): Promise<ClinicRegistration>;
   getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]>;
@@ -826,6 +839,117 @@ The Dan Bizzarro Method Team`,
       .where(eq(clinicRegistrations.sessionId, sessionId));
     
     return registrations[0].count > 0;
+  }
+
+  // Group Management Methods
+  async createClinicGroup(group: InsertClinicGroup): Promise<ClinicGroup> {
+    const [newGroup] = await db.insert(clinicGroups).values(group).returning();
+    return newGroup;
+  }
+
+  async getSessionGroups(sessionId: number): Promise<ClinicGroup[]> {
+    return await db
+      .select()
+      .from(clinicGroups)
+      .where(eq(clinicGroups.sessionId, sessionId))
+      .orderBy(clinicGroups.displayOrder);
+  }
+
+  async updateClinicGroup(groupId: number, updates: Partial<InsertClinicGroup>): Promise<ClinicGroup | undefined> {
+    const [updatedGroup] = await db
+      .update(clinicGroups)
+      .set(updates)
+      .where(eq(clinicGroups.id, groupId))
+      .returning();
+    return updatedGroup;
+  }
+
+  async deleteClinicGroup(groupId: number): Promise<void> {
+    // First, remove group assignments from all participants
+    await db
+      .update(clinicRegistrations)
+      .set({ groupId: null })
+      .where(eq(clinicRegistrations.groupId, groupId));
+    
+    // Then delete the group
+    await db.delete(clinicGroups).where(eq(clinicGroups.id, groupId));
+  }
+
+  async moveParticipantToGroup(registrationId: number, groupId: number | null): Promise<void> {
+    await db
+      .update(clinicRegistrations)
+      .set({ groupId })
+      .where(eq(clinicRegistrations.id, registrationId));
+  }
+
+  async getGroupParticipants(groupId: number): Promise<ClinicRegistration[]> {
+    return await db
+      .select()
+      .from(clinicRegistrations)
+      .where(eq(clinicRegistrations.groupId, groupId));
+  }
+
+  async getSessionRegistrations(sessionId: number, confirmedOnly: boolean = false): Promise<ClinicRegistration[]> {
+    if (confirmedOnly) {
+      return await db
+        .select()
+        .from(clinicRegistrations)
+        .where(
+          and(
+            eq(clinicRegistrations.sessionId, sessionId),
+            eq(clinicRegistrations.status, 'confirmed')
+          )
+        );
+    }
+    
+    return await db
+      .select()
+      .from(clinicRegistrations)
+      .where(eq(clinicRegistrations.sessionId, sessionId));
+  }
+
+  async autoOrganizeGroups(sessionId: number): Promise<ClinicGroup[]> {
+    // Get the session to check its skill level
+    const [session] = await db
+      .select()
+      .from(clinicSessions)
+      .where(eq(clinicSessions.id, sessionId));
+    
+    if (!session) {
+      throw new Error('Session not found');
+    }
+
+    // Get only confirmed registrations for this session
+    const registrations = await this.getSessionRegistrations(sessionId, true);
+
+    // Delete existing groups for this session
+    await db.delete(clinicGroups).where(eq(clinicGroups.sessionId, sessionId));
+
+    // For now, create a simple single group
+    // In future, this could be enhanced to split by skill level, max participants, etc.
+    const [group] = await db
+      .insert(clinicGroups)
+      .values({
+        sessionId: sessionId,
+        groupName: `${session.sessionName} - Group 1`,
+        skillLevel: session.skillLevel,
+        maxParticipants: session.maxParticipants,
+        displayOrder: 0
+      })
+      .returning();
+
+    // Assign only confirmed participants to this group
+    if (group && registrations.length > 0) {
+      const registrationIds = registrations.map(r => r.id);
+      for (const id of registrationIds) {
+        await db
+          .update(clinicRegistrations)
+          .set({ groupId: group.id })
+          .where(eq(clinicRegistrations.id, id));
+      }
+    }
+
+    return [group];
   }
 
   async createClinicRegistration(insertRegistration: InsertClinicRegistration): Promise<ClinicRegistration> {

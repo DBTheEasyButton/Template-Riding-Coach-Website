@@ -17,11 +17,13 @@ import type { Clinic, ClinicWithSessions } from "@shared/schema";
 import { Plus, Edit, Trash2, Calendar, MapPin, Users, Copy, Share2, FileText } from "lucide-react";
 import SocialShare from "@/components/SocialShare";
 import { Link } from "wouter";
+import GroupManagement from "@/components/GroupManagement";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingClinic, setEditingClinic] = useState<ClinicWithSessions | null>(null);
   const [dialogKey, setDialogKey] = useState(0); // Force dialog re-render
+  const [groupManagementSession, setGroupManagementSession] = useState<{ sessionId: number; sessionName: string } | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -518,6 +520,32 @@ export default function AdminClinics() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">{clinic.description}</p>
+                  
+                  {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0 && (
+                    <div className="mb-4 space-y-2 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                      <h4 className="font-semibold text-sm text-navy dark:text-white mb-2">Sessions</h4>
+                      {clinic.sessions.map((session: any) => (
+                        <div key={session.id} className="flex items-center justify-between bg-white dark:bg-gray-700 p-3 rounded border">
+                          <div className="flex-1">
+                            <span className="font-medium">{session.sessionName}</span>
+                            <span className="text-sm text-gray-600 dark:text-gray-300 ml-3">
+                              {session.skillLevel} · £{(session.price / 100).toFixed(0)}
+                            </span>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setGroupManagementSession({ sessionId: session.id, sessionName: session.sessionName })}
+                            data-testid={`button-manage-groups-${session.id}`}
+                          >
+                            <Users className="w-4 h-4 mr-1" />
+                            Manage Groups
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
                   <div className="flex gap-2 flex-wrap">
                     <Link href={`/admin/registrations?clinic=${clinic.id}`}>
                       <Button variant="default" size="sm" data-testid={`button-entries-${clinic.id}`}>
@@ -1008,6 +1036,15 @@ export default function AdminClinics() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {groupManagementSession && (
+        <GroupManagement
+          sessionId={groupManagementSession.sessionId}
+          sessionName={groupManagementSession.sessionName}
+          open={!!groupManagementSession}
+          onOpenChange={(open) => !open && setGroupManagementSession(null)}
+        />
+      )}
 
       <Footer />
     </div>

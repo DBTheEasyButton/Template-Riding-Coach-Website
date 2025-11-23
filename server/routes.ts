@@ -864,6 +864,119 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Group Management Endpoints
+  app.get("/api/admin/sessions/:sessionId/groups", async (req, res) => {
+    try {
+      const sessionId = parseInt(req.params.sessionId);
+      const groups = await storage.getSessionGroups(sessionId);
+      
+      // Get only confirmed registrations for this session
+      const confirmedRegistrations = await storage.getSessionRegistrations(sessionId, true);
+      
+      // Get participants for each group
+      const groupsWithParticipants = await Promise.all(
+        groups.map(async (group) => {
+          const participants = confirmedRegistrations.filter(
+            (r) => r.groupId === group.id
+          );
+          return { ...group, participants };
+        })
+      );
+      
+      // Get unassigned confirmed participants
+      const unassigned = confirmedRegistrations.filter((r) => !r.groupId);
+      
+      res.json({
+        groups: groupsWithParticipants,
+        unassigned
+      });
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+      res.status(500).json({ message: "Failed to fetch groups" });
+    }
+  });
+
+  app.post("/api/admin/sessions/:sessionId/groups", async (req, res) => {
+    try {
+      const sessionId = parseInt(req.params.sessionId);
+      const { groupName, skillLevel, maxParticipants, displayOrder } = req.body;
+      
+      const newGroup = await storage.createClinicGroup({
+        sessionId,
+        groupName,
+        skillLevel: skillLevel || null,
+        maxParticipants: maxParticipants || null,
+        displayOrder: displayOrder || 0
+      });
+      
+      res.status(201).json(newGroup);
+    } catch (error) {
+      console.error("Error creating group:", error);
+      res.status(500).json({ message: "Failed to create group" });
+    }
+  });
+
+  app.put("/api/admin/groups/:groupId", async (req, res) => {
+    try {
+      const groupId = parseInt(req.params.groupId);
+      const updates = req.body;
+      
+      const updatedGroup = await storage.updateClinicGroup(groupId, updates);
+      if (!updatedGroup) {
+        return res.status(404).json({ message: "Group not found" });
+      }
+      
+      res.json(updatedGroup);
+    } catch (error) {
+      console.error("Error updating group:", error);
+      res.status(500).json({ message: "Failed to update group" });
+    }
+  });
+
+  app.delete("/api/admin/groups/:groupId", async (req, res) => {
+    try {
+      const groupId = parseInt(req.params.groupId);
+      await storage.deleteClinicGroup(groupId);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      res.status(500).json({ message: "Failed to delete group" });
+    }
+  });
+
+  app.post("/api/admin/registrations/:registrationId/move", async (req, res) => {
+    try {
+      const registrationId = parseInt(req.params.registrationId);
+      const { groupId } = req.body;
+      
+      await storage.moveParticipantToGroup(registrationId, groupId);
+      res.json({ message: "Participant moved successfully" });
+    } catch (error) {
+      console.error("Error moving participant:", error);
+      res.status(500).json({ message: "Failed to move participant" });
+    }
+  });
+
+  app.post("/api/admin/sessions/:sessionId/auto-organize", async (req, res) => {
+    try {
+      const sessionId = parseInt(req.params.sessionId);
+      const groups = await storage.autoOrganizeGroups(sessionId);
+      
+      // Get participants for each group
+      const groupsWithParticipants = await Promise.all(
+        groups.map(async (group) => {
+          const participants = await storage.getGroupParticipants(group.id);
+          return { ...group, participants };
+        })
+      );
+      
+      res.json(groupsWithParticipants);
+    } catch (error) {
+      console.error("Error auto-organizing groups:", error);
+      res.status(500).json({ message: "Failed to auto-organize groups" });
+    }
+  });
+
   // Admin contact management
   app.get('/api/admin/contacts', async (req, res) => {
     try {
