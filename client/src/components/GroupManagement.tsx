@@ -58,6 +58,8 @@ interface ClinicGroup {
   groupName: string;
   skillLevel?: string | null;
   maxParticipants?: number | null;
+  startTime?: string | null;
+  endTime?: string | null;
   displayOrder: number;
   participants: ClinicRegistration[];
 }
@@ -125,10 +127,10 @@ function GroupCard({
 
   return (
     <Card 
-      className={`mb-4 transition-colors ${isOver ? 'ring-2 ring-blue-400 bg-blue-50' : ''}`}
+      className={`mb-4 transition-colors border-2 ${isOver ? 'ring-2 ring-blue-400 bg-blue-50 border-blue-400' : 'border-gray-300'}`}
       data-testid={`group-card-${group.id}`}
     >
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 bg-gray-50">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
             <Users className="w-5 h-5" />
@@ -153,13 +155,18 @@ function GroupCard({
             </Button>
           </div>
         </div>
-        <div className="text-sm text-gray-600 flex gap-4">
+        <div className="text-sm text-gray-700 flex gap-4 mt-2 font-medium">
+          {group.startTime && group.endTime && (
+            <span className="flex items-center gap-1">
+              ⏰ {group.startTime} - {group.endTime}
+            </span>
+          )}
           {group.skillLevel && (
-            <span className="capitalize">Level: {group.skillLevel}</span>
+            <span className="capitalize">📊 {group.skillLevel}</span>
           )}
           {group.maxParticipants && (
             <span>
-              Capacity: {confirmedParticipants.length}/{group.maxParticipants}
+              👥 {confirmedParticipants.length}/{group.maxParticipants}
             </span>
           )}
         </div>
@@ -199,28 +206,32 @@ function UnassignedParticipants({
     data: { groupId: null },
   });
 
-  if (participants.length === 0) return null;
-
   return (
     <Card 
-      className={`mb-4 border-yellow-200 bg-yellow-50 transition-colors ${isOver ? 'ring-2 ring-yellow-400' : ''}`}
+      className={`mb-4 border-2 border-yellow-400 bg-yellow-50 transition-colors ${isOver ? 'ring-2 ring-yellow-500 bg-yellow-100' : ''}`}
       data-testid="card-unassigned"
     >
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 bg-yellow-100">
         <CardTitle className="text-lg flex items-center gap-2">
           <Users className="w-5 h-5" />
-          Unassigned Participants ({participants.length})
+          Not Assigned ({participants.length})
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div ref={setNodeRef} className="space-y-2">
+        <div ref={setNodeRef} className="space-y-2 min-h-[100px]">
           <SortableContext
             items={participants.map((p) => p.id)}
             strategy={verticalListSortingStrategy}
           >
-            {participants.map((participant) => (
-              <ParticipantCard key={participant.id} participant={participant} />
-            ))}
+            {participants.length === 0 ? (
+              <div className="text-center text-gray-500 py-8 border-2 border-dashed border-yellow-300 rounded-lg">
+                Drag participants here to unassign them
+              </div>
+            ) : (
+              participants.map((participant) => (
+                <ParticipantCard key={participant.id} participant={participant} />
+              ))
+            )}
           </SortableContext>
         </div>
       </CardContent>
@@ -242,6 +253,8 @@ export default function GroupManagement({
     groupName: "",
     skillLevel: "",
     maxParticipants: "",
+    startTime: "",
+    endTime: "",
   });
 
   const sensors = useSensors(
@@ -272,7 +285,7 @@ export default function GroupManagement({
         queryKey: ["/api/admin/sessions", sessionId, "groups"],
       });
       setIsCreateGroupOpen(false);
-      setNewGroup({ groupName: "", skillLevel: "", maxParticipants: "" });
+      setNewGroup({ groupName: "", skillLevel: "", maxParticipants: "", startTime: "", endTime: "" });
       toast({ title: "Group created successfully" });
     },
     onError: () => {
@@ -419,6 +432,8 @@ export default function GroupManagement({
         groupName: editingGroup.groupName,
         skillLevel: editingGroup.skillLevel || null,
         maxParticipants: editingGroup.maxParticipants || null,
+        startTime: editingGroup.startTime || null,
+        endTime: editingGroup.endTime || null,
       },
     });
   };
@@ -552,9 +567,35 @@ export default function GroupManagement({
                 onChange={(e) =>
                   setNewGroup({ ...newGroup, maxParticipants: e.target.value })
                 }
-                placeholder="e.g., 6"
+                placeholder="e.g., 4"
                 data-testid="input-max-participants"
               />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="startTime">Start Time (Optional)</Label>
+                <Input
+                  id="startTime"
+                  type="time"
+                  value={newGroup.startTime}
+                  onChange={(e) =>
+                    setNewGroup({ ...newGroup, startTime: e.target.value })
+                  }
+                  data-testid="input-start-time"
+                />
+              </div>
+              <div>
+                <Label htmlFor="endTime">End Time (Optional)</Label>
+                <Input
+                  id="endTime"
+                  type="time"
+                  value={newGroup.endTime}
+                  onChange={(e) =>
+                    setNewGroup({ ...newGroup, endTime: e.target.value })
+                  }
+                  data-testid="input-end-time"
+                />
+              </div>
             </div>
           </div>
           <DialogFooter>
@@ -634,6 +675,38 @@ export default function GroupManagement({
                   }
                   data-testid="input-edit-max-participants"
                 />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="editStartTime">Start Time (Optional)</Label>
+                  <Input
+                    id="editStartTime"
+                    type="time"
+                    value={editingGroup.startTime || ""}
+                    onChange={(e) =>
+                      setEditingGroup({
+                        ...editingGroup,
+                        startTime: e.target.value || null,
+                      })
+                    }
+                    data-testid="input-edit-start-time"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="editEndTime">End Time (Optional)</Label>
+                  <Input
+                    id="editEndTime"
+                    type="time"
+                    value={editingGroup.endTime || ""}
+                    onChange={(e) =>
+                      setEditingGroup({
+                        ...editingGroup,
+                        endTime: e.target.value || null,
+                      })
+                    }
+                    data-testid="input-edit-end-time"
+                  />
+                </div>
               </div>
             </div>
             <DialogFooter>

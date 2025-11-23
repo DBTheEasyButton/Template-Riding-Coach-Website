@@ -112,6 +112,8 @@ export const clinicGroups = pgTable("clinic_groups", {
   groupName: text("group_name").notNull(), // "Group 1", "Beginner Group", "Advanced Group"
   skillLevel: text("skill_level"), // Optional: 70cm, 90cm, 1m, etc. for filtering
   maxParticipants: integer("max_participants"), // Optional: limit per group
+  startTime: text("start_time"), // Group start time (e.g., "15:00")
+  endTime: text("end_time"), // Group end time (e.g., "16:00")
   displayOrder: integer("display_order").notNull().default(0), // For sorting groups
   createdAt: timestamp("created_at").notNull().defaultNow(),
 }, (table) => ({
