@@ -758,7 +758,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (cleanedData.showJumpingMaxParticipants !== undefined) {
         cleanedData.showJumpingMaxParticipants = parseInt(cleanedData.showJumpingMaxParticipants.toString());
       }
-      // Extract sessions from the update data
+      // Extract sessions from the update data (sessions are not modified during clinic updates)
       const { sessions, ...clinicUpdateData } = updateData;
       
       const updatedClinic = await storage.updateClinic(clinicId, cleanedData);
@@ -766,29 +766,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Clinic not found" });
       }
       
-      // Recreate sessions if provided (old sessions already deleted in updateClinic)
-      if (sessions && Array.isArray(sessions)) {
-        for (const session of sessions) {
-          // Properly handle maxParticipants: convert to number, allow null for unlimited
-          let sessionMaxParticipants = null;
-          if (session.maxParticipants !== undefined && session.maxParticipants !== "" && session.maxParticipants !== null) {
-            sessionMaxParticipants = parseInt(session.maxParticipants.toString());
-          }
-          
-          await storage.createClinicSession({
-            clinicId: updatedClinic.id,
-            sessionName: session.sessionName || "",
-            startTime: "09:00",
-            endTime: "17:00", 
-            discipline: session.discipline || "jumping",
-            skillLevel: session.skillLevel || "90cm",
-            price: session.price ? Math.round(session.price * 100) : 8000,
-            maxParticipants: sessionMaxParticipants,
-            currentParticipants: 0,
-            requirements: session.requirements || null
-          });
-        }
-      }
+      // Note: Sessions are NOT recreated during clinic updates to preserve existing registrations
+      // Session management (add/edit/delete) should be done through separate endpoints if needed
       
       res.json(updatedClinic);
     } catch (error) {

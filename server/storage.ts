@@ -778,10 +778,8 @@ The Dan Bizzarro Method Team`,
   }
 
   async updateClinic(id: number, updateData: Partial<InsertClinic>): Promise<Clinic | undefined> {
-    // First, delete all existing sessions for this clinic to avoid confusion
-    await db.delete(clinicSessions).where(eq(clinicSessions.clinicId, id));
-    
-    // Update the clinic with complete replacement of all fields
+    // Update the clinic data only - do NOT delete sessions
+    // Sessions with registrations cannot be deleted due to foreign key constraints
     const [clinic] = await db.update(clinics)
       .set(updateData)
       .where(eq(clinics.id, id))
