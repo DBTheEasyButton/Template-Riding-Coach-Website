@@ -15,13 +15,11 @@ export default function Unsubscribe() {
   const { toast } = useToast();
   const [location] = useLocation();
 
-  // Check for email in URL parameters
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const emailParam = urlParams.get('email');
     if (emailParam) {
       setEmail(emailParam);
-      // Auto-unsubscribe if email is in URL
       handleUnsubscribe(emailParam);
     }
   }, [location]);
@@ -41,11 +39,11 @@ export default function Unsubscribe() {
     setIsLoading(true);
     
     try {
-      await apiRequest("POST", "/api/unsubscribe", { email: targetEmail });
+      await apiRequest("POST", "/api/email/unsubscribe", { email: targetEmail });
       setIsUnsubscribed(true);
       toast({
         title: "Successfully Unsubscribed",
-        description: "You have been removed from all email lists.",
+        description: "You have been removed from marketing emails.",
       });
     } catch (error) {
       toast({
@@ -63,7 +61,7 @@ export default function Unsubscribe() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
         <SEOHead 
           title="Unsubscribed Successfully | Dan Bizzarro Method"
-          description="You have successfully unsubscribed from Dan Bizzarro Method email communications."
+          description="You have successfully unsubscribed from Dan Bizzarro Method marketing emails."
           canonical="https://danbizzarromethod.com/unsubscribe"
         />
         <Card className="w-full max-w-md">
@@ -71,18 +69,30 @@ export default function Unsubscribe() {
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
             <CardTitle className="text-2xl">Unsubscribed Successfully</CardTitle>
             <CardDescription>
-              You have been removed from all Dan Bizzarro Method email lists.
+              You have been removed from marketing emails.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+              <p className="text-sm text-blue-900">
+                <strong>Please note:</strong> You will still receive important emails related to:
+              </p>
+              <ul className="text-sm text-blue-900 mt-2 ml-4 list-disc">
+                <li>Clinic registrations and confirmations</li>
+                <li>Payment receipts</li>
+                <li>Referral programme notifications</li>
+                <li>Important account updates</li>
+              </ul>
+            </div>
             <p className="text-sm text-gray-600 text-center">
-              We're sorry to see you go! If you change your mind, you can always subscribe again on our website.
+              Changed your mind? You can resubscribe anytime on our website.
             </p>
             <div className="text-center">
               <Button 
                 variant="outline" 
                 onClick={() => window.location.href = '/'}
                 className="w-full"
+                data-testid="button-return-home"
               >
                 Return to Homepage
               </Button>
@@ -102,13 +112,24 @@ export default function Unsubscribe() {
       />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+          <Mail className="w-16 h-16 text-blue-500 mx-auto mb-4" />
           <CardTitle className="text-2xl">Unsubscribe from Emails</CardTitle>
           <CardDescription>
-            We're sorry to see you go. Enter your email address to unsubscribe from all Dan Bizzarro Method emails.
+            We're sorry to see you go. Enter your email address to unsubscribe from marketing emails.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
+            <p className="text-sm text-amber-900">
+              <strong>Important:</strong> Unsubscribing will stop marketing emails only. You'll still receive:
+            </p>
+            <ul className="text-sm text-amber-900 mt-2 ml-4 list-disc">
+              <li>Clinic registration confirmations</li>
+              <li>Payment receipts</li>
+              <li>Referral programme notifications</li>
+              <li>Important account updates</li>
+            </ul>
+          </div>
           <form onSubmit={(e) => { e.preventDefault(); handleUnsubscribe(); }} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
@@ -121,13 +142,15 @@ export default function Unsubscribe() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                data-testid="input-unsubscribe-email"
               />
             </div>
             
             <Button 
               type="submit" 
-              className="w-full"
+              className="w-full bg-red-600 hover:bg-red-700"
               disabled={isLoading}
+              data-testid="button-unsubscribe"
             >
               {isLoading ? (
                 <div className="flex items-center">
@@ -135,10 +158,7 @@ export default function Unsubscribe() {
                   Unsubscribing...
                 </div>
               ) : (
-                <div className="flex items-center">
-                  <Mail className="w-4 h-4 mr-2" />
-                  Unsubscribe
-                </div>
+                "Unsubscribe"
               )}
             </Button>
           </form>
