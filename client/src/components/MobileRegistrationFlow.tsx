@@ -27,6 +27,7 @@ interface RegistrationData {
   email: string;
   phone: string;
   horseName: string;
+  skillLevel: string;
   specialRequests: string;
   emergencyContact: string;
   emergencyPhone: string;
@@ -54,6 +55,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     email: '',
     phone: '',
     horseName: '',
+    skillLevel: '',
     specialRequests: '',
     emergencyContact: '',
     emergencyPhone: '',
@@ -178,6 +180,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
     
     if (step === 2) {
       if (!registrationData.horseName.trim()) newErrors.horseName = "Horse name required";
+      if (!registrationData.skillLevel.trim()) newErrors.skillLevel = "Skill level required";
       if (clinic?.hasMultipleSessions && selectedSessions.length === 0) {
         newErrors.sessions = "Please select at least one session";
       }
@@ -251,6 +254,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
         email: registrationData.email,
         phone: registrationData.phone,
         horseName: registrationData.horseName || undefined,
+        skillLevel: registrationData.skillLevel || undefined,
         specialRequests: registrationData.specialRequests || undefined,
         emergencyContact: registrationData.emergencyContact,
         emergencyPhone: registrationData.emergencyPhone,
@@ -429,6 +433,28 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
                   autoComplete="off"
                 />
                 {errors.horseName && <p className="text-xs text-red-500 mt-1">{errors.horseName}</p>}
+              </div>
+
+              <div>
+                <Label htmlFor="skillLevel" className="text-sm font-medium text-gray-700">Skill Level *</Label>
+                <select
+                  id="skillLevel"
+                  value={registrationData.skillLevel}
+                  onChange={(e) => updateRegistrationData('skillLevel', e.target.value)}
+                  className={`mt-2 w-full h-12 text-base px-3 ${errors.skillLevel ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} border rounded-lg transition-colors`}
+                >
+                  <option value="">Select your skill level</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                  <option value="70cm">70cm</option>
+                  <option value="80cm">80cm</option>
+                  <option value="90cm">90cm</option>
+                  <option value="1m">1m</option>
+                  <option value="1.10m">1.10m</option>
+                  <option value="1.20m">1.20m</option>
+                </select>
+                {errors.skillLevel && <p className="text-xs text-red-500 mt-1">{errors.skillLevel}</p>}
               </div>
 
               {clinic?.hasMultipleSessions && clinic?.sessions && clinic.sessions.length > 0 && (

@@ -885,26 +885,11 @@ The Dan Bizzarro Method Team`,
   }
 
   async moveParticipantToGroup(registrationId: number, groupId: number | null): Promise<void> {
-    // If moving to a group, get the group's skill level
-    let skillLevel: string | null = null;
-    if (groupId !== null) {
-      const [group] = await db
-        .select()
-        .from(clinicGroups)
-        .where(eq(clinicGroups.id, groupId));
-      
-      if (group) {
-        skillLevel = group.skillLevel;
-      }
-    }
-    
-    // Update the participant's group and skill level
+    // Update only the participant's group assignment
+    // DO NOT change their skill level - it should remain as set during registration
     await db
       .update(clinicRegistrations)
-      .set({ 
-        groupId,
-        ...(groupId !== null && { skillLevel })
-      })
+      .set({ groupId })
       .where(eq(clinicRegistrations.id, registrationId));
   }
 
@@ -965,15 +950,13 @@ The Dan Bizzarro Method Team`,
       .returning();
 
     // Assign only confirmed participants to this group
+    // DO NOT change their skill levels - they keep what they selected during registration
     if (group && registrations.length > 0) {
       const registrationIds = registrations.map(r => r.id);
       for (const id of registrationIds) {
         await db
           .update(clinicRegistrations)
-          .set({ 
-            groupId: group.id,
-            skillLevel: group.skillLevel
-          })
+          .set({ groupId: group.id })
           .where(eq(clinicRegistrations.id, id));
       }
     }
