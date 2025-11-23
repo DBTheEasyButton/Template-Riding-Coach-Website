@@ -27,7 +27,10 @@ export default function AdminClinics() {
     description: "",
     date: "",
     endDate: "",
+    entryOpenDate: "",
     entryClosingDate: "",
+    startTime: "",
+    endTime: "",
     location: "",
     googleMapsLink: "",
     price: "",
@@ -116,7 +119,10 @@ export default function AdminClinics() {
       description: "",
       date: "",
       endDate: "",
+      entryOpenDate: "",
       entryClosingDate: "",
+      startTime: "",
+      endTime: "",
       location: "",
       googleMapsLink: "",
       price: "",
@@ -245,7 +251,10 @@ export default function AdminClinics() {
       description: freshClinic.description || "",
       date: freshClinic.date ? new Date(freshClinic.date).toISOString().split('T')[0] : "",
       endDate: freshClinic.endDate ? new Date(freshClinic.endDate).toISOString().split('T')[0] : "",
+      entryOpenDate: freshClinic.entryOpenDate ? new Date(freshClinic.entryOpenDate).toISOString().split('T')[0] : "",
       entryClosingDate: freshClinic.entryClosingDate ? new Date(freshClinic.entryClosingDate).toISOString().split('T')[0] : "",
+      startTime: freshClinic.startTime || "",
+      endTime: freshClinic.endTime || "",
       location: freshClinic.location || "",
       googleMapsLink: freshClinic.googleMapsLink || "",
       price: freshClinic.price?.toString() ?? "",
@@ -297,7 +306,10 @@ export default function AdminClinics() {
       description: clinic.description,
       date: cloneDate.toISOString().split('T')[0],
       endDate: clinic.endDate ? new Date(new Date(clinic.endDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
+      entryOpenDate: clinic.entryOpenDate ? new Date(new Date(clinic.entryOpenDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
       entryClosingDate: clinic.entryClosingDate ? new Date(new Date(clinic.entryClosingDate).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : "",
+      startTime: clinic.startTime || "",
+      endTime: clinic.endTime || "",
       location: clinic.location,
       googleMapsLink: clinic.googleMapsLink || "",
       price: clinic.price.toString(),
@@ -618,16 +630,50 @@ export default function AdminClinics() {
               </div>
             </div>
             
-            <div className="grid gap-2">
-              <Label htmlFor="entryClosingDate">Entry Closing Date</Label>
-              <Input
-                id="entryClosingDate"
-                type="date"
-                value={formData.entryClosingDate}
-                onChange={(e) => setFormData({ ...formData, entryClosingDate: e.target.value })}
-                placeholder="Optional - when registrations close"
-              />
-              <p className="text-sm text-gray-500">Leave empty to keep registrations open until clinic date</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="entryOpenDate">Entry Open Date</Label>
+                <Input
+                  id="entryOpenDate"
+                  type="date"
+                  value={formData.entryOpenDate}
+                  onChange={(e) => setFormData({ ...formData, entryOpenDate: e.target.value })}
+                />
+                <p className="text-sm text-gray-500">Leave empty to open entries straight away</p>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="entryClosingDate">Entry Closing Date</Label>
+                <Input
+                  id="entryClosingDate"
+                  type="date"
+                  value={formData.entryClosingDate}
+                  onChange={(e) => setFormData({ ...formData, entryClosingDate: e.target.value })}
+                />
+                <p className="text-sm text-gray-500">Leave empty to keep open until clinic date</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="startTime">Clinic Start Time</Label>
+                <Input
+                  id="startTime"
+                  type="time"
+                  value={formData.startTime}
+                  onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                  placeholder="09:00"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="endTime">Clinic End Time</Label>
+                <Input
+                  id="endTime"
+                  type="time"
+                  value={formData.endTime}
+                  onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                  placeholder="17:00"
+                />
+              </div>
             </div>
             
             <div className="grid gap-2">

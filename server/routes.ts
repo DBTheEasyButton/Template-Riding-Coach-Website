@@ -677,8 +677,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Process all allowed fields - allow empty strings to clear old data
       const allowedFields = [
-        'title', 'description', 'date', 'endDate', 'entryClosingDate', 'location', 'googleMapsLink', 'price', 
-        'maxParticipants', 'level', 'type', 'image', 'isActive',
+        'title', 'description', 'date', 'endDate', 'entryOpenDate', 'entryClosingDate', 'location', 'googleMapsLink', 'price', 
+        'maxParticipants', 'level', 'type', 'image', 'isActive', 'startTime', 'endTime',
         'hasMultipleSessions', 'clinicType', 'crossCountryMaxParticipants', 
         'showJumpingMaxParticipants'
       ];
@@ -723,6 +723,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       } else if (cleanedData.endDate === '' || cleanedData.endDate === null) {
         delete cleanedData.endDate; // Don't update with empty values
+      }
+      
+      // Convert entryOpenDate to proper Date object
+      if (cleanedData.entryOpenDate && typeof cleanedData.entryOpenDate === 'string' && cleanedData.entryOpenDate.trim() !== '') {
+        try {
+          const dateStr = cleanedData.entryOpenDate.includes('T') ? cleanedData.entryOpenDate : `${cleanedData.entryOpenDate}T00:00:00.000Z`;
+          const parsedDate = new Date(dateStr);
+          if (!isNaN(parsedDate.getTime())) {
+            cleanedData.entryOpenDate = parsedDate;
+          } else {
+            delete cleanedData.entryOpenDate; // Remove invalid date
+          }
+        } catch (e) {
+          delete cleanedData.entryOpenDate; // Remove invalid date
+        }
+      } else if (cleanedData.entryOpenDate === '' || cleanedData.entryOpenDate === null) {
+        cleanedData.entryOpenDate = null; // Allow clearing the date field
       }
       
       // Convert entryClosingDate to proper Date object

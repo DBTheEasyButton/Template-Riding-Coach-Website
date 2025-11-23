@@ -527,7 +527,7 @@ export default function ClinicsSection() {
               
               <CardHeader className="transition-transform duration-300 group-hover:translate-y-1">
                 <CardTitle className="text-xl font-playfair text-navy font-bold transition-colors duration-300 group-hover:text-orange">{clinic.title}</CardTitle>
-                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-3">{clinic.description}</CardDescription>
+                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-3 whitespace-pre-line">{clinic.description}</CardDescription>
               </CardHeader>
               
               <CardContent className="transition-transform duration-300 group-hover:translate-y-1 flex-grow">
