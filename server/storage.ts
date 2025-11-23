@@ -78,7 +78,7 @@ import {
   type InsertGhlContact
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql, and } from "drizzle-orm";
+import { eq, desc, sql, and, inArray } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -768,16 +768,25 @@ The Dan Bizzarro Method Team`,
   async getAllClinics(): Promise<ClinicWithSessions[]> {
     const clinicsData = await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
     
-    // For each clinic, get its sessions if it has multiple sessions
-    const clinicsWithSessions: ClinicWithSessions[] = await Promise.all(
-      clinicsData.map(async (clinic): Promise<ClinicWithSessions> => {
-        if (clinic.hasMultipleSessions) {
-          const sessions = await db.select().from(clinicSessions).where(eq(clinicSessions.clinicId, clinic.id));
-          return { ...clinic, sessions };
-        }
-        return { ...clinic, sessions: [] };
-      })
-    );
+    // Fetch all sessions for all clinics in a single query (eliminates N+1)
+    const clinicIds = clinicsData.map(c => c.id);
+    const allSessions = clinicIds.length > 0
+      ? await db.select().from(clinicSessions).where(inArray(clinicSessions.clinicId, clinicIds))
+      : [];
+    
+    // Group sessions by clinicId
+    const sessionsByClinicId = new Map<number, typeof allSessions>();
+    for (const session of allSessions) {
+      const existing = sessionsByClinicId.get(session.clinicId) || [];
+      existing.push(session);
+      sessionsByClinicId.set(session.clinicId, existing);
+    }
+    
+    // Attach sessions to clinics
+    const clinicsWithSessions: ClinicWithSessions[] = clinicsData.map(clinic => ({
+      ...clinic,
+      sessions: clinic.hasMultipleSessions ? (sessionsByClinicId.get(clinic.id) || []) : []
+    }));
     
     return clinicsWithSessions;
   }
