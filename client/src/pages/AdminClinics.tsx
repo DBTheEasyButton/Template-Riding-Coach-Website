@@ -14,8 +14,9 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions } from "@shared/schema";
-import { Plus, Edit, Trash2, Calendar, MapPin, Users, Copy, Share2 } from "lucide-react";
+import { Plus, Edit, Trash2, Calendar, MapPin, Users, Copy, Share2, FileText } from "lucide-react";
 import SocialShare from "@/components/SocialShare";
+import { Link } from "wouter";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -504,16 +505,22 @@ export default function AdminClinics() {
                 <CardContent>
                   <p className="text-slate-600 dark:text-slate-300 mb-4">{clinic.description}</p>
                   <div className="flex gap-2 flex-wrap">
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(clinic)}>
+                    <Link href={`/admin/registrations?clinic=${clinic.id}`}>
+                      <Button variant="default" size="sm" data-testid={`button-entries-${clinic.id}`}>
+                        <FileText className="w-4 h-4 mr-1" />
+                        Entries
+                      </Button>
+                    </Link>
+                    <Button variant="outline" size="sm" onClick={() => handleEdit(clinic)} data-testid={`button-edit-${clinic.id}`}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </Button>
-                    <Button variant="secondary" size="sm" onClick={() => handleClone(clinic)}>
+                    <Button variant="secondary" size="sm" onClick={() => handleClone(clinic)} data-testid={`button-clone-${clinic.id}`}>
                       <Copy className="w-4 h-4 mr-1" />
                       Clone
                     </Button>
                     <SocialShare clinic={clinic} />
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(clinic.id)}>
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(clinic.id)} data-testid={`button-delete-${clinic.id}`}>
                       <Trash2 className="w-4 h-4 mr-1" />
                       Delete
                     </Button>
