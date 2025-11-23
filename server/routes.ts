@@ -655,7 +655,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             endTime: "17:00", // Default time since not needed in UI
             discipline: session.discipline,
             skillLevel: session.skillLevel,
-            price: session.price !== undefined && session.price !== null ? Math.round(session.price * 100) : 8000,
+            price: session.price ? Math.round(session.price * 100) : 8000,
             maxParticipants: session.maxParticipants || 12,
             currentParticipants: 0,
             requirements: session.requirements || null
