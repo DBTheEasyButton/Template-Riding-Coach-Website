@@ -22,11 +22,11 @@ import {
   insertSponsorSchema
 } from "@shared/schema";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
+const stripeKey = process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
 
-const stripeKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeKey) {
+  throw new Error('Missing required Stripe secret: TESTING_STRIPE_SECRET_KEY or STRIPE_SECRET_KEY');
+}
 
 if (stripeKey.startsWith('pk_')) {
   console.warn('WARNING: STRIPE_SECRET_KEY appears to be a publishable key (pk_). This should be a secret key (sk_).');
