@@ -2138,8 +2138,12 @@ The Dan Bizzarro Method Team`,
         requestBody.phone = phone;
       }
 
+      // Convert customFields object to array format required by GHL API
       if (customFields) {
-        requestBody.customFields = customFields;
+        requestBody.customFields = Object.entries(customFields).map(([key, value]) => ({
+          key,
+          field_value: value
+        }));
       }
 
       // Create or update contact in Go High Level
@@ -2164,11 +2168,36 @@ The Dan Bizzarro Method Team`,
         if (response.status === 400 && 
             errorData.message?.includes('duplicated contact') && 
             errorData.meta?.contactId) {
-          console.log('Duplicate contact detected, using existing contactId:', errorData.meta.contactId);
+          console.log('Duplicate contact detected, updating existing contact:', errorData.meta.contactId);
+          
+          // Update the existing contact instead of just returning
+          const updateResponse = await fetch(
+            `https://services.leadconnectorhq.com/contacts/${errorData.meta.contactId}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Version': '2021-07-28',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(requestBody)
+            }
+          );
+          
+          if (!updateResponse.ok) {
+            const updateError = await updateResponse.json();
+            console.error('GHL update error:', updateError);
+            return {
+              success: false,
+              message: `Failed to update existing contact: ${updateResponse.status}`
+            };
+          }
+          
+          const updateData = await updateResponse.json();
           return {
             success: true,
             contactId: errorData.meta.contactId,
-            message: 'Using existing contact from Go High Level'
+            message: 'Updated existing contact in Go High Level'
           };
         }
         
