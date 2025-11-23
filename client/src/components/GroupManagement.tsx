@@ -266,7 +266,7 @@ export default function GroupManagement({
   );
 
   const { data: groupData, isLoading } = useQuery<{ groups: ClinicGroup[]; unassigned: ClinicRegistration[] }>({
-    queryKey: ["/api/admin/sessions", sessionId, "groups"],
+    queryKey: [`/api/admin/sessions/${sessionId}/groups`],
     enabled: open,
   });
 
@@ -283,7 +283,7 @@ export default function GroupManagement({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["/api/admin/sessions", sessionId, "groups"],
+        queryKey: [`/api/admin/sessions/${sessionId}/groups`],
       });
       setIsCreateGroupOpen(false);
       setNewGroup({ groupName: "", skillLevel: "", maxParticipants: "", startTime: "", endTime: "" });
@@ -309,7 +309,7 @@ export default function GroupManagement({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["/api/admin/sessions", sessionId, "groups"],
+        queryKey: [`/api/admin/sessions/${sessionId}/groups`],
       });
       setEditingGroup(null);
       toast({ title: "Group updated successfully" });
@@ -322,7 +322,7 @@ export default function GroupManagement({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["/api/admin/sessions", sessionId, "groups"],
+        queryKey: [`/api/admin/sessions/${sessionId}/groups`],
       });
       toast({ title: "Group deleted successfully" });
     },
@@ -344,7 +344,7 @@ export default function GroupManagement({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["/api/admin/sessions", sessionId, "groups"],
+        queryKey: [`/api/admin/sessions/${sessionId}/groups`],
       });
     },
   });
@@ -355,7 +355,7 @@ export default function GroupManagement({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["/api/admin/sessions", sessionId, "groups"],
+        queryKey: [`/api/admin/sessions/${sessionId}/groups`],
       });
       toast({ title: "Groups auto-organized successfully" });
     },
