@@ -220,6 +220,9 @@ export class EmailService {
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
+              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+            </p>
           </div>
         </div>
       </div>
@@ -261,6 +264,8 @@ Dan Bizzarro Method
 
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+
+Unsubscribe: https://danbizzarromethod.com/contact
     `;
 
     return this.sendEmail(email, `🎉 Welcome! Your Clinic Registration is Confirmed - ${clinicName}`, htmlContent, textContent);
@@ -353,6 +358,9 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
+              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+            </p>
           </div>
         </div>
       </div>
@@ -396,6 +404,8 @@ Dan Bizzarro Method
 
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+
+Unsubscribe: https://danbizzarromethod.com/contact
     `;
 
     return this.sendEmail(email, `✅ Clinic Registration Confirmed - ${clinicName}`, htmlContent, textContent);
@@ -467,6 +477,9 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
+              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+            </p>
           </div>
         </div>
       </div>
@@ -502,6 +515,8 @@ Dan Bizzarro Method
 
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+
+Unsubscribe: https://danbizzarromethod.com/contact
     `;
 
     return this.sendEmail(email, `🎉 You Earned ${bonusPoints} Bonus Points! - ${referredPersonName} Joined`, htmlContent, textContent);
@@ -780,18 +795,36 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
   
   async sendLoyaltyDiscountEmail(subscriberEmail: string, discountCode: string): Promise<boolean> {
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2c3e50;">Congratulations! You've Earned a Loyalty Discount</h2>
-        <p>Dear valued client,</p>
-        <p>Thank you for your continued support and participation in our clinics!</p>
-        <div style="background-color: #1e3a8a; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-          <h3 style="margin-top: 0;">You've earned a 20% discount!</h3>
-          <p style="font-size: 18px; margin: 10px 0;"><strong>Your discount code: ${discountCode}</strong></p>
-          <p style="font-size: 14px; margin-bottom: 0;">Use this code on your next clinic registration</p>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+        <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <h2 style="color: #1e3a8a; margin-top: 0;">Congratulations! You've Earned a Loyalty Discount</h2>
+          <p style="color: #374151; font-size: 16px;">Dear valued client,</p>
+          <p style="color: #374151; font-size: 16px;">Thank you for your continued support and participation in our clinics!</p>
+          <div style="background-color: #1e3a8a; color: white; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <h3 style="margin-top: 0;">You've earned a 20% discount!</h3>
+            <p style="font-size: 18px; margin: 10px 0;"><strong>Your discount code: ${discountCode}</strong></p>
+            <p style="font-size: 14px; margin-bottom: 0;">Use this code on your next clinic registration</p>
+          </div>
+          <p style="color: #374151; font-size: 16px;">This discount is valid for 12 months and can be used once on any of our upcoming clinics.</p>
+          <p style="color: #374151; font-size: 16px;">Thank you for being a loyal member of the Dan Bizzarro Method community!</p>
+          <p style="color: #374151; font-size: 16px; margin-top: 30px;">
+            Best regards,<br>
+            <strong>Dan Bizzarro</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+          </p>
+          
+          <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+            </p>
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
+              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+            </p>
+          </div>
         </div>
-        <p>This discount is valid for 12 months and can be used once on any of our upcoming clinics.</p>
-        <p>Thank you for being a loyal member of the Dan Bizzarro Method community!</p>
-        <p>Best regards,<br>Dan Bizzarro and the Team</p>
       </div>
     `;
 
@@ -810,7 +843,13 @@ This discount is valid for 12 months and can be used once on any of our upcoming
 Thank you for being a loyal member of the Dan Bizzarro Method community!
 
 Best regards,
-Dan Bizzarro and the Team
+Dan Bizzarro
+Dan Bizzarro Method
+
+📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+
+Unsubscribe: https://danbizzarromethod.com/contact
     `;
 
     return this.sendEmail(subscriberEmail, "🎉 You've Earned a Loyalty Discount!", htmlContent, textContent);
