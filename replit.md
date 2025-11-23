@@ -31,7 +31,7 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Core Web Vitals Optimization:** Automated image compression pipeline using Sharp, modern image loading with `<picture>` elements (WebP fallbacks), and deferred loading of third-party scripts (Facebook Pixel, Google Analytics, LeadConnector) to optimize LCP and FID.
 
 **Feature Specifications:**
-- **Coaching Section:** Renamed from "Services," includes dedicated pages for Private Lessons, Clinics, Remote Coaching, Dressage, Show Jumping, Cross Country, and Polework. Features WhatsApp booking buttons, flexible clinic capacity management (privacy-focused), an auto-fill system for returning clients, and GDPR-compliant data handling. Optional Google Maps integration for clinic locations.
+- **Coaching Section:** Renamed from "Services," includes dedicated pages for Private Lessons, Clinics, Remote Coaching, Dressage, Show Jumping, Cross Country, and Polework. Features WhatsApp booking buttons, flexible clinic capacity management (privacy-focused), an auto-fill system for returning clients, and GDPR-compliant data handling. **Google Maps Link is mandatory** for all clinics (validated on both frontend and backend).
 - **Interactive Tools:**
     - **Readiness Quiz:** An interactive assessment.
     - **Stride Calculator:** A professional tool for equestrian distance calculations.
