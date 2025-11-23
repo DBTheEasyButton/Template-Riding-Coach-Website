@@ -95,6 +95,7 @@ export default function Home() {
                 src={danPhotoPath} 
                 alt="International eventing coach Dan Bizzarro with his competition horse, showcasing their partnership and training expertise" 
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                loading="lazy"
               />
             </div>
           </div>

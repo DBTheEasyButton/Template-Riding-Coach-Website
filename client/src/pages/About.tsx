@@ -82,6 +82,7 @@ export default function About() {
                   src={danPhotoPath} 
                   alt="Dan Bizzarro with his horse - authentic photo showing the professional bond between rider and mount" 
                   className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                  loading="lazy"
                 />
               </div>
               <div className="relative">
@@ -89,6 +90,7 @@ export default function About() {
                   src={danWithHorsesPath} 
                   alt="Dan Bizzarro with his horses and dog - showing his personal connection with all his animals" 
                   className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                  loading="lazy"
                 />
               </div>
             </div>
