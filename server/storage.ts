@@ -105,6 +105,8 @@ export interface IStorage {
   updateClinic(id: number, clinic: Partial<InsertClinic>): Promise<Clinic | undefined>;
   deleteClinic(id: number): Promise<void>;
   createClinicSession(session: InsertClinicSession): Promise<ClinicSession>;
+  updateClinicSession(sessionId: number, updates: Partial<InsertClinicSession>): Promise<ClinicSession | undefined>;
+  hasSessionRegistrations(sessionId: number): Promise<boolean>;
   
   createClinicRegistration(registration: InsertClinicRegistration): Promise<ClinicRegistration>;
   getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]>;
@@ -806,6 +808,24 @@ The Dan Bizzarro Method Team`,
   async createClinicSession(insertSession: InsertClinicSession): Promise<ClinicSession> {
     const [session] = await db.insert(clinicSessions).values(insertSession).returning();
     return session;
+  }
+
+  async updateClinicSession(sessionId: number, updates: Partial<InsertClinicSession>): Promise<ClinicSession | undefined> {
+    const [updatedSession] = await db
+      .update(clinicSessions)
+      .set(updates)
+      .where(eq(clinicSessions.id, sessionId))
+      .returning();
+    return updatedSession;
+  }
+
+  async hasSessionRegistrations(sessionId: number): Promise<boolean> {
+    const registrations = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(clinicRegistrations)
+      .where(eq(clinicRegistrations.sessionId, sessionId));
+    
+    return registrations[0].count > 0;
   }
 
   async createClinicRegistration(insertRegistration: InsertClinicRegistration): Promise<ClinicRegistration> {
