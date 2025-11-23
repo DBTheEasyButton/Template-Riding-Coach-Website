@@ -373,7 +373,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertClinicRegistrationSchema.parse({
         ...registrationData,
         clinicId,
-        status: 'confirmed' // Set to confirmed since payment succeeded
+        status: 'confirmed', // Set to confirmed since payment succeeded
+        paymentIntentId: paymentIntentId || null // Save the payment intent ID
       });
       
       const clinic = await storage.getClinic(clinicId);
