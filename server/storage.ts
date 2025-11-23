@@ -885,9 +885,26 @@ The Dan Bizzarro Method Team`,
   }
 
   async moveParticipantToGroup(registrationId: number, groupId: number | null): Promise<void> {
+    // If moving to a group, get the group's skill level
+    let skillLevel: string | null = null;
+    if (groupId !== null) {
+      const [group] = await db
+        .select()
+        .from(clinicGroups)
+        .where(eq(clinicGroups.id, groupId));
+      
+      if (group) {
+        skillLevel = group.skillLevel;
+      }
+    }
+    
+    // Update the participant's group and skill level
     await db
       .update(clinicRegistrations)
-      .set({ groupId })
+      .set({ 
+        groupId,
+        ...(groupId !== null && { skillLevel })
+      })
       .where(eq(clinicRegistrations.id, registrationId));
   }
 
@@ -953,7 +970,10 @@ The Dan Bizzarro Method Team`,
       for (const id of registrationIds) {
         await db
           .update(clinicRegistrations)
-          .set({ groupId: group.id })
+          .set({ 
+            groupId: group.id,
+            skillLevel: group.skillLevel
+          })
           .where(eq(clinicRegistrations.id, id));
       }
     }

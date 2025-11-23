@@ -90,6 +90,9 @@ function ParticipantCard({
     opacity: isDragging ? 0.5 : 1,
   };
 
+  // Use group skill level if provided, otherwise use participant's own skill level
+  const displaySkillLevel = groupSkillLevel || participant.skillLevel;
+
   return (
     <div
       ref={setNodeRef}
@@ -102,9 +105,9 @@ function ParticipantCard({
       <div className="flex items-center justify-between">
         <div className="font-medium text-sm">
           {participant.firstName} {participant.lastName}
-          {groupSkillLevel && (
+          {displaySkillLevel && (
             <span className="ml-2 text-xs font-normal text-gray-600 capitalize">
-              ({groupSkillLevel})
+              ({displaySkillLevel})
             </span>
           )}
         </div>
