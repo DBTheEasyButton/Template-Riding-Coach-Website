@@ -523,7 +523,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
               registration.firstName,
               clinic.title,
               clinicDate,
-              referralCode
+              referralCode,
+              clinic.location,
+              clinic.googleMapsLink || undefined
             );
             console.log(`Sent first-time clinic confirmation email to ${registration.email}`);
           } else {
@@ -534,7 +536,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
               clinic.title,
               clinicDate,
               referralCode,
-              loyaltyProgram.points
+              loyaltyProgram.points,
+              clinic.location,
+              clinic.googleMapsLink || undefined
             );
             console.log(`Sent returning clinic confirmation email to ${registration.email}`);
           }

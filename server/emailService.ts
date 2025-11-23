@@ -140,12 +140,16 @@ export class EmailService {
     firstName: string,
     clinicName: string,
     clinicDate: string,
-    referralCode: string
+    referralCode: string,
+    clinicLocation?: string,
+    googleMapsLink?: string
   ): Promise<boolean> {
+    const locationHtml = clinicLocation ? `<p style="margin: 5px 0; font-size: 16px;"><strong>Location:</strong> ${googleMapsLink ? `<a href="${googleMapsLink}" style="color: white; text-decoration: underline;" target="_blank">${clinicLocation}</a>` : clinicLocation}</p>` : '';
+    
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
         <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Welcome to Dan Bizzarro Method! 🏇</h1>
+          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Welcome to Dan Bizzarro Method!</h1>
           
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear ${firstName},</p>
           
@@ -157,6 +161,7 @@ export class EmailService {
             <h2 style="margin-top: 0; font-size: 22px;">Clinic Details</h2>
             <p style="margin: 5px 0; font-size: 16px;"><strong>Clinic:</strong> ${clinicName}</p>
             <p style="margin: 5px 0; font-size: 16px;"><strong>Date:</strong> ${clinicDate}</p>
+            ${locationHtml}
           </div>
 
           <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 25px 0; border-radius: 4px;">
@@ -220,6 +225,8 @@ export class EmailService {
       </div>
     `;
 
+    const locationText = clinicLocation ? `Location: ${clinicLocation}${googleMapsLink ? ` (${googleMapsLink})` : ''}\n` : '';
+    
     const textContent = `
 Welcome to Dan Bizzarro Method!
 
@@ -230,7 +237,7 @@ We're thrilled to have you join us for your first clinic! Your registration has 
 CLINIC DETAILS:
 Clinic: ${clinicName}
 Date: ${clinicDate}
-
+${locationText}
 IMPORTANT: Your session times and groups will be sent to you a couple of days before the clinic.
 
 YOUR UNIQUE REFERRAL CODE: ${referralCode}
@@ -265,12 +272,16 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
     clinicName: string,
     clinicDate: string,
     referralCode: string,
-    currentPoints: number
+    currentPoints: number,
+    clinicLocation?: string,
+    googleMapsLink?: string
   ): Promise<boolean> {
+    const locationHtml = clinicLocation ? `<p style="margin: 5px 0; font-size: 16px;"><strong>Location:</strong> ${googleMapsLink ? `<a href="${googleMapsLink}" style="color: white; text-decoration: underline;" target="_blank">${clinicLocation}</a>` : clinicLocation}</p>` : '';
+    
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
         <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Registration Confirmed! 🏇</h1>
+          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Registration Confirmed!</h1>
           
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear ${firstName},</p>
           
@@ -282,6 +293,7 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             <h2 style="margin-top: 0; font-size: 22px;">Clinic Details</h2>
             <p style="margin: 5px 0; font-size: 16px;"><strong>Clinic:</strong> ${clinicName}</p>
             <p style="margin: 5px 0; font-size: 16px;"><strong>Date:</strong> ${clinicDate}</p>
+            ${locationHtml}
           </div>
 
           <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 25px 0; border-radius: 4px;">
@@ -346,6 +358,8 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
       </div>
     `;
 
+    const locationText = clinicLocation ? `Location: ${clinicLocation}${googleMapsLink ? ` (${googleMapsLink})` : ''}\n` : '';
+    
     const textContent = `
 Registration Confirmed!
 
@@ -356,7 +370,7 @@ Great to have you back! Your clinic registration has been confirmed.
 CLINIC DETAILS:
 Clinic: ${clinicName}
 Date: ${clinicDate}
-
+${locationText}
 IMPORTANT: Your session times and groups will be sent to you a couple of days before the clinic.
 
 YOU'VE EARNED POINTS!
