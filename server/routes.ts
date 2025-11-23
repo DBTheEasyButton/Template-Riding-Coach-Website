@@ -818,9 +818,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
               
               // Handle maxParticipants with validation
               if (session.maxParticipants !== undefined) {
-                const maxParts = parseInt(session.maxParticipants.toString());
-                if (Number.isFinite(maxParts) && maxParts > 0) {
-                  sessionUpdates.maxParticipants = maxParts;
+                // Allow empty string or null to clear the value
+                if (session.maxParticipants === "" || session.maxParticipants === null) {
+                  sessionUpdates.maxParticipants = null;
+                } else {
+                  const maxParts = parseInt(session.maxParticipants.toString());
+                  if (Number.isFinite(maxParts) && maxParts > 0) {
+                    sessionUpdates.maxParticipants = maxParts;
+                  }
                 }
               }
               
