@@ -2250,6 +2250,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Email unsubscribe endpoint
+  app.post("/api/email/unsubscribe", async (req, res) => {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      // Update local database
+      const subscriber = await storage.getEmailSubscriberByEmail(email);
+      if (subscriber) {
+        await storage.updateEmailSubscriber(subscriber.id, { 
+          isActive: false 
+        });
+      }
+
+      // Update Go High Level
+      if (process.env.GHL_API_KEY && process.env.GHL_LOCATION_ID) {
+        try {
+          const ghlResponse = await fetch(
+            `https://services.leadconnectorhq.com/contacts/`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${process.env.GHL_API_KEY}`,
+                'Content-Type': 'application/json',
+                'Version': '2021-07-28'
+              },
+              body: JSON.stringify({
+                email,
+                locationId: process.env.GHL_LOCATION_ID,
+                tags: ['unsubscribed'],
+                customFields: [
+                  { key: 'email_preferences', field_value: 'unsubscribed' }
+                ]
+              })
+            }
+          );
+
+          if (!ghlResponse.ok) {
+            // If contact exists, try updating instead
+            if (ghlResponse.status === 400) {
+              // Find contact by email
+              const searchResponse = await fetch(
+                `https://services.leadconnectorhq.com/contacts/search/duplicate?locationId=${process.env.GHL_LOCATION_ID}&email=${encodeURIComponent(email)}`,
+                {
+                  headers: {
+                    'Authorization': `Bearer ${process.env.GHL_API_KEY}`,
+                    'Version': '2021-07-28'
+                  }
+                }
+              );
+
+              if (searchResponse.ok) {
+                const searchData = await searchResponse.json();
+                if (searchData.contact) {
+                  // Update existing contact
+                  await fetch(
+                    `https://services.leadconnectorhq.com/contacts/${searchData.contact.id}`,
+                    {
+                      method: 'PUT',
+                      headers: {
+                        'Authorization': `Bearer ${process.env.GHL_API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Version': '2021-07-28'
+                      },
+                      body: JSON.stringify({
+                        tags: ['unsubscribed'],
+                        customFields: [
+                          { key: 'email_preferences', field_value: 'unsubscribed' }
+                        ]
+                      })
+                    }
+                  );
+                }
+              }
+            }
+          }
+
+          console.log(`Updated GHL contact for unsubscribe: ${email}`);
+        } catch (ghlError) {
+          console.error('GHL unsubscribe update failed:', ghlError);
+          // Don't fail the request if GHL update fails
+        }
+      }
+
+      res.json({ 
+        message: "Successfully unsubscribed from marketing emails",
+        success: true 
+      });
+    } catch (error) {
+      console.error("Error processing unsubscribe:", error);
+      res.status(500).json({ message: "Failed to process unsubscribe request" });
+    }
+  });
+
   // Database backup
   app.post("/api/admin/backup", async (req, res) => {
     try {
