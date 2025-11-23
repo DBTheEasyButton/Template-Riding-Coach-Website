@@ -221,7 +221,7 @@ export class EmailService {
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -265,7 +265,7 @@ Dan Bizzarro Method
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/contact
+Unsubscribe: https://danbizzarromethod.com/unsubscribe
     `;
 
     return this.sendEmail(email, `🎉 Welcome! Your Clinic Registration is Confirmed - ${clinicName}`, htmlContent, textContent);
@@ -359,7 +359,7 @@ Unsubscribe: https://danbizzarromethod.com/contact
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -405,7 +405,7 @@ Dan Bizzarro Method
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/contact
+Unsubscribe: https://danbizzarromethod.com/unsubscribe
     `;
 
     return this.sendEmail(email, `✅ Clinic Registration Confirmed - ${clinicName}`, htmlContent, textContent);
@@ -478,7 +478,7 @@ Unsubscribe: https://danbizzarromethod.com/contact
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -516,7 +516,7 @@ Dan Bizzarro Method
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/contact
+Unsubscribe: https://danbizzarromethod.com/unsubscribe
     `;
 
     return this.sendEmail(email, `🎉 You Earned ${bonusPoints} Bonus Points! - ${referredPersonName} Joined`, htmlContent, textContent);
@@ -821,7 +821,7 @@ Unsubscribe: https://danbizzarromethod.com/contact
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/contact" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -849,7 +849,7 @@ Dan Bizzarro Method
 📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/contact
+Unsubscribe: https://danbizzarromethod.com/unsubscribe
     `;
 
     return this.sendEmail(subscriberEmail, "🎉 You've Earned a Loyalty Discount!", htmlContent, textContent);
