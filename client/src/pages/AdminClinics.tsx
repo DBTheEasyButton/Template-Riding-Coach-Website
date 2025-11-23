@@ -342,6 +342,7 @@ export default function AdminClinics() {
     if (!formData.description.trim()) requiredFields.push('description');
     if (!formData.date) requiredFields.push('date');
     if (!formData.location.trim()) requiredFields.push('location');
+    if (!formData.googleMapsLink?.trim()) requiredFields.push('Google Maps Link');
     
     // Validate price for single session clinics
     if (formData.clinicType === 'single') {
@@ -649,12 +650,15 @@ export default function AdminClinics() {
             </div>
             
             <div className="grid gap-2">
-              <Label htmlFor="googleMapsLink">Google Maps Link</Label>
+              <Label htmlFor="googleMapsLink">
+                Google Maps Link <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="googleMapsLink"
                 value={formData.googleMapsLink || ''}
                 onChange={(e) => setFormData({ ...formData, googleMapsLink: e.target.value })}
                 placeholder="https://maps.app.goo.gl/..."
+                className={missingFields.includes('Google Maps Link') ? 'border-red-500' : ''}
               />
               <p className="text-sm text-gray-500">Paste the Google Maps link for this clinic location</p>
             </div>
