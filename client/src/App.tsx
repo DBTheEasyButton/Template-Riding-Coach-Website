@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -41,6 +41,15 @@ const AdminSettings = lazy(() => import("@/pages/AdminSettings"));
 const AdminGHL = lazy(() => import("@/pages/AdminGHL"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
+
+// Simple redirect component for wouter
+function RedirectToAdminClinics() {
+  const [, setLocation] = useLocation();
+  useEffect(() => {
+    setLocation("/admin/clinics");
+  }, [setLocation]);
+  return null;
+}
 
 // Preload popular pages on desktop for better UX
 const useDesktopPreloading = () => {
@@ -173,7 +182,7 @@ function Router() {
         </Suspense>
       </Route>
       <Route path="/admin">
-        <Redirect to="/admin/clinics" />
+        <RedirectToAdminClinics />
       </Route>
       <Route path="/admin/clinics">
         <Suspense fallback={<PageLoader />}>
