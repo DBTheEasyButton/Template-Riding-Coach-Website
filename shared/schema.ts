@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -39,7 +39,9 @@ export const news = pgTable("news", {
   image: text("image").notNull(),
   publishedAt: timestamp("published_at").notNull(),
   slug: text("slug").notNull().unique(),
-});
+}, (table) => ({
+  slugIdx: index("news_slug_idx").on(table.slug),
+}));
 
 export const contacts = pgTable("contacts", {
   id: serial("id").primaryKey(),
@@ -81,7 +83,11 @@ export const clinics = pgTable("clinics", {
   // Deprecated: use maxParticipants for total clinic cap and session-level maxParticipants instead
   crossCountryMaxParticipants: integer("cross_country_max_participants"),
   showJumpingMaxParticipants: integer("show_jumping_max_participants")
-});
+}, (table) => ({
+  isActiveIdx: index("clinics_is_active_idx").on(table.isActive),
+  dateIdx: index("clinics_date_idx").on(table.date),
+  isActiveDateIdx: index("clinics_is_active_date_idx").on(table.isActive, table.date),
+}));
 
 export const clinicSessions = pgTable("clinic_sessions", {
   id: serial("id").primaryKey(),
@@ -96,7 +102,9 @@ export const clinicSessions = pgTable("clinic_sessions", {
   currentParticipants: integer("current_participants").notNull().default(0),
   requirements: text("requirements"), // "Own horse required", "Suitable for green horses", etc.
   createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+}, (table) => ({
+  clinicIdIdx: index("clinic_sessions_clinic_id_idx").on(table.clinicId),
+}));
 
 export const clinicGroups = pgTable("clinic_groups", {
   id: serial("id").primaryKey(),
@@ -106,7 +114,9 @@ export const clinicGroups = pgTable("clinic_groups", {
   maxParticipants: integer("max_participants"), // Optional: limit per group
   displayOrder: integer("display_order").notNull().default(0), // For sorting groups
   createdAt: timestamp("created_at").notNull().defaultNow(),
-});
+}, (table) => ({
+  sessionIdIdx: index("clinic_groups_session_id_idx").on(table.sessionId),
+}));
 
 export const clinicRegistrations = pgTable("clinic_registrations", {
   id: serial("id").primaryKey(),
@@ -130,7 +140,12 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
   refundProcessedAt: timestamp("refund_processed_at"),
   cancellationReason: text("cancellation_reason"),
   paymentIntentId: text("payment_intent_id"),
-});
+}, (table) => ({
+  clinicIdIdx: index("clinic_registrations_clinic_id_idx").on(table.clinicId),
+  statusIdx: index("clinic_registrations_status_idx").on(table.status),
+  sessionIdIdx: index("clinic_registrations_session_id_idx").on(table.sessionId),
+  clinicIdStatusIdx: index("clinic_registrations_clinic_id_status_idx").on(table.clinicId, table.status),
+}));
 
 export const clinicWaitlist = pgTable("clinic_waitlist", {
   id: serial("id").primaryKey(),
