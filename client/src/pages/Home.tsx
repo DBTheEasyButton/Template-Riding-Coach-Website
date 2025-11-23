@@ -1,12 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import ClinicsSection from "@/components/ClinicsSection";
-import PodcastSection from "@/components/PodcastSection";
-import SponsorsSection from "@/components/SponsorsSection";
-import NewsletterSubscription from "@/components/NewsletterSubscription";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import StructuredData, { organizationData, websiteData, localBusinessData } from "@/components/StructuredData";
@@ -19,6 +14,29 @@ import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+
+// Lazy load below-the-fold components for faster initial page load
+const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+const ClinicsSection = lazy(() => import("@/components/ClinicsSection"));
+const PodcastSection = lazy(() => import("@/components/PodcastSection"));
+const SponsorsSection = lazy(() => import("@/components/SponsorsSection"));
+const NewsletterSubscription = lazy(() => import("@/components/NewsletterSubscription"));
+
+// Simple loading skeleton component
+function SectionSkeleton({ height = "400px" }: { height?: string }) {
+  return (
+    <div className="animate-pulse" style={{ height }}>
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-8"></div>
+        <div className="grid gap-6">
+          <div className="h-32 bg-gray-200 rounded"></div>
+          <div className="h-32 bg-gray-200 rounded"></div>
+          <div className="h-32 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   useEffect(() => {
@@ -63,8 +81,14 @@ export default function Home() {
       
       <Navigation />
       <HeroSection />
-      <TestimonialsSection />
-      <ClinicsSection />
+      
+      <Suspense fallback={<SectionSkeleton />}>
+        <TestimonialsSection />
+      </Suspense>
+      
+      <Suspense fallback={<SectionSkeleton />}>
+        <ClinicsSection />
+      </Suspense>
       
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
@@ -215,10 +239,17 @@ export default function Home() {
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
 
-      <PodcastSection />
+      <Suspense fallback={<SectionSkeleton height="500px" />}>
+        <PodcastSection />
+      </Suspense>
 
-      <SponsorsSection />
-      <NewsletterSubscription />
+      <Suspense fallback={<SectionSkeleton height="300px" />}>
+        <SponsorsSection />
+      </Suspense>
+      
+      <Suspense fallback={<SectionSkeleton height="400px" />}>
+        <NewsletterSubscription />
+      </Suspense>
       
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
