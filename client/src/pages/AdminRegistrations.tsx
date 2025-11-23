@@ -119,12 +119,12 @@ export default function AdminRegistrations() {
   }, {} as Record<number, { name: string; registrations: Registration[] }>);
   
   // Filter by clinic if specified in URL
-  const groupedRegistrations = clinicFilter 
+  const groupedRegistrations = clinicFilter && allGroupedRegistrations[clinicFilter]
     ? { [clinicFilter]: allGroupedRegistrations[clinicFilter] }
     : allGroupedRegistrations;
     
   // Filter out undefined entries (in case clinic doesn't exist)
-  const filteredGroupedRegistrations = Object.entries(groupedRegistrations).filter(([_, value]) => value);
+  const filteredGroupedRegistrations = Object.entries(groupedRegistrations).filter(([_, value]) => value !== undefined);
   
   // Scroll to clinic section when filter is applied
   useEffect(() => {
