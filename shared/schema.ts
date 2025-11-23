@@ -303,6 +303,7 @@ export const insertClinicRegistrationSchema = createInsertSchema(clinicRegistrat
   registeredAt: true,
 }).extend({
   sessionId: z.number().optional(), // Make sessionId optional for backward compatibility
+  skillLevel: z.string().optional(), // Participant's skill level selected during registration
 });
 
 export const insertClinicSessionSchema = createInsertSchema(clinicSessions).omit({
