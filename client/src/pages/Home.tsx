@@ -205,21 +205,21 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {news.slice(0, 3).map((article) => (
-              <Link key={article.id} href={`/news/${article.slug || article.id}`}>
-                <article className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+              <Link key={article.id} href={`/news/${article.slug || article.id}`} className="h-full">
+                <article className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer h-full flex flex-col">
                   <OptimizedImage 
                     src={article.image}
                     alt={article.title}
                     className="w-full h-48 object-cover"
                     loading="lazy"
                   />
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-grow">
                     <div className="flex items-center text-sm text-gray-600 mb-3">
                       <Calendar className="w-4 h-4 mr-2" />
                       <span>{formatDate(article.publishedAt)}</span>
                     </div>
                     <h3 className="text-xl font-playfair font-bold text-navy mb-3">{article.title}</h3>
-                    <p className="text-dark mb-4 line-clamp-3">{article.excerpt}</p>
+                    <p className="text-dark mb-4 line-clamp-3 flex-grow">{article.excerpt}</p>
                   </div>
                 </article>
               </Link>
