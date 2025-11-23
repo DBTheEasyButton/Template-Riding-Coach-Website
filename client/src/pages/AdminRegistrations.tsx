@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
-import { CalendarDays, User, Phone, Mail, Clock, AlertTriangle, Download, Eye } from "lucide-react";
+import { CalendarDays, User, Phone, Mail, Clock, AlertTriangle, Download, Eye, X } from "lucide-react";
+import { useLocation } from "wouter";
 
 interface Registration {
   id: number;
@@ -42,10 +43,16 @@ interface RefundCheck {
 export default function AdminRegistrations() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [location, setLocation] = useLocation();
   const [selectedRegistration, setSelectedRegistration] = useState<Registration | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [refundDialogOpen, setRefundDialogOpen] = useState(false);
   const [cancellationReason, setCancellationReason] = useState("");
+  const clinicRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  
+  // Get clinic filter from URL parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const clinicFilter = urlParams.get('clinic') ? parseInt(urlParams.get('clinic')!) : null;
 
   const { data: registrations = [], isLoading } = useQuery<Registration[]>({
     queryKey: ["/api/admin/registrations"],
@@ -99,16 +106,38 @@ export default function AdminRegistrations() {
   };
 
   // Group registrations by clinic
-  const groupedRegistrations = registrations.reduce((groups, registration) => {
+  const allGroupedRegistrations = registrations.reduce((groups, registration) => {
     const clinic = (clinics as any[]).find((c: any) => c.id === registration.clinicId);
     const clinicName = clinic ? clinic.title : `Clinic ${registration.clinicId}`;
+    const clinicId = registration.clinicId;
     
-    if (!groups[clinicName]) {
-      groups[clinicName] = [];
+    if (!groups[clinicId]) {
+      groups[clinicId] = { name: clinicName, registrations: [] };
     }
-    groups[clinicName].push(registration);
+    groups[clinicId].registrations.push(registration);
     return groups;
-  }, {} as Record<string, Registration[]>);
+  }, {} as Record<number, { name: string; registrations: Registration[] }>);
+  
+  // Filter by clinic if specified in URL
+  const groupedRegistrations = clinicFilter 
+    ? { [clinicFilter]: allGroupedRegistrations[clinicFilter] }
+    : allGroupedRegistrations;
+    
+  // Filter out undefined entries (in case clinic doesn't exist)
+  const filteredGroupedRegistrations = Object.entries(groupedRegistrations).filter(([_, value]) => value);
+  
+  // Scroll to clinic section when filter is applied
+  useEffect(() => {
+    if (clinicFilter && clinicRefs.current[clinicFilter]) {
+      setTimeout(() => {
+        clinicRefs.current[clinicFilter]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [clinicFilter]);
+  
+  const clearFilter = () => {
+    setLocation('/admin/registrations');
+  };
 
   const handleViewDetails = (registration: Registration) => {
     setSelectedRegistration(registration);
@@ -172,16 +201,32 @@ export default function AdminRegistrations() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Clinic Registrations</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Manage clinic participants and process refunds
+              {clinicFilter ? (
+                <span className="flex items-center gap-2">
+                  Filtered view for clinic ID {clinicFilter}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={clearFilter}
+                    className="ml-2"
+                    data-testid="button-clear-filter"
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    Clear Filter
+                  </Button>
+                </span>
+              ) : (
+                "Manage clinic participants and process refunds"
+              )}
             </p>
           </div>
-          <Button onClick={generateExcelReport} className="flex items-center gap-2">
+          <Button onClick={generateExcelReport} className="flex items-center gap-2" data-testid="button-export-excel">
             <Download className="w-4 h-4" />
             Export Excel
           </Button>
         </div>
 
-        {Object.keys(groupedRegistrations).length === 0 ? (
+        {filteredGroupedRegistrations.length === 0 ? (
           <Card>
             <CardContent className="text-center py-8 text-gray-500 dark:text-gray-400">
               No registrations found
@@ -189,12 +234,16 @@ export default function AdminRegistrations() {
           </Card>
         ) : (
           <div className="space-y-8">
-            {Object.entries(groupedRegistrations).map(([clinicName, clinicRegistrations]) => (
-              <Card key={clinicName}>
+            {filteredGroupedRegistrations.map(([clinicId, clinicData]) => (
+              <Card 
+                key={clinicId} 
+                ref={(el) => { clinicRefs.current[parseInt(clinicId)] = el; }}
+                className={clinicFilter === parseInt(clinicId) ? "ring-2 ring-primary" : ""}
+              >
                 <CardHeader>
-                  <CardTitle className="text-xl text-navy dark:text-blue-400">{clinicName}</CardTitle>
+                  <CardTitle className="text-xl text-navy dark:text-blue-400">{clinicData.name}</CardTitle>
                   <CardDescription>
-                    {clinicRegistrations.length} participant{clinicRegistrations.length !== 1 ? 's' : ''} registered
+                    {clinicData.registrations.length} participant{clinicData.registrations.length !== 1 ? 's' : ''} registered
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -209,7 +258,7 @@ export default function AdminRegistrations() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {clinicRegistrations.map((registration) => (
+                      {clinicData.registrations.map((registration: Registration) => (
                         <TableRow key={registration.id}>
                           <TableCell>
                             <Button 
