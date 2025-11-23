@@ -266,7 +266,7 @@ export default function AdminClinics() {
         sessionName: session.sessionName || "",
         discipline: session.discipline || "jumping",
         skillLevel: session.skillLevel || "90cm",
-        price: session.price ? Math.round(session.price / 100) : 80,
+        price: session.price !== undefined && session.price !== null ? Math.round(session.price / 100) : 80,
         maxParticipants: session.maxParticipants ?? "",
         requirements: session.requirements || ""
       }));
@@ -359,7 +359,7 @@ export default function AdminClinics() {
         if (!session.sessionName.trim()) {
           requiredFields.push(`session ${index + 1} name`);
         }
-        if (!session.price || session.price <= 0) {
+        if (session.price === undefined || session.price === null || session.price === '' || session.price < 0) {
           requiredFields.push(`session ${index + 1} price`);
         }
       });
