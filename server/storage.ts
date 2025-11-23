@@ -78,7 +78,7 @@ import {
   type InsertGhlContact
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql, and, inArray } from "drizzle-orm";
+import { eq, desc, sql, and, inArray, gte } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -103,6 +103,7 @@ export interface IStorage {
   markContactResolved(id: number): Promise<void>;
   
   getAllClinics(): Promise<ClinicWithSessions[]>;
+  getUpcomingClinics(limit?: number): Promise<ClinicWithSessions[]>;
   getClinic(id: number): Promise<Clinic | undefined>;
   createClinic(clinic: InsertClinic): Promise<Clinic>;
   updateClinic(id: number, clinic: Partial<InsertClinic>): Promise<Clinic | undefined>;
@@ -769,6 +770,45 @@ The Dan Bizzarro Method Team`,
     const clinicsData = await db.select().from(clinics).where(eq(clinics.isActive, true)).orderBy(clinics.date);
     
     // Fetch all sessions for all clinics in a single query (eliminates N+1)
+    const clinicIds = clinicsData.map(c => c.id);
+    const allSessions = clinicIds.length > 0
+      ? await db.select().from(clinicSessions).where(inArray(clinicSessions.clinicId, clinicIds))
+      : [];
+    
+    // Group sessions by clinicId
+    const sessionsByClinicId = new Map<number, typeof allSessions>();
+    for (const session of allSessions) {
+      const existing = sessionsByClinicId.get(session.clinicId) || [];
+      existing.push(session);
+      sessionsByClinicId.set(session.clinicId, existing);
+    }
+    
+    // Attach sessions to clinics
+    const clinicsWithSessions: ClinicWithSessions[] = clinicsData.map(clinic => ({
+      ...clinic,
+      sessions: clinic.hasMultipleSessions ? (sessionsByClinicId.get(clinic.id) ?? []) : []
+    }));
+    
+    return clinicsWithSessions;
+  }
+
+  async getUpcomingClinics(limit?: number): Promise<ClinicWithSessions[]> {
+    const now = new Date();
+    
+    // Fetch upcoming active clinics, ordered by date (nearest first)
+    const baseQuery = db.select().from(clinics)
+      .where(and(
+        eq(clinics.isActive, true),
+        gte(clinics.date, now)
+      ))
+      .orderBy(clinics.date);
+    
+    // Apply limit at database level if specified
+    const clinicsData = limit && limit > 0 
+      ? await baseQuery.limit(limit)
+      : await baseQuery;
+    
+    // Fetch all sessions for these clinics in a single query
     const clinicIds = clinicsData.map(c => c.id);
     const allSessions = clinicIds.length > 0
       ? await db.select().from(clinicSessions).where(inArray(clinicSessions.clinicId, clinicIds))

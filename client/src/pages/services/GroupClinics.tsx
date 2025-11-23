@@ -19,15 +19,9 @@ export default function GroupClinics() {
   const seoConfig = getSEOConfig('/coaching/clinics');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/clinics', seoConfig.h1);
   
-  const { data: clinics = [] } = useQuery<any[]>({
-    queryKey: ['/api/clinics'],
+  const { data: upcomingClinics = [] } = useQuery<any[]>({
+    queryKey: ['/api/clinics', { upcoming: 'true', limit: 3 }],
   });
-
-  // Get next 3 upcoming clinics
-  const upcomingClinics = clinics
-    .filter(clinic => new Date(clinic.date) >= new Date())
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    .slice(0, 3);
 
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('en-GB', {

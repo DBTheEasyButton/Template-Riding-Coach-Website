@@ -202,10 +202,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get all clinics
+  // Get all clinics (with optional filtering)
   app.get("/api/clinics", async (req, res) => {
     try {
-      const clinics = await storage.getAllClinics();
+      let clinics;
+      
+      // Use optimized upcoming clinics query if requested
+      if (req.query.upcoming === 'true') {
+        const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+        clinics = await storage.getUpcomingClinics(limit);
+      } else {
+        clinics = await storage.getAllClinics();
+      }
+      
       res.json(clinics);
     } catch (error) {
       console.error("Error fetching clinics:", error);
