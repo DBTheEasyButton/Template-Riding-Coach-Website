@@ -333,6 +333,52 @@ export default function TenPointsBetter() {
         </div>
       </section>
 
+      {/* Reviews Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-gray-700 mb-4 italic">
+                "I've been stuck at 62% for two years. After following the audio lessons for just 10 days, I scored 68.5% at my local competition. The geometry tips alone were worth it!"
+              </p>
+              <div className="font-semibold text-navy">Sarah M.</div>
+              <div className="text-sm text-gray-500">Amateur Rider, Hampshire</div>
+            </div>
+            
+            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-gray-700 mb-4 italic">
+                "Finally, a course I can listen to while mucking out! Dan's voice is so calm and the explanations are crystal clear. My horse and I actually look forward to schooling now."
+              </p>
+              <div className="font-semibold text-navy">Emma T.</div>
+              <div className="text-sm text-gray-500">Prelim/Novice Rider, Kent</div>
+            </div>
+            
+            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-gray-700 mb-4 italic">
+                "The ride-along format is genius. Having Dan in my ear while I'm actually on my horse makes such a difference. My transitions are smoother and my circles are finally round!"
+              </p>
+              <div className="font-semibold text-navy">Claire W.</div>
+              <div className="text-sm text-gray-500">BD Club Competitor, Oxfordshire</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pain Points Section */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
