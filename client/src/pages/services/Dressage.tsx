@@ -69,31 +69,31 @@ export default function Dressage() {
     },
     {
       question: "How can I improve my dressage scores?",
-      answer: "Improving dressage scores requires consistent training focusing on the fundamentals: rhythm, suppleness, contact, impulsion, straightness, and collection. Dan works with riders on accurate test riding, proper geometry, correct transitions, and developing quality gaits. Video analysis helps identify areas for improvement. Most importantly, training should develop your horse's way of going, not just teach test movements. Better scores come from better training, not just test practice."
+      answer: "Improving dressage scores requires consistent training focusing on the fundamentals: rhythm, suppleness, contact, impulsion, straightness, and collection. I work with riders on accurate test riding, proper geometry, correct transitions, and developing quality gaits. Video analysis helps identify areas for improvement. Most importantly, training should develop your horse's way of going, not just teach test movements. Better scores come from better training, not just test practice."
     },
     {
-      question: "What dressage levels does Dan coach?",
-      answer: "Dan coaches dressage from novice through advanced levels, working with both amateur riders building foundation skills and competitive eventers preparing for specific tests. Whether you're working on introductory tests or advanced movements, Dan tailors coaching to your current level and competitive goals. The training principles remain consistent across levels—only the complexity of movements changes."
+      question: "What dressage levels do you coach?",
+      answer: "I coach dressage from novice through advanced levels, working with both amateur riders building foundation skills and competitive eventers preparing for specific tests. Whether you're working on introductory tests or advanced movements, I tailor coaching to your current level and competitive goals. The training principles remain consistent across levels—only the complexity of movements changes."
     },
     {
       question: "Do you offer dressage coaching in clinics or just private lessons?",
-      answer: "Dressage coaching is available in both private lessons and group clinics. Private lessons provide individualized attention perfect for test preparation and addressing specific training challenges. Group clinics offer valuable opportunities to watch other riders, learn from shared feedback, and benefit from Dan's expert instruction at a more accessible price point. Many riders combine both formats—clinics for regular training and private lessons for competition preparation."
+      answer: "Dressage coaching is available in both private lessons and group clinics. Private lessons provide individualized attention perfect for test preparation and addressing specific training challenges. Group clinics offer valuable opportunities to watch other riders, learn from shared feedback, and benefit from my expert instruction at a more accessible price point. Many riders combine both formats—clinics for regular training and private lessons for competition preparation."
     },
     {
       question: "Can virtual lessons work for dressage training?",
-      answer: "Absolutely! Dressage is particularly well-suited to virtual lessons using live video technology like Pivo. Dan can see your position, your horse's way of going, the quality of gaits, and the accuracy of movements through the video feed. You hear his coaching in real-time through earbuds, allowing him to provide immediate corrections and guidance. Many riders successfully improve their dressage through virtual coaching, making expert instruction accessible regardless of location."
+      answer: "Absolutely! Dressage is particularly well-suited to virtual lessons using live video technology like Pivo. I can see your position, your horse's way of going, the quality of gaits, and the accuracy of movements through the video feed. You hear my coaching in real-time through earbuds, allowing me to provide immediate corrections and guidance. Many riders successfully improve their dressage through virtual coaching, making expert instruction accessible regardless of location."
     },
     {
       question: "What is the 'training scale' or 'pyramid of training'?",
-      answer: "The training scale (also called pyramid of training) is the systematic progression of dressage training: rhythm, suppleness, contact, impulsion, straightness, and collection. Each level builds on the previous one—you can't have true collection without first establishing rhythm and suppleness. Dan uses these classical principles to develop horses progressively and correctly, ensuring long-term soundness and performance. Understanding this progression helps riders train more effectively and avoid common training mistakes."
+      answer: "The training scale (also called pyramid of training) is the systematic progression of dressage training: rhythm, suppleness, contact, impulsion, straightness, and collection. Each level builds on the previous one—you can't have true collection without first establishing rhythm and suppleness. I use these classical principles to develop horses progressively and correctly, ensuring long-term soundness and performance. Understanding this progression helps riders train more effectively and avoid common training mistakes."
     },
     {
       question: "How do I prepare for a specific dressage test?",
-      answer: "Test preparation involves first ensuring your horse can perform all required movements correctly, then practicing the test for accuracy, geometry, and flow. Dan helps riders understand what judges are looking for, improve transitions, develop better geometry, and present movements effectively. However, good test riding comes from good training—Dan focuses on developing your horse's overall way of going rather than just drilling test movements. This approach produces better scores and happier horses."
+      answer: "Test preparation involves first ensuring your horse can perform all required movements correctly, then practicing the test for accuracy, geometry, and flow. I help riders understand what judges are looking for, improve transitions, develop better geometry, and present movements effectively. However, good test riding comes from good training—I focus on developing your horse's overall way of going rather than just drilling test movements. This approach produces better scores and happier horses."
     },
     {
       question: "What is lateral work and why is it important?",
-      answer: "Lateral work includes movements like leg-yield, shoulder-in, travers, renvers, and half-pass where the horse moves forward and sideways simultaneously. These exercises develop suppleness, engagement, straightness, and the ability to move off the rider's leg. Lateral work is essential for advanced dressage, but it also improves jumping horses by enhancing their adjustability, balance, and responsiveness. Dan teaches lateral work progressively, ensuring horses understand and perform movements correctly."
+      answer: "Lateral work includes movements like leg-yield, shoulder-in, travers, renvers, and half-pass where the horse moves forward and sideways simultaneously. These exercises develop suppleness, engagement, straightness, and the ability to move off the rider's leg. Lateral work is essential for advanced dressage, but it also improves jumping horses by enhancing their adjustability, balance, and responsiveness. I teach lateral work progressively, ensuring horses understand and perform movements correctly."
     },
     {
       question: "How can dressage help my show jumping and cross country?",
@@ -101,7 +101,7 @@ export default function Dressage() {
     },
     {
       question: "Do I need special dressage tack for lessons?",
-      answer: "No special tack is required for dressage lessons with Dan. Your regular training saddle and bridle are fine. Competition dressage requires specific tack (dressage saddle, double bridle for advanced levels), but for training, comfort and fit are more important than equipment type. Dan focuses on developing your riding and your horse's training, which matters far more than having specialised equipment."
+      answer: "No special tack is required for dressage lessons. Your regular training saddle and bridle are fine. Competition dressage requires specific tack (dressage saddle, double bridle for advanced levels), but for training, comfort and fit are more important than equipment type. I focus on developing your riding and your horse's training, which matters far more than having specialised equipment."
     }
   ];
 
@@ -172,13 +172,13 @@ export default function Dressage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our expert dressage training in Oxfordshire provides the foundation for eventing success. As an international eventing coach, Dan Bizzarro delivers specialist flat work coaching that creates balance, suppleness, and communication—essential skills that carry through to jumping and cross-country performance. This classical dressage training approach builds a solid foundation while preparing you for competitive success.
+                My dressage training in Oxfordshire provides the foundation for eventing success. As an international eventing coach, I deliver specialist flat work coaching that creates balance, suppleness, and communication—essential skills that carry through to jumping and cross-country performance. My classical dressage training approach builds a solid foundation while preparing you for competitive success.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Whether you're working on basic dressage test movements or refining advanced collection, every private dressage lesson focuses on developing harmony between horse and rider. Our equestrian coaching in Oxfordshire emphasizes the technical mastery that translates directly into improved dressage scores and better overall eventing results.
+                Whether you're working on basic dressage test movements or refining advanced collection, every private lesson focuses on developing harmony between horse and rider. I emphasize the technical mastery that translates directly into improved dressage scores and better overall eventing results.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Our dressage coaching emphasizes the classical training scale: rhythm, relaxation, contact, impulsion, straightness, and collection—proven fundamentals that produce consistent, competitive performances for amateur riders and international competitors alike.
+                My dressage coaching emphasizes the classical training scale: rhythm, relaxation, contact, impulsion, straightness, and collection—proven fundamentals that produce consistent, competitive performances for amateur riders and international competitors alike.
               </p>
             </div>
 

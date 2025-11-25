@@ -48,43 +48,43 @@ export default function PrivateLessons() {
   const faqs = [
     {
       question: "How much do private horse riding lessons cost in Oxfordshire?",
-      answer: "Private riding lessons with Dan Bizzarro cost £80 per session. This includes personalised one-on-one coaching in dressage, show jumping, cross country, or polework, tailored to your specific goals and experience level. Each session is customised to help you and your horse progress effectively."
+      answer: "My private riding lessons cost £80 per session. This includes personalised one-on-one coaching in dressage, show jumping, cross country, or polework, tailored to your specific goals and experience level. Each session is customised to help you and your horse progress effectively."
     },
     {
       question: "What experience level do I need for private riding lessons?",
-      answer: "Private lessons are suitable for all levels, from complete beginners to international competitors. Whether you're an amateur rider building confidence or a competitive eventer preparing for advanced competitions, Dan tailors the coaching to your current ability and goals. Beginners receive foundational instruction, while experienced riders work on refining technique and competition preparation."
+      answer: "Private lessons are suitable for all levels, from complete beginners to international competitors. Whether you're an amateur rider building confidence or a competitive eventer preparing for advanced competitions, I tailor the coaching to your current ability and goals. Beginners receive foundational instruction, while experienced riders work on refining technique and competition preparation."
     },
     {
       question: "Where do private riding lessons take place?",
       answer: "Private riding lessons are held in Ascott-Under-Wychwood, Oxfordshire, at Crown Farm. The facility offers excellent training facilities for dressage, show jumping, and polework. For riders outside the local area, virtual lessons are also available using live video technology like Pivo."
     },
     {
-      question: "How do I book a private riding lesson with Dan Bizzarro?",
-      answer: "You can book a private lesson by contacting Dan via WhatsApp at +44 7767 291713 or by clicking the 'Book a Lesson' button on this page. Lessons are scheduled based on availability and can be arranged at times that suit your schedule. Dan offers flexible booking to accommodate your training needs."
+      question: "How do I book a private riding lesson?",
+      answer: "You can book a private lesson by contacting me via WhatsApp at +44 7767 291713 or by clicking the 'Book a Lesson' button on this page. Lessons are scheduled based on availability and can be arranged at times that suit your schedule. I offer flexible booking to accommodate your training needs."
     },
     {
       question: "What disciplines can I learn in private lessons?",
-      answer: "Private lessons cover all three eventing disciplines: dressage (flatwork), show jumping, and cross country. You can also focus specifically on polework and gymnastic grid exercises. Dan provides expert coaching in whichever discipline you want to improve, whether you're training for a specific competition or building overall riding skills."
+      answer: "Private lessons cover all three eventing disciplines: dressage (flatwork), show jumping, and cross country. You can also focus specifically on polework and gymnastic grid exercises. I provide expert coaching in whichever discipline you want to improve, whether you're training for a specific competition or building overall riding skills."
     },
     {
       question: "Can I bring my own horse to private lessons?",
-      answer: "Yes, private lessons are conducted with your own horse. This allows Dan to work specifically with your partnership and address the unique strengths and challenges of your horse-and-rider combination. Training your own horse ensures the skills you develop translate directly to your competitions and regular riding."
+      answer: "Yes, private lessons are conducted with your own horse. This allows me to work specifically with your partnership and address the unique strengths and challenges of your horse-and-rider combination. Training your own horse ensures the skills you develop translate directly to your competitions and regular riding."
     },
     {
       question: "How long is a private riding lesson?",
-      answer: "Each private riding lesson is typically 45-60 minutes, providing focused coaching time without overworking horse or rider. The exact duration may vary depending on the specific training focus and your horse's fitness level. Dan ensures each session is productive and appropriate for your training goals."
+      answer: "Each private riding lesson is typically 45-60 minutes, providing focused coaching time without overworking horse or rider. The exact duration may vary depending on the specific training focus and your horse's fitness level. I ensure each session is productive and appropriate for your training goals."
     },
     {
       question: "Do you offer private lessons for young or nervous horses?",
-      answer: "Yes, Dan has extensive experience working with young horses and nervous or sensitive horses. Private lessons provide the ideal environment for horses that need extra patience, careful introduction to new obstacles, or confidence building. The one-on-one format allows Dan to work at your horse's pace without group pressure."
+      answer: "Yes, I have extensive experience working with young horses and nervous or sensitive horses. Private lessons provide the ideal environment for horses that need extra patience, careful introduction to new obstacles, or confidence building. The one-on-one format allows me to work at your horse's pace without group pressure."
     },
     {
       question: "Can I have regular weekly private lessons?",
-      answer: "Absolutely! Many riders schedule regular weekly or fortnightly private lessons to maintain consistent progress. Regular lessons help build a strong training foundation and allow Dan to track your development over time. Contact Dan to discuss setting up a regular lesson schedule that fits your availability."
+      answer: "Absolutely! Many riders schedule regular weekly or fortnightly private lessons to maintain consistent progress. Regular lessons help build a strong training foundation and allow me to track your development over time. Contact me to discuss setting up a regular lesson schedule that fits your availability."
     },
     {
       question: "What should I bring to my private riding lesson?",
-      answer: "Bring your horse properly tacked up and ready to ride, your riding helmet (properly fitted and safety-certified), appropriate riding boots, and gloves if preferred. For jumping lessons, your horse should have appropriate jump boots or wraps. Dan will provide expert guidance and may use video analysis, so no additional equipment is needed from you."
+      answer: "Bring your horse properly tacked up and ready to ride, your riding helmet (properly fitted and safety-certified), appropriate riding boots, and gloves if preferred. For jumping lessons, your horse should have appropriate jump boots or wraps. I'll provide expert guidance and may use video analysis, so no additional equipment is needed from you."
     },
     {
       question: "Are private lessons better than group clinics?",
@@ -92,7 +92,7 @@ export default function PrivateLessons() {
     },
     {
       question: "Can I get help preparing for a specific competition?",
-      answer: "Yes, private lessons are excellent for competition preparation. Dan can help you prepare for specific events by working on required movements, jumping courses similar to what you'll face, or building confidence for cross country obstacles. Tell Dan about your upcoming competition, and he'll tailor the lesson to ensure you and your horse are ready to perform your best."
+      answer: "Yes, private lessons are excellent for competition preparation. I can help you prepare for specific events by working on required movements, jumping courses similar to what you'll face, or building confidence for cross country obstacles. Tell me about your upcoming competition, and I'll tailor the lesson to ensure you and your horse are ready to perform your best."
     }
   ];
 
@@ -283,7 +283,7 @@ export default function PrivateLessons() {
             <div className="bg-gray-50 rounded-2xl p-8">
               <h3 className="text-2xl font-playfair font-bold text-navy mb-4">Location</h3>
               <p className="text-lg text-dark">
-                Lessons are available at Dan's base in Oxfordshire or at your own facility within a reasonable travel distance. Travel fees may apply for external locations.
+                Lessons are available at my base in Oxfordshire or at your own facility within a reasonable travel distance. Travel fees may apply for external locations.
               </p>
             </div>
           </div>

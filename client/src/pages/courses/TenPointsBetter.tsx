@@ -206,7 +206,7 @@ export default function TenPointsBetter() {
     },
     {
       question: "Do I need to ride at a specific venue or arena?",
-      answer: "Not at all. The audio lessons are designed to work in any standard arena. Dan uses generalised references that apply whether you're in a 20x40m or 20x60m arena. The downloadable diagrams help you set up cone markers wherever you ride."
+      answer: "Not at all. The audio lessons are designed to work in any standard arena. I use generalised references that apply whether you're in a 20x40m or 20x60m arena. The downloadable diagrams help you set up cone markers wherever you ride."
     },
     {
       question: "When will the course be available?",
@@ -226,7 +226,7 @@ export default function TenPointsBetter() {
     },
     {
       question: "How is this different from watching YouTube videos?",
-      answer: "Unlike videos, this is an audio ride-along course. Dan coaches you in real-time whilst you're actually on your horse, giving you instructions as you ride. It's like having Dan in the arena with you, guiding every movement."
+      answer: "Unlike videos, this is an audio ride-along course. I coach you in real-time whilst you're actually on your horse, giving you instructions as you ride. It's like having me in the arena with you, guiding every movement."
     },
     {
       question: "Can I use this course for pure dressage, not just eventing?",

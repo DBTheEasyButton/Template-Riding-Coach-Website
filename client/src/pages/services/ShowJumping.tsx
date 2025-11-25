@@ -67,43 +67,43 @@ export default function ShowJumping() {
   const faqs = [
     {
       question: "How can I stop knocking down poles in show jumping?",
-      answer: "Knocking poles usually stems from several factors: rider position (getting ahead or behind the movement), pace issues (too fast or too slow), poor line or distance, or lack of horse carefulness. Dan addresses all these areas through systematic training—improving your position, developing better rhythm, teaching you to see distances, and using gymnastic exercises to improve your horse's technique and carefulness. Consistent, correct training produces cleaner rounds."
+      answer: "Knocking poles usually stems from several factors: rider position (getting ahead or behind the movement), pace issues (too fast or too slow), poor line or distance, or lack of horse carefulness. I address all these areas through systematic training—improving your position, developing better rhythm, teaching you to see distances, and using gymnastic exercises to improve your horse's technique and carefulness. Consistent, correct training produces cleaner rounds."
     },
     {
       question: "What is grid work and how does it help?",
-      answer: "Grid work (also called gymnastic jumping) involves a series of fences set at specific distances that guide the horse through without rider interference. Grids develop better bascule (the horse's jumping arc), improve adjustability, strengthen muscles, build confidence, and teach horses to think and react quickly. For riders, grids improve timing, strengthen position, and develop feel. Dan uses progressive grid exercises as a foundation for all show jumping training."
+      answer: "Grid work (also called gymnastic jumping) involves a series of fences set at specific distances that guide the horse through without rider interference. Grids develop better bascule (the horse's jumping arc), improve adjustability, strengthen muscles, build confidence, and teach horses to think and react quickly. For riders, grids improve timing, strengthen position, and develop feel. I use progressive grid exercises as a foundation for all show jumping training."
     },
     {
       question: "How do I learn to see distances to jumps?",
-      answer: "Seeing distances comes from developing rhythm, understanding stride length, and gaining experience. Dan teaches riders to establish consistent rhythm first, then gradually develops distance awareness through progressive exercises. Counting strides, working over ground poles, riding related distances, and analysing courses all contribute. Most importantly, Dan teaches you to trust your horse's rhythm and avoid micromanaging—good rhythm produces good distances more reliably than trying to 'find' every stride."
+      answer: "Seeing distances comes from developing rhythm, understanding stride length, and gaining experience. I teach riders to establish consistent rhythm first, then gradually develop distance awareness through progressive exercises. Counting strides, working over ground poles, riding related distances, and analysing courses all contribute. Most importantly, I teach you to trust your horse's rhythm and avoid micromanaging—good rhythm produces good distances more reliably than trying to 'find' every stride."
     },
     {
       question: "Do you teach show jumping at all levels?",
-      answer: "Yes, Dan coaches show jumping from beginner to advanced international levels. Whether you're just learning to jump small fences or competing at championship level, the training principles remain consistent—sound position, good rhythm, straight lines, and systematic progression. Dan tailors exercises and fence heights to match your current ability while building skills for future advancement."
+      answer: "Yes, I coach show jumping from beginner to advanced international levels. Whether you're just learning to jump small fences or competing at championship level, the training principles remain consistent—sound position, good rhythm, straight lines, and systematic progression. I tailor exercises and fence heights to match your current ability while building skills for future advancement."
     },
     {
       question: "Can show jumping lessons help with eventing?",
-      answer: "Absolutely! Show jumping is one of the three eventing phases. Good show jumping skills directly improve your eventing results by reducing penalties in the jumping phase and developing the adjustability, technique, and confidence needed for cross country. Many of Dan's show jumping clients are eventers looking to improve their jumping scores and build skills that translate across all phases."
+      answer: "Absolutely! Show jumping is one of the three eventing phases. Good show jumping skills directly improve your eventing results by reducing penalties in the jumping phase and developing the adjustability, technique, and confidence needed for cross country. Many of my show jumping clients are eventers looking to improve their jumping scores and build skills that translate across all phases."
     },
     {
       question: "What if my horse rushes or gets anxious about jumping?",
-      answer: "Rushing and anxiety often stem from tension, confusion, or past experiences. Dan addresses these issues systematically through building confidence with simpler exercises, establishing better rhythm and relaxation, using polework and grids to develop calmness, and ensuring the horse understands what's expected. Patience, consistency, and correct training transform anxious jumpers into confident partners. The key is building positive experiences and never rushing the training process."
+      answer: "Rushing and anxiety often stem from tension, confusion, or past experiences. I address these issues systematically through building confidence with simpler exercises, establishing better rhythm and relaxation, using polework and grids to develop calmness, and ensuring the horse understands what's expected. Patience, consistency, and correct training transform anxious jumpers into confident partners. The key is building positive experiences and never rushing the training process."
     },
     {
       question: "How do I walk a show jumping course effectively?",
-      answer: "Course walking is a crucial skill Dan teaches all competitive riders. It involves analysing each fence, planning your lines and turns, counting strides in related distances, identifying potential problems, and creating a riding plan. Dan teaches you to walk like a professional—understanding jump design, terrain, footing, and how to set up each fence for success. Good course walking directly improves competition results."
+      answer: "Course walking is a crucial skill I teach all competitive riders. It involves analysing each fence, planning your lines and turns, counting strides in related distances, identifying potential problems, and creating a riding plan. I teach you to walk like a professional—understanding jump design, terrain, footing, and how to set up each fence for success. Good course walking directly improves competition results."
     },
     {
       question: "What's the difference between show jumping and cross country jumping?",
-      answer: "Show jumping uses colourful, moveable fences in an enclosed arena, ridden at a controlled pace with precision and accuracy prioritised. Cross country uses fixed natural obstacles across varying terrain, ridden at speed with boldness and trust emphasised. However, both require good technique, rider position, and horse training. Skills developed in show jumping—rhythm, straightness, adjustability—directly benefit cross country performance. Dan coaches both disciplines for well-rounded training."
+      answer: "Show jumping uses colourful, moveable fences in an enclosed arena, ridden at a controlled pace with precision and accuracy prioritised. Cross country uses fixed natural obstacles across varying terrain, ridden at speed with boldness and trust emphasised. However, both require good technique, rider position, and horse training. Skills developed in show jumping—rhythm, straightness, adjustability—directly benefit cross country performance. I coach both disciplines for well-rounded training."
     },
     {
       question: "How often should I have show jumping lessons?",
-      answer: "Lesson frequency depends on your goals, budget, and schedule. Competitive riders often train weekly or more frequently leading up to competitions. Amateur riders may prefer fortnightly or monthly sessions. Dan works with riders at all frequencies, ensuring each lesson builds on previous training and provides exercises to practice between sessions. Consistency matters more than frequency—regular lessons, even if spaced apart, produce better results than intensive bursts followed by long gaps."
+      answer: "Lesson frequency depends on your goals, budget, and schedule. Competitive riders often train weekly or more frequently leading up to competitions. Amateur riders may prefer fortnightly or monthly sessions. I work with riders at all frequencies, ensuring each lesson builds on previous training and provides exercises to practice between sessions. Consistency matters more than frequency—regular lessons, even if spaced apart, produce better results than intensive bursts followed by long gaps."
     },
     {
       question: "Can I improve my jumping without jumping every session?",
-      answer: "Definitely! Too much jumping can cause physical stress and mental sourness. Dan incorporates polework, flatwork, and gymnastic exercises that develop jumping skills without constant jumping. Dressage training improves balance and adjustability. Polework strengthens technique and rhythm. Grid work provides maximum benefit with minimal physical stress. This varied approach produces better jumpers while keeping horses fresh, sound, and enthusiastic."
+      answer: "Definitely! Too much jumping can cause physical stress and mental sourness. I incorporate polework, flatwork, and gymnastic exercises that develop jumping skills without constant jumping. Dressage training improves balance and adjustability. Polework strengthens technique and rhythm. Grid work provides maximum benefit with minimal physical stress. This varied approach produces better jumpers while keeping horses fresh, sound, and enthusiastic."
     }
   ];
 
@@ -174,13 +174,13 @@ export default function ShowJumping() {
           <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our professional show jumping coaching in Oxfordshire combines technical precision with boldness and partnership. As an experienced show jumping coach and international eventing coach, Dan Bizzarro's systematic approach develops both horse and rider, creating the confidence and jumping technique needed for competitive success in eventing and show jumping.
+                My show jumping coaching in Oxfordshire combines technical precision with boldness and partnership. As an experienced show jumping coach and international eventing coach, my systematic approach develops both horse and rider, creating the confidence and jumping technique needed for competitive success in eventing and show jumping.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Show jumping training progresses methodically from fundamental grid work and polework through complex technical courses. Each private show jumping lesson builds on the last, developing the adjustability, carefulness, and scope required at every level—from novice competitors to advanced eventers preparing for championship courses.
+                I progress show jumping training methodically from fundamental grid work and polework through complex technical courses. Each private lesson builds on the last, developing the adjustability, carefulness, and scope required at every level—from novice competitors to advanced eventers preparing for championship courses.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Whether you're an amateur rider working on consistency at lower heights or a competitive eventer preparing for championship-level show jumping, our equestrian coaching in Oxfordshire focuses on creating a confident, careful jumping partnership that consistently delivers clear rounds.
+                Whether you're an amateur rider working on consistency at lower heights or a competitive eventer preparing for championship-level show jumping, my coaching focuses on creating a confident, careful jumping partnership that consistently delivers clear rounds.
               </p>
             </div>
 

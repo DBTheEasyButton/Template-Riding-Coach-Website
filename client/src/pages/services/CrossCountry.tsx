@@ -67,7 +67,7 @@ export default function CrossCountry() {
   const faqs = [
     {
       question: "How do I build confidence for cross country?",
-      answer: "Building cross country confidence requires systematic training, positive experiences, and the right coaching. Dan works progressively—starting with simple obstacles and gradually increasing challenge as horse and rider gain confidence. Training focuses on developing a partnership built on trust, ensuring both horse and rider understand what's expected, and celebrating small victories. Confidence comes from competence, so Dan emphasizes correct technique, smart decision-making, and preparation that makes you ready to tackle any course with boldness and safety."
+      answer: "Building cross country confidence requires systematic training, positive experiences, and the right coaching. I work progressively—starting with simple obstacles and gradually increasing challenge as horse and rider gain confidence. Training focuses on developing a partnership built on trust, ensuring both horse and rider understand what's expected, and celebrating small victories. Confidence comes from competence, so I emphasize correct technique, smart decision-making, and preparation that makes you ready to tackle any course with boldness and safety."
     },
     {
       question: "What makes cross country different from other jumping disciplines?",
@@ -75,35 +75,35 @@ export default function CrossCountry() {
     },
     {
       question: "How do you train horses to jump into water?",
-      answer: "Water training requires patience and systematic progression. Dan introduces water gradually—first walking through, then trotting, then establishing confidence before introducing fences. Horses learn that water is safe and manageable through positive experiences. Training progresses from simple water entries to steps into water, jumps over water, and eventually complex water combinations. The key is never rushing the process and ensuring each step builds confidence rather than creating anxiety."
+      answer: "Water training requires patience and systematic progression. I introduce water gradually—first walking through, then trotting, then establishing confidence before introducing fences. Horses learn that water is safe and manageable through positive experiences. Training progresses from simple water entries to steps into water, jumps over water, and eventually complex water combinations. The key is never rushing the process and ensuring each step builds confidence rather than creating anxiety."
     },
     {
       question: "What is course walking and why is it important?",
-      answer: "Cross country course walking is essential preparation where you analyse each obstacle, assess terrain and footing, plan your lines and speeds, identify options and alternatives, and make tactical decisions. Dan teaches riders to walk professionally—understanding fence design, terrain challenges, optimal lines, and where to take time or make it up. Good course walking can make the difference between a clear round and problems, helping you ride smart and safe."
+      answer: "Cross country course walking is essential preparation where you analyse each obstacle, assess terrain and footing, plan your lines and speeds, identify options and alternatives, and make tactical decisions. I teach riders to walk professionally—understanding fence design, terrain challenges, optimal lines, and where to take time or make it up. Good course walking can make the difference between a clear round and problems, helping you ride smart and safe."
     },
     {
       question: "How fast should I go cross country?",
-      answer: "Speed depends on your level, your horse's experience, course conditions, and competition requirements. Dan teaches riders to understand optimum time requirements, balance speed with safety, maintain rhythm rather than rushing, and make intelligent pace decisions based on terrain and obstacles. For many riders, especially at lower levels, riding within their comfort zone and finishing confidently matters more than chasing time. As skills develop, speed comes naturally without forcing or taking unnecessary risks."
+      answer: "Speed depends on your level, your horse's experience, course conditions, and competition requirements. I teach riders to understand optimum time requirements, balance speed with safety, maintain rhythm rather than rushing, and make intelligent pace decisions based on terrain and obstacles. For many riders, especially at lower levels, riding within their comfort zone and finishing confidently matters more than chasing time. As skills develop, speed comes naturally without forcing or taking unnecessary risks."
     },
     {
       question: "What if my horse refuses at a cross country fence?",
-      answer: "Refusals happen for many reasons—lack of confidence, confusion about the question, loss of rhythm or impulsion, or difficulty reading the obstacle. Dan helps riders understand why refusals occur and develop strategies to prevent them. This includes better preparation, maintaining forward thinking and rhythm, giving clear aids, choosing appropriate lines, and ensuring obstacles are within your horse's current ability level. Sometimes refusals indicate you need to step back and build more foundation before attempting certain obstacles."
+      answer: "Refusals happen for many reasons—lack of confidence, confusion about the question, loss of rhythm or impulsion, or difficulty reading the obstacle. I help riders understand why refusals occur and develop strategies to prevent them. This includes better preparation, maintaining forward thinking and rhythm, giving clear aids, choosing appropriate lines, and ensuring obstacles are within your horse's current ability level. Sometimes refusals indicate you need to step back and build more foundation before attempting certain obstacles."
     },
     {
       question: "Do I need my own cross country course to train?",
-      answer: "No! While access to cross country obstacles is valuable, Dan can develop cross country skills through show jumping, polework, terrain work, and specific exercises that build the necessary attributes—boldness, adjustability, rhythm at speed, quick thinking. When Dan conducts cross country clinics, he provides access to proper courses with varied obstacles. Many successful eventers develop their skills through periodic clinic training combined with other work that builds the foundation for cross country success."
+      answer: "No! While access to cross country obstacles is valuable, I can develop cross country skills through show jumping, polework, terrain work, and specific exercises that build the necessary attributes—boldness, adjustability, rhythm at speed, quick thinking. When I conduct cross country clinics, I provide access to proper courses with varied obstacles. Many successful eventers develop their skills through periodic clinic training combined with other work that builds the foundation for cross country success."
     },
     {
       question: "Is cross country dangerous?",
-      answer: "Cross country carries inherent risks due to speed, solid obstacles, and terrain, but proper training, progressive preparation, riding within your ability, and smart decision-making make it safer. Dan emphasizes safety through systematic skill development, teaching risk assessment, ensuring proper preparation, and building confidence gradually. The key is never taking on more than you and your horse are ready for, always wearing proper safety equipment, and training with an experienced coach who prioritizes smart, safe riding."
+      answer: "Cross country carries inherent risks due to speed, solid obstacles, and terrain, but proper training, progressive preparation, riding within your ability, and smart decision-making make it safer. I emphasize safety through systematic skill development, teaching risk assessment, ensuring proper preparation, and building confidence gradually. The key is never taking on more than you and your horse are ready for, always wearing proper safety equipment, and training with an experienced coach who prioritizes smart, safe riding."
     },
     {
       question: "What equipment do I need for cross country training?",
-      answer: "For cross country, you'll need a properly fitted safety vest (body protector), certified riding helmet meeting current safety standards, cross country boots or wraps for your horse's legs, appropriate studs for footing conditions, and medical armband with emergency information. Dan can advise on proper equipment selection and fitting. Safety equipment is non-negotiable for cross country training and competition."
+      answer: "For cross country, you'll need a properly fitted safety vest (body protector), certified riding helmet meeting current safety standards, cross country boots or wraps for your horse's legs, appropriate studs for footing conditions, and medical armband with emergency information. I can advise on proper equipment selection and fitting. Safety equipment is non-negotiable for cross country training and competition."
     },
     {
       question: "Can beginners learn cross country or is it only for advanced riders?",
-      answer: "Beginners can absolutely learn cross country! Dan works with riders at all levels, starting with simple obstacles suitable for confidence building. Everyone starts somewhere, and with proper progression, patient instruction, and age-appropriate obstacles, even novice riders can safely experience the joy of cross country. The key is matching training to current ability, progressing systematically, and building skills with an experienced coach who understands how to develop confidence safely."
+      answer: "Beginners can absolutely learn cross country! I work with riders at all levels, starting with simple obstacles suitable for confidence building. Everyone starts somewhere, and with proper progression, patient instruction, and age-appropriate obstacles, even novice riders can safely experience the joy of cross country. The key is matching training to current ability, progressing systematically, and building skills with an experienced coach who understands how to develop confidence safely."
     }
   ];
 
@@ -174,13 +174,13 @@ export default function CrossCountry() {
           <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our expert cross country coaching in Oxfordshire brings eventing to life—the thrill of galloping across varied terrain, the challenge of natural obstacles, and the deep partnership between horse and rider. As an international eventing coach and cross country specialist, Dan Bizzarro's training builds both the technical skills and mental confidence needed to tackle cross-country courses safely and successfully.
+                My cross country coaching in Oxfordshire brings eventing to life—the thrill of galloping across varied terrain, the challenge of natural obstacles, and the deep partnership between horse and rider. As an international eventing coach and cross country specialist, my training builds both the technical skills and mental confidence needed to tackle cross-country courses safely and successfully.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our cross country training focuses on developing boldness without recklessness, teaching you to read terrain, manage speed, and make smart tactical decisions at pace. Every equestrian lesson strengthens the trust and communication that forms the foundation of safe, successful cross-country riding—from water complexes and banks to ditches and technical combinations.
+                I focus on developing boldness without recklessness, teaching you to read terrain, manage speed, and make smart tactical decisions at pace. Every lesson strengthens the trust and communication that forms the foundation of safe, successful cross-country riding—from water complexes and banks to ditches and technical combinations.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                From novice-level introductions to advanced international eventing courses, our cross country coaching in Oxfordshire emphasizes progressive development, ensuring both horse and rider gain experience and confidence at the appropriate pace. Whether you're an amateur rider building cross country skills or a competitive eventer preparing for advanced courses, our training delivers results.
+                From novice-level introductions to advanced international eventing courses, my cross country coaching emphasizes progressive development, ensuring both horse and rider gain experience and confidence at the appropriate pace. Whether you're an amateur rider building cross country skills or a competitive eventer preparing for advanced courses, my training delivers results.
               </p>
             </div>
 
@@ -346,7 +346,7 @@ export default function CrossCountry() {
               Cross-country training emphasizes safety above all else. Progressive introduction to obstacles, careful assessment of horse and rider capabilities, and smart training decisions ensure development without unnecessary risk.
             </p>
             <p className="text-lg text-dark leading-relaxed">
-              Dan's extensive international experience means training focuses on building genuine confidence through proper preparation, not false bravado. You'll learn when to be bold and when to be cautious—judgment that keeps you and your horse safe for the long term.
+              My extensive international experience means training focuses on building genuine confidence through proper preparation, not false bravado. You'll learn when to be bold and when to be cautious—judgment that keeps you and your horse safe for the long term.
             </p>
           </div>
         </div>

@@ -32,7 +32,7 @@ export default function RemoteCoaching() {
     "Real-time feedback as you ride",
     "Available worldwide - train from anywhere",
     "Wear earbuds to hear coaching while you ride",
-    "Dan watches you live on his laptop",
+    "I watch you live on my laptop",
     "Personalized instruction tailored to your level"
   ];
 
@@ -46,17 +46,17 @@ export default function RemoteCoaching() {
     {
       step: "2",
       title: "Connect Online",
-      description: "Join a video call with Dan where he can see you and your horse in real-time"
+      description: "Join a video call where I can see you and your horse in real-time"
     },
     {
       step: "3",
       title: "Wear Earbuds",
-      description: "Put in wireless earbuds so you can hear Dan's coaching as you ride"
+      description: "Put in wireless earbuds so you can hear my coaching as you ride"
     },
     {
       step: "4",
       title: "Ride & Learn",
-      description: "Dan coaches you live, watching on his laptop and giving immediate feedback"
+      description: "I coach you live, watching on my laptop and giving immediate feedback"
     }
   ];
 
@@ -81,19 +81,19 @@ export default function RemoteCoaching() {
   const faqs = [
     {
       question: "How much do virtual riding lessons cost?",
-      answer: "Virtual riding lessons with Dan Bizzarro cost £80 per session. This is the same price as in-person lessons, providing you with live, real-time coaching from anywhere in the world. You receive the same quality instruction as a face-to-face lesson, with Dan watching you live and coaching you as you ride."
+      answer: "My virtual riding lessons cost £80 per session. This is the same price as in-person lessons, providing you with live, real-time coaching from anywhere in the world. You receive the same quality instruction as a face-to-face lesson, with me watching you live and coaching you as you ride."
     },
     {
       question: "How do virtual riding lessons work?",
-      answer: "Virtual lessons are LIVE coaching sessions using video technology like Pivo. Dan watches you ride in real-time on his laptop while you wear wireless earbuds to hear his coaching. The video system tracks and follows you as you move around the arena. It's exactly like an in-person lesson—Dan sees you riding and provides immediate feedback and corrections as you go. This is NOT video submission with delayed feedback; it's real-time, interactive coaching."
+      answer: "Virtual lessons are LIVE coaching sessions using video technology like Pivo. I watch you ride in real-time on my laptop while you wear wireless earbuds to hear my coaching. The video system tracks and follows you as you move around the arena. It's exactly like an in-person lesson—I see you riding and provide immediate feedback and corrections as you go. This is NOT video submission with delayed feedback; it's real-time, interactive coaching."
     },
     {
       question: "What equipment do I need for virtual lessons?",
-      answer: "You'll need a video system like Pivo that can track and follow you as you ride, streaming live video to Dan. You'll also need wireless earbuds (like AirPods) so you can hear Dan's coaching while riding, and a stable internet connection at your riding facility. Many riders already have these items, making virtual lessons accessible and convenient."
+      answer: "You'll need a video system like Pivo that can track and follow you as you ride, streaming live video to me. You'll also need wireless earbuds (like AirPods) so you can hear my coaching while riding, and a stable internet connection at your riding facility. Many riders already have these items, making virtual lessons accessible and convenient."
     },
     {
       question: "What is Pivo and why is it recommended?",
-      answer: "Pivo is an automated video tracking system designed specifically for equestrian training. It uses a smart pod that follows you as you move around the arena, ensuring Dan always has a clear view of you and your horse. Pivo is popular among riders for virtual lessons because it eliminates the need for someone to hold a camera. Learn more at pivoequestrian.com."
+      answer: "Pivo is an automated video tracking system designed specifically for equestrian training. It uses a smart pod that follows you as you move around the arena, ensuring I always have a clear view of you and your horse. Pivo is popular among riders for virtual lessons because it eliminates the need for someone to hold a camera. Learn more at pivoequestrian.com."
     },
     {
       question: "Can virtual lessons replace in-person coaching?",
@@ -101,31 +101,31 @@ export default function RemoteCoaching() {
     },
     {
       question: "What disciplines can I learn through virtual lessons?",
-      answer: "Virtual lessons cover all eventing disciplines: dressage (flatwork), show jumping, polework, and cross country. Dan can coach you in whichever area you want to improve. Whether you're working on dressage movements, jumping technique, gymnastic gridwork, or cross country confidence, virtual lessons provide effective real-time instruction."
+      answer: "Virtual lessons cover all eventing disciplines: dressage (flatwork), show jumping, polework, and cross country. I can coach you in whichever area you want to improve. Whether you're working on dressage movements, jumping technique, gymnastic gridwork, or cross country confidence, virtual lessons provide effective real-time instruction."
     },
     {
       question: "Do virtual lessons work for beginners?",
-      answer: "Yes! Virtual lessons work well for all levels, from beginners to advanced competitors. Dan tailors the coaching to your current ability just as he would in person. For beginners, he provides clear explanations and step-by-step guidance. For advanced riders, he focuses on refining technique and competition preparation. The live format allows Dan to answer questions immediately and adjust exercises in real-time."
+      answer: "Yes! Virtual lessons work well for all levels, from beginners to advanced competitors. I tailor the coaching to your current ability just as I would in person. For beginners, I provide clear explanations and step-by-step guidance. For advanced riders, I focus on refining technique and competition preparation. The live format allows me to answer questions immediately and adjust exercises in real-time."
     },
     {
       question: "How do I book a virtual riding lesson?",
-      answer: "You can book a virtual lesson by contacting Dan via WhatsApp at +44 7767 291713 or by clicking the 'Book a Virtual Lesson' button on this page. When booking, let Dan know you want a virtual session, and he'll help you schedule a time and ensure you have the necessary equipment setup. Sessions are arranged at times that work for your schedule and time zone."
+      answer: "You can book a virtual lesson by contacting me via WhatsApp at +44 7767 291713 or by clicking the 'Book a Virtual Lesson' button on this page. When booking, let me know you want a virtual session, and I'll help you schedule a time and ensure you have the necessary equipment setup. Sessions are arranged at times that work for your schedule and time zone."
     },
     {
       question: "Can I have virtual lessons if I'm outside the UK?",
-      answer: "Absolutely! Virtual lessons are available worldwide. Dan works with riders across different time zones and countries. As long as you have the necessary equipment and internet connection, you can access expert coaching regardless of your location. Many international riders benefit from Dan's expertise without the need for travel."
+      answer: "Absolutely! Virtual lessons are available worldwide. I work with riders across different time zones and countries. As long as you have the necessary equipment and internet connection, you can access expert coaching regardless of your location. Many international riders benefit from my expertise without the need for travel."
     },
     {
       question: "How long is a virtual riding lesson?",
-      answer: "Virtual riding lessons are typically 45-60 minutes, the same length as in-person sessions. This provides adequate time for warm-up, focused training, and cool-down without overworking your horse. The live format allows Dan to use the time efficiently, providing continuous feedback throughout your ride."
+      answer: "Virtual riding lessons are typically 45-60 minutes, the same length as in-person sessions. This provides adequate time for warm-up, focused training, and cool-down without overworking your horse. The live format allows me to use the time efficiently, providing continuous feedback throughout your ride."
     },
     {
       question: "What if my internet connection isn't perfect?",
-      answer: "While a stable internet connection is ideal, many riders successfully conduct virtual lessons with moderate internet speeds. The video streaming doesn't require extremely high bandwidth. If you can video call on your phone, you likely have sufficient connection. Dan is experienced in working with various connection qualities and can adapt coaching if there are occasional brief interruptions."
+      answer: "While a stable internet connection is ideal, many riders successfully conduct virtual lessons with moderate internet speeds. The video streaming doesn't require extremely high bandwidth. If you can video call on your phone, you likely have sufficient connection. I'm experienced in working with various connection qualities and can adapt coaching if there are occasional brief interruptions."
     },
     {
       question: "Can I record my virtual lesson for review later?",
-      answer: "Yes! Many riders record their virtual lessons so they can review Dan's feedback and watch their progress. If you're using a system like Pivo, it often has built-in recording features. Reviewing your lesson recording is a great way to reinforce learning and track improvement over time. Just let Dan know if you plan to record the session."
+      answer: "Yes! Many riders record their virtual lessons so they can review my feedback and watch their progress. If you're using a system like Pivo, it often has built-in recording features. Reviewing your lesson recording is a great way to reinforce learning and track improvement over time. Just let me know if you plan to record the session."
     }
   ];
 
@@ -204,7 +204,7 @@ export default function RemoteCoaching() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Virtual riding lessons use live video technology like{" "}
+                My virtual riding lessons use live video technology like{" "}
                 <a 
                   href="https://pivoequestrian.com" 
                   target="_blank" 
@@ -213,10 +213,10 @@ export default function RemoteCoaching() {
                 >
                   Pivo
                 </a>
-                {" "}to bring the Dan Bizzarro Method directly to riders worldwide. Dan watches you and your horse in real-time on his laptop while you wear earbuds to hear his coaching as you ride—just like an in-person lesson, but from anywhere in the world.
+                {" "}to bring the Dan Bizzarro Method directly to you. I watch you and your horse in real-time on my laptop while you wear earbuds to hear my coaching as you ride—just like an in-person lesson, but from anywhere in the world.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                This remote equestrian coaching format uses systems like{" "}
+                This remote coaching format uses systems like{" "}
                 <a 
                   href="https://pivoequestrian.com" 
                   target="_blank" 
@@ -225,10 +225,10 @@ export default function RemoteCoaching() {
                 >
                   Pivo
                 </a>
-                {" "}that automatically track and follow you as you ride, streaming live video to Dan. You hear his voice through wireless earbuds, receiving immediate corrections, encouragement, and technical guidance exactly when you need it. It's truly live coaching—not video submission and feedback.
+                {" "}that automatically track and follow you as you ride, streaming live video to me. You hear my voice through wireless earbuds, receiving immediate corrections, encouragement, and technical guidance exactly when you need it. It's truly live coaching—not video submission and feedback.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Whether you're an amateur rider building confidence or a competitor preparing for events, Dan provides real-time instruction across all disciplines—dressage, show jumping, cross country, and polework—from beginner to international level, all from your own training facility.
+                Whether you're an amateur rider building confidence or a competitor preparing for events, I provide real-time instruction across all disciplines—dressage, show jumping, cross country, and polework—from beginner to international level, all from your own training facility.
               </p>
               <div className="bg-orange/10 border-l-4 border-orange p-6 rounded-r-lg">
                 <p className="text-2xl font-playfair font-bold text-navy mb-2">£80 per session</p>
@@ -378,7 +378,7 @@ export default function RemoteCoaching() {
 
             <div className="bg-white rounded-xl p-6 shadow-md">
               <h4 className="font-bold text-navy mb-3">Wireless Earbuds</h4>
-              <p className="text-dark">Any Bluetooth earbuds that stay secure while riding so you can hear Dan's coaching</p>
+              <p className="text-dark">Any Bluetooth earbuds that stay secure while riding so you can hear my coaching</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-md">

@@ -67,15 +67,15 @@ export default function GroupClinics() {
     },
     {
       question: "What types of clinics do you offer?",
-      answer: "We offer show jumping clinics, polework clinics, and cross country clinics in Oxfordshire. Each clinic focuses on specific skills—show jumping clinics work on technique and course work, polework clinics develop rhythm and balance through gymnastic exercises, and cross country clinics build confidence over natural obstacles. All clinics are designed as single-day training sessions with multiple sessions for different experience levels."
+      answer: "I offer show jumping clinics, polework clinics, and cross country clinics in Oxfordshire. Each clinic focuses on specific skills—show jumping clinics work on technique and course work, polework clinics develop rhythm and balance through gymnastic exercises, and cross country clinics build confidence over natural obstacles. All clinics are designed as single-day training sessions with multiple sessions for different experience levels."
     },
     {
       question: "What skill levels attend your clinics?",
-      answer: "Clinics cater to all levels from beginners to advanced competitors. Each clinic day typically has multiple sessions organised by skill level—for example, beginner/novice sessions, intermediate sessions, and advanced sessions. When registering, you select the session that matches your current experience level. This ensures everyone rides with others at a similar ability, creating a supportive and effective learning environment."
+      answer: "My clinics cater to all levels from beginners to advanced competitors. Each clinic day typically has multiple sessions organised by skill level—for example, beginner/novice sessions, intermediate sessions, and advanced sessions. When registering, you select the session that matches your current experience level. This ensures everyone rides with others at a similar ability, creating a supportive and effective learning environment."
     },
     {
       question: "How many riders are in each clinic session?",
-      answer: "We keep group sizes small to ensure individual attention from Dan. Most sessions have a maximum of 3-4 riders, depending on the specific clinic and discipline. This allows Dan to work with each rider personally while still providing the benefits of group learning—watching others, shared feedback, and a supportive atmosphere. The smaller group size distinguishes our clinics from larger group lessons."
+      answer: "I keep group sizes small to ensure individual attention. Most sessions have a maximum of 3-4 riders, depending on the specific clinic and discipline. This allows me to work with each rider personally while still providing the benefits of group learning—watching others, shared feedback, and a supportive atmosphere. The smaller group size distinguishes my clinics from larger group lessons."
     },
     {
       question: "Where are clinics held?",
@@ -87,7 +87,7 @@ export default function GroupClinics() {
     },
     {
       question: "What should I bring to a clinic?",
-      answer: "Bring your horse properly groomed and with appropriate tack for the discipline (jumping tack for show jumping/polework, cross country equipment for XC clinics). Your horse should have proper protective boots or wraps. You'll need a properly fitted riding helmet (safety-certified), riding boots, gloves if preferred, and water for both you and your horse. Dan will provide expert coaching and may use video analysis during the session."
+      answer: "Bring your horse properly groomed and with appropriate tack for the discipline (jumping tack for show jumping/polework, cross country equipment for XC clinics). Your horse should have proper protective boots or wraps. You'll need a properly fitted riding helmet (safety-certified), riding boots, gloves if preferred, and water for both you and your horse. I'll provide expert coaching and may use video analysis during the session."
     },
     {
       question: "Can I register for multiple sessions in one clinic?",
@@ -95,15 +95,15 @@ export default function GroupClinics() {
     },
     {
       question: "What if my horse is young or inexperienced?",
-      answer: "Young and inexperienced horses are welcome at appropriate skill-level sessions. When registering, choose the beginner or novice session that matches your horse's experience. Dan is experienced in working with young horses and will ensure exercises are suitable for their development level. The group format actually helps young horses by exposing them to other horses in a controlled training environment."
+      answer: "Young and inexperienced horses are welcome at appropriate skill-level sessions. When registering, choose the beginner or novice session that matches your horse's experience. I'm experienced in working with young horses and will ensure exercises are suitable for their development level. The group format actually helps young horses by exposing them to other horses in a controlled training environment."
     },
     {
       question: "Do I earn loyalty rewards for attending clinics?",
-      answer: "Yes! The Dan Bizzarro Method offers a loyalty rewards program for clinic participants. You earn points for every clinic you attend, and after every 5 clinic registrations, you receive a 15% discount code for future clinics. It's our way of rewarding dedicated riders who regularly train with us. You can check your loyalty status and points on the website."
+      answer: "Yes! I offer a loyalty rewards program for clinic participants. You earn points for every clinic you attend, and after every 5 clinic registrations, you receive a 15% discount code for future clinics. It's my way of rewarding dedicated riders who regularly train with me. You can check your loyalty status and points on the website."
     },
     {
       question: "What is your cancellation policy for clinics?",
-      answer: "Cancellation policies vary by clinic and are detailed in the Terms & Conditions when you register. Generally, cancellations made well in advance may receive refunds or credit towards future clinics, while late cancellations may forfeit payment. This policy ensures fairness to all participants and allows us to plan appropriately. Specific details are always provided before you complete your registration."
+      answer: "Cancellation policies vary by clinic and are detailed in the Terms & Conditions when you register. Generally, cancellations made well in advance may receive refunds or credit towards future clinics, while late cancellations may forfeit payment. This policy ensures fairness to all participants and allows me to plan appropriately. Specific details are always provided before you complete your registration."
     },
     {
       question: "Can spectators attend clinics?",
@@ -162,7 +162,7 @@ export default function GroupClinics() {
               <h2 className="text-3xl font-playfair font-bold text-navy mb-2">
                 Upcoming Clinics
               </h2>
-              <p className="text-gray-600">Join us at our next training sessions</p>
+              <p className="text-gray-600">Join me at my next training sessions</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
@@ -237,12 +237,12 @@ export default function GroupClinics() {
           
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-lg text-dark leading-relaxed mb-6">Our group clinics offer specialised training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels, whether you ride for pleasure or competition.</p>
+              <p className="text-lg text-dark leading-relaxed mb-6">My group clinics offer specialised training in show jumping, polework, and cross country. These single-day sessions welcome riders from beginner to advanced levels, whether you ride for pleasure or competition.</p>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Each clinic focuses on the Dan Bizzarro Method, combining technical instruction with practical application. With small group sizes, you receive personalised feedback while benefiting from watching fellow riders tackle similar challenges.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Our equestrian lessons in Oxfordshire cater to both amateur riders building confidence and competitors preparing for events. From foundational polework clinics to advanced show-jumping and cross country sessions, there's a clinic designed for your goals.
+                My clinics cater to both amateur riders building confidence and competitors preparing for events. From foundational polework clinics to advanced show-jumping and cross country sessions, there's a clinic designed for your goals.
               </p>
             </div>
 
@@ -322,7 +322,7 @@ export default function GroupClinics() {
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-6"></div>
             <p className="text-lg text-dark max-w-3xl mx-auto">
-              Join our loyalty programme! Earn 10 points per clinic entry and bonus points for referring friends. 
+              Join my loyalty programme! Earn 10 points per clinic entry and bonus points for referring friends. 
               Every 50 points unlocks a 20% discount code. The top 5 riders win prizes—first reset 30 June 2025, then bi-annually!
             </p>
           </div>
@@ -340,7 +340,7 @@ export default function GroupClinics() {
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
             <p className="text-lg text-dark">
-              Everything you need to know about our show jumping, polework, and cross country clinics
+              Everything you need to know about my show jumping, polework, and cross country clinics
             </p>
           </div>
 
@@ -366,7 +366,7 @@ export default function GroupClinics() {
       <section className="py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
-            Join Our Next Clinic
+            Join My Next Clinic
           </h2>
           <p className="text-xl mb-8 text-gray-200">
             Book your Competition Preparation Clinic or join a training session for all levels

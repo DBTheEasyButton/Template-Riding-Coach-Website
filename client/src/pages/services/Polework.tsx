@@ -69,7 +69,7 @@ export default function Polework() {
     },
     {
       question: "Is polework suitable for horses that don't jump?",
-      answer: "Absolutely! Polework benefits all horses, regardless of whether they jump. Dressage horses use polework to develop engagement, improve rhythm, and build strength. Flatwork horses benefit from the variety and physical demands poles provide. Even pleasure horses become more balanced and athletic through pole exercises. Dan designs polework sessions appropriate for any discipline and any horse's job—jumping experience not required."
+      answer: "Absolutely! Polework benefits all horses, regardless of whether they jump. Dressage horses use polework to develop engagement, improve rhythm, and build strength. Flatwork horses benefit from the variety and physical demands poles provide. Even pleasure horses become more balanced and athletic through pole exercises. I design polework sessions appropriate for any discipline and any horse's job—jumping experience not required."
     },
     {
       question: "How is polework different from regular jumping?",
@@ -77,27 +77,27 @@ export default function Polework() {
     },
     {
       question: "What are gymnastic grid exercises?",
-      answer: "Gymnastic grids are sequences of ground poles or low fences set at specific distances that guide the horse through without requiring rider adjustment. Grids teach horses to think, react, adjust their stride, and develop better jumping technique. For riders, grids improve position, timing, and feel without the pressure of decision-making. Dan uses progressive grid work as a foundation for all jumping training, developing skills that translate directly to course work and cross country."
+      answer: "Gymnastic grids are sequences of ground poles or low fences set at specific distances that guide the horse through without requiring rider adjustment. Grids teach horses to think, react, adjust their stride, and develop better jumping technique. For riders, grids improve position, timing, and feel without the pressure of decision-making. I use progressive grid work as a foundation for all jumping training, developing skills that translate directly to course work and cross country."
     },
     {
       question: "Can polework help with rhythm problems?",
-      answer: "Yes! Polework is one of the most effective tools for developing rhythm. The poles create consistent visual references that help horses find and maintain tempo. Regular spacing between poles encourages steady rhythm. Riders develop better feel for consistent pace. Dan designs pole exercises specifically targeting rhythm issues—whether horses rush, slow down, or lack consistency. Progressive polework builds the muscle memory and mental understanding for reliable rhythm in all gaits."
+      answer: "Yes! Polework is one of the most effective tools for developing rhythm. The poles create consistent visual references that help horses find and maintain tempo. Regular spacing between poles encourages steady rhythm. Riders develop better feel for consistent pace. I design pole exercises specifically targeting rhythm issues—whether horses rush, slow down, or lack consistency. Progressive polework builds the muscle memory and mental understanding for reliable rhythm in all gaits."
     },
     {
       question: "Is polework suitable for young or green horses?",
-      answer: "Polework is ideal for young and green horses! It provides controlled, systematic introduction to obstacles, develops coordination and balance, builds confidence through achievable challenges, strengthens muscles safely, and teaches horses to think and problem-solve. Dan uses polework to develop young horses' foundations without the physical demands of full jumping. Starting horses correctly with polework creates confident, capable athletes ready for more advanced work."
+      answer: "Polework is ideal for young and green horses! It provides controlled, systematic introduction to obstacles, develops coordination and balance, builds confidence through achievable challenges, strengthens muscles safely, and teaches horses to think and problem-solve. I use polework to develop young horses' foundations without the physical demands of full jumping. Starting horses correctly with polework creates confident, capable athletes ready for more advanced work."
     },
     {
       question: "How often should I do polework training?",
-      answer: "Polework can be incorporated more frequently than full jumping sessions because it's lower impact. Many horses benefit from polework 2-3 times per week as part of varied training. The exact frequency depends on your horse's fitness, your training goals, and what other work you're doing. Dan helps riders design balanced training programs that include polework alongside flatwork and jumping, ensuring horses stay fresh, sound, and progressing."
+      answer: "Polework can be incorporated more frequently than full jumping sessions because it's lower impact. Many horses benefit from polework 2-3 times per week as part of varied training. The exact frequency depends on your horse's fitness, your training goals, and what other work you're doing. I help riders design balanced training programs that include polework alongside flatwork and jumping, ensuring horses stay fresh, sound, and progressing."
     },
     {
       question: "Can I learn polework through virtual lessons?",
-      answer: "Yes! Polework is excellent for virtual lessons using live video systems like Pivo. Dan can clearly see the quality of movement, rhythm, and technique through video, and coach you in real-time through earbuds. Setting up basic pole patterns is straightforward, making polework accessible for home training with virtual coaching. This makes expert polework instruction available to riders worldwide, regardless of location."
+      answer: "Yes! Polework is excellent for virtual lessons using live video systems like Pivo. I can clearly see the quality of movement, rhythm, and technique through video, and coach you in real-time through earbuds. Setting up basic pole patterns is straightforward, making polework accessible for home training with virtual coaching. This makes expert polework instruction available to riders worldwide, regardless of location."
     },
     {
       question: "Do I need special equipment for polework?",
-      answer: "The basic equipment needed is simple—ground poles (usually 8-12 feet long), pole supports or blocks if you want to raise them, and a safe arena or working area. Most riders already have access to poles at their yard. Dan can design effective exercises with minimal equipment. As you progress, additional poles allow more complex patterns, but you can achieve excellent results with just 4-6 poles to start."
+      answer: "The basic equipment needed is simple—ground poles (usually 8-12 feet long), pole supports or blocks if you want to raise them, and a safe arena or working area. Most riders already have access to poles at their yard. I can design effective exercises with minimal equipment. As you progress, additional poles allow more complex patterns, but you can achieve excellent results with just 4-6 poles to start."
     },
     {
       question: "How does polework improve jumping technique?",
@@ -105,7 +105,7 @@ export default function Polework() {
     },
     {
       question: "Can polework help with confidence issues?",
-      answer: "Definitely! Polework provides achievable challenges that build confidence incrementally. Horses learn they can handle obstacles safely, develop problem-solving skills, gain physical strength that creates confidence, and experience success regularly. For nervous horses or riders, polework offers a controlled, low-stress way to develop boldness. Dan uses progressive polework to rebuild confidence in horses that have lost trust, creating positive experiences that carry forward to more challenging work."
+      answer: "Definitely! Polework provides achievable challenges that build confidence incrementally. Horses learn they can handle obstacles safely, develop problem-solving skills, gain physical strength that creates confidence, and experience success regularly. For nervous horses or riders, polework offers a controlled, low-stress way to develop boldness. I use progressive polework to rebuild confidence in horses that have lost trust, creating positive experiences that carry forward to more challenging work."
     }
   ];
 
@@ -176,10 +176,10 @@ export default function Polework() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our professional polework training in Oxfordshire combines systematic pole exercises with expert coaching to develop rhythm, balance, and jumping technique. As an international eventing coach, Dan Bizzarro uses grid work and gymnastic pole exercises to create confident, adjustable horses and riders across all eventing disciplines.
+                My polework training in Oxfordshire combines systematic pole exercises with expert coaching to develop rhythm, balance, and jumping technique. As an international eventing coach, I use grid work and gymnastic pole exercises to create confident, adjustable horses and riders across all eventing disciplines.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Polework coaching is available in multiple formats: specialised polework clinics for group learning, private lessons for personalised grid work instruction, and live virtual coaching sessions where Dan watches you in real-time via video systems like{" "}
+                I offer polework coaching in multiple formats: specialised polework clinics for group learning, private lessons for personalised grid work instruction, and live virtual coaching sessions where I watch you in real-time via video systems like{" "}
                 <a 
                   href="https://pivoequestrian.com" 
                   target="_blank" 
@@ -188,10 +188,10 @@ export default function Polework() {
                 >
                   Pivo
                 </a>
-                {" "}while you wear earbuds to hear his coaching. This flexibility ensures every rider—from complete beginners to international competitors—can access expert pole work training.
+                {" "}while you wear earbuds to hear my coaching. This flexibility ensures every rider—from complete beginners to international competitors—can access expert pole work training.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Whether you're an amateur rider building foundational balance through ground poles or a competitive eventer refining jumping technique with advanced gymnastic grids, our equestrian polework coaching in Oxfordshire delivers systematic training that improves rhythm, suppleness, and overall performance in dressage, show jumping, and cross country.
+                Whether you're an amateur rider building foundational balance through ground poles or a competitive eventer refining jumping technique with advanced gymnastic grids, my polework coaching delivers systematic training that improves rhythm, suppleness, and overall performance in dressage, show jumping, and cross country.
               </p>
             </div>
 
@@ -347,7 +347,7 @@ export default function Polework() {
               </div>
               <h3 className="text-2xl font-playfair font-bold text-navy mb-4 text-center">Live Virtual Polework</h3>
               <p className="text-dark mb-4 text-center leading-relaxed">
-                Dan coaches you live via video (like{" "}
+                I coach you live via video (like{" "}
                 <a 
                   href="https://pivoequestrian.com" 
                   target="_blank" 
@@ -356,7 +356,7 @@ export default function Polework() {
                 >
                   Pivo
                 </a>
-                ) while you ride. Hear him through earbuds in real-time
+                ) while you ride. Hear me through earbuds in real-time
               </p>
               <p className="text-2xl font-playfair font-bold text-navy mb-4 text-center">£80 per session</p>
               <div className="text-center">

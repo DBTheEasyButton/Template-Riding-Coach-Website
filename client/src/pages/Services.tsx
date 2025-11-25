@@ -106,13 +106,13 @@ export default function Services() {
                 <div className="w-24 h-1 bg-orange mb-8"></div>
               </div>
               <p className="text-lg text-dark leading-relaxed">
-                With over 20 years of international competition experience and a passion for helping riders communicate better with their horses, Dan brings unparalleled expertise to every training session. His proven methodology has helped riders at all levels achieve their competitive goals.
+                With over 20 years of international competition experience and a passion for helping riders communicate better with their horses, I bring unparalleled expertise to every training session. My proven methodology has helped riders at all levels achieve their competitive goals.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Dan offers comprehensive instruction across all three eventing disciplines: <strong>flat work</strong> for foundation and dressage development, <strong>jumping</strong> for technique and confidence, and <strong>cross-country</strong> for boldness and precision over natural obstacles.
+                I offer comprehensive instruction across all three eventing disciplines: <strong>flat work</strong> for foundation and dressage development, <strong>jumping</strong> for technique and confidence, and <strong>cross-country</strong> for boldness and precision over natural obstacles.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Whether you're just starting your equestrian journey or aiming for international competition, Dan's personalised approach ensures every rider reaches their full potential.
+                Whether you're just starting your equestrian journey or aiming for international competition, my personalised approach ensures every rider reaches their full potential.
               </p>
               
               <div className="grid grid-cols-2 gap-6">
