@@ -201,73 +201,84 @@ export default function TenPointsBetter() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
-        {/* Hero Background Image */}
-        <div className="absolute inset-0">
-          <HeroPicture
-            jpegSrc={dressageHeroJpg}
-            webpSrc={dressageHeroWebp}
-            alt="Dressage rider performing a precise movement in the arena - the Dan Bizzarro Method transforms your test scores"
-            loading="eager"
-            priority={true}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/80 to-navy/70"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20 lg:py-32">
-          <div className="text-center max-w-4xl mx-auto">
+      <section className="relative bg-navy overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+          {/* Top: Badge and Title (centered) */}
+          <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-orange/20 text-orange px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Headphones className="w-4 h-4" />
               <span>Audio Course • Coming Early 2026</span>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
               Become <span className="text-orange">10 Points Better</span> in Your Next Dressage Test
             </h1>
-            
-            <p className="text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
-              An 8-lesson audio course designed for Starter–Novice eventing riders to master geometry, transitions, straightness and show preparation—whilst you're actually in the saddle.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button 
-                size="lg" 
-                className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
-                onClick={() => scrollToSection('pricing')}
-                data-testid="button-hero-cta"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Join the Waitlist
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6"
-                onClick={() => scrollToSection('lessons')}
-                data-testid="button-see-lessons"
-              >
-                See What's Inside
-              </Button>
+          </div>
+          
+          {/* Bottom: Two-column layout */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left: Description, buttons, and features */}
+            <div className="space-y-8">
+              <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed">
+                An 8-lesson audio course designed for Starter–Novice eventing riders to master geometry, transitions, straightness and show preparation—whilst you're actually in the saddle.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  size="lg" 
+                  className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
+                  onClick={() => scrollToSection('pricing')}
+                  data-testid="button-hero-cta"
+                >
+                  <Play className="w-5 h-5 mr-2" />
+                  Join the Waitlist
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6"
+                  onClick={() => scrollToSection('lessons')}
+                  data-testid="button-see-lessons"
+                >
+                  See What's Inside
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 text-gray-400 text-sm">
+                <div className="flex items-center gap-2">
+                  <Headphones className="w-4 h-4" />
+                  <span>6 Mounted Ride-Alongs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  <span>2 Unmounted Lectures</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Download className="w-4 h-4" />
+                  <span>Downloadable Diagrams</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>Lifetime Access</span>
+                </div>
+              </div>
             </div>
             
-            <div className="flex flex-wrap justify-center gap-6 text-gray-400 text-sm">
-              <div className="flex items-center gap-2">
-                <Headphones className="w-4 h-4" />
-                <span>6 Mounted Ride-Alongs</span>
+            {/* Right: Hero Image */}
+            <div className="relative">
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
+                <HeroPicture
+                  jpegSrc={dressageHeroJpg}
+                  webpSrc={dressageHeroWebp}
+                  alt="Dressage rider performing a precise movement in the arena - the Dan Bizzarro Method transforms your test scores"
+                  loading="eager"
+                  priority={true}
+                  className="w-full h-auto object-cover aspect-[4/3]"
+                />
               </div>
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4" />
-                <span>2 Unmounted Lectures</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                <span>Downloadable Diagrams</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span>Lifetime Access</span>
-              </div>
+              {/* Decorative accent */}
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-orange/20 rounded-full blur-2xl"></div>
+              <div className="absolute -top-4 -left-4 w-32 h-32 bg-orange/10 rounded-full blur-3xl"></div>
             </div>
           </div>
         </div>
