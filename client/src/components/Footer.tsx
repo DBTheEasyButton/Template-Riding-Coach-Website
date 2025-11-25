@@ -137,7 +137,19 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Contact</h3>
+            <h3 className="font-semibold mb-4">Courses</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link 
+                  href="/courses/10-points-better"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                  data-testid="link-footer-10-points-better"
+                >
+                  10 Points Better
+                </Link>
+              </li>
+            </ul>
+            <h3 className="font-semibold mb-4 mt-6">Contact</h3>
             <ul className="space-y-2 text-gray-300">
               <li>Crown Farm</li>
               <li>Ascott-Under-Wychwood</li>
