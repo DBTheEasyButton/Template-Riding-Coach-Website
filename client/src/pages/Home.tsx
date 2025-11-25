@@ -79,21 +79,16 @@ export default function Home() {
       <StructuredData type="Organization" data={organizationData} />
       <StructuredData type="Website" data={websiteData} />
       <StructuredData type="LocalBusiness" data={localBusinessData} />
-      
       <Navigation />
       <HeroSection />
-      
       <Suspense fallback={<SectionSkeleton />}>
         <TestimonialsSection />
       </Suspense>
-      
       <Suspense fallback={<SectionSkeleton />}>
         <ClinicsSection />
       </Suspense>
-      
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
-      
       {/* About Preview Section */}
       <section id="about" className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -158,10 +153,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
-
       {/* What is the Dan Bizzarro Method Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
@@ -206,9 +199,7 @@ export default function Home() {
           </div>
           
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10 max-w-4xl mx-auto">
-            <p className="text-dark leading-relaxed mb-4">
-              The method comes from years of riding every type of horse—easy ones, tricky ones, sharp ones, and everything in between—and coaching thousands of riders at all levels.
-            </p>
+            <p className="text-dark leading-relaxed mb-4">The method comes from years of riding every type of horse, easy ones, tricky ones, sharp ones, and everything in between, and coaching thousands of riders at all levels.</p>
             <p className="text-dark leading-relaxed mb-4">
               It blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood.
             </p>
@@ -218,10 +209,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
-
       {/* Services Preview Section */}
       <section id="coaching" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
@@ -281,10 +270,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
-
       {/* News Preview Section */}
       <section id="news" className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -328,25 +315,19 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
-
       <Suspense fallback={<SectionSkeleton height="500px" />}>
         <PodcastSection />
       </Suspense>
-
       <Suspense fallback={<SectionSkeleton height="300px" />}>
         <SponsorsSection />
       </Suspense>
-      
       <Suspense fallback={<SectionSkeleton height="400px" />}>
         <NewsletterSubscription />
       </Suspense>
-      
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
-      
       {/* Contact CTA Section */}
       <section id="contact" className="py-12 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -363,7 +344,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
       <Footer />
     </div>
   );
