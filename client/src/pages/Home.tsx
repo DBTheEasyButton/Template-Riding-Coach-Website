@@ -162,6 +162,25 @@ export default function Home() {
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
 
+      {/* What is the Dan Bizzarro Method Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">What is the Dan Bizzarro Method?</h2>
+            <div className="w-24 h-1 bg-orange mx-auto"></div>
+          </div>
+          
+          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+            <p className="text-lg md:text-xl text-dark leading-relaxed">
+              The Dan Bizzarro Method is a simple, structured way of helping horses and riders understand each other better. It comes from years of riding every type of horse—easy ones, tricky ones, sharp ones, and everything in between—and coaching thousands of riders at all levels. The focus is always on clarity, confidence, and communication. Riders learn how to give clear instructions, horses learn how to respond without tension, and both start to enjoy the work more. The method blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood. Whether someone rides for fun or wants to be competitive, the goal is always the same: make riding easier to understand, build a partnership that feels good, and help people get the results they want without overcomplicating things.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="border-t-4 border-orange"></div>
+
       {/* Services Preview Section */}
       <section id="coaching" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
