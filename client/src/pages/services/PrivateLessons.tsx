@@ -125,10 +125,10 @@ export default function PrivateLessons() {
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
-            <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
+            <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4 drop-shadow-lg">
               Private Horse Riding Lessons in Oxfordshire
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 mb-6">
