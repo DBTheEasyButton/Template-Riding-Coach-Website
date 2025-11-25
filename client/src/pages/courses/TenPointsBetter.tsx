@@ -85,12 +85,12 @@ export default function TenPointsBetter() {
   };
 
   const painPoints = [
-    "Struggling to maintain straightness and accuracy through movements",
-    "Circles and corners that never quite look how you planned them",
-    "Unclear understanding of exactly what judges are looking for",
-    "Pre-test nerves that undermine your preparation",
-    "No structured warm-up routine that actually works",
-    "Losing easy points on simple movements you've practised a thousand times"
+    "You feel like you try your hardest but never seem to get the result you want in dressage.",
+    "You've trained for hours, but transitions still feel rushed or sluggish.",
+    "You've memorised the test, but the moment you enter the ring, nerves undo your preparation.",
+    'You hear "more impulsion" or "needs balance" but don\'t know how to fix it.',
+    "Your warm-ups always feel rushed, you can't find a routine that actually settles you in.",
+    "You struggle to maintain straightness and accuracy through your dressage movements."
   ];
 
   const lessons = [
@@ -387,23 +387,17 @@ export default function TenPointsBetter() {
       {/* Pain Points Section */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-6">
+          <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-8">
             Sound Familiar?
           </h2>
-          
-          <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
-            Without proper guidance, amateur riders often lose easy points on movements they've practised hundreds of times. The frustration builds, confidence drops, and scores stay stuck.
-          </p>
           
           <div className="grid sm:grid-cols-2 gap-4 text-left">
             {painPoints.map((point, index) => (
               <div 
                 key={index}
-                className="flex items-start gap-3 p-4 bg-red-50 rounded-lg border border-red-100"
+                className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200"
               >
-                <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-red-500 text-sm">✕</span>
-                </div>
+                <span className="text-xl flex-shrink-0 mt-0.5">✅</span>
                 <p className="text-gray-700">{point}</p>
               </div>
             ))}
