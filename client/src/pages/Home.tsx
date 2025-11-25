@@ -11,6 +11,7 @@ import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
+import coachingClinicPhoto from "@assets/optimized/coaching-clinic.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -94,42 +95,63 @@ export default function Home() {
       <div className="border-t-4 border-orange"></div>
       
       {/* About Preview Section */}
-      <section id="about" className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">About Dan</h2>
-                <div className="w-24 h-1 bg-orange mb-8"></div>
-              </div>
-              <p className="text-lg text-dark leading-relaxed">
-                Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
-              </p>
-              <p className="text-lg text-dark leading-relaxed">
-                This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
-              </p>
-              <p className="text-lg text-dark leading-relaxed">
-                Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
-              </p>
-              <p className="text-lg text-dark leading-relaxed">
-                My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
-              </p>
-              <div className="pt-6">
-                <Link href="/about">
-                  <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
-                    Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
+      <section id="about" className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">About Dan</h2>
+            <div className="w-24 h-1 bg-orange mx-auto"></div>
+          </div>
+          
+          {/* First row: Image left, text right */}
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="relative">
               <img 
                 src={danPhotoPath} 
-                alt="International eventing coach Dan Bizzarro with his competition horse, showcasing their partnership and training expertise" 
-                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                alt="Dan Bizzarro - International Event Rider and Coach"
+                className="rounded-2xl shadow-2xl w-full"
                 loading="lazy"
               />
             </div>
+            
+            <div className="space-y-6 text-lg text-dark leading-relaxed">
+              <p>
+                Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
+              </p>
+              
+              <p>
+                This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+              </p>
+            </div>
+          </div>
+          
+          {/* Second row: Text left, image right */}
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+            <div className="space-y-6 text-lg text-dark leading-relaxed">
+              <p>
+                Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
+              </p>
+              
+              <p>
+                My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
+              </p>
+            </div>
+            
+            <div className="relative">
+              <img 
+                src={coachingClinicPhoto} 
+                alt="Dan Bizzarro coaching a rider during a clinic session"
+                className="rounded-2xl shadow-2xl w-full"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          
+          <div className="text-center pt-6">
+            <Link href="/about">
+              <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
+                Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
