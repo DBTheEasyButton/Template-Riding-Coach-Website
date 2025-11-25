@@ -6,6 +6,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Award, TrendingUp } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -155,6 +156,8 @@ export default function Dressage() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

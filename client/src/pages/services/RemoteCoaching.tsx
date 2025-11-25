@@ -6,6 +6,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -187,6 +188,8 @@ export default function RemoteCoaching() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

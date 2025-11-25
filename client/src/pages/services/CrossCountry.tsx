@@ -6,6 +6,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Zap, Heart, Shield } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import crossCountryHeroJpg from "@assets/optimized/cross-country-hero.jpg";
 import crossCountryHeroWebp from "@assets/optimized/cross-country-hero.webp";
 import crossCountryClinicJpg from "@assets/optimized/cross-country-clinic.jpg";
@@ -157,6 +158,8 @@ export default function CrossCountry() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

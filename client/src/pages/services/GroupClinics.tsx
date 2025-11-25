@@ -8,6 +8,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Calendar, Check, Users, Award, Target, MapPin, Clock } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import clinicsHeroJpg from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
 import clinicsHeroWebp from "@assets/optimized/DBCLINIC-83_1762928005686.webp";
 import { useQuery } from "@tanstack/react-query";
@@ -150,6 +151,9 @@ export default function GroupClinics() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
+
       {/* Next 3 Upcoming Clinics */}
       {upcomingClinics.length > 0 && (
         <section className="py-12 bg-gray-50">

@@ -6,6 +6,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Users, Check, Calendar, Target, Award } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import privateLessonHeroJpg from "@assets/optimized/DBCLINIC-28_1762927604781.jpg";
 import privateLessonHeroWebp from "@assets/optimized/DBCLINIC-28_1762927604781.webp";
 import privateLessonClinicJpg from "@assets/optimized/private-lessons-clinic.jpg";
@@ -146,6 +147,8 @@ export default function PrivateLessons() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

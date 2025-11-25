@@ -6,6 +6,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Award, Check, Zap, TrendingUp } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import showJumpingHeroJpg from "@assets/optimized/show-jumping-hero.jpg";
 import showJumpingHeroWebp from "@assets/optimized/show-jumping-hero.webp";
 import showJumpingClinicJpg from "@assets/optimized/show-jumping-clinic.jpg";
@@ -157,6 +158,8 @@ export default function ShowJumping() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

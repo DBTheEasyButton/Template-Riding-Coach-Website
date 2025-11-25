@@ -6,6 +6,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Target, Check, Zap, TrendingUp, Calendar } from "lucide-react";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import poleworkHeroJpg from "@assets/optimized/polework-hero.jpg";
 import poleworkHeroWebp from "@assets/optimized/polework-hero.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -159,6 +160,8 @@ export default function Polework() {
           </div>
         </div>
       </section>
+
+      <TestimonialStrip />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">
