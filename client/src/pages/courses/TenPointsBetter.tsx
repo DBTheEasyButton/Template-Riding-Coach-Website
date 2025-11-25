@@ -411,6 +411,33 @@ export default function TenPointsBetter() {
         </div>
       </section>
 
+      {/* About Me Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-8 text-center">
+            About Me
+          </h2>
+          
+          <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+            <p>
+              Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
+            </p>
+            
+            <p>
+              This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+            </p>
+            
+            <p>
+              Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
+            </p>
+            
+            <p>
+              My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Lessons Section */}
       <section id="lessons" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
