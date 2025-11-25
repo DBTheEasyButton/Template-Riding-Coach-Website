@@ -114,11 +114,13 @@ export default function Home() {
               <p className="text-lg text-dark leading-relaxed">
                 My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
               </p>
-              <Link href="/about">
-                <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
-                  Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
+              <div className="pt-6">
+                <Link href="/about">
+                  <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
+                    Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+              </div>
             </div>
             <div className="relative">
               <img 
