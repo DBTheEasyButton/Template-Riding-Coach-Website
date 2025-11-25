@@ -98,7 +98,7 @@ export default function Home() {
       <section id="about" className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Let Me Explain</h2>
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">My Mission Is Simple</h2>
             <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
           
