@@ -56,10 +56,10 @@ export default function TestimonialStrip({ maxItems = 3, className = "", customT
               className="bg-white rounded-lg p-4 shadow-sm border border-gray-100"
             >
               <div className="flex items-start gap-2">
-                <Quote className="w-4 h-4 text-orange flex-shrink-0 mt-0.5 opacity-60" />
+                <Quote className="w-3 h-3 text-orange flex-shrink-0 mt-0.5 opacity-60" />
                 <div className="flex-1 min-w-0">
                   <p 
-                    className="text-sm text-gray-700 italic leading-relaxed line-clamp-2"
+                    className="text-xs text-gray-700 italic leading-relaxed"
                   >
                     "{testimonial.content}"
                   </p>
