@@ -130,10 +130,6 @@ export default function Home() {
               <p>
                 Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
               </p>
-              
-              <p>
-                My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
-              </p>
             </div>
             
             <div className="relative">
@@ -146,7 +142,14 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="text-center pt-6">
+          {/* Highlighted Mission Statement */}
+          <div className="mt-8 mb-12 p-8 bg-gradient-to-r from-orange/10 to-navy/10 rounded-2xl border-l-4 border-orange">
+            <p className="text-xl md:text-2xl font-medium text-navy text-center italic leading-relaxed">
+              "My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together."
+            </p>
+          </div>
+          
+          <div className="text-center">
             <Link href="/about">
               <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
                 Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
