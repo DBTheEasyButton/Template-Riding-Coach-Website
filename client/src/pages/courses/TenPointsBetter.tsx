@@ -366,7 +366,8 @@ export default function TenPointsBetter() {
             About Me
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* First row: Image left, text right */}
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="relative">
               <img 
                 src={danPhotoPath} 
@@ -383,7 +384,12 @@ export default function TenPointsBetter() {
               <p>
                 This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
               </p>
-              
+            </div>
+          </div>
+          
+          {/* Second row: Text left, image right */}
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
               <p>
                 Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
               </p>
@@ -391,6 +397,14 @@ export default function TenPointsBetter() {
               <p>
                 My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
               </p>
+            </div>
+            
+            <div className="relative">
+              <img 
+                src="/attached_assets/DBCLINIC-28_1764067051591.JPG" 
+                alt="Dan Bizzarro coaching a rider during a clinic session"
+                className="rounded-2xl shadow-2xl w-full"
+              />
             </div>
           </div>
         </div>
