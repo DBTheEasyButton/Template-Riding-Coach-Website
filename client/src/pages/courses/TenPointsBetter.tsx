@@ -35,7 +35,7 @@ import {
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
-const coachingClinicPhoto = "/attached_assets/DBCLINIC-28_1764067051591.JPG";
+import coachingClinicPhoto from "@assets/optimized/coaching-clinic.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 export default function TenPointsBetter() {
