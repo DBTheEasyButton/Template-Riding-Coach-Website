@@ -504,9 +504,9 @@ export default function TenPointsBetter() {
               <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
                 <Target className="w-6 h-6 text-orange" />
               </div>
-              <h3 className="text-xl font-bold text-navy mb-3">Instant Muscle Memory</h3>
+              <h3 className="text-xl font-bold text-navy mb-3">Save Money and Time</h3>
               <p className="text-gray-700">
-                When you practise something while hearing the instruction, your body learns faster. You're not trying to remember what you saw yesterday—you're applying it right now, in the saddle.
+                Pop in your earbuds and have a lesson whenever and wherever suits you. Early morning, late evening, weekends—it's up to you. Replay each lesson as often as you like without paying a penny more.
               </p>
             </div>
           </div>
