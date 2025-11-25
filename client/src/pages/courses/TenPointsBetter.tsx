@@ -1,6 +1,4 @@
 import { Link } from "wouter";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
@@ -198,8 +196,6 @@ export default function TenPointsBetter() {
         preloadImageJpeg={dressageHeroJpg}
       />
       
-      <Navigation />
-      
       {/* Hero Section */}
       <section className="relative bg-navy overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
@@ -220,7 +216,7 @@ export default function TenPointsBetter() {
             {/* Left: Description, buttons, and features */}
             <div className="space-y-8">
               <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed">
-                An 8-lesson audio course designed for Starter–Novice eventing riders to master geometry, transitions, straightness and show preparation—whilst you're actually in the saddle.
+                An 8-lesson audio course designed for Starter - Novice eventing riders to master transitions, straightness, suppleness, accuracy and show preparation - whilst you're actually in the saddle.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -235,8 +231,7 @@ export default function TenPointsBetter() {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10 text-lg px-8 py-6"
+                  className="bg-white text-navy hover:bg-gray-100 text-lg px-8 py-6 font-semibold"
                   onClick={() => scrollToSection('lessons')}
                   data-testid="button-see-lessons"
                 >
@@ -602,8 +597,6 @@ export default function TenPointsBetter() {
           </p>
         </div>
       </section>
-      
-      <Footer />
     </div>
   );
 }
