@@ -357,7 +357,7 @@ export default function TenPointsBetter() {
                 ))}
               </div>
               <p className="text-gray-700 mb-4 italic">
-                "Finally, a course I can listen to while mucking out! Dan's voice is so calm and the explanations are crystal clear. My horse and I actually look forward to schooling now."
+                "Finally, a course I can listen to while riding! Dan's voice is so calm and the explanations are crystal clear. My horse and I actually look forward to schooling now."
               </p>
               <div className="font-semibold text-navy">Emma T.</div>
               <div className="text-sm text-gray-500">Prelim/Novice Rider, Kent</div>
