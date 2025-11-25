@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { Link } from "wouter";
+import { useMutation } from "@tanstack/react-query";
 import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import { 
   Target, 
   CheckCircle2, 
@@ -21,7 +28,9 @@ import {
   Zap,
   Star,
   Users,
-  MapPin
+  MapPin,
+  Gift,
+  Loader2
 } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
@@ -30,6 +39,50 @@ import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 export default function TenPointsBetter() {
   const seoConfig = getSEOConfig('/courses/10-points-better');
+  const { toast } = useToast();
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: ""
+  });
+
+  const signupMutation = useMutation({
+    mutationFn: async (data: { firstName: string; lastName: string; email: string }) => {
+      return apiRequest("POST", "/api/audio-trial/signup", data);
+    },
+    onSuccess: () => {
+      setShowSuccess(true);
+      setFormData({ firstName: "", lastName: "", email: "" });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Something went wrong",
+        description: error.message || "Please try again later.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      toast({
+        title: "Please fill in all fields",
+        description: "We need your name and email to send you the free lesson.",
+        variant: "destructive"
+      });
+      return;
+    }
+    signupMutation.mutate(formData);
+  };
+
+  const openModal = () => {
+    setShowSuccess(false);
+    setIsModalOpen(true);
+  };
 
   const painPoints = [
     "Struggling to maintain straightness and accuracy through movements",
@@ -223,11 +276,11 @@ export default function TenPointsBetter() {
                 <Button 
                   size="lg" 
                   className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
-                  onClick={() => scrollToSection('pricing')}
+                  onClick={openModal}
                   data-testid="button-hero-cta"
                 >
-                  <Play className="w-5 h-5 mr-2" />
-                  Join the Waitlist
+                  <Gift className="w-5 h-5 mr-2" />
+                  Try it for free now
                 </Button>
                 <Button 
                   size="lg" 
@@ -480,13 +533,14 @@ export default function TenPointsBetter() {
               <Button 
                 size="lg" 
                 className="bg-orange hover:bg-orange/90 text-white text-lg px-12 py-6 w-full sm:w-auto"
+                onClick={openModal}
                 data-testid="button-pricing-cta"
               >
-                <Play className="w-5 h-5 mr-2" />
-                Join the Waitlist for Early Access
+                <Gift className="w-5 h-5 mr-2" />
+                Try it for free now
               </Button>
               <p className="text-sm text-gray-400 mt-4">
-                Be the first to know when the course launches. No payment required today.
+                Get a full free lesson sent to your inbox. No payment required.
               </p>
             </div>
           </div>
@@ -580,23 +634,122 @@ export default function TenPointsBetter() {
             Ready to Score 10 Points Better?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join the waitlist today and be the first to access Dan's proven system for transforming your dressage scores.
+            Try a full lesson for free and experience Dan's proven system for transforming your dressage scores.
           </p>
           
           <Button 
             size="lg" 
             className="bg-orange hover:bg-orange/90 text-white text-lg px-12 py-6"
+            onClick={openModal}
             data-testid="button-final-cta"
           >
-            <Play className="w-5 h-5 mr-2" />
-            Join the Waitlist Now
+            <Gift className="w-5 h-5 mr-2" />
+            Try it for free now
           </Button>
           
           <p className="text-gray-400 mt-6 text-sm">
-            Course launching early 2026 via Ride IQ. No payment required to join the waitlist.
+            Get a full lesson sent to your inbox. No payment required.
           </p>
         </div>
       </section>
+
+      {/* Free Trial Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          {showSuccess ? (
+            <div className="text-center py-6">
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              </div>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-navy mb-2">
+                  You're in!
+                </DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Check your inbox - your free lesson is on its way. We can't wait for you to experience the Dan Bizzarro Method.
+                </DialogDescription>
+              </DialogHeader>
+              <Button 
+                className="mt-6 bg-navy hover:bg-navy/90"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Got it
+              </Button>
+            </div>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-navy">
+                  Try a full lesson for free
+                </DialogTitle>
+                <DialogDescription className="text-gray-600 mt-2">
+                  We'll send you a complete audio lesson from the course - no strings attached. Experience Dan's coaching style and see how it can transform your dressage scores.
+                </DialogDescription>
+              </DialogHeader>
+              
+              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      placeholder="Enter your first name"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                      data-testid="input-first-name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Surname</Label>
+                    <Input
+                      id="lastName"
+                      placeholder="Enter your surname"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                      data-testid="input-last-name"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    data-testid="input-email"
+                  />
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-orange hover:bg-orange/90 text-white py-6"
+                  disabled={signupMutation.isPending}
+                  data-testid="button-submit-trial"
+                >
+                  {signupMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Gift className="w-5 h-5 mr-2" />
+                      Send me the free lesson
+                    </>
+                  )}
+                </Button>
+                
+                <p className="text-xs text-gray-500 text-center">
+                  We respect your privacy. Unsubscribe anytime.
+                </p>
+              </form>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

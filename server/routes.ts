@@ -1376,6 +1376,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Audio course trial signup
+  app.post("/api/audio-trial/signup", async (req, res) => {
+    try {
+      const { email, firstName, lastName } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      if (!firstName) {
+        return res.status(400).json({ message: "First name is required" });
+      }
+
+      if (!lastName) {
+        return res.status(400).json({ message: "Surname is required" });
+      }
+
+      // Create or update contact in Go High Level with "try audio" tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email, 
+          firstName, 
+          lastName, 
+          undefined, 
+          ["try audio"]
+        );
+        
+        if (!ghlResult.success) {
+          console.warn("GHL contact creation failed:", ghlResult.message);
+          return res.status(500).json({ message: "Failed to register for free trial" });
+        }
+      } catch (ghlError) {
+        console.error("Error creating GHL contact:", ghlError);
+        return res.status(500).json({ message: "Failed to register for free trial" });
+      }
+
+      res.json({ message: "Successfully registered for free audio lesson" });
+    } catch (error) {
+      console.error("Error registering for audio trial:", error);
+      res.status(500).json({ message: "Failed to register for free trial" });
+    }
+  });
+
   // Admin contact management routes
   app.get("/api/admin/contacts", async (req, res) => {
     try {
