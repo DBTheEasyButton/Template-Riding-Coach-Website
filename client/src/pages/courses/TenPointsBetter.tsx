@@ -494,9 +494,9 @@ export default function TenPointsBetter() {
               <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
                 <Clock className="w-6 h-6 text-orange" />
               </div>
-              <h3 className="text-xl font-bold text-navy mb-3">No Extra Time Needed</h3>
+              <h3 className="text-xl font-bold text-navy mb-3">No Need to Travel</h3>
               <p className="text-gray-700">
-                You're already riding. Why add more screen time to your day? Pop in your earbuds during your normal schooling session and turn every ride into a lesson. Same time commitment, twice the progress.
+                Forget loading the lorry, sitting in traffic, or paying for arena hire. Train at your own yard, on your own schedule. Every lesson happens exactly where you and your horse are most comfortable.
               </p>
             </div>
             
