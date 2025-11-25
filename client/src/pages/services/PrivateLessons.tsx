@@ -160,13 +160,13 @@ export default function PrivateLessons() {
           <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Our private horse riding lessons in Oxfordshire offer personalised instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, Dan brings over 20 years of experience to every session.
+                My private horse riding lessons in Oxfordshire offer personalised instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, I bring over 20 years of experience to every session.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Whether you're an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. Training covers all aspects of equestrian education—from foundational flatwork to advanced competition preparation.
+                Whether you're an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. I cover all aspects of equestrian education—from foundational flatwork to advanced competition preparation.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                These equestrian lessons in Oxfordshire welcome riders from complete beginners to international level competitors. Dan's approach balances technical excellence with an encouraging, supportive environment that makes learning enjoyable while achieving measurable results.
+                My equestrian lessons in Oxfordshire welcome riders from complete beginners to international level competitors. I balance technical excellence with an encouraging, supportive environment that makes learning enjoyable while achieving measurable results.
               </p>
               <div className="bg-orange/10 border-l-4 border-orange p-6 rounded-r-lg">
                 <p className="text-2xl font-playfair font-bold text-navy mb-2">£80 per session</p>
