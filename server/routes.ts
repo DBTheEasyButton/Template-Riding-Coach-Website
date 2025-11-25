@@ -1325,7 +1325,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create or update contact in Go High Level with Newsletter tag
       try {
-        const ghlResult = await storage.createOrUpdateGhlContactInApi(email, firstName, undefined, undefined, ["Newsletter"]);
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(email, firstName, lastName || undefined, undefined, ["newsletter"]);
         
         if (!ghlResult.success) {
           console.warn("GHL contact creation failed:", ghlResult.message);
