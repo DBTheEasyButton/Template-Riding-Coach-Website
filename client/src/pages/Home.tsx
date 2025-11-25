@@ -164,15 +164,56 @@ export default function Home() {
 
       {/* What is the Dan Bizzarro Method Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-10">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">What is the Dan Bizzarro Method?</h2>
-            <div className="w-24 h-1 bg-orange mx-auto"></div>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+            <p className="text-lg text-dark max-w-3xl mx-auto">
+              A simple, structured way of helping horses and riders understand each other better.
+            </p>
           </div>
           
-          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-            <p className="text-lg md:text-xl text-dark leading-relaxed">
-              The Dan Bizzarro Method is a simple, structured way of helping horses and riders understand each other better. It comes from years of riding every type of horse—easy ones, tricky ones, sharp ones, and everything in between—and coaching thousands of riders at all levels. The focus is always on clarity, confidence, and communication. Riders learn how to give clear instructions, horses learn how to respond without tension, and both start to enjoy the work more. The method blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood. Whether someone rides for fun or wants to be competitive, the goal is always the same: make riding easier to understand, build a partnership that feels good, and help people get the results they want without overcomplicating things.
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="w-7 h-7 text-orange" />
+              </div>
+              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Clarity</h3>
+              <p className="text-dark text-sm leading-relaxed">
+                Riders learn how to give clear instructions that horses can easily understand and follow.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-7 h-7 text-orange" />
+              </div>
+              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Confidence</h3>
+              <p className="text-dark text-sm leading-relaxed">
+                Horses learn to respond without tension, and both horse and rider start to enjoy the work more.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-7 h-7 text-orange" />
+              </div>
+              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Communication</h3>
+              <p className="text-dark text-sm leading-relaxed">
+                Build a partnership that feels good through progressive training and thoughtful exercises.
+              </p>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10 max-w-4xl mx-auto">
+            <p className="text-dark leading-relaxed mb-4">
+              The method comes from years of riding every type of horse—easy ones, tricky ones, sharp ones, and everything in between—and coaching thousands of riders at all levels.
+            </p>
+            <p className="text-dark leading-relaxed mb-4">
+              It blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood.
+            </p>
+            <p className="text-navy font-medium leading-relaxed">
+              Whether you ride for fun or want to be competitive, the goal is always the same: make riding easier to understand, build a partnership that feels good, and help you get the results you want without overcomplicating things.
             </p>
           </div>
         </div>
