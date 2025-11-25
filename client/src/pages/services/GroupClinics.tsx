@@ -262,9 +262,7 @@ export default function GroupClinics() {
           <h3 className="text-2xl md:text-3xl font-playfair font-bold text-navy mb-4">
             Ready to Elevate Your Training?
           </h3>
-          <p className="text-lg text-dark mb-6">
-            Join riders from across Oxfordshire at our expert-led clinics
-          </p>
+          <p className="text-lg text-dark mb-6">Join riders from across Oxfordshire at my clinics</p>
           <a
             href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20register%20for%20an%20upcoming%20clinic"
             target="_blank"
