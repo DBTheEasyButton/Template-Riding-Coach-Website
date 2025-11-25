@@ -404,11 +404,8 @@ export default function TenPointsBetter() {
           </div>
           
           <div className="mt-12 p-8 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100">
-            <h3 className="text-2xl font-bold text-navy mb-4">
-              It Doesn't Have to Be This Way
-            </h3>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              The 10 Points Better course gives you a systematic approach to the fundamentals that judges actually score. Master these eight lessons, and you'll ride into every test knowing exactly what to do—and why.
+            <p className="text-xl lg:text-2xl font-semibold text-navy max-w-2xl mx-auto">
+              What if you could enjoy schooling your horse having a clear plan and score 10 points better in only 2 weeks?
             </p>
           </div>
         </div>
