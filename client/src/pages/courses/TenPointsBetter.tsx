@@ -30,7 +30,9 @@ import {
   Users,
   MapPin,
   Gift,
-  Loader2
+  Loader2,
+  Home,
+  PiggyBank
 } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
@@ -492,7 +494,7 @@ export default function TenPointsBetter() {
             
             <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
               <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
-                <Clock className="w-6 h-6 text-orange" />
+                <Home className="w-6 h-6 text-orange" />
               </div>
               <h3 className="text-xl font-bold text-navy mb-3">No Need to Travel</h3>
               <p className="text-gray-700">
@@ -502,7 +504,7 @@ export default function TenPointsBetter() {
             
             <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
               <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
-                <Target className="w-6 h-6 text-orange" />
+                <PiggyBank className="w-6 h-6 text-orange" />
               </div>
               <h3 className="text-xl font-bold text-navy mb-3">Save Money and Time</h3>
               <p className="text-gray-700">
