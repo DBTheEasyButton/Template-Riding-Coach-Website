@@ -103,10 +103,16 @@ export default function Home() {
                 <div className="w-24 h-1 bg-orange mb-8"></div>
               </div>
               <p className="text-lg text-dark leading-relaxed">
-                With over 20 years of international competition experience, Dan Bizzarro brings unparalleled expertise to every training session. From working with British eventing legend William Fox-Pitt to competing at the highest international levels, Dan's journey is one of dedication and passion.
+                Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                In 2024 Dan was shortlisted for the Paris Olympic games, and in 2022 the Italian team finished 2nd at Nations Cup Boekelo - testament to his competitive excellence and expertise.
+                This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+              </p>
+              <p className="text-lg text-dark leading-relaxed">
+                Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
+              </p>
+              <p className="text-lg text-dark leading-relaxed">
+                My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
               </p>
               <Link href="/about">
                 <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
