@@ -207,7 +207,7 @@ export default function TenPointsBetter() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-              Become <span className="text-orange">10 Points Better</span> in Your Next Dressage Test
+              Score <span className="text-orange">10 Points Better</span> in Your Next Dressage Test
             </h1>
           </div>
           
