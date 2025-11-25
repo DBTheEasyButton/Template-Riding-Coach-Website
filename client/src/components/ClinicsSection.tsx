@@ -477,9 +477,7 @@ export default function ClinicsSection() {
         <div className="text-center mb-16">
           <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Upcoming Clinics</h2>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-          <p className="text-xl text-dark max-w-3xl mx-auto mb-6">
-            Join Dan for show-jumping clinics, polework clinics, and cross country sessions. Perfect for amateur riders building confidence or competitors preparing for events!
-          </p>
+          <p className="text-xl text-dark max-w-3xl mx-auto mb-6">Join me for show-jumping clinics, polework clinics, and cross country sessions. Perfect for amateur riders building confidence or competitors preparing for events!</p>
           <div className="bg-gradient-to-r from-orange/10 to-gold/10 border border-orange/20 rounded-lg p-4 max-w-2xl mx-auto mb-8">
             <div className="flex items-center justify-center gap-3">
               <div className="text-orange text-2xl">🎯</div>
