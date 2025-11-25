@@ -410,7 +410,7 @@ export default function TenPointsBetter() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-12 text-center">
-            About Me
+            Meet Your Coach: Dan Bizzarro
           </h2>
           
           {/* First row: Image left, text right */}
