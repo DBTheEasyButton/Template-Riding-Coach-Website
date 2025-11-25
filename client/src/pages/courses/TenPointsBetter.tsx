@@ -405,7 +405,7 @@ export default function TenPointsBetter() {
           
           <div className="mt-12 p-8 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100">
             <p className="text-xl lg:text-2xl font-semibold text-navy max-w-2xl mx-auto">
-              What if you could enjoy schooling your horse having a clear plan and score 10 points better in only 2 weeks?
+              What if you could follow a plan, love schooling, and score 10 points better in only 2 weeks?
             </p>
           </div>
         </div>
