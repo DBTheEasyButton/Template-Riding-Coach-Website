@@ -29,7 +29,7 @@ export default function RemoteCoaching() {
     },
     {
       name: "Laura B.",
-      content: "As a busy mum, virtual lessons fit perfectly into my schedule. No travel time, same quality coaching. Absolutely game-changing!",
+      content: "As a busy mum living in Texas, virtual lessons fit perfectly into my schedule. No travel time, same quality coaching. Absolutely game-changing!",
       rating: 5
     }
   ];
