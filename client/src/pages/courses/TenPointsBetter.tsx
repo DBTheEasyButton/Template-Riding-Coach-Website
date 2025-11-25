@@ -332,58 +332,6 @@ export default function TenPointsBetter() {
         </div>
       </section>
 
-      {/* About Dan Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-              <img 
-                src={danPhotoPath} 
-                alt="Dan Bizzarro - International Event Rider and Coach"
-                className="rounded-2xl shadow-2xl w-full max-w-md mx-auto"
-              />
-              <div className="absolute -bottom-4 -right-4 bg-orange text-white px-6 py-3 rounded-lg shadow-lg">
-                <div className="text-2xl font-bold">20+</div>
-                <div className="text-sm">Years Experience</div>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-navy">
-                Meet Your Coach: Dan Bizzarro
-              </h2>
-              
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Dan Bizzarro is an Italian international event rider who began riding at nine years old. After moving from Italy to England, he trained under Olympic medallist William Fox-Pitt—one of the most successful British event riders of all time.
-              </p>
-              
-              <p className="text-lg text-gray-600 leading-relaxed">
-                In 2024, Dan was shortlisted for the Paris Olympic Games, and he has represented Italy in numerous Nations Cup events. Now based in Oxfordshire, Dan is passionate about helping riders of all levels achieve their potential through clear, practical coaching.
-              </p>
-              
-              <blockquote className="border-l-4 border-orange pl-6 py-2 italic text-gray-700">
-                "I created this course because I see so many riders losing easy points on simple things—geometry, straightness, test preparation. These are skills you can learn, and once you know them, those 10 points are yours for life."
-              </blockquote>
-              
-              <div className="flex flex-wrap gap-4 pt-4">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Award className="w-5 h-5 text-orange" />
-                  <span>Olympic Shortlist 2024</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Users className="w-5 h-5 text-orange" />
-                  <span>Nations Cup Rider</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin className="w-5 h-5 text-orange" />
-                  <span>Based in Oxfordshire</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Pain Points Section */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -413,27 +361,37 @@ export default function TenPointsBetter() {
 
       {/* About Me Section */}
       <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-8 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-12 text-center">
             About Me
           </h2>
           
-          <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-            <p>
-              Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
-            </p>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <img 
+                src={danPhotoPath} 
+                alt="Dan Bizzarro - International Event Rider and Coach"
+                className="rounded-2xl shadow-2xl w-full"
+              />
+            </div>
             
-            <p>
-              This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
-            </p>
-            
-            <p>
-              Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
-            </p>
-            
-            <p>
-              My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
-            </p>
+            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+              <p>
+                Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
+              </p>
+              
+              <p>
+                This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+              </p>
+              
+              <p>
+                Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
+              </p>
+              
+              <p>
+                My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together.
+              </p>
+            </div>
           </div>
         </div>
       </section>
