@@ -17,6 +17,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function CrossCountry() {
   const seoConfig = getSEOConfig('/coaching/cross-country');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/cross-country', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Becky S.",
+      content: "I used to dread water complexes but Dan's progressive training built my confidence step by step. Now they're my favourite part of any course!",
+      rating: 5
+    },
+    {
+      name: "Charlotte A.",
+      content: "Dan taught me to trust my horse and commit to fences. My cross country scores have dropped dramatically and we're both so much braver.",
+      rating: 5
+    },
+    {
+      name: "Natalie G.",
+      content: "The course walking skills Dan teaches are invaluable. I now ride with a proper plan instead of just hoping for the best!",
+      rating: 5
+    }
+  ];
   
   const features = [
     "Natural obstacle training and technique",
@@ -159,7 +177,7 @@ export default function CrossCountry() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

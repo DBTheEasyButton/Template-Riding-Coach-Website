@@ -15,6 +15,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function Polework() {
   const seoConfig = getSEOConfig('/coaching/polework');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/polework', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Fiona M.",
+      content: "My older horse can't do much jumping anymore, but the polework sessions keep him engaged and supple. He absolutely loves it!",
+      rating: 5
+    },
+    {
+      name: "Jessica R.",
+      content: "The grid exercises Dan teaches have completely transformed my young horse's jumping technique. Low stress but maximum benefit.",
+      rating: 5
+    },
+    {
+      name: "Olivia P.",
+      content: "I thought polework was just ground poles—Dan showed me how gymnastic exercises can fix rhythm problems and build real strength.",
+      rating: 5
+    }
+  ];
   
   const features = [
     "Ground pole exercises for rhythm and balance",
@@ -161,7 +179,7 @@ export default function Polework() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

@@ -17,6 +17,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function ShowJumping() {
   const seoConfig = getSEOConfig('/coaching/show-jumping');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/show-jumping', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Hannah D.",
+      content: "We went from knocking 3-4 poles per round to jumping clear consistently. Dan's grid work exercises transformed my horse's technique completely.",
+      rating: 5
+    },
+    {
+      name: "Lucy F.",
+      content: "Finally learned to see a stride! Dan's patient approach to teaching distances has given me so much more confidence in the show jumping ring.",
+      rating: 5
+    },
+    {
+      name: "Sophie K.",
+      content: "My mare used to rush every fence. After working with Dan on rhythm and relaxation, she's careful and adjustable. The difference is night and day.",
+      rating: 5
+    }
+  ];
   
   const features = [
     "Jumping technique and form refinement",
@@ -159,7 +177,7 @@ export default function ShowJumping() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

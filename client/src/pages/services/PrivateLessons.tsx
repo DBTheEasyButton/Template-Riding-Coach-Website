@@ -17,6 +17,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function PrivateLessons() {
   const seoConfig = getSEOConfig('/coaching/private-lessons');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/private-lessons', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Sarah M.",
+      content: "The one-on-one attention in private lessons has transformed my riding. Dan identified issues I didn't even know I had and gave me clear exercises to fix them.",
+      rating: 5
+    },
+    {
+      name: "Emma T.",
+      content: "After just three private sessions, my horse and I were communicating so much better. The personalised approach makes all the difference.",
+      rating: 5
+    },
+    {
+      name: "Rachel H.",
+      content: "Worth every penny. Dan's ability to break down complex movements into simple steps helped me finally master my canter transitions.",
+      rating: 5
+    }
+  ];
   
   const features = [
     "Customized training plans for your specific goals",
@@ -148,7 +166,7 @@ export default function PrivateLessons() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

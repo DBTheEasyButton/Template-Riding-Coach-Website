@@ -15,6 +15,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function RemoteCoaching() {
   const seoConfig = getSEOConfig('/coaching/remote-coaching');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/remote-coaching', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Amanda J.",
+      content: "Living in Scotland, I never thought I'd access coaching of this quality. The virtual lessons via Pivo work brilliantly—it's like Dan is right there in the arena with me.",
+      rating: 5
+    },
+    {
+      name: "Michelle R.",
+      content: "Sceptical at first, but the live coaching through my earbuds is incredibly effective. Dan spots everything and the real-time feedback is invaluable.",
+      rating: 5
+    },
+    {
+      name: "Laura B.",
+      content: "As a busy mum, virtual lessons fit perfectly into my schedule. No travel time, same quality coaching. Absolutely game-changing!",
+      rating: 5
+    }
+  ];
   
   const pivoLink = (
     <a 
@@ -189,7 +207,7 @@ export default function RemoteCoaching() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

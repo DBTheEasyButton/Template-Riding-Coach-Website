@@ -15,6 +15,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function Dressage() {
   const seoConfig = getSEOConfig('/coaching/dressage');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/dressage', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Victoria N.",
+      content: "My dressage scores jumped from the low 30s to consistently in the 20s. Dan's focus on the training scale and correct basics made all the difference.",
+      rating: 5
+    },
+    {
+      name: "Alice C.",
+      content: "Finally understand what 'on the bit' actually means! Dan explains things so clearly and gives exercises that make sense to both me and my horse.",
+      rating: 5
+    },
+    {
+      name: "Georgina E.",
+      content: "The improvement in my horse's way of going has been remarkable. Better rhythm, better balance, and our jumping has improved too!",
+      rating: 5
+    }
+  ];
   
   const features = [
     "Classical training principles and foundation",
@@ -157,7 +175,7 @@ export default function Dressage() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Overview Section */}
       <section className="py-20 bg-white">

@@ -2,17 +2,27 @@ import { useQuery } from "@tanstack/react-query";
 import { Star, Quote } from "lucide-react";
 import type { Testimonial } from "@shared/schema";
 
+interface ServiceTestimonial {
+  name: string;
+  content: string;
+  rating: number;
+}
+
 interface TestimonialStripProps {
   maxItems?: number;
   className?: string;
+  customTestimonials?: ServiceTestimonial[];
 }
 
-export default function TestimonialStrip({ maxItems = 3, className = "" }: TestimonialStripProps) {
+export default function TestimonialStrip({ maxItems = 3, className = "", customTestimonials }: TestimonialStripProps) {
   const { data: testimonials = [], isLoading } = useQuery<Testimonial[]>({
     queryKey: ["/api/testimonials"],
+    enabled: !customTestimonials,
   });
 
-  const displayTestimonials = testimonials.slice(0, maxItems);
+  const displayTestimonials = customTestimonials 
+    ? customTestimonials.slice(0, maxItems)
+    : testimonials.slice(0, maxItems);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -25,7 +35,7 @@ export default function TestimonialStrip({ maxItems = 3, className = "" }: Testi
     ));
   };
 
-  if (isLoading || displayTestimonials.length === 0) {
+  if ((!customTestimonials && isLoading) || displayTestimonials.length === 0) {
     return null;
   }
 
@@ -40,9 +50,9 @@ export default function TestimonialStrip({ maxItems = 3, className = "" }: Testi
         </div>
         
         <div className="grid md:grid-cols-3 gap-4">
-          {displayTestimonials.map((testimonial) => (
+          {displayTestimonials.map((testimonial, index) => (
             <div 
-              key={testimonial.id}
+              key={customTestimonials ? index : (testimonial as Testimonial).id}
               className="bg-white rounded-lg p-4 shadow-sm border border-gray-100"
             >
               <div className="flex items-start gap-2">

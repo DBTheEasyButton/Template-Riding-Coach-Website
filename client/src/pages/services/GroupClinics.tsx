@@ -19,6 +19,24 @@ import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, creat
 export default function GroupClinics() {
   const seoConfig = getSEOConfig('/coaching/clinics');
   const breadcrumbs = getBreadcrumbsFromPath('/coaching/clinics', seoConfig.h1);
+
+  const testimonials = [
+    {
+      name: "Claire W.",
+      content: "The clinic atmosphere is brilliant—small groups mean you still get personal attention, plus you learn so much from watching others tackle the same exercises.",
+      rating: 5
+    },
+    {
+      name: "Jenny P.",
+      content: "I was nervous about my first clinic but Dan made everyone feel welcome. The improvement I saw in just one day was incredible.",
+      rating: 5
+    },
+    {
+      name: "Kate L.",
+      content: "Great value for money and such a supportive environment. I've already booked my next three clinics!",
+      rating: 5
+    }
+  ];
   
   const { data: upcomingClinics = [] } = useQuery<any[]>({
     queryKey: ['/api/clinics', { upcoming: 'true', limit: 3 }],
@@ -152,7 +170,7 @@ export default function GroupClinics() {
         </div>
       </section>
 
-      <TestimonialStrip />
+      <TestimonialStrip customTestimonials={testimonials} />
 
       {/* Next 3 Upcoming Clinics */}
       {upcomingClinics.length > 0 && (
