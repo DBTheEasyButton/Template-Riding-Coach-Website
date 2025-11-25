@@ -44,9 +44,7 @@ export default function TestimonialStrip({ maxItems = 3, className = "", customT
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-center gap-2 mb-4">
           <div className="flex">{renderStars(5)}</div>
-          <span className="text-sm text-gray-600 font-medium">
-            Trusted by riders across the UK
-          </span>
+          <span className="text-sm text-gray-600 font-medium">Trusted by riders across the WORLD</span>
         </div>
         
         <div className="grid md:grid-cols-3 gap-4">
