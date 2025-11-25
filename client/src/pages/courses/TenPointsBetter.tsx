@@ -457,6 +457,80 @@ export default function TenPointsBetter() {
         </div>
       </section>
 
+      {/* Why Audio Works Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-4">
+              Why Audio Lessons Actually Work Better
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Sceptical about learning from audio? You're not alone. But here's why riders who try it never go back...
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
+              <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
+                <Headphones className="w-6 h-6 text-orange" />
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-3">Your Eyes Stay on Your Horse</h3>
+              <p className="text-gray-700">
+                Video lessons force you to stop, dismount, and watch a screen. Audio lets you keep riding while you learn. You stay connected to your horse and feel the changes happening in real-time.
+              </p>
+            </div>
+            
+            <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
+              <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-orange" />
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-3">Learn Through Feel, Not Just Sight</h3>
+              <p className="text-gray-700">
+                Dressage is about feel. When you're listening to guidance while riding, you develop that feel instantly. It's like having a coach in your ear during every session—without the lesson fee.
+              </p>
+            </div>
+            
+            <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
+              <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
+                <Clock className="w-6 h-6 text-orange" />
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-3">No Extra Time Needed</h3>
+              <p className="text-gray-700">
+                You're already riding. Why add more screen time to your day? Pop in your earbuds during your normal schooling session and turn every ride into a lesson. Same time commitment, twice the progress.
+              </p>
+            </div>
+            
+            <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
+              <div className="w-12 h-12 bg-orange/20 rounded-xl flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-orange" />
+              </div>
+              <h3 className="text-xl font-bold text-navy mb-3">Instant Muscle Memory</h3>
+              <p className="text-gray-700">
+                When you practise something while hearing the instruction, your body learns faster. You're not trying to remember what you saw yesterday—you're applying it right now, in the saddle.
+              </p>
+            </div>
+          </div>
+          
+          <div className="bg-navy rounded-2xl p-8 md:p-12 text-center">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Still Not Sure? Try It Free.
+            </h3>
+            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+              The best way to understand why audio lessons work is to experience one yourself. Get your first lesson completely free—no payment details required. If it's not for you, no hard feelings.
+            </p>
+            <Button 
+              size="lg" 
+              className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
+              onClick={() => setIsModalOpen(true)}
+              data-testid="button-audio-section-free-trial"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Get Your Free Lesson Now
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Lessons Section */}
       <section id="lessons" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
