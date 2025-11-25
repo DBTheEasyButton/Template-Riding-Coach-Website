@@ -127,9 +127,7 @@ export default function GroupClinics() {
         preloadImageJpeg={clinicsHeroJpg}
         schemas={schemas}
       />
-      
       <Navigation />
-      
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
         <HeroPicture
@@ -152,7 +150,6 @@ export default function GroupClinics() {
           </div>
         </div>
       </section>
-
       {/* Next 3 Upcoming Clinics */}
       {upcomingClinics.length > 0 && (
         <section className="py-12 bg-gray-50">
@@ -224,7 +221,6 @@ export default function GroupClinics() {
           </div>
         </section>
       )}
-
       {/* Overview Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -237,9 +233,7 @@ export default function GroupClinics() {
           
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-lg text-dark leading-relaxed mb-6">
-                Our group clinics offer specialised training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels—whether you ride for pleasure or competition.
-              </p>
+              <p className="text-lg text-dark leading-relaxed mb-6">Our group clinics offer specialised training in show jumping, polework, and cross country, taught by international eventing coach Dan Bizzarro. These single-day sessions welcome riders from beginner to advanced levels, whether you ride for pleasure or competition.</p>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Each clinic focuses on the Dan Bizzarro Method, combining technical instruction with practical application. With small group sizes, you receive personalised feedback while benefiting from watching fellow riders tackle similar challenges.
               </p>
@@ -262,7 +256,6 @@ export default function GroupClinics() {
           </div>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-12 bg-orange/5">
         <div className="max-w-3xl mx-auto px-6 text-center">
@@ -283,7 +276,6 @@ export default function GroupClinics() {
           </a>
         </div>
       </section>
-
       {/* Benefits Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -313,16 +305,12 @@ export default function GroupClinics() {
           </div>
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
-
       {/* Upcoming Clinics Section */}
       <ClinicsSection />
-
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
-
       {/* Loyalty Leaderboard Section */}
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-6">
@@ -339,10 +327,8 @@ export default function GroupClinics() {
           <LoyaltyLeaderboard />
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
-
       {/* FAQ Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
@@ -374,7 +360,6 @@ export default function GroupClinics() {
           </Accordion>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -402,7 +387,6 @@ export default function GroupClinics() {
           </Link>
         </div>
       </section>
-
       <Footer />
     </div>
   );
