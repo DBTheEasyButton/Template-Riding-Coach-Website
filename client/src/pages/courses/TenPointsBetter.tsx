@@ -35,6 +35,7 @@ import {
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
+const coachingClinicPhoto = "/attached_assets/DBCLINIC-28_1764067051591.JPG";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 export default function TenPointsBetter() {
@@ -401,7 +402,7 @@ export default function TenPointsBetter() {
             
             <div className="relative">
               <img 
-                src="/attached_assets/DBCLINIC-28_1764067051591.JPG" 
+                src={coachingClinicPhoto} 
                 alt="Dan Bizzarro coaching a rider during a clinic session"
                 className="rounded-2xl shadow-2xl w-full"
               />
