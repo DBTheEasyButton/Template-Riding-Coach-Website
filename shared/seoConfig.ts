@@ -191,6 +191,16 @@ export const seoConfig: Record<string, PageSEOConfig> = {
     canonicalPath: '/loyalty',
     h1: 'Loyalty Rewards Programme',
     ogImage: '/hero-background.jpg'
+  },
+
+  // Courses
+  '/courses/10-points-better': {
+    title: '10 Points Better Audio Course | Dressage Training for Eventers | Dan Bizzarro Method',
+    description: 'Transform your dressage scores with Dan Bizzarro\'s 8-lesson audio course. Master geometry, transitions, straightness and test preparation through ride-along coaching. For Starter-Novice eventers.',
+    keywords: '10 points better, dressage audio course, eventing dressage training, ride along coaching, dressage improvement, horse training audio, Dan Bizzarro course, Ride IQ, dressage test preparation, eventing dressage, amateur dressage training',
+    canonicalPath: '/courses/10-points-better',
+    h1: '10 Points Better Audio Course',
+    ogImage: '/hero-background.jpg'
   }
 };
 

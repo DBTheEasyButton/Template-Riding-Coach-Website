@@ -42,6 +42,9 @@ const AdminGHL = lazy(() => import("@/pages/AdminGHL"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 
+// Course pages
+const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
+
 // Simple redirect component for wouter
 function RedirectToAdminClinics() {
   const [, setLocation] = useLocation();
@@ -124,6 +127,11 @@ function Router() {
       <Route path="/coaching/polework">
         <Suspense fallback={<PageLoader />}>
           <Polework />
+        </Suspense>
+      </Route>
+      <Route path="/courses/10-points-better">
+        <Suspense fallback={<PageLoader />}>
+          <TenPointsBetter />
         </Suspense>
       </Route>
       <Route path="/gallery">
