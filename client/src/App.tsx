@@ -13,7 +13,7 @@ import NotFound from "@/pages/not-found";
 const About = lazy(() => import("@/pages/About"));
 const Coaching = lazy(() => import("@/pages/Services"));
 const Gallery = lazy(() => import("@/pages/Gallery"));
-const News = lazy(() => import("@/pages/News"));
+const Blog = lazy(() => import("@/pages/News"));
 const Podcast = lazy(() => import("@/pages/Podcast"));
 const Contact = lazy(() => import("@/pages/Contact"));
 
@@ -139,9 +139,9 @@ function Router() {
           <Gallery />
         </Suspense>
       </Route>
-      <Route path="/news">
+      <Route path="/blog">
         <Suspense fallback={<PageLoader />}>
-          <News />
+          <Blog />
         </Suspense>
       </Route>
       <Route path="/podcast">
@@ -232,7 +232,7 @@ function Router() {
           <AdminSettings />
         </Suspense>
       </Route>
-      <Route path="/news/:id">
+      <Route path="/blog/:id">
         <Suspense fallback={<PageLoader />}>
           <NewsArticle />
         </Suspense>

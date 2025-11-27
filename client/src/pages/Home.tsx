@@ -277,19 +277,19 @@ export default function Home() {
       {/* Divider */}
       <div className="border-t-4 border-orange"></div>
       {/* News Preview Section */}
-      <section id="news" className="py-12 bg-white">
+      <section id="blog" className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Latest News</h2>
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">From the Blog</h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
             <p className="text-xl text-dark max-w-3xl mx-auto">
-              Stay updated with competitions, training insights, and our equestrian journey
+              Expert tips and insights to improve your riding
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {news.slice(0, 3).map((article) => (
-              <Link key={article.id} href={`/news/${article.slug || article.id}`} className="h-full">
+              <Link key={article.id} href={`/blog/${article.slug || article.id}`} className="h-full">
                 <article className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer h-full flex flex-col">
                   <OptimizedImage 
                     src={article.image}
@@ -311,9 +311,9 @@ export default function Home() {
           </div>
 
           <div className="text-center">
-            <Link href="/news">
-              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-view-all-news">
-                View All News <ArrowRight className="ml-2 w-5 h-5" />
+            <Link href="/blog">
+              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-view-all-blog">
+                View All Articles <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
           </div>

@@ -10,8 +10,8 @@ import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function News() {
-  const seoConfig = getSEOConfig('/news');
-  const breadcrumbs = getBreadcrumbsFromPath('/news', seoConfig.h1);
+  const seoConfig = getSEOConfig('/blog');
+  const breadcrumbs = getBreadcrumbsFromPath('/blog', seoConfig.h1);
   const schemas = [createBreadcrumbSchema(breadcrumbs)];
 
   const [, setLocation] = useLocation();
@@ -48,10 +48,10 @@ export default function News() {
         <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              Eventing News & Tips
+              Training Blog
             </h1>
             <p className="text-xl md:text-2xl text-gray-100">
-              Stay updated with competitions, training insights, and our equestrian journey
+              Expert tips and insights to improve your riding
             </p>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function News() {
               {featuredArticle && (
                 <div 
                   className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 mb-12 cursor-pointer"
-                  onClick={() => setLocation(`/news/${featuredArticle.slug || featuredArticle.id}`)}
+                  onClick={() => setLocation(`/blog/${featuredArticle.slug || featuredArticle.id}`)}
                   data-testid="featured-article"
                 >
                   <div className="md:grid md:grid-cols-2 gap-8">
@@ -136,7 +136,7 @@ export default function News() {
                     <article 
                       key={article.id} 
                       className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-                      onClick={() => setLocation(`/news/${article.slug || article.id}`)}
+                      onClick={() => setLocation(`/blog/${article.slug || article.id}`)}
                       data-testid={`news-article-${article.id}`}
                     >
                       <OptimizedImage 
@@ -167,8 +167,8 @@ export default function News() {
 
               {news.length === 0 && (
                 <div className="text-center py-12">
-                  <p className="text-xl text-gray-600">No news articles available at this time.</p>
-                  <p className="text-gray-500 mt-2">Check back soon for updates!</p>
+                  <p className="text-xl text-gray-600">No blog posts available at this time.</p>
+                  <p className="text-gray-500 mt-2">Check back soon for new articles!</p>
                 </div>
               )}
             </>

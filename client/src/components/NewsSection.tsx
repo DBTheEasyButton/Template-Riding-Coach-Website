@@ -54,7 +54,7 @@ export default function NewsSection() {
     <section id="news" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Latest News</h2>
+          <h2 className="text-5xl font-playfair font-bold text-navy mb-6">From the Blog</h2>
           <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           <p className="text-xl text-dark max-w-3xl mx-auto">
             Stay updated with Dan's latest competitions, training insights, and equestrian journey
@@ -66,7 +66,7 @@ export default function NewsSection() {
             <article 
               key={article.id || index} 
               className="bg-gradient-to-br from-cream to-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-              onClick={() => setLocation(`/news/${article.slug || article.id}`)}
+              onClick={() => setLocation(`/blog/${article.slug || article.id}`)}
             >
               <OptimizedImage 
                 src={article.image}
@@ -91,7 +91,7 @@ export default function NewsSection() {
 
         <div className="text-center mt-12">
           <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105">
-            View All News
+            View All Articles
           </Button>
         </div>
       </div>

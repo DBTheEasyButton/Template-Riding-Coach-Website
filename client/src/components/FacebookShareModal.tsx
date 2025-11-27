@@ -17,7 +17,7 @@ interface FacebookShareModalProps {
 export function FacebookShareModal({ isOpen, onClose, article }: FacebookShareModalProps) {
   const { toast } = useToast();
   const baseUrl = window.location.origin;
-  const articleUrl = `${baseUrl}/news/${article.slug || article.id}`;
+  const articleUrl = `${baseUrl}/blog/${article.slug || article.id}`;
   
   const [customMessage, setCustomMessage] = useState(
     `${article.title}\n\n${article.excerpt}\n\nRead more: ${articleUrl}\n\n#DanBizzarroMethod #Eventing #Horses`

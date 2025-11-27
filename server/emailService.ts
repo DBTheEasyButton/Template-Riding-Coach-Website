@@ -620,7 +620,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
             <p style="color: #f97316; font-size: 14px; margin: 0 0 10px 0;">📅 ${publishDate}</p>
             <p style="color: #374151; margin: 0 0 15px 0; line-height: 1.5; font-size: 14px;">${summary}</p>
             <div style="text-align: center;">
-              <a href="https://danbizzarromethod.com/news/${article.id}" style="background: #1e3a8a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 14px;">Read Full Article</a>
+              <a href="https://danbizzarromethod.com/blog/${article.slug || article.id}" style="background: #1e3a8a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 14px;">Read Full Article</a>
             </div>
           </div>`;
       }).join('');
@@ -636,7 +636,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
             article.content.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 
             article.content.replace(/<[^>]*>/g, ''));
         
-        return `${article.title}\nPublished: ${publishDate}\n${summary}\nRead more: https://danbizzarromethod.com/news/${article.id}\n`;
+        return `${article.title}\nPublished: ${publishDate}\n${summary}\nRead more: https://danbizzarromethod.com/blog/${article.slug || article.id}\n`;
       }).join('\n');
 
       return {

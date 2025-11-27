@@ -54,7 +54,7 @@ export default function NewsArticle() {
     });
   };
 
-  const shareUrl = `${window.location.origin}/news/${article.slug || article.id}`;
+  const shareUrl = `${window.location.origin}/blog/${article.slug || article.id}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -68,7 +68,7 @@ export default function NewsArticle() {
           className="mb-8 hover:bg-gray-100"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to News
+          Back to Blog
         </Button>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -163,7 +163,7 @@ export default function NewsArticle() {
 
             {/* Related Articles */}
             <section className="mt-16">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">More News</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">More Articles</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {news
                   .filter(n => n.id !== article.id)
@@ -172,7 +172,7 @@ export default function NewsArticle() {
                     <div 
                       key={relatedArticle.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                      onClick={() => setLocation(`/news/${relatedArticle.slug || relatedArticle.id}`)}
+                      onClick={() => setLocation(`/blog/${relatedArticle.slug || relatedArticle.id}`)}
                     >
                       <OptimizedImage
                         src={relatedArticle.image}
