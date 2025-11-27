@@ -495,13 +495,13 @@ export default function ClinicsSection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => window.open('https://wa.me/447767291713', '_blank')}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
               Book a Live Virtual Lesson
             </Button>
             <Button 
               onClick={() => window.open('https://wa.me/447767291713', '_blank')}
-              className="bg-navy hover:bg-navy/90 text-white"
+              className="bg-navy text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
               Book a Private Lesson
             </Button>
