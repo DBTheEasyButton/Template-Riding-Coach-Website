@@ -26,7 +26,7 @@ export default function Navigation() {
 
   const navItemsAfter = [
     { href: "/podcast", label: "Podcast", isPage: true },
-    { href: "/news", label: "News", isPage: true },
+    { href: "/blog", label: "Blog", isPage: true },
     { href: "/gallery", label: "Gallery", isPage: true },
     { href: "/contact", label: "Contact", isPage: true },
   ];

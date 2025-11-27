@@ -128,12 +128,12 @@ export const seoConfig: Record<string, PageSEOConfig> = {
     ogImage: '/hero-background.jpg'
   },
 
-  '/news': {
-    title: 'Eventing News & Tips | Dan Bizzarro Method',
-    description: 'Latest eventing news, training tips, and insights from Dan Bizzarro Method. Read about upcoming clinics, competition results, coaching advice, and equestrian industry news from our Oxfordshire coaching base.',
-    keywords: 'Dan Bizzarro news, eventing news, clinic updates, competition results, training tips, equestrian blog, riding advice, coaching updates, Oxfordshire equestrian news, eventing tips',
-    canonicalPath: '/news',
-    h1: 'Eventing News & Tips',
+  '/blog': {
+    title: 'Equestrian Training Blog | Tips & Insights | Dan Bizzarro Method',
+    description: 'Expert horse training tips, eventing insights, and coaching advice from Dan Bizzarro Method. Read about dressage, show jumping, cross country techniques and improve your riding.',
+    keywords: 'equestrian blog, horse training tips, eventing blog, dressage tips, show jumping advice, cross country techniques, riding improvement, Dan Bizzarro blog, horse training articles',
+    canonicalPath: '/blog',
+    h1: 'Training Blog',
     ogImage: '/hero-background.jpg'
   },
 
