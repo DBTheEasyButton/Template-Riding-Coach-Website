@@ -9,7 +9,6 @@ import { Download, Mail, Printer, CheckSquare, Square, Plus, X } from "lucide-re
 import jsPDF from 'jspdf';
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import PromotionalBanners from "@/components/PromotionalBanners";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -826,10 +825,6 @@ export default function PackingListGenerator() {
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <PromotionalBanners />
-            </div>
           </div>
         </div>
       </div>

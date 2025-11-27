@@ -7,7 +7,6 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, AlertTriangle, Target } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import PromotionalBanners from "@/components/PromotionalBanners";
 import SEOHead from "@/components/SEOHead";
 import StructuredData from "@/components/StructuredData";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -386,12 +385,6 @@ export default function ReadinessQuiz() {
                 </div>
               </div>
 
-              {/* Sidebar with Promotional Banners */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-8">
-                  <PromotionalBanners />
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -497,12 +490,6 @@ export default function ReadinessQuiz() {
                 </Card>
               </div>
 
-              {/* Sidebar with Promotional Banners */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-8">
-                  <PromotionalBanners />
-                </div>
-              </div>
             </div>
           </div>
         </div>

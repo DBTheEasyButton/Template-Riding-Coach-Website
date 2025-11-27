@@ -9,40 +9,6 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
-function InlineCTA() {
-  const [, setLocation] = useLocation();
-  return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg py-2 px-3 my-6 shadow-md">
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        <Button 
-          size="sm"
-          variant="secondary"
-          className="bg-white text-blue-700 hover:bg-blue-50 text-xs px-3 py-1 h-7"
-          onClick={() => setLocation('/#clinics')}
-        >
-          Book a Clinic
-        </Button>
-        <Button 
-          size="sm"
-          variant="secondary"
-          className="bg-white text-blue-700 hover:bg-blue-50 text-xs px-3 py-1 h-7"
-          onClick={() => setLocation('/coaching/private-lessons')}
-        >
-          Book an Individual Lesson
-        </Button>
-        <Button 
-          size="sm"
-          variant="secondary"
-          className="bg-white text-blue-700 hover:bg-blue-50 text-xs px-3 py-1 h-7"
-          onClick={() => setLocation('/coaching/remote')}
-        >
-          Book a Virtual Lesson
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 export default function NewsArticle() {
   const params = useParams();
   const [, setLocation] = useLocation();
@@ -171,23 +137,12 @@ export default function NewsArticle() {
               />
             </div>
 
-            {/* Article Content with inline CTAs */}
-            <div className="prose prose-lg max-w-none text-gray-800 leading-relaxed [&_strong]:font-bold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-2">
-              {(() => {
-                const paragraphs = formattedContent.split('</p>');
-                const midPoint = Math.floor(paragraphs.length / 2);
-                const firstHalf = paragraphs.slice(0, midPoint).join('</p>') + (midPoint > 0 ? '</p>' : '');
-                const secondHalf = paragraphs.slice(midPoint).join('</p>');
-                
-                return (
-                  <>
-                    <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
-                    {paragraphs.length > 4 && <InlineCTA />}
-                    <div dangerouslySetInnerHTML={{ __html: secondHalf }} />
-                    <InlineCTA />
-                  </>
-                );
-              })()}
+            {/* Article Content */}
+            <div className="prose prose-lg max-w-none">
+              <div 
+                className="text-gray-800 leading-relaxed [&_strong]:font-bold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-2"
+                dangerouslySetInnerHTML={{ __html: formattedContent }}
+              />
             </div>
 
             {/* Article Footer */}
