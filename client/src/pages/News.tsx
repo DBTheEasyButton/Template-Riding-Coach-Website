@@ -99,12 +99,14 @@ export default function News() {
                   data-testid="featured-article"
                 >
                   <div className="md:grid md:grid-cols-2 gap-8">
-                    <OptimizedImage 
-                      src={featuredArticle.image}
-                      alt={featuredArticle.title}
-                      className="w-full h-96 object-cover"
-                      loading="eager"
-                    />
+                    <div className="h-96 overflow-hidden flex items-center justify-center bg-gray-100">
+                      <OptimizedImage 
+                        src={featuredArticle.image}
+                        alt={featuredArticle.title}
+                        className="w-full h-full object-cover object-center"
+                        loading="eager"
+                      />
+                    </div>
                     <div className="p-8 flex flex-col justify-center">
                       <div className="inline-block mb-4">
                         <span className="bg-orange text-white px-4 py-2 rounded-full text-sm font-semibold">
