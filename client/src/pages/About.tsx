@@ -157,13 +157,13 @@ export default function About() {
           </div>
           <div className="space-y-6 text-lg text-dark leading-relaxed">
             <p>
-              Dan's approach to training combines classical eventing principles with modern techniques, always prioritizing the welfare and development of both horse and rider.
+              Dan's approach to training combines classical eventing principles with modern, rider-friendly techniques, always prioritising the welfare, understanding, and long-term development of both horse and rider. This philosophy sits at the heart of the <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a>—a clear, structured way of training designed to make communication easier, build trust, and help every partnership progress with purpose.
             </p>
             <p>
-              Drawing from his experience working with William Fox-Pitt and competing at the highest international levels, Dan emphasizes systematic progression, clear communication, and building confidence through proper preparation.
+              Drawing from his experience working with William Fox-Pitt, Caroline Moore, Ian Woodhead, and many other top riders and coaches, as well as competing at the highest international levels, Dan emphasises systematic progression, clear communication, and building confidence through thoughtful preparation.
             </p>
             <p>
-              Whether coaching beginners or advanced competitors, Dan's focus remains on creating strong foundations in dressage, show jumping, and cross-country - the three disciplines that make eventing the ultimate test of horsemanship.
+              Whether coaching beginners or advanced competitors, Dan's focus remains on developing strong foundations in dressage, show jumping, and cross-country—the three disciplines that make eventing the ultimate test of horsemanship—and ensuring that every rider has a method they can rely on both at home and in competition.
             </p>
           </div>
         </div>
