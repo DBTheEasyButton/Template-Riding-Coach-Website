@@ -39,7 +39,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
 export const organizationData = {
   name: "Dan Bizzarro Method",
   url: "https://danbizzarromethod.com",
-  logo: "https://danbizzarromethod.com/attached_assets/Logo-trasparenteRAST_1749385353493.png",
+  logo: "https://danbizzarromethod.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
   description: "Professional eventing coaching and horse training services by international event rider Dan Bizzarro",
   address: {
     "@type": "PostalAddress",
@@ -69,8 +69,8 @@ export const localBusinessData = {
   name: "Dan Bizzarro Method",
   description: "Professional equestrian coaching specialising in eventing, show jumping, dressage, cross country, and pole work training. Olympic-shortlisted international event rider offering private lessons, group clinics, and virtual coaching.",
   url: "https://danbizzarromethod.com",
-  logo: "https://danbizzarromethod.com/attached_assets/Logo-trasparenteRAST_1749385353493.png",
-  image: "https://danbizzarromethod.com/attached_assets/Logo-trasparenteRAST_1749385353493.png",
+  logo: "https://danbizzarromethod.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
+  image: "https://danbizzarromethod.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
   telephone: "+447767291713",
   email: "dan@danbizzarromethod.com",
   address: {

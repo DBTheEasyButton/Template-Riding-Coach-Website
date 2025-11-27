@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoPath from "@assets/optimized/Logo-trasparenteRAST_1749385353493.png";
+import logoPath from "@assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

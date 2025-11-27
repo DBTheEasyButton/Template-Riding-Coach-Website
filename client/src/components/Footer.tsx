@@ -1,6 +1,6 @@
 import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 import { Link } from "wouter";
-import logoPath from "@assets/optimized/Dan Bizzarro Method_1749676680719.png";
+import logoPath from "@assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png";
 
 export default function Footer() {
   const scrollToSection = (href: string) => {
