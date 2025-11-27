@@ -9,6 +9,8 @@ import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
 import carouselClinic2Webp from "@assets/optimized/carousel-clinic-2.webp";
 import dressageImageJpg from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import dressageImageWebp from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.webp";
+import coachingClinicImageJpg from "@assets/optimized/hero-coaching-clinic.jpg";
+import coachingClinicImageWebp from "@assets/optimized/hero-coaching-clinic.webp";
 import crossCountryImageJpg from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
 import crossCountryImageWebp from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.webp";
 import showJumpingImageJpg from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.jpg";
@@ -29,6 +31,11 @@ export default function HeroSection() {
       jpegSrc: carouselClinic2Jpg,
       webpSrc: carouselClinic2Webp,
       alt: "Dan Bizzarro coaching clinic with riders and horses"
+    },
+    { 
+      jpegSrc: coachingClinicImageJpg,
+      webpSrc: coachingClinicImageWebp,
+      alt: "Dan Bizzarro coaching at show jumping arena"
     },
     { 
       jpegSrc: dressageImageJpg,
