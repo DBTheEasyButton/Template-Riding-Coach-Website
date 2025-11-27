@@ -424,7 +424,7 @@ export default function AdminNews() {
                           size="sm"
                           onClick={() => {
                             setSelectedImage(null);
-                            setImagePreview("");
+                            setImagePreview(formData.image || "");
                             if (fileInputRef.current) fileInputRef.current.value = "";
                           }}
                           className="text-red-600 hover:text-red-700"
@@ -507,9 +507,9 @@ export default function AdminNews() {
                 </Button>
                 <Button 
                   onClick={handleSubmit}
-                  disabled={createMutation.isPending || updateMutation.isPending}
+                  disabled={createMutation.isPending || updateMutation.isPending || isUploadingImage}
                 >
-                  {editingNews ? 'Update' : 'Create'} Article
+                  {isUploadingImage ? 'Uploading Image...' : (createMutation.isPending || updateMutation.isPending) ? 'Saving...' : (editingNews ? 'Update Article' : 'Create Article')}
                 </Button>
               </DialogFooter>
             </DialogContent>
