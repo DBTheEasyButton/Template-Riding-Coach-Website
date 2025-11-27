@@ -40,7 +40,7 @@ export function OptimizedImage({
 
   const getOptimizedVersions = (originalSrc: string) => {
     if (!isUploadedImage) {
-      return { avif: null, webp: null, webpSrcset: null, srcset: null, mobileWebp: null, fallback: originalSrc };
+      return { avif: null, webp: null, webpSrcset: null, srcset: null, mobileWebp: null, mobileJpg: null, fallback: originalSrc };
     }
 
     const baseName = getBaseName(originalSrc);
@@ -51,9 +51,11 @@ export function OptimizedImage({
       webp: `${basePath}${baseName}.webp`,
       mobileWebp: `${basePath}${baseName}-mobile.webp`,
       mobileJpg: `${basePath}${baseName}-mobile.jpg`,
+      optimizedJpg: `${basePath}${baseName}-optimized.jpg`,
+      originalJpg: `${basePath}${baseName}.jpg`,
       webpSrcset: `${basePath}${baseName}-mobile.webp 480w, ${basePath}${baseName}.webp 1200w`,
       srcset: `${basePath}${baseName}-mobile.jpg 480w, ${basePath}${baseName}-tablet.jpg 768w, ${basePath}${baseName}-desktop.jpg 1200w`,
-      fallback: `${basePath}${baseName}-optimized.jpg`
+      fallback: originalSrc
     };
   };
 
@@ -110,6 +112,7 @@ export function OptimizedImage({
         <source 
           srcSet={versions.avif} 
           type="image/avif"
+          media="(min-width: 769px)"
         />
       )}
       {/* Desktop WebP */}
@@ -117,14 +120,7 @@ export function OptimizedImage({
         <source 
           srcSet={versions.webp} 
           type="image/webp"
-        />
-      )}
-      {/* Responsive JPEG srcset */}
-      {versions.srcset && (
-        <source 
-          srcSet={versions.srcset}
-          type="image/jpeg"
-          sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+          media="(min-width: 769px)"
         />
       )}
       <img
