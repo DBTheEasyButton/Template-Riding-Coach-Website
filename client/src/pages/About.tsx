@@ -2,8 +2,12 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
-import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
-import danWithHorsesPath from "@assets/optimized/11_1749504952106.jpg";
+import valleraTableJpg from "@assets/optimized/about-vallera-table.jpg";
+import valleraTableWebp from "@assets/optimized/about-vallera-table.webp";
+import hartpuryJpg from "@assets/optimized/about-hartpury.jpg";
+import hartpuryWebp from "@assets/optimized/about-hartpury.webp";
+import blenheimDressageJpg from "@assets/optimized/about-blenheim-dressage.jpg";
+import blenheimDressageWebp from "@assets/optimized/about-blenheim-dressage.webp";
 import aboutDanHeroJpg from "@assets/optimized/about-dan-hero.jpg";
 import aboutDanHeroWebp from "@assets/optimized/about-dan-hero.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -78,20 +82,37 @@ export default function About() {
             </div>
             <div className="space-y-6">
               <div className="relative">
-                <img 
-                  src={danPhotoPath} 
-                  alt="Dan Bizzarro with his horse - authentic photo showing the professional bond between rider and mount" 
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={valleraTableWebp} type="image/webp" />
+                  <img 
+                    src={valleraTableJpg} 
+                    alt="Dan Bizzarro competing cross country on grey horse Vallera" 
+                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </picture>
               </div>
               <div className="relative">
-                <img 
-                  src={danWithHorsesPath} 
-                  alt="Dan Bizzarro with his horses and dog - showing his personal connection with all his animals" 
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={hartpuryWebp} type="image/webp" />
+                  <img 
+                    src={hartpuryJpg} 
+                    alt="Dan Bizzarro jumping at Hartpury Open Championships cross country" 
+                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </picture>
+              </div>
+              <div className="relative">
+                <picture>
+                  <source srcSet={blenheimDressageWebp} type="image/webp" />
+                  <img 
+                    src={blenheimDressageJpg} 
+                    alt="Dan Bizzarro representing Italy at Blenheim European Championships dressage" 
+                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </picture>
               </div>
             </div>
           </div>
