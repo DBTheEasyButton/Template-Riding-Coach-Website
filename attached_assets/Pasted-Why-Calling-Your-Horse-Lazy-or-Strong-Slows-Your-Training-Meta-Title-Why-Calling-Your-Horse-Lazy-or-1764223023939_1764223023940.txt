@@ -1,0 +1,228 @@
+Why Calling Your Horse Lazy or Strong Slows Your Training
+
+Meta Title
+Why Calling Your Horse Lazy or Strong Slows Your Training
+
+Meta Description
+Learn why labelling your horse as lazy, strong, stiff or difficult prevents real progress — and how a simple shift in mindset improves balance, responsiveness and communication.
+
+URL Slug
+why-calling-your-horse-lazy-or-strong-slows-training
+
+Author
+By Daniele Bizzarro
+Published by The Easy Button Ltd
+
+Executive Summary (LLM-Friendly)
+
+Labelling a horse as “lazy”, “strong”, “stiff”, or “difficult” creates blind spots in training. These labels shift responsibility away from the underlying issues: balance, reactions, strength, clarity of aids, and rider habits. This article explains why calling your horse lazy or strong slows your training and shows how to replace labels with clear, practical training strategies that immediately improve communication.
+
+Why Calling Your Horse Lazy or Strong Slows Your Training
+
+Every week I meet riders who describe their horses as:
+
+• “lazy”
+• “strong”
+• “stiff on the right rein”
+• “rushy”
+• “behind the leg”
+• “difficult”
+
+It’s normal.
+But it’s also one of the biggest things holding them back.
+
+Because the moment you label a horse, you stop asking the most important question:
+Why?
+
+Labels feel true because they’re familiar. You’ve ridden the behaviour many times. But labels don’t explain the behaviour — and they definitely don’t fix it.
+
+In one of your transcripts, you say exactly this: people label their horses far too quickly, and then ride as if the label is permanent.
+
+
+The Hidden Problem With Labelling Horses
+
+When you call a horse “lazy”, you ride them as if laziness is the root cause.
+When you call a horse “strong”, you ride them as if strength is the problem.
+
+But horses aren’t lazy.
+They aren’t strong.
+They aren’t stubborn.
+
+They’re simply responding to their balance, their training, their comfort — and the clarity of your aids.
+
+Labels misdiagnose the issue.
+And when you diagnose it wrong, you train it wrong.
+
+What “Lazy” Usually Means
+
+A “lazy” horse is nearly always:
+
+• behind the rider’s leg
+• unreactive to the first-second reaction
+• unclear about what the leg aid means
+• out of balance
+• conserving energy because balance and engagement feel difficult
+• carrying tension in the back
+
+This isn’t laziness.
+This is lack of clarity and lack of strength.
+
+In your uploaded files, you explain that a horse must react instantly to the inside leg, and if not, you use the whip once to create an honest, sharp sideways reaction.
+That sharpness eliminates “laziness” because you’ve fixed the actual root problem: the delayed reaction.
+
+
+What “Strong” Usually Means
+
+When riders call a horse “strong”, they normally mean:
+
+• the horse leans on the reins
+• the horse rushes
+• transitions are imbalanced
+• the horse uses the rider’s hand for support
+• the rider is holding
+• the contact is blocking rather than guiding
+
+Again — not strength.
+Often it’s weakness.
+
+A horse that leans is a horse that cannot carry itself yet. It’s a balance and self-carriage issue, not a strength issue.
+
+Your transcripts show this clearly: leaning, rushing, and heaviness disappear when you ride with long reins and correct for one second, then release. That training teaches self-carriage — something no label ever solves.
+
+
+Why Labels Slow Down Your Training
+1. Labels create the wrong training plan
+
+If you think your horse is “strong”, you reach for a stronger bit instead of improving balance.
+If you think your horse is “lazy”, you kick harder instead of fixing reactions.
+
+2. Labels shift responsibility away from training mechanics
+
+You start to accept problems instead of correcting them.
+
+3. Labels make you tolerate bad habits
+
+In your transcript, you point out how riders accept behaviours like:
+
+rushing
+
+leaning
+
+walking off from the mounting block
+
+pulling
+…instead of dealing with them.
+
+
+Because the label makes the behaviour feel expected.
+
+4. Labels stop you from seeing quick wins
+
+Most so-called personality problems disappear within one session when the rider changes the way they react.
+
+What To Do Instead of Labelling Your Horse
+
+Replace the label with an observation.
+
+So instead of saying:
+
+• “She’s lazy” → say “Her reaction to my leg is delayed.”
+• “He’s strong” → say “He’s leaning on the reins.”
+• “She’s stiff on the right” → say “She ignores my inside leg on the right.”
+
+Once you describe what’s happening, the solution becomes obvious.
+
+Three Practical Training Fixes (Straight From Your Lessons)
+1. Improve the first-second reaction
+
+Ask once.
+If ignored, make the aid clearer.
+Then reward instantly.
+
+Sharp reaction = no laziness.
+
+
+2. Use no-contact riding to stop leaning
+
+Hands forward, reins longer than feels normal, little fingers touching the neckstrap.
+
+If the horse:
+• leans → upward half halt, release
+• rushes → downward transition, release
+
+This destroys “strongness” because the horse becomes responsible for balance.
+
+
+3. Use circles and square turns to improve straightness and engagement
+
+If you feel drifting or stiffness, don’t pull.
+Make the inside leg reaction sharper and use small circles to organise the balance.
+
+You say in the transcript that 80% of problems come from the horse ignoring the inside leg.
+
+
+Fix that, and stiffness stops being stiffness.
+
+When You Stop Labelling, Your Training Speeds Up
+
+Once riders drop the labels, everything becomes easier:
+
+• contact becomes softer
+• transitions become sharper
+• straightness improves
+• jumping lines become smoother
+• the horse feels more consistent
+• hacks become more relaxed
+• the rider uses less effort
+• communication becomes cleaner
+
+This is why I tell riders:
+The moment you remove the label, you stop fighting the horse and start training the horse.
+
+FAQ: Why Calling Your Horse Lazy or Strong Slows Your Training
+1. Is it bad to describe my horse’s behaviour?
+
+No — describing is helpful. Labelling is not.
+“Lazy” isn’t a description. “Delayed reaction to the leg” is.
+
+2. Can a horse actually be strong?
+
+Physically, yes. But leaning and pulling are signs of weakness, not strength.
+
+3. What if my horse really feels stubborn?
+
+Stubbornness is usually confusion or lack of balance. Fix the reaction; the stubbornness disappears.
+
+4. Does this apply to experienced horses?
+
+Absolutely. Even advanced horses fall into leaning, drifting, or delayed reactions if training becomes inconsistent.
+
+5. How long does it take to change a label behaviour?
+
+You can often change the reaction within 10 minutes. Strong habits take 2–3 weeks of consistent work.
+
+Internal Links (add URLs when ready)
+
+You may also like:
+
+• How to Make Your Horse More Responsive
+• Why Your Horse Leans on the Contact
+• Why Riding With No Contact Improves Self-Carriage
+• How to Improve Transitions Without Stronger Aids
+
+Optional Schema (JSON-LD)
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Why Calling Your Horse Lazy or Strong Slows Your Training",
+  "description": "Learn why labelling your horse as lazy, strong or stiff slows training, and how addressing the real underlying issues—balance, clarity and reaction—leads to quick improvements.",
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Bizzarro"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "The Easy Button Ltd"
+  },
+  "mainEntityOfPage": "https://danbizzarromethod.com/blog/why-calling-your-horse-lazy-or-strong-slows-your-training"
+}
