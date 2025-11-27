@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import AdminNavigation from "@/components/AdminNavigation";
 import Footer from "@/components/Footer";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -311,13 +312,10 @@ export default function AdminNews() {
                         </div>
                       </div>
                       {news.image && (
-                        <img 
+                        <OptimizedImage 
                           src={news.image} 
                           alt={news.title}
                           className="w-24 h-24 object-cover rounded-lg ml-4"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
                         />
                       )}
                     </div>
