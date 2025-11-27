@@ -115,7 +115,7 @@ export default function Home() {
               </p>
               
               <p>
-                This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+                This is why I dedicated myself to developing a method that works with every horse and every rider. <a href="#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">The Dan Bizzarro Method</a> builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
               </p>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function Home() {
       {/* Divider */}
       <div className="border-t-4 border-navy"></div>
       {/* What is the Dan Bizzarro Method Section */}
-      <section className="py-16 bg-gray-50">
+      <section id="method" className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">What is the Dan Bizzarro Method?</h2>
