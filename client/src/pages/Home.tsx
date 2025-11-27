@@ -89,6 +89,62 @@ export default function Home() {
       <Suspense fallback={<SectionSkeleton />}>
         <TestimonialsSection />
       </Suspense>
+      {/* What is the Dan Bizzarro Method Section */}
+      <section id="method" className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">What is the Dan Bizzarro Method?</h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+            <p className="text-lg text-dark max-w-3xl mx-auto">
+              A simple, structured way of helping horses and riders understand each other better.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="w-7 h-7 text-orange" />
+              </div>
+              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Clarity</h3>
+              <p className="text-dark text-sm leading-relaxed">
+                Riders learn how to give clear instructions that horses can easily understand and follow.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-7 h-7 text-orange" />
+              </div>
+              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Confidence</h3>
+              <p className="text-dark text-sm leading-relaxed">
+                Horses learn to respond without tension, and both horse and rider start to enjoy the work more.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-7 h-7 text-orange" />
+              </div>
+              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Communication</h3>
+              <p className="text-dark text-sm leading-relaxed">
+                Build a partnership that feels good through progressive training and thoughtful exercises.
+              </p>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10 max-w-4xl mx-auto">
+            <p className="text-dark leading-relaxed mb-4">The method comes from years of riding every type of horse, easy ones, tricky ones, sharp ones, and everything in between, and coaching thousands of riders at all levels.</p>
+            <p className="text-dark leading-relaxed mb-4">
+              It blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood.
+            </p>
+            <p className="text-navy font-medium leading-relaxed">
+              Whether you ride for fun or want to be competitive, the goal is always the same: make riding easier to understand, build a partnership that feels good, and help you get the results you want without overcomplicating things.
+            </p>
+          </div>
+        </div>
+      </section>
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
       <Suspense fallback={<SectionSkeleton />}>
         <ClinicsSection />
       </Suspense>
@@ -164,62 +220,6 @@ export default function Home() {
                 Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-      {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
-      {/* What is the Dan Bizzarro Method Section */}
-      <section id="method" className="py-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">What is the Dan Bizzarro Method?</h2>
-            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-            <p className="text-lg text-dark max-w-3xl mx-auto">
-              A simple, structured way of helping horses and riders understand each other better.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
-              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="w-7 h-7 text-orange" />
-              </div>
-              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Clarity</h3>
-              <p className="text-dark text-sm leading-relaxed">
-                Riders learn how to give clear instructions that horses can easily understand and follow.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
-              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-7 h-7 text-orange" />
-              </div>
-              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Confidence</h3>
-              <p className="text-dark text-sm leading-relaxed">
-                Horses learn to respond without tension, and both horse and rider start to enjoy the work more.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
-              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-7 h-7 text-orange" />
-              </div>
-              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Communication</h3>
-              <p className="text-dark text-sm leading-relaxed">
-                Build a partnership that feels good through progressive training and thoughtful exercises.
-              </p>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10 max-w-4xl mx-auto">
-            <p className="text-dark leading-relaxed mb-4">The method comes from years of riding every type of horse, easy ones, tricky ones, sharp ones, and everything in between, and coaching thousands of riders at all levels.</p>
-            <p className="text-dark leading-relaxed mb-4">
-              It blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood.
-            </p>
-            <p className="text-navy font-medium leading-relaxed">
-              Whether you ride for fun or want to be competitive, the goal is always the same: make riding easier to understand, build a partnership that feels good, and help you get the results you want without overcomplicating things.
-            </p>
           </div>
         </div>
       </section>
