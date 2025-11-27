@@ -501,7 +501,7 @@ export default function ClinicsSection() {
             </Button>
             <Button 
               onClick={() => window.open('https://wa.me/447767291713', '_blank')}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-navy hover:bg-navy/90 text-white"
             >
               Book a Private Lesson
             </Button>
