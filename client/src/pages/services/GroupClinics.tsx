@@ -11,6 +11,8 @@ import { Calendar, Check, Users, Award, Target, MapPin, Clock } from "lucide-rea
 import TestimonialStrip from "@/components/TestimonialStrip";
 import clinicsHeroJpg from "@assets/optimized/DBCLINIC-83_1762928005686.jpg";
 import clinicsHeroWebp from "@assets/optimized/DBCLINIC-83_1762928005686.webp";
+import clinicsHeroMobileJpg from "@assets/optimized/DBCLINIC-83_1762928005686-mobile.jpg";
+import clinicsHeroMobileWebp from "@assets/optimized/DBCLINIC-83_1762928005686-mobile.webp";
 import { useQuery } from "@tanstack/react-query";
 import type { Clinic } from "@shared/schema";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -152,6 +154,8 @@ export default function GroupClinics() {
         <HeroPicture
           jpegSrc={clinicsHeroJpg}
           webpSrc={clinicsHeroWebp}
+          mobileJpegSrc={clinicsHeroMobileJpg}
+          mobileWebpSrc={clinicsHeroMobileWebp}
           alt="Dan Bizzarro coaching group clinic with riders and horses"
           loading="eager"
           priority={true}

@@ -35,9 +35,15 @@ import {
   PiggyBank
 } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
+import danPhotoMobilePath from "@assets/optimized/13_1749386080915-mobile.jpg";
+import danPhotoMobileWebp from "@assets/optimized/13_1749386080915-mobile.webp";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
+import dressageHeroMobileJpg from "@assets/optimized/dressage-hero-mobile.jpg";
+import dressageHeroMobileWebp from "@assets/optimized/dressage-hero-mobile.webp";
 import coachingClinicPhoto from "@assets/optimized/coaching-clinic.jpg";
+import coachingClinicMobileJpg from "@assets/optimized/coaching-clinic-mobile.jpg";
+import coachingClinicMobileWebp from "@assets/optimized/coaching-clinic-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 export default function TenPointsBetter() {
@@ -321,6 +327,8 @@ export default function TenPointsBetter() {
                 <HeroPicture
                   jpegSrc={dressageHeroJpg}
                   webpSrc={dressageHeroWebp}
+                  mobileJpegSrc={dressageHeroMobileJpg}
+                  mobileWebpSrc={dressageHeroMobileWebp}
                   alt="Dressage rider performing a precise movement in the arena - the Dan Bizzarro Method transforms your test scores"
                   loading="eager"
                   priority={true}
@@ -418,11 +426,15 @@ export default function TenPointsBetter() {
           {/* First row: Image left, text right */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="relative">
-              <img 
-                src={danPhotoPath} 
-                alt="Dan Bizzarro - International Event Rider and Coach"
-                className="rounded-2xl shadow-2xl w-full"
-              />
+              <picture>
+                <source srcSet={danPhotoMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={danPhotoMobilePath} type="image/jpeg" media="(max-width: 768px)" />
+                <img 
+                  src={danPhotoPath} 
+                  alt="Dan Bizzarro - International Event Rider and Coach"
+                  className="rounded-2xl shadow-2xl w-full"
+                />
+              </picture>
             </div>
             
             <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
@@ -449,11 +461,15 @@ export default function TenPointsBetter() {
             </div>
             
             <div className="relative">
-              <img 
-                src={coachingClinicPhoto} 
-                alt="Dan Bizzarro coaching a rider during a clinic session"
-                className="rounded-2xl shadow-2xl w-full"
-              />
+              <picture>
+                <source srcSet={coachingClinicMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={coachingClinicMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
+                <img 
+                  src={coachingClinicPhoto} 
+                  alt="Dan Bizzarro coaching a rider during a clinic session"
+                  className="rounded-2xl shadow-2xl w-full"
+                />
+              </picture>
             </div>
           </div>
         </div>

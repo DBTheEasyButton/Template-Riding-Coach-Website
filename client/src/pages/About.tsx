@@ -2,18 +2,31 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
+import ResponsiveImage from "@/components/ResponsiveImage";
 import valleraTableJpg from "@assets/optimized/about-vallera-table.jpg";
 import valleraTableWebp from "@assets/optimized/about-vallera-table.webp";
+import valleraTableMobileJpg from "@assets/optimized/about-vallera-table-mobile.jpg";
+import valleraTableMobileWebp from "@assets/optimized/about-vallera-table-mobile.webp";
 import hartpuryJpg from "@assets/optimized/about-hartpury.jpg";
 import hartpuryWebp from "@assets/optimized/about-hartpury.webp";
+import hartpuryMobileJpg from "@assets/optimized/about-hartpury-mobile.jpg";
+import hartpuryMobileWebp from "@assets/optimized/about-hartpury-mobile.webp";
 import blenheimDressageJpg from "@assets/optimized/about-blenheim-dressage.jpg";
 import blenheimDressageWebp from "@assets/optimized/about-blenheim-dressage.webp";
+import blenheimDressageMobileJpg from "@assets/optimized/about-blenheim-dressage-mobile.jpg";
+import blenheimDressageMobileWebp from "@assets/optimized/about-blenheim-dressage-mobile.webp";
 import philosophyJpg from "@assets/optimized/about-philosophy.jpg";
 import philosophyWebp from "@assets/optimized/about-philosophy.webp";
+import philosophyMobileJpg from "@assets/optimized/about-philosophy-mobile.jpg";
+import philosophyMobileWebp from "@assets/optimized/about-philosophy-mobile.webp";
 import philosophy2Jpg from "@assets/optimized/about-philosophy-2.jpg";
 import philosophy2Webp from "@assets/optimized/about-philosophy-2.webp";
+import philosophy2MobileJpg from "@assets/optimized/about-philosophy-2-mobile.jpg";
+import philosophy2MobileWebp from "@assets/optimized/about-philosophy-2-mobile.webp";
 import aboutDanHeroJpg from "@assets/optimized/about-dan-hero.jpg";
 import aboutDanHeroWebp from "@assets/optimized/about-dan-hero.webp";
+import aboutDanHeroMobileJpg from "@assets/optimized/about-dan-hero-mobile.jpg";
+import aboutDanHeroMobileWebp from "@assets/optimized/about-dan-hero-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
@@ -41,6 +54,8 @@ export default function About() {
         <HeroPicture
           jpegSrc={aboutDanHeroJpg}
           webpSrc={aboutDanHeroWebp}
+          mobileJpegSrc={aboutDanHeroMobileJpg}
+          mobileWebpSrc={aboutDanHeroMobileWebp}
           alt="Dan Bizzarro professional eventing coach at clinic in Oxfordshire"
           loading="eager"
           priority={true}
@@ -86,37 +101,34 @@ export default function About() {
             </div>
             <div className="space-y-6">
               <div className="relative">
-                <picture>
-                  <source srcSet={valleraTableWebp} type="image/webp" />
-                  <img 
-                    src={valleraTableJpg} 
-                    alt="Dan Bizzarro competing cross country on grey horse Vallera" 
-                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                    loading="lazy"
-                  />
-                </picture>
+                <ResponsiveImage
+                  src={valleraTableJpg}
+                  webpSrc={valleraTableWebp}
+                  mobileSrc={valleraTableMobileJpg}
+                  mobileWebpSrc={valleraTableMobileWebp}
+                  alt="Dan Bizzarro competing cross country on grey horse Vallera"
+                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                />
               </div>
               <div className="relative">
-                <picture>
-                  <source srcSet={hartpuryWebp} type="image/webp" />
-                  <img 
-                    src={hartpuryJpg} 
-                    alt="Dan Bizzarro jumping at Hartpury Open Championships cross country" 
-                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                    loading="lazy"
-                  />
-                </picture>
+                <ResponsiveImage
+                  src={hartpuryJpg}
+                  webpSrc={hartpuryWebp}
+                  mobileSrc={hartpuryMobileJpg}
+                  mobileWebpSrc={hartpuryMobileWebp}
+                  alt="Dan Bizzarro jumping at Hartpury Open Championships cross country"
+                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                />
               </div>
               <div className="relative">
-                <picture>
-                  <source srcSet={blenheimDressageWebp} type="image/webp" />
-                  <img 
-                    src={blenheimDressageJpg} 
-                    alt="Dan Bizzarro representing Italy at Blenheim European Championships dressage" 
-                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                    loading="lazy"
-                  />
-                </picture>
+                <ResponsiveImage
+                  src={blenheimDressageJpg}
+                  webpSrc={blenheimDressageWebp}
+                  mobileSrc={blenheimDressageMobileJpg}
+                  mobileWebpSrc={blenheimDressageMobileWebp}
+                  alt="Dan Bizzarro representing Italy at Blenheim European Championships dressage"
+                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>
@@ -161,15 +173,14 @@ export default function About() {
           </div>
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="relative">
-              <picture>
-                <source srcSet={philosophyWebp} type="image/webp" />
-                <img 
-                  src={philosophyJpg} 
-                  alt="Dan Bizzarro coaching a rider during a training session" 
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                  loading="lazy"
-                />
-              </picture>
+              <ResponsiveImage
+                src={philosophyJpg}
+                webpSrc={philosophyWebp}
+                mobileSrc={philosophyMobileJpg}
+                mobileWebpSrc={philosophyMobileWebp}
+                alt="Dan Bizzarro coaching a rider during a training session"
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+              />
             </div>
             <div className="space-y-6 text-lg text-dark leading-relaxed">
               <p>
@@ -188,15 +199,14 @@ export default function About() {
               </p>
             </div>
             <div className="relative">
-              <picture>
-                <source srcSet={philosophy2Webp} type="image/webp" />
-                <img 
-                  src={philosophy2Jpg} 
-                  alt="Dan Bizzarro coaching at a show jumping arena" 
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                  loading="lazy"
-                />
-              </picture>
+              <ResponsiveImage
+                src={philosophy2Jpg}
+                webpSrc={philosophy2Webp}
+                mobileSrc={philosophy2MobileJpg}
+                mobileWebpSrc={philosophy2MobileWebp}
+                alt="Dan Bizzarro coaching at a show jumping arena"
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+              />
             </div>
           </div>
         </div>

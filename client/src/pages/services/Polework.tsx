@@ -9,6 +9,8 @@ import { Target, Check, Zap, TrendingUp, Calendar } from "lucide-react";
 import TestimonialStrip from "@/components/TestimonialStrip";
 import poleworkHeroJpg from "@assets/optimized/polework-hero.jpg";
 import poleworkHeroWebp from "@assets/optimized/polework-hero.webp";
+import poleworkHeroMobileJpg from "@assets/optimized/polework-hero-mobile.jpg";
+import poleworkHeroMobileWebp from "@assets/optimized/polework-hero-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
@@ -152,6 +154,8 @@ export default function Polework() {
         <HeroPicture
           jpegSrc={poleworkHeroJpg}
           webpSrc={poleworkHeroWebp}
+          mobileJpegSrc={poleworkHeroMobileJpg}
+          mobileWebpSrc={poleworkHeroMobileWebp}
           alt="Colorful polework training with horse and rider in Oxfordshire arena"
           loading="eager"
           priority={true}

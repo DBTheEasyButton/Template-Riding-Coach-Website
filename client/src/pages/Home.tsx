@@ -11,8 +11,12 @@ import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
+import danPhotoMobilePath from "@assets/optimized/13_1749386080915-mobile.jpg";
+import danPhotoMobileWebp from "@assets/optimized/13_1749386080915-mobile.webp";
 import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
 import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
+import boekeloPodiumMobileJpg from "@assets/optimized/boekelo-podium-mobile.jpg";
+import boekeloPodiumMobileWebp from "@assets/optimized/boekelo-podium-mobile.webp";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -101,12 +105,16 @@ export default function Home() {
           {/* First row: Image left, text right */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="relative">
-              <img 
-                src={danPhotoPath} 
-                alt="Dan Bizzarro - International Event Rider and Coach"
-                className="rounded-2xl shadow-2xl w-full"
-                loading="lazy"
-              />
+              <picture>
+                <source srcSet={danPhotoMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={danPhotoMobilePath} type="image/jpeg" media="(max-width: 768px)" />
+                <img 
+                  src={danPhotoPath} 
+                  alt="Dan Bizzarro - International Event Rider and Coach"
+                  className="rounded-2xl shadow-2xl w-full"
+                  loading="lazy"
+                />
+              </picture>
             </div>
             
             <div className="space-y-6 text-lg text-dark leading-relaxed">
@@ -130,6 +138,8 @@ export default function Home() {
             
             <div className="relative">
               <picture>
+                <source srcSet={boekeloPodiumMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={boekeloPodiumMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
                 <source srcSet={boekeloPodiumPhotoWebp} type="image/webp" />
                 <img 
                   src={boekeloPodiumPhotoJpg} 

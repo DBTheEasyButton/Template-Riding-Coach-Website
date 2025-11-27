@@ -9,8 +9,12 @@ import { Target, Check, Zap, Heart, Shield } from "lucide-react";
 import TestimonialStrip from "@/components/TestimonialStrip";
 import crossCountryHeroJpg from "@assets/optimized/cross-country-hero.jpg";
 import crossCountryHeroWebp from "@assets/optimized/cross-country-hero.webp";
+import crossCountryHeroMobileJpg from "@assets/optimized/cross-country-hero-mobile.jpg";
+import crossCountryHeroMobileWebp from "@assets/optimized/cross-country-hero-mobile.webp";
 import crossCountryClinicJpg from "@assets/optimized/cross-country-clinic.jpg";
 import crossCountryClinicWebp from "@assets/optimized/cross-country-clinic.webp";
+import crossCountryClinicMobileJpg from "@assets/optimized/cross-country-clinic-mobile.jpg";
+import crossCountryClinicMobileWebp from "@assets/optimized/cross-country-clinic-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
@@ -150,6 +154,8 @@ export default function CrossCountry() {
         <HeroPicture
           jpegSrc={crossCountryHeroJpg}
           webpSrc={crossCountryHeroWebp}
+          mobileJpegSrc={crossCountryHeroMobileJpg}
+          mobileWebpSrc={crossCountryHeroMobileWebp}
           alt="Dan Bizzarro cross country at CCI Saumur"
           loading="eager"
           priority={true}
@@ -204,6 +210,8 @@ export default function CrossCountry() {
 
             <div className="space-y-6">
               <picture>
+                <source srcSet={crossCountryClinicMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={crossCountryClinicMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
                 <source srcSet={crossCountryClinicWebp} type="image/webp" />
                 <img 
                   src={crossCountryClinicJpg} 

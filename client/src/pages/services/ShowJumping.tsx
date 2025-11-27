@@ -9,8 +9,12 @@ import { Award, Check, Zap, TrendingUp } from "lucide-react";
 import TestimonialStrip from "@/components/TestimonialStrip";
 import showJumpingHeroJpg from "@assets/optimized/show-jumping-hero.jpg";
 import showJumpingHeroWebp from "@assets/optimized/show-jumping-hero.webp";
+import showJumpingHeroMobileJpg from "@assets/optimized/show-jumping-hero-mobile.jpg";
+import showJumpingHeroMobileWebp from "@assets/optimized/show-jumping-hero-mobile.webp";
 import showJumpingClinicJpg from "@assets/optimized/show-jumping-clinic.jpg";
 import showJumpingClinicWebp from "@assets/optimized/show-jumping-clinic.webp";
+import showJumpingClinicMobileJpg from "@assets/optimized/show-jumping-clinic-mobile.jpg";
+import showJumpingClinicMobileWebp from "@assets/optimized/show-jumping-clinic-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
@@ -150,6 +154,8 @@ export default function ShowJumping() {
         <HeroPicture
           jpegSrc={showJumpingHeroJpg}
           webpSrc={showJumpingHeroWebp}
+          mobileJpegSrc={showJumpingHeroMobileJpg}
+          mobileWebpSrc={showJumpingHeroMobileWebp}
           alt="Dan Bizzarro show jumping at international competition"
           loading="eager"
           priority={true}
@@ -204,6 +210,8 @@ export default function ShowJumping() {
 
             <div className="space-y-6">
               <picture>
+                <source srcSet={showJumpingClinicMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={showJumpingClinicMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
                 <source srcSet={showJumpingClinicWebp} type="image/webp" />
                 <img 
                   src={showJumpingClinicJpg} 

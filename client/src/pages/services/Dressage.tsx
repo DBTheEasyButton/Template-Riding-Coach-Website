@@ -9,6 +9,8 @@ import { Target, Check, Award, TrendingUp } from "lucide-react";
 import TestimonialStrip from "@/components/TestimonialStrip";
 import dressageHeroJpg from "@assets/optimized/dressage-hero.jpg";
 import dressageHeroWebp from "@assets/optimized/dressage-hero.webp";
+import dressageHeroMobileJpg from "@assets/optimized/dressage-hero-mobile.jpg";
+import dressageHeroMobileWebp from "@assets/optimized/dressage-hero-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
@@ -148,6 +150,8 @@ export default function Dressage() {
         <HeroPicture
           jpegSrc={dressageHeroJpg}
           webpSrc={dressageHeroWebp}
+          mobileJpegSrc={dressageHeroMobileJpg}
+          mobileWebpSrc={dressageHeroMobileWebp}
           alt="Dan Bizzarro competing in dressage"
           loading="eager"
           priority={true}

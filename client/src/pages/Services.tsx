@@ -6,7 +6,11 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import { Button } from "@/components/ui/button";
 import { Award, Users, Target, Video, Calendar } from "lucide-react";
 import coachingImage1 from "@assets/optimized/1_1749388256611.jpg";
+import coachingImage1MobileJpg from "@assets/optimized/1_1749388256611-mobile.jpg";
+import coachingImage1MobileWebp from "@assets/optimized/1_1749388256611-mobile.webp";
 import coachingImage2 from "@assets/optimized/2_1749388256612.jpg";
+import coachingImage2MobileJpg from "@assets/optimized/2_1749388256612-mobile.jpg";
+import coachingImage2MobileWebp from "@assets/optimized/2_1749388256612-mobile.webp";
 
 export default function Services() {
 
@@ -137,12 +141,16 @@ export default function Services() {
             
             <div className="space-y-6">
               <div className="relative">
-                <OptimizedImage 
-                  src={coachingImage1} 
-                  alt="Dan Bizzarro coaching flat work - personalised instruction in the arena" 
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={coachingImage1MobileWebp} type="image/webp" media="(max-width: 768px)" />
+                  <source srcSet={coachingImage1MobileJpg} type="image/jpeg" media="(max-width: 768px)" />
+                  <img 
+                    src={coachingImage1} 
+                    alt="Dan Bizzarro coaching flat work - personalised instruction in the arena" 
+                    className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </picture>
                 <div className="absolute -bottom-6 -left-6 bg-orange text-white p-6 rounded-xl shadow-xl max-w-[200px]">
                   <div className="flex items-center space-x-3">
                     <Award className="text-2xl flex-shrink-0" />
@@ -154,12 +162,16 @@ export default function Services() {
                 </div>
               </div>
               <div className="relative">
-                <OptimizedImage 
-                  src={coachingImage2} 
-                  alt="Dan Bizzarro coaching cross-country - group instruction at training obstacles" 
-                  className="rounded-2xl shadow-xl w-full h-auto object-cover"
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={coachingImage2MobileWebp} type="image/webp" media="(max-width: 768px)" />
+                  <source srcSet={coachingImage2MobileJpg} type="image/jpeg" media="(max-width: 768px)" />
+                  <img 
+                    src={coachingImage2} 
+                    alt="Dan Bizzarro coaching cross-country - group instruction at training obstacles" 
+                    className="rounded-2xl shadow-xl w-full h-auto object-cover"
+                    loading="lazy"
+                  />
+                </picture>
                 <div className="absolute -bottom-6 -right-6 bg-navy text-white p-6 rounded-xl shadow-xl max-w-[200px]">
                   <div className="flex items-center space-x-3">
                     <Target className="text-2xl flex-shrink-0" />

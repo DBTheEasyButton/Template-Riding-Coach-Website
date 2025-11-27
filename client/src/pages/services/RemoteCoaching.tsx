@@ -9,6 +9,8 @@ import { Video, Check, Globe, MessageSquare, Upload } from "lucide-react";
 import TestimonialStrip from "@/components/TestimonialStrip";
 import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
+import virtualLessonHeroMobileJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155-mobile.jpg";
+import virtualLessonHeroMobileWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { coachingServices, getBreadcrumbsFromPath, createBreadcrumbSchema, createFAQSchema } from "@shared/schemaHelpers";
 
@@ -172,6 +174,8 @@ export default function RemoteCoaching() {
         <HeroPicture
           jpegSrc={virtualLessonHeroJpg}
           webpSrc={virtualLessonHeroWebp}
+          mobileJpegSrc={virtualLessonHeroMobileJpg}
+          mobileWebpSrc={virtualLessonHeroMobileWebp}
           alt="Virtual riding lesson session with online coaching"
           loading="eager"
           priority={true}
