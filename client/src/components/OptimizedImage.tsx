@@ -132,7 +132,6 @@ export function OptimizedImage({
         loading={priority ? 'eager' : loading}
         decoding="async"
         onError={handleError}
-        style={{ maxWidth: '100%', height: 'auto' }}
       />
     </picture>
   );
