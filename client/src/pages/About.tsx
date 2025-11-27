@@ -10,6 +10,8 @@ import blenheimDressageJpg from "@assets/optimized/about-blenheim-dressage.jpg";
 import blenheimDressageWebp from "@assets/optimized/about-blenheim-dressage.webp";
 import philosophyJpg from "@assets/optimized/about-philosophy.jpg";
 import philosophyWebp from "@assets/optimized/about-philosophy.webp";
+import philosophy2Jpg from "@assets/optimized/about-philosophy-2.jpg";
+import philosophy2Webp from "@assets/optimized/about-philosophy-2.webp";
 import aboutDanHeroJpg from "@assets/optimized/about-dan-hero.jpg";
 import aboutDanHeroWebp from "@assets/optimized/about-dan-hero.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -157,7 +159,7 @@ export default function About() {
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="relative">
               <picture>
                 <source srcSet={philosophyWebp} type="image/webp" />
@@ -173,12 +175,28 @@ export default function About() {
               <p>
                 Dan's approach to training combines classical eventing principles with modern, rider-friendly techniques, always prioritising the welfare, understanding, and long-term development of both horse and rider. This philosophy sits at the heart of the <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a>—a clear, structured way of training designed to make communication easier, build trust, and help every partnership progress with purpose.
               </p>
+            </div>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 text-lg text-dark leading-relaxed">
               <p>
                 Drawing from his experience working with William Fox-Pitt, Caroline Moore, Ian Woodhead, and many other top riders and coaches, as well as competing at the highest international levels, Dan emphasises systematic progression, clear communication, and building confidence through thoughtful preparation.
               </p>
               <p>
                 Whether coaching beginners or advanced competitors, Dan's focus remains on developing strong foundations in dressage, show jumping, and cross-country—the three disciplines that make eventing the ultimate test of horsemanship—and ensuring that every rider has a method they can rely on both at home and in competition.
               </p>
+            </div>
+            <div className="relative">
+              <picture>
+                <source srcSet={philosophy2Webp} type="image/webp" />
+                <img 
+                  src={philosophy2Jpg} 
+                  alt="Dan Bizzarro coaching at a show jumping arena" 
+                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </picture>
             </div>
           </div>
         </div>
