@@ -7,6 +7,7 @@ interface OptimizedImageProps {
   width?: number;
   height?: number;
   loading?: 'lazy' | 'eager';
+  priority?: boolean;
   onError?: () => void;
 }
 
@@ -17,87 +18,111 @@ export function OptimizedImage({
   width, 
   height, 
   loading = 'lazy',
+  priority = false,
   onError 
 }: OptimizedImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(src);
 
-  // Detect browser support for modern formats
-  const supportsWebP = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1;
-    canvas.height = 1;
-    return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  const isUploadedImage = src.includes('/uploads/');
+  
+  const getBaseName = (originalSrc: string): string => {
+    const filename = originalSrc.split('/').pop() || '';
+    return filename
+      .replace('-optimized.jpg', '')
+      .replace('-desktop.jpg', '')
+      .replace('-tablet.jpg', '')
+      .replace('-mobile.jpg', '')
+      .replace('.webp', '')
+      .replace('.avif', '')
+      .replace(/\.(jpg|jpeg|png|gif)$/i, '');
   };
 
-  const supportsAVIF = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1;
-    canvas.height = 1;
-    return canvas.toDataURL('image/avif').indexOf('data:image/avif') === 0;
+  const getOptimizedVersions = (originalSrc: string) => {
+    if (!isUploadedImage) {
+      return { avif: null, webp: null, srcset: null, fallback: originalSrc };
+    }
+
+    const baseName = getBaseName(originalSrc);
+    const basePath = originalSrc.substring(0, originalSrc.lastIndexOf('/') + 1);
+
+    return {
+      avif: `${basePath}${baseName}.avif`,
+      webp: `${basePath}${baseName}.webp`,
+      srcset: `${basePath}${baseName}-mobile.jpg 480w, ${basePath}${baseName}-tablet.jpg 768w, ${basePath}${baseName}-desktop.jpg 1200w`,
+      webpSrcset: `${basePath}${baseName}-mobile.jpg 480w, ${basePath}${baseName}-tablet.jpg 768w, ${basePath}${baseName}.webp 1200w`,
+      fallback: `${basePath}${baseName}-optimized.jpg`
+    };
   };
 
-  // Get WebP version path (if it exists in optimized folder)
-  const getWebPSrc = (originalSrc: string) => {
-    return originalSrc.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-  };
-
-  // Generate responsive image sources
-  const getOptimizedSrc = (originalSrc: string) => {
-    return originalSrc;
-  };
-
-  // Generate srcset for responsive images
-  const generateSrcSet = (originalSrc: string) => {
-    return '';
-  };
+  const versions = getOptimizedVersions(src);
 
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      // Fallback to original image if optimized versions fail
-      const fallbackSrc = src.includes('-optimized') ? 
-        src.replace('-optimized', '') : 
-        src;
-      setCurrentSrc(fallbackSrc);
+      setCurrentSrc(src);
       onError?.();
     }
   };
 
   useEffect(() => {
-    setCurrentSrc(getOptimizedSrc(src));
+    setCurrentSrc(versions.fallback || src);
     setHasError(false);
   }, [src]);
 
-  const srcSet = generateSrcSet(src);
-  const webpSrc = getWebPSrc(currentSrc);
-
-  return (
-    <picture>
-      {/* Serve WebP to browsers that support it */}
-      <source srcSet={webpSrc} type="image/webp" />
-      {/* Fallback to original format */}
+  if (!isUploadedImage) {
+    return (
       <img
-        src={currentSrc}
-        srcSet={srcSet || undefined}
-        sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        src={src}
         alt={alt}
         className={className}
         width={width}
         height={height}
-        loading={loading}
+        loading={priority ? 'eager' : loading}
+        decoding="async"
+        style={{ maxWidth: '100%', height: 'auto' }}
+      />
+    );
+  }
+
+  return (
+    <picture>
+      {versions.avif && (
+        <source 
+          srcSet={versions.avif} 
+          type="image/avif"
+          sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        />
+      )}
+      {versions.webp && (
+        <source 
+          srcSet={versions.webp} 
+          type="image/webp"
+          sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        />
+      )}
+      {versions.srcset && (
+        <source 
+          srcSet={versions.srcset}
+          type="image/jpeg"
+          sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
+        />
+      )}
+      <img
+        src={hasError ? src : currentSrc}
+        alt={alt}
+        className={className}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : loading}
         decoding="async"
         onError={handleError}
-        style={{
-          maxWidth: '100%',
-          height: 'auto'
-        }}
+        style={{ maxWidth: '100%', height: 'auto' }}
       />
     </picture>
   );
 }
 
-// Hook for lazy loading optimization
 export function useImageOptimization() {
   const [isIntersecting, setIsIntersecting] = useState(false);
   
