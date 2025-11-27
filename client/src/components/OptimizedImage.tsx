@@ -40,7 +40,7 @@ export function OptimizedImage({
 
   const getOptimizedVersions = (originalSrc: string) => {
     if (!isUploadedImage) {
-      return { avif: null, webp: null, srcset: null, fallback: originalSrc };
+      return { avif: null, webp: null, webpSrcset: null, srcset: null, mobileWebp: null, fallback: originalSrc };
     }
 
     const baseName = getBaseName(originalSrc);
@@ -49,8 +49,10 @@ export function OptimizedImage({
     return {
       avif: `${basePath}${baseName}.avif`,
       webp: `${basePath}${baseName}.webp`,
+      mobileWebp: `${basePath}${baseName}-mobile.webp`,
+      mobileJpg: `${basePath}${baseName}-mobile.jpg`,
+      webpSrcset: `${basePath}${baseName}-mobile.webp 480w, ${basePath}${baseName}.webp 1200w`,
       srcset: `${basePath}${baseName}-mobile.jpg 480w, ${basePath}${baseName}-tablet.jpg 768w, ${basePath}${baseName}-desktop.jpg 1200w`,
-      webpSrcset: `${basePath}${baseName}-mobile.jpg 480w, ${basePath}${baseName}-tablet.jpg 768w, ${basePath}${baseName}.webp 1200w`,
       fallback: `${basePath}${baseName}-optimized.jpg`
     };
   };
@@ -87,20 +89,37 @@ export function OptimizedImage({
 
   return (
     <picture>
+      {/* Mobile WebP - served first for small screens */}
+      {versions.mobileWebp && (
+        <source 
+          srcSet={versions.mobileWebp} 
+          type="image/webp"
+          media="(max-width: 768px)"
+        />
+      )}
+      {/* Mobile JPEG fallback for small screens */}
+      {versions.mobileJpg && (
+        <source 
+          srcSet={versions.mobileJpg} 
+          type="image/jpeg"
+          media="(max-width: 768px)"
+        />
+      )}
+      {/* Desktop AVIF */}
       {versions.avif && (
         <source 
           srcSet={versions.avif} 
           type="image/avif"
-          sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
         />
       )}
+      {/* Desktop WebP */}
       {versions.webp && (
         <source 
           srcSet={versions.webp} 
           type="image/webp"
-          sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 1200px"
         />
       )}
+      {/* Responsive JPEG srcset */}
       {versions.srcset && (
         <source 
           srcSet={versions.srcset}
