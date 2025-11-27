@@ -48,6 +48,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
+    <!-- Preload critical above-the-fold assets -->
+    <link rel="preload" href="/attached_assets/optimized/logo.webp" as="image" type="image/webp">
+    <link rel="preload" href="/attached_assets/optimized/hero-background-mobile.webp" as="image" type="image/webp" media="(max-width: 768px)">
+    <link rel="preload" href="/attached_assets/optimized/hero-background.webp" as="image" type="image/webp" media="(min-width: 769px)">
+    
     <!-- Reduced preloading for mobile -->
     <link rel="preload" href="/src/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/src/index.css"></noscript>

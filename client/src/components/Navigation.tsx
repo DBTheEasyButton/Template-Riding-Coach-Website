@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoPath from "@assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png";
+import logoPng from "@assets/optimized/logo.png";
+import logoWebp from "@assets/optimized/logo.webp";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -91,11 +92,18 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-12 sm:h-14">
           <div className="flex-shrink-0">
             <a href="/" onClick={handleLogoClick}>
-              <img 
-                src={logoPath} 
-                alt="Dan Bizzarro Method - International Eventing Coach & Training" 
-                className="h-16 sm:h-20 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-              />
+              <picture>
+                <source srcSet={logoWebp} type="image/webp" />
+                <img 
+                  src={logoPng} 
+                  alt="Dan Bizzarro Method - International Eventing Coach & Training" 
+                  className="h-16 sm:h-20 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  width="200"
+                  height="80"
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
             </a>
           </div>
           

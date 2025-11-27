@@ -5,16 +5,28 @@ import { Link } from "wouter";
 import HeroPicture from "@/components/HeroPicture";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
+import heroImageMobileJpg from "@assets/optimized/hero-background-mobile.jpg";
+import heroImageMobileWebp from "@assets/optimized/hero-background-mobile.webp";
 import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
 import carouselClinic2Webp from "@assets/optimized/carousel-clinic-2.webp";
+import carouselClinic2MobileJpg from "@assets/optimized/carousel-clinic-2-mobile.jpg";
+import carouselClinic2MobileWebp from "@assets/optimized/carousel-clinic-2-mobile.webp";
 import dressageImageJpg from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.jpg";
 import dressageImageWebp from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373.webp";
+import dressageImageMobileJpg from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373-mobile.jpg";
+import dressageImageMobileWebp from "@assets/optimized/_TLP0096{Hi Res_-_3 Star - A1  Dressage_-_a. 08.00 to 08.30_1749504219373-mobile.webp";
 import coachingClinicImageJpg from "@assets/optimized/hero-coaching-clinic.jpg";
 import coachingClinicImageWebp from "@assets/optimized/hero-coaching-clinic.webp";
+import coachingClinicMobileJpg from "@assets/optimized/hero-coaching-clinic-mobile.jpg";
+import coachingClinicMobileWebp from "@assets/optimized/hero-coaching-clinic-mobile.webp";
 import crossCountryImageJpg from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.jpg";
 import crossCountryImageWebp from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375.webp";
+import crossCountryMobileJpg from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375-mobile.jpg";
+import crossCountryMobileWebp from "@assets/optimized/Screenshot_20230819_110201_Instagram_1749504219375-mobile.webp";
 import showJumpingImageJpg from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.jpg";
 import showJumpingImageWebp from "@assets/optimized/Riot Boekelo sj 2022_1749504436583.webp";
+import showJumpingMobileJpg from "@assets/optimized/Riot Boekelo sj 2022_1749504436583-mobile.jpg";
+import showJumpingMobileWebp from "@assets/optimized/Riot Boekelo sj 2022_1749504436583-mobile.webp";
 import facebookLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (5)_1752564178859.png";
 import instagramLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Anis Pro Upload  (7)_1752564178858.png";
 
@@ -25,31 +37,43 @@ export default function HeroSection() {
     { 
       jpegSrc: heroImageJpg,
       webpSrc: heroImageWebp,
+      mobileJpegSrc: heroImageMobileJpg,
+      mobileWebpSrc: heroImageMobileWebp,
       alt: "Dan Bizzarro eventing competition"
     },
     { 
       jpegSrc: carouselClinic2Jpg,
       webpSrc: carouselClinic2Webp,
+      mobileJpegSrc: carouselClinic2MobileJpg,
+      mobileWebpSrc: carouselClinic2MobileWebp,
       alt: "Dan Bizzarro coaching clinic with riders and horses"
     },
     { 
       jpegSrc: coachingClinicImageJpg,
       webpSrc: coachingClinicImageWebp,
+      mobileJpegSrc: coachingClinicMobileJpg,
+      mobileWebpSrc: coachingClinicMobileWebp,
       alt: "Dan Bizzarro coaching at show jumping arena"
     },
     { 
       jpegSrc: dressageImageJpg,
       webpSrc: dressageImageWebp,
+      mobileJpegSrc: dressageImageMobileJpg,
+      mobileWebpSrc: dressageImageMobileWebp,
       alt: "Dressage training session with Dan Bizzarro"
     },
     { 
       jpegSrc: crossCountryImageJpg,
       webpSrc: crossCountryImageWebp,
+      mobileJpegSrc: crossCountryMobileJpg,
+      mobileWebpSrc: crossCountryMobileWebp,
       alt: "Cross country coaching over natural obstacles"
     },
     { 
       jpegSrc: showJumpingImageJpg,
       webpSrc: showJumpingImageWebp,
+      mobileJpegSrc: showJumpingMobileJpg,
+      mobileWebpSrc: showJumpingMobileWebp,
       alt: "Show jumping training clinic"
     }
   ];
@@ -82,6 +106,8 @@ export default function HeroSection() {
           <HeroPicture
             jpegSrc={image.jpegSrc}
             webpSrc={image.webpSrc}
+            mobileJpegSrc={image.mobileJpegSrc}
+            mobileWebpSrc={image.mobileWebpSrc}
             alt={image.alt}
             loading={index === 0 ? "eager" : "lazy"}
             priority={index === 0}
