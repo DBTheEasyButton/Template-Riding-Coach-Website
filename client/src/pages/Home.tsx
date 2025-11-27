@@ -11,7 +11,8 @@ import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
 import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
-import boekeloPodiumPhoto from "@assets/optimized/boekelo-podium.jpg";
+import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
+import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
@@ -128,12 +129,15 @@ export default function Home() {
             </div>
             
             <div className="relative">
-              <img 
-                src={boekeloPodiumPhoto} 
-                alt="Dan Bizzarro on the podium at Boekelo international eventing competition"
-                className="rounded-2xl shadow-2xl w-full"
-                loading="lazy"
-              />
+              <picture>
+                <source srcSet={boekeloPodiumPhotoWebp} type="image/webp" />
+                <img 
+                  src={boekeloPodiumPhotoJpg} 
+                  alt="Dan Bizzarro on the podium at Boekelo international eventing competition"
+                  className="rounded-2xl shadow-2xl w-full"
+                  loading="lazy"
+                />
+              </picture>
             </div>
           </div>
           
