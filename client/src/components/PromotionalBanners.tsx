@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Mail } from "lucide-react";
 import { useLocation } from "wouter";
 import SponsorRotation from "@/components/SponsorRotation";
 
@@ -7,46 +7,45 @@ export default function SidebarBanners() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="space-y-4">
-      {/* Clinics Banner */}
-      <div className="bg-gradient-to-b from-blue-600 to-blue-700 text-white rounded-lg p-4 shadow-lg">
-        <div className="text-center">
-          <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-100" />
-          <h3 className="text-lg font-bold mb-2">Training Clinics</h3>
-          <p className="text-blue-100 text-sm mb-3">
-            Join Dan's exclusive coaching sessions across the UK
-          </p>
+    <div className="space-y-3">
+      {/* Clinics Banner - Compact */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-3 shadow-md">
+        <div className="flex items-center gap-3">
+          <Calendar className="w-5 h-5 text-blue-100 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold">Training Clinics</h3>
+            <p className="text-blue-100 text-xs truncate">Join Dan's coaching sessions</p>
+          </div>
           <Button 
             size="sm"
             variant="secondary"
-            className="w-full bg-white text-blue-700 hover:bg-blue-50"
+            className="bg-white text-blue-700 hover:bg-blue-50 text-xs px-3 py-1 h-7"
             onClick={() => setLocation('/#clinics')}
           >
-            Book Now
+            Book
             <ArrowRight className="w-3 h-3 ml-1" />
           </Button>
         </div>
       </div>
 
-
       {/* Interactive Sponsor Rotation */}
       <SponsorRotation />
 
-      {/* Newsletter Signup Banner */}
-      <div className="bg-gradient-to-b from-gray-700 to-gray-800 text-white rounded-lg p-4 shadow-lg">
-        <div className="text-center">
-          <h3 className="text-lg font-bold mb-2">Stay Updated</h3>
-          <p className="text-gray-200 text-sm mb-3">
-            Get the latest training tips & news
-          </p>
+      {/* Newsletter Signup Banner - Compact */}
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-white rounded-lg p-3 shadow-md">
+        <div className="flex items-center gap-3">
+          <Mail className="w-5 h-5 text-gray-300 flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold">Stay Updated</h3>
+            <p className="text-gray-300 text-xs truncate">Get the latest training tips</p>
+          </div>
           <Button 
             size="sm"
             variant="secondary"
-            className="w-full bg-white text-gray-700 hover:bg-gray-50"
+            className="bg-white text-gray-700 hover:bg-gray-50 text-xs px-3 py-1 h-7"
             onClick={() => setLocation('/#newsletter')}
           >
             Subscribe
-            <ArrowRight className="w-3 h-3 ml-1" />
           </Button>
         </div>
       </div>
