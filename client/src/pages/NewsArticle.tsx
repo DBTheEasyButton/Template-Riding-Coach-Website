@@ -90,7 +90,7 @@ export default function NewsArticle() {
         {/* Back Button */}
         <Button 
           variant="ghost" 
-          onClick={() => setLocation('/')}
+          onClick={() => setLocation('/blog')}
           className="mb-8 hover:bg-gray-100"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
