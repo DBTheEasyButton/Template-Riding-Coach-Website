@@ -89,17 +89,17 @@ export default function Navigation() {
       isScrolled ? 'bg-gray-200/95 backdrop-blur-md' : 'bg-gray-100/90 backdrop-blur-md'
     } border-b border-gray-300/50`}>
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 xl:px-8">
-        <div className="flex justify-between items-center h-11 sm:h-12">
-          <div className="flex-shrink-0 py-1">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          <div className="flex-shrink-0">
             <a href="/" onClick={handleLogoClick}>
               <picture>
                 <source srcSet={logoWebp} type="image/webp" />
                 <img 
                   src={logoPng} 
                   alt="Dan Bizzarro Method - International Eventing Coach & Training" 
-                  className="h-9 sm:h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-                  width="135"
-                  height="50"
+                  className="h-12 sm:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  width="150"
+                  height="56"
                   loading="eager"
                   decoding="async"
                 />
