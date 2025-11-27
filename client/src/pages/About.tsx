@@ -61,19 +61,19 @@ export default function About() {
                 <div className="w-24 h-1 bg-orange mb-8"></div>
               </div>
               <p className="text-lg text-dark leading-relaxed">
-                Daniele was born and grew up on the outskirts of Turin, Italy. His mother rode at a local stable and it was here, at 9 years old, that Dan caught the riding bug. A few years later he was to meet the horse 'Fair and Square' that would give him his first taste of Eventing and take him to CCI*.
+                Daniele was born and grew up on the outskirts of Turin, Italy. His mother rode at a local stable, and it was there, at 9 years old, that Dan first caught the riding bug. A few years later he met the horse Fair and Square, who introduced him to Eventing and took him to CCI*.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                In 2007, whilst studying Graphic Design at University, Dan met Italian stud owner Alberto Bolaffi who offered his gorgeous Il Quadrifoglio Country Club as a base. Dan took the plunge into professional riding and has never looked back.
+                In 2007, while studying Graphic Design at university, Dan met Italian stud owner Alberto Bolaffi, who offered his Il Quadrifoglio Country Club as a base. Dan took the plunge into professional riding and has never looked back.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                A move to England in 2011 saw Dan working as a rider for British eventing legend William Fox-Pitt. An invaluable experience, learning from one of the most successful British event riders of all time.
+                A move to England in 2011 saw Dan working as a rider for British Eventing legend William Fox-Pitt—an invaluable experience learning from one of the most successful British event riders of all time.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                Since then, Dan has made the Gloucestershire/Oxfordshire area his base from where he competes for loyal owners and teaches a wide range of abilities. As well as producing great results at national and international level Dan has represented Italy in several Nations Cup events and in 2022 the Italian team finished 2nd at Boekelo.
+                Since then, Dan has made the Gloucestershire/Oxfordshire area his base, where he competes for loyal owners and teaches riders of all levels. Alongside producing consistent results at national and international level, Dan has represented Italy in several Nations Cup events, with the Italian team finishing 2nd at Boekelo in 2022. In 2025, he also represented Italy at the European Championships at Blenheim.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                In 2024 Dan was in the Short List for the Paris Olympic games.
+                In 2024, Dan was named on the Short List for the Paris Olympic Games.
               </p>
             </div>
             <div className="space-y-6">
