@@ -1,0 +1,272 @@
+Why Your Horse Rushes — And How to Fix It in 30 Seconds
+
+If your horse feels fast, quick, or ahead of you, you’re not alone — rushing is one of the most common issues I see in lessons. And there’s a simple reason: rushing always comes from imbalance, not bad behaviour.
+
+Horses don’t wake up thinking, “Today I’m going to tank off.”
+They rush when they feel they’re losing balance, so they speed up to catch themselves.
+
+The good news?
+You can fix this in less than 30 seconds.
+
+In the Dan Bizzarro Method, we always address the cause, not the speed — and that’s why this works so quickly.
+
+The 4 Real Reasons Horses Rush
+1. Loss of Balance
+
+When the shoulders fall forward or the horse gets long, they run to rebalance themselves.
+
+You’ll feel:
+
+the trot get fast and flat
+
+the canter lose its jump
+
+the horse “pulling you” forward
+
+2. Tension
+
+Some horses rush when:
+
+they’re excited,
+
+fresh,
+
+spooky,
+
+or anxious.
+
+Tension turns into speed.
+
+3. Leaning on the Contact
+
+A horse that leans will always feel quicker than it is.
+They use your hand instead of their hind legs.
+
+4. Rider Habits
+
+This is a big one.
+If you ride with:
+
+tight hands,
+
+gripping legs,
+
+or a slightly tipped-forward posture,
+
+…the horse speeds up to support you.
+
+None of these problems are personality traits.
+They’re balance issues — which means they’re fixable.
+
+The Fastest Fix: The 30-Second Reset
+
+Every time a horse rushes, you can fix it with one of three simple tools.
+These are core principles of the Dan Bizzarro Method because they teach balance, clarity, and self-carriage without force.
+
+1. Downward Transition (Resets Balance)
+
+This is the quickest and most reliable correction.
+
+If the horse rushes → transition to walk.
+If needed, transition to halt.
+
+The key is this:
+
+Correct for one second, then soften.
+Hands forward straight after the transition.
+
+This helps the horse rebalance without feeling trapped.
+
+Use this when the rushing feels like:
+
+loss of control,
+
+leaning,
+
+big canter,
+
+loss of rhythm.
+
+Why it works:
+The moment the horse slows, the shoulders lift and balance returns.
+
+2. Small Circle (Organises Rhythm)
+
+If the horse gets quick but still feels rideable, choose a small circle.
+
+A 10–12m circle:
+
+slows the stride naturally,
+
+improves the horse’s inside-hind engagement,
+
+reduces tension,
+
+and resets rhythm without pulling.
+
+Use this when the rushing feels like:
+
+excitement,
+
+tension,
+
+distraction,
+
+tightness.
+
+Why it works:
+The curve makes the horse rebalance without the rider doing more.
+
+3. Half Halt Upward (Stops Leaning)
+
+If the horse leans down onto your hands, use:
+
+a momentary upward half halt (lift the hand),
+
+one second only,
+
+then soft hands forward.
+
+Use this when the rushing feels like:
+
+heaviness,
+
+leaning,
+
+the horse “pulling you out of the saddle.”
+
+Why it works:
+Lifting the hand reminds the horse to carry their own shoulders.
+
+The Method That Makes the 30-Second Fix Work
+
+The correction is only half of the solution.
+The other half — and this is where riders often go wrong — is the RELEASE.
+
+You correct for one second → then immediately soften.
+
+This is a fundamental part of the Dan Bizzarro Method.
+
+Why?
+Because holding creates:
+
+tension,
+
+leaning,
+
+bracing,
+
+more rushing.
+
+The release teaches the horse:
+“You fix your balance — and I’ll stay out of your way.”
+
+This is how true self-carriage develops.
+
+A Simple Exercise to Stop Rushing in Minutes
+
+Here’s a routine I use in lessons all the time:
+
+Exercise: Transition → Circle → Release
+
+Start in trot or canter.
+Find a rhythm.
+
+If the horse rushes, ride a downward transition.
+Walk → soften → trot again.
+
+Ride a 10m circle.
+Focus on a calm rhythm.
+
+Go straight and soften your hands completely.
+Allow the horse to carry themselves.
+
+Repeat anytime the horse speeds up.
+
+Most horses improve within 2–3 repetitions.
+
+Signs the Horse Is No Longer Rushing
+
+You’ll feel:
+
+softer contact
+
+a slower breathing pattern
+
+hind legs stepping under
+
+shoulders lifting
+
+rhythm becoming regular
+
+the horse waiting
+
+This is correct, calm forwardness — not “slow,” but balanced.
+
+Common Mistakes Riders Make When Fixing Rushing
+1. Holding the horse instead of correcting and releasing
+
+This makes rushing worse.
+
+2. Pulling on both reins
+
+The horse will either lean or fight.
+
+3. Pushing the horse too much
+
+Forwardness is not speed.
+Speed is a symptom.
+
+4. Ignoring the first quick step
+
+Rushing starts with one stride — correct early.
+
+5. Getting tense
+
+Your body is the horse’s tempo setter.
+If you get quick, they will too.
+
+FAQ: Why Your Horse Rushes
+1. Is my horse rushing because they’re excited?
+
+Excitement contributes, but the root is balance.
+
+2. Will a stronger bit help?
+
+No.
+Bits don’t create balance — training does.
+
+3. Should I slow the trot by pulling?
+
+Never.
+Use transitions and circles instead.
+
+4. Can young or green horses learn not to rush?
+
+Absolutely — this method is ideal for young horses because it teaches balance early.
+
+5. Does this help in show jumping?
+
+Yes — a horse that doesn’t rush is easier to see a stride on and safer between fences.
+
+Internal Links (add URLs when live)
+
+You may also like:
+
+• How to Make Your Horse More Responsive
+• Why Inside Leg Reaction Solves 80% of Flatwork Problems
+• Why Transitions Fix Almost Every Training Problem
+• Why Your Horse Leans on the Contact
+
+Optional Schema (JSON-LD)
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Why Your Horse Rushes — And How to Fix It in 30 Seconds",
+  "description": "Learn why horses rush and how to fix it quickly using simple, effective corrections from the Dan Bizzarro Method.",
+  "author": {
+    "@type": "Person",
+    "name": "Daniele Bizzarro"
+  },
+  "mainEntityOfPage": "https://danbizzarromethod.com/blog/why-your-horse-rushes"
+}
