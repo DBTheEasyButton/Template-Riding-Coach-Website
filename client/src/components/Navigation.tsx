@@ -89,7 +89,7 @@ export default function Navigation() {
       isScrolled ? 'bg-gray-200/95 backdrop-blur-md' : 'bg-gray-100/90 backdrop-blur-md'
     } border-b border-gray-300/50`}>
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 xl:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20">
+        <div className="flex justify-between items-center h-12 sm:h-14">
           <div className="flex-shrink-0">
             <a href="/" onClick={handleLogoClick}>
               <picture>
@@ -97,9 +97,9 @@ export default function Navigation() {
                 <img 
                   src={logoPng} 
                   alt="Dan Bizzarro Method - International Eventing Coach & Training" 
-                  className="h-12 sm:h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-                  width="175"
-                  height="65"
+                  className="h-9 sm:h-11 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  width="120"
+                  height="44"
                   loading="eager"
                   decoding="async"
                 />
