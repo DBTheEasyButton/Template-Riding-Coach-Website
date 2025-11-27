@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useLocation } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import type { News } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,32 @@ export default function NewsArticle() {
     n.id.toString() === params.id || 
     n.slug === params.id
   );
+
+  // Parse markdown-style content to HTML
+  const formattedContent = useMemo(() => {
+    if (!article?.content) return '';
+    
+    let html = article.content
+      // Convert **bold** to <strong>
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      // Convert --- to horizontal rule
+      .replace(/^---$/gm, '<hr class="my-8 border-gray-300" />')
+      // Convert bullet points
+      .replace(/^• (.+)$/gm, '<li class="ml-4">$1</li>')
+      // Wrap consecutive <li> in <ul>
+      .replace(/(<li[^>]*>.*<\/li>\n?)+/g, '<ul class="list-disc pl-6 my-4 space-y-2">$&</ul>')
+      // Convert line breaks to paragraphs
+      .split('\n\n')
+      .map(para => {
+        if (para.startsWith('<ul') || para.startsWith('<hr') || para.trim() === '') {
+          return para;
+        }
+        return `<p class="mb-4">${para.replace(/\n/g, '<br />')}</p>`;
+      })
+      .join('');
+    
+    return html;
+  }, [article?.content]);
 
   if (!article) {
     return (
@@ -115,11 +141,9 @@ export default function NewsArticle() {
             {/* Article Content */}
             <div className="prose prose-lg max-w-none">
               <div 
-                className="text-gray-800 leading-relaxed space-y-6"
-                style={{ whiteSpace: 'pre-line' }}
-              >
-                {article.content}
-              </div>
+                className="text-gray-800 leading-relaxed [&_strong]:font-bold [&_strong]:text-gray-900 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:mb-2"
+                dangerouslySetInnerHTML={{ __html: formattedContent }}
+              />
             </div>
 
             {/* Article Footer */}
