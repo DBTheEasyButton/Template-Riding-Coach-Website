@@ -85,12 +85,12 @@ export default function HeroSection() {
       ))}
       
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl md:text-6xl font-inter font-light mb-6 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.2s'}}>
-          International Event Rider & Coach
+        <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+          Improve your riding NOW
         </h1>
-        <p className="text-6xl md:text-8xl font-playfair font-bold mb-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-          Dan Bizzarro
-        </p>
+        <h2 className="text-2xl md:text-3xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.4s'}}>
+          Become a confident, skilled rider and get better results!
+        </h2>
         <div className="flex flex-col md:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
           <Link href="/coaching/private-lessons">
             <Button 
