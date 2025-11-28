@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes } from 'react';
+import type { ImgHTMLAttributes, CSSProperties } from 'react';
 
 interface HeroPictureProps {
   jpegSrc: string;
@@ -9,6 +9,7 @@ interface HeroPictureProps {
   loading?: 'eager' | 'lazy';
   priority?: boolean;
   className?: string;
+  style?: CSSProperties;
 }
 
 export default function HeroPicture({
@@ -19,14 +20,16 @@ export default function HeroPicture({
   alt,
   loading = 'lazy',
   priority = false,
-  className = ''
+  className = '',
+  style
 }: HeroPictureProps) {
   const imgProps: ImgHTMLAttributes<HTMLImageElement> = {
     src: jpegSrc,
     alt,
     className,
     loading,
-    decoding: 'async'
+    decoding: 'async',
+    style
   };
 
   return (

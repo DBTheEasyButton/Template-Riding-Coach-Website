@@ -60,14 +60,16 @@ export default function HeroSection() {
       webpSrc: dressageImageWebp,
       mobileJpegSrc: dressageImageMobileJpg,
       mobileWebpSrc: dressageImageMobileWebp,
-      alt: "Dressage training session with Dan Bizzarro"
+      alt: "Dressage training session with Dan Bizzarro",
+      style: { objectPosition: 'center 30%' }
     },
     { 
       jpegSrc: crossCountryImageJpg,
       webpSrc: crossCountryImageWebp,
       mobileJpegSrc: crossCountryMobileJpg,
       mobileWebpSrc: crossCountryMobileWebp,
-      alt: "Cross country coaching over natural obstacles"
+      alt: "Cross country coaching over natural obstacles",
+      style: { objectPosition: 'center 30%' }
     },
     { 
       jpegSrc: showJumpingImageJpg,
@@ -112,6 +114,7 @@ export default function HeroSection() {
             loading={index === 0 ? "eager" : "lazy"}
             priority={index === 0}
             className="w-full h-full object-cover"
+            style={image.style}
           />
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
