@@ -8,6 +8,7 @@ import { ArrowLeft, Calendar, Facebook, Twitter, Mail } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import UpcomingClinicsBanner from "@/components/UpcomingClinicsBanner";
 
 export default function NewsArticle() {
   const params = useParams();
@@ -183,6 +184,9 @@ export default function NewsArticle() {
                 </div>
               </div>
             </footer>
+
+            {/* Upcoming Clinic Banner */}
+            <UpcomingClinicsBanner />
 
             {/* Related Articles */}
             <section className="mt-16">
