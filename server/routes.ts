@@ -7,6 +7,7 @@ import fs from "fs";
 import * as XLSX from "xlsx";
 import { storage } from "./storage";
 import { emailService } from "./emailService";
+import { facebookService } from "./facebookService";
 import { replaceCsvEmails } from "./csvImport";
 import { ImageOptimizer } from "./imageOptimizer";
 import { 
@@ -646,7 +647,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Convert date strings to Date objects before validation
       const rawData = req.body;
-      const { sessions, ...clinicData } = rawData;
+      const { sessions, autoPostToFacebook, excludeTagsFromEmail, ...clinicData } = rawData;
       
       // Convert price to cents if it exists
       const processedPrice = clinicData.price ? Math.round(parseFloat(clinicData.price.toString()) * 100) : 0;
@@ -656,7 +657,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         date: new Date(clinicData.date),
         endDate: new Date(clinicData.endDate),
         entryClosingDate: clinicData.entryClosingDate ? new Date(clinicData.entryClosingDate) : null,
-        price: processedPrice
+        price: processedPrice,
+        autoPostToFacebook: autoPostToFacebook || false,
+        excludeTagsFromEmail: excludeTagsFromEmail || ""
       };
       
       // Validate the clinic data
@@ -679,6 +682,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
             requirements: session.requirements || null
           });
         }
+      }
+
+      // Post to Facebook if enabled
+      if (autoPostToFacebook && clinic.image) {
+        const facebookResult = await facebookService.postClinic({
+          title: clinic.title,
+          description: clinic.description,
+          date: clinic.date,
+          location: clinic.location,
+          googleMapsLink: clinic.googleMapsLink || undefined,
+          imageUrl: clinic.image,
+          price: clinic.price,
+          maxParticipants: clinic.maxParticipants,
+          currentParticipants: clinic.currentParticipants
+        });
+        console.log('Facebook post result:', facebookResult);
+      }
+
+      // Send GHL emails to all contacts (tag-filtered)
+      try {
+        const excludeTags: string[] = excludeTagsFromEmail ? excludeTagsFromEmail.split(',').map((t: string) => t.trim()) : [];
+        await emailService.sendClinicAnnouncementToContacts(clinic, excludeTags);
+      } catch (emailError) {
+        console.error('Error sending clinic announcement emails:', emailError);
+        // Don't fail the clinic creation if emails fail
       }
       
       res.status(201).json(clinic);

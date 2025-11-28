@@ -885,6 +885,141 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
       return false;
     }
   }
+
+  async sendClinicAnnouncementToContacts(clinic: any, excludeTags: string[]): Promise<void> {
+    try {
+      const ghlContacts = await storage.getAllGhlContacts();
+      
+      for (const contact of ghlContacts) {
+        if (!contact.email) continue;
+        
+        const contactTags = contact.tags || [];
+        const shouldExclude = excludeTags.some(tag => contactTags.includes(tag));
+        
+        if (shouldExclude) {
+          console.log(`Skipping contact ${contact.email} - excluded by tags`);
+          continue;
+        }
+
+        const loyaltyProgram = await storage.getLoyaltyProgram(contact.email);
+        
+        if (loyaltyProgram && loyaltyProgram.referralCode) {
+          await this.sendNewClinicToExistingClient(contact.email, contact.firstName, loyaltyProgram.referralCode, loyaltyProgram.points, clinic);
+        } else {
+          await this.sendNewClinicToNewContact(contact.email, contact.firstName, clinic);
+        }
+      }
+      
+      console.log(`Sent clinic announcement emails for clinic: ${clinic.title}`);
+    } catch (error) {
+      console.error("Error sending clinic announcement emails:", error);
+      throw error;
+    }
+  }
+
+  private async sendNewClinicToExistingClient(email: string, firstName: string, referralCode: string, points: number, clinic: any): Promise<void> {
+    const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #374151;">
+        <p style="font-size: 16px; margin-bottom: 20px;">Hi ${firstName},</p>
+        
+        <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+          A new clinic is coming up and I'd love to see you there!
+        </p>
+
+        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
+          <h2 style="color: #1e3a8a; margin-top: 0;">${clinic.title}</h2>
+          <p style="color: #374151; margin: 10px 0;"><strong>📅 Date:</strong> ${clinicDate}</p>
+          <p style="color: #374151; margin: 10px 0;"><strong>📍 Location:</strong> ${clinic.location}</p>
+          ${clinic.googleMapsLink ? `<p style="color: #374151; margin: 10px 0;"><a href="${clinic.googleMapsLink}" style="color: #1e3a8a; text-decoration: underline;">View on Google Maps</a></p>` : ''}
+          <p style="color: #374151; margin: 10px 0;"><strong>💷 Price:</strong> €${(clinic.price / 100).toFixed(2)}</p>
+          <p style="color: #374151; margin-top: 15px;">${clinic.description}</p>
+        </div>
+
+        <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center; border: 2px dashed #1e3a8a; margin: 25px 0;">
+          <p style="color: #6b7280; margin: 0 0 10px 0; font-size: 14px;">Your Referral Code:</p>
+          <p style="color: #1e3a8a; font-size: 24px; font-weight: bold; margin: 0; letter-spacing: 2px;">${referralCode}</p>
+          <p style="color: #374151; margin-top: 10px; font-size: 14px;">You currently have <strong>${points} points</strong></p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://danbizzarromethod.com/coaching/clinics?utm_source=email&utm_medium=clinic-announcement&utm_campaign=${clinic.title.toLowerCase().replace(/\s+/g, '-')}" 
+             style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
+            Book Your Spot
+          </a>
+        </div>
+
+        <p style="color: #374151; font-size: 16px; margin-top: 30px;">
+          Best regards,<br>
+          <strong>Dan Bizzarro</strong><br>
+          <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+        </p>
+      </div>
+    `;
+
+    await this.sendEmail(email, `🐴 New Clinic: ${clinic.title} - ${clinicDate}`, htmlContent, '');
+  }
+
+  private async sendNewClinicToNewContact(email: string, firstName: string, clinic: any): Promise<void> {
+    const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #374151;">
+        <p style="font-size: 16px; margin-bottom: 20px;">Hi ${firstName},</p>
+        
+        <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+          I'm excited to share that we have a new clinic coming up! Whether you're just starting your riding journey or are looking to take your skills to the next level, I'd love to have you join us.
+        </p>
+
+        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
+          <h2 style="color: #1e3a8a; margin-top: 0;">${clinic.title}</h2>
+          <p style="color: #374151; margin: 10px 0;"><strong>📅 Date:</strong> ${clinicDate}</p>
+          <p style="color: #374151; margin: 10px 0;"><strong>📍 Location:</strong> ${clinic.location}</p>
+          ${clinic.googleMapsLink ? `<p style="color: #374151; margin: 10px 0;"><a href="${clinic.googleMapsLink}" style="color: #1e3a8a; text-decoration: underline;">View on Google Maps</a></p>` : ''}
+          <p style="color: #374151; margin: 10px 0;"><strong>💷 Price:</strong> €${(clinic.price / 100).toFixed(2)}</p>
+          <p style="color: #374151; margin-top: 15px;">${clinic.description}</p>
+        </div>
+
+        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
+          <h3 style="color: #1e3a8a; margin-top: 0; font-size: 18px;">Our Rewards Programme</h3>
+          <p style="color: #374151; margin: 10px 0;">Register for a clinic and start earning points towards amazing rewards!</p>
+          <ul style="color: #374151; line-height: 1.8; font-size: 15px;">
+            <li><strong>10 points</strong> per clinic registration</li>
+            <li><strong>20 bonus points</strong> for each friend you refer</li>
+            <li><strong>20% discount code</strong> automatically at every 50-point milestone</li>
+            <li>Compete on our live leaderboard</li>
+            <li>Top 5 riders win prizes twice per year</li>
+          </ul>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="https://danbizzarromethod.com/coaching/clinics?utm_source=email&utm_medium=clinic-announcement&utm_campaign=${clinic.title.toLowerCase().replace(/\s+/g, '-')}" 
+             style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
+            Book Your Spot & Get Your Referral Code
+          </a>
+        </div>
+
+        <p style="color: #374151; font-size: 16px; margin-top: 30px;">
+          Looking forward to meeting you!<br>
+          <strong>Dan Bizzarro</strong><br>
+          <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+        </p>
+      </div>
+    `;
+
+    await this.sendEmail(email, `🐴 Exciting New Clinic: ${clinic.title}`, htmlContent, '');
+  }
 }
 
 export const emailService = new EmailService();

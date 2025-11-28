@@ -82,7 +82,10 @@ export const clinics = pgTable("clinics", {
   clinicType: text("clinic_type").notNull().default("single"), // single, multi-session, combo
   // Deprecated: use maxParticipants for total clinic cap and session-level maxParticipants instead
   crossCountryMaxParticipants: integer("cross_country_max_participants"),
-  showJumpingMaxParticipants: integer("show_jumping_max_participants")
+  showJumpingMaxParticipants: integer("show_jumping_max_participants"),
+  // Automation fields
+  autoPostToFacebook: boolean("auto_post_to_facebook").notNull().default(false),
+  excludeTagsFromEmail: text("exclude_tags_from_email").default(""), // comma-separated tags
 }, (table) => ({
   isActiveIdx: index("clinics_is_active_idx").on(table.isActive),
   dateIdx: index("clinics_date_idx").on(table.date),
