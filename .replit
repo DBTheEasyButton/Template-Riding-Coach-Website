@@ -95,6 +95,10 @@ localPort = 37367
 externalPort = 3002
 
 [[ports]]
+localPort = 39395
+externalPort = 8080
+
+[[ports]]
 localPort = 41451
 externalPort = 5173
 
@@ -117,10 +121,6 @@ externalPort = 8008
 [[ports]]
 localPort = 45313
 externalPort = 6000
-
-[[ports]]
-localPort = 45827
-externalPort = 8080
 
 [agent]
 integrations = ["javascript_stripe:1.0.0"]
