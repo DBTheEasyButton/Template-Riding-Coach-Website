@@ -902,11 +902,12 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         }
 
         const loyaltyProgram = await storage.getLoyaltyProgram(contact.email);
+        const firstName = contact.firstName || 'Friend';
         
         if (loyaltyProgram && loyaltyProgram.referralCode) {
-          await this.sendNewClinicToExistingClient(contact.email, contact.firstName, loyaltyProgram.referralCode, loyaltyProgram.points, clinic);
+          await this.sendNewClinicToExistingClient(contact.email, firstName, loyaltyProgram.referralCode, loyaltyProgram.points, clinic);
         } else {
-          await this.sendNewClinicToNewContact(contact.email, contact.firstName, clinic);
+          await this.sendNewClinicToNewContact(contact.email, firstName, clinic);
         }
       }
       
