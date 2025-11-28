@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions } from "@shared/schema";
@@ -328,7 +329,9 @@ export default function AdminClinics() {
       image: clinic.image,
       isActive: true, // Default new clinic to active
       hasMultipleSessions: clinic.hasMultipleSessions || false,
-      clinicType: clinic.clinicType || "single"
+      clinicType: clinic.clinicType || "single",
+      autoPostToFacebook: clinic.autoPostToFacebook || false,
+      excludeTagsFromEmail: clinic.excludeTagsFromEmail || ""
     });
     
     // Copy session data if it exists
@@ -1011,6 +1014,38 @@ export default function AdminClinics() {
                 </div>
               </div>
             )}
+            
+            <div className="space-y-4 border-t pt-4">
+              <h3 className="font-semibold text-lg">Marketing Automation</h3>
+              
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="autoPostToFacebook"
+                  checked={formData.autoPostToFacebook}
+                  onCheckedChange={(checked) => setFormData({ ...formData, autoPostToFacebook: checked as boolean })}
+                />
+                <Label htmlFor="autoPostToFacebook" className="font-medium cursor-pointer">
+                  Auto-post to Facebook
+                </Label>
+              </div>
+              <p className="text-sm text-gray-500 ml-6">
+                Automatically post this clinic to your Facebook page when created, including booking link with UTM tracking.
+              </p>
+              
+              <div className="grid gap-2 mt-4">
+                <Label htmlFor="excludeTagsFromEmail">Exclude GHL Tags from Email (Optional)</Label>
+                <Input
+                  id="excludeTagsFromEmail"
+                  value={formData.excludeTagsFromEmail}
+                  onChange={(e) => setFormData({ ...formData, excludeTagsFromEmail: e.target.value })}
+                  placeholder="e.g., virtual lessons, inactive"
+                  data-testid="input-exclude-tags"
+                />
+                <p className="text-sm text-gray-500">
+                  Enter comma-separated GHL contact tags to exclude from clinic announcement emails. Contacts with these tags won't receive this clinic's email.
+                </p>
+              </div>
+            </div>
             
             <div className="grid gap-2">
               <Label htmlFor="image">Clinic Image</Label>
