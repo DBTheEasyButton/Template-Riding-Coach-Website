@@ -42,7 +42,9 @@ export default function AdminClinics() {
     image: "",
     isActive: true,
     hasMultipleSessions: false,
-    clinicType: "single"
+    clinicType: "single",
+    autoPostToFacebook: false,
+    excludeTagsFromEmail: ""
   });
 
   const [sessions, setSessions] = useState([
