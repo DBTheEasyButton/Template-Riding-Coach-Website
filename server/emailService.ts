@@ -888,7 +888,20 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
   async sendClinicAnnouncementToContacts(clinic: any, excludeTags: string[]): Promise<void> {
     try {
+      const simulationMode = process.env.SIMULATE_EMAILS === 'true';
       const ghlContacts = await storage.getAllGhlContacts();
+      
+      if (simulationMode) {
+        console.log('\n📧 [EMAIL SIMULATION MODE]');
+        console.log(`Clinic: ${clinic.title}`);
+        console.log(`Date: ${new Date(clinic.date).toLocaleDateString('en-GB')}`);
+        console.log(`Location: ${clinic.location}\n`);
+      }
+
+      let emailsSent = 0;
+      let emailsSkipped = 0;
+      let existingClients = 0;
+      let newContacts = 0;
       
       for (const contact of ghlContacts) {
         if (!contact.email) continue;
@@ -897,7 +910,10 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         const shouldExclude = excludeTags.some(tag => contactTags.includes(tag));
         
         if (shouldExclude) {
-          console.log(`Skipping contact ${contact.email} - excluded by tags`);
+          if (simulationMode) {
+            console.log(`⊘ ${contact.email} - EXCLUDED (tags: ${contactTags.join(', ')})`);
+          }
+          emailsSkipped++;
           continue;
         }
 
@@ -905,13 +921,36 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         const firstName = contact.firstName || 'Friend';
         
         if (loyaltyProgram && loyaltyProgram.referralCode) {
-          await this.sendNewClinicToExistingClient(contact.email, firstName, loyaltyProgram.referralCode, loyaltyProgram.points, clinic);
+          if (simulationMode) {
+            console.log(`✓ ${contact.email} (${firstName})`);
+            console.log(`  → Existing client with code: ${loyaltyProgram.referralCode} | ${loyaltyProgram.points} points`);
+          } else {
+            await this.sendNewClinicToExistingClient(contact.email, firstName, loyaltyProgram.referralCode, loyaltyProgram.points, clinic);
+          }
+          existingClients++;
+          emailsSent++;
         } else {
-          await this.sendNewClinicToNewContact(contact.email, firstName, clinic);
+          if (simulationMode) {
+            console.log(`✓ ${contact.email} (${firstName})`);
+            console.log(`  → New contact - introducing rewards program`);
+          } else {
+            await this.sendNewClinicToNewContact(contact.email, firstName, clinic);
+          }
+          newContacts++;
+          emailsSent++;
         }
       }
       
-      console.log(`Sent clinic announcement emails for clinic: ${clinic.title}`);
+      if (simulationMode) {
+        console.log(`\n📊 Email Simulation Summary:`);
+        console.log(`   Emails to send: ${emailsSent}`);
+        console.log(`   - Existing clients: ${existingClients}`);
+        console.log(`   - New contacts: ${newContacts}`);
+        console.log(`   Emails skipped (excluded tags): ${emailsSkipped}`);
+        console.log('✓ Simulation complete - no actual emails sent\n');
+      } else {
+        console.log(`Sent clinic announcement emails for clinic: ${clinic.title}`);
+      }
     } catch (error) {
       console.error("Error sending clinic announcement emails:", error);
       throw error;

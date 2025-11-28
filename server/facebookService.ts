@@ -4,6 +4,7 @@ export class FacebookService {
   private appSecret = process.env.FACEBOOK_APP_SECRET;
   private pageAccessToken = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
   private apiVersion = 'v19.0';
+  private simulationMode = process.env.SIMULATE_FACEBOOK_POSTS === 'true';
 
   async postClinic(clinicData: {
     title: string;
@@ -17,6 +18,18 @@ export class FacebookService {
     currentParticipants: number;
   }): Promise<{ success: boolean; postId?: string; error?: string }> {
     try {
+      if (this.simulationMode) {
+        console.log('\n📱 [FACEBOOK SIMULATION MODE]');
+        console.log(`Would post to Facebook: ${clinicData.title}`);
+        console.log(`Date: ${clinicData.date.toLocaleDateString('en-GB')}`);
+        console.log(`Location: ${clinicData.location}`);
+        console.log(`Price: €${(clinicData.price / 100).toFixed(2)}`);
+        console.log(`Capacity: ${clinicData.currentParticipants}/${clinicData.maxParticipants}`);
+        if (clinicData.googleMapsLink) console.log(`Maps: ${clinicData.googleMapsLink}`);
+        console.log('✓ Simulation complete - no actual post created\n');
+        return { success: true, postId: 'SIMULATED_POST_ID' };
+      }
+
       if (!this.pageAccessToken) {
         console.log('Facebook Page Access Token not configured, skipping Facebook post');
         return { success: false, error: 'Token not configured' };

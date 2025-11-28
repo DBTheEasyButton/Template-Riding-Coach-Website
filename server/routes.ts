@@ -686,18 +686,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Post to Facebook if enabled
       if (autoPostToFacebook && clinic.image) {
-        const facebookResult = await facebookService.postClinic({
-          title: clinic.title,
-          description: clinic.description,
-          date: clinic.date,
-          location: clinic.location,
-          googleMapsLink: clinic.googleMapsLink || undefined,
-          imageUrl: clinic.image,
-          price: clinic.price,
-          maxParticipants: clinic.maxParticipants,
-          currentParticipants: clinic.currentParticipants
-        });
-        console.log('Facebook post result:', facebookResult);
+        try {
+          const facebookResult = await facebookService.postClinic({
+            title: clinic.title,
+            description: clinic.description,
+            date: clinic.date,
+            location: clinic.location,
+            googleMapsLink: clinic.googleMapsLink || undefined,
+            imageUrl: clinic.image,
+            price: clinic.price,
+            maxParticipants: clinic.maxParticipants,
+            currentParticipants: clinic.currentParticipants
+          });
+          console.log('Facebook post result:', facebookResult);
+        } catch (fbError) {
+          console.error('Error posting to Facebook:', fbError);
+          // Don't fail the clinic creation if Facebook post fails
+        }
       }
 
       // Send GHL emails to all contacts (tag-filtered)
