@@ -48,3 +48,70 @@ The platform is built with React.js (TypeScript), Tailwind CSS, Express.js, and 
 - **Meta Pixel (Facebook Pixel):** For advertising campaign tracking and conversion events.
 - **Go High Level (GHL) API:** Integrated for contact management, synchronization, and automated email communications. Used for newsletter subscriptions, clinic registrations, and three automated email types: (1) First-time clinic confirmation (welcome, referral code, timing info), (2) Returning client confirmation (timing, points balance, referral reminder), and (3) Referral bonus notification (points earned, leaderboard link). Requires `GHL_API_KEY` and `GHL_LOCATION_ID`.
 - **Stripe Payment Integration:** Configured for clinic registrations with server-side payment validation, Stripe Elements, and Express Checkout (Apple Pay/Google Pay). Requires `STRIPE_SECRET_KEY` and `VITE_STRIPE_PUBLIC_KEY`.
+- **Facebook Marketing Automation:** Automatically posts new clinics to your Facebook page with clinic image, location, Google Maps link, price, capacity status, and trackable booking links with UTM parameters. Requires `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, `FACEBOOK_PAGE_ACCESS_TOKEN`.
+
+## New Features (November 28, 2025)
+
+### Clinic Marketing Automation System
+**Fully automated marketing workflows that increase clinic bookings:**
+
+1. **Facebook Auto-Posting**
+   - Automatically posts new clinics to Facebook page when created
+   - Includes clinic image, Google Maps link, price, capacity status
+   - Posts feature trackable booking link with UTM parameters to measure traffic
+   - Can be toggled on/off per clinic via admin form
+   - Optional simulation mode for testing (set `SIMULATE_FACEBOOK_POSTS=true`)
+
+2. **Personalized GHL Email Blasts**
+   - When a clinic is created, automatically emails all GHL contacts
+   - Tag-based filtering: exclude contacts by GHL tags (e.g., "virtual lessons", "inactive")
+   - **Two email templates:**
+     - **Existing Clients:** Shows their unique referral code + current points balance + clinic details
+     - **New Contacts:** Introduces rewards program + clinic details + points earning opportunity
+   - Optional simulation mode for testing (set `SIMULATE_EMAILS=true`)
+   - All emails include Google Maps link (clickable) + UTM tracking on booking link
+
+3. **Blog → Clinic Connection**
+   - Every blog post displays an "Upcoming Clinic" banner at the end
+   - Shows next clinic: date, location, price, and "Book Now" button
+   - Drives content readers directly to clinic bookings
+   - Component: `UpcomingClinicsBanner.tsx`
+
+4. **Clinic Capacity Display**
+   - Visual warnings on clinic pages showing capacity status
+   - "Only X spots left!" - when capacity is getting low (≤2 spots)
+   - "This clinic is full" - when at max capacity with waitlist option
+   - Component: `ClinicCapacityWarning.tsx`
+
+5. **Admin Controls**
+   - Clinic creation form includes:
+     - `autoPostToFacebook` checkbox - enable/disable Facebook posting
+     - `excludeTagsFromEmail` field - comma-separated GHL tags to exclude
+   - Database fields added to `clinics` table
+
+### Email Template Content
+**Existing Client Email:**
+- Personalized greeting
+- Clinic details (date, location, price, description)
+- Highlighted referral code (unique to client)
+- Current points balance
+- Book Now button with UTM tracking
+
+**New Contact Email:**
+- Friendly introduction
+- Clinic details (date, location, price, description)
+- Introduction to loyalty rewards program (10 points/clinic, 20 bonus for referrals, 20% discount at 50 points)
+- Book Now button explaining they'll get referral code upon registration
+
+### Simulation Mode
+For testing without sending real emails or creating Facebook posts:
+- Set `SIMULATE_EMAILS=true` in Secrets → logs show which emails would be sent
+- Set `SIMULATE_FACEBOOK_POSTS=true` in Secrets → logs show what post would be created
+- Detailed console output shows all contact filtering, tag exclusions, and sending summary
+
+### Implementation Files
+- `server/facebookService.ts` - Facebook Graph API integration
+- `server/emailService.ts` - GHL email automation (methods: `sendClinicAnnouncementToContacts`, `sendNewClinicToExistingClient`, `sendNewClinicToNewContact`)
+- `client/src/components/ClinicCapacityWarning.tsx` - Capacity display component
+- `client/src/components/UpcomingClinicsBanner.tsx` - Blog/article clinic promotion banner
+- Schema updates in `shared/schema.ts` - Added `autoPostToFacebook` and `excludeTagsFromEmail` to clinics table
