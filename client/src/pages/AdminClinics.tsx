@@ -136,7 +136,9 @@ export default function AdminClinics() {
       image: "",
       isActive: true,
       hasMultipleSessions: false,
-      clinicType: "single"
+      clinicType: "single",
+      autoPostToFacebook: false,
+      excludeTagsFromEmail: ""
     });
     setSessions([{
       sessionName: "",
@@ -268,7 +270,9 @@ export default function AdminClinics() {
       image: freshClinic.image || "",
       isActive: freshClinic.isActive !== undefined ? freshClinic.isActive : true,
       hasMultipleSessions: freshClinic.hasMultipleSessions || false,
-      clinicType: freshClinic.clinicType || "single"
+      clinicType: freshClinic.clinicType || "single",
+      autoPostToFacebook: freshClinic.autoPostToFacebook || false,
+      excludeTagsFromEmail: freshClinic.excludeTagsFromEmail || ""
     };
     
     setFormData(newFormData);
@@ -406,9 +410,12 @@ export default function AdminClinics() {
       ...formData,
       date: startDate,
       endDate: endDate,
+      entryOpenDate: formData.entryOpenDate ? new Date(formData.entryOpenDate + 'T00:00:00') : null,
       entryClosingDate: entryClosingDate,
       price: formData.clinicType === 'single' ? Number(formData.price) : 0,
       maxParticipants: Number(formData.maxParticipants),
+      autoPostToFacebook: formData.autoPostToFacebook || false,
+      excludeTagsFromEmail: formData.excludeTagsFromEmail || "",
       sessions: formData.hasMultipleSessions ? sessions : []
     };
 
