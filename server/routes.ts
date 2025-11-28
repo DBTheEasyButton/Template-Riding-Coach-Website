@@ -656,6 +656,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...clinicData,
         date: new Date(clinicData.date),
         endDate: new Date(clinicData.endDate),
+        entryOpenDate: clinicData.entryOpenDate ? new Date(clinicData.entryOpenDate) : null,
         entryClosingDate: clinicData.entryClosingDate ? new Date(clinicData.entryClosingDate) : null,
         price: processedPrice,
         autoPostToFacebook: autoPostToFacebook || false,
