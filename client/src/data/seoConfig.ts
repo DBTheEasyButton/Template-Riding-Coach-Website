@@ -165,6 +165,15 @@ export const seoConfig: Record<string, PageSEOConfig> = {
     ogImage: '/hero-background.jpg'
   },
 
+  '/packing-list': {
+    title: 'Competition Packing List Generator | Horse Show Checklist',
+    description: 'Create customised packing lists for horse shows and eventing competitions. Never forget essential tack, equipment, or documents. Professional checklist tool from Dan Bizzarro Method.',
+    keywords: 'competition packing list, horse show checklist, eventing packing list, competition checklist, tack list, show preparation, competition essentials, horse show preparation',
+    canonicalPath: '/packing-list',
+    h1: 'Packing List Generator',
+    ogImage: '/hero-background.jpg'
+  },
+
   // Other Pages
   '/terms-and-conditions': {
     title: 'Terms & Conditions | Dan Bizzarro Method',

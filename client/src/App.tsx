@@ -27,8 +27,10 @@ const CrossCountry = lazy(() => import("@/pages/services/CrossCountry"));
 const Polework = lazy(() => import("@/pages/services/Polework"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
+const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
 const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
 const ReadinessQuiz = lazy(() => import("@/pages/ReadinessQuiz"));
+const PackingListGenerator = lazy(() => import("@/pages/PackingListGenerator"));
 const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
 const AdminRegistrations = lazy(() => import("@/pages/AdminRegistrations"));
 const AdminGallery = lazy(() => import("@/pages/AdminGallery"));
@@ -62,6 +64,7 @@ const useDesktopPreloading = () => {
       // Preload commonly accessed pages after a short delay
       const timer = setTimeout(() => {
         import("@/pages/StrideCalculator");
+        import("@/pages/CompetitionChecklists");
         import("@/pages/Loyalty");
       }, 2000); // 2 second delay to let main page load first
 
@@ -161,6 +164,11 @@ function Router() {
           <Loyalty />
         </Suspense>
       </Route>
+      <Route path="/competition-checklists">
+        <Suspense fallback={<PageLoader />}>
+          <CompetitionChecklists />
+        </Suspense>
+      </Route>
       <Route path="/stride-calculator">
         <Suspense fallback={<PageLoader />}>
           <StrideCalculator />
@@ -169,6 +177,16 @@ function Router() {
       <Route path="/readiness-quiz">
         <Suspense fallback={<PageLoader />}>
           <ReadinessQuiz />
+        </Suspense>
+      </Route>
+      <Route path="/packing-list-generator">
+        <Suspense fallback={<PageLoader />}>
+          <PackingListGenerator />
+        </Suspense>
+      </Route>
+      <Route path="/packing-list">
+        <Suspense fallback={<PageLoader />}>
+          <PackingListGenerator />
         </Suspense>
       </Route>
       <Route path="/admin">
