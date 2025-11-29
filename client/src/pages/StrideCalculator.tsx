@@ -67,24 +67,30 @@ export default function StrideCalculator() {
   const calculateUserSteps = (exerciseType: DistanceType, strideCount?: StrideCount, distanceMeters?: number): string => {
     if (!distanceMeters) return "N/A";
     
-    const stepSizes = getUserStepSizes();
     const userHeightInches = (userFeet * 12) + userInches;
-    const isTallUser = userHeightInches >= 67;
+    const isTallUser = userHeightInches >= 67; // 5'7" or taller
     
-    // For shorter users
+    // For shorter users (< 5'7")
     if (!isTallUser) {
       const normalStep = 0.8;
       const bigStep = 1.0;
       
-      if (distanceMeters <= normalStep * 1.15) {
+      // Check against normal step (0.8m)
+      if (distanceMeters <= normalStep) {
         return "1 normal step";
-      } else if (distanceMeters <= bigStep * 1.15) {
+      } else if (distanceMeters <= normalStep + 0.15) {
+        return "A bit more than 1 normal step";
+      } 
+      // Check against big step (1.0m)
+      else if (distanceMeters <= bigStep) {
         return "1 big step";
-      } else if (distanceMeters <= (normalStep + bigStep) * 1.15) {
+      } else if (distanceMeters <= bigStep + 0.2) {
         return "A bit more than 1 big step";
-      } else {
-        const totalSteps = Math.round(distanceMeters / bigStep);
-        return totalSteps === 1 ? "1 big step" : `${totalSteps} big steps`;
+      } 
+      // Multiple big steps needed
+      else {
+        const steps = Math.ceil(distanceMeters / bigStep);
+        return `${steps} big steps`;
       }
     }
     
@@ -93,21 +99,28 @@ export default function StrideCalculator() {
     const normalStep = 0.9;
     const bigStep = 1.1;
     
-    if (distanceMeters <= smallStep * 1.15) {
+    // Check against small step (0.8m)
+    if (distanceMeters <= smallStep) {
       return "1 small step";
-    } else if (distanceMeters <= normalStep * 1.15) {
+    } else if (distanceMeters <= smallStep + 0.15) {
       return "A bit more than 1 small step";
-    } else if (distanceMeters <= bigStep * 1.15) {
+    } 
+    // Check against normal step (0.9m)
+    else if (distanceMeters <= normalStep) {
       return "1 normal step";
-    } else if (distanceMeters <= bigStep * 1.15 + 0.1) {
+    } else if (distanceMeters <= normalStep + 0.15) {
       return "A bit more than 1 normal step";
-    } else if (distanceMeters <= (bigStep + 0.2)) {
+    } 
+    // Check against big step (1.1m)
+    else if (distanceMeters <= bigStep) {
       return "1 big step";
-    } else if (distanceMeters <= (bigStep + 0.3)) {
+    } else if (distanceMeters <= bigStep + 0.2) {
       return "A bit more than 1 big step";
-    } else {
-      const totalSteps = Math.ceil(distanceMeters / bigStep);
-      return totalSteps === 1 ? "1 big step" : `${totalSteps} big steps`;
+    } 
+    // Multiple big steps needed
+    else {
+      const steps = Math.ceil(distanceMeters / bigStep);
+      return `${steps} big steps`;
     }
   };
 
