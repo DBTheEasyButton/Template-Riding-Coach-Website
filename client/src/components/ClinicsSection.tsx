@@ -239,57 +239,83 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Hide chat widget when registration modal opens
+  // Hide chat widget when registration modal opens - using MutationObserver
   useEffect(() => {
-    if (isRegistrationOpen) {
-      // Add a class to body to hide chat via CSS
-      document.body.classList.add('hide-chat-widget');
+    const hideAllChatWidgets = () => {
+      // Search by all possible selectors and hide them
+      const selectors = [
+        '[data-widget-id]',
+        'iframe[src*="leadconnector"]',
+        'iframe[src*="ghl"]',
+        '[class*="ghl"]',
+        '[class*="chat"]',
+        '[class*="messenger"]',
+        '[class*="leadconnector"]'
+      ];
       
-      // Also try to hide any existing chat elements
-      setTimeout(() => {
-        const allDivs = document.querySelectorAll('div, iframe, span, button');
-        allDivs.forEach((el) => {
-          const html = el.outerHTML || '';
-          const text = el.textContent || '';
-          const ariaLabel = (el as any).getAttribute('aria-label') || '';
-          
-          // Hide if it contains chat-related keywords
-          if (
-            html.includes('leadconnector') ||
-            html.includes('ghl-') ||
-            html.includes('messenger') ||
-            text.includes('Message') ||
-            ariaLabel.includes('chat')
-          ) {
-            (el as HTMLElement).style.display = 'none !important';
-            (el as HTMLElement).style.visibility = 'hidden !important';
-            (el as HTMLElement).style.pointerEvents = 'none !important';
-          }
-        });
-      }, 100);
-    } else {
-      // Remove the class to show chat again
-      document.body.classList.remove('hide-chat-widget');
-      
-      // Restore visibility of chat elements
-      const allDivs = document.querySelectorAll('div, iframe, span, button');
-      allDivs.forEach((el) => {
-        const html = el.outerHTML || '';
-        const text = el.textContent || '';
-        const ariaLabel = (el as any).getAttribute('aria-label') || '';
-        
-        if (
-          html.includes('leadconnector') ||
-          html.includes('ghl-') ||
-          html.includes('messenger') ||
-          text.includes('Message') ||
-          ariaLabel.includes('chat')
-        ) {
-          (el as HTMLElement).style.display = '';
-          (el as HTMLElement).style.visibility = '';
-          (el as HTMLElement).style.pointerEvents = '';
-        }
+      selectors.forEach(sel => {
+        try {
+          document.querySelectorAll(sel).forEach((el) => {
+            if ((el as HTMLElement).offsetParent !== null) {
+              (el as HTMLElement).style.display = 'none !important';
+              (el as HTMLElement).style.visibility = 'hidden !important';
+              (el as HTMLElement).style.height = '0 !important';
+              (el as HTMLElement).style.width = '0 !important';
+              (el as HTMLElement).style.opacity = '0 !important';
+              (el as HTMLElement).style.pointerEvents = 'none !important';
+            }
+          });
+        } catch (e) {}
       });
+    };
+
+    const showAllChatWidgets = () => {
+      const selectors = [
+        '[data-widget-id]',
+        'iframe[src*="leadconnector"]',
+        'iframe[src*="ghl"]',
+        '[class*="ghl"]',
+        '[class*="chat"]',
+        '[class*="messenger"]',
+        '[class*="leadconnector"]'
+      ];
+      
+      selectors.forEach(sel => {
+        try {
+          document.querySelectorAll(sel).forEach((el) => {
+            (el as HTMLElement).style.display = '';
+            (el as HTMLElement).style.visibility = '';
+            (el as HTMLElement).style.height = '';
+            (el as HTMLElement).style.width = '';
+            (el as HTMLElement).style.opacity = '';
+            (el as HTMLElement).style.pointerEvents = '';
+          });
+        } catch (e) {}
+      });
+    };
+
+    if (isRegistrationOpen) {
+      console.log('Registration modal opened - hiding chat widget');
+      document.body.classList.add('hide-chat-widget');
+      hideAllChatWidgets();
+      
+      // Watch for new elements being added and hide them too
+      const observer = new MutationObserver(() => {
+        hideAllChatWidgets();
+      });
+      
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class']
+      });
+      
+      return () => observer.disconnect();
+    } else {
+      console.log('Registration modal closed - showing chat widget');
+      document.body.classList.remove('hide-chat-widget');
+      showAllChatWidgets();
     }
   }, [isRegistrationOpen]);
 
