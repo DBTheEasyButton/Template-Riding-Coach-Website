@@ -239,7 +239,7 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Hide chat widget when registration modal opens - detect modal in DOM
+  // Hide chat widget when registration modal opens
   useEffect(() => {
     const checkAndHideChat = () => {
       const dialogContent = document.querySelector('[role="dialog"]');
@@ -247,21 +247,56 @@ export default function ClinicsSection() {
       
       if (hideChat) {
         document.body.classList.add('hide-chat-widget');
+        // Aggressively hide all chat-related elements
+        setTimeout(() => {
+          // Find and hide any script tags that might be loading the chat
+          document.querySelectorAll('script[src*="leadconnector"], script[src*="ghl"]').forEach(el => {
+            (el as HTMLElement).style.display = 'none';
+          });
+          
+          // Hide any iframes or divs that contain the widget
+          document.querySelectorAll('iframe, div[style*="position"], span').forEach(el => {
+            const html = (el as HTMLElement).outerHTML || '';
+            const id = (el as any).id || '';
+            const className = (el as any).className || '';
+            
+            if (
+              html.includes('leadconnector') || 
+              html.includes('ghl') ||
+              html.includes('messenger') ||
+              id.includes('ghl') ||
+              id.includes('chat') ||
+              className.includes('ghl') ||
+              className.includes('chat') ||
+              className.includes('messenger')
+            ) {
+              (el as HTMLElement).setAttribute('data-chat-hidden', 'true');
+              (el as HTMLElement).style.setProperty('display', 'none', 'important');
+              (el as HTMLElement).style.setProperty('visibility', 'hidden', 'important');
+              (el as HTMLElement).style.setProperty('height', '0px', 'important');
+              (el as HTMLElement).style.setProperty('width', '0px', 'important');
+              (el as HTMLElement).style.setProperty('opacity', '0', 'important');
+            }
+          });
+        }, 50);
       } else {
         document.body.classList.remove('hide-chat-widget');
+        // Restore hidden elements
+        document.querySelectorAll('[data-chat-hidden="true"]').forEach(el => {
+          (el as HTMLElement).removeAttribute('data-chat-hidden');
+          (el as HTMLElement).style.display = '';
+          (el as HTMLElement).style.visibility = '';
+          (el as HTMLElement).style.height = '';
+          (el as HTMLElement).style.width = '';
+          (el as HTMLElement).style.opacity = '';
+        });
       }
     };
 
-    // Check immediately
     checkAndHideChat();
 
-    // Watch for changes in the DOM
     const observer = new MutationObserver(checkAndHideChat);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: false
-    });
+    observer.observe(document.body, { childList: true, subtree: true });
 
     return () => observer.disconnect();
   }, []);
