@@ -42,43 +42,72 @@ export default function StrideCalculator() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Calculate user's stride length in meters based on height
-  const getUserStrideLength = (): number => {
-    const userHeightCm = getUserHeightCm();
-    // Typical stride length is approximately 0.43 x height
-    return (userHeightCm * 0.43) / 100;
+  // Get user step sizes based on height
+  const getUserStepSizes = (): { small?: number; normal: number; big: number } => {
+    const userHeightInches = (userFeet * 12) + userInches;
+    const isTallUser = userHeightInches >= 67; // 5'7" or taller
+    
+    if (isTallUser) {
+      // 5'7" or taller
+      return {
+        small: 0.8,
+        normal: 0.9,
+        big: 1.1
+      };
+    } else {
+      // Shorter than 5'7"
+      return {
+        normal: 0.8,
+        big: 1.0
+      };
+    }
   };
 
-  // Calculate steps needed to cover a distance
-  const calculateStepsForDistance = (distanceMeters: number): number => {
-    const strideLength = getUserStrideLength();
-    return Math.ceil(distanceMeters / strideLength);
-  };
-
-  // Calculate step description based on exercise type and distance
+  // Calculate step description based on distance and user height
   const calculateUserSteps = (exerciseType: DistanceType, strideCount?: StrideCount, distanceMeters?: number): string => {
     if (!distanceMeters) return "N/A";
     
-    const steps = calculateStepsForDistance(distanceMeters);
+    const stepSizes = getUserStepSizes();
+    const userHeightInches = (userFeet * 12) + userInches;
+    const isTallUser = userHeightInches >= 67;
     
-    switch (exerciseType) {
-      case "walk-poles":
-        return steps === 1 ? "1 step" : `${steps} steps`;
-        
-      case "trot-poles":
-        return steps === 1 ? "1 step" : `${steps} steps`;
-        
-      case "canter-poles":
-        return steps === 1 ? "1 step" : `${steps} steps`;
-        
-      case "gridwork":
-        return steps === 1 ? "1 step" : `${steps} steps`;
-        
-      case "course-distances":
-        return steps === 1 ? "1 step" : `${steps} steps`;
-        
-      default:
-        return steps === 1 ? "1 step" : `${steps} steps`;
+    // For shorter users
+    if (!isTallUser) {
+      const normalStep = 0.8;
+      const bigStep = 1.0;
+      
+      if (distanceMeters <= normalStep * 1.15) {
+        return "1 normal step";
+      } else if (distanceMeters <= bigStep * 1.15) {
+        return "1 big step";
+      } else if (distanceMeters <= (normalStep + bigStep) * 1.15) {
+        return "A bit more than 1 big step";
+      } else {
+        const totalSteps = Math.round(distanceMeters / bigStep);
+        return totalSteps === 1 ? "1 big step" : `${totalSteps} big steps`;
+      }
+    }
+    
+    // For taller users (5'7" or taller)
+    const smallStep = 0.8;
+    const normalStep = 0.9;
+    const bigStep = 1.1;
+    
+    if (distanceMeters <= smallStep * 1.15) {
+      return "1 small step";
+    } else if (distanceMeters <= normalStep * 1.15) {
+      return "A bit more than 1 small step";
+    } else if (distanceMeters <= bigStep * 1.15) {
+      return "1 normal step";
+    } else if (distanceMeters <= bigStep * 1.15 + 0.1) {
+      return "A bit more than 1 normal step";
+    } else if (distanceMeters <= (bigStep + 0.2)) {
+      return "1 big step";
+    } else if (distanceMeters <= (bigStep + 0.3)) {
+      return "A bit more than 1 big step";
+    } else {
+      const totalSteps = Math.ceil(distanceMeters / bigStep);
+      return totalSteps === 1 ? "1 big step" : `${totalSteps} big steps`;
     }
   };
 
