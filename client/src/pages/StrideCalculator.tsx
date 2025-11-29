@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, Ruler, Users, Info, AlertTriangle, ArrowLeft } from "lucide-react";
-import { ExerciseDiagram } from "@/components/ExerciseDiagram";
 import { MobileNumericInput } from "@/components/MobileNumericInput";
 import { Link } from "wouter";
 import { standardDistances, getStrideLength } from "@/data/strideData";
@@ -691,11 +690,6 @@ export default function StrideCalculator() {
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        {/* Exercise Diagrams Section */}
-        <div className="mt-6 sm:mt-8">
-          <ExerciseDiagram />
         </div>
 
       </div>
