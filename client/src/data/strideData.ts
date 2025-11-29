@@ -13,10 +13,10 @@ export const standardDistances = {
     "big-horse": { distance: 1.4, description: "Trot poles - big horse (16.1hh+): 1.4m" }
   },
   "canter-poles": {
-    "small-pony": { distance: 2.7, description: "Canter poles - small pony (<13hh): 2.7m" },
-    "big-pony": { distance: 2.9, description: "Canter poles - big pony (13-14.2hh): 2.9m" },
-    "small-horse": { distance: 3.1, description: "Canter poles - small horse (14.3-16hh): 3.1m" },
-    "big-horse": { distance: 3.4, description: "Canter poles - big horse (16.1hh+): 3.4m" }
+    "small-pony": { distance: 2.7, description: "Canter poles - pony: 2.7m" },
+    "big-pony": { distance: 2.7, description: "Canter poles - pony: 2.7m" },
+    "small-horse": { distance: 3.0, description: "Canter poles - small horse: 3.0m" },
+    "big-horse": { distance: 3.2, description: "Canter poles - big horse: 3.2m" }
   },
   "gridwork": {
     "small-pony": { distance: 2.7, description: "Gridwork bounce - small pony (<13hh): 2.7m" },
