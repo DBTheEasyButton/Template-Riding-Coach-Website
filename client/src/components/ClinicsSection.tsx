@@ -239,6 +239,22 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Hide chat widget when registration modal opens
+  useEffect(() => {
+    const chatWidget = document.querySelector('[data-widget-id="687ea32fde5e24006e414bf2"]');
+    if (isRegistrationOpen) {
+      // Hide chat widget when modal is open
+      if (chatWidget) {
+        (chatWidget as HTMLElement).style.display = 'none';
+      }
+    } else {
+      // Show chat widget when modal is closed
+      if (chatWidget) {
+        (chatWidget as HTMLElement).style.display = '';
+      }
+    }
+  }, [isRegistrationOpen]);
+
   const { data: allClinics = [] } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/clinics'],
   });
