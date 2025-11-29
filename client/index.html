@@ -106,8 +106,8 @@
       var chatLoaded = false;
       function loadChatWidget() {
         if (chatLoaded) return;
-        // Don't load chat on admin pages or clinic registration pages
-        if (window.location.pathname.startsWith('/admin') || window.location.pathname === '/coaching/clinics') {
+        // Don't load chat on admin pages
+        if (window.location.pathname.startsWith('/admin')) {
           return;
         }
         chatLoaded = true;
