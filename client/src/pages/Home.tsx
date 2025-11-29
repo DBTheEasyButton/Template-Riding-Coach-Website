@@ -90,6 +90,8 @@ export default function Home() {
       <Suspense fallback={<SectionSkeleton />}>
         <TestimonialsSection />
       </Suspense>
+      {/* Divider */}
+      <div className="border-t-4 border-navy"></div>
       {/* What is the Dan Bizzarro Method Section */}
       <section id="method" className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
