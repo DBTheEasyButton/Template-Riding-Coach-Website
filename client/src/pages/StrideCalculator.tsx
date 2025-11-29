@@ -89,8 +89,8 @@ export default function StrideCalculator() {
       } 
       // Multiple big steps needed
       else {
-        const steps = Math.ceil(distanceMeters / bigStep);
-        return `${steps} big steps`;
+        const steps = Math.round(distanceMeters / bigStep);
+        return steps === 1 ? "1 big step" : `${steps} big steps`;
       }
     }
     
@@ -119,8 +119,8 @@ export default function StrideCalculator() {
     } 
     // Multiple big steps needed
     else {
-      const steps = Math.ceil(distanceMeters / bigStep);
-      return `${steps} big steps`;
+      const steps = Math.round(distanceMeters / bigStep);
+      return steps === 1 ? "1 big step" : `${steps} big steps`;
     }
   };
 
