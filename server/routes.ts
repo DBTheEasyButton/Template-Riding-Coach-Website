@@ -180,10 +180,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get all news
+  // Get all news (with optional limit)
   app.get("/api/news", async (req, res) => {
     try {
-      const news = await storage.getAllNews();
+      let news;
+      
+      // Support limit parameter for performance optimization
+      if (req.query.limit) {
+        const limit = parseInt(req.query.limit as string);
+        if (!isNaN(limit) && limit > 0) {
+          news = await storage.getLatestNews(limit);
+        } else {
+          news = await storage.getAllNews();
+        }
+      } else {
+        news = await storage.getAllNews();
+      }
+      
       res.json(news);
     } catch (error) {
       console.error("Error fetching news:", error);

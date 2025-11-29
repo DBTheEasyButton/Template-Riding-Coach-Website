@@ -58,7 +58,8 @@ export default function Home() {
   }, []);
 
   const { data: news = [] } = useQuery<News[]>({
-    queryKey: ['/api/news'],
+    queryKey: ['/api/news', { limit: 3 }],
+    queryFn: () => fetch('/api/news?limit=3').then(res => res.json()),
   });
 
   const formatDate = (date: string | Date) => {

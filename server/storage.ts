@@ -92,6 +92,7 @@ export interface IStorage {
   createEvent(event: InsertEvent): Promise<Event>;
   
   getAllNews(): Promise<News[]>;
+  getLatestNews(limit: number): Promise<News[]>;
   getNewsById(id: number): Promise<News | undefined>;
   getNewsBySlug(slug: string): Promise<News | undefined>;
   createNews(news: InsertNews): Promise<News>;
@@ -723,6 +724,10 @@ The Dan Bizzarro Method Team`,
 
   async getAllNews(): Promise<News[]> {
     return await db.select().from(news).orderBy(desc(news.publishedAt));
+  }
+
+  async getLatestNews(limit: number): Promise<News[]> {
+    return await db.select().from(news).orderBy(desc(news.publishedAt)).limit(limit);
   }
 
   async getNewsById(id: number): Promise<News | undefined> {
