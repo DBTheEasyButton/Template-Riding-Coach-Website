@@ -69,7 +69,7 @@ export default function HeroSection() {
       mobileJpegSrc: crossCountryMobileJpg,
       mobileWebpSrc: crossCountryMobileWebp,
       alt: "Cross country coaching over natural obstacles",
-      style: { objectPosition: 'center 50%' }
+      style: { objectPosition: 'center 70%' }
     },
     { 
       jpegSrc: showJumpingImageJpg,
