@@ -239,12 +239,10 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const { data: allClinics = [] } = useQuery<ClinicWithSessions[]>({
-    queryKey: ['/api/clinics'],
+  const { data: clinics = [] } = useQuery<ClinicWithSessions[]>({
+    queryKey: ['/api/clinics', { upcoming: true }],
+    queryFn: () => fetch('/api/clinics?upcoming=true').then(res => res.json()),
   });
-
-  // Filter to only show future clinics
-  const clinics = allClinics.filter(clinic => new Date(clinic.date) >= new Date());
 
   // Create payment intent mutation
   const createPaymentIntentMutation = useMutation({
@@ -711,10 +709,10 @@ export default function ClinicsSection() {
               </Card>
 
               {/* Packing List Generator Banner */}
-              <Card className="bg-gradient-to-br from-red-50 to-pink-50 border-red-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-red-600 rounded-lg flex items-center justify-center w-10 h-10" style={{backgroundColor: '#dc2626'}}>
+                    <div className="p-2 bg-orange rounded-lg flex items-center justify-center w-10 h-10">
                       <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -728,7 +726,7 @@ export default function ClinicsSection() {
                     Generate a personalized packing checklist for your competition based on discipline and needs.
                   </p>
                   <Link href="/packing-list-generator">
-                    <Button className="w-full text-white font-medium" style={{backgroundColor: '#dc2626', borderColor: '#dc2626'}}>
+                    <Button className="w-full bg-orange hover:bg-orange/90 text-white font-medium">
                       Create Checklist
                     </Button>
                   </Link>
