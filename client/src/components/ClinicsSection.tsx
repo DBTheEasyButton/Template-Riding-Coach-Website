@@ -241,17 +241,27 @@ export default function ClinicsSection() {
 
   // Hide chat widget when registration modal opens
   useEffect(() => {
-    const chatWidget = document.querySelector('[data-widget-id="687ea32fde5e24006e414bf2"]');
     if (isRegistrationOpen) {
-      // Hide chat widget when modal is open
-      if (chatWidget) {
-        (chatWidget as HTMLElement).style.display = 'none';
-      }
+      // Hide all chat widget elements (icon and widget)
+      const chatElements = document.querySelectorAll('[data-widget-id="687ea32fde5e24006e414bf2"], .ghl-chat-widget, [class*="chat"], [id*="chat"]');
+      chatElements.forEach(el => {
+        (el as HTMLElement).style.display = 'none';
+      });
+      // Also hide by targeting the LeadConnector iframe
+      const iframes = document.querySelectorAll('iframe[src*="leadconnector"], iframe[src*="ghl"]');
+      iframes.forEach(el => {
+        (el as HTMLElement).style.display = 'none';
+      });
     } else {
-      // Show chat widget when modal is closed
-      if (chatWidget) {
-        (chatWidget as HTMLElement).style.display = '';
-      }
+      // Show all chat widget elements when modal is closed
+      const chatElements = document.querySelectorAll('[data-widget-id="687ea32fde5e24006e414bf2"], .ghl-chat-widget, [class*="chat"], [id*="chat"]');
+      chatElements.forEach(el => {
+        (el as HTMLElement).style.display = '';
+      });
+      const iframes = document.querySelectorAll('iframe[src*="leadconnector"], iframe[src*="ghl"]');
+      iframes.forEach(el => {
+        (el as HTMLElement).style.display = '';
+      });
     }
   }, [isRegistrationOpen]);
 
