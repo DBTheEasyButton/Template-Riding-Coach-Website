@@ -239,63 +239,51 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Hide chat widget when registration modal opens
+  // Prevent chat widget from loading when registration modal is open
   useEffect(() => {
-    const checkAndHideChat = () => {
+    const checkModalAndToggleChat = () => {
       const dialogContent = document.querySelector('[role="dialog"]');
-      const hideChat = dialogContent && dialogContent.textContent?.includes('Register for');
+      const isModalOpen = dialogContent && dialogContent.textContent?.includes('Register for');
       
-      if (hideChat) {
+      if (isModalOpen) {
+        // Prevent chat widget from loading/showing
+        (window as any).shouldLoadChat = false;
         document.body.classList.add('hide-chat-widget');
-        // Aggressively hide all chat-related elements
-        setTimeout(() => {
-          // Find and hide any script tags that might be loading the chat
-          document.querySelectorAll('script[src*="leadconnector"], script[src*="ghl"]').forEach(el => {
-            (el as HTMLElement).style.display = 'none';
-          });
-          
-          // Hide any iframes or divs that contain the widget
-          document.querySelectorAll('iframe, div[style*="position"], span').forEach(el => {
-            const html = (el as HTMLElement).outerHTML || '';
-            const id = (el as any).id || '';
-            const className = (el as any).className || '';
-            
-            if (
-              html.includes('leadconnector') || 
-              html.includes('ghl') ||
-              html.includes('messenger') ||
-              id.includes('ghl') ||
-              id.includes('chat') ||
-              className.includes('ghl') ||
-              className.includes('chat') ||
-              className.includes('messenger')
-            ) {
-              (el as HTMLElement).setAttribute('data-chat-hidden', 'true');
-              (el as HTMLElement).style.setProperty('display', 'none', 'important');
-              (el as HTMLElement).style.setProperty('visibility', 'hidden', 'important');
-              (el as HTMLElement).style.setProperty('height', '0px', 'important');
-              (el as HTMLElement).style.setProperty('width', '0px', 'important');
-              (el as HTMLElement).style.setProperty('opacity', '0', 'important');
-            }
-          });
-        }, 50);
-      } else {
-        document.body.classList.remove('hide-chat-widget');
-        // Restore hidden elements
-        document.querySelectorAll('[data-chat-hidden="true"]').forEach(el => {
-          (el as HTMLElement).removeAttribute('data-chat-hidden');
-          (el as HTMLElement).style.display = '';
-          (el as HTMLElement).style.visibility = '';
-          (el as HTMLElement).style.height = '';
-          (el as HTMLElement).style.width = '';
-          (el as HTMLElement).style.opacity = '';
+        
+        // Remove any existing chat widget elements
+        document.querySelectorAll('[data-widget-id], [data-resources-url*="leadconnector"], .ghl-chat-widget, .messenger-frame').forEach(el => {
+          (el as HTMLElement).remove();
         });
+        
+        // Remove the chat script if it exists
+        document.querySelectorAll('script[src*="leadconnector"], script[data-widget-id]').forEach(el => {
+          el.remove();
+        });
+      } else {
+        // Allow chat widget to load again
+        (window as any).shouldLoadChat = true;
+        document.body.classList.remove('hide-chat-widget');
+        
+        // Reload chat if it was prevented before
+        if ((window as any).chatLoaded === false) {
+          const loadChatWidget = () => {
+            if ((window as any).shouldLoadChat && !(window as any).chatLoaded && !window.location.pathname.startsWith('/admin')) {
+              (window as any).chatLoaded = true;
+              const chatScript = document.createElement('script');
+              chatScript.src = 'https://widgets.leadconnectorhq.com/loader.js';
+              chatScript.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
+              chatScript.setAttribute('data-widget-id', '687ea32fde5e24006e414bf2');
+              document.body.appendChild(chatScript);
+            }
+          };
+          setTimeout(loadChatWidget, 100);
+        }
       }
     };
 
-    checkAndHideChat();
+    checkModalAndToggleChat();
 
-    const observer = new MutationObserver(checkAndHideChat);
+    const observer = new MutationObserver(checkModalAndToggleChat);
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => observer.disconnect();
