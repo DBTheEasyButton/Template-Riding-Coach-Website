@@ -239,85 +239,32 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Hide chat widget when registration modal opens - using MutationObserver
+  // Hide chat widget when registration modal opens - detect modal in DOM
   useEffect(() => {
-    const hideAllChatWidgets = () => {
-      // Search by all possible selectors and hide them
-      const selectors = [
-        '[data-widget-id]',
-        'iframe[src*="leadconnector"]',
-        'iframe[src*="ghl"]',
-        '[class*="ghl"]',
-        '[class*="chat"]',
-        '[class*="messenger"]',
-        '[class*="leadconnector"]'
-      ];
+    const checkAndHideChat = () => {
+      const dialogContent = document.querySelector('[role="dialog"]');
+      const hideChat = dialogContent && dialogContent.textContent?.includes('Register for');
       
-      selectors.forEach(sel => {
-        try {
-          document.querySelectorAll(sel).forEach((el) => {
-            if ((el as HTMLElement).offsetParent !== null) {
-              (el as HTMLElement).style.display = 'none !important';
-              (el as HTMLElement).style.visibility = 'hidden !important';
-              (el as HTMLElement).style.height = '0 !important';
-              (el as HTMLElement).style.width = '0 !important';
-              (el as HTMLElement).style.opacity = '0 !important';
-              (el as HTMLElement).style.pointerEvents = 'none !important';
-            }
-          });
-        } catch (e) {}
-      });
+      if (hideChat) {
+        document.body.classList.add('hide-chat-widget');
+      } else {
+        document.body.classList.remove('hide-chat-widget');
+      }
     };
 
-    const showAllChatWidgets = () => {
-      const selectors = [
-        '[data-widget-id]',
-        'iframe[src*="leadconnector"]',
-        'iframe[src*="ghl"]',
-        '[class*="ghl"]',
-        '[class*="chat"]',
-        '[class*="messenger"]',
-        '[class*="leadconnector"]'
-      ];
-      
-      selectors.forEach(sel => {
-        try {
-          document.querySelectorAll(sel).forEach((el) => {
-            (el as HTMLElement).style.display = '';
-            (el as HTMLElement).style.visibility = '';
-            (el as HTMLElement).style.height = '';
-            (el as HTMLElement).style.width = '';
-            (el as HTMLElement).style.opacity = '';
-            (el as HTMLElement).style.pointerEvents = '';
-          });
-        } catch (e) {}
-      });
-    };
+    // Check immediately
+    checkAndHideChat();
 
-    if (isRegistrationOpen) {
-      console.log('Registration modal opened - hiding chat widget');
-      document.body.classList.add('hide-chat-widget');
-      hideAllChatWidgets();
-      
-      // Watch for new elements being added and hide them too
-      const observer = new MutationObserver(() => {
-        hideAllChatWidgets();
-      });
-      
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['style', 'class']
-      });
-      
-      return () => observer.disconnect();
-    } else {
-      console.log('Registration modal closed - showing chat widget');
-      document.body.classList.remove('hide-chat-widget');
-      showAllChatWidgets();
-    }
-  }, [isRegistrationOpen]);
+    // Watch for changes in the DOM
+    const observer = new MutationObserver(checkAndHideChat);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: false
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const { data: allClinics = [] } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/clinics'],
