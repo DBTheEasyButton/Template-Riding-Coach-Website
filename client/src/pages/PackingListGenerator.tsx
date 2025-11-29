@@ -663,7 +663,7 @@ export default function PackingListGenerator() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-4 mb-8">
                   {extraOptions.map((extra) => (
-                    <div key={extra.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-green-50 transition-colors">
+                    <div key={extra.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-blue-50 transition-colors">
                       <Checkbox
                         id={extra.id}
                         checked={selectedExtras.includes(extra.id)}
@@ -687,7 +687,7 @@ export default function PackingListGenerator() {
                   <Button
                     onClick={() => setCurrentStep('checklist')}
                     size="lg"
-                    className="bg-green-600 hover:bg-green-700 text-white px-8"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
                   >
                     Generate My Checklist
                   </Button>
@@ -724,7 +724,7 @@ export default function PackingListGenerator() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-green-600">{checkedCount}/{totalItems}</div>
+                    <div className="text-2xl font-bold text-blue-600">{checkedCount}/{totalItems}</div>
                     <div className="text-sm text-gray-500">items packed</div>
                   </div>
                 </div>

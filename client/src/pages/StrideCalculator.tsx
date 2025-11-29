@@ -343,7 +343,7 @@ export default function StrideCalculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
       <SEOHead 
         title={seoConfig.title}
         description={seoConfig.description}
@@ -364,7 +364,7 @@ export default function StrideCalculator() {
           </div>
           
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-800 dark:text-green-400 mb-2 md:mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-800 dark:text-blue-400 mb-2 md:mb-4">
               Horse Stride Calculator
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">

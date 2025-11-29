@@ -185,9 +185,9 @@ export default function ReadinessQuiz() {
       return {
         level: "Almost Ready",
         icon: Target,
-        color: "text-orange-600",
-        bgColor: "bg-orange-50",
-        borderColor: "border-orange-200",
+        color: "text-blue-600",
+        bgColor: "bg-blue-50",
+        borderColor: "border-blue-200",
         message: `You're really close to being ready for ${selectedLevel}! You've got a solid foundation, and with just a bit more preparation in a few key areas, you'll be set for success.`,
         recommendations: generatePersonalizedAdvice("Almost Ready")
       };
@@ -195,9 +195,9 @@ export default function ReadinessQuiz() {
       return {
         level: "Needs More Preparation",
         icon: AlertTriangle,
-        color: "text-red-600",
-        bgColor: "bg-red-50",
-        borderColor: "border-red-200",
+        color: "text-amber-600",
+        bgColor: "bg-amber-50",
+        borderColor: "border-amber-200",
         message: `You're on the right track, but there's some important groundwork to lay before tackling ${selectedLevel}. Take your time with this preparation - it's all about building a strong, confident partnership with your horse.`,
         recommendations: generatePersonalizedAdvice("Needs More Preparation")
       };
@@ -221,11 +221,11 @@ export default function ReadinessQuiz() {
   const progress = ((currentQuestionIndex + (answers[questions[currentQuestionIndex]?.id] ? 1 : 0)) / questions.length) * 100;
   
   const questionColors = [
-    'from-purple-500 to-pink-500',
-    'from-blue-500 to-cyan-500', 
-    'from-green-500 to-emerald-500',
-    'from-orange-500 to-red-500',
-    'from-indigo-500 to-purple-500'
+    'from-blue-500 to-blue-600',
+    'from-blue-600 to-teal-500', 
+    'from-teal-500 to-blue-500',
+    'from-blue-500 to-indigo-500',
+    'from-indigo-500 to-blue-600'
   ];
 
   const seoConfig = getSEOConfig('/readiness-quiz');
@@ -280,10 +280,10 @@ export default function ReadinessQuiz() {
                 <div className="grid gap-4">
                   {levels.map((level, index) => {
                     const colors = [
-                      'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600',
-                      'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600',
-                      'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600',
-                      'bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600'
+                      'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
+                      'bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600',
+                      'bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600',
+                      'bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600'
                     ];
                     return (
                       <Button
@@ -480,7 +480,7 @@ export default function ReadinessQuiz() {
                         Take Quiz Again
                       </Button>
                       <Button 
-                        className="bg-green-600 hover:bg-green-700"
+                        className="bg-blue-600 hover:bg-blue-700"
                         onClick={() => window.location.href = "/#clinics"}
                       >
                         Book Training Session
