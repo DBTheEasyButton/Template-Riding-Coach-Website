@@ -630,7 +630,10 @@ export default function PackingListGenerator() {
 
                 <div className="text-center">
                   <Button
-                    onClick={() => setCurrentStep('extras')}
+                    onClick={() => {
+                      setCurrentStep('extras');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={selectedDisciplines.length === 0}
                     size="lg"
                     className="bg-orange hover:bg-orange-hover text-white px-8"
@@ -678,14 +681,20 @@ export default function PackingListGenerator() {
 
                 <div className="flex justify-center gap-4">
                   <Button
-                    onClick={() => setCurrentStep('disciplines')}
+                    onClick={() => {
+                      setCurrentStep('disciplines');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     variant="outline"
                     size="lg"
                   >
                     Back
                   </Button>
                   <Button
-                    onClick={() => setCurrentStep('checklist')}
+                    onClick={() => {
+                      setCurrentStep('checklist');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     size="lg"
                     className="bg-orange hover:bg-orange-hover text-white px-8"
                   >
