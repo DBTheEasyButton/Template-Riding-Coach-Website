@@ -239,54 +239,55 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Prevent chat widget from loading when registration modal is open
+  // Hide chat widget when modal opens with an overlay
   useEffect(() => {
-    const checkModalAndToggleChat = () => {
+    let overlayDiv: HTMLElement | null = null;
+
+    const updateChatBlocker = () => {
       const dialogContent = document.querySelector('[role="dialog"]');
       const isModalOpen = dialogContent && dialogContent.textContent?.includes('Register for');
       
       if (isModalOpen) {
-        // Prevent chat widget from loading/showing
-        (window as any).shouldLoadChat = false;
-        document.body.classList.add('hide-chat-widget');
-        
-        // Remove any existing chat widget elements
-        document.querySelectorAll('[data-widget-id], [data-resources-url*="leadconnector"], .ghl-chat-widget, .messenger-frame').forEach(el => {
-          (el as HTMLElement).remove();
-        });
-        
-        // Remove the chat script if it exists
-        document.querySelectorAll('script[src*="leadconnector"], script[data-widget-id]').forEach(el => {
-          el.remove();
-        });
-      } else {
-        // Allow chat widget to load again
-        (window as any).shouldLoadChat = true;
-        document.body.classList.remove('hide-chat-widget');
-        
-        // Reload chat if it was prevented before
-        if ((window as any).chatLoaded === false) {
-          const loadChatWidget = () => {
-            if ((window as any).shouldLoadChat && !(window as any).chatLoaded && !window.location.pathname.startsWith('/admin')) {
-              (window as any).chatLoaded = true;
-              const chatScript = document.createElement('script');
-              chatScript.src = 'https://widgets.leadconnectorhq.com/loader.js';
-              chatScript.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
-              chatScript.setAttribute('data-widget-id', '687ea32fde5e24006e414bf2');
-              document.body.appendChild(chatScript);
-            }
-          };
-          setTimeout(loadChatWidget, 100);
+        // Create overlay if it doesn't exist
+        if (!overlayDiv) {
+          overlayDiv = document.createElement('div');
+          overlayDiv.id = 'chat-blocker-overlay';
+          overlayDiv.style.cssText = `
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 400px;
+            height: 600px;
+            z-index: 999999;
+            background: transparent;
+            pointer-events: none;
+          `;
+          document.body.appendChild(overlayDiv);
         }
+        overlayDiv.style.display = 'block';
+        
+        // Also hide via class
+        document.body.classList.add('hide-chat-widget');
+      } else {
+        // Remove overlay
+        if (overlayDiv) {
+          overlayDiv.style.display = 'none';
+        }
+        document.body.classList.remove('hide-chat-widget');
       }
     };
 
-    checkModalAndToggleChat();
+    updateChatBlocker();
 
-    const observer = new MutationObserver(checkModalAndToggleChat);
+    const observer = new MutationObserver(updateChatBlocker);
     observer.observe(document.body, { childList: true, subtree: true });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (overlayDiv) {
+        overlayDiv.remove();
+      }
+    };
   }, []);
 
   const { data: allClinics = [] } = useQuery<ClinicWithSessions[]>({
