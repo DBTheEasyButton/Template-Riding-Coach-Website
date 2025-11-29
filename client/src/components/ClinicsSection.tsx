@@ -241,55 +241,55 @@ export default function ClinicsSection() {
 
   // Hide chat widget when registration modal opens
   useEffect(() => {
-    const hideChat = () => {
-      // Target all possible LeadConnector containers
-      const selectors = [
-        '[data-widget-id="687ea32fde5e24006e414bf2"]',
-        '[data-resources-url*="leadconnector"]',
-        '.ghl-chat-widget',
-        '.messenger-frame',
-        '.widget-frame',
-        'iframe[src*="leadconnector"]',
-        'iframe[src*="ghl"]',
-        'div[style*="position"]' // Generic div containers
-      ];
+    if (isRegistrationOpen) {
+      // Add a class to body to hide chat via CSS
+      document.body.classList.add('hide-chat-widget');
       
-      selectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-          (el as HTMLElement).style.display = 'none';
-          (el as HTMLElement).style.visibility = 'hidden';
-          (el as HTMLElement).style.pointerEvents = 'none';
+      // Also try to hide any existing chat elements
+      setTimeout(() => {
+        const allDivs = document.querySelectorAll('div, iframe, span, button');
+        allDivs.forEach((el) => {
+          const html = el.outerHTML || '';
+          const text = el.textContent || '';
+          const ariaLabel = (el as any).getAttribute('aria-label') || '';
+          
+          // Hide if it contains chat-related keywords
+          if (
+            html.includes('leadconnector') ||
+            html.includes('ghl-') ||
+            html.includes('messenger') ||
+            text.includes('Message') ||
+            ariaLabel.includes('chat')
+          ) {
+            (el as HTMLElement).style.display = 'none !important';
+            (el as HTMLElement).style.visibility = 'hidden !important';
+            (el as HTMLElement).style.pointerEvents = 'none !important';
+          }
         });
-      });
-    };
-
-    const showChat = () => {
-      const selectors = [
-        '[data-widget-id="687ea32fde5e24006e414bf2"]',
-        '[data-resources-url*="leadconnector"]',
-        '.ghl-chat-widget',
-        '.messenger-frame',
-        '.widget-frame',
-        'iframe[src*="leadconnector"]',
-        'iframe[src*="ghl"]'
-      ];
+      }, 100);
+    } else {
+      // Remove the class to show chat again
+      document.body.classList.remove('hide-chat-widget');
       
-      selectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
+      // Restore visibility of chat elements
+      const allDivs = document.querySelectorAll('div, iframe, span, button');
+      allDivs.forEach((el) => {
+        const html = el.outerHTML || '';
+        const text = el.textContent || '';
+        const ariaLabel = (el as any).getAttribute('aria-label') || '';
+        
+        if (
+          html.includes('leadconnector') ||
+          html.includes('ghl-') ||
+          html.includes('messenger') ||
+          text.includes('Message') ||
+          ariaLabel.includes('chat')
+        ) {
           (el as HTMLElement).style.display = '';
           (el as HTMLElement).style.visibility = '';
           (el as HTMLElement).style.pointerEvents = '';
-        });
+        }
       });
-    };
-
-    if (isRegistrationOpen) {
-      hideChat();
-      // Also check periodically in case widget loads after modal opens
-      const interval = setInterval(hideChat, 500);
-      return () => clearInterval(interval);
-    } else {
-      showChat();
     }
   }, [isRegistrationOpen]);
 
