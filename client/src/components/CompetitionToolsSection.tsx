@@ -62,7 +62,7 @@ export default function CompetitionToolsSection() {
           <Card className="bg-white border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader>
               <div className="flex items-center mb-4">
-                <div className="p-3 bg-green-600 rounded-lg mr-4">
+                <div className="p-3 bg-blue-600 rounded-lg mr-4">
                   <Ruler className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -80,20 +80,20 @@ export default function CompetitionToolsSection() {
               </p>
               <div className="space-y-2 mb-6">
                 <div className="flex items-center text-sm text-gray-600">
-                  <Calculator className="w-4 h-4 mr-2 text-green-600" />
+                  <Calculator className="w-4 h-4 mr-2 text-blue-600" />
                   Trotting poles & jumping gymnastics
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
-                  <Target className="w-4 h-4 mr-2 text-green-600" />
+                  <Target className="w-4 h-4 mr-2 text-blue-600" />
                   Course related distances
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
-                  <Clock className="w-4 h-4 mr-2 text-green-600" />
+                  <Clock className="w-4 h-4 mr-2 text-blue-600" />
                   Personalized step counting
                 </div>
               </div>
               <Link to="/stride-calculator">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold">
                   Calculate Distances
                 </Button>
               </Link>

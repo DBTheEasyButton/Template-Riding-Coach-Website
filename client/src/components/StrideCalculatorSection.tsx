@@ -5,7 +5,7 @@ import { Ruler, Calculator, Target, Clock } from "lucide-react";
 
 export default function StrideCalculatorSection() {
   return (
-    <section id="stride-calculator" className="py-24 bg-gradient-to-br from-green-50 to-emerald-100">
+    <section id="stride-calculator" className="py-24 bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Video Background */}
         <div className="relative text-center mb-16 rounded-2xl overflow-hidden">
@@ -27,7 +27,7 @@ export default function StrideCalculatorSection() {
           
           <div className="relative z-10 py-16">
             <h2 className="text-5xl font-playfair font-bold text-white mb-6">Stride Calculator</h2>
-            <div className="w-24 h-1 bg-green-500 mx-auto mb-8"></div>
+            <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
             <p className="text-xl text-white max-w-3xl mx-auto">
               Calculate precise pole spacing and distances based on your height and your horse's measurements
             </p>
@@ -40,7 +40,7 @@ export default function StrideCalculatorSection() {
             <Card className="bg-white border-gray-200 shadow-xl h-full">
               <CardHeader>
                 <div className="flex items-center mb-4">
-                  <div className="p-4 bg-green-600 rounded-xl mr-6">
+                  <div className="p-4 bg-blue-600 rounded-xl mr-6">
                     <Ruler className="w-8 h-8 text-white" />
                   </div>
                   <div>
@@ -60,28 +60,28 @@ export default function StrideCalculatorSection() {
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
                   <div className="space-y-3">
                     <div className="flex items-center text-gray-600">
-                      <Calculator className="w-5 h-5 mr-3 text-green-600" />
+                      <Calculator className="w-5 h-5 mr-3 text-blue-600" />
                       <span>Trotting poles & jumping gymnastics</span>
                     </div>
                     <div className="flex items-center text-gray-600">
-                      <Target className="w-5 h-5 mr-3 text-green-600" />
+                      <Target className="w-5 h-5 mr-3 text-blue-600" />
                       <span>Course related distances</span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center text-gray-600">
-                      <Clock className="w-5 h-5 mr-3 text-green-600" />
+                      <Clock className="w-5 h-5 mr-3 text-blue-600" />
                       <span>Personalized step counting</span>
                     </div>
                     <div className="flex items-center text-gray-600">
-                      <Ruler className="w-5 h-5 mr-3 text-green-600" />
+                      <Ruler className="w-5 h-5 mr-3 text-blue-600" />
                       <span>Multiple measurement units</span>
                     </div>
                   </div>
                 </div>
 
                 <Link to="/stride-calculator">
-                  <Button size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-6">
+                  <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg py-6">
                     Open Stride Calculator
                   </Button>
                 </Link>
