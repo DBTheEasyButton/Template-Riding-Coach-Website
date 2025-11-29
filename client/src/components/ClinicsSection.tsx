@@ -470,7 +470,7 @@ export default function ClinicsSection() {
   };
 
   return (
-    <section id="clinics" className="pt-2 pb-7 bg-white">
+    <section id="clinics" className="pt-12 pb-7 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Upcoming Clinics</h2>
