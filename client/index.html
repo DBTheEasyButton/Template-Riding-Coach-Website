@@ -102,20 +102,15 @@
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
     <!-- Lead Connector Chat Widget (Lazy Loaded) -->
     <script>
-      // Global flag to control chat widget loading
-      window.shouldLoadChat = true;
-      window.chatLoaded = false;
-      
+      // Lazy load chat widget after user interaction or 3 seconds
+      var chatLoaded = false;
       function loadChatWidget() {
-        // Don't load if flag is false or already loaded
-        if (!window.shouldLoadChat || window.chatLoaded) return;
-        
+        if (chatLoaded) return;
         // Don't load chat on admin pages
         if (window.location.pathname.startsWith('/admin')) {
           return;
         }
-        
-        window.chatLoaded = true;
+        chatLoaded = true;
         var chatScript = document.createElement('script');
         chatScript.src = 'https://widgets.leadconnectorhq.com/loader.js';
         chatScript.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
@@ -123,7 +118,7 @@
         document.body.appendChild(chatScript);
       }
       
-      // Load on scroll, mousemove, or after 3 seconds (but respect flag)
+      // Load on scroll, mousemove, or after 3 seconds
       ['scroll', 'mousemove', 'touchstart'].forEach(function(event) {
         window.addEventListener(event, function() {
           setTimeout(loadChatWidget, 1000);

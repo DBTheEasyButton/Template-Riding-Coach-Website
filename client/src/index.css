@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Hide chat widget when registration modal is open */
-body.hide-chat-widget [data-widget-id="687ea32fde5e24006e414bf2"],
-body.hide-chat-widget [data-resources-url*="leadconnector"],
-body.hide-chat-widget .ghl-chat-widget,
-body.hide-chat-widget .messenger-frame,
-body.hide-chat-widget .widget-frame,
-body.hide-chat-widget iframe[src*="leadconnector"],
-body.hide-chat-widget iframe[src*="ghl"],
-body.hide-chat-widget [class*="ghl"],
-body.hide-chat-widget [class*="chat-widget"],
-body.hide-chat-widget [class*="leadconnector"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  height: 0 !important;
-  width: 0 !important;
-  position: absolute !important;
-  left: -9999px !important;
-  top: -9999px !important;
-}
-
 /* Mobile touch optimizations */
 @layer base {
   * {

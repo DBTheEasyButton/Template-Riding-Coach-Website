@@ -239,57 +239,6 @@ export default function ClinicsSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Hide chat widget when modal opens with an overlay
-  useEffect(() => {
-    let overlayDiv: HTMLElement | null = null;
-
-    const updateChatBlocker = () => {
-      const dialogContent = document.querySelector('[role="dialog"]');
-      const isModalOpen = dialogContent && dialogContent.textContent?.includes('Register for');
-      
-      if (isModalOpen) {
-        // Create overlay if it doesn't exist
-        if (!overlayDiv) {
-          overlayDiv = document.createElement('div');
-          overlayDiv.id = 'chat-blocker-overlay';
-          overlayDiv.style.cssText = `
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 400px;
-            height: 600px;
-            z-index: 999999;
-            background: transparent;
-            pointer-events: none;
-          `;
-          document.body.appendChild(overlayDiv);
-        }
-        overlayDiv.style.display = 'block';
-        
-        // Also hide via class
-        document.body.classList.add('hide-chat-widget');
-      } else {
-        // Remove overlay
-        if (overlayDiv) {
-          overlayDiv.style.display = 'none';
-        }
-        document.body.classList.remove('hide-chat-widget');
-      }
-    };
-
-    updateChatBlocker();
-
-    const observer = new MutationObserver(updateChatBlocker);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => {
-      observer.disconnect();
-      if (overlayDiv) {
-        overlayDiv.remove();
-      }
-    };
-  }, []);
-
   const { data: allClinics = [] } = useQuery<ClinicWithSessions[]>({
     queryKey: ['/api/clinics'],
   });
