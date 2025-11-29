@@ -191,14 +191,6 @@ export default function CompetitionChecklists() {
   return (
     <div className="min-h-screen bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-playfair font-bold text-navy mb-6">Competition Preparation</h1>
-          <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-            Generate comprehensive, personalised checklists for your competitions. Stay organised and never miss a crucial preparation step.
-          </p>
-        </div>
-
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Checklist Generator */}
           <div className="lg:col-span-1">
