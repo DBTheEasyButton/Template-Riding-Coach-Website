@@ -174,7 +174,7 @@ export default function Polework() {
               href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20polework%20coaching%20session"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+              className="inline-block bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
               data-testid="button-book-lesson"
             >
               Book a Lesson
@@ -245,7 +245,7 @@ export default function Polework() {
             href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20polework%20coaching%20session"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+            className="inline-block bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
             data-testid="button-book-polework-cta"
           >
             Book a Lesson
@@ -334,7 +334,7 @@ export default function Polework() {
               </p>
               <div className="text-center">
                 <Link href="/coaching/clinics">
-                  <Button className="bg-orange hover:bg-orange/90 text-white w-full">
+                  <Button className="bg-orange hover:bg-orange-hover text-white w-full">
                     View Upcoming Clinics
                   </Button>
                 </Link>
@@ -354,7 +354,7 @@ export default function Polework() {
               <p className="text-2xl font-playfair font-bold text-navy mb-4 text-center">£80 per session</p>
               <div className="text-center">
                 <Link href="/coaching/private-lessons">
-                  <Button className="bg-orange hover:bg-orange/90 text-white w-full">
+                  <Button className="bg-orange hover:bg-orange-hover text-white w-full">
                     Book Private Lesson
                   </Button>
                 </Link>
@@ -383,7 +383,7 @@ export default function Polework() {
               <p className="text-2xl font-playfair font-bold text-navy mb-4 text-center">£80 per session</p>
               <div className="text-center">
                 <Link href="/coaching/remote-coaching">
-                  <Button className="bg-orange hover:bg-orange/90 text-white w-full">
+                  <Button className="bg-orange hover:bg-orange-hover text-white w-full">
                     Get Virtual Coaching
                   </Button>
                 </Link>
@@ -438,7 +438,7 @@ export default function Polework() {
             href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20learn%20more%20about%20polework%20training"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+            className="inline-block bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
           >
             Get Started Today
           </a>

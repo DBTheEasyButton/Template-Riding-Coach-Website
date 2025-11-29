@@ -136,7 +136,7 @@ export default function CoachingSection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-4xl mx-auto">
             <Button 
               onClick={() => scrollToSection('#clinics')}
-              className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
             >
               Book a Clinic
             </Button>

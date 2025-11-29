@@ -141,7 +141,7 @@ export default function Loyalty() {
                     </div>
                     <Button 
                       type="submit" 
-                      className="w-full bg-orange hover:bg-orange/90 text-white"
+                      className="w-full bg-orange hover:bg-orange-hover text-white"
                       data-testid="button-check-status"
                     >
                       Check My Status
@@ -180,7 +180,7 @@ export default function Loyalty() {
             </p>
             <Button 
               size="lg" 
-              className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
+              className="bg-orange hover:bg-orange-hover text-white text-lg px-8 py-6"
               asChild
             >
               <a href="/#clinics" data-testid="button-view-clinics">View Available Clinics</a>

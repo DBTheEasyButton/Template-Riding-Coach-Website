@@ -102,7 +102,7 @@ export default function NewsletterSubscription() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-orange hover:bg-orange/90 text-white font-medium py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
+              className="w-full bg-orange hover:bg-orange-hover text-white font-medium py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">

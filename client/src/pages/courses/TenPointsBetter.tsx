@@ -284,7 +284,7 @@ export default function TenPointsBetter() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
                   size="lg" 
-                  className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
+                  className="bg-orange hover:bg-orange-hover text-white text-lg px-8 py-6"
                   onClick={openModal}
                   data-testid="button-hero-cta"
                 >
@@ -538,7 +538,7 @@ export default function TenPointsBetter() {
             </p>
             <Button 
               size="lg" 
-              className="bg-orange hover:bg-orange/90 text-white text-lg px-8 py-6"
+              className="bg-orange hover:bg-orange-hover text-white text-lg px-8 py-6"
               onClick={() => setIsModalOpen(true)}
               data-testid="button-audio-section-free-trial"
             >
@@ -589,7 +589,7 @@ export default function TenPointsBetter() {
           <div className="mt-12 text-center">
             <Button 
               size="lg" 
-              className="bg-orange hover:bg-orange/90 text-white"
+              className="bg-orange hover:bg-orange-hover text-white"
               onClick={() => scrollToSection('pricing')}
               data-testid="button-lessons-cta"
             >
@@ -661,7 +661,7 @@ export default function TenPointsBetter() {
             <div className="text-center">
               <Button 
                 size="lg" 
-                className="bg-orange hover:bg-orange/90 text-white text-lg px-12 py-6 w-full sm:w-auto"
+                className="bg-orange hover:bg-orange-hover text-white text-lg px-12 py-6 w-full sm:w-auto"
                 onClick={openModal}
                 data-testid="button-pricing-cta"
               >
@@ -768,7 +768,7 @@ export default function TenPointsBetter() {
           
           <Button 
             size="lg" 
-            className="bg-orange hover:bg-orange/90 text-white text-lg px-12 py-6"
+            className="bg-orange hover:bg-orange-hover text-white text-lg px-12 py-6"
             onClick={openModal}
             data-testid="button-final-cta"
           >
@@ -854,7 +854,7 @@ export default function TenPointsBetter() {
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-orange hover:bg-orange/90 text-white py-6"
+                  className="w-full bg-orange hover:bg-orange-hover text-white py-6"
                   disabled={signupMutation.isPending}
                   data-testid="button-submit-trial"
                 >

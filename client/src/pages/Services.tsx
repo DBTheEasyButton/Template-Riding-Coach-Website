@@ -222,7 +222,7 @@ export default function Services() {
                 </ul>
                 <Link href={service.url}>
                   <Button 
-                    className="w-full bg-orange hover:bg-orange/90 text-white rounded-full transition-all duration-300"
+                    className="w-full bg-orange hover:bg-orange-hover text-white rounded-full transition-all duration-300"
                     data-testid={`button-learn-more-${service.title.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     Learn More
@@ -284,7 +284,7 @@ export default function Services() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/#clinics">
               <Button 
-                className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+                className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
                 data-testid="button-book-clinic"
               >
                 View Upcoming Clinics

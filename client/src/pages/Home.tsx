@@ -216,7 +216,7 @@ export default function Home() {
           
           <div className="text-center">
             <Link href="/about">
-              <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
+              <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
                 Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
@@ -352,7 +352,7 @@ export default function Home() {
             Get in touch to book a coaching session or join an upcoming clinic
           </p>
           <Link href="/contact">
-            <Button className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-contact-us">
+            <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-contact-us">
               Contact Us <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
           </Link>

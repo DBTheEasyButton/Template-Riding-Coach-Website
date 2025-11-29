@@ -290,7 +290,7 @@ export default function CompetitionChecklists() {
                 <Button 
                   onClick={handleGenerate} 
                   disabled={isGenerating}
-                  className="w-full bg-orange hover:bg-orange/90"
+                  className="w-full bg-orange hover:bg-orange-hover"
                 >
                   {isGenerating ? "Generating..." : "Generate Checklist"}
                 </Button>

@@ -54,7 +54,10 @@ export default {
         // Custom Dan Bizzarro colors
         navy: "hsl(var(--navy))",
         cream: "hsl(var(--cream))",
-        orange: "hsl(var(--orange))",
+        orange: {
+          DEFAULT: "hsl(var(--orange))",
+          hover: "hsl(var(--orange-hover))",
+        },
         dark: "hsl(var(--text-dark))",
         charcoal: "hsl(var(--text-dark))",
         "italian-red": "hsl(var(--orange))",

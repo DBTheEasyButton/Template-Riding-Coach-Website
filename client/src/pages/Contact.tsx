@@ -121,7 +121,7 @@ export default function Contact() {
               </a>
               <a
                 href="/coaching/clinics"
-                className="flex items-center justify-center bg-orange hover:bg-orange/90 text-white px-6 py-4 rounded-lg transition text-lg font-medium"
+                className="flex items-center justify-center bg-orange hover:bg-orange-hover text-white px-6 py-4 rounded-lg transition text-lg font-medium"
                 data-testid="button-view-clinics"
               >
                 View Upcoming Clinics

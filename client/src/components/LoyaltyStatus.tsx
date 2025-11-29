@@ -204,7 +204,7 @@ export function LoyaltyStatus({ email }: LoyaltyStatusProps) {
           <Dialog open={showDiscounts} onOpenChange={setShowDiscounts}>
             <DialogTrigger asChild>
               <Button 
-                className="w-full bg-orange hover:bg-orange/90 text-white"
+                className="w-full bg-orange hover:bg-orange-hover text-white"
                 onClick={() => setShowDiscounts(true)}
                 data-testid="button-view-rewards"
               >

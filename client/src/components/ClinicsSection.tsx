@@ -726,7 +726,7 @@ export default function ClinicsSection() {
                     Generate a personalized packing checklist for your competition based on discipline and needs.
                   </p>
                   <Link href="/packing-list-generator">
-                    <Button className="w-full bg-orange hover:bg-orange/90 text-white font-medium">
+                    <Button className="w-full bg-orange hover:bg-orange-hover text-white font-medium">
                       Create Checklist
                     </Button>
                   </Link>

@@ -584,7 +584,7 @@ export default function PackingListGenerator() {
 
   if (currentStep === 'disciplines') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
         <SEOHead 
           title={seoConfig.title}
           description={seoConfig.description}
@@ -615,7 +615,7 @@ export default function PackingListGenerator() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                   {disciplines.map((discipline) => (
-                    <div key={discipline.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-blue-50 transition-colors">
+                    <div key={discipline.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-orange-50 transition-colors">
                       <Checkbox
                         id={discipline.id}
                         checked={selectedDisciplines.includes(discipline.id)}
@@ -633,7 +633,7 @@ export default function PackingListGenerator() {
                     onClick={() => setCurrentStep('extras')}
                     disabled={selectedDisciplines.length === 0}
                     size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-orange hover:bg-orange-hover text-white px-8"
                   >
                     Continue to Optional Extras
                   </Button>
@@ -649,7 +649,7 @@ export default function PackingListGenerator() {
 
   if (currentStep === 'extras') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
         <Navigation />
         <div className="pt-24 pb-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -663,7 +663,7 @@ export default function PackingListGenerator() {
               <CardContent>
                 <div className="grid grid-cols-1 gap-4 mb-8">
                   {extraOptions.map((extra) => (
-                    <div key={extra.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-blue-50 transition-colors">
+                    <div key={extra.id} className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-orange-50 transition-colors">
                       <Checkbox
                         id={extra.id}
                         checked={selectedExtras.includes(extra.id)}
@@ -687,7 +687,7 @@ export default function PackingListGenerator() {
                   <Button
                     onClick={() => setCurrentStep('checklist')}
                     size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-orange hover:bg-orange-hover text-white px-8"
                   >
                     Generate My Checklist
                   </Button>
@@ -708,7 +708,7 @@ export default function PackingListGenerator() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
       <Navigation />
       <div className="pt-24 pb-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -724,7 +724,7 @@ export default function PackingListGenerator() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-blue-600">{checkedCount}/{totalItems}</div>
+                    <div className="text-2xl font-bold text-orange">{checkedCount}/{totalItems}</div>
                     <div className="text-sm text-gray-500">items packed</div>
                   </div>
                 </div>

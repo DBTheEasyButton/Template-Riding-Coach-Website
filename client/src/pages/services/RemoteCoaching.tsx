@@ -202,7 +202,7 @@ export default function RemoteCoaching() {
               href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20virtual%20riding%20lesson"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+              className="inline-block bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
               data-testid="button-book-lesson"
             >
               Book a Lesson
@@ -286,7 +286,7 @@ export default function RemoteCoaching() {
             href="https://wa.me/447767291713?text=Hi%2C%20I%27d%20like%20to%20book%20a%20virtual%20riding%20lesson"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-orange hover:bg-orange/90 text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+            className="inline-block bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
             data-testid="button-book-virtual-cta"
           >
             Book a Virtual Lesson
@@ -476,7 +476,7 @@ export default function RemoteCoaching() {
             rel="noopener noreferrer"
           >
             <Button 
-              className="bg-orange hover:bg-orange/90 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
               data-testid="button-start-remote-coaching"
             >
               Get Started

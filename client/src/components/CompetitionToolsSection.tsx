@@ -51,7 +51,7 @@ export default function CompetitionToolsSection() {
                 </div>
               </div>
               <Link to="/competition-checklists">
-                <Button className="w-full bg-orange hover:bg-orange/90 text-white font-semibold">
+                <Button className="w-full bg-orange hover:bg-orange-hover text-white font-semibold">
                   Generate Your Checklist
                 </Button>
               </Link>
@@ -178,7 +178,7 @@ export default function CompetitionToolsSection() {
               now available as intelligent digital tools to elevate your performance.
             </p>
             <Link to="/competition-checklists">
-              <Button size="lg" className="bg-orange hover:bg-orange/90 text-white font-semibold px-8">
+              <Button size="lg" className="bg-orange hover:bg-orange-hover text-white font-semibold px-8">
                 Start Your Preparation Journey
               </Button>
             </Link>
