@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
-import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target, CheckSquare } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, PoundSterling, AlertCircle, Check, CreditCard, AlertTriangle, Target, CheckSquare } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe } from "@stripe/stripe-js";
@@ -708,30 +708,6 @@ export default function ClinicsSection() {
                 </CardContent>
               </Card>
 
-              {/* Packing List Generator Banner */}
-              <Card className="bg-gradient-to-br from-orange-50 to-amber-50 border-orange hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange rounded-lg flex items-center justify-center w-10 h-10">
-                      <FileText className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg text-navy">Packing List Generator</CardTitle>
-                      <CardDescription className="text-sm">Competition preparation made easy</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Generate a personalized packing checklist for your competition based on discipline and needs.
-                  </p>
-                  <Link href="/packing-list-generator">
-                    <Button className="w-full bg-orange hover:bg-orange-hover text-white font-medium">
-                      Create Checklist
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
