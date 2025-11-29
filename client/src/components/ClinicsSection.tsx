@@ -241,27 +241,55 @@ export default function ClinicsSection() {
 
   // Hide chat widget when registration modal opens
   useEffect(() => {
+    const hideChat = () => {
+      // Target all possible LeadConnector containers
+      const selectors = [
+        '[data-widget-id="687ea32fde5e24006e414bf2"]',
+        '[data-resources-url*="leadconnector"]',
+        '.ghl-chat-widget',
+        '.messenger-frame',
+        '.widget-frame',
+        'iframe[src*="leadconnector"]',
+        'iframe[src*="ghl"]',
+        'div[style*="position"]' // Generic div containers
+      ];
+      
+      selectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+          (el as HTMLElement).style.display = 'none';
+          (el as HTMLElement).style.visibility = 'hidden';
+          (el as HTMLElement).style.pointerEvents = 'none';
+        });
+      });
+    };
+
+    const showChat = () => {
+      const selectors = [
+        '[data-widget-id="687ea32fde5e24006e414bf2"]',
+        '[data-resources-url*="leadconnector"]',
+        '.ghl-chat-widget',
+        '.messenger-frame',
+        '.widget-frame',
+        'iframe[src*="leadconnector"]',
+        'iframe[src*="ghl"]'
+      ];
+      
+      selectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+          (el as HTMLElement).style.display = '';
+          (el as HTMLElement).style.visibility = '';
+          (el as HTMLElement).style.pointerEvents = '';
+        });
+      });
+    };
+
     if (isRegistrationOpen) {
-      // Hide all chat widget elements (icon and widget)
-      const chatElements = document.querySelectorAll('[data-widget-id="687ea32fde5e24006e414bf2"], .ghl-chat-widget, [class*="chat"], [id*="chat"]');
-      chatElements.forEach(el => {
-        (el as HTMLElement).style.display = 'none';
-      });
-      // Also hide by targeting the LeadConnector iframe
-      const iframes = document.querySelectorAll('iframe[src*="leadconnector"], iframe[src*="ghl"]');
-      iframes.forEach(el => {
-        (el as HTMLElement).style.display = 'none';
-      });
+      hideChat();
+      // Also check periodically in case widget loads after modal opens
+      const interval = setInterval(hideChat, 500);
+      return () => clearInterval(interval);
     } else {
-      // Show all chat widget elements when modal is closed
-      const chatElements = document.querySelectorAll('[data-widget-id="687ea32fde5e24006e414bf2"], .ghl-chat-widget, [class*="chat"], [id*="chat"]');
-      chatElements.forEach(el => {
-        (el as HTMLElement).style.display = '';
-      });
-      const iframes = document.querySelectorAll('iframe[src*="leadconnector"], iframe[src*="ghl"]');
-      iframes.forEach(el => {
-        (el as HTMLElement).style.display = '';
-      });
+      showChat();
     }
   }, [isRegistrationOpen]);
 
