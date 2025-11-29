@@ -91,7 +91,7 @@ export default function Home() {
         <TestimonialsSection />
       </Suspense>
       {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
+      <div className="border-t-2 border-navy"></div>
       {/* What is the Dan Bizzarro Method Section */}
       <section id="method" className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
@@ -147,12 +147,12 @@ export default function Home() {
         </div>
       </section>
       {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
+      <div className="border-t-2 border-navy"></div>
       <Suspense fallback={<SectionSkeleton />}>
         <ClinicsSection />
       </Suspense>
       {/* Divider */}
-      <div className="border-t-4 border-orange"></div>
+      <div className="border-t-2 border-orange"></div>
       {/* About Preview Section */}
       <section id="about" className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -227,7 +227,7 @@ export default function Home() {
         </div>
       </section>
       {/* Divider */}
-      <div className="border-t-4 border-orange"></div>
+      <div className="border-t-2 border-orange"></div>
       {/* Services Preview Section */}
       <section id="coaching" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
@@ -288,7 +288,7 @@ export default function Home() {
         </div>
       </section>
       {/* Divider */}
-      <div className="border-t-4 border-orange"></div>
+      <div className="border-t-2 border-orange"></div>
       {/* News Preview Section */}
       <section id="blog" className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -333,7 +333,7 @@ export default function Home() {
         </div>
       </section>
       {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
+      <div className="border-t-2 border-navy"></div>
       <Suspense fallback={<SectionSkeleton height="500px" />}>
         <PodcastSection />
       </Suspense>
@@ -344,7 +344,7 @@ export default function Home() {
         <NewsletterSubscription />
       </Suspense>
       {/* Divider */}
-      <div className="border-t-4 border-orange"></div>
+      <div className="border-t-2 border-orange"></div>
       {/* Contact CTA Section */}
       <section id="contact" className="py-12 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">

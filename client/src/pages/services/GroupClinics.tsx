@@ -330,11 +330,11 @@ export default function GroupClinics() {
         </div>
       </section>
       {/* Divider */}
-      <div className="border-t-4 border-orange"></div>
+      <div className="border-t-2 border-orange"></div>
       {/* Upcoming Clinics Section */}
       <ClinicsSection />
       {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
+      <div className="border-t-2 border-navy"></div>
       {/* Loyalty Leaderboard Section */}
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-6">
@@ -352,7 +352,7 @@ export default function GroupClinics() {
         </div>
       </section>
       {/* Divider */}
-      <div className="border-t-4 border-navy"></div>
+      <div className="border-t-2 border-navy"></div>
       {/* FAQ Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
