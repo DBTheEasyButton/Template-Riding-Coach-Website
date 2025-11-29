@@ -106,6 +106,10 @@
       var chatLoaded = false;
       function loadChatWidget() {
         if (chatLoaded) return;
+        // Don't load chat on admin pages
+        if (window.location.pathname.startsWith('/admin')) {
+          return;
+        }
         chatLoaded = true;
         var chatScript = document.createElement('script');
         chatScript.src = 'https://widgets.leadconnectorhq.com/loader.js';
