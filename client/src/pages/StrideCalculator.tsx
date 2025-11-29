@@ -78,19 +78,23 @@ export default function StrideCalculator() {
       // Check against normal step (0.8m)
       if (distanceMeters <= normalStep) {
         return "1 normal step";
-      } else if (distanceMeters <= normalStep + 0.15) {
+      } else if (distanceMeters <= normalStep + 0.1) {
         return "A bit more than 1 normal step";
       } 
       // Check against big step (1.0m)
       else if (distanceMeters <= bigStep) {
         return "1 big step";
-      } else if (distanceMeters <= bigStep + 0.2) {
+      } else if (distanceMeters <= bigStep + 0.25) {
         return "A bit more than 1 big step";
       } 
       // Multiple big steps needed
       else {
-        const steps = Math.round(distanceMeters / bigStep);
-        return steps === 1 ? "1 big step" : `${steps} big steps`;
+        const stepRatio = distanceMeters / bigStep;
+        if (stepRatio <= 1.5) {
+          return "A bit more than 1 big step";
+        }
+        const steps = Math.round(stepRatio);
+        return `${steps} big steps`;
       }
     }
     
@@ -102,25 +106,29 @@ export default function StrideCalculator() {
     // Check against small step (0.8m)
     if (distanceMeters <= smallStep) {
       return "1 small step";
-    } else if (distanceMeters <= smallStep + 0.15) {
+    } else if (distanceMeters <= smallStep + 0.1) {
       return "A bit more than 1 small step";
     } 
     // Check against normal step (0.9m)
     else if (distanceMeters <= normalStep) {
       return "1 normal step";
-    } else if (distanceMeters <= normalStep + 0.15) {
+    } else if (distanceMeters <= normalStep + 0.1) {
       return "A bit more than 1 normal step";
     } 
     // Check against big step (1.1m)
     else if (distanceMeters <= bigStep) {
       return "1 big step";
-    } else if (distanceMeters <= bigStep + 0.2) {
+    } else if (distanceMeters <= bigStep + 0.25) {
       return "A bit more than 1 big step";
     } 
     // Multiple big steps needed
     else {
-      const steps = Math.round(distanceMeters / bigStep);
-      return steps === 1 ? "1 big step" : `${steps} big steps`;
+      const stepRatio = distanceMeters / bigStep;
+      if (stepRatio <= 1.5) {
+        return "A bit more than 1 big step";
+      }
+      const steps = Math.round(stepRatio);
+      return `${steps} big steps`;
     }
   };
 
