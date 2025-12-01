@@ -2654,6 +2654,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // XML Sitemap for Blog Posts
+  app.get("/sitemap-blog.xml", async (req, res) => {
+    try {
+      const news = await storage.getAllNews();
+      const baseUrl = "https://danbizzarromethod.com";
+      
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+`;
+      
+      // Add blog index page
+      xml += `  <url>
+    <loc>${baseUrl}/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+      
+      // Add individual blog posts
+      for (const article of news) {
+        const slug = article.slug || article.id;
+        const lastMod = new Date(article.publishedAt).toISOString().split('T')[0];
+        
+        xml += `  <url>
+    <loc>${baseUrl}/blog/${slug}</loc>
+    <lastmod>${lastMod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+      }
+      
+      xml += `</urlset>`;
+      
+      res.setHeader('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error("Error generating blog sitemap:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+
+  // XML Sitemap for Clinics
+  app.get("/sitemap-clinics.xml", async (req, res) => {
+    try {
+      const clinics = await storage.getUpcomingClinics();
+      const baseUrl = "https://danbizzarromethod.com";
+      
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`;
+      
+      // Add clinics index page
+      xml += `  <url>
+    <loc>${baseUrl}/coaching/clinics</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+`;
+      
+      // Add home page clinics section
+      xml += `  <url>
+    <loc>${baseUrl}/#clinics</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+      
+      xml += `</urlset>`;
+      
+      res.setHeader('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error("Error generating clinics sitemap:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+
+  // Main Sitemap Index
+  app.get("/sitemap.xml", async (req, res) => {
+    try {
+      const baseUrl = "https://danbizzarromethod.com";
+      const today = new Date().toISOString().split('T')[0];
+      
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${baseUrl}/sitemap-blog.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${baseUrl}/sitemap-clinics.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+</sitemapindex>`;
+      
+      res.setHeader('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error("Error generating sitemap index:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
