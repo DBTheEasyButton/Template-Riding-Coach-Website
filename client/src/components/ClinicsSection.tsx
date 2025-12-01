@@ -22,6 +22,67 @@ import MobileRegistrationFlow from "@/components/MobileRegistrationFlow";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
 
+function ClinicEventsSchema({ clinics }: { clinics: ClinicWithSessions[] }) {
+  const baseUrl = "https://danbizzarromethod.com";
+  
+  const events = clinics.map(clinic => {
+    const imageUrl = clinic.image.startsWith('http') 
+      ? clinic.image 
+      : `${baseUrl}${clinic.image}`;
+    
+    const price = clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
+      ? Math.min(...clinic.sessions.map(s => s.price)) / 100
+      : clinic.price / 100;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": clinic.title,
+      "description": clinic.description,
+      "image": imageUrl,
+      "startDate": new Date(clinic.date).toISOString(),
+      "endDate": new Date(clinic.date).toISOString(),
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": clinic.location,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": clinic.location,
+          "addressCountry": "GB"
+        }
+      },
+      "organizer": {
+        "@type": "Person",
+        "name": "Dan Bizzarro",
+        "url": `${baseUrl}/about`
+      },
+      "performer": {
+        "@type": "Person",
+        "name": "Dan Bizzarro"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": price,
+        "priceCurrency": "GBP",
+        "url": `${baseUrl}/#clinics`,
+        "availability": clinic.currentParticipants >= clinic.maxParticipants 
+          ? "https://schema.org/SoldOut" 
+          : "https://schema.org/InStock",
+        "validFrom": new Date().toISOString()
+      }
+    };
+  });
+  
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(events) }}
+    />
+  );
+}
+
 // Payment form component
 function PaymentForm({ 
   onPaymentSuccess, 
@@ -471,6 +532,7 @@ export default function ClinicsSection() {
 
   return (
     <section id="clinics" className="pt-12 pb-7 bg-white">
+      {clinics.length > 0 && <ClinicEventsSchema clinics={clinics} />}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-5xl font-playfair font-bold text-navy mb-6">Upcoming Clinics</h2>
