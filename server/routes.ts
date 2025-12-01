@@ -2733,6 +2733,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // XML Sitemap for Static Pages
+  app.get("/sitemap-pages.xml", async (req, res) => {
+    try {
+      const baseUrl = "https://danbizzarromethod.com";
+      
+      const staticPages = [
+        { loc: '/', priority: '1.0', changefreq: 'daily' },
+        { loc: '/about', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/contact', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/coaching', priority: '0.9', changefreq: 'weekly' },
+        { loc: '/coaching/private-lessons', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/coaching/clinics', priority: '0.9', changefreq: 'daily' },
+        { loc: '/coaching/remote-coaching', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/coaching/dressage', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/coaching/show-jumping', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/coaching/cross-country', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/coaching/polework', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/tools/stride-calculator', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/tools/readiness-quiz', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/tools/packing-list', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/gallery', priority: '0.6', changefreq: 'weekly' },
+        { loc: '/podcast', priority: '0.7', changefreq: 'weekly' },
+        { loc: '/blog', priority: '0.8', changefreq: 'daily' },
+        { loc: '/loyalty', priority: '0.6', changefreq: 'monthly' },
+      ];
+      
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`;
+      
+      for (const page of staticPages) {
+        xml += `  <url>
+    <loc>${baseUrl}${page.loc}</loc>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>
+`;
+      }
+      
+      xml += `</urlset>`;
+      
+      res.setHeader('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error("Error generating pages sitemap:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+
   // Main Sitemap Index
   app.get("/sitemap.xml", async (req, res) => {
     try {
@@ -2741,6 +2790,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${baseUrl}/sitemap-pages.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
   <sitemap>
     <loc>${baseUrl}/sitemap-blog.xml</loc>
     <lastmod>${today}</lastmod>
