@@ -10,6 +10,49 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import UpcomingClinicsBanner from "@/components/UpcomingClinicsBanner";
 
+function BlogPostingSchema({ article }: { article: News }) {
+  const baseUrl = "https://danbizzarromethod.com";
+  const articleUrl = `${baseUrl}/blog/${article.slug || article.id}`;
+  const imageUrl = article.image.startsWith('http') 
+    ? article.image 
+    : `${baseUrl}${article.image}`;
+  
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": article.title,
+    "description": article.excerpt,
+    "image": imageUrl,
+    "datePublished": new Date(article.publishedAt).toISOString(),
+    "dateModified": new Date(article.publishedAt).toISOString(),
+    "author": {
+      "@type": "Person",
+      "name": "Dan Bizzarro",
+      "url": `${baseUrl}/about`
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Dan Bizzarro Method",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${baseUrl}/dan-bizzarro-logo.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": articleUrl
+    },
+    "url": articleUrl
+  };
+  
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export default function NewsArticle() {
   const params = useParams();
   const [, setLocation] = useLocation();
@@ -84,6 +127,7 @@ export default function NewsArticle() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <BlogPostingSchema article={article} />
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
