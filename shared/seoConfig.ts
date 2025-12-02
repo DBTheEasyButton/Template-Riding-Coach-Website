@@ -19,7 +19,7 @@ export interface PageSEOConfig {
   }>;
 }
 
-const BASE_URL = 'https://danbizzarromethod.com';
+export const BASE_URL = 'https://danbizzarromethod.com';
 
 export const getCanonicalUrl = (path: string): string => {
   return `${BASE_URL}${path}`;
