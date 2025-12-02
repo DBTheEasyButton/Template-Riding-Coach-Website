@@ -387,9 +387,24 @@ export function seoMiddleware(req: Request, res: Response, next: NextFunction) {
   
   // Override res.write to capture streamed chunks
   res.write = function (this: Response, chunk: any, encodingOrCb?: any, cb?: any): boolean {
-    // Check if this is HTML content by looking at Content-Type or chunk content
-    if (!isHtmlResponse && typeof chunk === 'string' && chunk.includes('<!DOCTYPE html>')) {
-      isHtmlResponse = true;
+    // Check if this is HTML content by looking at Content-Type header or chunk content
+    if (!isHtmlResponse) {
+      // Check Content-Type header first (most reliable for production)
+      const contentType = res.getHeader('Content-Type');
+      if (contentType && typeof contentType === 'string' && contentType.includes('text/html')) {
+        isHtmlResponse = true;
+      }
+      // Also check chunk content as fallback
+      else if (typeof chunk === 'string' && chunk.includes('<!DOCTYPE html>')) {
+        isHtmlResponse = true;
+      }
+      // Check Buffer content (production uses Buffers from express.static/sendFile)
+      else if (Buffer.isBuffer(chunk)) {
+        const chunkStr = chunk.toString('utf-8', 0, Math.min(100, chunk.length));
+        if (chunkStr.includes('<!DOCTYPE html>') || chunkStr.includes('<!doctype html>')) {
+          isHtmlResponse = true;
+        }
+      }
     }
     
     if (isHtmlResponse) {
