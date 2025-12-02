@@ -279,10 +279,10 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
       <style>#ssr-article-content{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;overflow:visible!important;}</style>
     </noscript>`;
     
-    // Inject right after the opening body tag
+    // Inject before the React root div (more reliable than matching <body> which can appear in minified scripts)
     modifiedHtml = modifiedHtml.replace(
-      /<body([^>]*)>/i,
-      `<body$1>${articleHtml}`
+      /<div id="root">/i,
+      `${articleHtml}\n    <div id="root">`
     );
   }
   
