@@ -27,7 +27,7 @@ export default function Podcast() {
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[400px] bg-gradient-to-r from-orange to-amber-500 pt-16">
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative h-full flex items-center justify-center text-center px-4">
+        <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Our Equestrian Life Podcast

@@ -26,7 +26,7 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] bg-gradient-to-r from-orange-600 to-orange-500 pt-16">
         <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative h-full flex items-center justify-center text-center px-4">
+        <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Stay Connected
