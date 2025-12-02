@@ -1,7 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { setupVite, log } from "./vite";
 import { seoMiddleware } from "./seo-middleware";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
@@ -57,7 +59,28 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // Production: Custom static file serving that allows SEO middleware to work
+    const distPath = path.resolve(import.meta.dirname, "public");
+    
+    if (!fs.existsSync(distPath)) {
+      throw new Error(`Could not find the build directory: ${distPath}, make sure to build the client first`);
+    }
+    
+    // Serve static assets (JS, CSS, images) directly - they don't need SEO processing
+    app.use(express.static(distPath, { index: false }));
+    
+    // Handle all HTML routes by reading and sending the file content
+    // This allows the SEO middleware to intercept and modify the HTML
+    app.use("*", (_req, res) => {
+      const indexPath = path.resolve(distPath, "index.html");
+      fs.readFile(indexPath, "utf-8", (err, html) => {
+        if (err) {
+          res.status(500).send("Error loading page");
+          return;
+        }
+        res.status(200).set({ "Content-Type": "text/html; charset=UTF-8" }).send(html);
+      });
+    });
   }
 
   // ALWAYS serve the app on port 5000
