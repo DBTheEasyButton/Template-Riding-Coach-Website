@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { seoConfig, getSEOConfig, getCanonicalUrl, BASE_URL } from "../shared/seoConfig";
 import { createBreadcrumbSchema, getBreadcrumbsFromPath, createServiceSchema, createFAQSchema } from "../shared/schemaHelpers";
 import { storage } from "./storage";
+import sanitizeHtml from "sanitize-html";
 
 /**
  * Server-side SEO middleware
@@ -31,6 +32,74 @@ interface DynamicSEOConfig {
   modifiedAt?: Date;
   author?: string;
   articleType?: 'BlogPosting' | 'NewsArticle';
+  articleContent?: string;
+  articleImage?: string;
+  articleExcerpt?: string;
+}
+
+/**
+ * Sanitization options for article content
+ * Only allow safe HTML tags - no scripts, iframes, or dangerous attributes
+ */
+const sanitizeOptions: sanitizeHtml.IOptions = {
+  allowedTags: [
+    'p', 'br', 'strong', 'b', 'em', 'i', 'u',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li',
+    'a', 'img',
+    'blockquote', 'hr',
+    'span', 'div'
+  ],
+  allowedAttributes: {
+    'a': ['href', 'title', 'style'],
+    'img': ['src', 'alt', 'title', 'width', 'height'],
+    '*': ['style']
+  },
+  allowedSchemes: ['http', 'https', 'mailto'],
+  allowedStyles: {
+    '*': {
+      'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(/],
+      'text-decoration': [/^underline$/]
+    }
+  }
+};
+
+/**
+ * Format article content for SSR injection
+ * Handles both HTML content (already formatted) and markdown-style content
+ * SECURITY: All content is sanitized to prevent XSS attacks
+ */
+function formatArticleContent(content: string): string {
+  let processedContent: string;
+  
+  // If content already has HTML tags, use it directly (don't double-process)
+  if (content.includes('<p>') || content.includes('<strong>') || content.includes('<h')) {
+    // Content is already HTML - just clean up any escaped newlines
+    processedContent = content.replace(/\\n/g, '\n');
+  } else {
+    // Otherwise, format markdown-style content (same logic as NewsArticle.tsx)
+    processedContent = content
+      // Convert **bold** to <strong>
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      // Convert --- to horizontal rule
+      .replace(/^---$/gm, '<hr />')
+      // Convert bullet points
+      .replace(/^• (.+)$/gm, '<li>$1</li>')
+      // Wrap consecutive <li> in <ul>
+      .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+      // Convert line breaks to paragraphs
+      .split('\n\n')
+      .map(para => {
+        if (para.startsWith('<ul') || para.startsWith('<hr') || para.trim() === '') {
+          return para;
+        }
+        return `<p>${para.replace(/\n/g, '<br />')}</p>`;
+      })
+      .join('');
+  }
+  
+  // SECURITY: Sanitize HTML to prevent XSS attacks
+  return sanitizeHtml(processedContent, sanitizeOptions);
 }
 
 function createBlogPostSchema(config: DynamicSEOConfig): object {
@@ -180,6 +249,43 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
     );
   }
   
+  // Inject full article content for blog posts (server-side rendering for SEO)
+  // This ensures Google sees the complete article without needing JavaScript
+  if (dynamicConfig?.articleContent) {
+    const formattedContent = formatArticleContent(dynamicConfig.articleContent);
+    const publishDate = dynamicConfig.publishedAt 
+      ? new Date(dynamicConfig.publishedAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+      : '';
+    
+    // Create a semantic article element with the full content
+    // This is placed in the body but will be replaced by React's hydration
+    const articleHtml = `
+    <!-- Server-rendered article content for SEO -->
+    <article id="ssr-article-content" itemscope itemtype="https://schema.org/BlogPosting" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
+      <header>
+        <h1 itemprop="headline">${escapeHtml(dynamicConfig.h1 || '')}</h1>
+        <p itemprop="description">${escapeHtml(dynamicConfig.articleExcerpt || dynamicConfig.description)}</p>
+        <time itemprop="datePublished" datetime="${dynamicConfig.publishedAt?.toISOString() || ''}">${publishDate}</time>
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+          <span itemprop="name">${escapeHtml(dynamicConfig.author || 'Dan Bizzarro')}</span>
+        </span>
+      </header>
+      ${dynamicConfig.articleImage ? `<img itemprop="image" src="${escapeHtml(dynamicConfig.articleImage)}" alt="${escapeHtml(dynamicConfig.h1 || '')}" />` : ''}
+      <div itemprop="articleBody">
+        ${formattedContent}
+      </div>
+    </article>
+    <noscript>
+      <style>#ssr-article-content{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;overflow:visible!important;}</style>
+    </noscript>`;
+    
+    // Inject right after the opening body tag
+    modifiedHtml = modifiedHtml.replace(
+      /<body([^>]*)>/i,
+      `<body$1>${articleHtml}`
+    );
+  }
+  
   return modifiedHtml;
 }
 
@@ -236,7 +342,10 @@ async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig> {
       publishedAt: post.publishedAt,
       modifiedAt: post.publishedAt, // Use same as published for now
       author: 'Dan Bizzarro',
-      articleType: 'BlogPosting'
+      articleType: 'BlogPosting',
+      articleContent: post.content,
+      articleImage: post.image,
+      articleExcerpt: post.excerpt
     };
   } catch (error) {
     console.error(`Error fetching blog post SEO for slug: ${slug}`, error);
