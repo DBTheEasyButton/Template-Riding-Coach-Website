@@ -192,13 +192,29 @@ function extractBlogSlug(path: string): string | null {
 }
 
 /**
+ * Get fallback SEO config for blog pages when post is not found
+ */
+function getBlogFallbackSEO(): DynamicSEOConfig {
+  const blogConfig = seoConfig['/blog'];
+  return {
+    title: blogConfig.title,
+    description: blogConfig.description,
+    keywords: blogConfig.keywords,
+    canonicalPath: '/blog',
+    h1: blogConfig.h1
+  };
+}
+
+/**
  * Fetch blog post SEO data from database
  */
-async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig | null> {
+async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig> {
   try {
     const post = await storage.getNewsBySlug(slug);
     if (!post) {
-      return null;
+      // Blog post not found - use blog index SEO as fallback
+      console.warn(`Blog post not found for slug: ${slug}, using blog index fallback`);
+      return getBlogFallbackSEO();
     }
     
     // Create SEO-optimized title (max ~60 chars for Google)
@@ -224,7 +240,7 @@ async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig | null> {
     };
   } catch (error) {
     console.error(`Error fetching blog post SEO for slug: ${slug}`, error);
-    return null;
+    return getBlogFallbackSEO();
   }
 }
 
