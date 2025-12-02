@@ -415,27 +415,27 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
     );
   }
   
-  // Inject static page content for all pages with SSR content registry
-  // This ensures Google and AI tools can read page content without JavaScript
-  const ssrContent = getSSRContent(normalizedPath);
-  if (ssrContent && !dynamicConfig?.articleContent && !dynamicConfig?.clinicsContent) {
-    const contentHtml = formatSSRContentAsHTML(ssrContent);
-    
-    const staticPageHtml = `
-    <!-- Server-rendered page content for SEO -->
-    <article id="ssr-page-content" itemscope itemtype="https://schema.org/WebPage" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
-      ${contentHtml}
-    </article>
-    <noscript>
-      <style>#ssr-page-content{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;overflow:visible!important;}</style>
-    </noscript>`;
-    
-    // Inject before the React root div
-    modifiedHtml = modifiedHtml.replace(
-      /<div id="root">/i,
-      `${staticPageHtml}\n    <div id="root">`
-    );
-  }
+  // SSR content injection temporarily disabled for debugging
+  // TODO: Re-enable after fixing white screen issue
+  // const ssrContent = getSSRContent(normalizedPath);
+  // if (ssrContent && !dynamicConfig?.articleContent && !dynamicConfig?.clinicsContent) {
+  //   const contentHtml = formatSSRContentAsHTML(ssrContent);
+  //   
+  //   const staticPageHtml = `
+  //   <!-- Server-rendered page content for SEO -->
+  //   <article id="ssr-page-content" itemscope itemtype="https://schema.org/WebPage" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
+  //     ${contentHtml}
+  //   </article>
+  //   <noscript>
+  //     <style>#ssr-page-content{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;overflow:visible!important;}</style>
+  //   </noscript>`;
+  //   
+  //   // Inject before the React root div
+  //   modifiedHtml = modifiedHtml.replace(
+  //     /<div id="root">/i,
+  //     `${staticPageHtml}\n    <div id="root">`
+  //   );
+  // }
   
   return modifiedHtml;
 }
