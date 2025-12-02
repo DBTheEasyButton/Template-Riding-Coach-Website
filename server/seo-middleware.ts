@@ -301,6 +301,119 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
     );
   }
   
+  // Inject clinics content for clinics page (server-side rendering for SEO)
+  // This ensures Google sees all clinic details without needing JavaScript
+  if (dynamicConfig?.clinicsContent && dynamicConfig.clinicsContent.length > 0) {
+    const clinicsHtml = dynamicConfig.clinicsContent.map(clinic => {
+      const clinicDate = new Date(clinic.date);
+      const formattedDate = clinicDate.toLocaleDateString('en-GB', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      const formattedTime = clinicDate.toLocaleTimeString('en-GB', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
+      
+      return `
+      <div itemscope itemtype="https://schema.org/Event" class="ssr-clinic-item">
+        <h2 itemprop="name">${escapeHtml(clinic.title)}</h2>
+        <meta itemprop="startDate" content="${clinicDate.toISOString()}" />
+        <p><strong>Date:</strong> <time datetime="${clinicDate.toISOString()}">${formattedDate} at ${formattedTime}</time></p>
+        <p itemprop="location" itemscope itemtype="https://schema.org/Place">
+          <strong>Location:</strong> <span itemprop="name">${escapeHtml(clinic.location)}</span>
+          ${clinic.googleMapsLink ? `<a itemprop="hasMap" href="${escapeHtml(clinic.googleMapsLink)}">View on Google Maps</a>` : ''}
+        </p>
+        <p><strong>Price:</strong> <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+          <span itemprop="price" content="${clinic.price}">£${clinic.price}</span>
+          <meta itemprop="priceCurrency" content="GBP" />
+          <meta itemprop="availability" content="${clinic.spotsLeft > 0 ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut'}" />
+        </span></p>
+        <p><strong>Capacity:</strong> ${clinic.capacity} riders${clinic.spotsLeft > 0 ? ` (${clinic.spotsLeft} spots available)` : ' (Full)'}</p>
+        ${clinic.description ? `<p itemprop="description">${escapeHtml(clinic.description)}</p>` : ''}
+        ${clinic.image ? `<img itemprop="image" src="${escapeHtml(clinic.image)}" alt="${escapeHtml(clinic.title)}" />` : ''}
+        <span itemprop="organizer" itemscope itemtype="https://schema.org/Person">
+          <meta itemprop="name" content="Dan Bizzarro" />
+        </span>
+      </div>`;
+    }).join('\n');
+    
+    const clinicsSection = `
+    <!-- Server-rendered clinics content for SEO -->
+    <section id="ssr-clinics-content" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
+      <h1>Upcoming Horse Riding Clinics in Oxfordshire</h1>
+      <p>Book your place at one of my ${dynamicConfig.clinicsContent.length} upcoming clinic${dynamicConfig.clinicsContent.length > 1 ? 's' : ''}. Small group sessions focusing on show jumping, polework, and cross country.</p>
+      ${clinicsHtml}
+    </section>
+    <noscript>
+      <style>#ssr-clinics-content{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;overflow:visible!important;}</style>
+    </noscript>`;
+    
+    // Inject before the React root div
+    modifiedHtml = modifiedHtml.replace(
+      /<div id="root">/i,
+      `${clinicsSection}\n    <div id="root">`
+    );
+    
+    // Add Event structured data for each clinic
+    const clinicSchemas = dynamicConfig.clinicsContent.map(clinic => {
+      const clinicDate = new Date(clinic.date);
+      return {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": clinic.title,
+        "description": clinic.description || `Horse riding clinic with Dan Bizzarro at ${clinic.location}`,
+        "startDate": clinicDate.toISOString(),
+        "endDate": new Date(clinicDate.getTime() + 4 * 60 * 60 * 1000).toISOString(), // Assume 4 hour duration
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": {
+          "@type": "Place",
+          "name": clinic.location,
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "Oxfordshire",
+            "addressCountry": "GB"
+          }
+        },
+        "organizer": {
+          "@type": "Person",
+          "name": "Dan Bizzarro",
+          "url": `${BASE_URL}/about`
+        },
+        "performer": {
+          "@type": "Person",
+          "name": "Dan Bizzarro"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": clinic.price,
+          "priceCurrency": "GBP",
+          "availability": clinic.spotsLeft > 0 ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+          "url": `${BASE_URL}/coaching/clinics`,
+          "validFrom": new Date().toISOString()
+        },
+        "image": clinic.image ? `${BASE_URL}${clinic.image}` : `${BASE_URL}/hero-background.jpg`,
+        "maximumAttendeeCapacity": clinic.capacity,
+        "remainingAttendeeCapacity": clinic.spotsLeft
+      };
+    });
+    
+    // Inject Event schemas before </head>
+    const clinicSchemasHtml = clinicSchemas.map((schema, index) => {
+      return `    <script type="application/ld+json" data-clinic-schema="true" data-clinic-index="${index}">
+${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join('\n')}
+    </script>`;
+    }).join('\n');
+    
+    modifiedHtml = modifiedHtml.replace(
+      /<\/head>/i,
+      `${clinicSchemasHtml}\n  </head>`
+    );
+  }
+  
   return modifiedHtml;
 }
 
@@ -386,10 +499,9 @@ async function getClinicsSEO(): Promise<DynamicSEOConfig> {
     
     // Transform clinics to SSR data
     const clinicsData: ClinicSSRData[] = upcomingClinics.map(clinic => {
-      // Count registrations that are confirmed
-      const registeredCount = clinic.sessions?.reduce((total, session) => {
-        return total; // Sessions don't have registration count directly
-      }, 0) || 0;
+      // Use currentParticipants from clinic data
+      const registeredCount = clinic.currentParticipants || 0;
+      const capacity = clinic.maxParticipants || 8;
       
       return {
         id: clinic.id,
@@ -400,9 +512,9 @@ async function getClinicsSEO(): Promise<DynamicSEOConfig> {
         price: clinic.price,
         description: clinic.description,
         image: clinic.image,
-        capacity: clinic.capacity,
+        capacity: capacity,
         registeredCount: registeredCount,
-        spotsLeft: clinic.capacity - registeredCount
+        spotsLeft: capacity - registeredCount
       };
     });
     
