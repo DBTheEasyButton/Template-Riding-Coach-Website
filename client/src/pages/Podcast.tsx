@@ -25,9 +25,9 @@ export default function Podcast() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] bg-gradient-to-r from-orange to-amber-500 pt-16">
+      <section className="relative min-h-[350px] sm:min-h-[400px] bg-gradient-to-r from-orange to-amber-500 mt-14 sm:mt-16">
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 h-full flex items-center justify-center text-center px-4">
+        <div className="relative z-10 flex items-center justify-center text-center px-4 py-12 sm:py-16">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Our Equestrian Life Podcast

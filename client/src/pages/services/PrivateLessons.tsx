@@ -135,7 +135,7 @@ export default function PrivateLessons() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-[400px] sm:min-h-[350px] overflow-hidden mt-14 sm:mt-16">
+      <section className="relative min-h-[450px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16">
         <HeroPicture
           jpegSrc={privateLessonHeroJpg}
           webpSrc={privateLessonHeroWebp}
