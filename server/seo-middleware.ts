@@ -35,6 +35,21 @@ interface DynamicSEOConfig {
   articleContent?: string;
   articleImage?: string;
   articleExcerpt?: string;
+  clinicsContent?: ClinicSSRData[];
+}
+
+interface ClinicSSRData {
+  id: number;
+  title: string;
+  date: Date;
+  location: string;
+  googleMapsLink: string;
+  price: number;
+  description: string | null;
+  image: string | null;
+  capacity: number;
+  registeredCount: number;
+  spotsLeft: number;
 }
 
 /**
@@ -354,6 +369,79 @@ async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig> {
 }
 
 /**
+ * Check if path is a clinics page
+ */
+function isClinicsPage(path: string): boolean {
+  return path === '/coaching/clinics' || path === '/clinics';
+}
+
+/**
+ * Fetch clinics SEO data with all upcoming clinic details
+ */
+async function getClinicsSEO(): Promise<DynamicSEOConfig> {
+  const clinicsConfig = seoConfig['/coaching/clinics'];
+  
+  try {
+    const upcomingClinics = await storage.getUpcomingClinics();
+    
+    // Transform clinics to SSR data
+    const clinicsData: ClinicSSRData[] = upcomingClinics.map(clinic => {
+      // Count registrations that are confirmed
+      const registeredCount = clinic.sessions?.reduce((total, session) => {
+        return total; // Sessions don't have registration count directly
+      }, 0) || 0;
+      
+      return {
+        id: clinic.id,
+        title: clinic.title,
+        date: clinic.date,
+        location: clinic.location,
+        googleMapsLink: clinic.googleMapsLink || '',
+        price: clinic.price,
+        description: clinic.description,
+        image: clinic.image,
+        capacity: clinic.capacity,
+        registeredCount: registeredCount,
+        spotsLeft: clinic.capacity - registeredCount
+      };
+    });
+    
+    // Build dynamic description with clinic count
+    let description = clinicsConfig.description;
+    if (clinicsData.length > 0) {
+      const nextClinic = clinicsData[0];
+      const nextDate = new Date(nextClinic.date).toLocaleDateString('en-GB', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+      });
+      description = `${clinicsData.length} upcoming clinic${clinicsData.length > 1 ? 's' : ''} available. Next: ${nextDate} at ${nextClinic.location}. ${clinicsConfig.description}`;
+      if (description.length > 155) {
+        description = description.substring(0, 152) + '...';
+      }
+    }
+    
+    return {
+      title: clinicsConfig.title,
+      description: description,
+      keywords: clinicsConfig.keywords,
+      canonicalPath: '/coaching/clinics',
+      h1: clinicsConfig.h1,
+      clinicsContent: clinicsData
+    };
+  } catch (error) {
+    console.error('Error fetching clinics SEO data:', error);
+    return {
+      title: clinicsConfig.title,
+      description: clinicsConfig.description,
+      keywords: clinicsConfig.keywords,
+      canonicalPath: '/coaching/clinics',
+      h1: clinicsConfig.h1
+    };
+  }
+}
+
+/**
  * Express middleware to inject SEO metadata into HTML responses
  * Handles both string payloads (development/Vite) and streamed responses (production/sendFile)
  */
@@ -373,8 +461,18 @@ export function seoMiddleware(req: Request, res: Response, next: NextFunction) {
   // Check if this is a blog post that needs dynamic SEO
   const blogSlug = extractBlogSlug(normalizedPath);
   
-  // If it's a blog post, fetch SEO data asynchronously
-  const seoDataPromise = blogSlug ? getBlogPostSEO(blogSlug) : Promise.resolve(null);
+  // Check if this is a clinics page that needs dynamic SEO
+  const isClinics = isClinicsPage(normalizedPath);
+  
+  // Fetch appropriate SEO data asynchronously
+  let seoDataPromise: Promise<DynamicSEOConfig | null>;
+  if (blogSlug) {
+    seoDataPromise = getBlogPostSEO(blogSlug);
+  } else if (isClinics) {
+    seoDataPromise = getClinicsSEO();
+  } else {
+    seoDataPromise = Promise.resolve(null);
+  }
   
   // Store original methods
   const originalSend = res.send;
