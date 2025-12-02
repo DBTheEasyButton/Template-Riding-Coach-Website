@@ -96,7 +96,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden pt-14 sm:pt-16">
       {/* Background images carousel */}
       {images.map((image, index) => (
         <div
