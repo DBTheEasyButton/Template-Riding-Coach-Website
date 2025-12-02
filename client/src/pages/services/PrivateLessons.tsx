@@ -145,8 +145,8 @@ export default function PrivateLessons() {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="absolute inset-0 flex items-center justify-center text-center px-4 pt-16 pb-6">
-          <div className="max-w-4xl">
+        <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+          <div className="max-w-4xl mt-14 sm:mt-16">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Private Horse Riding Lessons in Oxfordshire
             </h1>
