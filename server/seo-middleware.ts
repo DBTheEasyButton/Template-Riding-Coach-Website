@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { seoConfig, getSEOConfig, getCanonicalUrl, BASE_URL } from "../shared/seoConfig";
 import { createBreadcrumbSchema, getBreadcrumbsFromPath, createServiceSchema, createFAQSchema } from "../shared/schemaHelpers";
+import { getSSRContent, formatSSRContentAsHTML } from "../shared/ssrContent";
 import { storage } from "./storage";
 import sanitizeHtml from "sanitize-html";
 
@@ -411,6 +412,28 @@ ${JSON.stringify(schema, null, 2).split('\n').map(line => '      ' + line).join(
     modifiedHtml = modifiedHtml.replace(
       /<\/head>/i,
       `${clinicSchemasHtml}\n  </head>`
+    );
+  }
+  
+  // Inject static page content for all pages with SSR content registry
+  // This ensures Google and AI tools can read page content without JavaScript
+  const ssrContent = getSSRContent(normalizedPath);
+  if (ssrContent && !dynamicConfig?.articleContent && !dynamicConfig?.clinicsContent) {
+    const contentHtml = formatSSRContentAsHTML(ssrContent);
+    
+    const staticPageHtml = `
+    <!-- Server-rendered page content for SEO -->
+    <article id="ssr-page-content" itemscope itemtype="https://schema.org/WebPage" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
+      ${contentHtml}
+    </article>
+    <noscript>
+      <style>#ssr-page-content{position:static!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;overflow:visible!important;}</style>
+    </noscript>`;
+    
+    // Inject before the React root div
+    modifiedHtml = modifiedHtml.replace(
+      /<div id="root">/i,
+      `${staticPageHtml}\n    <div id="root">`
     );
   }
   
