@@ -135,7 +135,7 @@ export default function PrivateLessons() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden pt-14 sm:pt-16">
         <HeroPicture
           jpegSrc={privateLessonHeroJpg}
           webpSrc={privateLessonHeroWebp}
@@ -145,7 +145,7 @@ export default function PrivateLessons() {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative h-full flex items-center justify-center text-center px-4 pt-12">
+        <div className="relative h-full flex items-center justify-center text-center px-4">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Private Horse Riding Lessons in Oxfordshire

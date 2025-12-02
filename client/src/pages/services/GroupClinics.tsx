@@ -150,7 +150,7 @@ export default function GroupClinics() {
       />
       <Navigation />
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden pt-14 sm:pt-16">
         <HeroPicture
           jpegSrc={clinicsHeroJpg}
           webpSrc={clinicsHeroWebp}
