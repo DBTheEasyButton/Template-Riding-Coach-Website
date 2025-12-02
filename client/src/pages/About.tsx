@@ -50,7 +50,7 @@ export default function About() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-[350px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16">
+      <section className="relative min-h-[350px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16 flex">
         <HeroPicture
           jpegSrc={aboutDanHeroJpg}
           webpSrc={aboutDanHeroWebp}
@@ -62,7 +62,7 @@ export default function About() {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative z-10 flex items-center justify-center text-center px-4 py-12 sm:py-16">
+        <div className="relative z-10 flex-1 flex items-center justify-center text-center px-4 py-12 sm:py-16">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               About Dan Bizzarro
