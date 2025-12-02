@@ -96,7 +96,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden pt-14 sm:pt-16">
+    <section id="home" className="relative h-[70vh] min-h-[500px] overflow-hidden">
       {/* Background images carousel */}
       {images.map((image, index) => (
         <div
@@ -119,7 +119,8 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
       ))}
-      <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+      <div className="absolute inset-0 flex items-center justify-center pt-14 sm:pt-16">
+        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
         <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>Improve your riding</h1>
         <h2 className="text-2xl md:text-3xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.4s'}}>
           Become a confident, skilled rider and get better results!
@@ -179,6 +180,7 @@ export default function HeroSection() {
               style={{ imageRendering: 'crisp-edges' }}
             />
           </a>
+        </div>
         </div>
       </div>
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">

@@ -182,7 +182,7 @@ export default function RemoteCoaching() {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative h-full flex items-center justify-center text-center px-4">
+        <div className="absolute inset-0 flex items-center justify-center text-center px-4 pt-14 sm:pt-16">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Virtual Riding Lessons
