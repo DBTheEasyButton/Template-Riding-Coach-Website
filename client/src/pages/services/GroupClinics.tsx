@@ -150,7 +150,7 @@ export default function GroupClinics() {
       />
       <Navigation />
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[350px] overflow-hidden pt-14 sm:pt-16">
+      <section className="relative h-[40vh] min-h-[350px] overflow-hidden">
         <HeroPicture
           jpegSrc={clinicsHeroJpg}
           webpSrc={clinicsHeroWebp}
@@ -162,7 +162,7 @@ export default function GroupClinics() {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative h-full flex items-center justify-center text-center px-4">
+        <div className="absolute inset-0 flex items-center justify-center text-center px-4 pt-14 sm:pt-16 pb-12 sm:pb-8">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Eventing Clinics & Group Riding Lessons
