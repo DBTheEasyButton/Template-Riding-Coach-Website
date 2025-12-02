@@ -38,20 +38,29 @@ export default function Navigation() {
     { href: "/coaching/remote-coaching", label: "Virtual Lessons", isPage: true },
   ];
 
+  const [, setLocation] = useLocation();
+  
   const handleNavigation = (href: string, label: string, isPage?: boolean) => {
     setIsMenuOpen(false);
     setIsCoachingDropdownOpen(false);
     
     if (isPage) {
-      // Use client-side routing for page navigation
-      window.location.href = href;
+      // Use client-side routing for page navigation (same as Link component)
+      setLocation(href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     
     // For hash/anchor navigation
     if (location !== "/") {
       // Navigate to home page with hash
-      window.location.href = "/" + href;
+      setLocation("/");
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
       return;
     }
     
@@ -77,8 +86,8 @@ export default function Navigation() {
     setIsMenuOpen(false);
     setIsCoachingDropdownOpen(false);
     
-    // Navigate to home page
-    window.location.href = "/";
+    // Navigate to home page using client-side routing
+    setLocation("/");
     
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
