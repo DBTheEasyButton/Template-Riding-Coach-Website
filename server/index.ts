@@ -50,8 +50,8 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // SEO middleware temporarily disabled to fix production issue
-  // app.use(seoMiddleware);
+  // SEO middleware - injects meta tags and structured data for search engines
+  app.use(seoMiddleware);
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
