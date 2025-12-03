@@ -50,8 +50,8 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Add SEO middleware BEFORE Vite setup to inject meta tags server-side
-  app.use(seoMiddleware);
+  // SEO middleware temporarily disabled to fix production issue
+  // app.use(seoMiddleware);
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
