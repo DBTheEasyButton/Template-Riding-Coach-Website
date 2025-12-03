@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import HeroPicture from "@/components/HeroPicture";
@@ -88,13 +87,6 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section id="home" className="relative min-h-[500px] sm:min-h-[550px] overflow-hidden mt-14 sm:mt-16 flex">
       {/* Background images carousel */}
@@ -182,11 +174,6 @@ export default function HeroSection() {
           </a>
         </div>
         </div>
-      </div>
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-        <button onClick={() => scrollToSection('#about')} className="block">
-          <ChevronDown className="w-6 h-6" />
-        </button>
       </div>
     </section>
   );
