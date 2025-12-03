@@ -399,7 +399,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
     ]
   },
 
-  '/tools/stride-calculator': {
+  '/stride-calculator': {
     h1: 'Horse Stride Calculator - Equestrian Distance Tool',
     intro: 'Professional equestrian tool for calculating stride distances. Determine precise pole and jump spacing based on horse size and exercise type.',
     sections: [
@@ -425,7 +425,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
     ]
   },
 
-  '/tools/readiness-quiz': {
+  '/readiness-quiz': {
     h1: 'Riding Readiness Quiz - Assess Your Training Level',
     intro: 'Take the readiness quiz to assess your current riding level and get personalised recommendations for your training journey.',
     sections: [
@@ -441,7 +441,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
     ]
   },
 
-  '/tools/packing-list': {
+  '/packing-list-generator': {
     h1: 'Horse Show Packing List Generator',
     intro: 'Generate a customised packing list for horse shows and competitions. Never forget essential equipment again.',
     sections: [
@@ -452,6 +452,22 @@ export const ssrContent: Record<string, SSRPageContent> = {
           'Select your competition type: dressage, show jumping, eventing, or clinic.',
           'Get a complete checklist including tack, rider equipment, horse care items, and paperwork.',
           'Save and customise your list for future events.'
+        ]
+      }
+    ]
+  },
+
+  '/competition-checklists': {
+    h1: 'Competition Preparation Checklists - Dan Bizzarro Method',
+    intro: 'Generate comprehensive preparation checklists tailored to your competition level and timeline.',
+    sections: [
+      {
+        heading: 'Competition Checklists',
+        content: [
+          'Generate customised competition preparation checklists based on event type and level.',
+          'Timeline-based preparation phases from weeks before to competition day.',
+          'Tailored to competition level from Novice to CCI5*.',
+          'Track your progress and never miss a crucial preparation step.'
         ]
       }
     ]
