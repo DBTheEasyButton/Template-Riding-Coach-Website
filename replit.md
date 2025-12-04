@@ -53,3 +53,33 @@ The platform utilizes React.js (TypeScript), Tailwind CSS, Express.js, and Postg
 - **Go High Level (GHL) API:** Integrated for contact management, synchronization, and automated email communications (newsletter, clinic registrations, confirmation emails, referral bonus notifications). Requires `GHL_API_KEY` and `GHL_LOCATION_ID`.
 - **Stripe Payment Integration:** Configured for clinic registrations with server-side payment validation, Stripe Elements, and Express Checkout (Apple Pay/Google Pay). Requires `STRIPE_SECRET_KEY` and `VITE_STRIPE_PUBLIC_KEY`.
 - **Facebook Marketing Automation:** Integrates with Facebook Graph API to automatically post new clinics to the Facebook page. Requires `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, `FACEBOOK_PAGE_ACCESS_TOKEN`.
+
+## Automatic SEO Pre-Rendering System
+
+**Pre-rendered pages automatically update when content changes:**
+
+### Auto-Triggered (No Action Needed)
+- When you create/update a **clinic** → SEO pages regenerate in background
+- When you create/update a **blog post** → SEO pages regenerate in background
+- 5-second debounce prevents excessive regeneration
+
+### IMPORTANT: Static Page Changes Need Manual Regeneration
+**When making code changes to these pages, remind user to run:** `npx tsx scripts/prerender.ts`
+
+Static pages that need manual regeneration:
+- Home, About, Gallery, Podcast, Contact, Terms & Conditions
+- All coaching pages (Private Lessons, Show Jumping, Cross Country, Dressage, Polework, Remote Coaching)
+- Tools (Stride Calculator, Readiness Quiz, Packing List Generator)
+- Loyalty, 10 Points Better course
+
+### How It Works
+- Pre-rendered files stored in `client/public/prerender/` (development)
+- Vite copies to `dist/public/prerender/` during build
+- Bot detection serves these to Google, ChatGPT, Claude, etc.
+- Regular users get fast SPA experience
+
+### Implementation Files
+- `server/prerenderService.ts` - Background pre-rendering service with debouncing
+- `server/botDetection.ts` - User-Agent detection middleware
+- `server/routes.ts` - Triggers in clinic/news create/update endpoints
+- `scripts/prerender.ts` - Manual pre-rendering script
