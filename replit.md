@@ -116,6 +116,42 @@ For testing without sending real emails or creating Facebook posts:
 - `client/src/components/UpcomingClinicsBanner.tsx` - Blog/article clinic promotion banner
 - Schema updates in `shared/schema.ts` - Added `autoPostToFacebook` and `excludeTagsFromEmail` to clinics table
 
+## New Features (December 4, 2025)
+
+### SEO Pre-Rendering with Bot Detection
+**Build-time pre-rendering system for optimal SEO and AI crawler indexing:**
+
+1. **Pre-Rendering Script**
+   - Runs after Vite build using Puppeteer with Chromium
+   - Visits all 21+ pages and waits for full JavaScript render
+   - Saves complete HTML (60-80KB per page) to `dist/public/prerender/`
+   - Run manually: `npx tsx scripts/prerender.ts`
+
+2. **Bot Detection Middleware**
+   - Detects 50+ search engines and AI crawlers (Google, Bing, ChatGPT, Claude, Perplexity, etc.)
+   - Serves pre-rendered HTML files to bots (full content)
+   - Regular users get fast SPA experience (1.3KB shell)
+   - Only active in production when pre-rendered files exist
+
+3. **How It Works**
+   | Visitor | Response Size | What They See |
+   |---------|---------------|---------------|
+   | Googlebot | 80KB | Full HTML with all content, meta tags, structured data |
+   | ChatGPT | 70KB | Full HTML with all content |
+   | Regular browser | 1.3KB | Fast SPA that builds instantly |
+
+4. **Implementation Files**
+   - `scripts/prerender.ts` - Puppeteer-based pre-rendering script
+   - `server/botDetection.ts` - User-Agent detection middleware
+   - `server/index.ts` - Bot detection integration (production only)
+
+5. **Build Process**
+   - Standard build: `npm run build` (Vite + esbuild)
+   - Pre-render: `npx tsx scripts/prerender.ts` (after build)
+   - Pre-rendered files stored in `dist/public/prerender/`
+
+**Note:** SSR middleware remains in development mode only. Production uses pre-rendered files for bots and SPA for regular users to avoid the async SSR issues that caused previous outages.
+
 ## New Features (December 2, 2025)
 
 ### Complete SSR Content for All Pages
