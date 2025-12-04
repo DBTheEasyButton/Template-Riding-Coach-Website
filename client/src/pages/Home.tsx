@@ -32,6 +32,8 @@ import coachingSessionMobileJpg from "@assets/optimized/coaching-session-home-mo
 import coachingSessionMobileWebp from "@assets/optimized/coaching-session-home-mobile.webp";
 import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
 import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
+import privateLessonsBoxJpg from "@assets/optimized/private-lessons-box.jpg";
+import privateLessonsBoxWebp from "@assets/optimized/private-lessons-box.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -388,12 +390,15 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
               <div className="h-48 overflow-hidden">
-                <img 
-                  src={privateLessonsImage} 
-                  alt="Private riding lessons in Oxfordshire"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                <picture>
+                  <source srcSet={privateLessonsBoxWebp} type="image/webp" />
+                  <img 
+                    src={privateLessonsBoxJpg} 
+                    alt="Dan Bizzarro coaching a private riding lesson"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </picture>
               </div>
               <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-playfair font-bold text-navy mb-3">Private Riding Lessons (Oxfordshire)</h3>
