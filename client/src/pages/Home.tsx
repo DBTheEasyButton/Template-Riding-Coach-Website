@@ -30,6 +30,8 @@ import coachingSessionJpg from "@assets/optimized/coaching-session-home.jpg";
 import coachingSessionWebp from "@assets/optimized/coaching-session-home.webp";
 import coachingSessionMobileJpg from "@assets/optimized/coaching-session-home-mobile.jpg";
 import coachingSessionMobileWebp from "@assets/optimized/coaching-session-home-mobile.webp";
+import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
+import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -429,8 +431,16 @@ export default function Home() {
             </div>
 
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
-              <div className="h-48 overflow-hidden bg-gradient-to-br from-navy to-slate-700 flex items-center justify-center">
-                <Video className="w-20 h-20 text-white/80" />
+              <div className="h-48 overflow-hidden">
+                <picture>
+                  <source srcSet={virtualLessonHeroWebp} type="image/webp" />
+                  <img 
+                    src={virtualLessonHeroJpg} 
+                    alt="Virtual riding lesson with Pivo camera technology"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </picture>
               </div>
               <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-playfair font-bold text-navy mb-3">Virtual Riding Lessons</h3>
