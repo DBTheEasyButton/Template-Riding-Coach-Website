@@ -9,26 +9,23 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
-import { ArrowRight, Award, Users, Target, Calendar } from "lucide-react";
-import danPhotoPath from "@assets/optimized/13_1749386080915.jpg";
-import danPhotoMobilePath from "@assets/optimized/13_1749386080915-mobile.jpg";
-import danPhotoMobileWebp from "@assets/optimized/13_1749386080915-mobile.webp";
+import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video } from "lucide-react";
 import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
 import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
 import boekeloPodiumMobileJpg from "@assets/optimized/boekelo-podium-mobile.jpg";
 import boekeloPodiumMobileWebp from "@assets/optimized/boekelo-podium-mobile.webp";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
+import privateLessonsImage from "@assets/optimized/private-lessons-clinic.jpg";
+import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
-// Lazy load below-the-fold components for faster initial page load
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const ClinicsSection = lazy(() => import("@/components/ClinicsSection"));
 const PodcastSection = lazy(() => import("@/components/PodcastSection"));
 const SponsorsSection = lazy(() => import("@/components/SponsorsSection"));
 const NewsletterSubscription = lazy(() => import("@/components/NewsletterSubscription"));
 
-// Simple loading skeleton component
 function SectionSkeleton({ height = "400px" }: { height?: string }) {
   return (
     <div className="animate-pulse" style={{ height }}>
@@ -72,6 +69,35 @@ export default function Home() {
 
   const seoConfig = getSEOConfig('/');
 
+  const problemPoints = [
+    "Horse not listening to the leg",
+    "Unbalanced or inconsistent canter",
+    "Rushing at fences or stopping",
+    "Tension, spooking or loss of focus",
+    "Contact issues: leaning, hollowing, dropping the neck",
+    "Struggling to ride straight lines or accurate turns"
+  ];
+
+  const successBenefits = [
+    "More balanced and adjustable canter",
+    "Softer, more consistent contact",
+    "Clear reactions to the leg and hand",
+    "Less rushing, less spooking, less tension",
+    "Safer, more confident jumping",
+    "Better accuracy and straightness",
+    "A horse who works with you — not against you",
+    "A rider who knows exactly what to work on"
+  ];
+
+  const failurePoints = [
+    "Ongoing contact issues",
+    "Rushing or stopping at fences",
+    "Loss of balance and straightness",
+    "More spooking and tension",
+    "No clear progression in flatwork or jumping",
+    "Frustration and lack of confidence"
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
@@ -87,111 +113,60 @@ export default function Home() {
       <StructuredData type="LocalBusiness" data={localBusinessData} />
       <Navigation />
       <HeroSection />
-      <Suspense fallback={<SectionSkeleton />}>
-        <TestimonialsSection />
-      </Suspense>
-      {/* Divider */}
-      <div className="border-t-2 border-navy"></div>
-      {/* What is the Dan Bizzarro Method Section */}
-      <section id="method" className="py-16 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">What is the Dan Bizzarro Method?</h2>
+
+      {/* SECTION 2 — PROBLEM STATEMENT */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              Most Riders Work Hard… But Still Feel Stuck
+            </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-            <p className="text-lg text-dark max-w-3xl mx-auto">
-              A simple, structured way of helping horses and riders understand each other better.
-            </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
-              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="w-7 h-7 text-orange" />
+          <p className="text-lg text-dark leading-relaxed mb-8 text-center">
+            If you're dealing with a strong horse, a spooky horse, a lazy horse, or one that rushes into fences or leans on the contact, you're not alone. Many riders in Oxfordshire and across the UK feel unsure what to fix first, or how to improve balance, straightness, transitions and confidence. Without a clear training method, progress becomes unpredictable and frustrating.
+          </p>
+          
+          <div className="grid sm:grid-cols-2 gap-4 mb-10">
+            {problemPoints.map((point, index) => (
+              <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
+                <AlertTriangle className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
+                <span className="text-dark">{point}</span>
               </div>
-              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Clarity</h3>
-              <p className="text-dark text-sm leading-relaxed">
-                Riders learn how to give clear instructions that horses can easily understand and follow.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
-              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-7 h-7 text-orange" />
-              </div>
-              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Confidence</h3>
-              <p className="text-dark text-sm leading-relaxed">
-                Horses learn to respond without tension, and both horse and rider start to enjoy the work more.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
-              <div className="w-14 h-14 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-7 h-7 text-orange" />
-              </div>
-              <h3 className="text-xl font-playfair font-bold text-navy mb-3">Communication</h3>
-              <p className="text-dark text-sm leading-relaxed">
-                Build a partnership that feels good through progressive training and thoughtful exercises.
-              </p>
-            </div>
+            ))}
           </div>
           
-          <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10 max-w-4xl mx-auto">
-            <p className="text-dark leading-relaxed mb-4">The method comes from years of riding every type of horse, easy ones, tricky ones, sharp ones, and everything in between, and coaching thousands of riders at all levels.</p>
-            <p className="text-dark leading-relaxed mb-4">
-              It blends good basics, thoughtful exercises, and progressive training so that riders feel supported and horses feel understood.
-            </p>
-            <p className="text-navy font-medium leading-relaxed">
-              Whether you ride for fun or want to be competitive, the goal is always the same: make riding easier to understand, build a partnership that feels good, and help you get the results you want without overcomplicating things.
+          <div className="bg-gradient-to-r from-orange/10 to-navy/10 rounded-2xl p-6 md:p-8 border-l-4 border-orange">
+            <p className="text-lg md:text-xl text-navy font-medium text-center italic">
+              "Riding shouldn't feel confusing. You deserve clear steps that actually help your horse understand you."
             </p>
           </div>
         </div>
       </section>
-      {/* Divider */}
-      <div className="border-t-2 border-navy"></div>
-      <Suspense fallback={<SectionSkeleton />}>
-        <ClinicsSection />
-      </Suspense>
-      {/* Divider */}
-      <div className="border-t-2 border-orange"></div>
-      {/* About Preview Section */}
-      <section id="about" className="py-16 bg-white">
+
+      {/* SECTION 3 — GUIDE (Empathy + Authority) */}
+      <section className="py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">My Mission Is Simple</h2>
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              You're Not Doing Anything Wrong — You Just Need a Clearer System
+            </h2>
             <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
           
-          {/* First row: Image left, text right */}
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-            <div className="relative">
-              <picture>
-                <source srcSet={danPhotoMobileWebp} type="image/webp" media="(max-width: 768px)" />
-                <source srcSet={danPhotoMobilePath} type="image/jpeg" media="(max-width: 768px)" />
-                <img 
-                  src={danPhotoPath} 
-                  alt="Dan Bizzarro - International Event Rider and Coach"
-                  className="rounded-2xl shadow-2xl w-full"
-                  loading="lazy"
-                />
-              </picture>
-            </div>
-            
-            <div className="space-y-6 text-lg text-dark leading-relaxed">
-              <p>
-                Over the course of my career, I've had the pleasure of riding every type of horse and coaching thousands of pupils. I've worked alongside some of the best riders and coaches in the world. At the same time, I've often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <p className="text-lg text-dark leading-relaxed">
+                I've coached thousands of riders who felt exactly like you do now. Horses that rush, drift, get tight, ignore the inside leg or lose focus. Riders who feel they're always correcting something but never getting ahead of the problem. I understand how frustrating that feels.
               </p>
               
-              <p>
-                This is why I dedicated myself to developing a method that works with every horse and every rider. <a href="#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">The Dan Bizzarro Method</a> builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+              <p className="text-lg text-dark leading-relaxed">
+                With more than 20 years of experience coaching dressage, show jumping and event riders, having competed at the highest level in eventing — represented Italy in Nations Cups and the 2025 European Championships, shortlisted for the 2024 Paris Olympics — and having worked with world-class riders and coaches (William Fox-Pitt, Caroline Moore, Ian Woodhead), I've developed a simple method that works for every horse and every rider.
               </p>
-            </div>
-          </div>
-          
-          {/* Second row: Text left, image right */}
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
-            <div className="space-y-6 text-lg text-dark leading-relaxed">
-              <p>
-                Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.
+              
+              <p className="text-lg text-navy font-medium leading-relaxed">
+                The Dan Bizzarro Method gives you clarity, improves communication, and builds real confidence — whether you ride for fun or compete at the highest level.
               </p>
             </div>
             
@@ -209,91 +184,219 @@ export default function Home() {
               </picture>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* SECTION 4 — THE PLAN (3 STEPS) */}
+      <section id="method" className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              A Simple Plan That Works in Every Ride
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto"></div>
+          </div>
           
-          {/* Highlighted Mission Statement */}
-          <div className="mt-8 mb-12 p-8 bg-gradient-to-r from-orange/10 to-navy/10 rounded-2xl border-l-4 border-orange">
-            <p className="text-xl md:text-2xl font-medium text-navy text-center italic leading-relaxed">
-              "My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that's both effective and fun—so you can enjoy the journey and reach your goals together."
-            </p>
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-10 h-10 bg-orange text-white rounded-full flex items-center justify-center font-bold text-lg">1</div>
+              <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-6 mt-4">
+                <Lightbulb className="w-8 h-8 text-orange" />
+              </div>
+              <h3 className="text-2xl font-playfair font-bold text-navy mb-4">Get Clarity</h3>
+              <p className="text-dark leading-relaxed">
+                We look at your horse's balance, reactions, focus and way of going. You finally understand what's causing the problem — not just the symptoms.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-10 h-10 bg-orange text-white rounded-full flex items-center justify-center font-bold text-lg">2</div>
+              <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-6 mt-4">
+                <Target className="w-8 h-8 text-orange" />
+              </div>
+              <h3 className="text-2xl font-playfair font-bold text-navy mb-4">Follow the Method</h3>
+              <p className="text-dark leading-relaxed">
+                You use straightforward exercises that improve contact, rhythm, gears, lines and self-carriage. No overcomplication. No gimmicks.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-8 shadow-lg text-center relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-10 h-10 bg-orange text-white rounded-full flex items-center justify-center font-bold text-lg">3</div>
+              <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-6 mt-4">
+                <TrendingUp className="w-8 h-8 text-orange" />
+              </div>
+              <h3 className="text-2xl font-playfair font-bold text-navy mb-4">Build Confidence</h3>
+              <p className="text-dark leading-relaxed">
+                You and your horse develop habits that actually stick. Each week feels easier, clearer and more enjoyable.
+              </p>
+            </div>
           </div>
           
           <div className="text-center">
-            <Link href="/about">
-              <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-learn-more-about">
-                Learn More About Dan <ArrowRight className="ml-2 w-5 h-5" />
+            <Link href="/coaching/private-lessons">
+              <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-book-lesson-plan">
+                Book a Lesson <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
           </div>
         </div>
       </section>
-      {/* Divider */}
-      <div className="border-t-2 border-orange"></div>
-      {/* Services Preview Section */}
-      <section id="coaching" className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
+
+      {/* SECTION 5 — SUCCESS: THE TRANSFORMATION */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Clinics, Private Lessons & Virtual Riding Lessons</h2>
-            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-            <p className="text-xl text-dark max-w-3xl mx-auto">
-              Professional eventing instruction across all three disciplines
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              Imagine Riding a Horse Who Listens, Stays Soft and Feels Easy to Train
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto"></div>
+          </div>
+          
+          <div className="grid sm:grid-cols-2 gap-4 mb-10">
+            {successBenefits.map((benefit, index) => (
+              <div key={index} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <span className="text-dark">{benefit}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 md:p-8 border-l-4 border-green-600">
+            <p className="text-lg md:text-xl text-navy font-medium text-center italic">
+              "This isn't about being brave. It's about having clarity — so your horse becomes easier, softer and more confident every time you ride."
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6 — FAILURE (GENTLE WARNING) */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              Without a Clear Method, the Problems Don't Go Away
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          </div>
+          
+          <p className="text-lg text-dark leading-relaxed mb-8 text-center">
+            When riders guess their way through schooling, the same issues repeat themselves. Horses build bad habits, riders lose confidence, and training becomes a cycle of managing problems instead of improving them.
+          </p>
+          
+          <div className="grid sm:grid-cols-2 gap-4 mb-10">
+            {failurePoints.map((point, index) => (
+              <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
+                <div className="w-5 h-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
+                <span className="text-gray-600">{point}</span>
+              </div>
+            ))}
+          </div>
+          
+          <p className="text-xl text-navy font-medium text-center">
+            It doesn't need to be like this.
+          </p>
+        </div>
+      </section>
+
+      {/* SECTION 7 — SERVICES (Three Entry Points) */}
+      <section id="coaching" className="py-16 md:py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              Choose How You Want to Start
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <Link href="/coaching/private-lessons" className="group h-full">
-              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
-                <div className="text-orange mb-4 flex justify-center">
-                  <Users className="w-12 h-12" aria-hidden="true" />
-                </div>
-                <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Private Horse Riding Lessons</h3>
-                <p className="text-dark leading-relaxed mb-4 flex-grow">Expert one-on-one coaching in Oxfordshire for all levels—from amateur riders to competitors</p>
-                <span className="text-orange font-semibold group-hover:underline inline-flex items-center justify-center">
-                  Learn about private horse riding lessons <ArrowRight className="ml-2 w-4 h-4" />
-                </span>
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src={privateLessonsImage} 
+                  alt="Private riding lessons in Oxfordshire"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
-            </Link>
-            <Link href="/coaching/clinics" className="group h-full">
-              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
-                <div className="text-orange mb-4 flex justify-center">
-                  <Award className="w-12 h-12" aria-hidden="true" />
-                </div>
-                <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Clinics</h3>
-                <p className="text-dark leading-relaxed mb-4 flex-grow">Show-jumping, polework, and cross country clinics with single-day training for all abilities</p>
-                <span className="text-orange font-semibold group-hover:underline inline-flex items-center justify-center">
-                  Join Dan's clinics <ArrowRight className="ml-2 w-4 h-4" />
-                </span>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Private Riding Lessons (Oxfordshire)</h3>
+                <p className="text-dark leading-relaxed mb-6 flex-grow">
+                  Personal, focused coaching tailored to you and your horse. Ideal for improving balance, straightness, transitions and jumping technique.
+                </p>
+                <Link href="/coaching/private-lessons">
+                  <Button className="w-full bg-orange hover:bg-orange-hover text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-private">
+                    Book Now
+                  </Button>
+                </Link>
               </div>
-            </Link>
-            <Link href="/coaching/remote-coaching" className="group h-full">
-              <div className="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-2 h-full flex flex-col">
-                <div className="text-orange mb-4 flex justify-center">
-                  <Target className="w-12 h-12" aria-hidden="true" />
-                </div>
-                <h3 className="text-2xl font-playfair font-bold mb-3 text-navy">Virtual Riding Lessons</h3>
-                <p className="text-dark leading-relaxed mb-4 flex-grow">Remote equestrian coaching with video analysis—train anywhere, anytime</p>
-                <span className="text-orange font-semibold group-hover:underline inline-flex items-center justify-center">
-                  Discover virtual riding lessons <ArrowRight className="ml-2 w-4 h-4" />
-                </span>
-              </div>
-            </Link>
-          </div>
+            </div>
 
-          <div className="text-center">
-            <Link href="/coaching">
-              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-view-all-services">
-                View All Coaching Services <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src={carouselClinic2Jpg} 
+                  alt="Horse riding clinics across the UK"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Clinics Across the UK</h3>
+                <p className="text-dark leading-relaxed mb-6 flex-grow">
+                  Small-group coaching designed to build confidence, improve accuracy and develop clear communication with your horse.
+                </p>
+                <Link href="/coaching/clinics">
+                  <Button className="w-full bg-orange hover:bg-orange-hover text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-clinic">
+                    Book a Clinic
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+              <div className="h-48 overflow-hidden bg-gradient-to-br from-navy to-slate-700 flex items-center justify-center">
+                <Video className="w-20 h-20 text-white/80" />
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Virtual Riding Lessons</h3>
+                <p className="text-dark leading-relaxed mb-6 flex-grow">
+                  Real-time coaching using Pivo. Improve your riding from anywhere in the world with clear feedback and simple exercises.
+                </p>
+                <Link href="/coaching/remote-coaching">
+                  <Button className="w-full bg-orange hover:bg-orange-hover text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-virtual">
+                    Book a Virtual Lesson
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Divider */}
+      <div className="border-t-2 border-navy"></div>
+
+      {/* SECTION 8 — TESTIMONIALS */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <TestimonialsSection title="Riders See Real Progress With the Dan Bizzarro Method" />
+      </Suspense>
+
+      {/* Divider */}
+      <div className="border-t-2 border-navy"></div>
+
+      {/* Upcoming Clinics Section */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <ClinicsSection />
+      </Suspense>
+
       {/* Divider */}
       <div className="border-t-2 border-orange"></div>
-      {/* News Preview Section */}
-      <section id="blog" className="py-12 bg-white">
+
+      {/* Blog Section */}
+      <section id="blog" className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">From the Blog</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">From the Blog</h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
             <p className="text-xl text-dark max-w-3xl mx-auto">
               Expert tips and insights to improve your riding
@@ -332,35 +435,49 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       {/* Divider */}
       <div className="border-t-2 border-navy"></div>
+
       <Suspense fallback={<SectionSkeleton height="500px" />}>
         <PodcastSection />
       </Suspense>
+
       <Suspense fallback={<SectionSkeleton height="300px" />}>
         <SponsorsSection />
       </Suspense>
+
       <Suspense fallback={<SectionSkeleton height="400px" />}>
         <NewsletterSubscription />
       </Suspense>
+
       {/* Divider */}
       <div className="border-t-2 border-orange"></div>
-      {/* Contact CTA Section */}
-      <section id="contact" className="py-12 bg-navy text-white">
+
+      {/* SECTION 9 — FINAL CTA */}
+      <section id="contact" className="py-16 md:py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold mb-6">
-            Ready to Start Your Journey?
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold mb-6">
+            Ready for Clear, Confident Riding?
           </h2>
-          <p className="text-xl text-gray-200 mb-8">
-            Get in touch to book a coaching session or join an upcoming clinic
+          <p className="text-xl text-gray-200 mb-10 max-w-2xl mx-auto">
+            Take the first step towards a better partnership with your horse
           </p>
-          <Link href="/contact">
-            <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-contact-us">
-              Contact Us <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/coaching/private-lessons">
+              <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-final-book-lesson">
+                Book a Lesson <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-final-tips">
+                Get Free Training Tips
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
+
       <Footer />
     </div>
   );

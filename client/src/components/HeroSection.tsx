@@ -113,33 +113,26 @@ export default function HeroSection() {
       ))}
       <div className="relative z-10 flex-1 flex items-center justify-center py-12 sm:py-16">
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-        <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s'}}>Improve your riding</h1>
-        <h2 className="text-2xl md:text-3xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide" style={{animationDelay: '0.4s'}}>
-          Become a confident, skilled rider and get better results!
-        </h2>
-        <div className="flex flex-col md:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-12" style={{animationDelay: '0.6s'}}>
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up leading-tight" style={{animationDelay: '0.2s'}}>Improve your riding with<br className="hidden md:block" /> The Dan Bizzarro Method</h1>
+        <p className="text-lg md:text-xl lg:text-2xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide max-w-3xl mx-auto" style={{animationDelay: '0.4s'}}>
+          Straightforward coaching for everyday riders. Simple, proven training that improves communication, balance and confidence in dressage, show jumping and cross-country.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.6s'}}>
           <Link href="/coaching/private-lessons">
             <Button 
-              className="bg-navy text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
-              data-testid="button-book-private-lesson"
+              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              data-testid="button-book-lesson"
             >
-              BOOK A PRIVATE LESSON
+              Book a Lesson
             </Button>
           </Link>
-          <Link href="/coaching/clinics">
+          <Link href="/contact">
             <Button 
-              className="bg-orange text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
-              data-testid="button-book-clinic"
+              variant="outline"
+              className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              data-testid="button-get-tips"
             >
-              BOOK A CLINIC
-            </Button>
-          </Link>
-          <Link href="/coaching/remote-coaching">
-            <Button 
-              className="bg-navy text-white px-6 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-110 w-full md:w-auto"
-              data-testid="button-book-virtual-lesson"
-            >
-              BOOK A VIRTUAL LESSON
+              Get Free Training Tips
             </Button>
           </Link>
         </div>

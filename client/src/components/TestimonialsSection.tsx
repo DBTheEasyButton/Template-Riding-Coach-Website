@@ -6,7 +6,11 @@ import { useState, useEffect } from "react";
 import type { Testimonial } from "@shared/schema";
 import StructuredData from "@/components/StructuredData";
 
-export default function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  title?: string;
+}
+
+export default function TestimonialsSection({ title }: TestimonialsSectionProps) {
   const { data: testimonials = [], isLoading } = useQuery<Testimonial[]>({
     queryKey: ["/api/testimonials"],
   });
@@ -85,9 +89,17 @@ export default function TestimonialsSection() {
   }
 
   return (
-    <section className="py-3 bg-gray-50">
+    <section className="py-8 md:py-12 bg-gray-50">
       {reviewsStructuredData && <StructuredData type="Product" data={reviewsStructuredData} />}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {title && (
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
+              {title}
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto"></div>
+          </div>
+        )}
         <div className="relative max-w-6xl mx-auto overflow-hidden">
           <div className="flex animate-scroll gap-4">
             {/* Duplicate testimonials for seamless infinite scroll */}
