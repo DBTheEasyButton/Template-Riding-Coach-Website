@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, log } from "./vite";
 import { seoMiddleware } from "./seo-middleware";
+import { botDetectionMiddleware, isPrerenderingAvailable } from "./botDetection";
 import fs from "fs";
 import path from "path";
 
@@ -50,16 +51,15 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // SEO middleware - injects meta tags and structured data for search engines
-  app.use(seoMiddleware);
-
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
+    // In development, use SSR middleware for SEO
+    app.use(seoMiddleware);
     await setupVite(app, server);
   } else {
-    // Production: Custom static file serving that allows SEO middleware to work
+    // Production: Custom static file serving with bot detection
     const distPath = path.resolve(import.meta.dirname, "public");
     
     if (!fs.existsSync(distPath)) {
@@ -69,8 +69,18 @@ app.use((req, res, next) => {
     // Serve static assets (JS, CSS, images) directly - they don't need SEO processing
     app.use(express.static(distPath, { index: false }));
     
+    // Bot detection: serve pre-rendered HTML to search engines and AI crawlers
+    if (isPrerenderingAvailable()) {
+      log('Pre-rendered pages available - bot detection enabled');
+      app.use(botDetectionMiddleware);
+    } else {
+      log('No pre-rendered pages found - using SSR middleware as fallback');
+    }
+    
+    // SSR middleware as fallback for bots without pre-rendered files
+    app.use(seoMiddleware);
+    
     // Handle all HTML routes by reading and sending the file content
-    // This allows the SEO middleware to intercept and modify the HTML
     app.use("*", (_req, res) => {
       const indexPath = path.resolve(distPath, "index.html");
       fs.readFile(indexPath, "utf-8", (err, html) => {
