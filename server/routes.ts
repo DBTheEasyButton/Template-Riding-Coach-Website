@@ -22,6 +22,7 @@ import {
   insertCompetitionChecklistSchema,
   insertSponsorSchema
 } from "@shared/schema";
+import { prerenderService } from "./prerenderService";
 
 const stripeKey = process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
 
@@ -727,6 +728,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error('Error sending clinic announcement emails:', emailError);
         // Don't fail the clinic creation if emails fail
       }
+
+      // Trigger SEO pre-rendering in background (5 second delay to allow for any follow-up changes)
+      prerenderService.triggerPrerender(5000);
       
       res.status(201).json(clinic);
     } catch (error) {
@@ -910,6 +914,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (skippedSessions.length > 0) {
         response.warning = `The following sessions could not be updated because they have existing registrations: ${skippedSessions.join(', ')}`;
       }
+
+      // Trigger SEO pre-rendering in background
+      prerenderService.triggerPrerender(5000);
       
       res.json(response);
     } catch (error) {
@@ -2016,6 +2023,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("News data to insert:", newsData);
       const news = await storage.createNews(newsData);
+
+      // Trigger SEO pre-rendering in background
+      prerenderService.triggerPrerender(5000);
+
       res.status(201).json(news);
     } catch (error) {
       console.error("Error creating news:", error);
@@ -2031,6 +2042,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!news) {
         return res.status(404).json({ message: "News article not found" });
       }
+
+      // Trigger SEO pre-rendering in background
+      prerenderService.triggerPrerender(5000);
       
       res.json(news);
     } catch (error) {

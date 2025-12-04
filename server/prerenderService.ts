@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const CHROMIUM_PATH = process.env.CHROMIUM_PATH || '/nix/store/zi4f80l169xlmivz8vja8wlphq74qqk0-chromium-125.0.6422.141/bin/chromium';
-const PORT = process.env.PRERENDER_PORT || 5000;
+const PORT = process.env.PORT || 5000;
 const BASE_URL = `http://localhost:${PORT}`;
 const OUTPUT_DIR = path.resolve(process.cwd(), 'public/prerender');
 
@@ -31,14 +31,16 @@ const ROUTES = [
   '/courses/10-points-better',
 ];
 
-async function prerenderPage(browser: Browser, route: string): Promise<void> {
+let isRunning = false;
+let lastRunTime: Date | null = null;
+
+async function prerenderPage(browser: Browser, route: string): Promise<boolean> {
   const page = await browser.newPage();
   
   try {
     await page.setUserAgent('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)');
     
     const url = `${BASE_URL}${route}`;
-    console.log(`Pre-rendering: ${route}`);
     
     await page.goto(url, {
       waitUntil: 'networkidle0',
@@ -46,7 +48,6 @@ async function prerenderPage(browser: Browser, route: string): Promise<void> {
     });
 
     await page.waitForSelector('#root', { timeout: 10000 });
-    
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     const html = await page.content();
@@ -61,29 +62,29 @@ async function prerenderPage(browser: Browser, route: string): Promise<void> {
     }
 
     fs.writeFileSync(outputPath, html);
-    
-    const sizeKB = (Buffer.byteLength(html, 'utf8') / 1024).toFixed(1);
-    console.log(`  ✓ Saved ${outputPath} (${sizeKB} KB)`);
+    return true;
     
   } catch (error) {
-    console.error(`  ✗ Failed to pre-render ${route}:`, error);
+    console.error(`[Prerender] Failed to pre-render ${route}:`, error);
+    return false;
   } finally {
     await page.close();
   }
 }
 
-async function main() {
-  console.log('=== Pre-rendering for SEO ===\n');
-  console.log(`Using server at: ${BASE_URL}`);
-  console.log(`Output directory: ${OUTPUT_DIR}\n`);
-  
+async function runPrerender(): Promise<{ success: boolean; pagesRendered: number; errors: number }> {
+  if (isRunning) {
+    console.log('[Prerender] Already running, skipping...');
+    return { success: false, pagesRendered: 0, errors: 0 };
+  }
+
+  isRunning = true;
+  console.log('[Prerender] Starting SEO pre-rendering...');
+
   if (!fs.existsSync(CHROMIUM_PATH)) {
-    const altPath = process.env.CHROMIUM_PATH;
-    if (!altPath || !fs.existsSync(altPath)) {
-      console.error('Chromium not found at:', CHROMIUM_PATH);
-      console.error('Set CHROMIUM_PATH environment variable to the correct path');
-      process.exit(1);
-    }
+    console.error('[Prerender] Chromium not found at:', CHROMIUM_PATH);
+    isRunning = false;
+    return { success: false, pagesRendered: 0, errors: 1 };
   }
 
   if (!fs.existsSync(OUTPUT_DIR)) {
@@ -91,9 +92,10 @@ async function main() {
   }
 
   let browser: Browser | null = null;
+  let pagesRendered = 0;
+  let errors = 0;
 
   try {
-    console.log('Launching Chromium...');
     browser = await puppeteer.launch({
       executablePath: CHROMIUM_PATH,
       headless: true,
@@ -107,26 +109,58 @@ async function main() {
       ],
     });
 
-    console.log(`\nPre-rendering ${ROUTES.length} pages...\n`);
-
     for (const route of ROUTES) {
-      await prerenderPage(browser, route);
+      const success = await prerenderPage(browser, route);
+      if (success) {
+        pagesRendered++;
+      } else {
+        errors++;
+      }
     }
 
-    console.log('\n=== Pre-rendering complete! ===');
-    console.log(`Output directory: ${OUTPUT_DIR}`);
-    
-    const files = fs.readdirSync(OUTPUT_DIR);
-    console.log(`Generated ${files.length} HTML files`);
+    lastRunTime = new Date();
+    console.log(`[Prerender] Complete! ${pagesRendered} pages rendered, ${errors} errors`);
+
+    return { success: true, pagesRendered, errors };
 
   } catch (error) {
-    console.error('Pre-rendering failed:', error);
-    process.exit(1);
+    console.error('[Prerender] Failed:', error);
+    return { success: false, pagesRendered, errors: errors + 1 };
   } finally {
     if (browser) {
       await browser.close();
     }
+    isRunning = false;
   }
 }
 
-main().catch(console.error);
+let debounceTimer: NodeJS.Timeout | null = null;
+
+function triggerPrerender(delay: number = 5000): void {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+
+  console.log(`[Prerender] Scheduled to run in ${delay / 1000} seconds...`);
+  
+  debounceTimer = setTimeout(() => {
+    runPrerender().catch(err => {
+      console.error('[Prerender] Background run failed:', err);
+    });
+  }, delay);
+}
+
+function getStatus(): { isRunning: boolean; lastRunTime: Date | null; outputDir: string } {
+  return {
+    isRunning,
+    lastRunTime,
+    outputDir: OUTPUT_DIR,
+  };
+}
+
+export const prerenderService = {
+  runPrerender,
+  triggerPrerender,
+  getStatus,
+  ROUTES,
+};
