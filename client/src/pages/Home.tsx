@@ -30,10 +30,10 @@ import coachingSessionJpg from "@assets/optimized/coaching-session-home.jpg";
 import coachingSessionWebp from "@assets/optimized/coaching-session-home.webp";
 import coachingSessionMobileJpg from "@assets/optimized/coaching-session-home-mobile.jpg";
 import coachingSessionMobileWebp from "@assets/optimized/coaching-session-home-mobile.webp";
-import virtualLessonHeroJpg from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.png";
-import virtualLessonHeroWebp from "@assets/optimized/Generated Image November 12, 2025 - 6_02AM_1762927379155.webp";
 import privateLessonsBoxJpg from "@assets/optimized/private-lessons-box.jpg";
 import privateLessonsBoxWebp from "@assets/optimized/private-lessons-box.webp";
+import virtualLessonsBoxJpg from "@assets/optimized/virtual-lessons-box.jpg";
+import virtualLessonsBoxWebp from "@assets/optimized/virtual-lessons-box.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -438,10 +438,10 @@ export default function Home() {
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
               <div className="h-48 overflow-hidden">
                 <picture>
-                  <source srcSet={virtualLessonHeroWebp} type="image/webp" />
+                  <source srcSet={virtualLessonsBoxWebp} type="image/webp" />
                   <img 
-                    src={virtualLessonHeroJpg} 
-                    alt="Virtual riding lesson with Pivo camera technology"
+                    src={virtualLessonsBoxJpg} 
+                    alt="Virtual riding lesson on laptop screen"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
