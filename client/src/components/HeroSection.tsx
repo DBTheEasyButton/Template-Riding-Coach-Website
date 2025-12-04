@@ -113,7 +113,10 @@ export default function HeroSection() {
       ))}
       <div className="relative z-10 flex-1 flex items-center justify-center py-12 sm:py-16">
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold mb-6 opacity-0 animate-fade-in-up leading-tight" style={{animationDelay: '0.2s'}}>Improve your riding with<br className="hidden md:block" /> The Dan Bizzarro Method</h1>
+        <h1 className="opacity-0 animate-fade-in-up leading-tight mb-6" style={{animationDelay: '0.2s'}}>
+          <span className="block text-4xl md:text-6xl lg:text-7xl font-playfair font-bold">Improve your riding</span>
+          <span className="block text-2xl md:text-3xl lg:text-4xl font-playfair font-medium mt-2">with The Dan Bizzarro Method</span>
+        </h1>
         <p className="text-lg md:text-xl lg:text-2xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide max-w-3xl mx-auto" style={{animationDelay: '0.4s'}}>
           Straightforward coaching for everyday riders. Simple, proven training that improves communication, balance and confidence in dressage, show jumping and cross-country.
         </p>
@@ -124,6 +127,14 @@ export default function HeroSection() {
               data-testid="button-book-lesson"
             >
               Book a Lesson
+            </Button>
+          </Link>
+          <Link href="/coaching/clinics">
+            <Button 
+              className="bg-navy hover:bg-slate-800 text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              data-testid="button-book-clinic-hero"
+            >
+              Book a Clinic
             </Button>
           </Link>
           <Link href="/contact">

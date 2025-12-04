@@ -232,10 +232,15 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="text-center">
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/coaching/private-lessons">
               <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-book-lesson-plan">
                 Book a Lesson <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="/coaching/clinics">
+              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-book-clinic-plan">
+                Book a Clinic <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
           </div>
@@ -467,6 +472,11 @@ export default function Home() {
             <Link href="/coaching/private-lessons">
               <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-final-book-lesson">
                 Book a Lesson <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Link href="/coaching/clinics">
+              <Button className="bg-white text-navy hover:bg-gray-100 px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-final-book-clinic">
+                Book a Clinic <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
             <Link href="/contact">
