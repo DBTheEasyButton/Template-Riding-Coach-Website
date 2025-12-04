@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
-import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video } from "lucide-react";
+import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle } from "lucide-react";
 import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
 import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
 import boekeloPodiumMobileJpg from "@assets/optimized/boekelo-podium-mobile.jpg";
@@ -102,12 +102,12 @@ export default function Home() {
   ];
 
   const failurePoints = [
-    "Ongoing contact issues",
-    "Rushing or stopping at fences",
-    "Loss of balance and straightness",
-    "More spooking and tension",
-    "No clear progression in flatwork or jumping",
-    "Frustration and lack of confidence"
+    { text: "Ongoing contact issues", icon: Link2Off },
+    { text: "Rushing or stopping at fences", icon: Zap },
+    { text: "Loss of balance and straightness", icon: Scale },
+    { text: "More spooking and tension", icon: AlertTriangle },
+    { text: "No clear progression in flatwork or jumping", icon: TrendingDown },
+    { text: "Frustration and lack of confidence", icon: Frown }
   ];
 
   return (
@@ -355,12 +355,17 @@ export default function Home() {
           </p>
           
           <div className="grid sm:grid-cols-2 gap-4 mb-10">
-            {failurePoints.map((point, index) => (
-              <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
-                <div className="w-5 h-5 rounded-full bg-gray-300 flex-shrink-0 mt-0.5"></div>
-                <span className="text-gray-600">{point}</span>
-              </div>
-            ))}
+            {failurePoints.map((point, index) => {
+              const IconComponent = point.icon;
+              return (
+                <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                  <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+                    <IconComponent className="w-4 h-4 text-red-500" />
+                  </div>
+                  <span className="text-gray-600 mt-1">{point.text}</span>
+                </div>
+              );
+            })}
           </div>
           
           <p className="text-xl text-navy font-medium text-center">
