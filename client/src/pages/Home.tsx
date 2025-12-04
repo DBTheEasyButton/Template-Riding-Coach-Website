@@ -386,68 +386,6 @@ export default function Home() {
         <TestimonialsSection title="Riders See Real Progress With the Dan Bizzarro Method" />
       </Suspense>
 
-      {/* Divider */}
-      <div className="border-t-2 border-navy"></div>
-
-      {/* Upcoming Clinics Section */}
-      <Suspense fallback={<SectionSkeleton />}>
-        <ClinicsSection />
-      </Suspense>
-
-      {/* Divider */}
-      <div className="border-t-2 border-orange"></div>
-
-      {/* Blog Section */}
-      <section id="blog" className="py-16 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">From the Blog</h2>
-            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
-            <p className="text-xl text-dark max-w-3xl mx-auto">
-              Expert tips and insights to improve your riding
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {news.slice(0, 3).map((article) => (
-              <Link key={article.id} href={`/blog/${article.slug || article.id}`} className="h-full">
-                <article className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer h-full flex flex-col">
-                  <OptimizedImage 
-                    src={article.image}
-                    alt={article.title}
-                    className="w-full h-48 object-cover"
-                    loading="lazy"
-                  />
-                  <div className="p-6 flex flex-col flex-grow">
-                    <div className="flex items-center text-sm text-gray-600 mb-3">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      <span>{formatDate(article.publishedAt)}</span>
-                    </div>
-                    <h3 className="text-xl font-playfair font-bold text-navy mb-3">{article.title}</h3>
-                    <p className="text-dark mb-4 line-clamp-3 flex-grow">{article.excerpt}</p>
-                  </div>
-                </article>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Link href="/blog">
-              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-view-all-blog">
-                View All Articles <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div className="border-t-2 border-navy"></div>
-
-      <Suspense fallback={<SectionSkeleton height="500px" />}>
-        <PodcastSection />
-      </Suspense>
-
       <Suspense fallback={<SectionSkeleton height="300px" />}>
         <SponsorsSection />
       </Suspense>

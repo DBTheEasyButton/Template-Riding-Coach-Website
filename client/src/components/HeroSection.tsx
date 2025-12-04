@@ -117,9 +117,7 @@ export default function HeroSection() {
           <span className="block text-4xl md:text-6xl lg:text-7xl font-playfair font-bold">Improve your riding</span>
           <span className="block text-2xl md:text-3xl lg:text-4xl font-playfair font-medium mt-2">with The Dan Bizzarro Method</span>
         </h1>
-        <p className="text-lg md:text-xl lg:text-2xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide max-w-3xl mx-auto" style={{animationDelay: '0.4s'}}>
-          Straightforward coaching for everyday riders. Simple, proven training that improves communication, balance and confidence in dressage, show jumping and cross-country.
-        </p>
+        <p className="text-lg md:text-xl lg:text-2xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide max-w-3xl mx-auto" style={{animationDelay: '0.4s'}}>Become a confident, skilled rider and get better results!</p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.6s'}}>
           <Link href="/coaching/private-lessons">
             <Button 
