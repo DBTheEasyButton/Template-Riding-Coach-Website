@@ -55,7 +55,7 @@ app.use((req, res, next) => {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
-    // In development, use SSR middleware for SEO
+    // In development, use SSR middleware for SEO testing
     app.use(seoMiddleware);
     await setupVite(app, server);
   } else {
@@ -70,17 +70,16 @@ app.use((req, res, next) => {
     app.use(express.static(distPath, { index: false }));
     
     // Bot detection: serve pre-rendered HTML to search engines and AI crawlers
+    // This replaces the SSR middleware in production for better reliability
     if (isPrerenderingAvailable()) {
       log('Pre-rendered pages available - bot detection enabled');
       app.use(botDetectionMiddleware);
     } else {
-      log('No pre-rendered pages found - using SSR middleware as fallback');
+      log('No pre-rendered pages found - bots will see SPA shell');
     }
     
-    // SSR middleware as fallback for bots without pre-rendered files
-    app.use(seoMiddleware);
-    
-    // Handle all HTML routes by reading and sending the file content
+    // Handle all HTML routes by serving the SPA shell
+    // Regular users get the fast SPA, bots get pre-rendered HTML (handled above)
     app.use("*", (_req, res) => {
       const indexPath = path.resolve(distPath, "index.html");
       fs.readFile(indexPath, "utf-8", (err, html) => {
