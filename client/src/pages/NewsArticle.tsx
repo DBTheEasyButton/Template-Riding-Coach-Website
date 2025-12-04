@@ -72,20 +72,21 @@ export default function NewsArticle() {
     n.slug === params.id
   );
 
-  // Parse markdown-style content to HTML
+  // Use HTML content directly - articles are already formatted with proper HTML tags
   const formattedContent = useMemo(() => {
     if (!article?.content) return '';
     
+    // Check if content already has HTML tags (modern format)
+    if (article.content.includes('<p>') || article.content.includes('<h2>')) {
+      return article.content;
+    }
+    
+    // Legacy fallback for old markdown-style content
     let html = article.content
-      // Convert **bold** to <strong>
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      // Convert --- to horizontal rule
       .replace(/^---$/gm, '<hr class="my-8 border-gray-300" />')
-      // Convert bullet points
       .replace(/^• (.+)$/gm, '<li class="ml-4">$1</li>')
-      // Wrap consecutive <li> in <ul>
       .replace(/(<li[^>]*>.*<\/li>\n?)+/g, '<ul class="list-disc pl-6 my-4 space-y-2">$&</ul>')
-      // Convert line breaks to paragraphs
       .split('\n\n')
       .map(para => {
         if (para.startsWith('<ul') || para.startsWith('<hr') || para.trim() === '') {
