@@ -55,7 +55,11 @@ const BOT_USER_AGENTS = [
   'screaming frog',
 ];
 
-const PRERENDER_DIR = path.resolve(process.cwd(), 'dist/public/prerender');
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const PRERENDER_DIR = path.resolve(
+  process.cwd(), 
+  IS_PRODUCTION ? 'dist/public/prerender' : 'public/prerender'
+);
 
 function isBot(userAgent: string): boolean {
   const ua = userAgent.toLowerCase();
