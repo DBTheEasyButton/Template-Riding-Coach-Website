@@ -55,7 +55,12 @@ app.use((req, res, next) => {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
-    // In development, use SSR middleware for SEO testing
+    // In development, enable bot detection for pre-rendered files if available
+    if (isPrerenderingAvailable()) {
+      log('Pre-rendered pages available - bot detection enabled for development');
+      app.use(botDetectionMiddleware);
+    }
+    // Fallback to SSR middleware for SEO testing
     app.use(seoMiddleware);
     await setupVite(app, server);
   } else {

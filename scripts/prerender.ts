@@ -5,7 +5,7 @@ import * as path from 'path';
 const CHROMIUM_PATH = process.env.CHROMIUM_PATH || '/nix/store/zi4f80l169xlmivz8vja8wlphq74qqk0-chromium-125.0.6422.141/bin/chromium';
 const PORT = process.env.PRERENDER_PORT || 5000;
 const BASE_URL = `http://localhost:${PORT}`;
-const OUTPUT_DIR = path.resolve(process.cwd(), 'public/prerender');
+const OUTPUT_DIR = path.resolve(process.cwd(), 'client/public/prerender');
 
 const ROUTES = [
   '/',

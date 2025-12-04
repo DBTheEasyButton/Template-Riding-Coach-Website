@@ -58,7 +58,7 @@ const BOT_USER_AGENTS = [
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const PRERENDER_DIR = path.resolve(
   process.cwd(), 
-  IS_PRODUCTION ? 'dist/public/prerender' : 'public/prerender'
+  IS_PRODUCTION ? 'dist/public/prerender' : 'client/public/prerender'
 );
 
 function isBot(userAgent: string): boolean {
