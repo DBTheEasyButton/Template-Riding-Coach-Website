@@ -368,7 +368,7 @@ export default function Home() {
             })}
           </div>
           
-          <p className="text-xl text-navy font-medium text-center">
+          <p className="text-navy text-center text-[23px] font-semibold">
             It doesn't need to be like this.
           </p>
         </div>
