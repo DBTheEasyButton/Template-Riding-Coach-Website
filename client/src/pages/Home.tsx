@@ -20,6 +20,7 @@ import privateLessonsImage from "@assets/optimized/private-lessons-clinic.jpg";
 import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
 import blenheimDressageImg from "@assets/Blenheim_Dressage_1764886318581.jpg";
 import hartpuryOpenImg from "@assets/Hartpury_Open_Champ_1764886318583.jpg";
+import coachingSessionImg from "@assets/IMG_3019_1764887176071.png";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -278,7 +279,7 @@ export default function Home() {
       </section>
       {/* SECTION 5 — SUCCESS: THE TRANSFORMATION */}
       <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
               Imagine Riding a Horse Who Listens, Stays Soft and Feels Easy to Train
@@ -286,13 +287,26 @@ export default function Home() {
             <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
           
-          <div className="grid sm:grid-cols-2 gap-4 mb-10">
-            {successBenefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <span className="text-dark">{benefit}</span>
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-10">
+            <div className="order-1">
+              <div className="grid gap-3">
+                {successBenefits.map((benefit, index) => (
+                  <div key={index} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-dark">{benefit}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            
+            <div className="relative order-2">
+              <img 
+                src={coachingSessionImg} 
+                alt="Dan Bizzarro coaching a rider during a lesson"
+                className="rounded-2xl shadow-2xl w-full"
+                loading="lazy"
+              />
+            </div>
           </div>
           
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 md:p-8 border-l-4 border-green-600">
