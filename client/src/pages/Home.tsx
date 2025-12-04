@@ -113,7 +113,6 @@ export default function Home() {
       <StructuredData type="LocalBusiness" data={localBusinessData} />
       <Navigation />
       <HeroSection />
-
       {/* SECTION 2 — PROBLEM STATEMENT */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
@@ -144,7 +143,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* SECTION 3 — GUIDE (Empathy + Authority) */}
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -186,14 +184,11 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* SECTION 4 — THE PLAN (3 STEPS) */}
       <section id="method" className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
-              A Simple Plan That Works in Every Ride
-            </h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">A Simple Plan That Works for Everyone</h2>
             <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
           
@@ -246,7 +241,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* SECTION 5 — SUCCESS: THE TRANSFORMATION */}
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-5xl mx-auto px-6">
@@ -273,7 +267,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* SECTION 6 — FAILURE (GENTLE WARNING) */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
@@ -302,7 +295,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-
       {/* SECTION 7 — SERVICES (Three Entry Points) */}
       <section id="coaching" className="py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -377,26 +369,20 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Divider */}
       <div className="border-t-2 border-navy"></div>
-
       {/* SECTION 8 — TESTIMONIALS */}
       <Suspense fallback={<SectionSkeleton />}>
         <TestimonialsSection title="Riders See Real Progress With the Dan Bizzarro Method" />
       </Suspense>
-
       <Suspense fallback={<SectionSkeleton height="300px" />}>
         <SponsorsSection />
       </Suspense>
-
       <Suspense fallback={<SectionSkeleton height="400px" />}>
         <NewsletterSubscription />
       </Suspense>
-
       {/* Divider */}
       <div className="border-t-2 border-orange"></div>
-
       {/* SECTION 9 — FINAL CTA */}
       <section id="contact" className="py-16 md:py-20 bg-navy text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -425,7 +411,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
