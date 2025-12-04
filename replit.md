@@ -83,3 +83,36 @@ Static pages that need manual regeneration:
 - `server/botDetection.ts` - User-Agent detection middleware
 - `server/routes.ts` - Triggers in clinic/news create/update endpoints
 - `scripts/prerender.ts` - Manual pre-rendering script
+
+## Blog Article Formatting Guidelines
+
+**IMPORTANT: Always use HTML formatting for blog articles, NEVER markdown syntax.**
+
+### Required HTML Tags (NO markdown like # or **)
+- `<h2>` - Main section headings
+- `<h3>` - Sub-headings (for steps, sub-sections)
+- `<p>` - Paragraphs
+- `<strong>` - Bold/emphasis text
+- `<ul>` and `<li>` - Bullet lists
+- `<ol>` and `<li>` - Numbered lists
+- `<br>` - Line breaks within paragraphs
+- `<a href="..." style="color: #ea580c; text-decoration: underline;">` - Links to other pages
+
+### Standard CTA Banner (include once or twice per article)
+```html
+<div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: 8px; padding: 12px 20px; margin: 20px 0; text-align: center;"><p style="color: white; font-size: 1rem; font-weight: 600; margin: 0 0 6px 0;">Ready to Take Your Riding to the Next Level?</p><p style="color: #dbeafe; font-size: 0.875rem; margin: 0 0 12px 0;">Join me for personalised coaching that transforms your partnership with your horse.</p><div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"><a href="/coaching/clinics" style="display: inline-block; background: white; color: #1e40af; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.875rem;">Book a Clinic</a><a href="/coaching/private-lessons" style="display: inline-block; background: white; color: #1e40af; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.875rem;">Book an Individual Lesson</a><a href="/coaching/remote-coaching" style="display: inline-block; background: white; color: #1e40af; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.875rem;">Book a Virtual Lesson</a></div></div>
+```
+
+### Article Structure
+1. Opening paragraphs introducing the topic
+2. Main content with `<h2>` sections and `<h3>` sub-sections
+3. Step-by-step instructions using `<h3>` for each step
+4. Bullet lists for key points
+5. CTA banner (place mid-article and/or before FAQ)
+6. FAQ section with `<h2>Frequently Asked Questions</h2>` followed by `<p><strong>Question?</strong><br>Answer text.</p>` format
+
+### Links to Dan Bizzarro Method
+Always link mentions of "Dan Bizzarro Method" to the method section:
+```html
+<a href="/#method" style="color: #ea580c; text-decoration: underline;">Dan Bizzarro Method</a>
+```
