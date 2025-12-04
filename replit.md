@@ -108,8 +108,13 @@ Static pages that need manual regeneration:
 2. Main content with `<h2>` sections and `<h3>` sub-sections
 3. Step-by-step instructions using `<h3>` for each step
 4. Bullet lists for key points
-5. CTA banner (place mid-article and/or before FAQ)
+5. CTA banner placement: after 1/3 of article AND at the very end
 6. FAQ section with `<h2>Frequently Asked Questions</h2>` followed by `<p><strong>Question?</strong><br>Answer text.</p>` format
+
+### Spacing Rules (IMPORTANT)
+- NO empty lines between `<p>` tags - keep paragraphs flowing
+- Lists (`<ul>`, `<ol>`) should immediately follow their intro text with no blank line
+- Keep consistent spacing throughout - no extra gaps around lists or headings
 
 ### Links to Dan Bizzarro Method
 Always link mentions of "Dan Bizzarro Method" to the method section:
