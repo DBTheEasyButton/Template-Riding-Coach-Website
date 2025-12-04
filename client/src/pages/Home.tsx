@@ -18,6 +18,8 @@ import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import privateLessonsImage from "@assets/optimized/private-lessons-clinic.jpg";
 import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
+import blenheimDressageImg from "@assets/Blenheim_Dressage_1764886318581.jpg";
+import hartpuryOpenImg from "@assets/Hartpury_Open_Champ_1764886318583.jpg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -153,8 +155,9 @@ export default function Home() {
             <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
+          {/* First row: Text left, Image right (mobile: text then image) */}
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div className="space-y-6 order-1">
               <p className="text-lg text-dark leading-relaxed">
                 I've coached thousands of riders who felt exactly like you do now. Horses that rush, drift, get tight, ignore the inside leg or lose focus. Riders who feel they're always correcting something but never getting ahead of the problem. I understand how frustrating that feels.
               </p>
@@ -162,24 +165,37 @@ export default function Home() {
               <p className="text-lg text-dark leading-relaxed">
                 With more than 20 years of experience coaching dressage, show jumping and event riders, having competed at the highest level in eventing — represented Italy in Nations Cups and the 2025 European Championships, shortlisted for the 2024 Paris Olympics — and having worked with world-class riders and coaches (William Fox-Pitt, Caroline Moore, Ian Woodhead), I've developed a simple method that works for every horse and every rider.
               </p>
-              
+            </div>
+            
+            <div className="relative order-2">
+              <img 
+                src={blenheimDressageImg} 
+                alt="Dan Bizzarro competing in dressage at Blenheim Palace International Horse Trials"
+                className="rounded-2xl shadow-2xl w-full"
+                loading="lazy"
+              />
+            </div>
+          </div>
+          
+          {/* Second row: Image left, Text right (mobile: text then image) */}
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="relative order-2 md:order-1">
+              <img 
+                src={hartpuryOpenImg} 
+                alt="Dan Bizzarro competing in cross country at Hartpury Open Championship"
+                className="rounded-2xl shadow-2xl w-full"
+                loading="lazy"
+              />
+            </div>
+            
+            <div className="space-y-6 order-1 md:order-2">
               <p className="text-lg text-navy font-medium leading-relaxed">
                 The Dan Bizzarro Method gives you clarity, improves communication, and builds real confidence — whether you ride for fun or compete at the highest level.
               </p>
-            </div>
-            
-            <div className="relative">
-              <picture>
-                <source srcSet={boekeloPodiumMobileWebp} type="image/webp" media="(max-width: 768px)" />
-                <source srcSet={boekeloPodiumMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
-                <source srcSet={boekeloPodiumPhotoWebp} type="image/webp" />
-                <img 
-                  src={boekeloPodiumPhotoJpg} 
-                  alt="Dan Bizzarro on the podium at Boekelo international eventing competition"
-                  className="rounded-2xl shadow-2xl w-full"
-                  loading="lazy"
-                />
-              </picture>
+              
+              <p className="text-lg text-dark leading-relaxed">
+                My approach focuses on the fundamentals: balance, rhythm, straightness and clear aids. When these are in place, everything else becomes easier — from flatwork to jumping to competing under pressure.
+              </p>
             </div>
           </div>
         </div>
