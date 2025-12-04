@@ -18,9 +18,18 @@ import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import privateLessonsImage from "@assets/optimized/private-lessons-clinic.jpg";
 import carouselClinic2Jpg from "@assets/optimized/carousel-clinic-2.jpg";
-import blenheimDressageImg from "@assets/Blenheim_Dressage_1764886318581.jpg";
-import hartpuryOpenImg from "@assets/Hartpury_Open_Champ_1764886318583.jpg";
-import coachingSessionImg from "@assets/IMG_3019_1764887176071.png";
+import blenheimDressageJpg from "@assets/optimized/blenheim-dressage-home.jpg";
+import blenheimDressageWebp from "@assets/optimized/blenheim-dressage-home.webp";
+import blenheimDressageMobileJpg from "@assets/optimized/blenheim-dressage-home-mobile.jpg";
+import blenheimDressageMobileWebp from "@assets/optimized/blenheim-dressage-home-mobile.webp";
+import hartpuryOpenJpg from "@assets/optimized/hartpury-cross-country-home.jpg";
+import hartpuryOpenWebp from "@assets/optimized/hartpury-cross-country-home.webp";
+import hartpuryOpenMobileJpg from "@assets/optimized/hartpury-cross-country-home-mobile.jpg";
+import hartpuryOpenMobileWebp from "@assets/optimized/hartpury-cross-country-home-mobile.webp";
+import coachingSessionJpg from "@assets/optimized/coaching-session-home.jpg";
+import coachingSessionWebp from "@assets/optimized/coaching-session-home.webp";
+import coachingSessionMobileJpg from "@assets/optimized/coaching-session-home-mobile.jpg";
+import coachingSessionMobileWebp from "@assets/optimized/coaching-session-home-mobile.webp";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -165,24 +174,34 @@ export default function Home() {
             </div>
             
             <div className="relative order-2">
-              <img 
-                src={blenheimDressageImg} 
-                alt="Dan Bizzarro competing in dressage at Blenheim Palace International Horse Trials"
-                className="rounded-2xl shadow-2xl w-full"
-                loading="lazy"
-              />
+              <picture>
+                <source srcSet={blenheimDressageMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={blenheimDressageMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
+                <source srcSet={blenheimDressageWebp} type="image/webp" />
+                <img 
+                  src={blenheimDressageJpg} 
+                  alt="Dan Bizzarro competing in dressage at Blenheim Palace International Horse Trials"
+                  className="rounded-2xl shadow-2xl w-full"
+                  loading="lazy"
+                />
+              </picture>
             </div>
           </div>
           
           {/* Second row: Hartpury left, Text right (mobile: text then image) */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="relative order-2 md:order-1">
-              <img 
-                src={hartpuryOpenImg} 
-                alt="Dan Bizzarro competing in cross country at Hartpury Open Championship"
-                className="rounded-2xl shadow-2xl w-full"
-                loading="lazy"
-              />
+              <picture>
+                <source srcSet={hartpuryOpenMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={hartpuryOpenMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
+                <source srcSet={hartpuryOpenWebp} type="image/webp" />
+                <img 
+                  src={hartpuryOpenJpg} 
+                  alt="Dan Bizzarro competing in cross country at Hartpury Open Championship"
+                  className="rounded-2xl shadow-2xl w-full"
+                  loading="lazy"
+                />
+              </picture>
             </div>
             
             <div className="space-y-6 order-1 md:order-2">
@@ -300,12 +319,17 @@ export default function Home() {
             </div>
             
             <div className="relative order-2">
-              <img 
-                src={coachingSessionImg} 
-                alt="Dan Bizzarro coaching a rider during a lesson"
-                className="rounded-2xl shadow-2xl w-full"
-                loading="lazy"
-              />
+              <picture>
+                <source srcSet={coachingSessionMobileWebp} type="image/webp" media="(max-width: 768px)" />
+                <source srcSet={coachingSessionMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
+                <source srcSet={coachingSessionWebp} type="image/webp" />
+                <img 
+                  src={coachingSessionJpg} 
+                  alt="Dan Bizzarro coaching a rider during a lesson"
+                  className="rounded-2xl shadow-2xl w-full"
+                  loading="lazy"
+                />
+              </picture>
             </div>
           </div>
           
