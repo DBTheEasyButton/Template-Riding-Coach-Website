@@ -23,6 +23,7 @@ import {
   insertSponsorSchema
 } from "@shared/schema";
 import { prerenderService } from "./prerenderService";
+import { generateWarmupSystemPDF } from "./generateWarmupPDF";
 
 const stripeKey = process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
 
@@ -156,6 +157,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Image optimization failed:', error);
       res.status(500).json({ error: 'Failed to optimize images' });
+    }
+  });
+
+  // Download PDF: The Eventer's Warm-Up System
+  app.get("/api/downloads/warmup-system-pdf", async (req, res) => {
+    try {
+      const pdfBuffer = generateWarmupSystemPDF();
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="The-Eventers-Warmup-System-Dan-Bizzarro.pdf"');
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error generating warm-up PDF:', error);
+      res.status(500).json({ error: 'Failed to generate PDF' });
     }
   });
 
