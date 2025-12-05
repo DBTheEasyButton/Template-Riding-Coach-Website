@@ -161,7 +161,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Training Philosophy
+              My Training Philosophy
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
@@ -178,18 +178,49 @@ export default function About() {
             </div>
             <div className="space-y-6 text-lg text-dark leading-relaxed">
               <p>
-                Dan's approach to training combines classical eventing principles with modern, rider-friendly techniques, always prioritising the welfare, understanding, and long-term development of both horse and rider. This philosophy sits at the heart of the <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a>—a clear, structured way of training designed to make communication easier, build trust, and help every partnership progress with purpose.
+                I believe every horse can go better, and every rider can feel more confident when the communication between them is clear.
               </p>
+              <p>
+                The <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a> is based on a few simple principles that stay the same whether you're doing dressage, show jumping or cross-country:
+              </p>
+              <ul className="space-y-3 text-lg text-dark">
+                <li className="flex items-start gap-3">
+                  <span className="text-orange font-bold">•</span>
+                  <span><strong>Clear reactions to the aids</strong> — the horse knows what you're asking</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange font-bold">•</span>
+                  <span><strong>Balance and self-carriage</strong> — a horse that can carry itself feels lighter, softer and easier</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange font-bold">•</span>
+                  <span><strong>Straightness and accuracy</strong> — the foundation of every good transition and every good jump</span>
+                </li>
+              </ul>
             </div>
           </div>
           
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 text-lg text-dark leading-relaxed">
+              <ul className="space-y-3 text-lg text-dark">
+                <li className="flex items-start gap-3">
+                  <span className="text-orange font-bold">•</span>
+                  <span><strong>A soft, consistent contact</strong> — not forced, not restrictive, but genuinely connected</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange font-bold">•</span>
+                  <span><strong>Small corrections at the right time</strong> — before bad habits grow</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-orange font-bold">•</span>
+                  <span><strong>Confidence for horse and rider</strong> — without tension, pressure or confusion</span>
+                </li>
+              </ul>
               <p>
-                Drawing from his experience working with William Fox-Pitt, Caroline Moore, Ian Woodhead, and many other top riders and coaches, as well as competing at the highest international levels, Dan emphasises systematic progression, clear communication, and building confidence through thoughtful preparation.
+                My teaching style is direct, calm and practical. I don't overcomplicate things. I show you what matters, and I explain why it matters, so you can train your horse even on the days when I'm not there.
               </p>
               <p>
-                Whether coaching beginners or advanced competitors, Dan's focus remains on developing strong foundations in dressage, show jumping, and cross-country—the three disciplines that make eventing the ultimate test of horsemanship—and ensuring that every rider has a method they can rely on both at home and in competition.
+                Riders often tell me they feel "relieved" after a lesson — not because it was easy, but because everything finally made sense.
               </p>
             </div>
             <div className="relative">
