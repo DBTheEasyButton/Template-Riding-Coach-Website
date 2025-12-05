@@ -6,10 +6,6 @@ import HeroPicture from "@/components/HeroPicture";
 import ResponsiveImage from "@/components/ResponsiveImage";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { Link } from "wouter";
-import valleraTableJpg from "@assets/optimized/about-vallera-table.jpg";
-import valleraTableWebp from "@assets/optimized/about-vallera-table.webp";
-import valleraTableMobileJpg from "@assets/optimized/about-vallera-table-mobile.jpg";
-import valleraTableMobileWebp from "@assets/optimized/about-vallera-table-mobile.webp";
 import hartpuryJpg from "@assets/optimized/about-hartpury.jpg";
 import hartpuryWebp from "@assets/optimized/about-hartpury.webp";
 import hartpuryMobileJpg from "@assets/optimized/about-hartpury-mobile.jpg";
@@ -98,16 +94,6 @@ export default function About() {
               </p>
             </div>
             <div className="space-y-6">
-              <div className="relative">
-                <ResponsiveImage
-                  src={valleraTableJpg}
-                  webpSrc={valleraTableWebp}
-                  mobileSrc={valleraTableMobileJpg}
-                  mobileWebpSrc={valleraTableMobileWebp}
-                  alt="Dan Bizzarro competing cross country on grey horse Vallera"
-                  className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                />
-              </div>
               <div className="relative">
                 <ResponsiveImage
                   src={hartpuryJpg}
