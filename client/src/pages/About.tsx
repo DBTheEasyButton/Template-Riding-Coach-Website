@@ -46,9 +46,7 @@ export default function About() {
         preloadImageJpeg={aboutDanHeroJpg}
         schemas={schemas}
       />
-      
       <Navigation />
-      
       {/* Hero Section */}
       <section className="relative min-h-[350px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16 flex">
         <HeroPicture
@@ -73,14 +71,13 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Main Content */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <div>
-                <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Who I Am</h2>
+                <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">More About Me</h2>
                 <div className="w-24 h-1 bg-orange mb-8"></div>
               </div>
               <p className="text-lg text-dark leading-relaxed">
@@ -118,7 +115,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Stats Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
@@ -145,7 +141,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Philosophy Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -226,7 +221,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Where I Coach Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
@@ -264,7 +258,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Why I Created the Method Section */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-6">
@@ -301,7 +294,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* A Final Note Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
@@ -335,13 +327,11 @@ export default function About() {
           </div>
         </div>
       </section>
-
       {/* Lead Capture Modal */}
       <LeadCaptureModal 
         isOpen={isLeadModalOpen} 
         onClose={() => setIsLeadModalOpen(false)} 
       />
-
       <Footer />
     </div>
   );
