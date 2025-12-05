@@ -482,12 +482,40 @@ export default function AdminNews() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="content">Content</Label>
+                  <Label htmlFor="content">Content (use HTML formatting)</Label>
+                  <details className="mb-2 text-sm">
+                    <summary className="cursor-pointer text-blue-600 hover:text-blue-700 font-medium">
+                      View formatting guide
+                    </summary>
+                    <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded-lg space-y-2 text-xs">
+                      <p className="font-semibold">Required HTML tags (NO markdown like # or **):</p>
+                      <ul className="list-disc pl-4 space-y-1">
+                        <li><code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">&lt;h2&gt;</code> - Main section headings</li>
+                        <li><code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">&lt;h3&gt;</code> - Sub-headings</li>
+                        <li><code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">&lt;p&gt;</code> - Paragraphs</li>
+                        <li><code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">&lt;strong&gt;</code> - Bold text</li>
+                        <li><code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">&lt;ul&gt;&lt;li&gt;</code> - Bullet lists</li>
+                        <li><code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">&lt;ol&gt;&lt;li&gt;</code> - Numbered lists</li>
+                      </ul>
+                      <p className="font-semibold mt-2">Example structure:</p>
+                      <pre className="bg-slate-200 dark:bg-slate-700 p-2 rounded text-[10px] overflow-x-auto whitespace-pre-wrap">{`<p>Opening paragraph introducing the topic.</p>
+<h2>Main Section</h2>
+<p>Content for this section.</p>
+<h3>Sub-section</h3>
+<ul>
+<li>First point</li>
+<li>Second point</li>
+</ul>`}</pre>
+                      <p className="text-orange-600 dark:text-orange-400 font-medium mt-2">
+                        Important: Keep spacing consistent - no extra blank lines between paragraphs or around lists.
+                      </p>
+                    </div>
+                  </details>
                   <Textarea
                     id="content"
                     value={formData.content}
                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    placeholder="Full article content"
+                    placeholder="<p>Start your article content here...</p>"
                     rows={8}
                   />
                 </div>
