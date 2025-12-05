@@ -260,7 +260,7 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setFillColor(...NAVY);
   doc.rect(0, 0, opts.pageWidth, opts.pageHeight, 'F');
 
-  // Logo with correct 2:1 aspect ratio
+  // Logo with correct 2:1 aspect ratio, centered on page
   try {
     const logoPath = path.join(process.cwd(), 'attached_assets', 'optimized', 'Dan Bizzarro Method_1749676680719.png');
     if (fs.existsSync(logoPath)) {
@@ -269,8 +269,9 @@ export function generateWarmupSystemPDF(): Buffer {
       // Actual ratio is 2:1 (756x378), so use width=100, height=50
       const logoWidth = 100;
       const logoHeight = 50;
-      const logoX = (opts.pageWidth - logoWidth) / 2;
-      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 35, logoWidth, logoHeight);
+      // Center: page is 210mm wide, logo is 100mm, so x = (210-100)/2 = 55
+      const logoX = 55;
+      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 40, logoWidth, logoHeight);
     }
   } catch (err) {
     console.log('Could not load logo:', err);
