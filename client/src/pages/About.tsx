@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
 import ResponsiveImage from "@/components/ResponsiveImage";
+import { Link } from "wouter";
 import valleraTableJpg from "@assets/optimized/about-vallera-table.jpg";
 import valleraTableWebp from "@assets/optimized/about-vallera-table.webp";
 import valleraTableMobileJpg from "@assets/optimized/about-vallera-table-mobile.jpg";
@@ -233,6 +234,113 @@ export default function About() {
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Where I Coach Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Where I Coach
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          </div>
+          <div className="space-y-6 text-lg text-dark leading-relaxed">
+            <p>
+              I'm based in Oxfordshire and teach riders of all levels — from amateurs building confidence to riders preparing for eventing competitions. I offer:
+            </p>
+            <ul className="space-y-3 text-lg text-dark pl-4">
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Private riding lessons</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Show jumping and cross-country coaching</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Clinics across the UK</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Virtual riding lessons for riders anywhere in the world</span>
+              </li>
+            </ul>
+            <p>
+              No matter the location, the goal is the same: clear communication, better balance and a more confident partnership.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Why I Created the Method Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              Why I Created the Dan Bizzarro Method
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          </div>
+          <div className="space-y-6 text-lg text-dark leading-relaxed">
+            <p>
+              After years of coaching, I kept seeing the same patterns:
+            </p>
+            <ul className="space-y-3 text-lg text-dark pl-4">
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Riders were working hard but feeling stuck.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Horses were trying their best but becoming tense, unbalanced or confused.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-orange font-bold">•</span>
+                <span>Most people weren't struggling because they lacked talent — they simply didn't have a system that made the work clear and consistent.</span>
+              </li>
+            </ul>
+            <p>
+              So I created the <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a> to give riders a structure they can follow at home, at clinics, in competition warm-ups and even out hacking. It's designed to be simple, effective and genuinely useful for the horses people ride every day — not just elite athletes.
+            </p>
+            <p className="font-medium">
+              My aim is always the same: to make horse riding easier to understand, more enjoyable, and more rewarding for both horse and rider.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* A Final Note Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
+              A Final Note
+            </h2>
+            <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
+          </div>
+          <div className="space-y-6 text-lg text-dark leading-relaxed text-center">
+            <p>
+              I take coaching seriously, but I believe it should still feel enjoyable. You don't need to be brave, talented or perfect — you just need a willingness to learn and a horse that's ready to listen.
+            </p>
+            <p>
+              If that sounds like you, I'd be glad to help.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+            <Link href="/coaching/private-lessons">
+              <button className="px-8 py-4 bg-orange text-white font-semibold rounded-lg hover:bg-orange/90 transition-colors text-lg" data-testid="button-book-lesson">
+                Book a Lesson
+              </button>
+            </Link>
+            <Link href="/contact">
+              <button className="px-8 py-4 bg-white text-navy font-semibold rounded-lg border-2 border-navy hover:bg-gray-50 transition-colors text-lg" data-testid="button-training-tips">
+                Get Free Training Tips
+              </button>
+            </Link>
           </div>
         </div>
       </section>
