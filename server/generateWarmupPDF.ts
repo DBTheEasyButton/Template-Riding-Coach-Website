@@ -14,18 +14,17 @@ interface PDFOptions {
   pageWidth: number;
   pageHeight: number;
   contentWidth: number;
+  bottomMargin: number;
 }
 
 function drawPageHeader(doc: jsPDF, title: string, opts: PDFOptions): number {
   let y = opts.margin + 5;
   
-  // Section title with orange accent
   doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
   doc.text(title, opts.margin, y);
   
-  // Orange underline
   y += 5;
   doc.setDrawColor(...ORANGE);
   doc.setLineWidth(2);
@@ -110,7 +109,6 @@ function drawInfoCard(doc: jsPDF, title: string, content: string, y: number, opt
   doc.setFillColor(...LIGHT_GRAY);
   doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 4, 4, 'F');
   
-  // Left accent bar
   doc.setFillColor(...ORANGE);
   doc.roundedRect(opts.margin, y, 4, boxHeight, 2, 2, 'F');
   
@@ -132,7 +130,6 @@ function drawNumberedList(doc: jsPDF, items: string[], y: number, opts: PDFOptio
     const circleX = opts.margin + 10;
     const circleY = y - 1;
     
-    // Orange circle with number
     doc.setFillColor(...ORANGE);
     doc.circle(circleX, circleY, 5, 'F');
     
@@ -141,7 +138,6 @@ function drawNumberedList(doc: jsPDF, items: string[], y: number, opts: PDFOptio
     doc.setTextColor(...WHITE);
     doc.text(String(index + 1), circleX - 2, y + 1);
     
-    // Item text
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...DARK);
     const lines = doc.splitTextToSize(item, opts.contentWidth - 28);
@@ -156,7 +152,6 @@ function drawIconList(doc: jsPDF, items: string[], y: number, opts: PDFOptions):
   doc.setFontSize(10);
   
   items.forEach(item => {
-    // Orange arrow/chevron
     doc.setFillColor(...ORANGE);
     doc.triangle(opts.margin + 6, y - 3, opts.margin + 6, y + 3, opts.margin + 12, y, 'F');
     
@@ -174,14 +169,13 @@ function drawCheckList(doc: jsPDF, items: string[], y: number, opts: PDFOptions)
   doc.setFontSize(10);
   
   items.forEach(item => {
-    // Orange checkmark box
     doc.setFillColor(...ORANGE);
     doc.roundedRect(opts.margin + 4, y - 4, 8, 8, 1, 1, 'F');
     
-    doc.setFontSize(8);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...WHITE);
-    doc.text('OK', opts.margin + 5, y + 1);
+    doc.text(String.fromCharCode(0x2713), opts.margin + 6, y + 1);
     
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
@@ -194,30 +188,27 @@ function drawCheckList(doc: jsPDF, items: string[], y: number, opts: PDFOptions)
 }
 
 function drawStepCard(doc: jsPDF, stepNum: string, title: string, items: string[], note: string, y: number, opts: PDFOptions): number {
-  const padding = 10;
-  const itemHeight = items.length * 7;
-  const noteHeight = note ? 10 : 0;
-  const boxHeight = 20 + itemHeight + noteHeight + padding;
+  const padding = 8;
+  const itemHeight = items.length * 6;
+  const noteHeight = note ? 8 : 0;
+  const boxHeight = 18 + itemHeight + noteHeight + padding;
   
   doc.setFillColor(...LIGHT_GRAY);
   doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 4, 4, 'F');
   
-  // Step number badge
   doc.setFillColor(...NAVY);
-  doc.roundedRect(opts.margin + padding, y + padding, 30, 14, 3, 3, 'F');
-  doc.setFontSize(10);
+  doc.roundedRect(opts.margin + padding, y + padding, 28, 12, 3, 3, 'F');
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...WHITE);
-  doc.text(stepNum, opts.margin + padding + 5, y + padding + 10);
+  doc.text(stepNum, opts.margin + padding + 4, y + padding + 8);
   
-  // Title
-  doc.setFontSize(12);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
-  doc.text(title, opts.margin + padding + 36, y + padding + 10);
+  doc.text(title, opts.margin + padding + 34, y + padding + 8);
   
-  // Items
-  let itemY = y + padding + 22;
+  let itemY = y + padding + 18;
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
@@ -227,17 +218,17 @@ function drawStepCard(doc: jsPDF, stepNum: string, title: string, items: string[
     doc.text('-', opts.margin + padding + 4, itemY);
     doc.setTextColor(...DARK);
     doc.text(item, opts.margin + padding + 10, itemY);
-    itemY += 7;
+    itemY += 6;
   });
   
-  // Note
   if (note) {
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(...NAVY);
-    doc.text(note, opts.margin + padding + 4, itemY + 2);
+    doc.setFontSize(8);
+    doc.text(note, opts.margin + padding + 4, itemY + 1);
   }
   
-  return y + boxHeight + 6;
+  return y + boxHeight + 5;
 }
 
 export function generateWarmupSystemPDF(): Buffer {
@@ -251,7 +242,8 @@ export function generateWarmupSystemPDF(): Buffer {
     margin: 20,
     pageWidth: 210,
     pageHeight: 297,
-    contentWidth: 170
+    contentWidth: 170,
+    bottomMargin: 25
   };
 
   let y = 0;
@@ -260,16 +252,13 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setFillColor(...NAVY);
   doc.rect(0, 0, opts.pageWidth, opts.pageHeight, 'F');
 
-  // Logo with correct 2:1 aspect ratio, centered on page
   try {
     const logoPath = path.join(process.cwd(), 'attached_assets', 'optimized', 'Dan Bizzarro Method_1749676680719.png');
     if (fs.existsSync(logoPath)) {
       const logoData = fs.readFileSync(logoPath);
       const logoBase64 = logoData.toString('base64');
-      // Actual ratio is 2:1 (756x378), so use width=100, height=50
       const logoWidth = 100;
       const logoHeight = 50;
-      // Center: page is 210mm wide, logo is 100mm, so x = (210-100)/2 = 55
       const logoX = 55;
       doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 40, logoWidth, logoHeight);
     }
@@ -277,25 +266,21 @@ export function generateWarmupSystemPDF(): Buffer {
     console.log('Could not load logo:', err);
   }
 
-  // Title
   doc.setTextColor(...WHITE);
   doc.setFontSize(36);
   doc.setFont('helvetica', 'bold');
   doc.text("THE EVENTER'S", opts.pageWidth / 2, 110, { align: 'center' });
   doc.text("WARM-UP SYSTEM", opts.pageWidth / 2, 126, { align: 'center' });
 
-  // Orange line
   doc.setDrawColor(...ORANGE);
   doc.setLineWidth(3);
   doc.line(50, 136, 160, 136);
 
-  // Subtitle
   doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
   doc.text('A simple, reliable warm-up routine for', opts.pageWidth / 2, 155, { align: 'center' });
   doc.text('Dressage, Show Jumping, and Cross-Country', opts.pageWidth / 2, 166, { align: 'center' });
 
-  // Author
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
@@ -306,10 +291,9 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setTextColor(200, 200, 200);
   doc.text('International Event Rider & Coach', opts.pageWidth / 2, 208, { align: 'center' });
 
-  // Website
   doc.setFontSize(11);
   doc.setTextColor(170, 170, 170);
-  doc.text('www.danbizzarromethod.com', opts.pageWidth / 2, 270, { align: 'center' });
+  doc.text('https://danbizzarromethod.com', opts.pageWidth / 2, 265, { align: 'center' });
 
   // ==================== PAGE 2: INTRODUCTION ====================
   doc.addPage();
@@ -401,7 +385,6 @@ export function generateWarmupSystemPDF(): Buffer {
     doc.setFillColor(...LIGHT_GRAY);
     doc.roundedRect(opts.margin, y, opts.contentWidth, 24, 4, 4, 'F');
     
-    // Number circle
     doc.setFillColor(...ORANGE);
     doc.circle(opts.margin + 14, y + 12, 8, 'F');
     doc.setFontSize(14);
@@ -409,12 +392,10 @@ export function generateWarmupSystemPDF(): Buffer {
     doc.setTextColor(...WHITE);
     doc.text(String(i + 1), opts.margin + 11, y + 16);
     
-    // Title
     doc.setFontSize(11);
     doc.setTextColor(...NAVY);
     doc.text(p.title, opts.margin + 28, y + 10);
     
-    // Description
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...DARK);
@@ -456,12 +437,10 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.addPage();
   y = drawPageHeader(doc, '5. WARM-UP OVERVIEW', opts);
 
-  // Table
   const colWidths = [42, 42, 43, 43];
   const rowHeight = 12;
   let tableX = opts.margin;
 
-  // Header
   doc.setFillColor(...NAVY);
   doc.roundedRect(tableX, y, opts.contentWidth, rowHeight, 3, 3, 'F');
   doc.setFontSize(10);
@@ -510,7 +489,7 @@ export function generateWarmupSystemPDF(): Buffer {
   y += 15;
   y = drawQuoteBox(doc, 'Transitions are woven into every phase, not just at the end. Use them to check balance, wake the hind legs, or settle the brain.', y, opts);
 
-  // ==================== PAGE 7: DRESSAGE ====================
+  // ==================== PAGE 7: DRESSAGE PART 1 ====================
   doc.addPage();
   y = drawPageHeader(doc, '6. DRESSAGE WARM-UP', opts);
 
@@ -532,15 +511,15 @@ export function generateWarmupSystemPDF(): Buffer {
     'A few 3-second releases'
   ], 'Let the trot find its own swing before you organise anything.', y, opts);
 
+  // ==================== PAGE 8: DRESSAGE PART 2 ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '6. DRESSAGE WARM-UP', opts);
+
   y = drawStepCard(doc, 'STEP 3', 'Canter (5-7 minutes)', [
     'Canter-trot-canter transitions',
     'Gear changes: go forward, bring back, soften',
     'One 20m circle each way'
   ], 'Think: adjustable, soft, breathing.', y, opts);
-
-  // ==================== PAGE 8: DRESSAGE CONTINUED ====================
-  doc.addPage();
-  y = drawPageHeader(doc, '6. DRESSAGE (continued)', opts);
 
   y = drawStepCard(doc, 'STEP 4', 'Specific Work (10 minutes)', [
     'Transitions every few strides to keep balance',
@@ -557,10 +536,13 @@ export function generateWarmupSystemPDF(): Buffer {
     'One upward, one downward transition',
     'Stretch the neck down',
     'Straighten on a long side',
-    'Walk towards the ring with a calm, organised horse'
+    'Walk towards the ring calm and organised'
   ], '', y, opts);
 
-  y += 5;
+  // ==================== PAGE 9: DRESSAGE QUICK FIXES ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '6. DRESSAGE WARM-UP', opts);
+
   y = drawNavyQuoteBox(doc, 'QUICK FIXES', [
     'Tension: 20m circles + trot-walk-trot transitions',
     'Behind the leg: quick upward transitions',
@@ -568,7 +550,7 @@ export function generateWarmupSystemPDF(): Buffer {
     'Hollow: bigger lines + soft neck + transitions'
   ], y, opts);
 
-  // ==================== PAGE 9: SHOW JUMPING ====================
+  // ==================== PAGE 10: SHOW JUMPING PART 1 ====================
   doc.addPage();
   y = drawPageHeader(doc, '7. SHOW JUMPING WARM-UP', opts);
 
@@ -601,6 +583,10 @@ export function generateWarmupSystemPDF(): Buffer {
     'Softening the neck'
   ], '', y, opts);
 
+  // ==================== PAGE 11: SHOW JUMPING PART 2 ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '7. SHOW JUMPING WARM-UP', opts);
+
   y = drawStepCard(doc, 'STEP 3', 'Canter (5-7 minutes)', [
     'Canter-trot-canter transitions',
     'Gear changes: "wait" 3-4 strides then "go" 3-4 strides',
@@ -608,10 +594,7 @@ export function generateWarmupSystemPDF(): Buffer {
     'Keep hands soft after each transition'
   ], 'This is the most important part before fences.', y, opts);
 
-  // ==================== PAGE 10: SJ CONTINUED ====================
-  doc.addPage();
-  y = drawPageHeader(doc, '7. SHOW JUMPING (continued)', opts);
-
+  y += 5;
   y = drawBigHighlightBox(doc, [
     'No horse should jump until you have had',
     'three good transitions in a row.'
@@ -619,17 +602,15 @@ export function generateWarmupSystemPDF(): Buffer {
 
   y = drawStepCard(doc, 'STEP 4', 'Jump Warm-Up (10-12 minutes)', [
     'Crosspole twice',
-    'Upright small',
-    'Upright mid-height',
-    'Oxer small',
-    'Oxer at competition height',
+    'Upright small, then mid-height',
+    'Oxer small, then at competition height',
     'Optional: 1-2 bigger for confidence'
   ], '', y, opts);
 
   y += 5;
   y = drawQuoteBox(doc, 'After every jump: Land, wait, straighten, ride away. This is the Dan Bizzarro Method - balance before and after the fence.', y, opts);
 
-  // ==================== PAGE 11: CROSS-COUNTRY ====================
+  // ==================== PAGE 12: CROSS-COUNTRY PART 1 ====================
   doc.addPage();
   y = drawPageHeader(doc, '8. CROSS-COUNTRY WARM-UP', opts);
 
@@ -663,16 +644,15 @@ export function generateWarmupSystemPDF(): Buffer {
     'Keep it loose and swinging'
   ], '', y, opts);
 
-  // ==================== PAGE 12: XC CONTINUED ====================
+  // ==================== PAGE 13: CROSS-COUNTRY PART 2 ====================
   doc.addPage();
-  y = drawPageHeader(doc, '8. CROSS-COUNTRY (continued)', opts);
+  y = drawPageHeader(doc, '8. CROSS-COUNTRY WARM-UP', opts);
 
   y = drawStepCard(doc, 'STEP 3', 'Canter (7-10 minutes)', [
     'Forward canter, then transition down, then forward again',
     'Canter-trot-canter',
     'One decent gallop stretch',
-    'Bring back, soften, breathe',
-    'Repeat'
+    'Bring back, soften, breathe, repeat'
   ], "You're searching for adjustability, not exhaustion.", y, opts);
 
   doc.setFont('helvetica', 'bold');
@@ -695,7 +675,7 @@ export function generateWarmupSystemPDF(): Buffer {
     'If the answer is yes - you are ready.'
   ], y, opts);
 
-  // ==================== PAGE 13: TROUBLESHOOTING ====================
+  // ==================== PAGE 14: TROUBLESHOOTING ====================
   doc.addPage();
   y = drawPageHeader(doc, '9. TROUBLESHOOTING', opts);
 
@@ -735,7 +715,7 @@ export function generateWarmupSystemPDF(): Buffer {
   y += 5;
   y = drawQuoteBox(doc, 'Every warm-up is different. Trust the structure - but stay flexible with the details.', y, opts);
 
-  // ==================== PAGE 14: SUMMARY ====================
+  // ==================== PAGE 15: SUMMARY ====================
   doc.addPage();
   y = drawPageHeader(doc, '10. ONE-PAGE SUMMARY', opts);
 
@@ -747,9 +727,9 @@ export function generateWarmupSystemPDF(): Buffer {
 
   // Dressage summary
   doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, 55, 4, 4, 'F');
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 50, 4, 4, 'F');
   doc.setFillColor(...NAVY);
-  doc.roundedRect(opts.margin, y, 4, 55, 2, 2, 'F');
+  doc.roundedRect(opts.margin, y, 4, 50, 2, 2, 'F');
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
@@ -769,15 +749,15 @@ export function generateWarmupSystemPDF(): Buffer {
   let boxY = y + 18;
   dressageSummary.forEach(line => {
     doc.text(line, opts.margin + 10, boxY);
-    boxY += 7;
+    boxY += 6;
   });
-  y += 60;
+  y += 55;
 
   // Show Jumping summary
   doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, 55, 4, 4, 'F');
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 50, 4, 4, 'F');
   doc.setFillColor(...ORANGE);
-  doc.roundedRect(opts.margin, y, 4, 55, 2, 2, 'F');
+  doc.roundedRect(opts.margin, y, 4, 50, 2, 2, 'F');
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
@@ -797,15 +777,15 @@ export function generateWarmupSystemPDF(): Buffer {
   boxY = y + 18;
   sjSummary.forEach(line => {
     doc.text(line, opts.margin + 10, boxY);
-    boxY += 7;
+    boxY += 6;
   });
-  y += 60;
+  y += 55;
 
   // XC summary
   doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, 55, 4, 4, 'F');
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 50, 4, 4, 'F');
   doc.setFillColor(...NAVY);
-  doc.roundedRect(opts.margin, y, 4, 55, 2, 2, 'F');
+  doc.roundedRect(opts.margin, y, 4, 50, 2, 2, 'F');
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
@@ -825,10 +805,10 @@ export function generateWarmupSystemPDF(): Buffer {
   boxY = y + 18;
   xcSummary.forEach(line => {
     doc.text(line, opts.margin + 10, boxY);
-    boxY += 7;
+    boxY += 6;
   });
 
-  // ==================== PAGE 15: FINAL THOUGHTS ====================
+  // ==================== PAGE 16: FINAL THOUGHTS ====================
   doc.addPage();
   y = drawPageHeader(doc, 'FINAL THOUGHTS', opts);
 
@@ -864,7 +844,6 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.text('Good luck, ride well, and trust your training.', opts.margin, y);
   y += 25;
 
-  // Sign off
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
@@ -875,9 +854,8 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setTextColor(...DARK);
   doc.text('International Event Rider & Coach', opts.margin, y);
   y += 6;
-  doc.text('www.danbizzarromethod.com', opts.margin, y);
+  doc.text('https://danbizzarromethod.com', opts.margin, y);
 
-  // Footer CTA
   y += 25;
   doc.setFillColor(...NAVY);
   doc.roundedRect(opts.margin, y, opts.contentWidth, 40, 5, 5, 'F');
@@ -889,7 +867,7 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...WHITE);
   doc.text('Book a clinic or private lesson to work on your warm-up in person.', opts.margin + 12, y + 25);
-  doc.text('Visit: www.danbizzarromethod.com/coaching', opts.margin + 12, y + 34);
+  doc.text('Visit: https://danbizzarromethod.com/coaching', opts.margin + 12, y + 34);
 
   const pdfOutput = doc.output('arraybuffer');
   return Buffer.from(pdfOutput);
