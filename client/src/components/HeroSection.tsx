@@ -139,7 +139,7 @@ export default function HeroSection() {
           </Link>
           <Link href="/coaching/remote-coaching">
             <Button 
-              className="bg-navy hover:bg-slate-800 text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
               data-testid="button-book-virtual-lesson"
             >
               Book a Virtual Lesson
