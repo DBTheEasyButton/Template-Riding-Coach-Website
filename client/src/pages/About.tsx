@@ -1,8 +1,10 @@
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
 import ResponsiveImage from "@/components/ResponsiveImage";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { Link } from "wouter";
 import valleraTableJpg from "@assets/optimized/about-vallera-table.jpg";
 import valleraTableWebp from "@assets/optimized/about-vallera-table.webp";
@@ -32,6 +34,7 @@ import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import { getBreadcrumbsFromPath, createBreadcrumbSchema } from "@shared/schemaHelpers";
 
 export default function About() {
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const seoConfig = getSEOConfig('/about');
   const breadcrumbs = getBreadcrumbsFromPath('/about', seoConfig.h1);
   const schemas = [createBreadcrumbSchema(breadcrumbs)];
@@ -336,14 +339,22 @@ export default function About() {
                 Book a Lesson
               </button>
             </Link>
-            <Link href="/contact">
-              <button className="px-8 py-4 bg-white text-navy font-semibold rounded-lg border-2 border-navy hover:bg-gray-50 transition-colors text-lg" data-testid="button-training-tips">
-                Get Free Training Tips
-              </button>
-            </Link>
+            <button 
+              className="px-8 py-4 bg-white text-navy font-semibold rounded-lg border-2 border-navy hover:bg-gray-50 transition-colors text-lg" 
+              data-testid="button-training-tips"
+              onClick={() => setIsLeadModalOpen(true)}
+            >
+              Get Free Training Tips
+            </button>
           </div>
         </div>
       </section>
+
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+      />
 
       <Footer />
     </div>

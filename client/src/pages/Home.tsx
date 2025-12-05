@@ -1,9 +1,10 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense, useState } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 import StructuredData, { organizationData, websiteData, localBusinessData } from "@/components/StructuredData";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
@@ -58,6 +59,8 @@ function SectionSkeleton({ height = "400px" }: { height?: string }) {
 }
 
 export default function Home() {
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
@@ -496,14 +499,24 @@ export default function Home() {
                 Book a Clinic <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
-            <Link href="/contact">
-              <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-final-tips">
-                Get Free Training Tips
-              </Button>
-            </Link>
+            <Button 
+              variant="outline" 
+              className="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" 
+              data-testid="button-final-tips"
+              onClick={() => setIsLeadModalOpen(true)}
+            >
+              Get Free Training Tips
+            </Button>
           </div>
         </div>
       </section>
+      
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+      />
+      
       <Footer />
     </div>
   );
