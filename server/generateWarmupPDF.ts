@@ -257,10 +257,10 @@ export function generateWarmupSystemPDF(): Buffer {
     if (fs.existsSync(logoPath)) {
       const logoData = fs.readFileSync(logoPath);
       const logoBase64 = logoData.toString('base64');
-      const logoWidth = 120;
-      const logoHeight = 33;
+      const logoWidth = 72;
+      const logoHeight = 20;
       const logoX = (opts.pageWidth - logoWidth) / 2;
-      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 45, logoWidth, logoHeight);
+      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 50, logoWidth, logoHeight);
     }
   } catch (err) {
     console.log('Could not load logo:', err);
