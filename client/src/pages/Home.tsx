@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
-import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle } from "lucide-react";
+import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle, ChevronDown } from "lucide-react";
 import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
 import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
 import boekeloPodiumMobileJpg from "@assets/optimized/boekelo-podium-mobile.jpg";
@@ -60,6 +60,7 @@ function SectionSkeleton({ height = "400px" }: { height?: string }) {
 
 export default function Home() {
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [expandedProblem, setExpandedProblem] = useState<number | null>(null);
   
   useEffect(() => {
     const hash = window.location.hash;
@@ -89,12 +90,30 @@ export default function Home() {
   const seoConfig = getSEOConfig('/');
 
   const problemPoints = [
-    "Horse not listening to the leg",
-    "Unbalanced or inconsistent canter",
-    "Rushing at fences or stopping",
-    "Tension, spooking or loss of focus",
-    "Contact issues: leaning, hollowing, dropping the neck",
-    "Struggling to ride straight lines or accurate turns"
+    {
+      problem: "Horse not listening to the leg",
+      tip: "Take your legs off, then give a quick tap tap with your legs. Make your horse react quickly (almost overreact), then take your legs off and reward. Repeat as many times as you need."
+    },
+    {
+      problem: "Rushing or pulling towards fences",
+      tip: "Do lots of canter to walk and canter to halt transitions (until they feel very easy), then trot slowly towards a small fence and halt just after (until you can soften your contact in the approach). Do the same in canter."
+    },
+    {
+      problem: "Losing balance or falling in/out",
+      tip: "In a 20m circle halt every 5 seconds (directly from trot) until it feels very easy. Then ask your horse to make the circle 2m bigger using your inside leg near the girth and then 2m smaller using your outside leg near the girth. Make your horse react quickly!"
+    },
+    {
+      problem: "Tension or lack of focus",
+      tip: "Bombard your horse with lots of simple questions from the very beginning of the session. Transitions, small circles, halts, rein back, leg yield in, leg yield out. Do it in walk first, then introduce the trot. One new question every 5 seconds."
+    },
+    {
+      problem: "Struggling with straightness",
+      tip: "Trot for 5 seconds, walk for 5 seconds, trot for 5 seconds, halt. Do it staying a couple of yards away from the track. Then leg yield in a couple of feet, leg yield out a couple of feet. Keep doing it whilst you introduce transitions within the trot."
+    },
+    {
+      problem: "Inconsistent rhythm or contact",
+      tip: "Trot for 5 seconds, walk for 5 seconds. Not 4, or 6! Make sure that the transitions are sharp. Only then ask for roundness during the transition."
+    }
   ];
 
   const successBenefits = [
@@ -146,9 +165,35 @@ export default function Home() {
           
           <div className="grid sm:grid-cols-2 gap-4 mb-10">
             {problemPoints.map((point, index) => (
-              <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm">
-                <AlertTriangle className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
-                <span className="text-dark">{point}</span>
+              <div 
+                key={index} 
+                className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-md"
+                onClick={() => setExpandedProblem(expandedProblem === index ? null : index)}
+                data-testid={`problem-box-${index}`}
+              >
+                <div className="flex items-center justify-between gap-3 p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
+                    <span className="text-dark font-medium">{point.problem}</span>
+                  </div>
+                  <ChevronDown 
+                    className={`w-5 h-5 text-navy flex-shrink-0 transition-transform duration-300 ${
+                      expandedProblem === index ? 'rotate-180' : ''
+                    }`} 
+                  />
+                </div>
+                <div 
+                  className={`overflow-hidden transition-all duration-300 ${
+                    expandedProblem === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="px-4 pb-4 pt-0">
+                    <div className="bg-gradient-to-r from-orange/10 to-navy/5 rounded-lg p-4 border-l-4 border-orange">
+                      <p className="text-sm font-semibold text-navy mb-2">Top Tip:</p>
+                      <p className="text-dark text-sm leading-relaxed">{point.tip}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
