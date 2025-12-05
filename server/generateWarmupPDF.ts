@@ -671,8 +671,9 @@ export function generateWarmupSystemPDF(): Buffer {
   y += 8;
   y = drawBigHighlightBox(doc, [
     'Before you start XC, ask yourself:',
-    '"Can I wait?"',
-    'If the answer is yes - you are ready.'
+    '"Can I ask my horse to let the fence come to me?"',
+    '"Can we jump the fence exactly how I want to?"',
+    'If the answers are yes and yes - you are ready!'
   ], y, opts);
 
   // ==================== PAGE 14: TROUBLESHOOTING ====================
@@ -800,7 +801,7 @@ export function generateWarmupSystemPDF(): Buffer {
     'Trot (5 min): Rising trot > trot-walk-trot',
     'Canter (7-10 min): Forward > back > gallop > collect',
     'Jumps (10-12 min): Small > medium > height',
-    'Test: "Can I wait?" If yes - you are ready.'
+    'Test: Can horse let fence come to me? Jump how I want? Yes + Yes = Ready!'
   ];
   boxY = y + 18;
   xcSummary.forEach(line => {
