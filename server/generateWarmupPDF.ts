@@ -253,14 +253,14 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.rect(0, 0, opts.pageWidth, opts.pageHeight, 'F');
 
   try {
-    const logoPath = path.join(process.cwd(), 'attached_assets', 'optimized', 'Dan Bizzarro Method_1749676680719.png');
+    const logoPath = path.join(process.cwd(), 'attached_assets', 'optimized', 'Dan-Bizzarro-Method-trimmed.png');
     if (fs.existsSync(logoPath)) {
       const logoData = fs.readFileSync(logoPath);
       const logoBase64 = logoData.toString('base64');
-      const logoWidth = 100;
-      const logoHeight = 50;
-      const logoX = 55;
-      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 40, logoWidth, logoHeight);
+      const logoWidth = 120;
+      const logoHeight = 33;
+      const logoX = (opts.pageWidth - logoWidth) / 2;
+      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 45, logoWidth, logoHeight);
     }
   } catch (err) {
     console.log('Could not load logo:', err);
