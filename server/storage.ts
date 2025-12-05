@@ -2367,11 +2367,23 @@ The Dan Bizzarro Method Team`,
         if (response.status === 400 && 
             errorData.message?.includes('duplicated contact') && 
             errorData.meta?.contactId) {
-          console.log('Duplicate contact detected, updating existing contact:', errorData.meta.contactId);
+          const existingContactId = errorData.meta.contactId;
+          console.log('Duplicate contact detected, updating existing contact:', existingContactId);
           
-          // Update the existing contact instead of just returning
+          // Create update body without tags (tags are handled separately via dedicated endpoint)
+          const updateBody: any = {
+            locationId,
+            email,
+            firstName,
+            source: requestBody.source
+          };
+          if (lastName) updateBody.lastName = lastName;
+          if (phone) updateBody.phone = phone;
+          if (requestBody.customFields) updateBody.customFields = requestBody.customFields;
+          
+          // Update the existing contact info
           const updateResponse = await fetch(
-            `https://services.leadconnectorhq.com/contacts/${errorData.meta.contactId}`,
+            `https://services.leadconnectorhq.com/contacts/${existingContactId}`,
             {
               method: 'PUT',
               headers: {
@@ -2379,24 +2391,47 @@ The Dan Bizzarro Method Team`,
                 'Version': '2021-07-28',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(requestBody)
+              body: JSON.stringify(updateBody)
             }
           );
           
           if (!updateResponse.ok) {
             const updateError = await updateResponse.json();
             console.error('GHL update error:', updateError);
-            return {
-              success: false,
-              message: `Failed to update existing contact: ${updateResponse.status}`
-            };
+            // Continue to try adding tags even if update fails
           }
           
-          const updateData = await updateResponse.json();
+          // Add tags using the dedicated tags endpoint (this appends tags rather than replacing)
+          if (tags && tags.length > 0) {
+            console.log(`Adding tags to existing contact ${existingContactId}:`, tags);
+            const tagsResponse = await fetch(
+              `https://services.leadconnectorhq.com/contacts/${existingContactId}/tags`,
+              {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${apiKey}`,
+                  'Version': '2021-07-28',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ tags })
+              }
+            );
+            
+            if (!tagsResponse.ok) {
+              const tagsError = await tagsResponse.json();
+              console.error('GHL tags error:', tagsError);
+              return {
+                success: false,
+                message: `Failed to add tags to existing contact: ${tagsResponse.status}`
+              };
+            }
+            console.log(`Successfully added tags ${tags.join(', ')} to contact ${existingContactId}`);
+          }
+          
           return {
             success: true,
-            contactId: errorData.meta.contactId,
-            message: 'Updated existing contact in Go High Level'
+            contactId: existingContactId,
+            message: 'Updated existing contact and added tags in Go High Level'
           };
         }
         
