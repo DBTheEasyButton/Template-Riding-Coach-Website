@@ -1,12 +1,8 @@
-import { useState } from "react";
 import { Instagram, Facebook, Twitter, Youtube, Gift } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/optimized/Dan Bizzarro Method_1749676680719.png";
-import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 export default function Footer() {
-  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
-  
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -76,14 +72,15 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <button 
-                  onClick={() => setIsLeadModalOpen(true)}
+                <a 
+                  href="/api/downloads/warmup-system-pdf"
+                  download="The-Eventers-Warmup-System-Dan-Bizzarro.pdf"
                   className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
                   data-testid="link-footer-free-guide"
                 >
                   <Gift className="w-4 h-4" />
                   Get Free Warm Up Guide
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -201,12 +198,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      
-      {/* Lead Capture Modal */}
-      <LeadCaptureModal 
-        isOpen={isLeadModalOpen} 
-        onClose={() => setIsLeadModalOpen(false)} 
-      />
     </footer>
   );
 }
