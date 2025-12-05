@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import HeroPicture from "@/components/HeroPicture";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
 import heroImageWebp from "@assets/optimized/hero-background.webp";
 import heroImageMobileJpg from "@assets/optimized/hero-background-mobile.jpg";
@@ -31,6 +32,7 @@ import instagramLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Ani
 
 export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   
   const images = [
     { 
@@ -135,15 +137,14 @@ export default function HeroSection() {
               Book a Clinic
             </Button>
           </Link>
-          <Link href="/contact">
-            <Button 
-              variant="outline"
-              className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
-              data-testid="button-get-tips"
-            >
-              Get Free Training Tips
-            </Button>
-          </Link>
+          <Button 
+            variant="outline"
+            className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+            data-testid="button-get-tips"
+            onClick={() => setIsLeadModalOpen(true)}
+          >
+            Get Free Training Tips
+          </Button>
         </div>
         
         {/* Social Media Icons */}
@@ -177,6 +178,12 @@ export default function HeroSection() {
         </div>
         </div>
       </div>
+      
+      {/* Lead Capture Modal for Free Training Tips */}
+      <LeadCaptureModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+      />
     </section>
   );
 }

@@ -175,6 +175,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Lead capture for Warm-Up PDF - creates/updates GHL contact with WarmUpPDF tag
+  app.post("/api/lead-capture/warmup-pdf", async (req, res) => {
+    try {
+      const { firstName, lastName, email } = req.body;
+
+      if (!firstName || !lastName || !email) {
+        return res.status(400).json({ error: 'First name, surname, and email are required' });
+      }
+
+      // Create or update contact in GHL with WarmUpPDF tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          undefined, // no phone
+          ['WarmUpPDF'], // tag for tracking this lead source
+          { lead_source: 'Warm-Up PDF Download' }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`GHL contact created/updated for ${email} with WarmUpPDF tag`);
+        } else {
+          console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        // Log error but don't fail the request - still provide the PDF
+        console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      // Generate and send the PDF
+      const pdfBuffer = generateWarmupSystemPDF();
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="The-Eventers-Warmup-System-Dan-Bizzarro.pdf"');
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error in lead capture endpoint:', error);
+      res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
   // Get all achievements
   app.get("/api/achievements", async (req, res) => {
     try {
