@@ -1,8 +1,12 @@
-import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
+import { useState } from "react";
+import { Instagram, Facebook, Twitter, Youtube, Gift } from "lucide-react";
 import { Link } from "wouter";
 import logoPath from "@assets/optimized/Dan Bizzarro Method_1749676680719.png";
+import LeadCaptureModal from "@/components/LeadCaptureModal";
 
 export default function Footer() {
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -70,6 +74,16 @@ export default function Footer() {
                 >
                   Contact
                 </Link>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setIsLeadModalOpen(true)}
+                  className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
+                  data-testid="link-footer-free-guide"
+                >
+                  <Gift className="w-4 h-4" />
+                  Free Training Guide
+                </button>
               </li>
             </ul>
           </div>
@@ -187,6 +201,12 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal 
+        isOpen={isLeadModalOpen} 
+        onClose={() => setIsLeadModalOpen(false)} 
+      />
     </footer>
   );
 }
