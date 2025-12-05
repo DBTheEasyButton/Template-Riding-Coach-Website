@@ -126,7 +126,7 @@ export default function About() {
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-md" data-testid="stat-olympic">
               <div className="text-4xl font-playfair font-bold text-orange mb-2">2025</div>
-              <div className="text-gray-700">Olympic Short Listed</div>
+              <div className="text-gray-700">European Championships Blenhem</div>
             </div>
             <div className="text-center p-6 bg-white rounded-xl shadow-md" data-testid="stat-nations-cup">
               <div className="text-4xl font-playfair font-bold text-orange mb-2">2nd</div>
