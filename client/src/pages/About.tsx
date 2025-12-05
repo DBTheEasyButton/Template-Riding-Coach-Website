@@ -80,23 +80,17 @@ export default function About() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <div>
-                <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Dan's Story</h2>
+                <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">Who I Am</h2>
                 <div className="w-24 h-1 bg-orange mb-8"></div>
               </div>
               <p className="text-lg text-dark leading-relaxed">
-                Daniele was born and grew up on the outskirts of Turin, Italy. His mother rode at a local stable, and it was there, at 9 years old, that Dan first caught the riding bug. A few years later he met the horse Fair and Square, who introduced him to Eventing and took him to CCI*.
+                My name is Daniele Bizzarro, and I've spent more than 20 years riding, training and coaching horses and riders across dressage, show jumping and cross-country. I grew up just outside Turin, started riding when I was nine, and very quickly discovered that I loved the process of training horses just as much as I loved competing them.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                In 2007, while studying Graphic Design at university, Dan met Italian stud owner Alberto Bolaffi, who offered his Il Quadrifoglio Country Club as a base. Dan took the plunge into professional riding and has never looked back.
+                Over the years I've had the privilege of working with some of the best riders and coaches in the world, including William Fox-Pitt, Caroline Moore and Ian Woodhead. Their influence shaped how I ride, how I think, and how I teach — always with clarity, fairness and a genuine desire to help horses understand their job.
               </p>
               <p className="text-lg text-dark leading-relaxed">
-                A move to England in 2011 saw Dan working as a rider for British Eventing legend William Fox-Pitt—an invaluable experience learning from one of the most successful British event riders of all time.
-              </p>
-              <p className="text-lg text-dark leading-relaxed">
-                Since then, Dan has made the Gloucestershire/Oxfordshire area his base, where he competes for loyal owners and teaches riders of all levels. Alongside producing consistent results at national and international level, Dan has represented Italy in several Nations Cup events, with the Italian team finishing 2nd at Boekelo in 2022. In 2025, he also represented Italy at the European Championships at Blenheim.
-              </p>
-              <p className="text-lg text-dark leading-relaxed">
-                In 2024, Dan was named on the Short List for the Paris Olympic Games.
+                I've represented Italy in Nations Cup competitions and at the 2025 European Championships, and I've ridden every type of horse along the way: sharp ones, strong ones, lazy ones, spooky ones, young ones, talented ones, complicated ones. The variety taught me more than any book ever could.
               </p>
             </div>
             <div className="space-y-6">
