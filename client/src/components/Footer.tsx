@@ -82,7 +82,7 @@ export default function Footer() {
                   data-testid="link-footer-free-guide"
                 >
                   <Gift className="w-4 h-4" />
-                  Free Training Guide
+                  Get Free Warm Up Guide
                 </button>
               </li>
             </ul>
