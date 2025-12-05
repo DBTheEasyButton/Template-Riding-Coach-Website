@@ -137,13 +137,23 @@ export default function HeroSection() {
               Book a Clinic
             </Button>
           </Link>
+          <Link href="/coaching/remote-coaching">
+            <Button 
+              className="bg-navy hover:bg-slate-800 text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              data-testid="button-book-virtual-lesson"
+            >
+              Book a Virtual Lesson
+            </Button>
+          </Link>
+        </div>
+        <div className="flex justify-center opacity-0 animate-fade-in-up mt-4" style={{animationDelay: '0.7s'}}>
           <Button 
             variant="outline"
-            className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
-            data-testid="button-get-tips"
+            className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+            data-testid="button-get-guide"
             onClick={() => setIsLeadModalOpen(true)}
           >
-            Get Free Training Tips
+            Get the Free Warm Up Guide
           </Button>
         </div>
         
