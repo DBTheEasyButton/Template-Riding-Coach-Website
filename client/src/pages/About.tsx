@@ -84,9 +84,7 @@ export default function About() {
               <p className="text-lg text-dark leading-relaxed">
                 Over the years I've had the privilege of working with some of the best riders and coaches in the world, including William Fox-Pitt, Caroline Moore and Ian Woodhead. Their influence shaped how I ride, how I think, and how I teach — always with clarity, fairness and a genuine desire to help horses understand their job.
               </p>
-              <p className="text-lg text-dark leading-relaxed">
-                I've represented Italy in Nations Cup competitions and at the 2025 European Championships, and I've ridden every type of horse along the way: sharp ones, strong ones, lazy ones, spooky ones, young ones, talented ones, complicated ones. The variety taught me more than any book ever could.
-              </p>
+              <p className="text-lg text-dark leading-relaxed">I've represented Italy in Nations Cup competitions, I was in the short-list for the 2024 Paris Olympics and I competed at the 2025 European Championships, and I've ridden every type of horse along the way: sharp ones, strong ones, lazy ones, spooky ones, young ones, talented ones, complicated ones. The variety taught me more than any book ever could.</p>
             </div>
             <div className="space-y-6">
               <div className="relative">
