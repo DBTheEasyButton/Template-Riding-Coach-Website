@@ -2,7 +2,7 @@ import { jsPDF } from 'jspdf';
 import fs from 'fs';
 import path from 'path';
 
-// Exact website colors (converted from HSL to RGB)
+// Exact website colors
 const NAVY = [31, 58, 89] as const;
 const ORANGE = [249, 156, 13] as const;
 const DARK = [51, 65, 85] as const;
@@ -16,177 +16,228 @@ interface PDFOptions {
   contentWidth: number;
 }
 
-function addNewPageIfNeeded(doc: jsPDF, y: number, opts: PDFOptions, requiredSpace: number = 50): number {
-  if (y > opts.pageHeight - opts.margin - requiredSpace) {
-    doc.addPage();
-    return opts.margin + 15;
-  }
-  return y;
-}
-
-function drawSectionHeader(doc: jsPDF, title: string, y: number, opts: PDFOptions): number {
-  y = addNewPageIfNeeded(doc, y, opts, 30);
+function drawPageHeader(doc: jsPDF, title: string, opts: PDFOptions): number {
+  let y = opts.margin + 5;
   
-  doc.setFontSize(20);
+  // Section title with orange accent
+  doc.setFontSize(24);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
   doc.text(title, opts.margin, y);
-  y += 6;
   
+  // Orange underline
+  y += 5;
   doc.setDrawColor(...ORANGE);
-  doc.setLineWidth(1.5);
-  doc.line(opts.margin, y, opts.margin + 45, y);
+  doc.setLineWidth(2);
+  doc.line(opts.margin, y, opts.margin + 60, y);
   
-  return y + 12;
+  return y + 15;
 }
 
-function drawInfoBox(doc: jsPDF, title: string, content: string, y: number, opts: PDFOptions): number {
-  y = addNewPageIfNeeded(doc, y, opts, 45);
+function drawBigHighlightBox(doc: jsPDF, lines: string[], y: number, opts: PDFOptions): number {
+  const padding = 14;
+  const lineHeight = 10;
+  const boxHeight = lines.length * lineHeight + padding * 2;
   
-  const padding = 8;
+  doc.setFillColor(...ORANGE);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 6, 6, 'F');
+  
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  
+  let textY = y + padding + 8;
+  lines.forEach(line => {
+    doc.text(line, opts.pageWidth / 2, textY, { align: 'center' });
+    textY += lineHeight;
+  });
+  
+  return y + boxHeight + 12;
+}
+
+function drawQuoteBox(doc: jsPDF, quote: string, y: number, opts: PDFOptions): number {
+  const padding = 12;
+  doc.setFontSize(12);
+  const lines = doc.splitTextToSize(quote, opts.contentWidth - padding * 2 - 10);
+  const boxHeight = lines.length * 7 + padding * 2;
+  
+  doc.setFillColor(...ORANGE);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 5, 5, 'F');
+  
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text(lines, opts.margin + padding, y + padding + 6);
+  
+  return y + boxHeight + 10;
+}
+
+function drawNavyQuoteBox(doc: jsPDF, title: string, lines: string[], y: number, opts: PDFOptions): number {
+  const padding = 12;
+  const titleHeight = title ? 14 : 0;
+  const lineHeight = 8;
+  const boxHeight = titleHeight + lines.length * lineHeight + padding * 2;
+  
+  doc.setFillColor(...NAVY);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 5, 5, 'F');
+  
+  let textY = y + padding;
+  
+  if (title) {
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...ORANGE);
+    doc.text(title, opts.margin + padding, textY + 6);
+    textY += titleHeight;
+  }
+  
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...WHITE);
+  lines.forEach(line => {
+    doc.text(line, opts.margin + padding, textY + 5);
+    textY += lineHeight;
+  });
+  
+  return y + boxHeight + 10;
+}
+
+function drawInfoCard(doc: jsPDF, title: string, content: string, y: number, opts: PDFOptions): number {
+  const padding = 10;
   doc.setFontSize(10);
   const contentLines = doc.splitTextToSize(content, opts.contentWidth - padding * 2);
-  const boxHeight = 12 + contentLines.length * 5 + padding * 2;
+  const boxHeight = 16 + contentLines.length * 5 + padding * 2;
   
   doc.setFillColor(...LIGHT_GRAY);
   doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 4, 4, 'F');
   
-  doc.setFontSize(11);
+  // Left accent bar
+  doc.setFillColor(...ORANGE);
+  doc.roundedRect(opts.margin, y, 4, boxHeight, 2, 2, 'F');
+  
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
-  doc.text(title, opts.margin + padding, y + padding + 5);
+  doc.text(title, opts.margin + padding + 4, y + padding + 6);
   
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
-  doc.text(contentLines, opts.margin + padding, y + padding + 14);
+  doc.text(contentLines, opts.margin + padding + 4, y + padding + 16);
   
   return y + boxHeight + 8;
 }
 
-function drawHighlightBox(doc: jsPDF, title: string, lines: string[], y: number, opts: PDFOptions): number {
-  y = addNewPageIfNeeded(doc, y, opts, 50);
-  
-  const padding = 10;
-  const titleHeight = title ? 12 : 0;
-  const lineHeight = 7;
-  const boxHeight = titleHeight + lines.length * lineHeight + padding * 2;
-  
-  doc.setFillColor(...ORANGE);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 4, 4, 'F');
-  
-  let textY = y + padding + 5;
-  
-  if (title) {
-    doc.setFontSize(11);
+function drawNumberedList(doc: jsPDF, items: string[], y: number, opts: PDFOptions): number {
+  items.forEach((item, index) => {
+    const circleX = opts.margin + 10;
+    const circleY = y - 1;
+    
+    // Orange circle with number
+    doc.setFillColor(...ORANGE);
+    doc.circle(circleX, circleY, 5, 'F');
+    
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...WHITE);
-    doc.text(title, opts.margin + padding, textY);
-    textY += titleHeight;
-  }
-  
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  lines.forEach(line => {
-    doc.text(line, opts.margin + padding, textY);
-    textY += lineHeight;
+    doc.text(String(index + 1), circleX - 2, y + 1);
+    
+    // Item text
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...DARK);
+    const lines = doc.splitTextToSize(item, opts.contentWidth - 28);
+    doc.text(lines, opts.margin + 22, y);
+    y += lines.length * 5 + 8;
   });
   
-  return y + boxHeight + 10;
+  return y;
 }
 
-function drawNavyBox(doc: jsPDF, title: string, lines: string[], y: number, opts: PDFOptions): number {
-  y = addNewPageIfNeeded(doc, y, opts, 50);
-  
-  const padding = 10;
-  const titleHeight = title ? 12 : 0;
-  const lineHeight = 7;
-  const boxHeight = titleHeight + lines.length * lineHeight + padding * 2;
-  
-  doc.setFillColor(...NAVY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 4, 4, 'F');
-  
-  let textY = y + padding + 5;
-  
-  if (title) {
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...WHITE);
-    doc.text(title, opts.margin + padding, textY);
-    textY += titleHeight;
-  }
-  
+function drawIconList(doc: jsPDF, items: string[], y: number, opts: PDFOptions): number {
   doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  lines.forEach(line => {
-    doc.text(line, opts.margin + padding, textY);
-    textY += lineHeight;
-  });
-  
-  return y + boxHeight + 10;
-}
-
-function drawBulletList(doc: jsPDF, items: string[], y: number, opts: PDFOptions): number {
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
   
   items.forEach(item => {
-    y = addNewPageIfNeeded(doc, y, opts, 15);
-    doc.setTextColor(...ORANGE);
-    doc.text('-', opts.margin + 6, y);
+    // Orange arrow/chevron
+    doc.setFillColor(...ORANGE);
+    doc.triangle(opts.margin + 6, y - 3, opts.margin + 6, y + 3, opts.margin + 12, y, 'F');
+    
+    doc.setFont('helvetica', 'normal');
     doc.setTextColor(...DARK);
-    const lines = doc.splitTextToSize(item, opts.contentWidth - 18);
-    doc.text(lines, opts.margin + 14, y);
-    y += lines.length * 5 + 3;
+    const lines = doc.splitTextToSize(item, opts.contentWidth - 22);
+    doc.text(lines, opts.margin + 18, y + 1);
+    y += lines.length * 5 + 6;
   });
   
-  return y + 3;
+  return y + 2;
 }
 
 function drawCheckList(doc: jsPDF, items: string[], y: number, opts: PDFOptions): number {
   doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
   
   items.forEach(item => {
-    y = addNewPageIfNeeded(doc, y, opts, 12);
-    doc.setTextColor(...ORANGE);
-    doc.text('[x]', opts.margin + 4, y);
+    // Orange checkmark box
+    doc.setFillColor(...ORANGE);
+    doc.roundedRect(opts.margin + 4, y - 4, 8, 8, 1, 1, 'F');
+    
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...WHITE);
+    doc.text('OK', opts.margin + 5, y + 1);
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
     doc.setTextColor(...DARK);
-    doc.text(item, opts.margin + 16, y);
-    y += 7;
+    doc.text(item, opts.margin + 18, y);
+    y += 10;
   });
   
   return y + 3;
 }
 
-function drawStep(doc: jsPDF, title: string, items: string[], purpose: string, y: number, opts: PDFOptions): number {
-  y = addNewPageIfNeeded(doc, y, opts, 60);
+function drawStepCard(doc: jsPDF, stepNum: string, title: string, items: string[], note: string, y: number, opts: PDFOptions): number {
+  const padding = 10;
+  const itemHeight = items.length * 7;
+  const noteHeight = note ? 10 : 0;
+  const boxHeight = 20 + itemHeight + noteHeight + padding;
   
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...ORANGE);
-  doc.text(title, opts.margin, y);
-  y += 8;
+  doc.setFillColor(...LIGHT_GRAY);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, boxHeight, 4, 4, 'F');
   
+  // Step number badge
+  doc.setFillColor(...NAVY);
+  doc.roundedRect(opts.margin + padding, y + padding, 30, 14, 3, 3, 'F');
   doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...WHITE);
+  doc.text(stepNum, opts.margin + padding + 5, y + padding + 10);
+  
+  // Title
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...NAVY);
+  doc.text(title, opts.margin + padding + 36, y + padding + 10);
+  
+  // Items
+  let itemY = y + padding + 22;
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   
   items.forEach(item => {
-    y = addNewPageIfNeeded(doc, y, opts, 12);
-    doc.text('-  ' + item, opts.margin + 5, y);
-    y += 6;
+    doc.setTextColor(...ORANGE);
+    doc.text('-', opts.margin + padding + 4, itemY);
+    doc.setTextColor(...DARK);
+    doc.text(item, opts.margin + padding + 10, itemY);
+    itemY += 7;
   });
   
-  if (purpose) {
-    y += 2;
+  // Note
+  if (note) {
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(...NAVY);
-    doc.text(purpose, opts.margin + 5, y);
-    y += 8;
+    doc.text(note, opts.margin + padding + 4, itemY + 2);
   }
   
-  return y + 4;
+  return y + boxHeight + 6;
 }
 
 export function generateWarmupSystemPDF(): Buffer {
@@ -205,188 +256,185 @@ export function generateWarmupSystemPDF(): Buffer {
 
   let y = 0;
 
-  // ==================== TITLE PAGE ====================
+  // ==================== PAGE 1: TITLE ====================
   doc.setFillColor(...NAVY);
   doc.rect(0, 0, opts.pageWidth, opts.pageHeight, 'F');
 
-  // Add logo with correct aspect ratio
+  // Logo with correct 2:1 aspect ratio
   try {
     const logoPath = path.join(process.cwd(), 'attached_assets', 'optimized', 'Dan Bizzarro Method_1749676680719.png');
     if (fs.existsSync(logoPath)) {
       const logoData = fs.readFileSync(logoPath);
       const logoBase64 = logoData.toString('base64');
-      // Logo aspect ratio is approximately 4:1 (width:height)
-      // Display at 120mm width, 30mm height to maintain proportion
-      const logoWidth = 120;
-      const logoHeight = 30;
+      // Actual ratio is 2:1 (756x378), so use width=100, height=50
+      const logoWidth = 100;
+      const logoHeight = 50;
       const logoX = (opts.pageWidth - logoWidth) / 2;
-      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 40, logoWidth, logoHeight);
+      doc.addImage(`data:image/png;base64,${logoBase64}`, 'PNG', logoX, 35, logoWidth, logoHeight);
     }
   } catch (err) {
-    console.log('Could not load logo for PDF:', err);
+    console.log('Could not load logo:', err);
   }
 
   // Title
   doc.setTextColor(...WHITE);
-  doc.setFontSize(34);
+  doc.setFontSize(36);
   doc.setFont('helvetica', 'bold');
-  
-  doc.text("THE EVENTER'S", opts.pageWidth / 2, 100, { align: 'center' });
-  doc.text("WARM-UP SYSTEM", opts.pageWidth / 2, 114, { align: 'center' });
+  doc.text("THE EVENTER'S", opts.pageWidth / 2, 110, { align: 'center' });
+  doc.text("WARM-UP SYSTEM", opts.pageWidth / 2, 126, { align: 'center' });
 
-  // Orange accent line
+  // Orange line
   doc.setDrawColor(...ORANGE);
   doc.setLineWidth(3);
-  doc.line(50, 124, 160, 124);
+  doc.line(50, 136, 160, 136);
 
   // Subtitle
-  doc.setFontSize(13);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
-  doc.text('A simple, reliable warm-up routine for', opts.pageWidth / 2, 145, { align: 'center' });
-  doc.text('Dressage, Show Jumping, and Cross-Country', opts.pageWidth / 2, 155, { align: 'center' });
+  doc.text('A simple, reliable warm-up routine for', opts.pageWidth / 2, 155, { align: 'center' });
+  doc.text('Dressage, Show Jumping, and Cross-Country', opts.pageWidth / 2, 166, { align: 'center' });
 
   // Author
-  doc.setFontSize(16);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
-  doc.text('By Dan Bizzarro', opts.pageWidth / 2, 185, { align: 'center' });
+  doc.text('By Dan Bizzarro', opts.pageWidth / 2, 195, { align: 'center' });
 
-  doc.setFontSize(12);
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(200, 200, 200);
-  doc.text('International Event Rider & Coach', opts.pageWidth / 2, 197, { align: 'center' });
+  doc.text('International Event Rider & Coach', opts.pageWidth / 2, 208, { align: 'center' });
 
   // Website
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setTextColor(170, 170, 170);
   doc.text('www.danbizzarromethod.com', opts.pageWidth / 2, 270, { align: 'center' });
 
   // ==================== PAGE 2: INTRODUCTION ====================
   doc.addPage();
-  y = opts.margin + 10;
+  y = drawPageHeader(doc, '1. INTRODUCTION', opts);
 
-  y = drawSectionHeader(doc, '1. INTRODUCTION', y, opts);
-
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
 
-  const introLines = [
-    "Warming up shouldn't feel chaotic. Yet for most riders, it does.",
-    "",
-    "Busy arenas, tight timings, nerves, and a horse who may feel nothing like",
-    "the one you had yesterday.",
-    "",
-    "This guide gives you a system you can repeat every time you compete.",
-    "It keeps things simple, practical, and effective - even when you're",
-    "stressed or short on time.",
-    "",
-    "Everything in here is built around one main idea:"
-  ];
+  const intro = "Warming up shouldn't feel chaotic. Yet for most riders, it does. Busy arenas, tight timings, nerves, and a horse who may feel nothing like the one you had yesterday.";
+  const introLines = doc.splitTextToSize(intro, opts.contentWidth);
+  doc.text(introLines, opts.margin, y);
+  y += introLines.length * 6 + 8;
 
-  introLines.forEach(line => {
-    if (line === "") {
-      y += 3;
-    } else {
-      doc.text(line, opts.margin, y);
-      y += 5;
-    }
-  });
+  const intro2 = "This guide gives you a system you can repeat every time you compete. It keeps things simple, practical, and effective - even when you're stressed or short on time.";
+  const intro2Lines = doc.splitTextToSize(intro2, opts.contentWidth);
+  doc.text(intro2Lines, opts.margin, y);
+  y += intro2Lines.length * 6 + 12;
 
-  y += 6;
-  y = drawInfoBox(doc, 'Key Principle', 'Transitions are the engine of a good warm-up. Done often and done lightly, they change your horse more quickly than circles, schooling movements, or drilling tests.', y, opts);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...NAVY);
+  doc.text('Everything in here is built around one main idea:', opts.margin, y);
+  y += 12;
 
-  doc.setFontSize(10);
+  y = drawBigHighlightBox(doc, [
+    'Transitions are the engine of a good warm-up.',
+    'Done often and done lightly, they change your horse',
+    'more quickly than circles or drilling tests.'
+  ], y, opts);
+
+  y += 5;
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   doc.text('If you only changed one habit in your warm-up, let it be this:', opts.margin, y);
-  y += 6;
+  y += 8;
+  
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
   doc.text('More transitions, spread throughout the whole routine.', opts.margin, y);
-  y += 14;
 
-  // ==================== HOW TO USE THIS GUIDE ====================
-  y = drawSectionHeader(doc, '2. HOW TO USE THIS GUIDE', y, opts);
+  // ==================== PAGE 3: HOW TO USE ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '2. HOW TO USE THIS GUIDE', opts);
 
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   doc.text('Use this guide on competition day as a clear plan you can follow step-by-step.', opts.margin, y);
-  y += 8;
+  y += 12;
 
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...NAVY);
   doc.text("You'll find:", opts.margin, y);
-  y += 7;
+  y += 10;
 
-  const useGuideItems = [
+  y = drawNumberedList(doc, [
     'A repeatable structure for each discipline',
     'Simple explanations for why it works',
     'Quick fixes for common problems',
     'A printable one-page summary',
     'The core Dan Bizzarro Method principles woven throughout'
-  ];
+  ], y, opts);
 
-  y = drawBulletList(doc, useGuideItems, y, opts);
-
-  y += 4;
-  y = drawHighlightBox(doc, 'THE GOLDEN RULE', [
+  y += 10;
+  y = drawBigHighlightBox(doc, [
+    'THE GOLDEN RULE',
+    '',
     'If in doubt, do a transition.',
     'If it feels wrong, do a transition.',
     'If it feels right - reward, breathe, carry on.'
   ], y, opts);
 
-  // ==================== PAGE 3: WARM-UP PRINCIPLES ====================
+  // ==================== PAGE 4: PRINCIPLES ====================
   doc.addPage();
-  y = opts.margin + 10;
-
-  y = drawSectionHeader(doc, '3. WARM-UP PRINCIPLES', y, opts);
+  y = drawPageHeader(doc, '3. WARM-UP PRINCIPLES', opts);
 
   const principles = [
-    { num: '1', title: 'Keep everything repeatable', desc: 'Your horse should recognise the structure of your warm-up. It creates confidence and predictability.' },
-    { num: '2', title: 'Create a soft neck before everything else', desc: 'A relaxed neck gives you access to the shoulders, back, and hind legs.' },
-    { num: '3', title: "Don't chase a shape", desc: 'Let rhythm and relaxation give you the outline - not pulling, driving, or forcing.' },
-    { num: '4', title: 'Use transitions early and often', desc: "They're the quickest way to build balance, connection, and focus." },
-    { num: '5', title: "Don't over-school before competing", desc: "You're preparing the body and brain, not re-training." },
-    { num: '6', title: 'End on a good note', desc: 'Finish with softness, straightness, and one clear positive feeling.' }
+    { title: 'Keep everything repeatable', desc: 'Your horse should recognise the structure. It creates confidence.' },
+    { title: 'Create a soft neck first', desc: 'A relaxed neck gives you access to the shoulders, back, and hind legs.' },
+    { title: "Don't chase a shape", desc: 'Let rhythm and relaxation give you the outline - not pulling or forcing.' },
+    { title: 'Use transitions early and often', desc: "They're the quickest way to build balance, connection, and focus." },
+    { title: "Don't over-school before competing", desc: "You're preparing the body and brain, not re-training." },
+    { title: 'End on a good note', desc: 'Finish with softness, straightness, and one clear positive feeling.' }
   ];
 
-  principles.forEach(p => {
-    y = addNewPageIfNeeded(doc, y, opts, 28);
-    
+  principles.forEach((p, i) => {
     doc.setFillColor(...LIGHT_GRAY);
-    doc.roundedRect(opts.margin, y, opts.contentWidth, 22, 3, 3, 'F');
+    doc.roundedRect(opts.margin, y, opts.contentWidth, 24, 4, 4, 'F');
     
+    // Number circle
+    doc.setFillColor(...ORANGE);
+    doc.circle(opts.margin + 14, y + 12, 8, 'F');
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(...ORANGE);
-    doc.text(p.num + '.', opts.margin + 6, y + 9);
+    doc.setTextColor(...WHITE);
+    doc.text(String(i + 1), opts.margin + 11, y + 16);
     
+    // Title
     doc.setFontSize(11);
     doc.setTextColor(...NAVY);
-    doc.text(p.title, opts.margin + 16, y + 9);
+    doc.text(p.title, opts.margin + 28, y + 10);
     
+    // Description
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...DARK);
-    const descLines = doc.splitTextToSize(p.desc, opts.contentWidth - 22);
-    doc.text(descLines, opts.margin + 16, y + 16);
+    doc.text(p.desc, opts.margin + 28, y + 18);
     
-    y += 26;
+    y += 28;
   });
 
-  // ==================== WHY TRANSITIONS MATTER ====================
-  y += 6;
-  y = drawSectionHeader(doc, '4. WHY TRANSITIONS MATTER', y, opts);
+  // ==================== PAGE 5: WHY TRANSITIONS ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '4. WHY TRANSITIONS MATTER', opts);
 
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
-  doc.text("Most riders know transitions are important, but very few actually use them", opts.margin, y);
-  y += 5;
-  doc.text("enough - especially when warming up. Here's what transitions give you:", opts.margin, y);
-  y += 8;
+  const transIntro = "Most riders know transitions are important, but very few actually use them enough - especially when warming up. Here's what transitions give you:";
+  const transIntroLines = doc.splitTextToSize(transIntro, opts.contentWidth);
+  doc.text(transIntroLines, opts.margin, y);
+  y += transIntroLines.length * 6 + 10;
 
-  const transitionBenefits = [
+  y = drawCheckList(doc, [
     'Balance without tension',
     'Engagement without speed',
     'More control in busy warm-up rings',
@@ -395,51 +443,45 @@ export function generateWarmupSystemPDF(): Buffer {
     'A more adjustable canter for jumping',
     'A focused mind for spooky or sharp horses',
     'A better connection with fewer aids'
-  ];
+  ], y, opts);
 
-  y = drawCheckList(doc, transitionBenefits, y, opts);
+  y += 10;
+  y = drawBigHighlightBox(doc, [
+    'Transitions are the quickest, kindest,',
+    'and most effective tool you have.'
+  ], y, opts);
 
-  y += 3;
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...NAVY);
-  doc.text('They are the quickest, kindest, and most effective tool you have.', opts.margin, y);
-
-  // ==================== PAGE 4: WARM-UP OVERVIEW TABLE ====================
+  // ==================== PAGE 6: OVERVIEW TABLE ====================
   doc.addPage();
-  y = opts.margin + 10;
-
-  y = drawSectionHeader(doc, '5. WARM-UP OVERVIEW TABLE', y, opts);
+  y = drawPageHeader(doc, '5. WARM-UP OVERVIEW', opts);
 
   // Table
-  const tableHeaders = ['Phase', 'Dressage', 'Show Jumping', 'Cross-Country'];
-  const tableData = [
-    ['Walk', '8-12 mins', '5 mins', '5-10 mins'],
-    ['Trot', '8-10 mins', '5 mins', '5 mins'],
-    ['Canter', '5-7 mins', '5-7 mins', '7-10 mins'],
-    ['Specific work', '10 mins', '10-15 mins', '10-12 mins'],
-    ['Final prep', '2-3 mins', '2-3 mins', '2-3 mins']
-  ];
-
   const colWidths = [42, 42, 43, 43];
-  const rowHeight = 11;
+  const rowHeight = 12;
   let tableX = opts.margin;
 
-  // Header row
+  // Header
   doc.setFillColor(...NAVY);
-  doc.roundedRect(tableX, y, opts.contentWidth, rowHeight, 2, 2, 'F');
-  doc.setFontSize(9);
+  doc.roundedRect(tableX, y, opts.contentWidth, rowHeight, 3, 3, 'F');
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...WHITE);
   
   let xPos = tableX;
-  tableHeaders.forEach((header, i) => {
-    doc.text(header, xPos + 5, y + 7);
+  ['Phase', 'Dressage', 'Show Jumping', 'Cross-Country'].forEach((h, i) => {
+    doc.text(h, xPos + 5, y + 8);
     xPos += colWidths[i];
   });
   y += rowHeight;
 
-  // Data rows
-  doc.setFont('helvetica', 'normal');
+  const tableData = [
+    ['Walk', '8-12 mins', '5 mins', '5-10 mins'],
+    ['Trot', '8-10 mins', '5 mins', '5 mins'],
+    ['Canter', '5-7 mins', '5-7 mins', '7-10 mins'],
+    ['Specific', '10 mins', '10-15 mins', '10-12 mins'],
+    ['Final prep', '2-3 mins', '2-3 mins', '2-3 mins']
+  ];
+
   tableData.forEach((row, rowIndex) => {
     if (rowIndex % 2 === 0) {
       doc.setFillColor(...LIGHT_GRAY);
@@ -447,10 +489,6 @@ export function generateWarmupSystemPDF(): Buffer {
       doc.setFillColor(...WHITE);
     }
     doc.rect(tableX, y, opts.contentWidth, rowHeight, 'F');
-    
-    doc.setDrawColor(220, 220, 220);
-    doc.setLineWidth(0.2);
-    doc.rect(tableX, y, opts.contentWidth, rowHeight, 'S');
     
     xPos = tableX;
     row.forEach((cell, i) => {
@@ -461,154 +499,206 @@ export function generateWarmupSystemPDF(): Buffer {
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...DARK);
       }
-      doc.text(cell, xPos + 5, y + 7);
+      doc.setFontSize(9);
+      doc.text(cell, xPos + 5, y + 8);
       xPos += colWidths[i];
     });
     y += rowHeight;
   });
 
-  y += 12;
-  y = drawHighlightBox(doc, 'KEY INSIGHT', [
-    'Transitions are woven into every phase, not just at the end.',
-    'Use them to check balance, wake the hind legs, or settle the brain.'
-  ], y, opts);
+  y += 15;
+  y = drawQuoteBox(doc, 'Transitions are woven into every phase, not just at the end. Use them to check balance, wake the hind legs, or settle the brain.', y, opts);
 
-  // ==================== PAGE 5: DRESSAGE WARM-UP ====================
+  // ==================== PAGE 7: DRESSAGE ====================
   doc.addPage();
-  y = opts.margin + 10;
+  y = drawPageHeader(doc, '6. DRESSAGE WARM-UP', opts);
 
-  y = drawSectionHeader(doc, '6. DRESSAGE WARM-UP ROUTINE', y, opts);
+  y = drawInfoCard(doc, 'Goal', 'Soft neck - Rhythm and relaxation - Straightness - Horse in front of the leg - Rider breathing and centred', y, opts);
 
-  y = drawInfoBox(doc, 'Goal of the Dressage Warm-Up', 'Soft neck - Rhythm and relaxation - Straightness - Horse in front of the leg - Rider breathing and centred', y, opts);
+  y = drawStepCard(doc, 'STEP 1', 'Walk (8-12 minutes)', [
+    'Free walk to begin',
+    'Big bending lines',
+    'A few steps of leg yield each way',
+    '3-4 walk-halt-walk transitions',
+    'One or two rein-back then walk on'
+  ], 'Purpose: establish boundaries, softness, and a calm rhythm.', y, opts);
 
-  y = drawStep(doc, '1. Walk (8-12 minutes)', 
-    ['Free walk to begin', 'Big bending lines', 'A few steps of leg yield each way', '3-4 walk-halt-walk transitions', 'One or two rein-back then walk on'],
-    'Purpose: establish boundaries, softness, and a calm rhythm.', y, opts);
+  y = drawStepCard(doc, 'STEP 2', 'Trot (8-10 minutes)', [
+    'Large circles',
+    'Serpentines',
+    'Frequent changes of rein',
+    'Trot-walk-trot every 6-8 strides',
+    'A few 3-second releases'
+  ], 'Let the trot find its own swing before you organise anything.', y, opts);
 
-  y = drawStep(doc, '2. Trot (8-10 minutes)',
-    ['Large circles', 'Serpentines', 'Frequent changes of rein', 'Trot-walk-trot every 6-8 strides', 'A few 3-second releases (let the horse carry itself)'],
-    'Let the trot find its own swing before you organise anything.', y, opts);
+  y = drawStepCard(doc, 'STEP 3', 'Canter (5-7 minutes)', [
+    'Canter-trot-canter transitions',
+    'Gear changes: go forward, bring back, soften',
+    'One 20m circle each way'
+  ], 'Think: adjustable, soft, breathing.', y, opts);
 
-  y = drawStep(doc, '3. Canter (5-7 minutes)',
-    ['Canter-trot-canter transitions', 'Gear changes: go forward, then bring back, then soften', 'One 20m circle each way'],
-    'Think: adjustable, soft, breathing.', y, opts);
+  // ==================== PAGE 8: DRESSAGE CONTINUED ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '6. DRESSAGE (continued)', opts);
 
-  y = drawStep(doc, '4. Specific Work (10 minutes)',
-    ['Transitions every few strides to keep balance', '20m circles', 'A few steps of leg yield', 'A couple of lengthened strides', 'Tighten the edges of the connection without forcing a frame'],
-    '', y, opts);
+  y = drawStepCard(doc, 'STEP 4', 'Specific Work (10 minutes)', [
+    'Transitions every few strides to keep balance',
+    '20m circles',
+    'A few steps of leg yield',
+    'A couple of lengthened strides',
+    'Tighten the edges of the connection'
+  ], '', y, opts);
 
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(10);
-  doc.text('Rule: Never ride a movement until the transition before it feels good.', opts.margin + 5, y - 2);
-  y += 8;
+  y += 2;
+  y = drawQuoteBox(doc, 'Rule: Never ride a movement until the transition before it feels good.', y, opts);
 
-  y = drawStep(doc, '5. Pre-Ring Routine (2-3 minutes)',
-    ['One upward, one downward transition', 'Stretch the neck down', 'Straighten on a long side', 'Walk towards the ring with a calm, organised horse'],
-    '', y, opts);
+  y = drawStepCard(doc, 'STEP 5', 'Pre-Ring Routine (2-3 minutes)', [
+    'One upward, one downward transition',
+    'Stretch the neck down',
+    'Straighten on a long side',
+    'Walk towards the ring with a calm, organised horse'
+  ], '', y, opts);
 
-  y = drawNavyBox(doc, 'QUICK FIXES', [
+  y += 5;
+  y = drawNavyQuoteBox(doc, 'QUICK FIXES', [
     'Tension: 20m circles + trot-walk-trot transitions',
     'Behind the leg: quick upward transitions',
     'Leaning or heavy: upward transition then release',
     'Hollow: bigger lines + soft neck + transitions'
   ], y, opts);
 
-  // ==================== PAGE 6: SHOW JUMPING WARM-UP ====================
+  // ==================== PAGE 9: SHOW JUMPING ====================
   doc.addPage();
-  y = opts.margin + 10;
+  y = drawPageHeader(doc, '7. SHOW JUMPING WARM-UP', opts);
 
-  y = drawSectionHeader(doc, '7. SHOW JUMPING WARM-UP', y, opts);
+  y = drawInfoCard(doc, 'Goal', 'Adjustability - Balance before and after fences - Straightness - A canter you can ride forward or bring back', y, opts);
 
-  y = drawInfoBox(doc, 'Goal of the SJ Warm-Up', 'Adjustability - Balance before and after fences - Straightness - A canter you can ride forward or bring back', y, opts);
-
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
   doc.text('Why Transitions Matter in SJ - They create:', opts.margin, y);
-  y += 7;
-  
-  const sjBenefits = ['The canter you jump from', 'Control in a busy warm-up', 'Softness without losing power', 'Straightness without fighting', 'A "thinking" horse rather than a reactive one'];
-  y = drawBulletList(doc, sjBenefits, y, opts);
-  y += 3;
+  y += 8;
 
-  y = drawStep(doc, '1. Walk (5 minutes)',
-    ['A few walk-halt-walk transitions', 'One or two rein-back then walk on', 'Gentle bending'],
-    '', y, opts);
-
-  y = drawStep(doc, '2. Trot (5 minutes)',
-    ['Figure-of-eights', 'Trot-walk-trot every 6-8 strides', 'Softening the neck'],
-    '', y, opts);
-
-  y = drawStep(doc, '3. Canter (5-7 minutes) - The most important part before fences',
-    ['Canter-trot-canter transitions', 'Gear changes: "wait" for 3-4 strides then "go" 3-4 strides', 'Straight lines with a soft neck', 'Keep hands soft after each transition'],
-    '', y, opts);
-
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(10);
-  doc.text("No horse should jump until you've had three good transitions in a row.", opts.margin, y - 2);
-  y += 10;
-
-  y = drawStep(doc, '4. Jump Warm-Up (10-12 minutes)',
-    ['Crosspole twice', 'Upright small', 'Upright mid-height', 'Oxer small', 'Oxer at competition height', 'Optional: 1-2 bigger for confidence'],
-    '', y, opts);
-
-  y = drawHighlightBox(doc, '', [
-    'After every jump: Land, wait, straighten, ride away.',
-    'This is the Dan Bizzarro Method: balance before and after the fence.'
+  y = drawIconList(doc, [
+    'The canter you jump from',
+    'Control in a busy warm-up',
+    'Softness without losing power',
+    'Straightness without fighting',
+    'A "thinking" horse rather than a reactive one'
   ], y, opts);
 
-  // ==================== PAGE 7: CROSS-COUNTRY WARM-UP ====================
+  y += 5;
+  y = drawStepCard(doc, 'STEP 1', 'Walk (5 minutes)', [
+    'A few walk-halt-walk transitions',
+    'One or two rein-back then walk on',
+    'Gentle bending'
+  ], '', y, opts);
+
+  y = drawStepCard(doc, 'STEP 2', 'Trot (5 minutes)', [
+    'Figure-of-eights',
+    'Trot-walk-trot every 6-8 strides',
+    'Softening the neck'
+  ], '', y, opts);
+
+  y = drawStepCard(doc, 'STEP 3', 'Canter (5-7 minutes)', [
+    'Canter-trot-canter transitions',
+    'Gear changes: "wait" 3-4 strides then "go" 3-4 strides',
+    'Straight lines with a soft neck',
+    'Keep hands soft after each transition'
+  ], 'This is the most important part before fences.', y, opts);
+
+  // ==================== PAGE 10: SJ CONTINUED ====================
   doc.addPage();
-  y = opts.margin + 10;
+  y = drawPageHeader(doc, '7. SHOW JUMPING (continued)', opts);
 
-  y = drawSectionHeader(doc, '8. CROSS-COUNTRY WARM-UP', y, opts);
-
-  y = drawInfoBox(doc, 'Goal of the XC Warm-Up', 'Controlled engine - A soft, long neck for balance - A "thinking" canter - Confidence at the first fence', y, opts);
-
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...NAVY);
-  doc.text('Why Transitions Matter Even More in XC - Because XC creates:', opts.margin, y);
-  y += 7;
-  
-  const xcReasons = ['More adrenaline', 'More forward desire', 'More need for adjustability', 'More need for a balanced gallop'];
-  y = drawBulletList(doc, xcReasons, y, opts);
-  
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...NAVY);
-  doc.text('Transitions give you access to the hind legs without killing forward.', opts.margin, y);
-  y += 10;
-
-  y = drawStep(doc, '1. Walk (5-10 minutes)',
-    ['Long rein', 'Let the horse look', 'Walk-halt-walk', 'A few steps of leg yield'],
-    '', y, opts);
-
-  y = drawStep(doc, '2. Trot (5 minutes)',
-    ['Rising trot', 'One or two trot-walk-trot transitions', 'Keep it loose and swinging'],
-    '', y, opts);
-
-  y = drawStep(doc, '3. Canter (7-10 minutes) - This is where your XC ride is made',
-    ['Forward canter, then transition down, then forward again', 'Canter-trot-canter', 'One decent gallop stretch', 'Bring back, soften, breathe', 'Repeat'],
-    "You're searching for adjustability, not exhaustion.", y, opts);
-
-  y = drawStep(doc, '4. Jump Warm-Up (10-12 minutes)',
-    ['Small fence (maybe twice)', 'Medium fence', 'One at competition height', 'Land, wait, straighten, ride away'],
-    '', y, opts);
-
-  y = drawHighlightBox(doc, '', [
-    'Before you start XC:',
-    'Ask yourself: "Can I wait?" If the answer is yes - you are ready.'
+  y = drawBigHighlightBox(doc, [
+    'No horse should jump until you have had',
+    'three good transitions in a row.'
   ], y, opts);
 
-  // ==================== PAGE 8: TROUBLESHOOTING ====================
+  y = drawStepCard(doc, 'STEP 4', 'Jump Warm-Up (10-12 minutes)', [
+    'Crosspole twice',
+    'Upright small',
+    'Upright mid-height',
+    'Oxer small',
+    'Oxer at competition height',
+    'Optional: 1-2 bigger for confidence'
+  ], '', y, opts);
+
+  y += 5;
+  y = drawQuoteBox(doc, 'After every jump: Land, wait, straighten, ride away. This is the Dan Bizzarro Method - balance before and after the fence.', y, opts);
+
+  // ==================== PAGE 11: CROSS-COUNTRY ====================
   doc.addPage();
-  y = opts.margin + 10;
+  y = drawPageHeader(doc, '8. CROSS-COUNTRY WARM-UP', opts);
 
-  y = drawSectionHeader(doc, '9. TROUBLESHOOTING', y, opts);
+  y = drawInfoCard(doc, 'Goal', 'Controlled engine - A soft, long neck for balance - A "thinking" canter - Confidence at the first fence', y, opts);
 
-  doc.setFontSize(10);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...NAVY);
+  doc.text('Why Transitions Matter Even More in XC:', opts.margin, y);
+  y += 8;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...DARK);
+  doc.text('Because XC creates more adrenaline, more forward desire,', opts.margin, y);
+  y += 6;
+  doc.text('and more need for adjustability and a balanced gallop.', opts.margin, y);
+  y += 10;
+
+  y = drawQuoteBox(doc, 'Transitions give you access to the hind legs without killing forward.', y, opts);
+
+  y = drawStepCard(doc, 'STEP 1', 'Walk (5-10 minutes)', [
+    'Long rein',
+    'Let the horse look',
+    'Walk-halt-walk',
+    'A few steps of leg yield'
+  ], '', y, opts);
+
+  y = drawStepCard(doc, 'STEP 2', 'Trot (5 minutes)', [
+    'Rising trot',
+    'One or two trot-walk-trot transitions',
+    'Keep it loose and swinging'
+  ], '', y, opts);
+
+  // ==================== PAGE 12: XC CONTINUED ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '8. CROSS-COUNTRY (continued)', opts);
+
+  y = drawStepCard(doc, 'STEP 3', 'Canter (7-10 minutes)', [
+    'Forward canter, then transition down, then forward again',
+    'Canter-trot-canter',
+    'One decent gallop stretch',
+    'Bring back, soften, breathe',
+    'Repeat'
+  ], "You're searching for adjustability, not exhaustion.", y, opts);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...NAVY);
+  doc.setFontSize(11);
+  doc.text('This is where your XC ride is made.', opts.margin, y);
+  y += 12;
+
+  y = drawStepCard(doc, 'STEP 4', 'Jump Warm-Up (10-12 minutes)', [
+    'Small fence (maybe twice)',
+    'Medium fence',
+    'One at competition height',
+    'Land, wait, straighten, ride away'
+  ], '', y, opts);
+
+  y += 8;
+  y = drawBigHighlightBox(doc, [
+    'Before you start XC, ask yourself:',
+    '"Can I wait?"',
+    'If the answer is yes - you are ready.'
+  ], y, opts);
+
+  // ==================== PAGE 13: TROUBLESHOOTING ====================
+  doc.addPage();
+  y = drawPageHeader(doc, '9. TROUBLESHOOTING', opts);
+
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   doc.text('Common Warm-Up Problems and Fixes:', opts.margin, y);
@@ -618,42 +708,35 @@ export function generateWarmupSystemPDF(): Buffer {
     { problem: 'Horse is tense or spooky', fix: 'Bigger lines, more transitions, longer walk phase. Avoid corrections - use redirection.' },
     { problem: 'Horse is behind the leg', fix: 'Quick upward transitions, then soften. Walk-trot-walk-trot until sharp.' },
     { problem: 'Horse is rushing or strong', fix: 'Down transitions every few strides. Canter-trot-canter. Keep your body soft.' },
-    { problem: 'Horse won\'t connect', fix: 'Soft neck first. Transitions to the hand, not pulling.' },
+    { problem: "Horse won't connect", fix: 'Soft neck first. Transitions to the hand, not pulling.' },
     { problem: 'Rider is stressed', fix: 'Breathe out. Simplify the plan. Focus on one good transition.' },
     { problem: 'Short on time', fix: 'Transitions from walk, straight to canter work. Skip trot if needed.' }
   ];
 
   problems.forEach(p => {
-    y = addNewPageIfNeeded(doc, y, opts, 25);
-    
     doc.setFillColor(...LIGHT_GRAY);
-    doc.roundedRect(opts.margin, y, opts.contentWidth, 20, 3, 3, 'F');
+    doc.roundedRect(opts.margin, y, opts.contentWidth, 22, 4, 4, 'F');
     
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...ORANGE);
-    doc.text(p.problem, opts.margin + 6, y + 7);
+    doc.text(p.problem, opts.margin + 8, y + 8);
     
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...DARK);
     doc.setFontSize(9);
-    const fixLines = doc.splitTextToSize('> ' + p.fix, opts.contentWidth - 14);
-    doc.text(fixLines, opts.margin + 6, y + 14);
+    const fixLines = doc.splitTextToSize(p.fix, opts.contentWidth - 16);
+    doc.text(fixLines, opts.margin + 8, y + 16);
     
-    y += 24;
+    y += 26;
   });
 
-  y += 6;
-  y = drawHighlightBox(doc, 'REMEMBER', [
-    'Every warm-up is different.',
-    'Trust the structure - but stay flexible with the details.'
-  ], y, opts);
+  y += 5;
+  y = drawQuoteBox(doc, 'Every warm-up is different. Trust the structure - but stay flexible with the details.', y, opts);
 
-  // ==================== PAGE 9: ONE-PAGE SUMMARY ====================
+  // ==================== PAGE 14: SUMMARY ====================
   doc.addPage();
-  y = opts.margin + 10;
-
-  y = drawSectionHeader(doc, '10. ONE-PAGE SUMMARY', y, opts);
+  y = drawPageHeader(doc, '10. ONE-PAGE SUMMARY', opts);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'italic');
@@ -661,16 +744,16 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.text('Print this page and keep it in your lorry.', opts.margin, y);
   y += 10;
 
-  // Summary boxes for each discipline
-  const summaryBoxHeight = 62;
-  
-  // Dressage
+  // Dressage summary
   doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, summaryBoxHeight, 4, 4, 'F');
-  doc.setFontSize(11);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 55, 4, 4, 'F');
+  doc.setFillColor(...NAVY);
+  doc.roundedRect(opts.margin, y, 4, 55, 2, 2, 'F');
+  
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
-  doc.text('DRESSAGE', opts.margin + 6, y + 10);
+  doc.text('DRESSAGE', opts.margin + 10, y + 10);
   
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
@@ -684,18 +767,21 @@ export function generateWarmupSystemPDF(): Buffer {
   ];
   let boxY = y + 18;
   dressageSummary.forEach(line => {
-    doc.text(line, opts.margin + 6, boxY);
-    boxY += 8;
+    doc.text(line, opts.margin + 10, boxY);
+    boxY += 7;
   });
-  y += summaryBoxHeight + 6;
+  y += 60;
 
-  // Show Jumping
+  // Show Jumping summary
   doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, summaryBoxHeight, 4, 4, 'F');
-  doc.setFontSize(11);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 55, 4, 4, 'F');
+  doc.setFillColor(...ORANGE);
+  doc.roundedRect(opts.margin, y, 4, 55, 2, 2, 'F');
+  
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
-  doc.text('SHOW JUMPING', opts.margin + 6, y + 10);
+  doc.text('SHOW JUMPING', opts.margin + 10, y + 10);
   
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
@@ -709,18 +795,21 @@ export function generateWarmupSystemPDF(): Buffer {
   ];
   boxY = y + 18;
   sjSummary.forEach(line => {
-    doc.text(line, opts.margin + 6, boxY);
-    boxY += 8;
+    doc.text(line, opts.margin + 10, boxY);
+    boxY += 7;
   });
-  y += summaryBoxHeight + 6;
+  y += 60;
 
-  // Cross-Country
+  // XC summary
   doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, summaryBoxHeight, 4, 4, 'F');
-  doc.setFontSize(11);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 55, 4, 4, 'F');
+  doc.setFillColor(...NAVY);
+  doc.roundedRect(opts.margin, y, 4, 55, 2, 2, 'F');
+  
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
-  doc.text('CROSS-COUNTRY', opts.margin + 6, y + 10);
+  doc.text('CROSS-COUNTRY', opts.margin + 10, y + 10);
   
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
@@ -734,70 +823,73 @@ export function generateWarmupSystemPDF(): Buffer {
   ];
   boxY = y + 18;
   xcSummary.forEach(line => {
-    doc.text(line, opts.margin + 6, boxY);
-    boxY += 8;
+    doc.text(line, opts.margin + 10, boxY);
+    boxY += 7;
   });
 
-  // ==================== FINAL PAGE ====================
+  // ==================== PAGE 15: FINAL THOUGHTS ====================
   doc.addPage();
-  y = opts.margin + 10;
+  y = drawPageHeader(doc, 'FINAL THOUGHTS', opts);
 
-  y = drawSectionHeader(doc, 'FINAL THOUGHTS', y, opts);
-
-  doc.setFontSize(10);
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   
-  doc.text("A good warm-up isn't about making the horse perfect - it's about making", opts.margin, y);
-  y += 5;
-  doc.text("the horse ready.", opts.margin, y);
-  y += 10;
+  doc.text("A good warm-up isn't about making the horse perfect -", opts.margin, y);
+  y += 7;
+  doc.text("it's about making the horse ready.", opts.margin, y);
+  y += 15;
   
   doc.text("If you can leave the warm-up ring with a horse that is:", opts.margin, y);
-  y += 8;
+  y += 10;
 
-  const readyItems = ['Soft in the neck', 'Listening to the leg', 'Balanced in the transitions', 'And still breathing...'];
-  y = drawCheckList(doc, readyItems, y, opts);
+  y = drawCheckList(doc, [
+    'Soft in the neck',
+    'Listening to the leg',
+    'Balanced in the transitions',
+    'And still breathing...'
+  ], y, opts);
 
-  y += 3;
+  y += 5;
+  doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
   doc.text("...then you've done your job.", opts.margin, y);
-  y += 16;
+  y += 18;
 
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   doc.text('Good luck, ride well, and trust your training.', opts.margin, y);
-  y += 20;
+  y += 25;
 
   // Sign off
-  doc.setFontSize(13);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
   doc.text('Dan Bizzarro', opts.margin, y);
-  y += 7;
-  doc.setFontSize(10);
+  y += 8;
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   doc.text('International Event Rider & Coach', opts.margin, y);
-  y += 5;
+  y += 6;
   doc.text('www.danbizzarromethod.com', opts.margin, y);
 
-  // Footer box
-  y += 20;
+  // Footer CTA
+  y += 25;
   doc.setFillColor(...NAVY);
-  doc.roundedRect(opts.margin, y, opts.contentWidth, 35, 4, 4, 'F');
-  doc.setFontSize(11);
+  doc.roundedRect(opts.margin, y, opts.contentWidth, 40, 5, 5, 'F');
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...WHITE);
-  doc.text('Ready for More?', opts.margin + 8, y + 12);
-  doc.setFontSize(9);
+  doc.setTextColor(...ORANGE);
+  doc.text('Ready for More?', opts.margin + 12, y + 14);
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text('Book a clinic or private lesson to work on your warm-up in person.', opts.margin + 8, y + 21);
-  doc.text('Visit: www.danbizzarromethod.com/coaching', opts.margin + 8, y + 29);
+  doc.setTextColor(...WHITE);
+  doc.text('Book a clinic or private lesson to work on your warm-up in person.', opts.margin + 12, y + 25);
+  doc.text('Visit: www.danbizzarromethod.com/coaching', opts.margin + 12, y + 34);
 
-  // Return as buffer
   const pdfOutput = doc.output('arraybuffer');
   return Buffer.from(pdfOutput);
 }
