@@ -289,6 +289,18 @@ export default function Home() {
               </picture>
             </div>
           </div>
+          
+          {/* More About Dan Button */}
+          <div className="flex justify-center mt-12">
+            <Link href="/about">
+              <Button 
+                className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105"
+                data-testid="button-more-about-dan"
+              >
+                More About Dan <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
       {/* SECTION 4 — THE PLAN (3 STEPS) */}
