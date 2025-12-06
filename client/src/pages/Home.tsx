@@ -161,7 +161,9 @@ export default function Home() {
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
           
-          <p className="text-lg text-dark leading-relaxed mb-8 text-center">If you're dealing with a strong horse, a spooky horse, a lazy horse, or one that rushes into fences or leans on the contact, you're not alone. Many riders feel unsure what to fix first, or how to improve balance, straightness, transitions and confidence. Without a clear training method, progress becomes unpredictable and frustrating.</p>
+          <p className="text-lg text-dark leading-relaxed mb-8 text-center">If you're dealing with a strong horse, a spooky horse, a lazy horse, or one that rushes into fences or leans on the contact, you're not alone. 
+          Many riders feel unsure what to fix first, or how to improve balance, straightness, transitions and confidence. 
+          Without a clear training method, progress becomes unpredictable and frustrating.</p>
           
           <div className="grid sm:grid-cols-2 gap-4 mb-10 items-start">
             {problemPoints.map((point, index) => (
