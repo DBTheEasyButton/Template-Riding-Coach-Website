@@ -201,9 +201,8 @@ export default function Home() {
           </div>
           
           <div className="bg-gradient-to-r from-orange/10 to-navy/10 rounded-2xl p-6 md:p-8 border-l-4 border-orange">
-            <p className="text-lg md:text-xl text-navy font-medium text-center italic">
-              "Riding shouldn't feel confusing. You deserve clear steps that actually help your horse understand you."
-            </p>
+            <p className="text-lg md:text-xl text-navy font-medium text-center italic">"Riding your horse shoudn't be hard.
+            You deserve clear steps that actually help your horse understand you."</p>
           </div>
         </div>
       </section>
