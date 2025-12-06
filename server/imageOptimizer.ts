@@ -108,17 +108,24 @@ export class ImageOptimizer {
     baseName: string
   ): Promise<{
     mobile: { buffer: Buffer; filename: string };
+    mobileWebp: { buffer: Buffer; filename: string };
     tablet: { buffer: Buffer; filename: string };
     desktop: { buffer: Buffer; filename: string };
     webp: { buffer: Buffer; filename: string };
     avif: { buffer: Buffer; filename: string };
   }> {
-    const [mobile, tablet, desktop, webp, avif] = await Promise.all([
+    const [mobile, mobileWebp, tablet, desktop, webp, avif] = await Promise.all([
       // Mobile version (480px width) - smaller file size target
       this.optimizeImage(inputBuffer, {
         width: 480,
         quality: 75,
         format: 'jpeg'
+      }),
+      // Mobile WebP version (480px width) - for modern mobile browsers
+      this.optimizeImage(inputBuffer, {
+        width: 480,
+        quality: 70,
+        format: 'webp'
       }),
       // Tablet version (768px width)
       this.optimizeImage(inputBuffer, {
@@ -150,6 +157,10 @@ export class ImageOptimizer {
       mobile: {
         buffer: mobile.buffer,
         filename: `${baseName}-mobile.jpg`
+      },
+      mobileWebp: {
+        buffer: mobileWebp.buffer,
+        filename: `${baseName}-mobile.webp`
       },
       tablet: {
         buffer: tablet.buffer,

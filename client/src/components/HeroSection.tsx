@@ -125,9 +125,7 @@ export default function HeroSection() {
             <Button 
               className="bg-orange hover:bg-orange-hover text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
               data-testid="button-book-lesson"
-            >
-              Book a Lesson
-            </Button>
+            >Book In Person Lesson</Button>
           </Link>
           <Link href="/coaching/clinics">
             <Button 
