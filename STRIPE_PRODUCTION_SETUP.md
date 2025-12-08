@@ -34,8 +34,10 @@ Before switching to production, ensure you have:
 3. Configure the endpoint:
    - **URL**: `https://danbizzarromethod.com/api/stripe-webhook`
    - **Events to send**: Select the following events:
-     - `payment_intent.succeeded`
-     - `payment_intent.payment_failed`
+     - `payment_intent.succeeded` - Confirms successful payments
+     - `payment_intent.payment_failed` - Handles failed payments
+     - `charge.refunded` - Tracks refunds processed in Stripe Dashboard
+     - `charge.dispute.created` - Alerts you to chargebacks/disputes
 4. Click **Add endpoint**
 5. Click on the newly created endpoint
 6. Under **Signing secret**, click **Reveal** and copy the secret (starts with `whsec_`)

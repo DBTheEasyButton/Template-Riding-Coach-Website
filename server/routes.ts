@@ -182,6 +182,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
             break;
           }
 
+          case 'charge.refunded': {
+            const charge = event.data.object as Stripe.Charge;
+            console.log('Charge refunded:', charge.id, 'Payment Intent:', charge.payment_intent);
+            
+            // Find registration by payment intent ID
+            const allRegs = await storage.getAllClinicRegistrations();
+            const reg = allRegs.find(r => r.paymentIntentId === charge.payment_intent);
+            
+            if (reg) {
+              // Calculate refund amount
+              const refundedAmount = charge.amount_refunded / 100; // Convert from cents to pounds
+              const isFullRefund = charge.refunded; // true if fully refunded
+              
+              const refundNote = isFullRefund 
+                ? `Full refund of £${refundedAmount.toFixed(2)} processed via Stripe`
+                : `Partial refund of £${refundedAmount.toFixed(2)} processed via Stripe`;
+              
+              // Update registration status if not already cancelled
+              if (reg.status !== 'cancelled' && reg.status !== 'cancelled_by_admin') {
+                await storage.updateRegistrationStatus(
+                  reg.id, 
+                  'refunded', 
+                  Math.round(refundedAmount * 100), // Store in pence
+                  refundNote
+                );
+                console.log(`Updated registration ${reg.id} to refunded: ${refundNote}`);
+              } else {
+                console.log(`Registration ${reg.id} already cancelled, skipping status update`);
+              }
+            } else {
+              console.warn(`No registration found for refunded charge with payment intent ${charge.payment_intent}`);
+            }
+            break;
+          }
+
+          case 'charge.dispute.created': {
+            const dispute = event.data.object as Stripe.Dispute;
+            console.error('⚠️  CHARGEBACK ALERT: Dispute created!', {
+              disputeId: dispute.id,
+              chargeId: dispute.charge,
+              amount: dispute.amount / 100,
+              currency: dispute.currency,
+              reason: dispute.reason,
+              status: dispute.status
+            });
+            
+            // Find the associated registration
+            if (typeof dispute.charge === 'string') {
+              try {
+                const chargeDetails = await stripe.charges.retrieve(dispute.charge);
+                const allRegsForDispute = await storage.getAllClinicRegistrations();
+                const disputedReg = allRegsForDispute.find(r => r.paymentIntentId === chargeDetails.payment_intent);
+                
+                if (disputedReg) {
+                  console.error(`⚠️  Disputed registration: ID ${disputedReg.id}, Email: ${disputedReg.email}, Clinic: ${disputedReg.clinicId}`);
+                  // Update registration with dispute note
+                  await storage.updateRegistrationStatus(
+                    disputedReg.id,
+                    'disputed',
+                    undefined,
+                    `Chargeback dispute opened: ${dispute.reason} - Dispute ID: ${dispute.id}`
+                  );
+                }
+              } catch (chargeError) {
+                console.error('Failed to retrieve charge details for dispute:', chargeError);
+              }
+            }
+            break;
+          }
+
           default:
             console.log(`Unhandled webhook event type: ${event.type}`);
         }
