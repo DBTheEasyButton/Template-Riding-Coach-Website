@@ -76,6 +76,125 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Stripe webhook endpoint - raw body parsing is handled in server/index.ts
+  // This endpoint receives webhook events from Stripe for payment status updates
+  app.post("/api/stripe-webhook", async (req, res) => {
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      const sig = req.headers['stripe-signature'];
+      
+      // PRODUCTION SECURITY: Require webhook secret in production
+      if (process.env.NODE_ENV === 'production') {
+        if (!webhookSecret) {
+          console.error('STRIPE_WEBHOOK_SECRET not configured in production - refusing webhook');
+          return res.status(500).json({ error: 'Webhook secret not configured' });
+        }
+        if (!sig) {
+          console.error('Missing stripe-signature header - potential forged webhook');
+          return res.status(400).json({ error: 'Missing signature' });
+        }
+      }
+      
+      // DEVELOPMENT WARNING: In development, webhook secret is optional for testing
+      if (!webhookSecret) {
+        console.warn('⚠️  STRIPE_WEBHOOK_SECRET not configured - webhook signature verification skipped');
+        console.warn('⚠️  This is ONLY acceptable for local development testing');
+        console.warn('⚠️  NEVER deploy to production without STRIPE_WEBHOOK_SECRET');
+      }
+      
+      let event: Stripe.Event;
+
+      try {
+        // Verify webhook signature if secret and signature are both present
+        if (webhookSecret && sig) {
+          event = stripe.webhooks.constructEvent(req.body, sig as string, webhookSecret);
+          console.log(`✓ Webhook signature verified for event type: ${event.type}`);
+        } else if (process.env.NODE_ENV === 'development' && !webhookSecret) {
+          // DEVELOPMENT ONLY: Parse unsigned webhooks for local testing
+          event = JSON.parse(req.body.toString());
+          console.warn('⚠️  Processing UNSIGNED webhook in development mode');
+        } else {
+          // This should never happen due to checks above, but fail safe
+          console.error('Webhook verification prerequisites not met');
+          return res.status(400).json({ error: 'Invalid webhook request' });
+        }
+      } catch (err) {
+        console.error('Webhook signature verification failed:', {
+          error: err instanceof Error ? err.message : String(err),
+          hasSignature: !!sig,
+          hasSecret: !!webhookSecret
+        });
+        return res.status(400).json({ error: 'Webhook signature verification failed' });
+      }
+
+      // Handle the event
+      try {
+        switch (event.type) {
+          case 'payment_intent.succeeded': {
+            const paymentIntent = event.data.object as Stripe.PaymentIntent;
+            console.log('Payment succeeded:', paymentIntent.id);
+            
+            // Extract metadata
+            const discountCode = paymentIntent.metadata?.discountCode;
+            const clinicId = paymentIntent.metadata?.clinicId;
+            
+            // Find registration by payment intent ID
+            const allRegistrations = await storage.getAllClinicRegistrations();
+            const registration = allRegistrations.find(r => r.paymentIntentId === paymentIntent.id);
+            
+            if (registration) {
+              // Ensure registration status is confirmed
+              if (registration.status !== 'confirmed') {
+                await storage.updateRegistrationStatus(registration.id, 'confirmed');
+                console.log(`Updated registration ${registration.id} to confirmed via webhook`);
+              }
+              
+              // Mark discount code as used (backup in case registration endpoint failed)
+              if (discountCode) {
+                try {
+                  // Check if discount is already marked as used
+                  const discount = await storage.getDiscountByCode(discountCode);
+                  if (discount && !discount.isUsed) {
+                    await storage.useLoyaltyDiscount(discountCode, registration.id);
+                    console.log(`Marked discount ${discountCode} as used via webhook for registration ${registration.id}`);
+                  }
+                } catch (error) {
+                  console.error('Failed to mark discount as used in webhook:', error);
+                }
+              }
+            } else {
+              console.warn(`No registration found for payment intent ${paymentIntent.id}`);
+            }
+            break;
+          }
+
+          case 'payment_intent.payment_failed': {
+            const paymentIntent = event.data.object as Stripe.PaymentIntent;
+            console.log('Payment failed:', paymentIntent.id);
+            
+            // Find registration and mark as cancelled if it exists
+            const allRegistrations = await storage.getAllClinicRegistrations();
+            const registration = allRegistrations.find(r => r.paymentIntentId === paymentIntent.id);
+            
+            if (registration && registration.status === 'pending') {
+              await storage.updateRegistrationStatus(registration.id, 'cancelled', undefined, 'Payment failed');
+              console.log(`Marked registration ${registration.id} as cancelled due to payment failure`);
+            }
+            break;
+          }
+
+          default:
+            console.log(`Unhandled webhook event type: ${event.type}`);
+        }
+
+        // Return a 200 response to acknowledge receipt of the event
+        res.json({ received: true });
+      } catch (error) {
+        console.error('Error processing webhook event:', error);
+        res.status(500).json({ error: 'Webhook processing failed' });
+      }
+    }
+  );
+
   // Enhanced image upload endpoint with advanced optimization
   app.post("/api/upload-image", upload.single('image'), async (req, res) => {
     try {
@@ -360,16 +479,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Create payment intent for clinic registration
   app.post("/api/clinics/:id/create-payment-intent", async (req, res) => {
+    const clinicId = parseInt(req.params.id);
+    const { sessionIds, discountCode } = req.body;
+    let amount: number = 0;
+    
     try {
-      const clinicId = parseInt(req.params.id);
-      const { sessionIds, discountCode } = req.body;
       
       const clinic = await storage.getClinic(clinicId);
       if (!clinic) {
         return res.status(404).json({ message: "Clinic not found" });
       }
-      
-      let amount: number;
       
       if (clinic.hasMultipleSessions && sessionIds?.length > 0) {
         // Calculate total for selected sessions
@@ -379,11 +498,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: "Sessions not found" });
         }
         
+        // SECURITY FIX: Validate that all selected session IDs belong to this clinic
+        const clinicSessionIds = clinicWithSessions.sessions.map(s => s.id);
+        const invalidSessions = sessionIds.filter((id: number) => !clinicSessionIds.includes(id));
+        if (invalidSessions.length > 0) {
+          console.error(`Invalid session IDs provided: ${invalidSessions.join(', ')} for clinic ${clinicId}`);
+          return res.status(400).json({ message: "Invalid session selection" });
+        }
+        
         const selectedSessions = clinicWithSessions.sessions.filter(s => sessionIds.includes(s.id));
+        
+        // Ensure at least one session was selected
+        if (selectedSessions.length === 0) {
+          return res.status(400).json({ message: "No valid sessions selected" });
+        }
+        
         amount = selectedSessions.reduce((total, session) => total + session.price, 0);
       } else {
         // Single session clinic
         amount = clinic.price;
+      }
+
+      // Validate minimum amount before applying discount
+      if (amount <= 0) {
+        console.error(`Invalid clinic price: ${amount} for clinic ${clinicId}`);
+        return res.status(400).json({ message: "Invalid clinic pricing" });
       }
 
       // NEW: Apply discount code if provided
@@ -405,13 +544,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
               return res.status(400).json({ message: "This discount code has expired" });
             }
 
-            // Apply 20% discount
-            if (discount.discountType === 'percentage' && discount.discountValue === 20) {
-              discountAmount = Math.round(amount * 0.20);
-              amount = amount - discountAmount;
-              discountApplied = true;
-              console.log(`Applied 20% discount (${discountCode}): £${discountAmount/100} off`);
+            // Apply discount based on type
+            if (discount.discountType === 'percentage') {
+              discountAmount = Math.round(amount * (discount.discountValue / 100));
+            } else if (discount.discountType === 'fixed') {
+              discountAmount = discount.discountValue;
             }
+
+            // SECURITY FIX: Ensure discount doesn't exceed total amount
+            if (discountAmount >= amount) {
+              console.error(`Discount amount (${discountAmount}) exceeds payment amount (${amount}) for code ${discountCode}`);
+              return res.status(400).json({ message: "Invalid discount for this purchase" });
+            }
+
+            amount = amount - discountAmount;
+            discountApplied = true;
+            console.log(`Applied ${discount.discountValue}${discount.discountType === 'percentage' ? '%' : '£'} discount (${discountCode}): £${discountAmount/100} off, final: £${amount/100}`);
           } else {
             return res.status(400).json({ message: "Invalid discount code" });
           }
@@ -420,6 +568,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: "Error validating discount code" });
         }
       }
+
+      // Final validation: Ensure amount is positive
+      if (amount <= 0) {
+        console.error(`Final payment amount is invalid: ${amount}`);
+        return res.status(400).json({ message: "Invalid payment amount" });
+      }
+
+      // TODO: PRODUCTION IMPROVEMENT - Add idempotency keys
+      // Idempotency keys prevent duplicate charges when users click submit multiple times
+      // However, the key MUST include user-specific entropy to prevent cross-user collisions
+      // Implementation options:
+      //   1. Client generates UUID on payment form load and sends as requestId in request body
+      //   2. Server generates UUID per request (but this doesn't help with network retries)
+      // For now, we rely on Stripe's built-in duplicate detection and the registration endpoint's
+      // payment verification to prevent double-charging
       
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount), // Amount is already in cents
@@ -436,6 +599,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
       });
       
+      console.log(`Payment intent created successfully: ${paymentIntent.id} for clinic ${clinicId}, amount: £${amount/100}${discountApplied ? ` (discount applied: -£${discountAmount/100})` : ''}`);
+      
       res.json({ 
         clientSecret: paymentIntent.client_secret,
         discountApplied,
@@ -443,8 +608,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         finalAmount: amount
       });
     } catch (error) {
-      console.error("Error creating payment intent:", error);
-      res.status(500).json({ message: "Failed to create payment intent" });
+      // Enhanced error handling with Stripe-specific error details
+      console.error("Error creating payment intent:", {
+        clinicId,
+        amount,
+        discountCode,
+        error: error instanceof Error ? error.message : String(error),
+        type: (error as any)?.type,
+        code: (error as any)?.code,
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      // Return user-friendly error messages for common Stripe errors
+      if ((error as any)?.type === 'StripeCardError') {
+        return res.status(400).json({ message: "Your card was declined. Please try another payment method." });
+      } else if ((error as any)?.type === 'StripeInvalidRequestError') {
+        return res.status(400).json({ message: "Invalid payment request. Please try again." });
+      } else if ((error as any)?.type === 'StripeAPIError') {
+        return res.status(503).json({ message: "Payment service temporarily unavailable. Please try again in a moment." });
+      }
+      
+      res.status(500).json({ message: "Failed to create payment intent. Please try again." });
     }
   });
 
@@ -454,11 +638,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clinicId = parseInt(req.params.id);
       const { paymentIntentId, ...registrationData } = req.body;
       
+      let discountCodeUsed: string | null = null;
+      
       // Verify payment was successful
       if (paymentIntentId) {
         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
         if (paymentIntent.status !== 'succeeded') {
           return res.status(400).json({ message: "Payment not completed" });
+        }
+
+        // Extract discount code from payment intent metadata if it was applied
+        if (paymentIntent.metadata?.discountCode && paymentIntent.metadata?.discountApplied === 'true') {
+          discountCodeUsed = paymentIntent.metadata.discountCode;
         }
       }
       
@@ -485,6 +676,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create registration (capacity checks are handled atomically in the storage layer)
       const registration = await storage.createClinicRegistration(validatedData);
+
+      // CRITICAL FIX: Mark discount code as used after successful registration
+      if (discountCodeUsed) {
+        try {
+          await storage.useLoyaltyDiscount(discountCodeUsed, registration.id);
+          console.log(`Marked discount code ${discountCodeUsed} as used for registration ${registration.id}`);
+        } catch (error) {
+          console.error(`Failed to mark discount code ${discountCodeUsed} as used:`, error);
+          // Log the error but don't fail the registration since payment already succeeded
+        }
+      }
       
       // Calculate clinic price for loyalty tracking
       let clinicPrice = clinic.price;

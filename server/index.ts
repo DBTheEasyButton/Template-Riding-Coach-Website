@@ -7,7 +7,17 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
-app.use(express.json({ limit: '10mb' }));
+// CRITICAL: Stripe webhook needs raw body for signature verification
+// Apply raw body parser ONLY for webhook endpoint, JSON parser for everything else
+app.use((req, res, next) => {
+  if (req.path === '/api/stripe-webhook') {
+    // Webhook gets raw JSON for signature verification
+    express.raw({ type: 'application/json' })(req, res, next);
+  } else {
+    // All other routes get JSON parsing
+    express.json({ limit: '10mb' })(req, res, next);
+  }
+});
 app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 app.use((req, res, next) => {
