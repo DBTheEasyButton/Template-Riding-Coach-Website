@@ -1566,6 +1566,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error('Failed to deduct points for cancellation:', error);
         }
 
+        // Send refund confirmation email
+        try {
+          const clinic = await storage.getClinic(cancelledReg.clinicId);
+          if (clinic) {
+            const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            });
+            await emailService.sendRefundConfirmation(
+              cancelledReg.email,
+              cancelledReg.firstName,
+              clinic.title,
+              clinicDate,
+              refundCheck.amount || 0,
+              refundCheck.adminFee || 0,
+              reason
+            );
+            console.log(`Refund confirmation email sent to ${cancelledReg.email}`);
+          }
+        } catch (emailError) {
+          console.error('Failed to send refund confirmation email:', emailError);
+        }
+
         const adminFeeText = refundCheck.adminFee ? ` (£${(refundCheck.adminFee / 100).toFixed(2)} admin fee deducted)` : '';
         const promotionText = promotedParticipant ? ` - ${promotedParticipant.firstName} ${promotedParticipant.lastName} has been automatically accepted from the waiting list` : '';
 

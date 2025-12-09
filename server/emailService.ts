@@ -522,6 +522,125 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
     return this.sendEmail(email, `🎉 You Earned ${bonusPoints} Bonus Points! - ${referredPersonName} Joined`, htmlContent, textContent);
   }
 
+  async sendRefundConfirmation(
+    email: string,
+    firstName: string,
+    clinicName: string,
+    clinicDate: string,
+    refundAmount: number,
+    adminFee: number,
+    reason?: string
+  ): Promise<boolean> {
+    const refundAmountPounds = (refundAmount / 100).toFixed(2);
+    const adminFeeText = adminFee > 0 ? `A £${(adminFee / 100).toFixed(2)} admin fee has been deducted from the original payment.` : '';
+    const reasonText = reason ? `<p style="color: #374151; font-size: 15px; margin: 10px 0;"><strong>Reason:</strong> ${reason}</p>` : '';
+    
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+        <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Refund Confirmation</h1>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear ${firstName},</p>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Your registration for the following clinic has been cancelled and a refund has been processed.
+          </p>
+
+          <div style="background-color: #fee2e2; border-left: 4px solid #ef4444; padding: 15px; margin: 25px 0; border-radius: 4px;">
+            <h3 style="color: #b91c1c; margin-top: 0; font-size: 18px;">Cancelled Clinic</h3>
+            <p style="color: #374151; margin: 5px 0; font-size: 15px;"><strong>Clinic:</strong> ${clinicName}</p>
+            <p style="color: #374151; margin: 5px 0; font-size: 15px;"><strong>Original Date:</strong> ${clinicDate}</p>
+            ${reasonText}
+          </div>
+
+          <div style="background-color: #dcfce7; padding: 20px; border-radius: 8px; margin: 25px 0; border: 2px solid #16a34a;">
+            <h3 style="color: #15803d; margin-top: 0; font-size: 20px;">💰 Refund Details</h3>
+            <p style="color: #374151; font-size: 28px; font-weight: bold; margin: 15px 0; text-align: center;">
+              £${refundAmountPounds}
+            </p>
+            <p style="color: #374151; font-size: 14px; text-align: center;">
+              ${adminFeeText}
+            </p>
+            <p style="color: #374151; font-size: 14px; margin-top: 15px; text-align: center;">
+              The refund should appear in your account within 5-10 business days, depending on your bank.
+            </p>
+          </div>
+
+          <div style="background-color: #dbeafe; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="color: #1e3a8a; margin-top: 0; font-size: 18px;">Book Another Clinic</h3>
+            <p style="color: #374151; margin-bottom: 15px; font-size: 15px;">
+              I'd love to see you at a future clinic! Check out the upcoming sessions on my website.
+            </p>
+            <div style="text-align: center;">
+              <a href="https://danbizzarromethod.com/coaching/clinics" 
+                 style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
+                View Upcoming Clinics
+              </a>
+            </div>
+          </div>
+
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            If you have any questions about your refund or would like to discuss booking a future clinic, please don't hesitate to get in touch.
+          </p>
+
+          <p style="color: #374151; font-size: 16px; margin-top: 30px;">
+            Best regards,<br>
+            <strong>Dan Bizzarro</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+          </p>
+
+          <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+            </p>
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
+              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const reasonTextPlain = reason ? `\nReason: ${reason}` : '';
+    
+    const textContent = `
+Refund Confirmation
+
+Dear ${firstName},
+
+Your registration for the following clinic has been cancelled and a refund has been processed.
+
+CANCELLED CLINIC:
+Clinic: ${clinicName}
+Original Date: ${clinicDate}${reasonTextPlain}
+
+REFUND DETAILS:
+Amount: £${refundAmountPounds}
+${adminFee > 0 ? `A £${(adminFee / 100).toFixed(2)} admin fee has been deducted from the original payment.` : ''}
+
+The refund should appear in your account within 5-10 business days, depending on your bank.
+
+I'd love to see you at a future clinic! Check out the upcoming sessions on my website:
+https://danbizzarromethod.com/coaching/clinics
+
+If you have any questions about your refund or would like to discuss booking a future clinic, please don't hesitate to get in touch.
+
+Best regards,
+Dan Bizzarro
+Dan Bizzarro Method
+
+📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+
+Unsubscribe: https://danbizzarromethod.com/unsubscribe
+    `;
+
+    return this.sendEmail(email, `Refund Confirmation - ${clinicName}`, htmlContent, textContent);
+  }
+
   private async getUpcomingClinicsForEmail(): Promise<{ html: string; text: string }> {
     try {
       const allClinics = await storage.getAllClinics();
