@@ -79,8 +79,18 @@ export default function Footer() {
                   data-testid="link-footer-free-guide"
                 >
                   <Gift className="w-4 h-4" />
-                  Get Free Warm Up Guide
+                  Free Warm Up Guide
                 </a>
+              </li>
+              <li>
+                <Link 
+                  href="/guides/strong-horse"
+                  className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
+                  data-testid="link-footer-strong-horse-guide"
+                >
+                  <Gift className="w-4 h-4" />
+                  Free Strong Horse Guide
+                </Link>
               </li>
             </ul>
           </div>
