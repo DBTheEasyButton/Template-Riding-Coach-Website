@@ -83,14 +83,15 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <Link 
-                  href="/guides/strong-horse"
+                <a 
+                  href="/api/downloads/strong-horse-pdf"
+                  download="The-Strong-Horse-Solution-Dan-Bizzarro.pdf"
                   className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
                   data-testid="link-footer-strong-horse-guide"
                 >
                   <Gift className="w-4 h-4" />
                   Free Strong Horse Guide
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
