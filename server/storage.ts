@@ -1103,8 +1103,24 @@ The Dan Bizzarro Method Team`,
     const today = new Date();
     const daysUntilClinic = Math.ceil((clinicDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
+    // Calculate payment amount - use session price if available, otherwise clinic price
+    let paymentAmount = clinic.price;
+    
+    // If registration has a session, get the session price
+    if (registration.sessionId) {
+      const [session] = await db.select().from(clinicSessions).where(eq(clinicSessions.id, registration.sessionId));
+      if (session && session.price) {
+        paymentAmount = session.price;
+      }
+    }
+    
+    // If still 0, this might be a free clinic or bank transfer - no refund applicable
+    if (paymentAmount === 0) {
+      return { eligible: false, reason: "No payment recorded for this registration" };
+    }
+
     const adminFee = 500; // £5.00 in pence
-    const refundAmount = Math.max(0, clinic.price - adminFee);
+    const refundAmount = Math.max(0, paymentAmount - adminFee);
 
     // Check if more than 7 days before clinic
     if (daysUntilClinic > 7) {
