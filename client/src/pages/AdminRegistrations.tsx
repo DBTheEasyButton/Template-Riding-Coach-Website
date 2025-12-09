@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
-import { CalendarDays, User, Phone, Mail, Clock, AlertTriangle, Download, Eye, X } from "lucide-react";
+import { CalendarDays, User, Phone, Mail, Clock, AlertTriangle, Download, Eye, X, Check } from "lucide-react";
 import { useLocation } from "wouter";
 
 interface Registration {
@@ -48,6 +48,8 @@ export default function AdminRegistrations() {
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [refundDialogOpen, setRefundDialogOpen] = useState(false);
   const [cancellationReason, setCancellationReason] = useState("");
+  const [refundSuccessDialogOpen, setRefundSuccessDialogOpen] = useState(false);
+  const [refundSuccessData, setRefundSuccessData] = useState<{ name: string; amount: number } | null>(null);
   const clinicRefs = useRef<Record<number, HTMLDivElement | null>>({});
   
   // Get clinic filter from URL parameter
@@ -72,14 +74,16 @@ export default function AdminRegistrations() {
       return await apiRequest("POST", `/api/admin/registrations/${id}/cancel`, { reason });
     },
     onSuccess: (data) => {
-      toast({
-        title: "Refund Processed",
-        description: data.message,
-      });
+      const refundedName = selectedRegistration ? `${selectedRegistration.firstName} ${selectedRegistration.lastName}` : '';
+      const refundAmount = data.refundAmount || 0;
+      
       queryClient.invalidateQueries({ queryKey: ["/api/admin/registrations"] });
       setRefundDialogOpen(false);
       setSelectedRegistration(null);
       setCancellationReason("");
+      
+      setRefundSuccessData({ name: refundedName, amount: refundAmount });
+      setRefundSuccessDialogOpen(true);
     },
     onError: (error) => {
       toast({
@@ -460,6 +464,46 @@ export default function AdminRegistrations() {
                 </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Refund Success Dialog */}
+        <Dialog open={refundSuccessDialogOpen} onOpenChange={setRefundSuccessDialogOpen}>
+          <DialogContent className="sm:max-w-md text-center">
+            <div className="flex flex-col items-center py-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+                Refund Processed
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-base mb-4">
+                {refundSuccessData && refundSuccessData.amount > 0 ? (
+                  <>
+                    A refund of <span className="font-semibold">£{(refundSuccessData.amount / 100).toFixed(2)}</span> has been issued to {refundSuccessData.name}.
+                  </>
+                ) : (
+                  <>
+                    The registration for {refundSuccessData?.name} has been cancelled.
+                  </>
+                )}
+              </DialogDescription>
+              <p className="text-sm text-gray-500 mb-2">
+                A confirmation email has been sent to the customer.
+              </p>
+              <p className="text-base text-blue-600 font-medium mb-6">
+                See you again soon! 👋
+              </p>
+              <Button 
+                onClick={() => {
+                  setRefundSuccessDialogOpen(false);
+                  setRefundSuccessData(null);
+                }}
+                className="bg-navy hover:bg-slate-800 text-white px-8"
+              >
+                Close
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
