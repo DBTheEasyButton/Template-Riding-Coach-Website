@@ -16,13 +16,18 @@ interface PDFOptions {
   bottomMargin: number;
 }
 
-function drawPageHeader(doc: jsPDF, title: string, opts: PDFOptions): number {
+function drawPageHeader(doc: jsPDF, title: string, opts: PDFOptions, secondLine?: string): number {
   let y = opts.margin + 5;
   
   doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...NAVY);
   doc.text(title, opts.margin, y);
+  
+  if (secondLine) {
+    y += 9;
+    doc.text(secondLine, opts.margin, y);
+  }
   
   y += 5;
   doc.setDrawColor(...ORANGE);
@@ -489,7 +494,7 @@ export function generateStrongHorsePDF(): Buffer {
 
   // ==================== PAGE 6: PART 3 - THE STRONG-HORSE PROGRAM ====================
   doc.addPage();
-  y = drawPageHeader(doc, 'PART 3 — THE STRONG-HORSE PROGRAM (FLATWORK)', opts);
+  y = drawPageHeader(doc, 'PART 3 — THE STRONG-HORSE', opts, 'PROGRAM (FLATWORK)');
 
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
@@ -574,31 +579,17 @@ export function generateStrongHorsePDF(): Buffer {
   y += 2;
   y = drawQuoteBox(doc, 'This makes the horse think instead of react.', y, opts);
 
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...NAVY);
-  doc.text('Rule 3: Start Small and Build Up', opts.margin, y);
-  y += 8;
+  y = drawInfoCard(doc, 'Rule 3: Start Small and Build Up', '1. Approach a small fence with balance. 2. Halt before the fence to check control. 3. Approach again and soften the contact. 4. Hold the mane and let the horse jump. 5. Halt in a straight line. 6. Repeat until easy, then add a second fence.', y, opts);
 
-  y = drawNumberedList(doc, [
-    'Approach a small fence with balance',
-    'Halt before the fence to check control',
-    'Approach again and soften the contact',
-    'Hold the mane and let the horse jump',
-    'Halt in a straight line',
-    'Repeat until easy, then add a second fence'
-  ], y, opts);
-
-  y += 3;
-  y = drawNavyQuoteBox(doc, 'Rule 4: Teach Self-Carriage', [
-    'Correct for one second, then release.',
-    'This is the Dan Bizzarro Method:',
-    'Show the horse the answer, then let it carry itself.'
-  ], y, opts);
-
-  // ==================== PAGE 9: PART 5 - IF THE HORSE GETS STRONG AT COMPETITIONS ====================
+  // ==================== PAGE 9: PART 4 CONTINUED - RULE 4 ====================
   doc.addPage();
-  y = drawPageHeader(doc, 'PART 5 — IF THE HORSE GETS STRONG AT COMPETITIONS', opts);
+  y = opts.margin + 5;
+
+  y = drawInfoCard(doc, 'Rule 4: Teach Self-Carriage', 'Correct for one second, then release. This is the Dan Bizzarro Method: Show the horse the answer, then let it carry itself.', y, opts);
+
+  // ==================== PAGE 10: PART 5 - IF THE HORSE GETS STRONG AT COMPETITIONS ====================
+  doc.addPage();
+  y = drawPageHeader(doc, 'PART 5 — IF THE HORSE GETS', opts, 'STRONG AT COMPETITIONS');
 
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
@@ -615,7 +606,7 @@ export function generateStrongHorsePDF(): Buffer {
   y += 3;
   y = drawQuoteBox(doc, 'This resets the brain and body quickly.', y, opts);
 
-  // ==================== PAGE 10: PART 6 - TROUBLESHOOTING ====================
+  // ==================== PAGE 11: PART 6 - TROUBLESHOOTING ====================
   doc.addPage();
   y = drawPageHeader(doc, 'PART 6 — TROUBLESHOOTING', opts);
 
@@ -629,7 +620,7 @@ export function generateStrongHorsePDF(): Buffer {
 
   y = drawTroubleshootItem(doc, 'Rider holds too long', 'Correct for one second, then release. Holding causes leaning.', y, opts);
 
-  // ==================== PAGE 11: PART 7 - THE TRANSFORMATION ====================
+  // ==================== PAGE 12: PART 7 - THE TRANSFORMATION ====================
   doc.addPage();
   y = drawPageHeader(doc, 'PART 7 — THE TRANSFORMATION', opts);
 
@@ -676,7 +667,7 @@ export function generateStrongHorsePDF(): Buffer {
     'It becomes light when the communication becomes clear.'
   ], y, opts);
 
-  // ==================== PAGE 12: FINAL NOTE ====================
+  // ==================== PAGE 13: FINAL NOTE ====================
   doc.addPage();
   y = drawPageHeader(doc, 'FINAL NOTE', opts);
 
