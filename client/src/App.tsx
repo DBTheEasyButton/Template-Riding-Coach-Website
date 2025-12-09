@@ -31,6 +31,7 @@ const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists")
 const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
 const ReadinessQuiz = lazy(() => import("@/pages/ReadinessQuiz"));
 const PackingListGenerator = lazy(() => import("@/pages/PackingListGenerator"));
+const StrongHorseGuide = lazy(() => import("@/pages/StrongHorseGuide"));
 const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
 const AdminRegistrations = lazy(() => import("@/pages/AdminRegistrations"));
 const AdminGallery = lazy(() => import("@/pages/AdminGallery"));
@@ -187,6 +188,11 @@ function Router() {
       <Route path="/packing-list">
         <Suspense fallback={<PageLoader />}>
           <PackingListGenerator />
+        </Suspense>
+      </Route>
+      <Route path="/guides/strong-horse">
+        <Suspense fallback={<PageLoader />}>
+          <StrongHorseGuide />
         </Suspense>
       </Route>
       <Route path="/admin">

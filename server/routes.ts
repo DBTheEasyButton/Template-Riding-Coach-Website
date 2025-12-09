@@ -24,6 +24,7 @@ import {
 } from "@shared/schema";
 import { prerenderService } from "./prerenderService";
 import { generateWarmupSystemPDF } from "./generateWarmupPDF";
+import { generateStrongHorsePDF } from "./generateStrongHorsePDF";
 
 const stripeKey = process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
 
@@ -407,6 +408,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', 'attachment; filename="The-Eventers-Warmup-System-Dan-Bizzarro.pdf"');
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error in lead capture endpoint:', error);
+      res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
+  // Download PDF: The Strong Horse Solution
+  app.get("/api/downloads/strong-horse-pdf", async (req, res) => {
+    try {
+      const pdfBuffer = generateStrongHorsePDF();
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="The-Strong-Horse-Solution-Dan-Bizzarro.pdf"');
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error generating strong horse PDF:', error);
+      res.status(500).json({ error: 'Failed to generate PDF' });
+    }
+  });
+
+  // Lead capture for Strong Horse PDF - creates/updates GHL contact with StrongHorsePDF tag
+  app.post("/api/lead-capture/strong-horse-pdf", async (req, res) => {
+    try {
+      const { firstName, lastName, email } = req.body;
+
+      if (!firstName || !lastName || !email) {
+        return res.status(400).json({ error: 'First name, surname, and email are required' });
+      }
+
+      // Create or update contact in GHL with StrongHorsePDF tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          undefined, // no phone
+          ['StrongHorsePDF'], // tag for tracking this lead source
+          { lead_source: 'Strong Horse PDF Download' }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`GHL contact created/updated for ${email} with StrongHorsePDF tag`);
+        } else {
+          console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        // Log error but don't fail the request - still provide the PDF
+        console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      // Generate and send the PDF
+      const pdfBuffer = generateStrongHorsePDF();
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="The-Strong-Horse-Solution-Dan-Bizzarro.pdf"');
       res.setHeader('Content-Length', pdfBuffer.length);
       res.send(pdfBuffer);
     } catch (error) {
