@@ -200,7 +200,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 : `Partial refund of £${refundedAmount.toFixed(2)} processed via Stripe`;
               
               // Update registration status if not already cancelled
-              if (reg.status !== 'cancelled' && reg.status !== 'cancelled_by_admin') {
+              if (reg.status !== 'cancelled' && reg.status !== 'cancelled_by_admin' && reg.status !== 'refunded') {
                 await storage.updateRegistrationStatus(
                   reg.id, 
                   'refunded', 
@@ -208,8 +208,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   refundNote
                 );
                 console.log(`Updated registration ${reg.id} to refunded: ${refundNote}`);
+                
+                // Deduct loyalty points for refunded registration
+                try {
+                  await storage.deductPoints(reg.email, 10, `Refund processed via Stripe`);
+                  console.log(`Deducted 10 points from ${reg.email} due to Stripe refund`);
+                } catch (pointsError) {
+                  console.error('Failed to deduct points for Stripe refund:', pointsError);
+                }
               } else {
-                console.log(`Registration ${reg.id} already cancelled, skipping status update`);
+                console.log(`Registration ${reg.id} already ${reg.status}, skipping status update and point deduction`);
               }
             } else {
               console.warn(`No registration found for refunded charge with payment intent ${charge.payment_intent}`);
@@ -1487,14 +1495,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const registrationId = parseInt(req.params.id);
       const { reason } = req.body;
 
+      // Get registration details first (needed for point deduction)
+      const registrations = await storage.getAllClinicRegistrations();
+      const cancelledReg = registrations.find(r => r.id === registrationId);
+      
+      if (!cancelledReg) {
+        return res.status(404).json({ message: "Registration not found" });
+      }
+
       // Check refund eligibility first
       const refundCheck = await storage.canProcessRefund(registrationId);
       
       if (refundCheck.eligible) {
-        // Get the registration details for waitlist promotion
-        const registrations = await storage.getAllClinicRegistrations();
-        const cancelledReg = registrations.find(r => r.id === registrationId);
-        
         // Process automatic refund with admin fee
         const updatedRegistration = await storage.updateRegistrationStatus(
           registrationId, 
@@ -1546,19 +1558,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
 
+        // Deduct loyalty points for refunded registration
+        try {
+          await storage.deductPoints(cancelledReg.email, 10, `Refund for cancelled registration`);
+          console.log(`Deducted 10 points from ${cancelledReg.email} due to cancellation/refund`);
+        } catch (error) {
+          console.error('Failed to deduct points for cancellation:', error);
+        }
+
         const adminFeeText = refundCheck.adminFee ? ` (£${(refundCheck.adminFee / 100).toFixed(2)} admin fee deducted)` : '';
         const promotionText = promotedParticipant ? ` - ${promotedParticipant.firstName} ${promotedParticipant.lastName} has been automatically accepted from the waiting list` : '';
 
         res.json({
           success: true,
-          message: `Refund processed: £${(refundCheck.amount! / 100).toFixed(2)}${adminFeeText}${promotionText}`,
+          message: `Refund processed: £${(refundCheck.amount! / 100).toFixed(2)}${adminFeeText}${promotionText}. 10 loyalty points deducted.`,
           registration: updatedRegistration,
           refundAmount: refundCheck.amount,
           adminFee: refundCheck.adminFee,
           promotedParticipant: promotedParticipant
         });
       } else {
-        // Cancel without refund
+        // Cancel without refund - still deduct points
         const updatedRegistration = await storage.updateRegistrationStatus(
           registrationId, 
           "cancelled_by_admin", 
@@ -1566,9 +1586,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           reason || refundCheck.reason
         );
 
+        // Deduct loyalty points even for non-refunded cancellations
+        try {
+          await storage.deductPoints(cancelledReg.email, 10, `Cancelled registration (no refund)`);
+          console.log(`Deducted 10 points from ${cancelledReg.email} due to cancellation`);
+        } catch (error) {
+          console.error('Failed to deduct points for cancellation:', error);
+        }
+
         res.json({
           success: true,
-          message: `Registration cancelled - no refund (${refundCheck.reason})`,
+          message: `Registration cancelled - no refund (${refundCheck.reason}). 10 loyalty points deducted.`,
           registration: updatedRegistration,
           refundAmount: 0
         });

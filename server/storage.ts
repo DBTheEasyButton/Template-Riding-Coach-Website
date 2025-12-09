@@ -1589,6 +1589,30 @@ The Dan Bizzarro Method Team`,
     return program;
   }
 
+  async deductPoints(email: string, points: number, reason: string): Promise<LoyaltyProgram | undefined> {
+    const program = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email)).then(rows => rows[0]);
+    
+    if (!program) {
+      console.log(`No loyalty program found for ${email}, cannot deduct points`);
+      return undefined;
+    }
+    
+    // Don't let points go below 0
+    const newPoints = Math.max(0, program.points - points);
+    
+    const [updatedProgram] = await db
+      .update(loyaltyProgram)
+      .set({
+        points: newPoints,
+        updatedAt: new Date(),
+      })
+      .where(eq(loyaltyProgram.email, email))
+      .returning();
+
+    console.log(`Deducted ${points} points from ${email} for: ${reason}. New total: ${updatedProgram.points}`);
+    return updatedProgram;
+  }
+
   async trackReferral(referrerId: number, refereeEmail: string, isNewClient: boolean, registrationId: number): Promise<void> {
     await db.insert(referrals).values({
       referrerId,
