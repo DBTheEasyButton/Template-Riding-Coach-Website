@@ -19,6 +19,7 @@ interface MobileRegistrationFlowProps {
   clinic: ClinicWithSessions;
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 interface RegistrationData {
@@ -45,7 +46,7 @@ const STEPS = [
   { id: 4, title: "Payment", icon: CreditCard }
 ];
 
-export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: MobileRegistrationFlowProps) {
+export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSuccess }: MobileRegistrationFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -279,11 +280,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose }: Mobi
       localStorage.setItem('clinicClientData', JSON.stringify(clientDataToSave));
 
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
-      toast({
-        title: "Registration successful!",
-        description: "You'll receive a confirmation email shortly.",
-      });
       onClose();
+      if (onSuccess) {
+        onSuccess();
+      }
     },
     onError: (error) => {
       toast({

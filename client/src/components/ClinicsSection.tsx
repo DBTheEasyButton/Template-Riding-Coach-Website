@@ -232,6 +232,7 @@ export default function ClinicsSection() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [hasSavedData, setHasSavedData] = useState(false);
   const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -344,12 +345,9 @@ export default function ClinicsSection() {
       };
       localStorage.setItem('clinicClientData', JSON.stringify(clientDataToSave));
       
-      toast({
-        title: "Registration successful!",
-        description: "Payment confirmed. You'll receive a confirmation email shortly.",
-      });
       setIsRegistrationOpen(false);
       setClientSecret(null);
+      setShowSuccessDialog(true);
       setRegistrationData({
         firstName: '',
         lastName: '',
@@ -1177,9 +1175,35 @@ export default function ClinicsSection() {
             clinic={selectedClinic}
             isOpen={isRegistrationOpen}
             onClose={() => setIsRegistrationOpen(false)}
+            onSuccess={() => setShowSuccessDialog(true)}
           />
         )}
-        
+
+        {/* Success Dialog */}
+        <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+          <DialogContent className="sm:max-w-md text-center">
+            <div className="flex flex-col items-center py-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <DialogTitle className="text-2xl font-bold text-gray-900 mb-2">
+                Registration Successful!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-base mb-4">
+                Thank you for booking! I look forward to seeing you and your horse at the clinic.
+              </DialogDescription>
+              <p className="text-sm text-gray-500 mb-6">
+                You'll receive a confirmation email shortly with all the details.
+              </p>
+              <Button 
+                onClick={() => setShowSuccessDialog(false)}
+                className="bg-navy hover:bg-slate-800 text-white px-8"
+              >
+                Close
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
       </div>
     </section>
