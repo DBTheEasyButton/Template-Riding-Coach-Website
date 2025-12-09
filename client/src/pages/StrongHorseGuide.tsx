@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Download, CheckCircle, Mail } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
+import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export default function StrongHorseGuide() {
@@ -14,6 +15,10 @@ export default function StrongHorseGuide() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,8 +98,9 @@ export default function StrongHorseGuide() {
         description="Learn how to turn a heavy, rushing horse into a soft, balanced partner. Free downloadable guide with practical exercises for riders of all levels."
         canonical="/guides/strong-horse"
       />
+      <Navigation />
 
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-20">
         <section className="py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
