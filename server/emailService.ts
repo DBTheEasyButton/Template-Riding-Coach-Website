@@ -1095,10 +1095,12 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
           <h2 style="color: #1e3a8a; margin-top: 0;">${clinic.title}</h2>
           <p style="color: #374151; margin: 10px 0;"><strong>📅 Date:</strong> ${clinicDate}</p>
+          ${clinic.startTime ? `<p style="color: #374151; margin: 10px 0;"><strong>🕐 Time:</strong> ${clinic.startTime}${clinic.endTime ? ` - ${clinic.endTime}` : ''}</p>` : ''}
           <p style="color: #374151; margin: 10px 0;"><strong>📍 Location:</strong> ${clinic.location}</p>
           ${clinic.googleMapsLink ? `<p style="color: #374151; margin: 10px 0;"><a href="${clinic.googleMapsLink}" style="color: #1e3a8a; text-decoration: underline;">View on Google Maps</a></p>` : ''}
-          <p style="color: #374151; margin: 10px 0;"><strong>💷 Price:</strong> €${(clinic.price / 100).toFixed(2)}</p>
+          <p style="color: #374151; margin: 10px 0;"><strong>💷 Price:</strong> £${(clinic.price / 100).toFixed(2)}</p>
           <p style="color: #374151; margin-top: 15px;">${clinic.description}</p>
+          ${clinic.maxParticipants ? `<p style="color: #b91c1c; margin-top: 15px; font-weight: 600;">⚠️ Limited to ${clinic.maxParticipants} spots only - book early to avoid disappointment!</p>` : ''}
         </div>
 
         <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center; border: 2px dashed #1e3a8a; margin: 25px 0;">
@@ -1144,10 +1146,12 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
           <h2 style="color: #1e3a8a; margin-top: 0;">${clinic.title}</h2>
           <p style="color: #374151; margin: 10px 0;"><strong>📅 Date:</strong> ${clinicDate}</p>
+          ${clinic.startTime ? `<p style="color: #374151; margin: 10px 0;"><strong>🕐 Time:</strong> ${clinic.startTime}${clinic.endTime ? ` - ${clinic.endTime}` : ''}</p>` : ''}
           <p style="color: #374151; margin: 10px 0;"><strong>📍 Location:</strong> ${clinic.location}</p>
           ${clinic.googleMapsLink ? `<p style="color: #374151; margin: 10px 0;"><a href="${clinic.googleMapsLink}" style="color: #1e3a8a; text-decoration: underline;">View on Google Maps</a></p>` : ''}
-          <p style="color: #374151; margin: 10px 0;"><strong>💷 Price:</strong> €${(clinic.price / 100).toFixed(2)}</p>
+          <p style="color: #374151; margin: 10px 0;"><strong>💷 Price:</strong> £${(clinic.price / 100).toFixed(2)}</p>
           <p style="color: #374151; margin-top: 15px;">${clinic.description}</p>
+          ${clinic.maxParticipants ? `<p style="color: #b91c1c; margin-top: 15px; font-weight: 600;">⚠️ Limited to ${clinic.maxParticipants} spots only - book early to avoid disappointment!</p>` : ''}
         </div>
 
         <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
@@ -1170,7 +1174,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         </div>
 
         <p style="color: #374151; font-size: 16px; margin-top: 30px;">
-          Looking forward to meeting you!<br>
+          Looking forward to seeing you there!<br>
           <strong>Dan Bizzarro</strong><br>
           <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
         </p>
