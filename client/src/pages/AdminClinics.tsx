@@ -305,6 +305,12 @@ export default function AdminClinics() {
   };
 
   const handleClone = (clinic: any) => {
+    console.log('[AdminClinics] Cloning clinic:', {
+      id: clinic.id,
+      title: clinic.title,
+      autoPostToFacebook: clinic.autoPostToFacebook
+    });
+    
     // Calculate next available date (1 week from original)
     const originalDate = new Date(clinic.date);
     const cloneDate = new Date(originalDate);
@@ -330,7 +336,7 @@ export default function AdminClinics() {
       isActive: true, // Default new clinic to active
       hasMultipleSessions: clinic.hasMultipleSessions || false,
       clinicType: clinic.clinicType || "single",
-      autoPostToFacebook: true, // Default to true when cloning so Facebook post is created
+      autoPostToFacebook: clinic.autoPostToFacebook ?? false,
       excludeTagsFromEmail: clinic.excludeTagsFromEmail || ""
     });
     
@@ -421,6 +427,13 @@ export default function AdminClinics() {
       excludeTagsFromEmail: formData.excludeTagsFromEmail || "",
       sessions: formData.hasMultipleSessions ? sessions : []
     };
+    
+    console.log('[AdminClinics] Submitting clinic:', {
+      title: submitData.title,
+      autoPostToFacebook: submitData.autoPostToFacebook,
+      formDataAutoPost: formData.autoPostToFacebook,
+      isNewClinic: !editingClinic
+    });
 
     if (editingClinic) {
       updateMutation.mutate({ id: editingClinic.id, ...submitData });
