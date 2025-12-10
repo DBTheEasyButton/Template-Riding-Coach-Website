@@ -458,6 +458,59 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 />
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
+
+              {/* Referral Code - Prominent placement */}
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
+                <p className="text-xs text-gray-700 mt-1 mb-2">
+                  They'll earn 20 bonus points and you'll start earning points too.
+                </p>
+                <div className="relative">
+                  <Input
+                    id="referralCode"
+                    data-testid="input-referral-code"
+                    value={registrationData.referralCode || ''}
+                    onChange={(e) => {
+                      const value = e.target.value.toUpperCase();
+                      updateRegistrationData('referralCode', value);
+                      setReferralValidation(null);
+                    }}
+                    onBlur={(e) => {
+                      const code = e.target.value.trim();
+                      if (code) {
+                        validateReferralCode(code);
+                      }
+                    }}
+                    placeholder="DBM-XXXXX"
+                    className={`mt-1 h-12 text-base ${
+                      referralValidation?.valid === false ? 'border-red-500 bg-red-50' : 
+                      referralValidation?.valid === true ? 'border-green-500 bg-green-50' : ''
+                    }`}
+                  />
+                  {isValidatingReferral && (
+                    <div className="absolute right-3 top-4">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    </div>
+                  )}
+                </div>
+                {referralValidation && (
+                  <p className={`text-xs mt-2 flex items-center gap-1 ${
+                    referralValidation.valid ? 'text-green-600' : 'text-red-600'
+                  }`} data-testid="referral-validation-message">
+                    {referralValidation.valid ? (
+                      <>
+                        <Check className="w-3 h-3" />
+                        {referralValidation.message}
+                      </>
+                    ) : (
+                      <>
+                        <AlertTriangle className="w-3 h-3" />
+                        {referralValidation.message}
+                      </>
+                    )}
+                  </p>
+                )}
+              </div>
             </div>
           )}
 
@@ -588,59 +641,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                   className="mt-1 h-20"
                   placeholder="Any medical conditions we should know about..."
                 />
-              </div>
-
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
-                <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
-                <p className="text-xs text-gray-700 mt-1 mb-2">
-                  They'll earn 20 bonus points and you'll start earning points too.
-                </p>
-                <div className="relative">
-                  <Input
-                    id="referralCode"
-                    data-testid="input-referral-code"
-                    value={registrationData.referralCode || ''}
-                    onChange={(e) => {
-                      const value = e.target.value.toUpperCase();
-                      updateRegistrationData('referralCode', value);
-                      // Clear validation when user types
-                      setReferralValidation(null);
-                    }}
-                    onBlur={(e) => {
-                      const code = e.target.value.trim();
-                      if (code) {
-                        validateReferralCode(code);
-                      }
-                    }}
-                    placeholder="DBM-XXXXX"
-                    className={`mt-1 ${
-                      referralValidation?.valid === false ? 'border-red-500 bg-red-50' : 
-                      referralValidation?.valid === true ? 'border-green-500 bg-green-50' : ''
-                    }`}
-                  />
-                  {isValidatingReferral && (
-                    <div className="absolute right-3 top-4">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                    </div>
-                  )}
-                </div>
-                {referralValidation && (
-                  <p className={`text-xs mt-2 flex items-center gap-1 ${
-                    referralValidation.valid ? 'text-green-600' : 'text-red-600'
-                  }`} data-testid="referral-validation-message">
-                    {referralValidation.valid ? (
-                      <>
-                        <Check className="w-3 h-3" />
-                        {referralValidation.message}
-                      </>
-                    ) : (
-                      <>
-                        <AlertTriangle className="w-3 h-3" />
-                        {referralValidation.message}
-                      </>
-                    )}
-                  </p>
-                )}
               </div>
 
               <div className="bg-blue-50 p-4 rounded-lg">
