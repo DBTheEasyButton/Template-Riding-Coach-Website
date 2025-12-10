@@ -122,6 +122,13 @@ function PaymentForm({
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaymentReady, setIsPaymentReady] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Log Stripe readiness for debugging
+  useEffect(() => {
+    console.log('[PaymentForm] Stripe ready:', !!stripe, 'Elements ready:', !!elements);
+  }, [stripe, elements]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,11 +212,39 @@ function PaymentForm({
       
       {/* Regular Card Payment */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <PaymentElement />
+        {paymentError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-800 text-sm">
+            <AlertTriangle className="w-4 h-4 inline mr-2" />
+            {paymentError}
+          </div>
+        )}
+        
+        {!isPaymentReady && !paymentError && (
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-gray-600">
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-3"></div>
+              Loading payment form...
+            </div>
+          </div>
+        )}
+        
+        <div className={!isPaymentReady ? 'opacity-0 h-0 overflow-hidden' : ''}>
+          <PaymentElement 
+            onReady={() => {
+              console.log('[PaymentForm] PaymentElement ready');
+              setIsPaymentReady(true);
+              setPaymentError(null);
+            }}
+            onLoadError={(error) => {
+              console.error('[PaymentForm] PaymentElement load error:', error);
+              setPaymentError(error.error?.message || 'Failed to load payment form. Please refresh the page.');
+            }}
+          />
+        </div>
         
         <Button
           type="submit"
-          disabled={!stripe || isProcessing}
+          disabled={!stripe || isProcessing || !isPaymentReady}
           className="w-full bg-navy hover:bg-slate-800 text-white"
         >
           {isProcessing ? (
