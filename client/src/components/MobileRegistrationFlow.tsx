@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,14 +10,31 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { ClinicWithSessions, ClinicSession } from "@shared/schema";
 import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Zap, AlertTriangle, X } from "lucide-react";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 
-const stripeKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
-if (!stripeKey) {
-  console.error('VITE_STRIPE_PUBLIC_KEY is not configured');
+// Runtime Stripe key loading - fetches from server instead of build-time env var
+let stripePromiseCache: Promise<Stripe | null> | null = null;
+
+async function getStripePromise(): Promise<Stripe | null> {
+  if (stripePromiseCache) return stripePromiseCache;
+  
+  try {
+    const response = await fetch('/api/config/stripe-key');
+    if (!response.ok) {
+      console.error('Failed to fetch Stripe key');
+      return null;
+    }
+    const data = await response.json();
+    if (data.publishableKey) {
+      stripePromiseCache = loadStripe(data.publishableKey);
+      return stripePromiseCache;
+    }
+  } catch (error) {
+    console.error('Error fetching Stripe key:', error);
+  }
+  return null;
 }
-const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 interface MobileRegistrationFlowProps {
   clinic: ClinicWithSessions;
@@ -54,6 +71,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     firstName: '',
     lastName: '',
@@ -162,6 +180,17 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
       }
     }
   }, [isOpen, clinic]);
+
+  // Load Stripe at runtime
+  useEffect(() => {
+    if (isOpen && !stripePromise) {
+      getStripePromise().then(promise => {
+        if (promise) {
+          setStripePromise(Promise.resolve(promise));
+        }
+      });
+    }
+  }, [isOpen, stripePromise]);
 
   const updateRegistrationData = (field: keyof RegistrationData, value: string | boolean) => {
     setRegistrationData(prev => ({ ...prev, [field]: value }));

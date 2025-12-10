@@ -44,6 +44,12 @@ if (!stripeKey.startsWith('sk_') && !stripeKey.startsWith('pk_')) {
 console.log('Stripe initialized with key type:', stripeKey.substring(0, 7));
 const stripe = new Stripe(stripeKey);
 
+// Get Stripe publishable key for frontend (runtime loading)
+const stripePublishableKey = process.env.VITE_STRIPE_PUBLIC_KEY || '';
+if (!stripePublishableKey) {
+  console.warn('WARNING: VITE_STRIPE_PUBLIC_KEY not set - Stripe payments will not work on frontend');
+}
+
 // Ensure uploads directory exists
 const uploadsDir = path.join(process.cwd(), 'client', 'public', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -77,6 +83,14 @@ const upload = multer({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Runtime Stripe publishable key endpoint - allows frontend to get key without rebuild
+  app.get("/api/config/stripe-key", (req, res) => {
+    if (!stripePublishableKey) {
+      return res.status(500).json({ error: 'Stripe not configured' });
+    }
+    res.json({ publishableKey: stripePublishableKey });
+  });
+
   // Stripe webhook endpoint - raw body parsing is handled in server/index.ts
   // This endpoint receives webhook events from Stripe for payment status updates
   app.post("/api/stripe-webhook", async (req, res) => {

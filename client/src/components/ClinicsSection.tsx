@@ -15,16 +15,32 @@ import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSessio
 import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target, CheckSquare } from "lucide-react";
 import { Link } from "wouter";
 import SocialShare from "@/components/SocialShare";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 import MobileRegistrationFlow from "@/components/MobileRegistrationFlow";
-// Import removed - using direct path instead
 
-const stripeKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
-if (!stripeKey) {
-  console.error('VITE_STRIPE_PUBLIC_KEY is not configured');
+// Runtime Stripe key loading - fetches from server instead of build-time env var
+let stripePromiseCacheClinic: Promise<Stripe | null> | null = null;
+
+async function getStripePromiseClinic(): Promise<Stripe | null> {
+  if (stripePromiseCacheClinic) return stripePromiseCacheClinic;
+  
+  try {
+    const response = await fetch('/api/config/stripe-key');
+    if (!response.ok) {
+      console.error('Failed to fetch Stripe key');
+      return null;
+    }
+    const data = await response.json();
+    if (data.publishableKey) {
+      stripePromiseCacheClinic = loadStripe(data.publishableKey);
+      return stripePromiseCacheClinic;
+    }
+  } catch (error) {
+    console.error('Error fetching Stripe key:', error);
+  }
+  return null;
 }
-const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 function ClinicEventsSchema({ clinics }: { clinics: ClinicWithSessions[] }) {
   const baseUrl = "https://danbizzarromethod.com";
@@ -217,6 +233,7 @@ export default function ClinicsSection() {
   const [selectedClinic, setSelectedClinic] = useState<ClinicWithSessions | null>(null);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isMobileFlow, setIsMobileFlow] = useState(false);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [registrationData, setRegistrationData] = useState({
     firstName: '',
     lastName: '',
@@ -237,6 +254,17 @@ export default function ClinicsSection() {
   const [hasSavedData, setHasSavedData] = useState(false);
   const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
+  // Load Stripe at runtime
+  useEffect(() => {
+    if (isRegistrationOpen && !stripePromise) {
+      getStripePromiseClinic().then(promise => {
+        if (promise) {
+          setStripePromise(Promise.resolve(promise));
+        }
+      });
+    }
+  }, [isRegistrationOpen, stripePromise]);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
