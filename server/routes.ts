@@ -26,10 +26,18 @@ import { prerenderService } from "./prerenderService";
 import { generateWarmupSystemPDF } from "./generateWarmupPDF";
 import { generateStrongHorsePDF } from "./generateStrongHorsePDF";
 
-const stripeKey = process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
+// In production, always use the live key. Only use testing key in development if explicitly set.
+const isProduction = process.env.NODE_ENV === 'production';
+const stripeKey = isProduction 
+  ? process.env.STRIPE_SECRET_KEY 
+  : (process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY);
 
 if (!stripeKey) {
-  throw new Error('Missing required Stripe secret: TESTING_STRIPE_SECRET_KEY or STRIPE_SECRET_KEY');
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+
+if (isProduction && process.env.TESTING_STRIPE_SECRET_KEY) {
+  console.log('Note: TESTING_STRIPE_SECRET_KEY is set but ignored in production - using STRIPE_SECRET_KEY');
 }
 
 if (stripeKey.startsWith('pk_')) {
