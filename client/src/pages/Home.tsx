@@ -557,7 +557,7 @@ export default function Home() {
             </Link>
             <Button 
               variant="outline" 
-              className="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" 
+              className="border-2 border-navy bg-white text-navy hover:bg-navy hover:text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" 
               data-testid="button-final-tips"
               onClick={() => setIsLeadModalOpen(true)}
             >
