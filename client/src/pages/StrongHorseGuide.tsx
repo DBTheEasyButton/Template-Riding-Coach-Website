@@ -38,13 +38,14 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free guide.",
@@ -75,6 +76,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim(),
+          mobile: mobile.trim(),
         }),
       });
 
@@ -100,6 +102,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       setFirstName("");
       setLastName("");
       setEmail("");
+      setMobile("");
     } catch (error) {
       console.error("Lead capture error:", error);
       toast({
@@ -142,6 +145,15 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           onChange={(e) => setEmail(e.target.value)}
           disabled={isSubmitting}
           data-testid="input-strong-horse-email-compact"
+          className="border-gray-300"
+        />
+        <Input
+          type="tel"
+          placeholder="Mobile Number"
+          value={mobile}
+          onChange={(e) => setMobile(e.target.value)}
+          disabled={isSubmitting}
+          data-testid="input-strong-horse-mobile-compact"
           className="border-gray-300"
         />
         <Button
@@ -225,6 +237,22 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             onChange={(e) => setEmail(e.target.value)}
             disabled={isSubmitting}
             data-testid="input-strong-horse-email"
+            className="border-gray-300 focus:border-navy focus:ring-navy"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="mobile" className="text-navy font-medium">
+            Mobile Number
+          </Label>
+          <Input
+            id="mobile"
+            type="tel"
+            placeholder="Enter your mobile number"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            disabled={isSubmitting}
+            data-testid="input-strong-horse-mobile"
             className="border-gray-300 focus:border-navy focus:ring-navy"
           />
         </div>

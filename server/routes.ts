@@ -376,10 +376,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture for Warm-Up PDF - creates/updates GHL contact with WarmUpPDF tag
   app.post("/api/lead-capture/warmup-pdf", async (req, res) => {
     try {
-      const { firstName, lastName, email } = req.body;
+      const { firstName, lastName, email, mobile } = req.body;
 
-      if (!firstName || !lastName || !email) {
-        return res.status(400).json({ error: 'First name, surname, and email are required' });
+      if (!firstName || !lastName || !email || !mobile) {
+        return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
       // Create or update contact in GHL with WarmUpPDF tag
@@ -388,7 +388,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email,
           firstName,
           lastName,
-          undefined, // no phone
+          mobile, // phone number
           ['WarmUpPDF'], // tag for tracking this lead source
           { lead_source: 'Warm-Up PDF Download' }
         );
@@ -434,10 +434,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture for Strong Horse PDF - creates/updates GHL contact with StrongHorsePDF tag
   app.post("/api/lead-capture/strong-horse-pdf", async (req, res) => {
     try {
-      const { firstName, lastName, email } = req.body;
+      const { firstName, lastName, email, mobile } = req.body;
 
-      if (!firstName || !lastName || !email) {
-        return res.status(400).json({ error: 'First name, surname, and email are required' });
+      if (!firstName || !lastName || !email || !mobile) {
+        return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
       // Create or update contact in GHL with StrongHorsePDF tag
@@ -446,7 +446,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email,
           firstName,
           lastName,
-          undefined, // no phone
+          mobile, // phone number
           ['StrongHorsePDF'], // tag for tracking this lead source
           { lead_source: 'Strong Horse PDF Download' }
         );

@@ -15,13 +15,14 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free guide.",
@@ -52,6 +53,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim(),
+          mobile: mobile.trim(),
         }),
       });
 
@@ -77,6 +79,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       setFirstName("");
       setLastName("");
       setEmail("");
+      setMobile("");
       onClose();
     } catch (error) {
       console.error("Lead capture error:", error);
@@ -150,6 +153,22 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               onChange={(e) => setEmail(e.target.value)}
               disabled={isSubmitting}
               data-testid="input-lead-email"
+              className="border-gray-300 focus:border-navy focus:ring-navy"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="mobile" className="text-navy font-medium">
+              Mobile Number
+            </Label>
+            <Input
+              id="mobile"
+              type="tel"
+              placeholder="Enter your mobile number"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              disabled={isSubmitting}
+              data-testid="input-lead-mobile"
               className="border-gray-300 focus:border-navy focus:ring-navy"
             />
           </div>
