@@ -504,7 +504,7 @@ export default function StrongHorseGuide() {
             </div>
             <div className="mt-6">
               <Link href="/coaching/private-lessons">
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-orange">
+                <Button variant="outline" className="border-navy bg-white text-navy hover:bg-navy hover:text-white">
                   Or Book a Lesson
                 </Button>
               </Link>
