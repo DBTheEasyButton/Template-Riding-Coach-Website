@@ -1075,6 +1075,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const rawData = req.body;
       const { sessions, autoPostToFacebook, excludeTagsFromEmail, ...clinicData } = rawData;
       
+      // Log incoming data for debugging
+      console.log('\n📋 [CLINIC CREATION] Received request:');
+      console.log('  - Title:', clinicData.title);
+      console.log('  - autoPostToFacebook:', autoPostToFacebook, '(type:', typeof autoPostToFacebook, ')');
+      console.log('  - Image:', clinicData.image ? 'Yes' : 'No');
+      
       // Convert price to cents if it exists
       const processedPrice = clinicData.price ? Math.round(parseFloat(clinicData.price.toString()) * 100) : 0;
       
@@ -1092,6 +1098,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate the clinic data
       const validatedData = insertClinicSchema.parse(processedClinicData);
       const clinic = await storage.createClinic(validatedData);
+      
+      console.log('  - Clinic created with ID:', clinic.id);
       
       // If there are sessions, create them
       if (sessions && Array.isArray(sessions) && sessions.length > 0) {
@@ -1112,7 +1120,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Post to Facebook if enabled
+      console.log('  - Checking Facebook post conditions:');
+      console.log('    * autoPostToFacebook:', autoPostToFacebook);
+      console.log('    * clinic.image exists:', !!clinic.image);
+      
       if (autoPostToFacebook && clinic.image) {
+        console.log('  - ✅ Attempting Facebook post...');
         try {
           const facebookResult = await facebookService.postClinic({
             title: clinic.title,
@@ -1125,11 +1138,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
             maxParticipants: clinic.maxParticipants,
             currentParticipants: clinic.currentParticipants
           });
-          console.log('Facebook post result:', facebookResult);
+          console.log('  - Facebook post result:', facebookResult);
         } catch (fbError) {
-          console.error('Error posting to Facebook:', fbError);
+          console.error('  - ❌ Error posting to Facebook:', fbError);
           // Don't fail the clinic creation if Facebook post fails
         }
+      } else {
+        console.log('  - ⏭️ Skipping Facebook post (conditions not met)');
       }
 
       // Send GHL emails to all contacts (tag-filtered)

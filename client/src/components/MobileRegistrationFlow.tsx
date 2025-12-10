@@ -72,6 +72,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     firstName: '',
     lastName: '',
@@ -181,16 +182,23 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
     }
   }, [isOpen, clinic]);
 
-  // Load Stripe at runtime
+  // Load Stripe at runtime - start loading immediately when modal opens
   useEffect(() => {
-    if (isOpen && !stripePromise) {
+    if (isOpen && !stripePromise && !isStripeLoading) {
+      setIsStripeLoading(true);
+      console.log('[MobileRegistrationFlow] Loading Stripe...');
       getStripePromise().then(promise => {
+        console.log('[MobileRegistrationFlow] Stripe loaded:', !!promise);
         if (promise) {
           setStripePromise(Promise.resolve(promise));
         }
+        setIsStripeLoading(false);
+      }).catch(err => {
+        console.error('[MobileRegistrationFlow] Stripe load error:', err);
+        setIsStripeLoading(false);
       });
     }
-  }, [isOpen, stripePromise]);
+  }, [isOpen, stripePromise, isStripeLoading]);
 
   const updateRegistrationData = (field: keyof RegistrationData, value: string | boolean) => {
     setRegistrationData(prev => ({ ...prev, [field]: value }));
@@ -732,7 +740,15 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                   />
                 </Elements>
               )}
-              {clientSecret && !stripePromise && (
+              {clientSecret && !stripePromise && isStripeLoading && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-blue-800">
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3"></div>
+                    Loading payment system...
+                  </div>
+                </div>
+              )}
+              {clientSecret && !stripePromise && !isStripeLoading && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
                   <AlertTriangle className="w-5 h-5 inline mr-2" />
                   Payment system is not configured. Please contact support.

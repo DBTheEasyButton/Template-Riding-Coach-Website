@@ -330,7 +330,7 @@ export default function AdminClinics() {
       isActive: true, // Default new clinic to active
       hasMultipleSessions: clinic.hasMultipleSessions || false,
       clinicType: clinic.clinicType || "single",
-      autoPostToFacebook: clinic.autoPostToFacebook || false,
+      autoPostToFacebook: true, // Default to true when cloning so Facebook post is created
       excludeTagsFromEmail: clinic.excludeTagsFromEmail || ""
     });
     

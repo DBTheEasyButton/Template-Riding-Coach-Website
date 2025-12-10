@@ -234,6 +234,7 @@ export default function ClinicsSection() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isMobileFlow, setIsMobileFlow] = useState(false);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [registrationData, setRegistrationData] = useState({
     firstName: '',
     lastName: '',
@@ -255,16 +256,23 @@ export default function ClinicsSection() {
   const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
-  // Load Stripe at runtime
+  // Load Stripe at runtime - start loading immediately when dialog opens
   useEffect(() => {
-    if (isRegistrationOpen && !stripePromise) {
+    if (isRegistrationOpen && !stripePromise && !isStripeLoading) {
+      setIsStripeLoading(true);
+      console.log('[ClinicsSection] Loading Stripe...');
       getStripePromiseClinic().then(promise => {
+        console.log('[ClinicsSection] Stripe loaded:', !!promise);
         if (promise) {
           setStripePromise(Promise.resolve(promise));
         }
+        setIsStripeLoading(false);
+      }).catch(err => {
+        console.error('[ClinicsSection] Stripe load error:', err);
+        setIsStripeLoading(false);
       });
     }
-  }, [isRegistrationOpen, stripePromise]);
+  }, [isRegistrationOpen, stripePromise, isStripeLoading]);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -1111,16 +1119,30 @@ export default function ClinicsSection() {
               ) : (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Secure Payment</h3>
-                  <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <PaymentForm
-                      onPaymentSuccess={handlePaymentSuccess}
-                      onPaymentError={handlePaymentError}
-                      registrationData={registrationData}
-                      selectedClinic={selectedClinic!}
-                      selectedSessions={selectedSessions}
-                      clientSecret={clientSecret}
-                    />
-                  </Elements>
+                  {stripePromise ? (
+                    <Elements stripe={stripePromise} options={{ clientSecret }}>
+                      <PaymentForm
+                        onPaymentSuccess={handlePaymentSuccess}
+                        onPaymentError={handlePaymentError}
+                        registrationData={registrationData}
+                        selectedClinic={selectedClinic!}
+                        selectedSessions={selectedSessions}
+                        clientSecret={clientSecret}
+                      />
+                    </Elements>
+                  ) : isStripeLoading ? (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-blue-800">
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3"></div>
+                        Loading payment system...
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+                      <AlertTriangle className="w-5 h-5 inline mr-2" />
+                      Payment system is not configured. Please contact support.
+                    </div>
+                  )}
                 </div>
               )}
 
