@@ -13,7 +13,11 @@ import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Cloc
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+if (!stripeKey) {
+  console.error('VITE_STRIPE_PUBLIC_KEY is not configured');
+}
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 interface MobileRegistrationFlowProps {
   clinic: ClinicWithSessions;
@@ -687,7 +691,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
               </div>
 
               {/* Payment Section */}
-              {clientSecret && (
+              {clientSecret && stripePromise && (
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
                   <MobilePaymentForm 
                     onPaymentSuccess={(paymentIntentId) => registrationMutation.mutate(paymentIntentId)}
@@ -698,6 +702,12 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                     clientSecret={clientSecret}
                   />
                 </Elements>
+              )}
+              {clientSecret && !stripePromise && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+                  <AlertTriangle className="w-5 h-5 inline mr-2" />
+                  Payment system is not configured. Please contact support.
+                </div>
               )}
             </div>
           )}

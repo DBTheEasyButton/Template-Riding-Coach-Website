@@ -20,7 +20,11 @@ import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElemen
 import MobileRegistrationFlow from "@/components/MobileRegistrationFlow";
 // Import removed - using direct path instead
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+if (!stripeKey) {
+  console.error('VITE_STRIPE_PUBLIC_KEY is not configured');
+}
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 function ClinicEventsSchema({ clinics }: { clinics: ClinicWithSessions[] }) {
   const baseUrl = "https://danbizzarromethod.com";
