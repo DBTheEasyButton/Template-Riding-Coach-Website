@@ -281,8 +281,11 @@ export default function ClinicsSection() {
     emergencyPhone: '',
     medicalConditions: '',
     agreeToTerms: false,
-    paymentMethod: 'debit_card'
+    paymentMethod: 'debit_card',
+    referralCode: ''
   });
+  const [isValidatingReferral, setIsValidatingReferral] = useState(false);
+  const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
@@ -333,14 +336,40 @@ export default function ClinicsSection() {
         }));
         setHasSavedData(true);
         toast({
-          title: "Welcome back!",
-          description: "We've pre-filled your details from your last registration.",
+          title: `Hi ${data.firstName || 'there'}!`,
+          description: "Your details have been pre-filled from your last registration.",
         });
       }
     } catch (error) {
       // Silently fail - it just means no previous registration
     } finally {
       setIsLookingUpEmail(false);
+    }
+  };
+
+  // Validate referral code
+  const validateReferralCode = async (code: string) => {
+    if (!code) return;
+    
+    setIsValidatingReferral(true);
+    try {
+      const response = await fetch('/api/loyalty/referral/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ referralCode: code })
+      });
+      
+      const result = await response.json();
+      
+      if (result.valid) {
+        setReferralValidation({ valid: true, message: "Valid referral code! Your friend will earn bonus points." });
+      } else {
+        setReferralValidation({ valid: false, message: "This referral code is not valid." });
+      }
+    } catch (error) {
+      setReferralValidation({ valid: false, message: "Could not validate referral code." });
+    } finally {
+      setIsValidatingReferral(false);
     }
   };
 
@@ -434,8 +463,10 @@ export default function ClinicsSection() {
         emergencyPhone: '',
         medicalConditions: '',
         agreeToTerms: false,
-        paymentMethod: 'debit_card'
+        paymentMethod: 'debit_card',
+        referralCode: ''
       });
+      setReferralValidation(null);
       setFormErrors({});
       queryClient.invalidateQueries({ queryKey: ['/api/clinics'] });
     },
@@ -514,8 +545,10 @@ export default function ClinicsSection() {
       emergencyPhone: '',
       medicalConditions: '',
       agreeToTerms: false,
-      paymentMethod: 'bank_transfer'
+      paymentMethod: 'bank_transfer',
+      referralCode: ''
     });
+    setReferralValidation(null);
     toast({
       title: "Saved data cleared",
       description: "Your saved registration details have been removed.",
@@ -1043,6 +1076,59 @@ export default function ClinicsSection() {
                     <p className="text-sm text-red-500 mt-1 flex items-center">
                       <AlertCircle className="w-4 h-4 mr-1" />
                       {formErrors.phone}
+                    </p>
+                  )}
+                </div>
+
+                {/* Referral Code - Prominent placement */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                  <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
+                  <p className="text-xs text-gray-700 mt-1 mb-2">
+                    They'll earn 20 bonus points and you'll start earning points too.
+                  </p>
+                  <div className="relative">
+                    <Input
+                      id="referralCode"
+                      data-testid="input-referral-code-desktop"
+                      value={registrationData.referralCode || ''}
+                      onChange={(e) => {
+                        const value = e.target.value.toUpperCase();
+                        handleInputChange('referralCode', value);
+                        setReferralValidation(null);
+                      }}
+                      onBlur={(e) => {
+                        const code = e.target.value.trim();
+                        if (code) {
+                          validateReferralCode(code);
+                        }
+                      }}
+                      placeholder="DBM-XXXXX"
+                      className={`${
+                        referralValidation?.valid === false ? 'border-red-500 bg-red-50' : 
+                        referralValidation?.valid === true ? 'border-green-500 bg-green-50' : ''
+                      }`}
+                    />
+                    {isValidatingReferral && (
+                      <div className="absolute right-3 top-3">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                      </div>
+                    )}
+                  </div>
+                  {referralValidation && (
+                    <p className={`text-xs mt-2 flex items-center gap-1 ${
+                      referralValidation.valid ? 'text-green-600' : 'text-red-600'
+                    }`} data-testid="referral-validation-message-desktop">
+                      {referralValidation.valid ? (
+                        <>
+                          <Check className="w-3 h-3" />
+                          {referralValidation.message}
+                        </>
+                      ) : (
+                        <>
+                          <AlertTriangle className="w-3 h-3" />
+                          {referralValidation.message}
+                        </>
+                      )}
                     </p>
                   )}
                 </div>

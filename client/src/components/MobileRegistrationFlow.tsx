@@ -115,8 +115,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
           medicalConditions: data.medicalConditions || prev.medicalConditions
         }));
         toast({
-          title: "Welcome back!",
-          description: "We've pre-filled your details from your last registration.",
+          title: `Hi ${data.firstName || 'there'}!`,
+          description: "Your details have been pre-filled from your last registration.",
         });
       }
     } catch (error) {
