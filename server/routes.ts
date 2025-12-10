@@ -864,9 +864,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error('Failed to update old loyalty program:', error);
       }
 
-      // NEW: Award 10 points for clinic entry
+      // NEW: Award 10 points for clinic entry (with firstName for memorable referral code)
       try {
-        await storage.awardPoints(registration.email, 10, `Clinic registration: ${clinic.title}`);
+        await storage.awardPoints(registration.email, 10, `Clinic registration: ${clinic.title}`, registration.firstName);
         console.log(`Awarded 10 points to ${registration.email} for clinic entry`);
       } catch (error) {
         console.error('Failed to award clinic entry points:', error);

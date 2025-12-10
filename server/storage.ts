@@ -192,10 +192,10 @@ export interface IStorage {
   useLoyaltyDiscount(discountCode: string, registrationId: number): Promise<LoyaltyDiscount | undefined>;
   
   // Points & Referral System
-  generateUniqueReferralCode(): Promise<string>;
+  generateUniqueReferralCode(firstName?: string): Promise<string>;
   validateReferralCode(code: string): Promise<{ valid: boolean; referrerId?: number; referrerEmail?: string }>;
   isNewClient(email: string): Promise<boolean>;
-  awardPoints(email: string, points: number, reason: string): Promise<LoyaltyProgram | undefined>;
+  awardPoints(email: string, points: number, reason: string, firstName?: string): Promise<LoyaltyProgram | undefined>;
   trackReferral(referrerId: number, refereeEmail: string, isNewClient: boolean, registrationId: number): Promise<void>;
   checkPointsMilestone(loyaltyId: number, points: number): Promise<void>;
   generateDiscount20Percent(loyaltyId: number, pointsRequired: number): Promise<LoyaltyDiscount>;
@@ -1512,8 +1512,31 @@ The Dan Bizzarro Method Team`,
   }
 
   // Points & Referral System Implementation
-  async generateUniqueReferralCode(): Promise<string> {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No confusing chars like I, O, 0, 1
+  async generateUniqueReferralCode(firstName?: string): Promise<string> {
+    // If firstName is provided, create a memorable code like DBM-SARAH
+    if (firstName && firstName.trim().length > 0) {
+      const cleanName = firstName.trim().toUpperCase().replace(/[^A-Z]/g, '');
+      
+      if (cleanName.length > 0) {
+        // Try the base code first (DBM-SARAH)
+        let baseCode = `DBM-${cleanName}`;
+        let code = baseCode;
+        let counter = 1;
+        
+        while (true) {
+          const existing = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.referralCode, code));
+          if (existing.length === 0) {
+            return code;
+          }
+          // If exists, try with number (DBM-SARAH2, DBM-SARAH3, etc.)
+          counter++;
+          code = `${baseCode}${counter}`;
+        }
+      }
+    }
+    
+    // Fallback to random code if no firstName provided
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let code: string;
     let isUnique = false;
 
@@ -1549,18 +1572,18 @@ The Dan Bizzarro Method Team`,
     return registrations.length === 0;
   }
 
-  async awardPoints(email: string, points: number, reason: string): Promise<LoyaltyProgram | undefined> {
+  async awardPoints(email: string, points: number, reason: string, firstName?: string): Promise<LoyaltyProgram | undefined> {
     let program = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email)).then(rows => rows[0]);
     
     if (!program) {
-      // Create new loyalty program entry with referral code
-      const referralCode = await this.generateUniqueReferralCode();
+      // Create new loyalty program entry with referral code based on firstName
+      const referralCode = await this.generateUniqueReferralCode(firstName);
       const [emailParts] = email.split('@');
       const [newProgram] = await db
         .insert(loyaltyProgram)
         .values({
           email,
-          firstName: emailParts,
+          firstName: firstName || emailParts,
           lastName: '',
           clinicEntries: 0,
           totalSpent: 0,
