@@ -462,14 +462,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
-      // Create or update contact in GHL with StrongHorsePDF tag
+      // Create or update contact in GHL with StrongHorse tag
       try {
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
           email,
           firstName,
           lastName,
           mobile, // phone number
-          ['StrongHorsePDF'], // tag for tracking this lead source
+          ['StrongHorse'], // tag for tracking this lead source
           { lead_source: 'Strong Horse PDF Download' }
         );
         

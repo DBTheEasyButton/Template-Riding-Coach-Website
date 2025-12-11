@@ -151,7 +151,7 @@ export default function HeroSection() {
             data-testid="button-get-guide"
             onClick={() => setIsLeadModalOpen(true)}
           >
-            Get the Free Warm Up Guide
+            Get the Strong Horse Solution FREE GUIDE
           </Button>
         </div>
         

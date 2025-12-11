@@ -44,7 +44,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/lead-capture/warmup-pdf", {
+      const response = await fetch("/api/lead-capture/strong-horse-pdf", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "The-Eventers-Warmup-System-Dan-Bizzarro.pdf";
+      link.download = "The-Strong-Horse-Solution-Dan-Bizzarro.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -73,7 +73,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
 
       toast({
         title: "Your Guide is Downloading!",
-        description: "Check your downloads folder for 'The Eventer's Warm-Up System'.",
+        description: "Check your downloads folder for 'The Strong Horse Solution'.",
       });
 
       setFirstName("");
@@ -100,11 +100,11 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           <div className="flex items-center gap-2 mb-2">
             <Gift className="h-6 w-6 text-orange" />
             <DialogTitle className="text-xl font-playfair text-navy">
-              Free Training Guide
+              The Strong Horse Solution - Free Guide
             </DialogTitle>
           </div>
           <DialogDescription className="text-gray-600 text-base">
-            I'd love to send you my "Eventer's Warm-Up System" guide. Just let me know where to send it!
+            I'd love to send you my "Strong Horse Solution" guide. Just let me know where to send it!
           </DialogDescription>
         </DialogHeader>
 
@@ -192,7 +192,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                 Preparing Your Guide...
               </>
             ) : (
-              "Send Me the Free Guide"
+              "Get the Strong Horse Solution PDF"
             )}
           </Button>
         </form>
