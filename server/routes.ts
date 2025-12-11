@@ -2291,6 +2291,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Loyalty Program routes
+  
+  // NEW: Leaderboard endpoint (MUST be before /:email route to avoid being caught by it)
+  app.get("/api/loyalty/leaderboard", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 5;
+      const leaderboard = await storage.getLeaderboard(limit);
+      res.json(leaderboard);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+      res.status(500).json({ message: "Failed to fetch leaderboard" });
+    }
+  });
+
   app.get("/api/loyalty/:email", async (req, res) => {
     try {
       const email = decodeURIComponent(req.params.email);
@@ -2371,18 +2384,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error using loyalty discount:", error);
       res.status(500).json({ message: "Failed to use discount" });
-    }
-  });
-
-  // NEW: Leaderboard endpoint
-  app.get("/api/loyalty/leaderboard", async (req, res) => {
-    try {
-      const limit = parseInt(req.query.limit as string) || 5;
-      const leaderboard = await storage.getLeaderboard(limit);
-      res.json(leaderboard);
-    } catch (error) {
-      console.error("Error fetching leaderboard:", error);
-      res.status(500).json({ message: "Failed to fetch leaderboard" });
     }
   });
 
