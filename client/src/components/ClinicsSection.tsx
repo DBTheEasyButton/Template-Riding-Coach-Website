@@ -703,6 +703,12 @@ export default function ClinicsSection() {
                     <Calendar className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                     <span className="transition-colors duration-300 group-hover:text-navy">{formatDate(clinic.date)}</span>
                   </div>
+                  {clinic.startTime && clinic.endTime && (
+                    <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
+                      <Clock className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
+                      <span className="transition-colors duration-300 group-hover:text-navy">{clinic.startTime} - {clinic.endTime}</span>
+                    </div>
+                  )}
                   <div className="flex items-center text-sm text-dark font-medium transition-all duration-300 group-hover:translate-x-1">
                     <MapPin className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:scale-110 group-hover:text-orange" />
                     <a 
