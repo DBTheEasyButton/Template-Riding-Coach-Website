@@ -1456,7 +1456,7 @@ export default function ClinicsSection() {
 
                   <div className="border-t pt-4">
                     <h4 className="font-semibold text-navy mb-2">About this clinic</h4>
-                    <p className="text-gray-600 whitespace-pre-line">{selectedClinic.description}</p>
+                    <p className="text-gray-600 whitespace-pre-wrap">{selectedClinic.description}</p>
                   </div>
 
                   {selectedClinic.hasMultipleSessions && selectedClinic.sessions && selectedClinic.sessions.length > 0 && (
