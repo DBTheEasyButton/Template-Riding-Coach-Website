@@ -918,7 +918,7 @@ export default function ClinicsSection() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center text-green-800">
                       <Check className="w-4 h-4 mr-2" />
-                      <span className="text-sm font-medium">Your details have been pre-filled from your last registration</span>
+                      <span className="text-sm font-medium">Hi {registrationData.firstName || 'there'}! Your details have been pre-filled from your last registration</span>
                     </div>
                     <Button
                       variant="ghost"

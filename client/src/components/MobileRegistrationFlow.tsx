@@ -92,6 +92,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
   const [isValidatingReferral, setIsValidatingReferral] = useState(false);
   const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
+  const [hasSavedData, setHasSavedData] = useState(false);
+  const [savedFirstName, setSavedFirstName] = useState('');
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -114,10 +116,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
           emergencyPhone: data.emergencyPhone || prev.emergencyPhone,
           medicalConditions: data.medicalConditions || prev.medicalConditions
         }));
-        toast({
-          title: `Hi ${data.firstName || 'there'}!`,
-          description: "Your details have been pre-filled from your last registration.",
-        });
+        if (data.firstName) {
+          setHasSavedData(true);
+          setSavedFirstName(data.firstName);
+        }
       }
     } catch (error) {
       // Silently fail - it just means no previous registration
@@ -163,6 +165,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
         try {
           const parsed = JSON.parse(savedData);
           setRegistrationData(prev => ({ ...prev, ...parsed }));
+          if (parsed.firstName) {
+            setHasSavedData(true);
+            setSavedFirstName(parsed.firstName);
+          }
         } catch (e) {
           console.error('Error loading saved data:', e);
         }
@@ -396,6 +402,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
         <div className="px-6 py-4 overflow-y-auto flex-1">
           {currentStep === 1 && (
             <div className="space-y-4">
+              {hasSavedData && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <div className="flex items-center text-green-800">
+                    <Check className="w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="text-sm font-medium">Hi {savedFirstName || 'there'}! Your details have been pre-filled from your last registration</span>
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">First Name *</Label>
