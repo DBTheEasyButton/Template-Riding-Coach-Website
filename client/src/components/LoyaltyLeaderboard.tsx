@@ -11,7 +11,7 @@ interface LeaderboardEntry {
 
 export default function LoyaltyLeaderboard() {
   const { data: leaderboard, isLoading } = useQuery<LeaderboardEntry[]>({
-    queryKey: ['/api/loyalty/leaderboard'],
+    queryKey: ['/api/loyalty/leaderboard', { limit: 10 }],
   });
 
   const getNextResetDate = () => {
@@ -99,36 +99,32 @@ export default function LoyaltyLeaderboard() {
           ))}
         </div>
       ) : leaderboard && leaderboard.length > 0 ? (
-        <div className="space-y-3" data-testid="leaderboard-list">
+        <div className="space-y-2" data-testid="leaderboard-list">
           {leaderboard.map((entry) => (
             <div
               key={entry.rank}
               data-testid={`leaderboard-entry-${entry.rank}`}
-              className={`flex items-center justify-between p-4 rounded-lg border-2 transition-all ${getRankBgColor(entry.rank)}`}
+              className={`flex items-center justify-between rounded-lg border-2 transition-all ${getRankBgColor(entry.rank)} ${entry.rank <= 3 ? 'p-4' : 'p-2'}`}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <div className="flex-shrink-0">
-                  {getRankIcon(entry.rank)}
+                  {entry.rank <= 3 ? getRankIcon(entry.rank) : (
+                    <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-gray-500">
+                      {entry.rank}
+                    </span>
+                  )}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold text-gray-900">
-                      {entry.firstName} {entry.lastInitial}.
-                    </span>
-                    {entry.rank <= 3 && (
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-600 text-white">
-                        TOP {entry.rank}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-600">Rank #{entry.rank}</p>
+                  <span className={`font-bold text-gray-900 ${entry.rank <= 3 ? 'text-lg' : 'text-sm'}`}>
+                    {entry.firstName} {entry.lastInitial}.
+                  </span>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-blue-600" data-testid={`points-${entry.rank}`}>
+                <div className={`font-bold text-blue-600 ${entry.rank <= 3 ? 'text-2xl' : 'text-lg'}`} data-testid={`points-${entry.rank}`}>
                   {entry.points}
                 </div>
-                <p className="text-xs text-gray-600">points</p>
+                {entry.rank <= 3 && <p className="text-xs text-gray-600">points</p>}
               </div>
             </div>
           ))}
