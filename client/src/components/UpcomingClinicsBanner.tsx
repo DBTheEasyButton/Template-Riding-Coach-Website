@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Clinic } from "@shared/schema";
 
@@ -33,6 +33,12 @@ export default function UpcomingClinicsBanner() {
               <Calendar className="w-5 h-5" />
               <span>{clinicDate}</span>
             </div>
+            {clinic.startTime && clinic.endTime && (
+              <div className="flex items-center gap-3">
+                <Clock className="w-5 h-5" />
+                <span>{clinic.startTime} - {clinic.endTime}</span>
+              </div>
+            )}
             <div className="flex items-center gap-3">
               <MapPin className="w-5 h-5" />
               <span>{clinic.location}</span>
