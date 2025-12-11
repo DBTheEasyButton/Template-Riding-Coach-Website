@@ -267,6 +267,7 @@ function PaymentForm({
 export default function ClinicsSection() {
   const [selectedClinic, setSelectedClinic] = useState<ClinicWithSessions | null>(null);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isMobileFlow, setIsMobileFlow] = useState(false);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [isStripeLoading, setIsStripeLoading] = useState(false);
@@ -531,6 +532,18 @@ export default function ClinicsSection() {
     setIsRegistrationOpen(true);
   };
 
+  const handleViewDetails = (clinic: ClinicWithSessions) => {
+    setSelectedClinic(clinic);
+    setIsDetailsOpen(true);
+  };
+
+  const handleRegisterFromDetails = () => {
+    setIsDetailsOpen(false);
+    if (selectedClinic) {
+      handleRegistration(selectedClinic);
+    }
+  };
+
   const clearSavedData = () => {
     localStorage.removeItem('clinicClientData');
     setHasSavedData(false);
@@ -679,7 +692,7 @@ export default function ClinicsSection() {
           <div className="lg:col-span-3">
             <div className="grid md:grid-cols-2 gap-8">
           {clinics.map((clinic) => (
-            <Card key={clinic.id} data-clinic-id={clinic.id} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
+            <Card key={clinic.id} data-clinic-id={clinic.id} onClick={() => handleViewDetails(clinic)} className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.03] group cursor-pointer transform flex flex-col h-full">
               <div className="relative overflow-hidden">
                 <img 
                   src={clinic.image}
@@ -715,6 +728,7 @@ export default function ClinicsSection() {
                       href={clinic.googleMapsLink || `https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                       className="hover:text-orange underline transition-colors duration-300 group-hover:text-navy"
                     >
                       {clinic.location}
@@ -769,7 +783,7 @@ export default function ClinicsSection() {
                     
                     return isFull ? (
                       <Button 
-                        onClick={() => handleRegistration(clinic)}
+                        onClick={(e) => { e.stopPropagation(); handleRegistration(clinic); }}
                         variant="outline"
                         className="flex-1 border-orange text-orange hover:bg-orange hover:text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:border-2"
                       >
@@ -777,7 +791,7 @@ export default function ClinicsSection() {
                       </Button>
                     ) : (
                       <Button 
-                        onClick={() => handleRegistration(clinic)}
+                        onClick={(e) => { e.stopPropagation(); handleRegistration(clinic); }}
                         className="flex-1 bg-navy hover:bg-slate-800 text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:bg-orange relative"
                       >
                         <span className="hidden sm:inline">Register Now</span>
@@ -790,7 +804,7 @@ export default function ClinicsSection() {
                       </Button>
                     );
                   })()}
-                  <div className="transition-transform duration-300 group-hover:scale-110">
+                  <div className="transition-transform duration-300 group-hover:scale-110" onClick={(e) => e.stopPropagation()}>
                     <SocialShare clinic={clinic} />
                   </div>
                 </div>
@@ -1383,6 +1397,118 @@ export default function ClinicsSection() {
                 Close
               </Button>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Clinic Details Dialog */}
+        <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+            {selectedClinic && (
+              <>
+                <div className="relative">
+                  <img 
+                    src={selectedClinic.image}
+                    alt={selectedClinic.title}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                </div>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-playfair text-navy">
+                    {selectedClinic.title}
+                  </DialogTitle>
+                </DialogHeader>
+                
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center text-sm text-dark font-medium">
+                      <Calendar className="w-4 h-4 mr-2 text-orange" />
+                      <span>{formatDate(selectedClinic.date)}</span>
+                    </div>
+                    {selectedClinic.startTime && selectedClinic.endTime && (
+                      <div className="flex items-center text-sm text-dark font-medium">
+                        <Clock className="w-4 h-4 mr-2 text-orange" />
+                        <span>{selectedClinic.startTime} - {selectedClinic.endTime}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center text-sm text-dark font-medium">
+                      <MapPin className="w-4 h-4 mr-2 text-orange" />
+                      <a 
+                        href={selectedClinic.googleMapsLink || `https://maps.google.com/maps?q=${encodeURIComponent(selectedClinic.location)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-orange underline"
+                      >
+                        {selectedClinic.location}
+                      </a>
+                    </div>
+                    <div className="flex items-center text-sm text-dark">
+                      <PoundSterling className="w-4 h-4 mr-2 text-orange" />
+                      <span className="font-bold text-xl text-orange">
+                        {selectedClinic.hasMultipleSessions && selectedClinic.sessions && selectedClinic.sessions.length > 0
+                          ? `from £${(Math.min(...selectedClinic.sessions.map((s: ClinicSession) => s.price)) / 100).toFixed(0)}`
+                          : selectedClinic.price > 0 
+                            ? `£${(selectedClinic.price / 100).toFixed(0)}`
+                            : 'Price TBA'
+                        }
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <h4 className="font-semibold text-navy mb-2">About this clinic</h4>
+                    <p className="text-gray-600 whitespace-pre-line">{selectedClinic.description}</p>
+                  </div>
+
+                  {selectedClinic.hasMultipleSessions && selectedClinic.sessions && selectedClinic.sessions.length > 0 && (
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-navy mb-2">Available Sessions</h4>
+                      <div className="space-y-2">
+                        {selectedClinic.sessions.map((session) => (
+                          <div key={session.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <div>
+                              <span className="font-medium">{session.sessionName}</span>
+                              <span className="text-sm text-gray-500 ml-2">({session.discipline})</span>
+                            </div>
+                            <span className="font-semibold text-orange">£{(session.price / 100).toFixed(0)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedClinic.entryClosingDate && (
+                    <div className="bg-orange/10 p-3 rounded-lg">
+                      <div className="flex items-center text-sm">
+                        <Clock className="w-4 h-4 mr-2 text-orange" />
+                        <span className={isRegistrationClosed(selectedClinic) ? 'text-red-600 font-bold' : 'text-gray-700'}>
+                          {isRegistrationClosed(selectedClinic) 
+                            ? 'Registration Closed'
+                            : `Entries close: ${formatDate(selectedClinic.entryClosingDate)}`
+                          }
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <DialogFooter className="mt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsDetailsOpen(false)}
+                  >
+                    Close
+                  </Button>
+                  {!isRegistrationClosed(selectedClinic) && (
+                    <Button
+                      onClick={handleRegisterFromDetails}
+                      className="bg-navy hover:bg-slate-800 text-white"
+                    >
+                      Register Now
+                    </Button>
+                  )}
+                </DialogFooter>
+              </>
+            )}
           </DialogContent>
         </Dialog>
 

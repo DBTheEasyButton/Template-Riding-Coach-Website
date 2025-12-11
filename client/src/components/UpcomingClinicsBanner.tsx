@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Calendar, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Clinic } from "@shared/schema";
@@ -14,6 +14,7 @@ export default function UpcomingClinicsBanner() {
   }
 
   const clinic = clinics[0];
+  const [, navigate] = useLocation();
   const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
     weekday: 'short',
     year: 'numeric',
@@ -21,8 +22,15 @@ export default function UpcomingClinicsBanner() {
     day: 'numeric'
   });
 
+  const handleBannerClick = () => {
+    navigate('/coaching/clinics');
+  };
+
   return (
-    <div className="mt-16 bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg p-8 text-white shadow-lg">
+    <div 
+      onClick={handleBannerClick}
+      className="mt-16 bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg p-8 text-white shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
+    >
       <div className="flex items-start justify-between gap-6 flex-col md:flex-row">
         <div className="flex-1">
           <p className="text-orange-100 text-sm font-semibold uppercase mb-2">Upcoming Clinic</p>
@@ -48,7 +56,7 @@ export default function UpcomingClinicsBanner() {
           <p className="text-orange-50 mb-6 max-w-lg line-clamp-2">{clinic.description}</p>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
           <Link href="/coaching/clinics">
             <Button 
               size="lg" 
