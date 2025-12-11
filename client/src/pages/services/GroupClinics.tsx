@@ -191,7 +191,19 @@ export default function GroupClinics() {
               {upcomingClinics.map((clinic) => (
                 <div 
                   key={clinic.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full cursor-pointer hover:scale-[1.02]"
+                  onClick={() => {
+                    const element = document.getElementById('clinics');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    setTimeout(() => {
+                      const clinicCard = document.querySelector(`[data-clinic-id="${clinic.id}"]`) as HTMLElement;
+                      if (clinicCard) {
+                        clinicCard.click();
+                      }
+                    }, 600);
+                  }}
                 >
                   <div className="p-4 text-white" style={{ background: 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)' }}>
                     <h3 className="text-xl font-playfair font-bold mb-1 line-clamp-2">{clinic.title}</h3>
@@ -227,7 +239,8 @@ export default function GroupClinics() {
                       <Button 
                         size="sm"
                         className="bg-navy hover:bg-slate-800 text-white"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           // Scroll to clinics section
                           const element = document.getElementById('clinics');
                           if (element) {
