@@ -199,6 +199,12 @@ export default function GroupClinics() {
                       <Calendar className="w-4 h-4 mr-2" />
                       {formatDate(clinic.date)}
                     </div>
+                    {clinic.startTime && clinic.endTime && (
+                      <div className="flex items-center text-sm mt-1">
+                        <Clock className="w-4 h-4 mr-2" />
+                        {clinic.startTime} - {clinic.endTime}
+                      </div>
+                    )}
                   </div>
                   
                   <div className="p-4 flex flex-col flex-grow">
