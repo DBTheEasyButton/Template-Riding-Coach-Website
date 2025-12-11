@@ -118,6 +118,7 @@ export default function LoyaltyLeaderboard() {
                   <span className={`font-bold text-gray-900 ${entry.rank <= 3 ? 'text-lg' : 'text-sm'}`}>
                     {entry.firstName} {entry.lastInitial}.
                   </span>
+                  <p className={`text-gray-600 ${entry.rank <= 3 ? 'text-xs' : 'text-[10px]'}`}>Rank #{entry.rank}</p>
                 </div>
               </div>
               <div className="text-right">
