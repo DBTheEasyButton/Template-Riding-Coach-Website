@@ -1406,19 +1406,21 @@ The Dan Bizzarro Method Team`,
     return program;
   }
 
-  async incrementClinicEntries(email: string, amount: number): Promise<LoyaltyProgram | undefined> {
+  async incrementClinicEntries(email: string, amount: number, firstName?: string, lastName?: string): Promise<LoyaltyProgram | undefined> {
     // Get or create loyalty program
     let program = await db.select().from(loyaltyProgram).where(eq(loyaltyProgram.email, email)).then(rows => rows[0]);
     
     if (!program) {
-      // Create new loyalty program entry
+      // Create new loyalty program entry with referral code
+      const referralCode = await this.generateUniqueReferralCode(firstName);
       const [emailParts] = email.split('@');
       const [newProgram] = await db
         .insert(loyaltyProgram)
         .values({
           email,
-          firstName: emailParts, // Will be updated with real data later
-          lastName: '',
+          firstName: firstName || emailParts,
+          lastName: lastName || '',
+          referralCode,
           clinicEntries: 1,
           totalSpent: amount,
           lastClinicDate: new Date(),

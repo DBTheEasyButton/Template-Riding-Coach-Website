@@ -859,7 +859,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Track clinic entry in loyalty program (old system - will be phased out)
       try {
-        await storage.incrementClinicEntries(registration.email, clinicPrice);
+        await storage.incrementClinicEntries(registration.email, clinicPrice, registration.firstName, registration.lastName);
       } catch (error) {
         console.error('Failed to update old loyalty program:', error);
       }
