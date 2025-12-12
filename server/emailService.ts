@@ -1183,6 +1183,90 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
     await this.sendEmail(email, `🐴 Exciting New Clinic: ${clinic.title}`, htmlContent, '');
   }
+
+  async sendReferralCodeReminder(email: string, firstName: string, referralCode: string, points: number): Promise<boolean> {
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+        <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Your Referral Code is Ready!</h1>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Hi ${firstName},</p>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Thank you for being part of Dan Bizzarro Method! Here's your unique referral code to share with friends:
+          </p>
+
+          <div style="background-color: #dbeafe; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="color: #1e3a8a; margin-top: 0; font-size: 20px; text-align: center;">🎁 Your Referral Code</h3>
+            <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center; border: 2px dashed #1e3a8a; margin-top: 15px;">
+              <p style="color: #1e3a8a; font-size: 32px; font-weight: bold; margin: 0; letter-spacing: 3px;">${referralCode}</p>
+            </div>
+            <p style="color: #374151; margin-top: 15px; font-size: 14px; text-align: center;">
+              You currently have <strong>${points} points</strong>
+            </p>
+          </div>
+
+          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="color: #1e3a8a; margin-top: 0; font-size: 18px;">How It Works</h3>
+            <ul style="color: #374151; line-height: 1.8; font-size: 15px; padding-left: 20px;">
+              <li>Share your code with friends who are interested in my clinics</li>
+              <li>When they register using your code, you earn <strong>20 bonus points</strong></li>
+              <li>Every 50 points earns you an automatic <strong>20% discount code</strong></li>
+              <li>Top 5 on the leaderboard win prizes twice per year!</li>
+            </ul>
+          </div>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="https://danbizzarromethod.com/coaching/clinics" 
+               style="background-color: #1e3a8a; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
+              View Upcoming Clinics
+            </a>
+          </div>
+
+          <p style="color: #374151; font-size: 16px; margin-top: 30px;">
+            Thank you for being part of the Dan Bizzarro Method family!<br><br>
+            <strong>Dan Bizzarro</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+          </p>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; color: #6b7280; font-size: 12px;">
+          <p>📧 dan@danbizzarromethod.com | 📞 +44 7767 291713</p>
+          <p>Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom</p>
+        </div>
+      </div>
+    `;
+
+    const textContent = `
+Your Referral Code is Ready!
+
+Hi ${firstName},
+
+Thank you for being part of Dan Bizzarro Method! Here's your unique referral code to share with friends:
+
+YOUR REFERRAL CODE: ${referralCode}
+
+You currently have ${points} points.
+
+HOW IT WORKS:
+- Share your code with friends who are interested in my clinics
+- When they register using your code, you earn 20 bonus points
+- Every 50 points earns you an automatic 20% discount code
+- Top 5 on the leaderboard win prizes twice per year!
+
+View upcoming clinics: https://danbizzarromethod.com/coaching/clinics
+
+Thank you for being part of the Dan Bizzarro Method family!
+
+Dan Bizzarro
+Dan Bizzarro Method
+
+📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+    `;
+
+    return this.sendEmail(email, `🎁 Your Referral Code: ${referralCode}`, htmlContent, textContent);
+  }
 }
 
 export const emailService = new EmailService();
