@@ -1597,10 +1597,17 @@ The Dan Bizzarro Method Team`,
     } else {
       const newPoints = program.points + points;
       
+      // Generate referral code if existing entry doesn't have one
+      let referralCode = program.referralCode;
+      if (!referralCode) {
+        referralCode = await this.generateUniqueReferralCode(firstName || program.firstName);
+      }
+      
       [program] = await db
         .update(loyaltyProgram)
         .set({
           points: newPoints,
+          referralCode,
           updatedAt: new Date(),
         })
         .where(eq(loyaltyProgram.email, email))
