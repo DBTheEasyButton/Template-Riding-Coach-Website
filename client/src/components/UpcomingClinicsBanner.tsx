@@ -8,13 +8,13 @@ export default function UpcomingClinicsBanner() {
   const { data: clinics = [] } = useQuery<Clinic[]>({
     queryKey: ['/api/clinics', { upcoming: 'true', limit: 1 }],
   });
+  const [, navigate] = useLocation();
 
   if (!clinics.length) {
     return null;
   }
 
   const clinic = clinics[0];
-  const [, navigate] = useLocation();
   const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
     weekday: 'short',
     year: 'numeric',
