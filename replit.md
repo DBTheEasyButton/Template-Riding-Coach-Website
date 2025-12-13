@@ -100,7 +100,7 @@ Static pages that need manual regeneration:
 
 ### Standard CTA Banner (include once or twice per article)
 ```html
-<div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 8px; padding: 12px 20px; margin: 20px 0; text-align: center;"><p style="color: white; font-size: 1rem; font-weight: 600; margin: 0 0 6px 0;">Get My FREE Strong Horse Solution Guide</p><p style="color: #d1fae5; font-size: 0.875rem; margin: 0 0 12px 0;">Discover the proven techniques I use to build confident, responsive horses that love their work.</p><div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"><a href="/tools/strong-horse-solution" style="display: inline-block; background: white; color: #059669; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.875rem;">Download Free Guide</a></div></div>
+<div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-radius: 8px; padding: 12px 20px; margin: 20px 0; text-align: center;"><p style="color: white; font-size: 1rem; font-weight: 600; margin: 0 0 6px 0;">Get My FREE Strong Horse Solution Guide</p><p style="color: #d1fae5; font-size: 0.875rem; margin: 0 0 12px 0;">Discover the proven techniques I use to build confident, responsive horses that love their work.</p><div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;"><a href="/guides/strong-horse" style="display: inline-block; background: white; color: #059669; padding: 8px 16px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.875rem;">Download Free Guide</a></div></div>
 ```
 
 ### Article Structure
