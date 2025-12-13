@@ -57,7 +57,7 @@ export default function NewsArticle() {
   const params = useParams();
   const [, setLocation] = useLocation();
   
-  const { data: news = [] } = useQuery<News[]>({
+  const { data: news = [], isLoading } = useQuery<News[]>({
     queryKey: ['/api/news'],
   });
 
@@ -71,6 +71,29 @@ export default function NewsArticle() {
     n.id.toString() === params.id || 
     n.slug === params.id
   );
+
+  // Show loading state while fetching data
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="h-12 bg-gray-200 rounded w-3/4 mb-4"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/2 mb-8"></div>
+            <div className="h-96 bg-gray-200 rounded mb-8"></div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Use HTML content directly - articles are already formatted with proper HTML tags
   const formattedContent = useMemo(() => {
