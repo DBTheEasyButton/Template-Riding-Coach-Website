@@ -40,6 +40,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,15 +95,11 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      toast({
-        title: "Your Guide is Downloading!",
-        description: "Check your downloads folder for 'The Strong Horse Solution'.",
-      });
-
       setFirstName("");
       setLastName("");
       setEmail("");
       setMobile("");
+      setShowSuccess(true);
     } catch (error) {
       console.error("Lead capture error:", error);
       toast({
@@ -114,6 +111,35 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       setIsSubmitting(false);
     }
   };
+
+  if (showSuccess) {
+    return (
+      <div className={variant === "compact" ? "text-center py-4" : "bg-white rounded-2xl shadow-xl p-8 border border-gray-100 text-center"}>
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+          <CheckCircle className="h-8 w-8 text-green-600" />
+        </div>
+        <h3 className="text-xl font-playfair font-bold text-navy mb-3">
+          Your Guide is Downloading!
+        </h3>
+        <p className="text-gray-600 mb-4">
+          I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder.
+        </p>
+        <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
+          <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+            <Mail className="h-4 w-4 text-navy flex-shrink-0" />
+            <span>Look for an email from Dan Bizzarro Method</span>
+          </p>
+        </div>
+        <Button
+          onClick={() => setShowSuccess(false)}
+          variant="outline"
+          className="border-navy text-navy hover:bg-navy hover:text-white"
+        >
+          Download Again
+        </Button>
+      </div>
+    );
+  }
 
   if (variant === "compact") {
     return (

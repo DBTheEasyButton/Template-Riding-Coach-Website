@@ -17,7 +17,13 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
+
+  const handleClose = () => {
+    setShowSuccess(false);
+    onClose();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,16 +77,11 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      toast({
-        title: "Your Guide is Downloading!",
-        description: "Check your downloads folder for 'The Strong Horse Solution'.",
-      });
-
       setFirstName("");
       setLastName("");
       setEmail("");
       setMobile("");
-      onClose();
+      setShowSuccess(true);
     } catch (error) {
       console.error("Lead capture error:", error);
       toast({
@@ -94,8 +95,36 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
+        {showSuccess ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <Mail className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair text-navy mb-3">
+                Your Guide is Downloading!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-base">
+                I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 my-4">
+              <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+                <Mail className="h-4 w-4 text-navy flex-shrink-0" />
+                <span>Look for an email from Dan Bizzarro Method</span>
+              </p>
+            </div>
+            <Button
+              onClick={handleClose}
+              className="bg-orange hover:bg-orange-hover text-white font-semibold"
+            >
+              Got it!
+            </Button>
+          </div>
+        ) : (
+          <>
         <DialogHeader>
           <div className="flex items-center gap-2 mb-2">
             <Gift className="h-6 w-6 text-orange" />
@@ -196,6 +225,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
             )}
           </Button>
         </form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
