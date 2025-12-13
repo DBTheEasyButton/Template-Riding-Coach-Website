@@ -107,7 +107,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                 Your Guide is Downloading!
               </DialogTitle>
               <DialogDescription className="text-gray-600 text-base">
-                I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder.
+                I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder. If you still haven't received it, please contact me at <a href="mailto:dan@danbizzarromethod.com" className="text-orange hover:underline font-medium">dan@danbizzarromethod.com</a>
               </DialogDescription>
             </DialogHeader>
             <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 my-4">

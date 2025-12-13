@@ -122,7 +122,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           Your Guide is Downloading!
         </h3>
         <p className="text-gray-600 mb-4">
-          I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder.
+          I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder. If you still haven't received it, please contact me at <a href="mailto:dan@danbizzarromethod.com" className="text-orange hover:underline font-medium">dan@danbizzarromethod.com</a>
         </p>
         <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
           <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
