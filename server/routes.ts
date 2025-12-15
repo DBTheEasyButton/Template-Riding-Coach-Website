@@ -2290,6 +2290,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Send pole clinic invitation email to contacts with "pole clinic" tag
+  app.post("/api/admin/email/pole-clinic-blast", async (req, res) => {
+    try {
+      const { tag = "pole clinic" } = req.body;
+      console.log(`Starting pole clinic email blast for tag: "${tag}"`);
+      
+      const results = await emailService.sendPoleClinicInvitationToTaggedContacts(tag);
+      
+      res.json({
+        success: true,
+        message: `Pole clinic email blast complete`,
+        sent: results.sent,
+        skipped: results.skipped,
+        errors: results.errors
+      });
+    } catch (error) {
+      console.error("Error sending pole clinic email blast:", error);
+      res.status(500).json({ 
+        success: false,
+        message: "Failed to send pole clinic email blast",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // Loyalty Program routes
   
   // NEW: Leaderboard endpoint (MUST be before /:email route to avoid being caught by it)

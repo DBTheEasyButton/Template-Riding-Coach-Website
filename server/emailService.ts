@@ -1267,6 +1267,192 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
     return this.sendEmail(email, `🎁 Your Referral Code: ${referralCode}`, htmlContent, textContent);
   }
+
+  async sendPoleClinicInvitationToTaggedContacts(requiredTag: string = "pole clinic"): Promise<{ sent: number; skipped: number; errors: number }> {
+    const simulationMode = process.env.SIMULATE_EMAILS === 'true';
+    const ghlContacts = await storage.getAllGhlContacts();
+    
+    const results = { sent: 0, skipped: 0, errors: 0 };
+    
+    if (simulationMode) {
+      console.log('\n📧 [POLE CLINIC EMAIL - SIMULATION MODE]');
+      console.log(`Looking for contacts with tag: "${requiredTag}"\n`);
+    }
+
+    for (const contact of ghlContacts) {
+      if (!contact.email) {
+        results.skipped++;
+        continue;
+      }
+      
+      const contactTags = (contact.tags || []).map(t => t.toLowerCase());
+      const hasRequiredTag = contactTags.includes(requiredTag.toLowerCase());
+      
+      if (!hasRequiredTag) {
+        if (simulationMode) {
+          console.log(`⊘ ${contact.email} - SKIPPED (no "${requiredTag}" tag)`);
+        }
+        results.skipped++;
+        continue;
+      }
+
+      const firstName = contact.firstName || 'there';
+      
+      if (simulationMode) {
+        console.log(`✓ ${contact.email} (${firstName}) - HAS "${requiredTag}" tag`);
+        results.sent++;
+      } else {
+        try {
+          await this.sendPoleClinicInvitationEmail(contact.email, firstName);
+          results.sent++;
+        } catch (error) {
+          console.error(`Error sending to ${contact.email}:`, error);
+          results.errors++;
+        }
+      }
+    }
+    
+    console.log(`\n📊 Pole Clinic Email Summary:`);
+    console.log(`   Emails ${simulationMode ? 'to send' : 'sent'}: ${results.sent}`);
+    console.log(`   Contacts skipped: ${results.skipped}`);
+    if (results.errors > 0) {
+      console.log(`   Errors: ${results.errors}`);
+    }
+    console.log(simulationMode ? '✓ Simulation complete - no actual emails sent\n' : '✓ Email blast complete\n');
+    
+    return results;
+  }
+
+  private async sendPoleClinicInvitationEmail(email: string, firstName: string): Promise<boolean> {
+    const subject = "You're Invited! Pole Work Clinic + Exciting New Rewards Program";
+    
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+        <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Hi ${firstName},</p>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            I hope you're well and enjoying your riding!
+          </p>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            I wanted to reach out personally because you've attended one of my pole work clinics before — and I've got some exciting news to share.
+          </p>
+
+          <h2 style="color: #1e3a8a; font-size: 22px; margin-top: 30px; margin-bottom: 15px;">Upcoming Pole Work Clinics</h2>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            I'm running a new series of pole work sessions starting on the 16th of Jan, and I'd love to have you back. As you know, these clinics are perfect for improving your horse's balance, rhythm, and adjustability — whether you're working on improving the flatwork, bringing a horse back in work, training a young one or simply having fun!
+          </p>
+
+          <div style="background-color: #1e3a8a; color: white; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="margin-top: 0; font-size: 20px; color: white;">Pole Work Clinic - 16th January</h3>
+            <p style="margin: 8px 0; font-size: 16px;">📍 <a href="https://maps.app.goo.gl/C78bkCchDYQdR9Pm6" style="color: white; text-decoration: underline;">Chimneys (near Moreton-in-Marsh, GL56 9QU)</a></p>
+            <p style="margin: 8px 0; font-size: 16px;">🕒 3:00 PM - 7:00 PM</p>
+            <p style="margin: 8px 0; font-size: 16px;">👥 Sessions for all levels (3-4 horses per group)</p>
+          </div>
+
+          <div style="text-align: center; margin: 25px 0;">
+            <a href="https://danbizzarromethod.com/coaching/clinics" 
+               style="background-color: #f97316; color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 18px;">
+              BOOK NOW
+            </a>
+          </div>
+
+          <h2 style="color: #1e3a8a; font-size: 22px; margin-top: 35px; margin-bottom: 15px;">Introducing the Dan Bizzarro Method Rewards Program</h2>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            I've also launched a new loyalty program to thank my regular clients:
+          </p>
+          
+          <ul style="color: #374151; font-size: 16px; line-height: 1.8;">
+            <li><strong>Earn 10 points</strong> for every clinic entry</li>
+            <li><strong>Earn 20 bonus points</strong> when someone you refer books a clinic using your personal referral code</li>
+            <li><strong>Prizes awarded twice a year</strong> — the more points you earn, the better your chances!</li>
+          </ul>
+
+          <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-top: 25px;">
+            I'd love to see you at an upcoming clinic. If you have any questions, just reply to this email or message me on WhatsApp.
+          </p>
+
+          <div style="background-color: #dcfce7; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center;">
+            <p style="color: #15803d; font-size: 18px; font-weight: 600; margin: 0;">
+              🎄 Wishing you and your horses a very Merry Christmas and a Happy New Year! 🎄
+            </p>
+          </div>
+
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            See you soon,
+          </p>
+
+          <p style="color: #374151; font-size: 16px; margin-top: 20px;">
+            <strong>Dan Bizzarro</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span><br>
+            <span style="color: #6b7280; font-size: 14px;">+44 7767 291713</span>
+          </p>
+
+          <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+            </p>
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+            </p>
+            <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
+              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const textContent = `
+Hi ${firstName},
+
+I hope you're well and enjoying your riding!
+
+I wanted to reach out personally because you've attended one of my pole work clinics before — and I've got some exciting news to share.
+
+UPCOMING POLE WORK CLINICS
+
+I'm running a new series of pole work sessions starting on the 16th of Jan, and I'd love to have you back. As you know, these clinics are perfect for improving your horse's balance, rhythm, and adjustability — whether you're working on improving the flatwork, bringing a horse back in work, training a young one or simply having fun!
+
+POLE WORK CLINIC - 16TH JANUARY
+📍 Chimneys (near Moreton-in-Marsh, GL56 9QU)
+   Maps: https://maps.app.goo.gl/C78bkCchDYQdR9Pm6
+🕒 3:00 PM - 7:00 PM
+👥 Sessions for all levels (3-4 horses per group)
+
+Book now: https://danbizzarromethod.com/coaching/clinics
+
+INTRODUCING THE DAN BIZZARRO METHOD REWARDS PROGRAM
+
+I've also launched a new loyalty program to thank my regular clients:
+
+• Earn 10 points for every clinic entry
+• Earn 20 bonus points when someone you refer books a clinic using your personal referral code
+• Prizes awarded twice a year — the more points you earn, the better your chances!
+
+I'd love to see you at an upcoming clinic. If you have any questions, just reply to this email or message me on WhatsApp.
+
+🎄 Wishing you and your horses a very Merry Christmas and a Happy New Year! 🎄
+
+See you soon,
+
+Dan Bizzarro
+Dan Bizzarro Method
++44 7767 291713
+
+---
+📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+
+Unsubscribe: https://danbizzarromethod.com/unsubscribe
+    `;
+
+    return this.sendEmail(email, subject, htmlContent, textContent);
+  }
 }
 
 export const emailService = new EmailService();
