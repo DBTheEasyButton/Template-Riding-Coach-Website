@@ -1270,57 +1270,122 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
   async sendPoleClinicInvitationToTaggedContacts(requiredTag: string = "pole clinic"): Promise<{ sent: number; skipped: number; errors: number }> {
     const simulationMode = process.env.SIMULATE_EMAILS === 'true';
-    const ghlContacts = await storage.getAllGhlContacts();
-    
     const results = { sent: 0, skipped: 0, errors: 0 };
     
+    // Fetch contacts directly from GHL API instead of local cache
+    const apiKey = process.env.GHL_API_KEY;
+    const locationId = process.env.GHL_LOCATION_ID;
+    
+    if (!apiKey || !locationId) {
+      console.error('GHL_API_KEY or GHL_LOCATION_ID not configured');
+      throw new Error('GHL credentials not configured');
+    }
+
+    console.log(`\n📧 Fetching contacts directly from GHL API...`);
     if (simulationMode) {
-      console.log('\n📧 [POLE CLINIC EMAIL - SIMULATION MODE]');
-      console.log(`Looking for contacts with tag: "${requiredTag}"\n`);
+      console.log('[SIMULATION MODE - No emails will be sent]');
     }
+    console.log(`Looking for contacts with tag: "${requiredTag}"\n`);
 
-    for (const contact of ghlContacts) {
-      if (!contact.email) {
-        results.skipped++;
-        continue;
-      }
-      
-      const contactTags = (contact.tags || []).map(t => t.toLowerCase().replace(/^"|"$/g, '').trim());
-      const hasRequiredTag = contactTags.includes(requiredTag.toLowerCase().trim());
-      
-      if (!hasRequiredTag) {
-        if (simulationMode) {
-          console.log(`⊘ ${contact.email} - SKIPPED (no "${requiredTag}" tag)`);
-        }
-        results.skipped++;
-        continue;
-      }
+    let startAfterId: string | undefined;
+    const limit = 100;
+    let totalContacts = 0;
+    const processedEmails = new Set<string>(); // Track emails to prevent duplicates
 
-      const firstName = contact.firstName || 'there';
-      
-      if (simulationMode) {
-        console.log(`✓ ${contact.email} (${firstName}) - HAS "${requiredTag}" tag`);
-        results.sent++;
-      } else {
-        try {
-          await this.sendPoleClinicInvitationEmail(contact.email, firstName);
-          results.sent++;
-        } catch (error) {
-          console.error(`Error sending to ${contact.email}:`, error);
-          results.errors++;
+    try {
+      do {
+        const params = new URLSearchParams({
+          locationId,
+          limit: limit.toString()
+        });
+        
+        if (startAfterId) {
+          params.append('startAfterId', startAfterId);
         }
+
+        const response = await fetch(
+          `https://services.leadconnectorhq.com/contacts/?${params}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Version': '2021-07-28',
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`GHL API error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.contacts && Array.isArray(data.contacts)) {
+          for (const contact of data.contacts) {
+            totalContacts++;
+            
+            if (!contact.email) {
+              results.skipped++;
+              continue;
+            }
+
+            // Skip if we've already processed this email (deduplication)
+            const emailLower = contact.email.toLowerCase();
+            if (processedEmails.has(emailLower)) {
+              continue; // Already processed, don't count again
+            }
+            processedEmails.add(emailLower);
+            
+            const contactTags = (contact.tags || []).map((t: string) => t.toLowerCase().replace(/^"|"$/g, '').trim());
+            const hasRequiredTag = contactTags.includes(requiredTag.toLowerCase().trim());
+            
+            if (!hasRequiredTag) {
+              results.skipped++;
+              continue;
+            }
+
+            const firstName = contact.firstName || 'there';
+            
+            if (simulationMode) {
+              console.log(`✓ ${contact.email} (${firstName}) - HAS "${requiredTag}" tag`);
+              results.sent++;
+            } else {
+              try {
+                await this.sendPoleClinicInvitationEmail(contact.email, firstName);
+                console.log(`✓ Email sent to ${contact.email} (${firstName})`);
+                results.sent++;
+              } catch (error) {
+                console.error(`Error sending to ${contact.email}:`, error);
+                results.errors++;
+              }
+            }
+          }
+
+          // Pagination
+          if (data.contacts.length === limit) {
+            startAfterId = data.contacts[data.contacts.length - 1].id;
+          } else {
+            startAfterId = undefined;
+          }
+        } else {
+          startAfterId = undefined;
+        }
+      } while (startAfterId);
+
+      console.log(`\n📊 Pole Clinic Email Summary:`);
+      console.log(`   Total contacts checked: ${totalContacts}`);
+      console.log(`   Emails ${simulationMode ? 'to send' : 'sent'}: ${results.sent}`);
+      console.log(`   Contacts skipped: ${results.skipped}`);
+      if (results.errors > 0) {
+        console.log(`   Errors: ${results.errors}`);
       }
+      console.log(simulationMode ? '✓ Simulation complete - no actual emails sent\n' : '✓ Email blast complete\n');
+      
+      return results;
+    } catch (error) {
+      console.error('Error fetching contacts from GHL:', error);
+      throw error;
     }
-    
-    console.log(`\n📊 Pole Clinic Email Summary:`);
-    console.log(`   Emails ${simulationMode ? 'to send' : 'sent'}: ${results.sent}`);
-    console.log(`   Contacts skipped: ${results.skipped}`);
-    if (results.errors > 0) {
-      console.log(`   Errors: ${results.errors}`);
-    }
-    console.log(simulationMode ? '✓ Simulation complete - no actual emails sent\n' : '✓ Email blast complete\n');
-    
-    return results;
   }
 
   private async sendPoleClinicInvitationEmail(email: string, firstName: string): Promise<boolean> {
