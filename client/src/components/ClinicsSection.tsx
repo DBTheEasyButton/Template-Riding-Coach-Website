@@ -1461,17 +1461,59 @@ export default function ClinicsSection() {
 
                   {selectedClinic.hasMultipleSessions && selectedClinic.sessions && selectedClinic.sessions.length > 0 && (
                     <div className="border-t pt-4">
-                      <h4 className="font-semibold text-navy mb-2">Available Sessions</h4>
-                      <div className="space-y-2">
-                        {selectedClinic.sessions.map((session) => (
-                          <div key={session.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                            <div>
-                              <span className="font-medium">{session.sessionName}</span>
-                              <span className="text-sm text-gray-500 ml-2">({session.discipline})</span>
+                      <h4 className="font-semibold text-navy mb-3">Available Classes</h4>
+                      <div className="space-y-3">
+                        {selectedClinic.sessions.map((session) => {
+                          const spotsLeft = session.maxParticipants 
+                            ? session.maxParticipants - session.currentParticipants 
+                            : null;
+                          const isFull = spotsLeft !== null && spotsLeft <= 0;
+                          
+                          return (
+                            <div key={session.id} className={`p-4 rounded-lg border ${isFull ? 'bg-gray-100 border-gray-300' : 'bg-gray-50 border-gray-200'}`}>
+                              <div className="flex justify-between items-start mb-2">
+                                <div>
+                                  <span className="font-semibold text-navy text-lg">{session.sessionName}</span>
+                                  <Badge className="ml-2 bg-orange/20 text-orange border-orange/30">
+                                    {session.discipline}
+                                  </Badge>
+                                </div>
+                                <span className="font-bold text-xl text-orange">£{(session.price / 100).toFixed(0)}</span>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-2">
+                                <div className="flex items-center">
+                                  <Clock className="w-3.5 h-3.5 mr-1.5 text-orange" />
+                                  <span>{session.startTime} - {session.endTime}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <Target className="w-3.5 h-3.5 mr-1.5 text-orange" />
+                                  <span className="capitalize">{session.skillLevel}</span>
+                                </div>
+                              </div>
+                              
+                              {session.requirements && (
+                                <div className="flex items-start text-sm text-gray-600 mb-2">
+                                  <FileText className="w-3.5 h-3.5 mr-1.5 mt-0.5 text-orange flex-shrink-0" />
+                                  <span>{session.requirements}</span>
+                                </div>
+                              )}
+                              
+                              {spotsLeft !== null && (
+                                <div className={`flex items-center text-sm font-medium ${isFull ? 'text-red-600' : spotsLeft <= 3 ? 'text-orange' : 'text-green-600'}`}>
+                                  <Users className="w-3.5 h-3.5 mr-1.5" />
+                                  {isFull ? (
+                                    <span>Class Full</span>
+                                  ) : spotsLeft <= 3 ? (
+                                    <span>Only {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left!</span>
+                                  ) : (
+                                    <span>{spotsLeft} spots available</span>
+                                  )}
+                                </div>
+                              )}
                             </div>
-                            <span className="font-semibold text-orange">£{(session.price / 100).toFixed(0)}</span>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
