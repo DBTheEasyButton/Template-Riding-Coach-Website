@@ -1463,14 +1463,8 @@ export default function ClinicsSection() {
                     <div className="border-t pt-4">
                       <h4 className="font-semibold text-navy mb-3">Available Classes</h4>
                       <div className="space-y-3">
-                        {selectedClinic.sessions.map((session) => {
-                          const spotsLeft = session.maxParticipants 
-                            ? session.maxParticipants - session.currentParticipants 
-                            : null;
-                          const isFull = spotsLeft !== null && spotsLeft <= 0;
-                          
-                          return (
-                            <div key={session.id} className={`p-4 rounded-lg border ${isFull ? 'bg-gray-100 border-gray-300' : 'bg-gray-50 border-gray-200'}`}>
+                        {selectedClinic.sessions.map((session) => (
+                            <div key={session.id} className="p-4 rounded-lg border bg-gray-50 border-gray-200">
                               <div className="flex justify-between items-start mb-2">
                                 <div>
                                   <span className="font-semibold text-navy text-lg">{session.sessionName}</span>
@@ -1493,20 +1487,9 @@ export default function ClinicsSection() {
                               </div>
                               
                               {session.requirements && (
-                                <div className="flex items-start text-sm text-gray-600 mb-2">
+                                <div className="flex items-start text-sm text-gray-600">
                                   <FileText className="w-3.5 h-3.5 mr-1.5 mt-0.5 text-orange flex-shrink-0" />
                                   <span>{session.requirements}</span>
-                                </div>
-                              )}
-                              
-                              {spotsLeft !== null && spotsLeft <= 4 && (
-                                <div className={`flex items-center text-sm font-medium ${isFull ? 'text-red-600' : 'text-orange'}`}>
-                                  <Users className="w-3.5 h-3.5 mr-1.5" />
-                                  {isFull ? (
-                                    <span>Class Full</span>
-                                  ) : (
-                                    <span>Only {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left!</span>
-                                  )}
                                 </div>
                               )}
                             </div>
