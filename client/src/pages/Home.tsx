@@ -519,6 +519,17 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="text-center mt-8">
+            <Button 
+              variant="outline"
+              className="bg-navy hover:bg-slate-800 text-white px-4 sm:px-8 py-4 text-sm sm:text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+              data-testid="button-get-guide-section"
+              onClick={() => setIsLeadModalOpen(true)}
+            >
+              Get the Strong Horse Solution FREE GUIDE
+            </Button>
+          </div>
         </div>
       </section>
       {/* Divider */}
