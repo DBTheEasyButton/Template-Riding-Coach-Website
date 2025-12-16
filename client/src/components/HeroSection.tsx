@@ -113,8 +113,8 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
       ))}
-      <div className="relative z-10 flex-1 flex items-center justify-center py-12 sm:py-16">
-        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+      <div className="relative z-10 flex-1 flex items-center justify-center py-12 sm:py-16 w-full">
+        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 w-full">
         <h1 className="opacity-0 animate-fade-in-up leading-tight mb-6" style={{animationDelay: '0.2s'}}>
           <span className="block text-4xl md:text-6xl lg:text-7xl font-playfair font-bold">Improve Your Riding</span>
           <span className="block text-2xl md:text-3xl lg:text-4xl font-playfair font-medium mt-2">with The Dan Bizzarro Method</span>
