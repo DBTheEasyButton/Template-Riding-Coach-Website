@@ -1499,15 +1499,13 @@ export default function ClinicsSection() {
                                 </div>
                               )}
                               
-                              {spotsLeft !== null && (
-                                <div className={`flex items-center text-sm font-medium ${isFull ? 'text-red-600' : spotsLeft <= 3 ? 'text-orange' : 'text-green-600'}`}>
+                              {spotsLeft !== null && spotsLeft <= 4 && (
+                                <div className={`flex items-center text-sm font-medium ${isFull ? 'text-red-600' : 'text-orange'}`}>
                                   <Users className="w-3.5 h-3.5 mr-1.5" />
                                   {isFull ? (
                                     <span>Class Full</span>
-                                  ) : spotsLeft <= 3 ? (
-                                    <span>Only {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left!</span>
                                   ) : (
-                                    <span>{spotsLeft} spots available</span>
+                                    <span>Only {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left!</span>
                                   )}
                                 </div>
                               )}
