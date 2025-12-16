@@ -123,13 +123,13 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.6s'}}>
           <Link href="/coaching/private-lessons">
             <Button 
-              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              className="bg-orange hover:bg-orange-hover text-white px-4 sm:px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
               data-testid="button-book-lesson"
             >Book In Person Lesson</Button>
           </Link>
           <Link href="/coaching/clinics">
             <Button 
-              className="bg-navy hover:bg-slate-800 text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              className="bg-navy hover:bg-slate-800 text-white px-4 sm:px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
               data-testid="button-book-clinic-hero"
             >
               Book a Clinic
@@ -137,7 +137,7 @@ export default function HeroSection() {
           </Link>
           <Link href="/coaching/remote-coaching">
             <Button 
-              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
+              className="bg-orange hover:bg-orange-hover text-white px-4 sm:px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
               data-testid="button-book-virtual-lesson"
             >
               Book a Virtual Lesson
@@ -147,7 +147,7 @@ export default function HeroSection() {
         <div className="flex justify-center opacity-0 animate-fade-in-up mt-4" style={{animationDelay: '0.7s'}}>
           <Button 
             variant="outline"
-            className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+            className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-navy px-4 sm:px-8 py-4 text-sm sm:text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
             data-testid="button-get-guide"
             onClick={() => setIsLeadModalOpen(true)}
           >
