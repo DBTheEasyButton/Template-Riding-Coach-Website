@@ -1493,8 +1493,7 @@ export default function ClinicsSection() {
                                 </div>
                               )}
                             </div>
-                          );
-                        })}
+                        ))}
                       </div>
                     </div>
                   )}
