@@ -1285,8 +1285,8 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
         continue;
       }
       
-      const contactTags = (contact.tags || []).map(t => t.toLowerCase());
-      const hasRequiredTag = contactTags.includes(requiredTag.toLowerCase());
+      const contactTags = (contact.tags || []).map(t => t.toLowerCase().replace(/^"|"$/g, '').trim());
+      const hasRequiredTag = contactTags.includes(requiredTag.toLowerCase().trim());
       
       if (!hasRequiredTag) {
         if (simulationMode) {

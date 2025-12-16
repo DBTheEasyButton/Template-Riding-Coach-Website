@@ -2826,10 +2826,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/ghl/sync", async (req, res) => {
     try {
-      const { locationId } = req.body;
+      const locationId = req.body.locationId || process.env.GHL_LOCATION_ID;
       
       if (!locationId) {
-        return res.status(400).json({ message: "Location ID is required" });
+        return res.status(400).json({ message: "Location ID is required (provide in body or set GHL_LOCATION_ID env var)" });
       }
 
       const syncedCount = await storage.syncGhlContacts(locationId);
