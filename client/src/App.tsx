@@ -45,6 +45,7 @@ const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 
 // Course pages
 const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
+const StrongHorseAudioCourse = lazy(() => import("@/pages/courses/StrongHorseAudioCourse"));
 
 // Simple redirect component for wouter
 function RedirectToAdminClinics() {
@@ -133,6 +134,11 @@ function Router() {
       <Route path="/courses/10-points-better">
         <Suspense fallback={<PageLoader />}>
           <TenPointsBetter />
+        </Suspense>
+      </Route>
+      <Route path="/courses/strong-horse-audio">
+        <Suspense fallback={<PageLoader />}>
+          <StrongHorseAudioCourse />
         </Suspense>
       </Route>
       <Route path="/gallery">

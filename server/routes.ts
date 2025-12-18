@@ -496,6 +496,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Lead capture for Strong Horse Audio Course - creates/updates GHL contact with StrongHorseAudio tag
+  app.post("/api/lead-capture/strong-horse-audio", async (req, res) => {
+    try {
+      const { firstName, lastName, email, mobile } = req.body;
+
+      if (!firstName || !lastName || !email || !mobile) {
+        return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
+      }
+
+      // Create or update contact in GHL with StrongHorseAudio tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          mobile,
+          ['StrongHorseAudio'],
+          { lead_source: 'Strong Horse Audio Course' }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`GHL contact created/updated for ${email} with StrongHorseAudio tag`);
+        } else {
+          console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      res.json({ success: true, message: 'Lead captured successfully' });
+    } catch (error) {
+      console.error('Error in audio lead capture endpoint:', error);
+      res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
   // Get all achievements
   app.get("/api/achievements", async (req, res) => {
     try {
