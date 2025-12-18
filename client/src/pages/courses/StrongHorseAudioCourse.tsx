@@ -10,6 +10,8 @@ import SEOHead from "@/components/SEOHead";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import introAudio from "@assets/Introductory_STRON_HORSE_Audio_Lesson_1766019614594.mp3";
+import beforeImage from "@assets/67_1766025322880.png";
+import afterImage from "@assets/14_1766025322881.png";
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -653,6 +655,52 @@ export default function StrongHorseAudioCourse() {
                     <CheckCircle className="h-4 w-4 text-green-500" />
                     <span>Instant download • No payment required</span>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* BEFORE & AFTER */}
+        <section className="py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-playfair font-bold text-navy mb-4 text-center">
+              The Transformation
+            </h2>
+            <p className="text-gray-600 text-lg text-center mb-10">
+              See the difference when a horse learns to carry itself in balance.
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="relative">
+                <div className="absolute top-4 left-4 bg-red-500 text-white px-4 py-2 rounded-lg font-semibold z-10 shadow-lg">
+                  Before
+                </div>
+                <img 
+                  src={beforeImage} 
+                  alt="Horse rushing and on the forehand" 
+                  className="w-full h-72 object-cover rounded-xl shadow-lg"
+                />
+                <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-800 font-medium text-center">
+                    Heavy on the forehand, rushing, pulling against the rider
+                  </p>
+                </div>
+              </div>
+              
+              <div className="relative">
+                <div className="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold z-10 shadow-lg">
+                  After
+                </div>
+                <img 
+                  src={afterImage} 
+                  alt="Horse balanced and soft in the contact" 
+                  className="w-full h-72 object-cover rounded-xl shadow-lg"
+                />
+                <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="text-green-800 font-medium text-center">
+                    Balanced, soft in the contact, listening to the rider
+                  </p>
                 </div>
               </div>
             </div>
