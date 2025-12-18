@@ -602,7 +602,7 @@ export default function StrongHorseAudioCourse() {
                   </div>
                   <div className="flex items-center gap-2 text-gray-300">
                     <Clock className="h-5 w-5 text-orange" />
-                    <span>~90 Minutes Total</span>
+                    <span>~180 Minutes Total</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-300">
                     <Target className="h-5 w-5 text-orange" />
