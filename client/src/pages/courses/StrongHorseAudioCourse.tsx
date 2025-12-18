@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, Play, FileText, Clock, Target } from "lucide-react";
+import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import Navigation from "@/components/Navigation";
@@ -560,51 +560,6 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   );
 }
 
-const lessons = [
-  {
-    number: 1,
-    title: "Understanding Why Horses Get Strong",
-    description: "Learn the real reasons behind heaviness and rushing — it's not what you think.",
-    duration: "12 min",
-    free: true
-  },
-  {
-    number: 2,
-    title: "The Reset Before You Ride System",
-    description: "A calm, repeatable warm-up that creates softness from the very first moment.",
-    duration: "15 min",
-    free: false
-  },
-  {
-    number: 3,
-    title: "The 5-Second Transition Method",
-    description: "Quick, clear transitions that break the cycle of leaning and rushing.",
-    duration: "14 min",
-    free: false
-  },
-  {
-    number: 4,
-    title: "GO/WOAH: Building True Adjustability",
-    description: "Exercises that teach your horse to wait and go on command — without fighting.",
-    duration: "16 min",
-    free: false
-  },
-  {
-    number: 5,
-    title: "Canter Confidence: Where Strong Horses Transform",
-    description: "Master the gait where heaviness shows most — and becomes most fixable.",
-    duration: "18 min",
-    free: false
-  },
-  {
-    number: 6,
-    title: "Jumping a Strong Horse Safely",
-    description: "The framework for approaching fences with balance, not force.",
-    duration: "20 min",
-    free: false
-  }
-];
-
 export default function StrongHorseAudioCourse() {
   const [showAudioModal, setShowAudioModal] = useState(false);
   const [showPDFModal, setShowPDFModal] = useState(false);
@@ -700,56 +655,6 @@ export default function StrongHorseAudioCourse() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* WHAT YOU'LL LEARN */}
-        <section className="py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-playfair font-bold text-navy mb-4 text-center">
-              What You'll Learn in This Course
-            </h2>
-            <p className="text-gray-600 text-lg text-center mb-12">
-              Six lessons that take you from understanding the problem to confidently solving it — step by step.
-            </p>
-            
-            <div className="space-y-4">
-              {lessons.map((lesson) => (
-                <div 
-                  key={lesson.number}
-                  className={`rounded-xl p-6 border ${lesson.free ? 'bg-orange/5 border-orange' : 'bg-white border-gray-200'} shadow-sm`}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${lesson.free ? 'bg-orange text-white' : 'bg-navy/10 text-navy'}`}>
-                      {lesson.free ? <Play className="h-5 w-5" /> : <span className="font-bold">{lesson.number}</span>}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-semibold text-navy">
-                          Lesson {lesson.number}: {lesson.title}
-                        </h3>
-                        {lesson.free && (
-                          <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded">
-                            FREE
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-gray-600 mb-2">{lesson.description}</p>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Clock className="h-4 w-4" />
-                        <span>{lesson.duration}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-8 text-center">
-              <p className="text-gray-500 text-sm">
-                Full course coming soon. Get the free introductory lesson now to start transforming your riding today.
-              </p>
             </div>
           </div>
         </section>
