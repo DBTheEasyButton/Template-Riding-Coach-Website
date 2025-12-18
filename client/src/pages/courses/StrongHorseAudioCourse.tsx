@@ -621,10 +621,8 @@ export default function StrongHorseAudioCourse() {
         canonical="/courses/strong-horse-audio"
       />
       <Navigation />
-
       <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
       <PDFLeadCaptureModal isOpen={showPDFModal} onClose={() => setShowPDFModal(false)} />
-
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-20">
         
         {/* HERO SECTION */}
@@ -668,9 +666,7 @@ export default function StrongHorseAudioCourse() {
               {/* CTA BUTTONS */}
               <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                 <div className="text-center mb-6">
-                  <h2 className="text-2xl font-playfair font-bold text-navy mb-2">
-                    Start Learning Free
-                  </h2>
+                  <h2 className="text-2xl font-playfair font-bold text-navy mb-2">Start Learning Now</h2>
                   <p className="text-gray-600">
                     Choose your free resource to get started right away.
                   </p>
@@ -948,7 +944,6 @@ export default function StrongHorseAudioCourse() {
         </section>
 
       </div>
-      
       <Footer />
     </>
   );
