@@ -20,7 +20,7 @@ export default function Footer() {
               alt="Dan Bizzarro Method - International Eventing Coach & Training" 
               className="h-16 w-auto mb-4"
             />
-            <p className="text-slate-300 mb-6 leading-relaxed">The Dan Bizzarro Method builds clear communication, confidence, and partnership between horse and rider through simple, effective, progressive training that works for everyone.</p>
+            <p className="text-slate-300 mb-6 leading-relaxed">Become a confident, skilled rider and get better results!</p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-orange transition-colors">
                 <Instagram className="w-5 h-5" />
