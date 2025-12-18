@@ -679,7 +679,7 @@ export default function StrongHorseAudioCourse() {
                 <img 
                   src={beforeImage} 
                   alt="Horse rushing and on the forehand" 
-                  className="w-full h-72 object-cover rounded-xl shadow-lg"
+                  className="w-full h-72 object-cover object-center rounded-xl shadow-lg"
                 />
                 <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
                   <p className="text-red-800 font-medium text-center">
