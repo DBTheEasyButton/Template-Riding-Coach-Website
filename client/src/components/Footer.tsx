@@ -168,6 +168,15 @@ export default function Footer() {
                   10 Points Better
                 </Link>
               </li>
+              <li>
+                <Link 
+                  href="/courses/strong-horse-audio"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                  data-testid="link-footer-strong-horse-audio"
+                >
+                  Strong Horse Audio Course
+                </Link>
+              </li>
             </ul>
             <h3 className="font-semibold mb-4 mt-6">Contact</h3>
             <ul className="space-y-2 text-gray-300">
