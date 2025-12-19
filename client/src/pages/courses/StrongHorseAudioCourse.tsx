@@ -591,7 +591,7 @@ export default function StrongHorseAudioCourse() {
                   6-Lesson Audio Course
                 </span>
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold mb-6 leading-tight">
-                  From Strong to Light and Soft <span className="text-orange">(in No Time)</span>
+                  From Strong to Light and Soft <span className="text-orange">(in 28 Days)</span>
                 </h1>
                 <p className="text-lg text-gray-200 mb-6">
                   The complete audio training that transforms heavy, rushing horses into soft, balanced, rideable partners — listen while you groom, drive, or prepare for your ride.
