@@ -639,7 +639,7 @@ export default function StrongHorseAudioCourse() {
                     data-testid="button-get-free-lesson"
                   >
                     <Headphones className="mr-3 h-6 w-6" />
-                    Download a Free Lesson and Try It
+                    Try a Free Audio Lesson
                   </Button>
 
                   <Button
@@ -851,7 +851,7 @@ export default function StrongHorseAudioCourse() {
                 data-testid="button-get-free-lesson-bottom"
               >
                 <Headphones className="mr-2 h-5 w-5" />
-                Download a Free Lesson and Try It
+                Try a Free Audio Lesson
               </Button>
 
               <Button
