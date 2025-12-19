@@ -9,7 +9,7 @@ import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import introAudio from "@assets/Introductory_STRON_HORSE_Audio_Lesson_1766019614594.mp3";
+import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
 import beforeImage from "@assets/67_1766025322880.png";
 import afterImage from "@assets/14_1766025322881.png";
 
@@ -63,10 +63,13 @@ function DownloadProgressOverlay({ onComplete }: { onComplete: () => void }) {
           <Download className="h-10 w-10 text-orange animate-bounce" />
         </div>
         <h3 className="text-xl font-playfair font-bold text-navy mb-2">
-          Preparing Your Download
+          Your Download Has Started
         </h3>
-        <p className="text-gray-600 mb-6">
-          Your free audio lesson is being prepared...
+        <p className="text-gray-600 mb-4">
+          Your free audio lesson is downloading now.
+        </p>
+        <p className="text-gray-500 text-sm mb-6">
+          This may take a couple of minutes depending on your internet connection.
         </p>
         <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
           <div 
@@ -107,7 +110,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const triggerDownload = () => {
     const link = document.createElement('a');
     link.href = introAudio;
-    link.download = 'Strong-Horse-Introductory-Lesson.mp3';
+    link.download = 'From-Strong-to-Light-and-Soft-Trial-Lesson.mp3';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -199,7 +202,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             <div className="bg-navy rounded-xl p-4 my-6">
               <div className="flex items-center justify-center gap-2 text-white mb-3">
                 <Headphones className="h-5 w-5 text-orange" />
-                <span className="font-semibold text-sm">Introductory Audio Lesson</span>
+                <span className="font-semibold text-sm">Trial Lesson</span>
               </div>
               <audio controls className="w-full" data-testid="audio-intro-lesson">
                 <source src={introAudio} type="audio/mpeg" />
@@ -208,7 +211,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             </div>
             
             <div className="flex flex-col gap-3">
-              <a href={introAudio} download="Strong-Horse-Introductory-Lesson.mp3">
+              <a href={introAudio} download="From-Strong-to-Light-and-Soft-Trial-Lesson.mp3">
                 <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-download-audio-again">
                   <Download className="mr-2 h-4 w-4" />
                   Download Again
