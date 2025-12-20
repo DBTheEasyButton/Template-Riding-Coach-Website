@@ -2,6 +2,7 @@ import { useEffect, lazy, Suspense, useState } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import GoogleReviewsStrip from "@/components/GoogleReviewsStrip";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
@@ -151,6 +152,7 @@ export default function Home() {
       <StructuredData type="LocalBusiness" data={localBusinessData} />
       <Navigation />
       <HeroSection />
+      <GoogleReviewsStrip />
       {/* SECTION 2 — PROBLEM STATEMENT */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6">
