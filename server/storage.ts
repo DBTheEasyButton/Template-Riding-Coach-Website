@@ -1716,9 +1716,14 @@ The Dan Bizzarro Method Team`,
       .orderBy(desc(loyaltyProgram.points))
       .limit(limit);
 
+    const capitalizeFirstLetter = (str: string): string => {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+
     return topUsers.map((user, index) => ({
       rank: index + 1,
-      firstName: user.firstName,
+      firstName: capitalizeFirstLetter(user.firstName),
       lastInitial: user.lastName.charAt(0).toUpperCase() || '',
       points: user.points,
     }));
