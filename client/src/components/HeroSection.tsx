@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
+import { Calendar, MapPin, Video } from "lucide-react";
 import HeroPicture from "@/components/HeroPicture";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
@@ -33,6 +35,7 @@ import instagramLogo from "@assets/optimized/07Oct24 Anis Pro Upload 07Oct24 Ani
 export default function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [isTrainModalOpen, setIsTrainModalOpen] = useState(false);
   
   const images = [
     { 
@@ -120,29 +123,14 @@ export default function HeroSection() {
           <span className="block text-2xl md:text-3xl lg:text-4xl font-playfair font-medium mt-2">with The Dan Bizzarro Method</span>
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide max-w-3xl mx-auto" style={{animationDelay: '0.4s'}}>Become a confident, skilled rider and get better results!</p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.6s'}}>
-          <Link href="/coaching/private-lessons">
-            <Button 
-              className="bg-orange hover:bg-orange-hover text-white px-4 sm:px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
-              data-testid="button-book-lesson"
-            >Book In Person Lesson</Button>
-          </Link>
-          <Link href="/coaching/clinics">
-            <Button 
-              className="bg-navy hover:bg-slate-800 text-white px-4 sm:px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
-              data-testid="button-book-clinic-hero"
-            >
-              Book a Clinic
-            </Button>
-          </Link>
-          <Link href="/coaching/remote-coaching">
-            <Button 
-              className="bg-orange hover:bg-orange-hover text-white px-4 sm:px-8 py-4 text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto"
-              data-testid="button-book-virtual-lesson"
-            >
-              Book a Virtual Lesson
-            </Button>
-          </Link>
+        <div className="flex justify-center opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.6s'}}>
+          <Button 
+            className="bg-orange hover:bg-orange-hover text-white px-8 sm:px-12 py-5 text-lg md:text-xl font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
+            data-testid="button-train-with-dan"
+            onClick={() => setIsTrainModalOpen(true)}
+          >
+            Train with Dan
+          </Button>
         </div>
         <div className="flex justify-center opacity-0 animate-fade-in-up mt-4" style={{animationDelay: '0.7s'}}>
           <Button 
@@ -191,6 +179,46 @@ export default function HeroSection() {
         isOpen={isLeadModalOpen} 
         onClose={() => setIsLeadModalOpen(false)} 
       />
+
+      {/* Train with Dan Options Modal */}
+      <Dialog open={isTrainModalOpen} onOpenChange={setIsTrainModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-playfair font-bold text-navy text-center">
+              Train with Dan
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 mt-4">
+            <Link href="/coaching/clinics" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-navy hover:bg-slate-800 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-clinic"
+              >
+                <Calendar className="w-5 h-5" />
+                Book a Clinic
+              </Button>
+            </Link>
+            <Link href="/coaching/private-lessons" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-orange hover:bg-orange-hover text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-private"
+              >
+                <MapPin className="w-5 h-5" />
+                Book In Person Lesson
+              </Button>
+            </Link>
+            <Link href="/coaching/remote-coaching" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-virtual"
+              >
+                <Video className="w-5 h-5" />
+                Book a Virtual Lesson
+              </Button>
+            </Link>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
