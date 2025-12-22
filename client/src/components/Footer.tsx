@@ -177,6 +177,15 @@ export default function Footer() {
                   Strong Horse Audio Course
                 </Link>
               </li>
+              <li>
+                <Link 
+                  href="/gat-uk-tour"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                  data-testid="link-footer-gat-uk-tour"
+                >
+                  GAT UK Eventing Tour
+                </Link>
+              </li>
             </ul>
             <h3 className="font-semibold mb-4 mt-6">Contact</h3>
             <ul className="space-y-2 text-gray-300">
