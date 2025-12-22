@@ -47,6 +47,9 @@ const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
 const StrongHorseAudioCourse = lazy(() => import("@/pages/courses/StrongHorseAudioCourse"));
 
+// Tour pages
+const GATUKTour = lazy(() => import("@/pages/GATUKTour"));
+
 // Simple redirect component for wouter
 function RedirectToAdminClinics() {
   const [, setLocation] = useLocation();
@@ -139,6 +142,11 @@ function Router() {
       <Route path="/courses/strong-horse-audio">
         <Suspense fallback={<PageLoader />}>
           <StrongHorseAudioCourse />
+        </Suspense>
+      </Route>
+      <Route path="/gat-uk-tour">
+        <Suspense fallback={<PageLoader />}>
+          <GATUKTour />
         </Suspense>
       </Route>
       <Route path="/gallery">
