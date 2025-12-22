@@ -5,13 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Calendar, MapPin, Users, Award, CheckCircle, Clock, Coffee, Sun, Star, ChevronRight } from "lucide-react";
-
-const burghleyJumpImage = "/attached_assets/Burghley_(1)_1766404028280.PNG";
-const burghleyWaterImage = "/attached_assets/Burghley__1766404028280.PNG";
-const cotswoldsImage = "/attached_assets/IMG_2889_1766404028281.jpg";
-const londonImage = "/attached_assets/IMG_2896_1766404028280.jpg";
-const coachingImage = "/attached_assets/DBCLINIC-28_1764067051591.JPG";
-const coachingImage2 = "/attached_assets/DBCLINIC-56_1762982883601.JPG";
+import burghleyJumpImage from "@assets/Burghley_(1)_1766404028280.png";
+import burghleyWaterImage from "@assets/Burghley__1766404028280.png";
+import cotswoldsImage from "@assets/IMG_2889_1766404028281.jpg";
+import londonImage from "@assets/IMG_2896_1766404028280.jpg";
+import coachingImage from "@assets/DBCLINIC-28_1764067051591.jpg";
+import coachingImage2 from "@assets/DBCLINIC-56_1762982883601.jpg";
 
 export default function GATUKTour() {
   const handleRegisterInterest = () => {
