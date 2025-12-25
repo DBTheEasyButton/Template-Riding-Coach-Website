@@ -614,9 +614,7 @@ export default function StrongHorseAudioCourse() {
                 </div>
 
                 <div className="bg-white/10 rounded-lg p-4 border-l-4 border-orange">
-                  <p className="text-gray-200 italic">
-                    "A strong horse doesn't become light by being held. It becomes light when the communication becomes clear."
-                  </p>
+                  <p className="text-gray-200 italic">"A strong horse doesn't become light by being held. It becomes light when the communication becomes clear and the self-carriage is established"</p>
                   <p className="text-orange font-semibold mt-2">— Dan Bizzarro</p>
                 </div>
               </div>
