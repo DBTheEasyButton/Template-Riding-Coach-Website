@@ -802,23 +802,23 @@ export default function StrongHorseAudioCourse() {
                 Why an Audio Course?
               </h2>
               <p className="text-gray-300 text-lg">
-                Because learning happens best when it fits your life.
+                Real-time coaching in your earbuds — while you're actually riding.
               </p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
-                  title: "While You Groom",
-                  description: "Listen as you prepare your horse, so the ideas are fresh when you mount."
+                  title: "Listen While You Ride",
+                  description: "Pop in your earbuds and get expert guidance in real time, right there in the saddle when you need it most."
                 },
                 {
-                  title: "On the Drive",
-                  description: "Turn travel time into training time — arrive at the yard ready to ride."
+                  title: "No Booking, No Fees, No Travel",
+                  description: "Forget scheduling lessons, paying per session, or driving to a trainer. Train at your own yard, on your own terms."
                 },
                 {
-                  title: "Before Your Lesson",
-                  description: "Quick refresh on key concepts so you're focused and prepared."
+                  title: "Unlimited Lessons, Anytime",
+                  description: "Repeat any lesson as many times as you want, whenever suits you — early morning, late evening, weekends."
                 }
               ].map((item, i) => (
                 <div key={i} className="bg-white/10 rounded-lg p-6 text-center">
