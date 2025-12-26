@@ -513,7 +513,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           lastName,
           mobile,
           ['StrongHorseAudio'],
-          { lead_source: 'Strong Horse Audio Course' }
+          { lead_source: 'Strong Horse Trial Lesson' }
         );
         
         if (ghlResult.success) {
