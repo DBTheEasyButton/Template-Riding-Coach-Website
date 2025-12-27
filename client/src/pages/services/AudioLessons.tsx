@@ -564,14 +564,29 @@ export default function AudioLessons() {
             The Problem with Traditional Lessons
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">You love riding, you would love to have more coaching sessions but the traditional lesson model doesn't always fit modern life. Finding a slot, booking weeks ahead, driving to the trainer, paying £50-£100 each time... and by the time you practice again on your own, you've forgotten half of what you learned. There has to be a better way.</p>
-          <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-            <h3 className="text-xl font-semibold text-navy mb-4">Audio Lessons Are the Solution</h3>
-            <p className="text-gray-600">With audio lessons, the coaching comes to you. 
-            Pop in your earbuds, press play, and I'll guide you through exercises in real time while you ride. 
-            No scheduling. 
-            No travel. 
-            No ongoing costs. 
-            Just focused training whenever and wherever suits you.</p>
+          <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-left">
+            <h3 className="text-xl font-semibold text-navy mb-4 text-center">Audio Lessons Are the Solution</h3>
+            <p className="text-gray-600 mb-4">
+              With audio lessons, the coaching comes to you. Pop in your earbuds, press play, and I'll guide you through exercises in real time while you ride.
+            </p>
+            <ul className="space-y-3 text-gray-600">
+              <li className="flex items-start gap-3">
+                <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <span><strong>No scheduling</strong> — train whenever suits you</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <span><strong>No travel</strong> — learn at your own yard</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <span><strong>No ongoing costs</strong> — pay once, keep forever</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                <span><strong>Real-time guidance</strong> — coaching while you ride</span>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
