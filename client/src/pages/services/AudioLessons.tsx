@@ -566,9 +566,12 @@ export default function AudioLessons() {
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">You love riding, you would love to have more coaching sessions but the traditional lesson model doesn't always fit modern life. Finding a slot, booking weeks ahead, driving to the trainer, paying £50-£100 each time... and by the time you practice again on your own, you've forgotten half of what you learned. There has to be a better way.</p>
           <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
             <h3 className="text-xl font-semibold text-navy mb-4">Audio Lessons Are the Solution</h3>
-            <p className="text-gray-600">
-              With audio lessons, the coaching comes to you. Pop in your earbuds, press play, and I'll guide you through exercises in real time while you ride. No scheduling. No travel. No ongoing costs. Just focused training whenever and wherever suits you.
-            </p>
+            <p className="text-gray-600">With audio lessons, the coaching comes to you. 
+            Pop in your earbuds, press play, and I'll guide you through exercises in real time while you ride. 
+            No scheduling. 
+            No travel. 
+            No ongoing costs. 
+            Just focused training whenever and wherever suits you.</p>
           </div>
         </div>
       </section>
