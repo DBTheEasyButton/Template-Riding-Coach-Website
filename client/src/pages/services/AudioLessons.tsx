@@ -465,18 +465,18 @@ export default function AudioLessons() {
                   </div>
                   <div>
                     <p className="text-white font-semibold text-lg">From Strong to Light and Soft</p>
-                    <p className="text-gray-400">28-Day Audio Course</p>
+                    <p className="text-gray-400">6-Lesson Audio Course</p>
                   </div>
                 </div>
                 <div className="space-y-3">
-                  {["Day 1: Finding the Balance Point", "Day 2: Releasing the Poll", "Day 3: Softening the Jaw", "Day 4: Creating Forward Without Speed"].map((item, i) => (
+                  {["Lesson 1: Finding the Balance Point", "Lesson 2: Releasing the Poll", "Lesson 3: Softening the Jaw", "Lesson 4: Creating Forward"].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3">
                       <Play className="h-4 w-4 text-orange" />
                       <span className="text-gray-300 text-sm">{item}</span>
                     </div>
                   ))}
                   <div className="text-center pt-2">
-                    <span className="text-gray-400 text-sm">+ 24 more lessons</span>
+                    <span className="text-gray-400 text-sm">+ 2 more lessons</span>
                   </div>
                 </div>
               </div>
@@ -499,6 +499,62 @@ export default function AudioLessons() {
             <p className="text-gray-600">
               With audio lessons, the coaching comes to you. Pop in your earbuds, press play, and I'll guide you through exercises in real time while you ride. No scheduling. No travel. No ongoing costs. Just focused training whenever and wherever suits you.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Course Box */}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200">
+            <div className="bg-orange px-6 py-3">
+              <div className="flex items-center gap-2 text-white">
+                <Star className="h-5 w-5 fill-current" />
+                <span className="font-semibold">Featured Audio Course</span>
+              </div>
+            </div>
+            <div className="p-8 md:p-10">
+              <h2 className="text-2xl md:text-3xl font-playfair font-bold text-navy mb-4">
+                From Strong to Light and Soft in 28 Days
+              </h2>
+              <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                Is your horse heavy in the hand, rushing, or leaning on the bit? This audio course guides you through a proven system to transform your horse's way of going — one ride at a time.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-3 mb-8">
+                {[
+                  "6 structured audio lessons",
+                  "Listen while you ride",
+                  "Progressive exercises over 28 days",
+                  "Develop true self-carriage",
+                  "Lighten the contact naturally",
+                  "Works for all disciplines"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  onClick={() => setShowAudioModal(true)}
+                  className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl"
+                  data-testid="button-featured-free-lesson"
+                >
+                  <Headphones className="mr-2 h-5 w-5" />
+                  Try a Free Lesson
+                </Button>
+                <Link href="/courses/strong-horse-audio">
+                  <Button 
+                    className="bg-navy hover:bg-navy/90 text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
+                    data-testid="button-featured-buy"
+                  >
+                    BUY THE FULL COURSE
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -554,60 +610,6 @@ export default function AudioLessons() {
                 )}
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Course Box */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-navy to-navy/90 rounded-2xl overflow-hidden shadow-xl">
-            <div className="p-8 md:p-12">
-              <div className="flex items-center gap-2 text-orange mb-4">
-                <Star className="h-5 w-5 fill-current" />
-                <span className="font-medium">Featured Course</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
-                From Strong to Light and Soft<br />
-                <span className="text-orange">in 28 Days</span>
-              </h2>
-              <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-                Is your horse heavy in the hand, rushing, or leaning on the bit? This 28-day audio course guides you through a proven system to transform your horse's way of going — one ride at a time.
-              </p>
-              <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                {[
-                  "28 structured audio lessons",
-                  "Listen while you ride",
-                  "Progressive daily exercises",
-                  "Develop true self-carriage",
-                  "Lighten the contact naturally",
-                  "Works for all disciplines"
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="h-5 w-5 text-green-400 flex-shrink-0" />
-                    <span className="text-gray-200 text-sm">{item}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  onClick={() => setShowAudioModal(true)}
-                  className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
-                  data-testid="button-featured-course"
-                >
-                  <Headphones className="mr-2 h-5 w-5" />
-                  Start With a Free Lesson
-                </Button>
-                <Link href="/courses/strong-horse-audio">
-                  <Button 
-                    className="bg-white hover:bg-gray-100 text-navy font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
-                    data-testid="button-learn-more-course"
-                  >
-                    BUY NOW
-                  </Button>
-                </Link>
-              </div>
-            </div>
           </div>
         </div>
       </section>
