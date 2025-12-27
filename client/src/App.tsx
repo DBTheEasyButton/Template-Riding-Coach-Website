@@ -25,6 +25,7 @@ const Dressage = lazy(() => import("@/pages/services/Dressage"));
 const ShowJumping = lazy(() => import("@/pages/services/ShowJumping"));
 const CrossCountry = lazy(() => import("@/pages/services/CrossCountry"));
 const Polework = lazy(() => import("@/pages/services/Polework"));
+const AudioLessons = lazy(() => import("@/pages/services/AudioLessons"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
 const AudioLessonsTerms = lazy(() => import("@/pages/AudioLessonsTerms"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
@@ -133,6 +134,11 @@ function Router() {
       <Route path="/coaching/polework">
         <Suspense fallback={<PageLoader />}>
           <Polework />
+        </Suspense>
+      </Route>
+      <Route path="/coaching/audio-lessons">
+        <Suspense fallback={<PageLoader />}>
+          <AudioLessons />
         </Suspense>
       </Route>
       <Route path="/courses/10-points-better">

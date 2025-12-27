@@ -36,6 +36,7 @@ export default function Navigation() {
     { href: "/coaching/clinics", label: "Clinics", isPage: true },
     { href: "/coaching/private-lessons", label: "In Person Lessons", isPage: true },
     { href: "/coaching/remote-coaching", label: "Virtual Lessons", isPage: true },
+    { href: "/coaching/audio-lessons", label: "Audio Lessons", isPage: true },
   ];
 
   const [, setLocation] = useLocation();
