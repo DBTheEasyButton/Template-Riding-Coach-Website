@@ -26,6 +26,7 @@ const ShowJumping = lazy(() => import("@/pages/services/ShowJumping"));
 const CrossCountry = lazy(() => import("@/pages/services/CrossCountry"));
 const Polework = lazy(() => import("@/pages/services/Polework"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
+const AudioLessonsTerms = lazy(() => import("@/pages/AudioLessonsTerms"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
 const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
 const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
@@ -172,6 +173,11 @@ function Router() {
       <Route path="/terms-and-conditions">
         <Suspense fallback={<PageLoader />}>
           <TermsAndConditions />
+        </Suspense>
+      </Route>
+      <Route path="/audio-lessons-terms">
+        <Suspense fallback={<PageLoader />}>
+          <AudioLessonsTerms />
         </Suspense>
       </Route>
       <Route path="/loyalty">
