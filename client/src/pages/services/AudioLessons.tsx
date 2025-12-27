@@ -493,7 +493,7 @@ export default function AudioLessons() {
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
                 Listen to professional training guidance while you ride. No booking, no travel, no weekly fees — just real-time instruction whenever you want it.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Button 
                   onClick={() => setShowAudioModal(true)}
                   className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
