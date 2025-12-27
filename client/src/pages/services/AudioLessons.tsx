@@ -1,10 +1,312 @@
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar, Download, CheckCircle, Mail, Loader2 } from "lucide-react";
+import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
+
+function DownloadProgressOverlay({ onComplete }: { onComplete: () => void }) {
+  const [progress, setProgress] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(onComplete, 500);
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 150);
+    
+    return () => clearInterval(interval);
+  }, [onComplete]);
+
+  return (
+    <div className="fixed inset-0 bg-navy/95 z-50 flex items-center justify-center">
+      <div className="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-orange/10 rounded-full mb-6">
+          <Download className="h-10 w-10 text-orange animate-bounce" />
+        </div>
+        <h3 className="text-xl font-playfair font-bold text-navy mb-2">
+          Your Download Has Started
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Your free audio lesson is downloading now.
+        </p>
+        <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+          <div 
+            className="bg-orange h-3 rounded-full transition-all duration-150"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <p className="text-sm text-gray-500">{progress}%</p>
+      </div>
+    </div>
+  );
+}
+
+function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const { toast } = useToast();
+
+  const resetForm = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setShowSuccess(false);
+    setShowProgress(false);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  const triggerDownload = () => {
+    const link = document.createElement('a');
+    link.href = introAudio;
+    link.download = 'From-Strong-to-Light-and-Soft-Trial-Lesson.mp3';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields to receive your free audio lesson.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/lead-capture/strong-horse-audio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process request");
+      }
+
+      setShowProgress(true);
+      triggerDownload();
+      
+    } catch (error) {
+      console.error("Lead capture error:", error);
+      toast({
+        title: "Something Went Wrong",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleProgressComplete = () => {
+    setShowProgress(false);
+    setShowSuccess(true);
+  };
+
+  if (showProgress) {
+    return <DownloadProgressOverlay onComplete={handleProgressComplete} />;
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md">
+        {showSuccess ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy mb-2">
+                Your Free Lesson is Ready!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Your download has started. You can also listen to the lesson below.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="bg-navy rounded-xl p-4 my-6">
+              <div className="flex items-center justify-center gap-2 text-white mb-3">
+                <Headphones className="h-5 w-5 text-orange" />
+                <span className="font-semibold text-sm">Trial Lesson</span>
+              </div>
+              <audio controls className="w-full" data-testid="audio-intro-lesson">
+                <source src={introAudio} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <a href={introAudio} download="From-Strong-to-Light-and-Soft-Trial-Lesson.mp3">
+                <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-download-audio-again">
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Again
+                </Button>
+              </a>
+              <Button variant="outline" onClick={handleClose} data-testid="button-close-audio-modal">
+                Close
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-4">
+                <div className="inline-flex items-center justify-center w-14 h-14 bg-orange/10 rounded-full">
+                  <Headphones className="h-7 w-7 text-orange" />
+                </div>
+              </div>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy text-center">
+                Get Your Free Audio Lesson
+              </DialogTitle>
+              <DialogDescription className="text-center text-gray-600">
+                Enter your details and your download will start immediately.
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="audio-firstName" className="text-navy font-medium text-sm">
+                    First Name
+                  </Label>
+                  <Input
+                    id="audio-firstName"
+                    type="text"
+                    placeholder="First name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={isSubmitting}
+                    data-testid="input-audio-firstname"
+                    className="border-gray-300"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="audio-lastName" className="text-navy font-medium text-sm">
+                    Surname
+                  </Label>
+                  <Input
+                    id="audio-lastName"
+                    type="text"
+                    placeholder="Surname"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={isSubmitting}
+                    data-testid="input-audio-lastname"
+                    className="border-gray-300"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="audio-email" className="text-navy font-medium text-sm">
+                  Email Address
+                </Label>
+                <Input
+                  id="audio-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
+                  data-testid="input-audio-email"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
+                  Mobile Number
+                </Label>
+                <Input
+                  id="audio-mobile"
+                  type="tel"
+                  placeholder="+44 7..."
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  disabled={isSubmitting}
+                  data-testid="input-audio-mobile"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                <p className="text-xs text-gray-600 flex items-start gap-2">
+                  <Mail className="h-3 w-3 text-navy mt-0.5 flex-shrink-0" />
+                  <span>Your details are safe. I'll only send helpful training tips and clinic updates.</span>
+                </p>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
+                data-testid="button-submit-audio-form"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Preparing...
+                  </>
+                ) : (
+                  <>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Free Lesson
+                  </>
+                )}
+              </Button>
+            </form>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export default function AudioLessons() {
   const testimonials = [
@@ -104,6 +406,8 @@ export default function AudioLessons() {
     }
   ];
 
+  const [showAudioModal, setShowAudioModal] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
@@ -134,22 +438,20 @@ export default function AudioLessons() {
                 Listen to professional training guidance while you ride. No booking, no travel, no weekly fees — just real-time instruction whenever you want it.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  onClick={() => setShowAudioModal(true)}
+                  className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
+                  data-testid="button-hero-cta"
+                >
+                  <Headphones className="mr-2 h-5 w-5" />
+                  Try a Free Lesson
+                </Button>
                 <Link href="/courses/strong-horse-audio">
                   <Button 
-                    className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
-                    data-testid="button-hero-cta"
-                  >
-                    <Headphones className="mr-2 h-5 w-5" />
-                    Try a Free Lesson
-                  </Button>
-                </Link>
-                <Link href="/courses/strong-horse-audio">
-                  <Button 
-                    variant="outline"
-                    className="border-2 border-white text-white hover:bg-white/10 font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
+                    className="bg-white hover:bg-gray-100 text-navy font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
                     data-testid="button-hero-course"
                   >
-                    View the 28-Day Course
+                    BUY NOW
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
@@ -288,22 +590,20 @@ export default function AudioLessons() {
                 ))}
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  onClick={() => setShowAudioModal(true)}
+                  className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
+                  data-testid="button-featured-course"
+                >
+                  <Headphones className="mr-2 h-5 w-5" />
+                  Start With a Free Lesson
+                </Button>
                 <Link href="/courses/strong-horse-audio">
                   <Button 
-                    className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
-                    data-testid="button-featured-course"
-                  >
-                    <Headphones className="mr-2 h-5 w-5" />
-                    Start With a Free Lesson
-                  </Button>
-                </Link>
-                <Link href="/courses/strong-horse-audio">
-                  <Button 
-                    variant="outline"
-                    className="border-2 border-white text-white hover:bg-white/10 font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
+                    className="bg-white hover:bg-gray-100 text-navy font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
                     data-testid="button-learn-more-course"
                   >
-                    Learn More About the Course
+                    BUY NOW
                   </Button>
                 </Link>
               </div>
@@ -365,18 +665,18 @@ export default function AudioLessons() {
           <p className="text-gray-600 text-lg mb-8">
             Start with a free lesson from the "From Strong to Light and Soft" course. Experience what it's like to have expert coaching in your ear while you ride.
           </p>
-          <Link href="/courses/strong-horse-audio">
-            <Button 
-              className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-10 text-lg rounded-xl"
-              data-testid="button-final-cta"
-            >
-              <Headphones className="mr-2 h-5 w-5" />
-              Get Your Free Audio Lesson
-            </Button>
-          </Link>
+          <Button 
+            onClick={() => setShowAudioModal(true)}
+            className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-10 text-lg rounded-xl"
+            data-testid="button-final-cta"
+          >
+            <Headphones className="mr-2 h-5 w-5" />
+            Get Your Free Audio Lesson
+          </Button>
         </div>
       </section>
 
+      <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
       <Footer />
     </div>
   );
