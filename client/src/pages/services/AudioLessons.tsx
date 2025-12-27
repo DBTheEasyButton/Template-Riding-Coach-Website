@@ -610,7 +610,7 @@ export default function AudioLessons() {
                   </div>
                 ))}
               </div>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
                   onClick={() => setShowAudioModal(true)}
                   className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl"
