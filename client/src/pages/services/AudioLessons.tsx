@@ -473,7 +473,6 @@ export default function AudioLessons() {
         canonical="https://danbizzarromethod.com/coaching/audio-lessons"
       />
       <Navigation />
-      
       {/* Hero Section */}
       <section className="relative bg-navy pt-24 pb-16 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -540,7 +539,6 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-
       {/* Compact Reviews */}
       <section className="py-6 bg-gray-50 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -559,16 +557,13 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-
       {/* Problem/Solution Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-playfair font-bold text-navy mb-6">
             The Problem with Traditional Lessons
           </h2>
-          <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            You love riding, but the traditional lesson model doesn't always fit modern life. Finding a slot, booking weeks ahead, driving to the trainer, paying £50-100 each time... and by the time you get home, you've forgotten half of what you learned. There has to be a better way.
-          </p>
+          <p className="text-lg text-gray-600 mb-8 leading-relaxed">You love riding, you would love to have more coaching sessions but the traditional lesson model doesn't always fit modern life. Finding a slot, booking weeks ahead, driving to the trainer, paying £50-£100 each time... and by the time you practice again on your own, you've forgotten half of what you learned. There has to be a better way.</p>
           <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
             <h3 className="text-xl font-semibold text-navy mb-4">Audio Lessons Are the Solution</h3>
             <p className="text-gray-600">
@@ -577,7 +572,6 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-
       {/* Featured Course Box */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -633,7 +627,6 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-
       {/* Benefits Grid */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -656,7 +649,6 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-
       {/* How It Works */}
       <section className="py-16 bg-navy text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -688,7 +680,6 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-
       {/* FAQ Section */}
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -709,7 +700,6 @@ export default function AudioLessons() {
           </Accordion>
         </div>
       </section>
-
       {/* Final CTA */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -736,7 +726,6 @@ export default function AudioLessons() {
           </p>
         </div>
       </section>
-
       <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
       <Footer />
     </div>
