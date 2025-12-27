@@ -385,24 +385,80 @@ export default function AudioLessons() {
 
   const faqs = [
     {
-      question: "Is it safe to use earbuds while riding?",
-      answer: "Many riders use bone conduction headphones which sit outside your ears and allow you to hear your surroundings clearly. For arena work in a safe, controlled environment, regular earbuds at a sensible volume work fine. The lessons are designed for training at home or in safe settings — not for hacking on roads or in traffic."
+      question: "What are the Dan Bizzarro Method audio lessons?",
+      answer: "The Dan Bizzarro Method audio lessons are listen-while-you-ride coaching sessions designed to guide you in real time while you are riding. You listen to the lesson during your ride and are coached step by step, just as you would be in a lesson. The guidance helps you understand what you are doing, what you should be feeling, and how to make adjustments as you go. The aim is not just to tell you what to do, but to help you ride with more awareness, clarity, and understanding."
     },
     {
-      question: "Will this work for my level?",
-      answer: "The 'From Strong to Light and Soft in 28 days' course is designed for riders who want to improve their horse's way of going, lighten the contact, and develop true self-carriage. Whether you're schooling at home, preparing for competition, or simply want a more enjoyable ride, the principles apply to all levels."
+      question: "How do these audio lessons compare to having a lesson in person?",
+      answer: "The audio lessons are designed to feel like I am there with you, coaching you through the ride. I guide you step by step, explaining the focus of the session, what to pay attention to, how to recognise changes, and how to respond if something doesn't feel right. Because the coaching happens during the ride, many riders find it feels far more effective than trying to remember instructions afterwards."
     },
     {
-      question: "How is this different from watching training videos?",
-      answer: "Videos require you to stop riding, watch, then try to remember what you saw. Audio lessons talk you through exercises in real time while you're actually doing them. It's like having a coach in your ear giving you feedback as you ride."
+      question: "Are these just exercises, or is it real coaching?",
+      answer: "These are not just exercise instructions. Each audio lesson is structured like a real coaching session, helping you understand how your horse feels underneath you, recognise why things feel the way they do, and learn how to improve them progressively. The focus is on developing feel, timing, and understanding, not simply riding patterns or movements."
     },
     {
-      question: "Can I download the lessons or do I need internet while riding?",
-      answer: "You can download the lessons to your phone and listen offline. No internet needed while you're riding — perfect for yards with patchy signal."
+      question: "Do I need to follow the lessons in order?",
+      answer: "Yes. Each audio course is designed with a clear sequence, and the lessons are intended to be followed in order. Each one builds on the previous lesson so that understanding and improvement develop logically. Once you have completed a course, you can revisit individual lessons whenever you need them."
     },
     {
-      question: "What if I don't understand something or need help?",
-      answer: "The lessons are designed to be clear and easy to follow. If you need additional support, you can always book a virtual lesson or attend one of my clinics to get personalised feedback on your progress."
+      question: "How long are the audio lessons?",
+      answer: "Most audio lessons are between 30 and 45 minutes, designed to fit naturally into a normal schooling or focused riding session."
+    },
+    {
+      question: "What do I need to listen to the audio lessons?",
+      answer: "The lessons work best if you listen using earphones or AirPods, as this allows you to hear the guidance clearly without distraction. You can also listen through your phone speaker and keep the phone safely in your pocket if needed. The most important thing is that you can hear the instructions clearly while riding."
+    },
+    {
+      question: "Where can I use the audio lessons?",
+      answer: "The lessons are primarily designed for flatwork, but many of the principles can be applied in different riding environments. You should always choose a safe and appropriate environment where you can concentrate on your riding and surroundings. Listening in situations that require full attention, such as busy roads or traffic, is not recommended."
+    },
+    {
+      question: "Do I need an arena to use the audio lessons?",
+      answer: "No. An arena can be useful, but it is not essential. The lessons are designed to be adaptable and can be used wherever you normally ride, provided the environment is safe and suitable."
+    },
+    {
+      question: "What level of rider are the audio lessons for?",
+      answer: "The audio lessons are mainly aimed at amateur riders, but they are not basic. They are suitable for riders who want clearer structure and guidance, want to understand what they are feeling when they ride, and want to improve the quality of their riding over time. You do not need to ride at a specific level to benefit from them."
+    },
+    {
+      question: "Are the audio lessons discipline-specific?",
+      answer: "No. The Dan Bizzarro Method is based on general training principles that apply across disciplines. The focus is on how the horse moves, balances, and responds to the rider, regardless of what you ride for."
+    },
+    {
+      question: "Can I use the lessons with more than one horse?",
+      answer: "Yes. The principles taught apply to all horses, but you should always adapt your expectations and intensity based on each horse's level, fitness, and training."
+    },
+    {
+      question: "Are the audio lessons suitable for young or inexperienced horses?",
+      answer: "Many lessons focus on fundamental training principles, which can be useful for a wide range of horses. It is always the rider's responsibility to decide whether a lesson is appropriate for their horse's age, experience, and physical development."
+    },
+    {
+      question: "What kind of improvements can I expect?",
+      answer: "The audio lessons aim to help you better understand how your horse feels and how your riding influences that feeling. Most riders notice improvements in clarity and consistency, communication between horse and rider, and overall quality and ease of the ride. Progress depends on consistency and correct application, but the tools you learn are designed to be long-lasting."
+    },
+    {
+      question: "Will the audio lessons replace live coaching?",
+      answer: "No. The audio lessons are designed to support and complement live coaching, not replace it. Many riders find that the lessons help them get more out of in-person coaching because they ride with greater awareness and understanding."
+    },
+    {
+      question: "Is there a time limit on access to the audio lessons?",
+      answer: "No. Once you purchase an audio course, you have lifetime access. You can return to the lessons whenever you want or need them."
+    },
+    {
+      question: "What if I don't find the audio lessons useful?",
+      answer: "If you complete a course and genuinely feel it hasn't been useful, you can contact me and I will give you a full refund. I want riders to feel confident trying the audio lessons and to only keep them if they genuinely help."
+    },
+    {
+      question: "Are the audio lessons safe to use?",
+      answer: "Horse riding always involves risk. The audio lessons are designed to be used in safe, controlled environments. You are responsible for deciding when and where to listen and for prioritising safety at all times."
+    },
+    {
+      question: "Are these audio lessons part of the Dan Bizzarro Method?",
+      answer: "Yes. All audio lessons are part of the wider Dan Bizzarro Method, a structured approach to training focused on clarity, balance, and understanding rather than force or shortcuts. The lessons are designed to give you tools you can continue to use long after you finish the course."
+    },
+    {
+      question: "I'm not sure which audio lesson or course to start with. What should I do?",
+      answer: "Start with the course that best matches what you want to improve in your riding right now. Over time, the audio lessons are designed to complement each other and build a broader understanding of the method."
     }
   ];
 
