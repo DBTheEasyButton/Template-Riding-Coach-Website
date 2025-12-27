@@ -670,28 +670,6 @@ export default function AudioLessons() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-12 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-playfair font-bold text-navy mb-8 text-center">
-            What Riders Are Saying
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <div className="flex gap-1 mb-3">
-                  {[...Array(t.rating)].map((_, j) => (
-                    <Star key={j} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-600 text-sm mb-4 italic">"{t.content}"</p>
-                <p className="font-semibold text-navy text-sm">{t.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -721,7 +699,7 @@ export default function AudioLessons() {
             Ready to Try Audio Lessons?
           </h2>
           <p className="text-gray-600 text-lg mb-8">
-            Start with a free lesson from the "From Strong to Light and Soft" course. Experience what it's like to have expert coaching in your ear while you ride.
+            Start with a free lesson from the "From Strong to Light and Soft in 28 Days" course. Experience what it's like to have expert coaching in your ear while you ride.
           </p>
           <Button 
             onClick={() => setShowAudioModal(true)}
