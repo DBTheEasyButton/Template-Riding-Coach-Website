@@ -541,6 +541,25 @@ export default function AudioLessons() {
         </div>
       </section>
 
+      {/* Compact Reviews */}
+      <section className="py-6 bg-gray-50 border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 gap-4">
+            {testimonials.map((t, i) => (
+              <div key={i} className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <div className="flex gap-0.5 mb-2">
+                  {[...Array(t.rating)].map((_, j) => (
+                    <Star key={j} className="h-3 w-3 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-600 text-xs mb-2 italic leading-relaxed">"{t.content}"</p>
+                <p className="font-medium text-navy text-xs">{t.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Problem/Solution Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
