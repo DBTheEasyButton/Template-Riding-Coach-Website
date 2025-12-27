@@ -728,6 +728,12 @@ export default function AudioLessons() {
             <Headphones className="mr-2 h-5 w-5" />
             Get Your Free Audio Lesson
           </Button>
+          <p className="mt-6 text-sm text-gray-500">
+            By using our audio lessons you agree to our{" "}
+            <Link href="/audio-lessons-terms" className="text-orange hover:underline">
+              Audio Lessons Terms & Conditions
+            </Link>
+          </p>
         </div>
       </section>
 
