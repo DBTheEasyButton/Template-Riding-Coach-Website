@@ -501,7 +501,7 @@ export default function AudioLessons() {
                   <Headphones className="mr-2 h-5 w-5" />
                   Try a Free Lesson
                 </Button>
-                <Link href="/courses/strong-horse-audio">
+                <a href="https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b" target="_blank" rel="noopener noreferrer">
                   <Button 
                     className="bg-white hover:bg-gray-100 text-navy font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
                     data-testid="button-hero-course"
@@ -509,7 +509,7 @@ export default function AudioLessons() {
                     BUY NOW
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
             <div className="relative hidden lg:block">
@@ -631,7 +631,7 @@ export default function AudioLessons() {
                   <Headphones className="mr-2 h-5 w-5" />
                   Try a Free Lesson
                 </Button>
-                <Link href="/courses/strong-horse-audio">
+                <a href="https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b" target="_blank" rel="noopener noreferrer">
                   <Button 
                     className="bg-navy hover:bg-navy/90 text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
                     data-testid="button-featured-buy"
@@ -639,7 +639,7 @@ export default function AudioLessons() {
                     BUY THE FULL COURSE
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
