@@ -633,7 +633,7 @@ export default function AudioLessons() {
                 </Button>
                 <a href="https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b" target="_blank" rel="noopener noreferrer">
                   <Button 
-                    className="bg-navy hover:bg-navy/90 text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
+                    className="bg-navy hover:bg-[#1e3a5f] text-white hover:text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto border-2 border-navy hover:border-[#1e3a5f]"
                     data-testid="button-featured-buy"
                   >
                     BUY THE FULL COURSE
