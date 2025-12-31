@@ -532,6 +532,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Course interest/registration - creates/updates GHL contact with specific course tags
+  app.post("/api/course-interest", async (req, res) => {
+    try {
+      const { firstName, lastName, email, mobile, courseType, courseName, price } = req.body;
+
+      if (!firstName || !lastName || !email || !mobile || !courseType) {
+        return res.status(400).json({ error: 'First name, surname, email, mobile and course type are required' });
+      }
+
+      // Determine the appropriate tag based on course type
+      let tag = '';
+      let leadSource = '';
+      
+      switch (courseType) {
+        case 'guided-group':
+          tag = 'strongchallenge';
+          leadSource = 'Strong to Soft & Light - 28-Day Challenge Registration';
+          break;
+        case 'private-mentorship':
+          tag = 'strongmentorship';
+          leadSource = 'Strong to Soft & Light - Private Mentorship Application';
+          break;
+        default:
+          tag = 'strongcourse';
+          leadSource = 'Strong to Soft & Light - Course Interest';
+      }
+
+      // Create or update contact in GHL with the appropriate tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          mobile,
+          [tag],
+          { 
+            lead_source: leadSource,
+            course_interest: courseName || courseType,
+            course_price: price || ''
+          }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`GHL contact created/updated for ${email} with ${tag} tag`);
+        } else {
+          console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      res.json({ success: true, message: 'Registration received successfully' });
+    } catch (error) {
+      console.error('Error in course interest endpoint:', error);
+      res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
   // Get all achievements
   app.get("/api/achievements", async (req, res) => {
     try {
