@@ -628,7 +628,7 @@ const pricingTiers: PricingTier[] = [
   },
   {
     id: "private-mentorship",
-    name: "PRIVATE MENTORSHIP",
+    name: "28 DAYS PRIVATE MENTORSHIP",
     subtitle: "",
     price: "£997",
     badge: "Premium",
@@ -686,9 +686,6 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
         <div className="flex items-baseline justify-center gap-2 mb-2">
           <span className={`text-4xl font-bold ${tier.highlighted ? 'text-white' : 'text-navy'}`}>
             {tier.price}
-          </span>
-          <span className={`text-sm ${tier.highlighted ? 'text-gray-300' : 'text-gray-500'}`}>
-            (1 time only)
           </span>
         </div>
         
