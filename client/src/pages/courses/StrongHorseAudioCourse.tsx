@@ -717,19 +717,6 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
         </ul>
       </div>
       
-      <div className={`mb-6 p-4 rounded-lg ${tier.highlighted ? 'bg-white/10' : 'bg-gray-50'}`}>
-        <p className={`text-sm font-semibold mb-2 ${tier.highlighted ? 'text-white' : 'text-navy'}`}>
-          This option is ideal if you want:
-        </p>
-        <ul className="space-y-1">
-          {tier.idealFor.map((item, i) => (
-            <li key={i} className={`text-sm flex items-center gap-2 ${tier.highlighted ? 'text-gray-300' : 'text-gray-600'}`}>
-              <span className="text-orange">•</span> {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-      
       {tier.note && (
         <p className={`text-xs text-center mb-4 ${tier.highlighted ? 'text-gray-400' : 'text-gray-500'}`}>
           {tier.note}
