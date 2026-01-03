@@ -683,10 +683,6 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
           {tier.name}
         </p>
         
-        <h3 className={`text-lg font-bold mb-2 ${tier.highlighted ? 'text-white' : 'text-navy'}`}>
-          {tier.subtitle}
-        </h3>
-        
         <div className="flex items-baseline justify-center gap-1 mb-2">
           <span className={`text-4xl font-bold ${tier.highlighted ? 'text-white' : 'text-navy'}`}>
             {tier.price}
