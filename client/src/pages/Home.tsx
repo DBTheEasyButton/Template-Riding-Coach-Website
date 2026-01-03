@@ -37,6 +37,7 @@ import privateLessonsBoxJpg from "@assets/optimized/private-lessons-box.jpg";
 import privateLessonsBoxWebp from "@assets/optimized/private-lessons-box.webp";
 import virtualLessonsBoxJpg from "@assets/optimized/virtual-lessons-box.jpg";
 import virtualLessonsBoxWebp from "@assets/optimized/virtual-lessons-box.webp";
+import audioLessonsImage from "@assets/Audio_lessons_1767409308208.jpeg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
@@ -445,7 +446,7 @@ export default function Home() {
             <div className="w-24 h-1 bg-orange mx-auto"></div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
               <div className="h-48 overflow-hidden">
                 <picture>
@@ -459,9 +460,9 @@ export default function Home() {
                 </picture>
               </div>
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Private Riding Lessons (Oxfordshire)</h3>
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Private Lessons</h3>
                 <p className="text-dark leading-relaxed mb-6 flex-grow">
-                  Personal, focused coaching tailored to you and your horse. Ideal for improving balance, straightness, transitions and jumping technique.
+                  Personal, focused coaching tailored to you and your horse in Oxfordshire.
                 </p>
                 <Link href="/coaching/private-lessons">
                   <Button className="w-full bg-orange hover:bg-orange-hover text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-private">
@@ -483,7 +484,7 @@ export default function Home() {
               <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-playfair font-bold text-navy mb-3">Clinics Across the UK</h3>
                 <p className="text-dark leading-relaxed mb-6 flex-grow">
-                  Small-group coaching designed to build confidence, improve accuracy and develop clear communication with your horse.
+                  Small-group coaching to build confidence and improve accuracy.
                 </p>
                 <Link href="/coaching/clinics">
                   <Button className="w-full bg-orange hover:bg-orange-hover text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-clinic">
@@ -506,13 +507,35 @@ export default function Home() {
                 </picture>
               </div>
               <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Virtual Riding Lessons</h3>
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Virtual Lessons</h3>
                 <p className="text-dark leading-relaxed mb-6 flex-grow">
-                  Real-time coaching using Pivo. Improve your riding from anywhere in the world with clear feedback and simple exercises.
+                  Real-time coaching using Pivo from anywhere in the world.
                 </p>
                 <Link href="/coaching/remote-coaching">
                   <Button className="w-full bg-orange hover:bg-orange-hover text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-virtual">
-                    Book a Virtual Lesson
+                    Book Now
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src={audioLessonsImage} 
+                  alt="Rider listening to audio lessons while riding"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Audio Lessons</h3>
+                <p className="text-dark leading-relaxed mb-6 flex-grow">
+                  Listen and learn at your own pace with guided audio coaching.
+                </p>
+                <Link href="/courses/strong-horse-audio">
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-audio">
+                    Learn More
                   </Button>
                 </Link>
               </div>
