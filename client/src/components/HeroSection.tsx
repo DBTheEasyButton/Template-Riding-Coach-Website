@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Calendar, MapPin, Video } from "lucide-react";
+import { Calendar, MapPin, Video, Headphones } from "lucide-react";
 import HeroPicture from "@/components/HeroPicture";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import heroImageJpg from "@assets/optimized/hero-background.jpg";
@@ -214,6 +214,15 @@ export default function HeroSection() {
               >
                 <Video className="w-5 h-5" />
                 Book a Virtual Lesson
+              </Button>
+            </Link>
+            <Link href="/courses/strong-horse-audio" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-audio"
+              >
+                <Headphones className="w-5 h-5" />
+                Audio Lessons
               </Button>
             </Link>
           </div>

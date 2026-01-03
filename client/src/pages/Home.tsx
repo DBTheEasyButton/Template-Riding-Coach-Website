@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
-import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle, ChevronDown } from "lucide-react";
+import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle, ChevronDown, MapPin, Headphones } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
 import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
 import boekeloPodiumMobileJpg from "@assets/optimized/boekelo-podium-mobile.jpg";
@@ -62,6 +63,7 @@ function SectionSkeleton({ height = "400px" }: { height?: string }) {
 export default function Home() {
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [expandedProblem, setExpandedProblem] = useState<number | null>(null);
+  const [isTrainModalOpen, setIsTrainModalOpen] = useState(false);
   
   useEffect(() => {
     const hash = window.location.hash;
@@ -345,17 +347,14 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/coaching/private-lessons">
-              <Button className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-book-lesson-plan">
-                Book a Lesson <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-            <Link href="/coaching/clinics">
-              <Button className="bg-navy hover:bg-slate-800 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" data-testid="button-book-clinic-plan">
-                Book a Clinic <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
+          <div className="flex justify-center">
+            <Button 
+              onClick={() => setIsTrainModalOpen(true)}
+              className="bg-orange hover:bg-orange-hover text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105" 
+              data-testid="button-train-with-dan-plan"
+            >
+              Train with Dan <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
           </div>
         </div>
       </section>
@@ -582,6 +581,55 @@ export default function Home() {
         isOpen={isLeadModalOpen} 
         onClose={() => setIsLeadModalOpen(false)} 
       />
+
+      {/* Train with Dan Options Modal */}
+      <Dialog open={isTrainModalOpen} onOpenChange={setIsTrainModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-playfair font-bold text-navy text-center">
+              Train with Dan
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-3 mt-4">
+            <Link href="/coaching/clinics" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-navy hover:bg-slate-800 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-clinic-home"
+              >
+                <Calendar className="w-5 h-5" />
+                Book a Clinic
+              </Button>
+            </Link>
+            <Link href="/coaching/private-lessons" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-orange hover:bg-orange-hover text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-private-home"
+              >
+                <MapPin className="w-5 h-5" />
+                Book In Person Lesson
+              </Button>
+            </Link>
+            <Link href="/coaching/remote-coaching" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-virtual-home"
+              >
+                <Video className="w-5 h-5" />
+                Book a Virtual Lesson
+              </Button>
+            </Link>
+            <Link href="/courses/strong-horse-audio" onClick={() => setIsTrainModalOpen(false)}>
+              <Button 
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
+                data-testid="button-modal-audio-home"
+              >
+                <Headphones className="w-5 h-5" />
+                Audio Lessons
+              </Button>
+            </Link>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Footer />
     </div>
   );
