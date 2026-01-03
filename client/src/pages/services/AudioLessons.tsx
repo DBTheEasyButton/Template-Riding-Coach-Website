@@ -3,7 +3,9 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
+import audioLessonsHero from "@assets/Gemini_Generated_Image_g3oiikg3oiikg3oi_1767409635915.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -474,67 +476,42 @@ export default function AudioLessons() {
       />
       <Navigation />
       {/* Hero Section */}
-      <section className="relative bg-navy pt-24 pb-16 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
-        </div>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-orange/20 text-orange px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <Headphones className="h-4 w-4" />
-                <span>A New Way to Train</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-6">
-                Expert Coaching<br />
-                <span className="text-orange">In Your Earbuds</span>
-              </h1>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Listen to professional training guidance while you ride. No booking, no travel, no weekly fees — just real-time instruction whenever you want it.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+      <section className="relative min-h-[450px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16 flex">
+        <HeroPicture
+          jpegSrc={audioLessonsHero}
+          webpSrc={audioLessonsHero}
+          alt="Rider listening to audio lessons while riding"
+          loading="eager"
+          priority={true}
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="relative z-10 flex-1 flex items-center justify-center text-center px-4 py-12 sm:py-16">
+          <div className="max-w-4xl">
+            <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
+              Audio Lessons
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-100 mb-6">
+              Expert coaching in your earbuds — train at your own pace
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                onClick={() => setShowAudioModal(true)}
+                className="bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+                data-testid="button-hero-cta"
+              >
+                <Headphones className="mr-2 h-5 w-5" />
+                Try a Free Lesson
+              </Button>
+              <Link href="/courses/strong-horse-audio">
                 <Button 
-                  onClick={() => setShowAudioModal(true)}
-                  className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
-                  data-testid="button-hero-cta"
+                  className="bg-white hover:bg-gray-100 text-navy font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
+                  data-testid="button-hero-course"
                 >
-                  <Headphones className="mr-2 h-5 w-5" />
-                  Try a Free Lesson
+                  View Course Options
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <a href="https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b" target="_blank" rel="noopener noreferrer">
-                  <Button 
-                    className="bg-white hover:bg-gray-100 text-navy font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto"
-                    data-testid="button-hero-course"
-                  >
-                    BUY NOW
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </a>
-              </div>
-            </div>
-            <div className="relative hidden lg:block">
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-orange rounded-full flex items-center justify-center">
-                    <Headphones className="h-8 w-8 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-white font-semibold text-lg">From Strong to Light and Soft</p>
-                    <p className="text-gray-400">6-Lesson Audio Course</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  {["Lesson 1: Finding the Balance Point", "Lesson 2: Releasing the Poll", "Lesson 3: Softening the Jaw", "Lesson 4: Creating Forward"].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3">
-                      <Play className="h-4 w-4 text-orange" />
-                      <span className="text-gray-300 text-sm">{item}</span>
-                    </div>
-                  ))}
-                  <div className="text-center pt-2">
-                    <span className="text-gray-400 text-sm">+ 2 more lessons</span>
-                  </div>
-                </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
