@@ -492,9 +492,7 @@ export default function AudioLessons() {
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
               Audio Lessons
             </h1>
-            <p className="text-xl md:text-2xl text-gray-100 mb-6">
-              Expert coaching in your earbuds — train at your own pace
-            </p>
+            <p className="text-xl md:text-2xl text-gray-100 mb-6">Expert coaching in your earpods — train at your own pace</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={() => setShowAudioModal(true)}

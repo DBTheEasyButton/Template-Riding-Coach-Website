@@ -533,7 +533,7 @@ export default function Home() {
                 <p className="text-dark leading-relaxed mb-6 flex-grow">
                   Listen and learn at your own pace with guided audio coaching.
                 </p>
-                <Link href="/courses/strong-horse-audio">
+                <Link href="/coaching/audio-lessons">
                   <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-audio">
                     Learn More
                   </Button>
@@ -641,7 +641,7 @@ export default function Home() {
                 Book a Virtual Lesson
               </Button>
             </Link>
-            <Link href="/courses/strong-horse-audio" onClick={() => setIsTrainModalOpen(false)}>
+            <Link href="/coaching/audio-lessons" onClick={() => setIsTrainModalOpen(false)}>
               <Button 
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
                 data-testid="button-modal-audio-home"
