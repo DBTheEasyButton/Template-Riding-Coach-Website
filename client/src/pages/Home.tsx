@@ -221,9 +221,7 @@ export default function Home() {
           {/* First row: Text left, Blenheim Dressage right (mobile: text then image) */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="space-y-6 order-1">
-              <p className="text-lg text-dark leading-relaxed">
-                I've coached thousands of riders who felt exactly like you do now. Horses that rush, drift, get tight, ignore the inside leg or lose focus. Riders who feel they're always correcting something but never getting ahead of the problem. I understand how frustrating that feels.
-              </p>
+              <p className="text-lg text-dark leading-relaxed">I've coached thousands of riders who felt exactly like you do now. Horses that rush, drift, get tight, ignore the legs or lose focus. Riders who feel they're always correcting something but never getting ahead of the problem. I understand how frustrating that feels.</p>
             </div>
             
             <div className="relative order-2">
