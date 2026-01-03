@@ -484,7 +484,7 @@ export default function AudioLessons() {
           alt="Rider listening to audio lessons while riding"
           loading="eager"
           priority={true}
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="absolute inset-0 w-full h-full object-cover object-top"
         />
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10 flex-1 flex items-center justify-center text-center px-4 py-12 sm:py-16">
