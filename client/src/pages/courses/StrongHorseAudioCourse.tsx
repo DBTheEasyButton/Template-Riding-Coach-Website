@@ -596,8 +596,7 @@ const pricingTiers: PricingTier[] = [
     ],
     idealFor: [
       "clarity",
-      "understanding",
-      "a system you can repeat on your own"
+      "understanding"
     ],
     note: "Self-paced · No live calls · No group",
     buttonText: "Get Self-Guided Course",
