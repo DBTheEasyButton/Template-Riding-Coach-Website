@@ -584,8 +584,8 @@ interface PricingTier {
 const pricingTiers: PricingTier[] = [
   {
     id: "self-guided",
-    name: "OPTION 1 — Self-Guided",
-    subtitle: "Strong to Soft & Light – Audio Course",
+    name: "AUDIO COURSE ONLY",
+    subtitle: "",
     price: "£97",
     description: "Best if you're happy to work independently and apply the system in your own time.",
     features: [
@@ -605,8 +605,8 @@ const pricingTiers: PricingTier[] = [
   },
   {
     id: "guided-group",
-    name: "OPTION 2 — Guided Group",
-    subtitle: "Strong to Soft & Light – 28-Day Challenge",
+    name: "28 DAYS CHALLENGE",
+    subtitle: "",
     price: "£147",
     badge: "Most Popular",
     limitText: "Limited to 40 riders",
@@ -628,8 +628,8 @@ const pricingTiers: PricingTier[] = [
   },
   {
     id: "private-mentorship",
-    name: "OPTION 3 — Private Mentorship",
-    subtitle: "Strong to Soft & Light – 28-Day Private Mentorship",
+    name: "PRIVATE MENTORSHIP",
+    subtitle: "",
     price: "£997",
     badge: "Premium",
     limitText: "Limited to 3 riders",
@@ -683,9 +683,12 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
           {tier.name}
         </p>
         
-        <div className="flex items-baseline justify-center gap-1 mb-2">
+        <div className="flex items-baseline justify-center gap-2 mb-2">
           <span className={`text-4xl font-bold ${tier.highlighted ? 'text-white' : 'text-navy'}`}>
             {tier.price}
+          </span>
+          <span className={`text-sm ${tier.highlighted ? 'text-gray-300' : 'text-gray-500'}`}>
+            (1 time only)
           </span>
         </div>
         
