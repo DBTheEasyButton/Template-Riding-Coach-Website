@@ -524,7 +524,7 @@ export default function Home() {
                 <img 
                   src={audioLessonsImage} 
                   alt="Rider listening to audio lessons while riding"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-[center_30%]"
                   loading="lazy"
                 />
               </div>
