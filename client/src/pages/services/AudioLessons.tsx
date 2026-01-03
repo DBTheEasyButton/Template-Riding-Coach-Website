@@ -6,6 +6,7 @@ import SEOHead from "@/components/SEOHead";
 import HeroPicture from "@/components/HeroPicture";
 import { Button } from "@/components/ui/button";
 import audioLessonsHero from "@assets/Gemini_Generated_Image_g3oiikg3oiikg3oi_1767409635915.png";
+import audioLessonsRider from "@assets/Gemini_Generated_Image_slhck0slhck0slhc_1767410018779.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -633,14 +634,24 @@ export default function AudioLessons() {
               More flexibility, less expense, and coaching you can actually use while you're riding.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div className="mb-4">{benefit.icon}</div>
-                <h3 className="text-lg font-semibold text-navy mb-2">{benefit.title}</h3>
-                <p className="text-gray-600 text-sm">{benefit.description}</p>
-              </div>
-            ))}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="grid sm:grid-cols-2 gap-6">
+              {benefits.map((benefit, i) => (
+                <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                  <div className="mb-4">{benefit.icon}</div>
+                  <h3 className="text-lg font-semibold text-navy mb-2">{benefit.title}</h3>
+                  <p className="text-gray-600 text-sm">{benefit.description}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center">
+              <img 
+                src={audioLessonsRider} 
+                alt="Happy rider enjoying audio lessons while riding"
+                className="rounded-2xl shadow-xl max-h-[500px] object-cover"
+                loading="lazy"
+              />
+            </div>
           </div>
         </div>
       </section>
