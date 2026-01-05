@@ -532,6 +532,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Audio Course payment intent - creates Stripe payment for £97 audio course
+  app.post("/api/audio-course/create-payment-intent", async (req, res) => {
+    try {
+      const { firstName, lastName, email, mobile } = req.body;
+
+      if (!firstName || !lastName || !email || !mobile) {
+        return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
+      }
+
+      const amount = 9700; // £97 in pence
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: "gbp",
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        metadata: {
+          productType: 'audio-course',
+          productName: 'Strong to Soft & Light - Audio Course',
+          customerEmail: email,
+          customerFirstName: firstName,
+          customerLastName: lastName,
+          customerMobile: mobile,
+        },
+        receipt_email: email,
+      });
+
+      console.log(`Audio course payment intent created: ${paymentIntent.id} for ${email}`);
+
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id
+      });
+    } catch (error) {
+      console.error("Error creating audio course payment intent:", error);
+      res.status(500).json({ error: 'Failed to create payment' });
+    }
+  });
+
+  // Audio Course purchase completion - called after successful payment
+  app.post("/api/audio-course/complete-purchase", async (req, res) => {
+    try {
+      const { paymentIntentId, firstName, lastName, email, mobile } = req.body;
+
+      if (!paymentIntentId || !firstName || !lastName || !email || !mobile) {
+        return res.status(400).json({ error: 'Payment intent ID and customer details are required' });
+      }
+
+      // Verify the payment was successful
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      if (paymentIntent.status !== 'succeeded') {
+        return res.status(400).json({ error: 'Payment not completed' });
+      }
+
+      // Create or update contact in GHL with stl-audio tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          mobile,
+          ['stl-audio'],
+          { 
+            lead_source: 'Strong to Soft & Light - Audio Course Purchase',
+            purchase_date: new Date().toISOString(),
+            purchase_amount: '£97'
+          }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`GHL contact created/updated for ${email} with stl-audio tag after audio course purchase`);
+        } else {
+          console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      console.log(`Audio course purchase completed for ${email}, payment: ${paymentIntentId}`);
+
+      res.json({ 
+        success: true, 
+        message: 'Purchase completed successfully. You will receive an email with access to the course.' 
+      });
+    } catch (error) {
+      console.error("Error completing audio course purchase:", error);
+      res.status(500).json({ error: 'Failed to complete purchase' });
+    }
+  });
+
   // Course interest/registration - creates/updates GHL contact with specific course tags
   app.post("/api/course-interest", async (req, res) => {
     try {

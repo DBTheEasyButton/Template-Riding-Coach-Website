@@ -2,18 +2,43 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User } from "lucide-react";
+import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HeroPicture from "@/components/HeroPicture";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
 import beforeImage from "@assets/67_1766025322880.png";
 import afterImage from "@assets/14_1766025322881.png";
 import strongHorseHero from "@assets/From_THIS_(2)_1767410380848.png";
+
+let stripePromiseCache: Promise<Stripe | null> | null = null;
+
+async function getStripePromise(): Promise<Stripe | null> {
+  if (stripePromiseCache) return stripePromiseCache;
+  
+  try {
+    const response = await fetch('/api/config/stripe-key');
+    if (!response.ok) {
+      console.error('Failed to fetch Stripe key');
+      return null;
+    }
+    const data = await response.json();
+    if (data.publishableKey) {
+      stripePromiseCache = loadStripe(data.publishableKey);
+      return stripePromiseCache;
+    }
+  } catch (error) {
+    console.error('Error fetching Stripe key:', error);
+  }
+  return null;
+}
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -581,6 +606,487 @@ interface PricingTier {
   purchaseUrl?: string;
 }
 
+function AudioCoursePaymentForm({ 
+  onPaymentSuccess, 
+  onPaymentError, 
+  customerData,
+  clientSecret 
+}: {
+  onPaymentSuccess: (paymentIntentId: string) => void;
+  onPaymentError: (error: string) => void;
+  customerData: { firstName: string; lastName: string; email: string; mobile: string };
+  clientSecret: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaymentReady, setIsPaymentReady] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin,
+        },
+        redirect: 'if_required',
+      });
+
+      if (error) {
+        onPaymentError(error.message || 'Payment failed');
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        onPaymentSuccess(paymentIntent.id);
+      }
+    } catch (error) {
+      onPaymentError('Payment processing failed');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleExpressCheckout = async (event: any) => {
+    const { error } = event;
+    
+    if (error) {
+      onPaymentError(error.message || 'Express checkout failed');
+      return;
+    }
+
+    const paymentIntentId = clientSecret.split('_secret_')[0];
+    onPaymentSuccess(paymentIntentId);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+        <div className="flex items-center text-blue-800 mb-1">
+          <CreditCard className="w-4 h-4 mr-2" />
+          <span className="font-semibold text-sm">Secure Payment - £97</span>
+        </div>
+        <p className="text-xs text-blue-700">
+          Complete your purchase with secure payment
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <ExpressCheckoutElement
+          onConfirm={handleExpressCheckout}
+          options={{
+            buttonType: {
+              applePay: 'buy',
+              googlePay: 'buy'
+            }
+          }}
+        />
+      </div>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-gray-300" />
+        </div>
+        <div className="relative flex justify-center text-xs">
+          <span className="bg-white px-2 text-gray-500">Or pay with card</span>
+        </div>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-3">
+        {paymentError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-2 text-red-800 text-xs">
+            <AlertTriangle className="w-3 h-3 inline mr-1" />
+            {paymentError}
+          </div>
+        )}
+        
+        {!isPaymentReady && !paymentError && (
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-600 text-sm">
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-600 mr-2"></div>
+              Loading payment form...
+            </div>
+          </div>
+        )}
+        
+        <div className={!isPaymentReady ? 'opacity-0 h-0 overflow-hidden' : ''}>
+          <PaymentElement 
+            onReady={() => {
+              setIsPaymentReady(true);
+              setPaymentError(null);
+            }}
+            onLoadError={(error) => {
+              setPaymentError(error.error?.message || 'Failed to load payment form');
+            }}
+          />
+        </div>
+        
+        <Button
+          type="submit"
+          disabled={!stripe || isProcessing || !isPaymentReady}
+          className="w-full bg-navy hover:bg-slate-800 text-white py-3"
+          data-testid="button-audio-course-pay"
+        >
+          {isProcessing ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              <CreditCard className="w-4 h-4 mr-2" />
+              Pay £97 Now
+            </>
+          )}
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+function AudioCoursePurchaseModal({ 
+  isOpen, 
+  onClose 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+}) {
+  const [step, setStep] = useState<'form' | 'payment' | 'success'>('form');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (isOpen && !stripePromise) {
+      const promise = getStripePromise();
+      setStripePromise(promise);
+    }
+  }, [isOpen]);
+
+  const resetForm = () => {
+    setStep('form');
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setTermsAccepted(false);
+    setClientSecret(null);
+    setPaymentIntentId(null);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/audio-course/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create payment");
+      }
+
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      setPaymentIntentId(data.paymentIntentId);
+      setStep('payment');
+      
+    } catch (error) {
+      console.error("Payment intent error:", error);
+      toast({
+        title: "Something Went Wrong",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (intentId: string) => {
+    try {
+      const response = await fetch("/api/audio-course/complete-purchase", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          paymentIntentId: intentId,
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to complete purchase");
+      }
+
+      setStep('success');
+    } catch (error) {
+      console.error("Purchase completion error:", error);
+      toast({
+        title: "Payment Received",
+        description: "Your payment was successful. Please contact us if you don't receive your course access email.",
+        variant: "default",
+      });
+      setStep('success');
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast({
+      title: "Payment Failed",
+      description: error,
+      variant: "destructive",
+    });
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+        {step === 'success' ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy mb-2">
+                Purchase Complete!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Thank you for your purchase! You will receive an email shortly with the link to access the "From Strong to Soft & Light in 28 Days" full course and the Dan Bizzarro Method Hub.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="mt-6">
+              <Button variant="outline" onClick={handleClose} className="w-full" data-testid="button-close-audio-purchase-modal">
+                Close
+              </Button>
+            </div>
+          </div>
+        ) : step === 'payment' && clientSecret && stripePromise ? (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-navy/10">
+                  <CreditCard className="h-6 w-6 text-navy" />
+                </div>
+              </div>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy text-center">
+                Complete Your Purchase
+              </DialogTitle>
+              <DialogDescription className="text-center text-gray-600 text-sm">
+                Strong to Soft & Light — Audio Course
+              </DialogDescription>
+            </DialogHeader>
+
+            <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+              <AudioCoursePaymentForm
+                onPaymentSuccess={handlePaymentSuccess}
+                onPaymentError={handlePaymentError}
+                customerData={{ firstName, lastName, email, mobile }}
+                clientSecret={clientSecret}
+              />
+            </Elements>
+
+            <Button 
+              variant="ghost" 
+              onClick={() => setStep('form')} 
+              className="w-full text-gray-500 text-sm mt-2"
+              data-testid="button-back-to-form"
+            >
+              ← Back to edit details
+            </Button>
+          </>
+        ) : (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange/10">
+                  <Headphones className="h-6 w-6 text-orange" />
+                </div>
+              </div>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy text-center">
+                Get the Audio Course
+              </DialogTitle>
+              <DialogDescription className="text-center text-gray-600 text-sm">
+                Strong to Soft & Light — £97
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={handleFormSubmit} className="space-y-3 mt-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <Label htmlFor="audio-firstName" className="text-navy font-medium text-sm">
+                    Name
+                  </Label>
+                  <Input
+                    id="audio-firstName"
+                    type="text"
+                    placeholder="First name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={isSubmitting}
+                    data-testid="input-audio-firstname"
+                    className="border-gray-300"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="audio-lastName" className="text-navy font-medium text-sm">
+                    Surname
+                  </Label>
+                  <Input
+                    id="audio-lastName"
+                    type="text"
+                    placeholder="Surname"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={isSubmitting}
+                    data-testid="input-audio-lastname"
+                    className="border-gray-300"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="audio-email" className="text-navy font-medium text-sm">
+                  Email Address
+                </Label>
+                <Input
+                  id="audio-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
+                  data-testid="input-audio-email"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
+                  Mobile Number
+                </Label>
+                <Input
+                  id="audio-mobile"
+                  type="tel"
+                  placeholder="+44 7..."
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  disabled={isSubmitting}
+                  data-testid="input-audio-mobile"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="flex items-start gap-2 pt-2">
+                <Checkbox
+                  id="audio-terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                  disabled={isSubmitting}
+                  data-testid="checkbox-audio-terms"
+                  className="mt-0.5"
+                />
+                <label htmlFor="audio-terms" className="text-sm text-gray-600 leading-tight">
+                  <a 
+                    href="https://danbizzarromethod.com/audio-lessons-terms" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-navy hover:text-orange underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    I have read and agree to the terms and conditions
+                  </a>
+                </label>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isSubmitting || !termsAccepted}
+                className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 mt-2"
+                data-testid="button-audio-proceed-to-payment"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Access the Full Course Now
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </form>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 const pricingTiers: PricingTier[] = [
   {
     id: "self-guided",
@@ -599,8 +1105,7 @@ const pricingTiers: PricingTier[] = [
       "understanding"
     ],
     note: "Self-paced · No live calls · No group",
-    buttonText: "Get Self-Guided Course",
-    purchaseUrl: "https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b"
+    buttonText: "Get the Audio Course"
   },
   {
     id: "guided-group",
@@ -723,34 +1228,18 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
         </p>
       )}
       
-      {tier.purchaseUrl ? (
-        <a href={tier.purchaseUrl} target="_blank" rel="noopener noreferrer" className="block">
-          <Button 
-            className={`w-full py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg ${
-              tier.highlighted 
-                ? 'bg-orange hover:bg-orange-hover text-white' 
-                : 'bg-navy hover:bg-navy/90 text-white'
-            }`}
-            data-testid={`button-buy-${tier.id}`}
-          >
-            {tier.buttonText}
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </a>
-      ) : (
-        <Button 
-          onClick={() => onSelect(tier.id)}
-          className={`w-full py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg ${
-            tier.highlighted 
-              ? 'bg-orange hover:bg-orange-hover text-white' 
-              : 'bg-navy hover:bg-navy/90 text-white'
-          }`}
-          data-testid={`button-buy-${tier.id}`}
-        >
-          {tier.buttonText}
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-      )}
+      <Button 
+        onClick={() => onSelect(tier.id)}
+        className={`w-full py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+          tier.highlighted 
+            ? 'bg-orange hover:bg-orange-hover text-white' 
+            : 'bg-navy hover:bg-navy/90 text-white'
+        }`}
+        data-testid={`button-buy-${tier.id}`}
+      >
+        {tier.buttonText}
+        <ArrowRight className="ml-2 h-5 w-5" />
+      </Button>
     </div>
   );
 }
@@ -1002,6 +1491,7 @@ export default function StrongHorseAudioCourse() {
   const [showAudioModal, setShowAudioModal] = useState(false);
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
+  const [showAudioCoursePurchaseModal, setShowAudioCoursePurchaseModal] = useState(false);
   const [selectedTier, setSelectedTier] = useState<PricingTier | null>(null);
 
   useEffect(() => {
@@ -1009,6 +1499,10 @@ export default function StrongHorseAudioCourse() {
   }, []);
 
   const handleTierSelect = (tierId: string) => {
+    if (tierId === 'self-guided') {
+      setShowAudioCoursePurchaseModal(true);
+      return;
+    }
     const tier = pricingTiers.find(t => t.id === tierId);
     if (tier) {
       setSelectedTier(tier);
@@ -1030,6 +1524,10 @@ export default function StrongHorseAudioCourse() {
         isOpen={showPurchaseModal} 
         onClose={() => setShowPurchaseModal(false)} 
         tier={selectedTier} 
+      />
+      <AudioCoursePurchaseModal
+        isOpen={showAudioCoursePurchaseModal}
+        onClose={() => setShowAudioCoursePurchaseModal(false)}
       />
       {/* Hero Section */}
       <section className="relative min-h-[450px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16 flex">
