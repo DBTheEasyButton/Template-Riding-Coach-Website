@@ -607,15 +607,15 @@ export default function AudioLessons() {
                   <Headphones className="mr-2 h-5 w-5" />
                   Try a Free Lesson
                 </Button>
-                <a href="https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b" target="_blank" rel="noopener noreferrer">
+                <Link href="/courses/strong-horse-audio#pricing">
                   <Button 
                     className="bg-navy hover:bg-[#1e3a5f] text-white hover:text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto border-2 border-navy hover:border-[#1e3a5f] transition-all duration-300 hover:scale-105 hover:shadow-lg"
                     data-testid="button-featured-buy"
                   >
-                    BUY THE FULL COURSE
+                    ACCESS THE FULL COURSE
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
