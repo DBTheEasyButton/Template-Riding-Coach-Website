@@ -1170,7 +1170,7 @@ const pricingTiers: PricingTier[] = [
     features: [
       "Full Strong to Soft & Light audio course (6 lessons)",
       "Clear structure and progression",
-      "Coaching that explains what to feel, not just what to do",
+      "Clear results very quickly",
       "Lifetime access"
     ],
     idealFor: [
