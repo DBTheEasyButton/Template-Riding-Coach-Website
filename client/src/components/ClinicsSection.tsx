@@ -1024,7 +1024,7 @@ export default function ClinicsSection() {
               {/* Personal Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Personal Information</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input
@@ -1157,7 +1157,7 @@ export default function ClinicsSection() {
               {/* Emergency Contact */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Emergency Contact</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <Label htmlFor="emergencyContact">Emergency Contact Name *</Label>
                     <Input
