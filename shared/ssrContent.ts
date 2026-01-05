@@ -519,6 +519,135 @@ export const ssrContent: Record<string, SSRPageContent> = {
         ]
       }
     ]
+  },
+
+  '/coaching/audio-lessons': {
+    h1: 'Audio Riding Lessons - Learn the Dan Bizzarro Method',
+    intro: 'Transform your riding with audio lessons you can listen to anywhere. The Dan Bizzarro Method distilled into clear, actionable guidance.',
+    sections: [
+      {
+        heading: 'Audio Lessons Overview',
+        content: [
+          'Audio riding lessons designed for busy equestrians who want to improve their skills on the go.',
+          'Learn the Dan Bizzarro Method through structured audio content that explains what to feel, not just what to do.',
+          'Perfect for listening during your commute, at the yard, or while grooming your horse.',
+          'Each lesson builds on the previous one, creating a progressive learning journey.'
+        ]
+      },
+      {
+        heading: 'Strong to Soft & Light Audio Course',
+        content: [
+          'The flagship audio programme teaching you how to transform a strong, heavy horse into one that is soft and light in your hands.',
+          'Learn proven techniques used at the highest levels of eventing.',
+          'Clear, step-by-step instructions you can apply immediately in your riding.',
+          'Results come quickly when you understand what to feel for.',
+          'Available as Audio Course Only, with 28-Day Challenge, or with Private Mentorship support.'
+        ]
+      },
+      {
+        heading: 'Why Audio Lessons Work',
+        content: [
+          'Listen and Learn: Absorb training concepts while doing other tasks.',
+          'Repeat and Reinforce: Listen as many times as needed to master each concept.',
+          'Apply Immediately: Take lessons straight to your next riding session.',
+          'Expert Guidance: Learn directly from Dan Bizzarro\'s 20+ years of international experience.'
+        ]
+      }
+    ],
+    features: [
+      'Listen anywhere - at the yard, in the car, or at home',
+      'Clear structure and progression through the course',
+      'Explains what to feel, not just what to do',
+      'Proven techniques from international competition',
+      'Lifetime access to all audio content',
+      'Multiple support options available'
+    ]
+  },
+
+  '/courses/strong-horse-audio': {
+    h1: 'Strong to Soft & Light Audio Course - Dan Bizzarro Method',
+    intro: 'Transform your strong, pulling horse into one that is soft and light in your hands. A complete audio training programme with proven techniques from international eventing.',
+    sections: [
+      {
+        heading: 'About the Strong to Soft & Light Course',
+        content: [
+          'Does your horse pull, lean on the bit, or feel heavy in your hands? The Strong to Soft & Light audio course teaches you exactly how to transform that feeling.',
+          'This complete audio programme distils Dan Bizzarro\'s 20+ years of experience working with every type of horse into clear, actionable lessons you can apply immediately.',
+          'Learn the exact techniques used to prepare horses for international competition, explained in a way that makes sense for riders at any level.',
+          'The course focuses on what you should feel, not just what you should do - helping you develop true understanding and lasting results.'
+        ]
+      },
+      {
+        heading: 'What You Will Learn',
+        content: [
+          'The fundamental principles of creating lightness in any horse',
+          'How to communicate clearly so your horse understands what you want',
+          'Progressive exercises that build softness without resistance',
+          'How to recognise and reward the right responses',
+          'Techniques to maintain lightness even in strong horses',
+          'Common mistakes that create heaviness and how to avoid them'
+        ]
+      },
+      {
+        heading: 'Course Structure',
+        content: [
+          'The course includes 6 comprehensive audio lessons, each building on the previous one.',
+          'Lesson 1: Understanding why horses become strong and heavy',
+          'Lesson 2: The foundation exercises for creating softness',
+          'Lesson 3: Building the conversation between your hands and your horse',
+          'Lesson 4: Progressive training to establish consistent lightness',
+          'Lesson 5: Maintaining softness in different situations',
+          'Lesson 6: Troubleshooting and advanced techniques'
+        ]
+      },
+      {
+        heading: 'Choose Your Level of Support',
+        content: [
+          'Audio Course Only (£97): The complete 6-lesson audio course with lifetime access. Perfect for self-motivated riders who like to work independently.',
+          '28-Day Challenge (£147): Audio course plus a structured 28-day training plan with daily exercises. Ideal for riders who want a clear roadmap to follow.',
+          'Private Mentorship (£997): Audio course, 28-day plan, plus direct access to Dan for personalised guidance. Best for riders who want expert support throughout their transformation.'
+        ]
+      },
+      {
+        heading: 'Who Is This Course For?',
+        content: [
+          'Riders whose horses pull or lean on the bit',
+          'Those struggling to achieve a soft, consistent contact',
+          'Riders who have tried other methods without lasting results',
+          'Anyone wanting to understand the principles behind lightness',
+          'Both amateur and competitive riders at any level'
+        ]
+      },
+      {
+        heading: 'Why This Approach Works',
+        content: [
+          'The Dan Bizzarro Method focuses on clear communication and progressive training. Rather than forcing compliance, we teach horses to choose softness because they understand what we want.',
+          'This approach comes from years of riding every type of horse - easy ones, tricky ones, sharp ones, and strong ones - and finding what consistently works.',
+          'Clear results come quickly because the method addresses the root cause of heaviness, not just the symptoms.'
+        ]
+      }
+    ],
+    features: [
+      'Complete 6-lesson audio course',
+      'Clear structure and progression',
+      'Learn what to feel, not just what to do',
+      'Lifetime access to all content',
+      'Proven techniques from international eventing',
+      'Results come quickly when applied correctly'
+    ],
+    faqs: [
+      { question: 'How much does the Strong to Soft & Light audio course cost?', answer: 'The Audio Course Only is £97. The 28-Day Challenge (course plus structured training plan) is £147. Private Mentorship (course, plan, plus direct access to Dan) is £997.' },
+      { question: 'How long is the audio course?', answer: 'The course contains 6 comprehensive audio lessons that you can listen to at your own pace. Most riders complete the initial listening within a week, then revisit lessons as they apply the techniques.' },
+      { question: 'Will this work for my horse?', answer: 'The principles taught in this course work for all horses regardless of breed, age, or discipline. The techniques are based on clear communication that any horse can understand.' },
+      { question: 'Do I need any special equipment?', answer: 'No special equipment is needed. You just need your regular tack and a horse that you ride regularly so you can apply what you learn.' },
+      { question: 'How quickly will I see results?', answer: 'Most riders notice changes within the first few sessions of applying the techniques. The course is designed to produce clear results very quickly when the principles are applied correctly.' },
+      { question: 'Can I access the course on my phone?', answer: 'Yes, the audio lessons can be accessed on any device - phone, tablet, or computer. Listen while at the yard, in your car, or anywhere convenient.' }
+    ],
+    testimonials: [
+      { name: 'Sarah M.', content: 'My horse went from constantly pulling to carrying himself beautifully within two weeks. I finally understand what I should be feeling for.' },
+      { name: 'Emma T.', content: 'The audio format is perfect - I listen during my commute and then apply it in my next ride. The results have been amazing.' },
+      { name: 'Rachel H.', content: 'After years of struggling with a heavy horse, this course finally gave me the tools to change it. Worth every penny.' }
+    ]
   }
 };
 

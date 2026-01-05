@@ -18,6 +18,7 @@ const ROUTES = [
   '/coaching/show-jumping',
   '/coaching/cross-country',
   '/coaching/polework',
+  '/coaching/audio-lessons',
   '/gallery',
   '/blog',
   '/podcast',
@@ -29,6 +30,7 @@ const ROUTES = [
   '/packing-list-generator',
   '/terms-and-conditions',
   '/courses/10-points-better',
+  '/courses/strong-horse-audio',
 ];
 
 let isRunning = false;
