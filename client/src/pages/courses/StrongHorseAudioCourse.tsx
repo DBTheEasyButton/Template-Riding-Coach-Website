@@ -1895,14 +1895,13 @@ export default function StrongHorseAudioCourse() {
             </p>
             
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="https://danbizzarromethod.app.clientclub.net/courses/offers/9351549b-1244-4d3a-8b2e-eba9c6b42c3b" target="_blank" rel="noopener noreferrer">
-                <Button 
-                  className="bg-white text-navy hover:bg-gray-100 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                  data-testid="button-cta-self-guided"
-                >
-                  Self-Guided — £97
-                </Button>
-              </a>
+              <Button 
+                onClick={() => handleTierSelect("self-guided")}
+                className="bg-white text-navy hover:bg-gray-100 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                data-testid="button-cta-self-guided"
+              >
+                Audio Course Only — £97
+              </Button>
               <Button 
                 onClick={() => handleTierSelect("guided-group")}
                 className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
@@ -1912,8 +1911,7 @@ export default function StrongHorseAudioCourse() {
               </Button>
               <Button 
                 onClick={() => handleTierSelect("private-mentorship")}
-                variant="outline"
-                className="border-2 border-white text-white hover:bg-white/10 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105"
+                className="bg-white text-navy hover:bg-gray-100 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
                 data-testid="button-cta-mentorship"
               >
                 Private Mentorship — £997
