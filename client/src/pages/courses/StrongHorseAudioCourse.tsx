@@ -19,9 +19,12 @@ import afterImage from "@assets/14_1766025322881.png";
 import strongHorseHero from "@assets/From_THIS_(2)_1767410380848.png";
 
 let stripePromiseCache: Promise<Stripe | null> | null = null;
+let stripeLoadAttempts = 0;
 
 async function getStripePromise(): Promise<Stripe | null> {
   if (stripePromiseCache) return stripePromiseCache;
+  
+  stripeLoadAttempts++;
   
   try {
     const response = await fetch('/api/config/stripe-key');
@@ -31,13 +34,22 @@ async function getStripePromise(): Promise<Stripe | null> {
     }
     const data = await response.json();
     if (data.publishableKey) {
-      stripePromiseCache = loadStripe(data.publishableKey);
-      return stripePromiseCache;
+      const stripeInstance = await loadStripe(data.publishableKey);
+      if (stripeInstance) {
+        stripePromiseCache = Promise.resolve(stripeInstance);
+        return stripeInstance;
+      }
     }
   } catch (error) {
-    console.error('Error fetching Stripe key:', error);
+    console.error('Error loading Stripe:', error);
+    stripePromiseCache = null;
   }
   return null;
+}
+
+function resetStripeCache() {
+  stripePromiseCache = null;
+  stripeLoadAttempts = 0;
 }
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
@@ -766,13 +778,35 @@ function AudioCoursePurchaseModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
-  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const [stripe, setStripe] = useState<Stripe | null>(null);
+  const [stripeLoading, setStripeLoading] = useState(false);
+  const [stripeError, setStripeError] = useState(false);
   const { toast } = useToast();
 
+  const loadStripeInstance = async () => {
+    setStripeLoading(true);
+    setStripeError(false);
+    resetStripeCache();
+    
+    try {
+      const instance = await getStripePromise();
+      if (instance) {
+        setStripe(instance);
+        setStripeError(false);
+      } else {
+        setStripeError(true);
+      }
+    } catch (error) {
+      console.error('Stripe loading error:', error);
+      setStripeError(true);
+    } finally {
+      setStripeLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (isOpen && !stripePromise) {
-      const promise = getStripePromise();
-      setStripePromise(promise);
+    if (isOpen && !stripe && !stripeLoading && !stripeError) {
+      loadStripeInstance();
     }
   }, [isOpen]);
 
@@ -923,7 +957,7 @@ function AudioCoursePurchaseModal({
               </Button>
             </div>
           </div>
-        ) : step === 'payment' && clientSecret && stripePromise ? (
+        ) : step === 'payment' && clientSecret && stripe ? (
           <>
             <DialogHeader>
               <div className="flex justify-center mb-3">
@@ -939,7 +973,7 @@ function AudioCoursePurchaseModal({
               </DialogDescription>
             </DialogHeader>
 
-            <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+            <Elements stripe={stripe} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
               <AudioCoursePaymentForm
                 onPaymentSuccess={handlePaymentSuccess}
                 onPaymentError={handlePaymentError}
@@ -1061,9 +1095,48 @@ function AudioCoursePurchaseModal({
                 </label>
               </div>
 
+              {stripeError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-red-700 font-medium">Payment system unavailable</p>
+                      <p className="text-xs text-red-600 mt-1">
+                        Unable to load payment processing. Please try again or contact us.
+                      </p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={loadStripeInstance}
+                        disabled={stripeLoading}
+                        className="mt-2 text-xs"
+                        data-testid="button-retry-stripe"
+                      >
+                        {stripeLoading ? (
+                          <>
+                            <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                            Retrying...
+                          </>
+                        ) : (
+                          'Try Again'
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {stripeLoading && !stripeError && (
+                <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading payment system...
+                </div>
+              )}
+
               <Button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted}
+                disabled={isSubmitting || !termsAccepted || stripeLoading || stripeError}
                 className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 mt-2"
                 data-testid="button-audio-proceed-to-payment"
               >
