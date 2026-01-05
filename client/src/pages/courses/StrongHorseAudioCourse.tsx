@@ -1635,7 +1635,7 @@ export default function StrongHorseAudioCourse() {
                   className="bg-white hover:bg-gray-100 text-navy font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
                   data-testid="button-hero-view-options"
                 >
-                  View Course Options
+                  START THE COURSE NOW
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
