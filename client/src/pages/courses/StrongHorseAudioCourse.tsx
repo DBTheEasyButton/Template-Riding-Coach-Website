@@ -1658,12 +1658,9 @@ export default function StrongHorseAudioCourse() {
             
             {/* Right Card */}
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
-              <h2 className="text-2xl font-playfair font-bold text-navy text-center mb-2">
+              <h2 className="text-2xl font-playfair font-bold text-navy text-center mb-6">
                 Start Learning Now
               </h2>
-              <p className="text-gray-600 text-center mb-6">
-                Choose your free resource to get started right away.
-              </p>
               
               <div className="space-y-4">
                 <Button 
