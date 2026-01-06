@@ -1615,42 +1615,44 @@ export default function StrongHorseAudioCourse() {
         onClose={() => setShowAudioCoursePurchaseModal(false)}
       />
       {/* Hero Section */}
-      <section className="relative min-h-[450px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16 flex">
-        <HeroPicture
-          jpegSrc={strongHorseHero}
-          webpSrc={strongHorseHero}
-          alt="From strong to soft and light in 28 days - horse transformation"
-          loading="eager"
-          priority={true}
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative z-10 flex-1 flex items-center justify-center text-center px-4 py-12 sm:py-16">
-          <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-white mb-4">
-              Strong to Soft & Light
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-100 mb-6">
-              Transform your horse in 28 days with audio coaching
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={() => setShowAudioModal(true)}
-                className="bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
-                data-testid="button-hero-free-lesson"
-              >
-                <Headphones className="mr-2 h-5 w-5" />
-                Try a Free Lesson
-              </Button>
-              <a href="#pricing">
+      <section className="relative overflow-hidden mt-14 sm:mt-16 bg-navy">
+        <div className="relative w-full">
+          <HeroPicture
+            jpegSrc={strongHorseHero}
+            webpSrc={strongHorseHero}
+            alt="From strong to soft and light in 28 days - horse transformation"
+            loading="eager"
+            priority={true}
+            className="w-full h-auto object-contain"
+          />
+          <div className="absolute inset-0 bg-black/30"></div>
+          <div className="absolute inset-0 z-10 flex items-center justify-center text-center px-4 py-8 sm:py-12">
+            <div className="max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-white mb-3 sm:mb-4 drop-shadow-lg">
+                Strong to Soft & Light
+              </h1>
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-4 sm:mb-6 drop-shadow-md">
+                Transform your horse in 28 days with audio coaching
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <Button 
-                  className="bg-white hover:bg-gray-100 text-navy font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
-                  data-testid="button-hero-view-options"
+                  onClick={() => setShowAudioModal(true)}
+                  className="bg-orange hover:bg-orange-hover text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                  data-testid="button-hero-free-lesson"
                 >
-                  START THE COURSE NOW
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <Headphones className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  Try a Free Lesson
                 </Button>
-              </a>
+                <a href="#pricing">
+                  <Button 
+                    className="bg-white hover:bg-gray-100 text-navy font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base w-full sm:w-auto"
+                    data-testid="button-hero-view-options"
+                  >
+                    START THE COURSE NOW
+                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>
