@@ -292,7 +292,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="audio-firstName" className="text-navy font-medium text-sm">
-                    First Name
+                    First Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="audio-firstName"
@@ -301,13 +301,14 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-audio-firstname"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="audio-lastName" className="text-navy font-medium text-sm">
-                    Surname
+                    Surname <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="audio-lastName"
@@ -316,6 +317,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-audio-lastname"
                     className="border-gray-300"
                   />
@@ -543,7 +545,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="pdf-firstName" className="text-navy font-medium text-sm">
-                    First Name
+                    First Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="pdf-firstName"
@@ -552,13 +554,14 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-pdf-firstname"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="pdf-lastName" className="text-navy font-medium text-sm">
-                    Surname
+                    Surname <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="pdf-lastName"
@@ -567,6 +570,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-pdf-lastname"
                     className="border-gray-300"
                   />
@@ -1050,7 +1054,7 @@ function AudioCoursePurchaseModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 <div className="space-y-1">
                   <Label htmlFor="audio-firstName" className="text-navy font-medium text-sm">
-                    Name
+                    First Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="audio-firstName"
@@ -1059,13 +1063,14 @@ function AudioCoursePurchaseModal({
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-audio-firstname"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="audio-lastName" className="text-navy font-medium text-sm">
-                    Surname
+                    Surname <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="audio-lastName"
@@ -1074,6 +1079,7 @@ function AudioCoursePurchaseModal({
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-audio-lastname"
                     className="border-gray-300"
                   />
@@ -1499,7 +1505,7 @@ function PurchaseModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="purchase-firstName" className="text-navy font-medium text-sm">
-                    First Name
+                    First Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="purchase-firstName"
@@ -1508,13 +1514,14 @@ function PurchaseModal({
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-purchase-firstname"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="purchase-lastName" className="text-navy font-medium text-sm">
-                    Surname
+                    Surname <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="purchase-lastName"
@@ -1523,6 +1530,7 @@ function PurchaseModal({
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={isSubmitting}
+                    required
                     data-testid="input-purchase-lastname"
                     className="border-gray-300"
                   />
