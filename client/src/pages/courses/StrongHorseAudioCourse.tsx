@@ -11,6 +11,7 @@ import SEOHead from "@/components/SEOHead";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HeroPicture from "@/components/HeroPicture";
+import TestimonialStrip from "@/components/TestimonialStrip";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
 import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
@@ -1658,6 +1659,27 @@ export default function StrongHorseAudioCourse() {
         </div>
       </section>
 
+      {/* Reviews Strip */}
+      <TestimonialStrip 
+        customTestimonials={[
+          {
+            name: "Charlotte B.",
+            content: "My horse went from dragging me around to actually listening. The audio format is brilliant - I listen while grooming and it all clicks when I get on.",
+            rating: 5
+          },
+          {
+            name: "Sarah W.",
+            content: "Week 2 and already seeing changes. He's not leaning on my hands anymore. I was skeptical about audio lessons but they actually work better for me than videos.",
+            rating: 5
+          },
+          {
+            name: "Emma T.",
+            content: "Finally something that explains WHY my horse rushes, not just 'do more half-halts'. The exercises are simple but the results are incredible.",
+            rating: 5
+          }
+        ]}
+      />
+
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         
         {/* THE TRANSFORMATION - BEFORE & AFTER */}
@@ -1742,6 +1764,203 @@ export default function StrongHorseAudioCourse() {
           </div>
         </section>
 
+        {/* WHAT YOU'LL LEARN */}
+        <section className="py-16 md:py-20 bg-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-4">
+                What You'll Learn in 28 Days
+              </h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                A complete system for rebalancing your horse — from understanding the problem to solving it.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
+                    <span className="text-orange font-bold">1</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-navy">Week 1: Understanding Balance</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Why your horse leans on your hands (it's not stubbornness)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>The simple test to check your horse's natural balance</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>First exercises to start the rebalancing process</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
+                    <span className="text-orange font-bold">2</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-navy">Week 2: Building the Basics</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Transitions that teach your horse to carry themselves</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>How to create a half-halt that actually works</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>The "wait" exercise that stops rushing</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
+                    <span className="text-orange font-bold">3</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-navy">Week 3: Developing Softness</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Getting your horse to seek the contact (not lean on it)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Exercises for a lighter, more responsive horse</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>How to maintain softness in all three gaits</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
+                    <span className="text-orange font-bold">4</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-navy">Week 4: Putting It Together</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Combining all exercises into flowing sessions</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Maintaining balance under pressure and excitement</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Your roadmap for continued progress after 28 days</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* HOW AUDIO LESSONS WORK */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Headphones className="h-12 w-12 text-orange mx-auto mb-4" />
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-4">
+                How Audio Lessons Work
+              </h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Never used audio lessons before? Here's exactly what to expect and how to get the most from them.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+                <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Download className="h-8 w-8 text-orange" />
+                </div>
+                <h3 className="text-lg font-bold text-navy mb-2">1. Download Your Lessons</h3>
+                <p className="text-gray-600 text-sm">
+                  After purchase, you'll get instant access to download all audio files. Save them to your phone, tablet, or computer — they're yours forever.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+                <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Headphones className="h-8 w-8 text-orange" />
+                </div>
+                <h3 className="text-lg font-bold text-navy mb-2">2. Listen Before You Ride</h3>
+                <p className="text-gray-600 text-sm">
+                  Pop in your earbuds while you groom, tack up, or drive to the yard. Each lesson is 10-15 minutes — perfect for preparation time.
+                </p>
+              </div>
+              
+              <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+                <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-8 w-8 text-orange" />
+                </div>
+                <h3 className="text-lg font-bold text-navy mb-2">3. Apply While You Ride</h3>
+                <p className="text-gray-600 text-sm">
+                  The concepts stay fresh in your mind as you mount up. You'll know exactly what to focus on and what exercises to practice that session.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl p-8 shadow-sm">
+              <h3 className="text-xl font-bold text-navy mb-6 text-center">Why Audio Works Better Than Video</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-navy mb-1">Learn While Doing Other Things</h4>
+                    <p className="text-gray-600 text-sm">Unlike video, audio lessons let you absorb information while grooming, mucking out, or driving — time you'd otherwise waste.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-navy mb-1">Focus on Feel, Not Copying</h4>
+                    <p className="text-gray-600 text-sm">Video makes you copy what you see. Audio helps you understand the feel and develop your own connection with your horse.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-navy mb-1">Easy to Repeat</h4>
+                    <p className="text-gray-600 text-sm">Quickly replay any lesson as many times as needed. No scrubbing through video to find the bit you wanted to hear again.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-navy mb-1">Like Having a Coach in Your Ear</h4>
+                    <p className="text-gray-600 text-sm">The lessons are designed to feel like personal coaching — conversational, clear, and focused on what actually matters.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CHOOSE YOUR LEVEL OF SUPPORT - PRICING TIERS */}
         <section id="pricing" className="py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1821,43 +2040,6 @@ export default function StrongHorseAudioCourse() {
                   Get Free PDF Guide
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* WHY AUDIO */}
-        <section className="py-16 bg-navy text-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <Headphones className="h-12 w-12 text-orange mx-auto mb-4" />
-              <h2 className="text-3xl font-playfair font-bold mb-4">
-                Why an Audio Course?
-              </h2>
-              <p className="text-gray-300 text-lg">
-                Real-time coaching in your earbuds — absorb the lesson before you ride.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Listen While You Prepare",
-                  description: "Pop in your earbuds while grooming, driving, or getting ready — the concepts will be fresh when you mount up."
-                },
-                {
-                  title: "No Booking, No Fees, No Travel",
-                  description: "Forget scheduling lessons, paying per session, or driving to a trainer. Train at your own yard, on your own terms."
-                },
-                {
-                  title: "Unlimited Lessons, Anytime",
-                  description: "Repeat any lesson as many times as you want, whenever suits you — early morning, late evening, weekends."
-                }
-              ].map((item, i) => (
-                <div key={i} className="bg-white/10 rounded-lg p-6 text-center">
-                  <h3 className="text-lg font-semibold text-orange mb-2">{item.title}</h3>
-                  <p className="text-gray-300 text-sm">{item.description}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>
