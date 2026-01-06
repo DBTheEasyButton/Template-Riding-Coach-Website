@@ -140,7 +140,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
             <Label htmlFor="firstName" className="text-navy font-medium">
-              First Name
+              First Name <span className="text-red-500">*</span>
             </Label>
             <Input
               id="firstName"
@@ -149,6 +149,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               disabled={isSubmitting}
+              required
               data-testid="input-lead-firstname"
               className="border-gray-300 focus:border-navy focus:ring-navy"
             />
@@ -156,7 +157,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
 
           <div className="space-y-2">
             <Label htmlFor="lastName" className="text-navy font-medium">
-              Surname
+              Surname <span className="text-red-500">*</span>
             </Label>
             <Input
               id="lastName"
@@ -165,14 +166,15 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               disabled={isSubmitting}
+              required
               data-testid="input-lead-lastname"
               className="border-gray-300 focus:border-navy focus:ring-navy"
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Label htmlFor="email" className="text-navy font-medium">
-              Email Address
+              Email Address <span className="text-red-500">*</span>
             </Label>
             <Input
               id="email"
@@ -181,14 +183,16 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isSubmitting}
+              required
               data-testid="input-lead-email"
               className="border-gray-300 focus:border-navy focus:ring-navy"
             />
+            <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="mobile" className="text-navy font-medium">
-              Mobile Number
+              Mobile Number <span className="text-red-500">*</span>
             </Label>
             <Input
               id="mobile"
@@ -197,6 +201,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
               disabled={isSubmitting}
+              required
               data-testid="input-lead-mobile"
               className="border-gray-300 focus:border-navy focus:ring-navy"
             />

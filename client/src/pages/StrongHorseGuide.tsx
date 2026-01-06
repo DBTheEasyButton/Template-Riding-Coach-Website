@@ -147,38 +147,42 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Input
             type="text"
-            placeholder="First Name"
+            placeholder="First Name *"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             disabled={isSubmitting}
+            required
             data-testid="input-strong-horse-firstname-compact"
             className="border-gray-300"
           />
           <Input
             type="text"
-            placeholder="Surname"
+            placeholder="Surname *"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             disabled={isSubmitting}
+            required
             data-testid="input-strong-horse-lastname-compact"
             className="border-gray-300"
           />
         </div>
         <Input
           type="email"
-          placeholder="Email Address"
+          placeholder="Email Address *"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={isSubmitting}
+          required
           data-testid="input-strong-horse-email-compact"
           className="border-gray-300"
         />
         <Input
           type="tel"
-          placeholder="Mobile Number"
+          placeholder="Mobile Number *"
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
           disabled={isSubmitting}
+          required
           data-testid="input-strong-horse-mobile-compact"
           className="border-gray-300"
         />
@@ -221,7 +225,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="firstName" className="text-navy font-medium">
-            First Name
+            First Name <span className="text-red-500">*</span>
           </Label>
           <Input
             id="firstName"
@@ -230,6 +234,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             disabled={isSubmitting}
+            required
             data-testid="input-strong-horse-firstname"
             className="border-gray-300 focus:border-navy focus:ring-navy"
           />
@@ -237,7 +242,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
 
         <div className="space-y-2">
           <Label htmlFor="lastName" className="text-navy font-medium">
-            Surname
+            Surname <span className="text-red-500">*</span>
           </Label>
           <Input
             id="lastName"
@@ -246,14 +251,15 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             disabled={isSubmitting}
+            required
             data-testid="input-strong-horse-lastname"
             className="border-gray-300 focus:border-navy focus:ring-navy"
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Label htmlFor="email" className="text-navy font-medium">
-            Email Address
+            Email Address <span className="text-red-500">*</span>
           </Label>
           <Input
             id="email"
@@ -262,14 +268,16 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isSubmitting}
+            required
             data-testid="input-strong-horse-email"
             className="border-gray-300 focus:border-navy focus:ring-navy"
           />
+          <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="mobile" className="text-navy font-medium">
-            Mobile Number
+            Mobile Number <span className="text-red-500">*</span>
           </Label>
           <Input
             id="mobile"
@@ -277,6 +285,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             placeholder="Enter your mobile number"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
+            required
             disabled={isSubmitting}
             data-testid="input-strong-horse-mobile"
             className="border-gray-300 focus:border-navy focus:ring-navy"
