@@ -607,7 +607,7 @@ export default function AudioLessons() {
                   <Headphones className="mr-2 h-5 w-5" />
                   Try a Free Lesson
                 </Button>
-                <Link href="/courses/strong-horse-audio#pricing">
+                <a href="/courses/strong-horse-audio#pricing">
                   <Button 
                     className="bg-navy hover:bg-[#1e3a5f] text-white hover:text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto border-2 border-navy hover:border-[#1e3a5f] transition-all duration-300 hover:scale-105 hover:shadow-lg"
                     data-testid="button-featured-buy"
@@ -615,7 +615,7 @@ export default function AudioLessons() {
                     ACCESS THE FULL COURSE
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
