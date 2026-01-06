@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink } from "lucide-react";
+import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import Navigation from "@/components/Navigation";
@@ -1818,8 +1818,184 @@ export default function StrongHorseAudioCourse() {
           </div>
         </section>
 
-        {/* WHAT CHANGES WHEN YOU APPLY THIS SYSTEM */}
+        {/* FROM STRONG TO LIGHT AND SOFT IN 28 DAYS */}
         <section className="py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-4">
+                From Strong to Light and Soft <span className="text-orange">in 28 Days</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                A structured, ride-along audio course designed to help you develop a lighter, softer, more self-carrying horse through better balance, clearer aids, and progressive training.
+              </p>
+              <p className="text-gray-500 mt-3 italic">
+                You listen to each lesson while you ride, so the work happens in real time — with your own horse, in your normal routine.
+              </p>
+            </div>
+
+            {/* A Clear Sequence */}
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
+              <h3 className="text-2xl font-bold text-navy mb-4">A clear sequence that builds real change</h3>
+              <p className="text-gray-700 mb-4">
+                This course is made up of six audio lessons, designed to be followed in order. Each lesson builds on the previous one. <strong>The sequence matters.</strong>
+              </p>
+              <p className="text-gray-700 mb-4">
+                That's because lightness doesn't come from a single exercise — it comes from developing the right foundations, in the right order:
+              </p>
+              <ul className="space-y-2 mb-4">
+                {["Balance before softness", "Understanding before adjustment", "Self-carriage before refinement"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-orange rounded-full flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-gray-600 text-sm italic">
+                While the lessons can be repeated and revisited as needed, following the sequence ensures you don't skip the steps that actually make the difference.
+              </p>
+            </div>
+
+            {/* What the course focuses on */}
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
+              <h3 className="text-2xl font-bold text-navy mb-4">What the course focuses on</h3>
+              <p className="text-gray-700 mb-4">
+                Most strong horses aren't difficult — they're trying to balance themselves the only way they know how.
+              </p>
+              <p className="text-gray-700 mb-4">In this course, you'll learn how to:</p>
+              <ul className="space-y-3 mb-6">
+                {[
+                  "Reduce heaviness without losing energy",
+                  "Stop the horse leaning on the hand",
+                  "Improve balance through correct transitions",
+                  "Create softness during the work, not only afterwards",
+                  "Ride with less effort and more clarity"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="bg-navy/5 rounded-lg p-4">
+                <p className="text-gray-700">
+                  The emphasis is on <strong>how the horse carries himself</strong>, not on managing the symptoms. This reflects the principles of the Dan Bizzarro Method: helping horses move better by improving posture, balance, and understanding — rather than forcing outcomes.
+                </p>
+              </div>
+            </div>
+
+            {/* How and where to use the lessons */}
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                <h3 className="text-xl font-bold text-navy mb-4">How and where to use the lessons</h3>
+                <ul className="space-y-3">
+                  {[
+                    "The lessons are primarily flatwork-based",
+                    "One lesson includes a bonus jumping element",
+                    "Many of the exercises can also be applied while hacking"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-orange rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-gray-600 mt-4 text-sm">
+                  You don't need a perfect arena or ideal conditions. The ideas are designed to be adaptable, so you can apply them in your normal riding environment.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                <h3 className="text-xl font-bold text-navy mb-4">How the course works</h3>
+                <ul className="space-y-3">
+                  {[
+                    "6 audio lessons you listen to while riding",
+                    "Clear guidance you can apply immediately"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <Headphones className="h-5 w-5 text-orange mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-gray-600 mt-4 text-sm">Each lesson gives you:</p>
+                <ul className="space-y-1 mt-2 text-sm text-gray-600">
+                  <li>• A focus for the ride</li>
+                  <li>• Specific exercises</li>
+                  <li>• What you should feel changing</li>
+                  <li>• Common mistakes to avoid</li>
+                </ul>
+                <p className="text-gray-600 mt-4 text-sm italic">
+                  The course is designed to be followed over 28 days, but you can move at a pace that suits you and your horse.
+                </p>
+              </div>
+            </div>
+
+            {/* Who this course is for */}
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
+              <h3 className="text-2xl font-bold text-navy mb-4">Who this course is for</h3>
+              <p className="text-gray-700 mb-4">This course is for riders who:</p>
+              <div className="grid md:grid-cols-2 gap-3">
+                {[
+                  "Feel like their horse is strong, heavy, or resistant",
+                  "Want softness without losing impulsion",
+                  "Feel they're constantly managing rather than riding",
+                  "Want structure and clarity between lessons or clinics",
+                  "Ride for enjoyment, training, or personal goals — whatever the discipline"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-gray-600 mt-6 italic">
+                It's particularly useful if you don't have regular access to coaching but still want guidance that makes sense and produces real change.
+              </p>
+            </div>
+
+            {/* What this course is NOT */}
+            <div className="bg-red-50 border border-red-100 rounded-xl p-8 mb-8">
+              <h3 className="text-2xl font-bold text-navy mb-4">What this course is not</h3>
+              <div className="flex flex-wrap gap-4 mb-4">
+                {["A quick fix", "A gadget-based solution", 'A "pull less and hope" approach'].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg">
+                    <X className="h-5 w-5 text-red-500 flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-gray-700">
+                It's a methodical process that teaches you <strong>why things feel the way they do</strong> — and how to change them step by step.
+              </p>
+            </div>
+
+            {/* The goal after 28 days */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-8">
+              <h3 className="text-2xl font-bold text-navy mb-4">The goal after 28 days</h3>
+              <p className="text-gray-700 mb-4">By the end of the course, you should notice:</p>
+              <ul className="space-y-3 mb-6">
+                {[
+                  "A lighter, more consistent contact",
+                  "A more balanced horse",
+                  "Less effort in your arms and body",
+                  "Clearer, calmer transitions",
+                  "A better understanding of how to maintain softness"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-center text-navy font-semibold text-lg">
+                Not perfection — but meaningful, repeatable progress you can build on.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* WHAT CHANGES WHEN YOU APPLY THIS SYSTEM */}
+        <section className="py-16 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-10 text-center">
               What Changes When You Apply This System
