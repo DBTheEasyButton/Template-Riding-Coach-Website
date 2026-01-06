@@ -127,6 +127,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -137,6 +138,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setLastName("");
     setEmail("");
     setMobile("");
+    setTermsAccepted(false);
     setShowSuccess(false);
     setShowProgress(false);
   };
@@ -172,6 +174,15 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
         variant: "destructive",
       });
       return;
@@ -343,6 +354,28 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 />
               </div>
 
+              <div className="flex items-start gap-2 pt-2">
+                <Checkbox
+                  id="audio-lead-terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                  disabled={isSubmitting}
+                  data-testid="checkbox-audio-lead-terms"
+                  className="mt-0.5"
+                />
+                <label htmlFor="audio-lead-terms" className="text-sm text-gray-600 leading-tight">
+                  <a 
+                    href="https://danbizzarromethod.com/audio-lessons-terms" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-navy hover:text-orange underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    I have read and agree to the terms and conditions
+                  </a>
+                </label>
+              </div>
+
               <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
                 <p className="text-xs text-gray-600 flex items-start gap-2">
                   <Mail className="h-3 w-3 text-navy mt-0.5 flex-shrink-0" />
@@ -352,7 +385,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !termsAccepted}
                 className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
                 data-testid="button-submit-audio-form"
               >
