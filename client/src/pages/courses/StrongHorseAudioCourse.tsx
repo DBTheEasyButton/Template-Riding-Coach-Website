@@ -1742,6 +1742,61 @@ export default function StrongHorseAudioCourse() {
           </div>
         </section>
 
+        {/* WHAT CHANGES WHEN YOU APPLY THIS SYSTEM */}
+        <section className="py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-10 text-center">
+              What Changes When You Apply This System
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* For You */}
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-3xl">🙋</span>
+                  <h3 className="text-2xl font-bold text-navy">For You:</h3>
+                </div>
+                <ul className="space-y-4">
+                  {[
+                    "Feel calmer and more in control",
+                    "Know exactly what to do when the horse gets strong",
+                    "Spend less time fighting, more time riding",
+                    "Clearer, more effective aids",
+                    "Confidence that comes from predictability"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              {/* For Your Horse */}
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="text-3xl">🐴</span>
+                  <h3 className="text-2xl font-bold text-navy">For Your Horse:</h3>
+                </div>
+                <ul className="space-y-4">
+                  {[
+                    "Softer, more relaxed neck",
+                    "Lighter, more comfortable contact",
+                    "Better natural balance",
+                    "Quicker, clearer responses",
+                    "Less rushing, leaning and pulling"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CHOOSE YOUR LEVEL OF SUPPORT - PRICING TIERS */}
         <section id="pricing" className="py-16 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
