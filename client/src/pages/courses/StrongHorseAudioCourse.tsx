@@ -1615,43 +1615,81 @@ export default function StrongHorseAudioCourse() {
         onClose={() => setShowAudioCoursePurchaseModal(false)}
       />
       {/* Hero Section */}
-      <section className="relative overflow-hidden mt-14 sm:mt-16 bg-navy">
-        <div className="relative w-full">
-          <HeroPicture
-            jpegSrc={strongHorseHero}
-            webpSrc={strongHorseHero}
-            alt="From strong to soft and light in 28 days - horse transformation"
-            loading="eager"
-            priority={true}
-            className="w-full h-auto object-contain"
-          />
-          <div className="absolute inset-0 bg-black/30"></div>
-          <div className="absolute inset-0 z-10 flex items-center justify-center text-center px-4 py-8 sm:py-12">
-            <div className="max-w-4xl">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-white mb-3 sm:mb-4 drop-shadow-lg">
-                Strong to Soft & Light
+      <section className="relative overflow-hidden mt-14 sm:mt-16 bg-gradient-to-br from-navy via-navy to-[#1a365d]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left Content */}
+            <div>
+              <span className="inline-block bg-amber-400 text-navy font-semibold text-sm px-4 py-1.5 rounded-full mb-6">
+                6-Lesson Audio Course
+              </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold text-white mb-4 leading-tight">
+                From Strong to Light and Soft{" "}
+                <span className="text-orange">(in 28 Days)</span>
               </h1>
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-4 sm:mb-6 drop-shadow-md">
-                Transform your horse in 28 days with audio coaching
+              <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                The complete Listen-While-You-Ride Audio Course that transforms heavy, rushing horses into soft, balanced, rideable partners — IN ONLY 28 DAYS.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              
+              {/* Stats Row */}
+              <div className="flex flex-wrap gap-4 sm:gap-6 mb-8">
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Headphones className="h-5 w-5 text-orange" />
+                  <span>6 Audio Lessons</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Clock className="h-5 w-5 text-orange" />
+                  <span>~180 Minutes Total</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-300">
+                  <Target className="h-5 w-5 text-orange" />
+                  <span>Proven Method</span>
+                </div>
+              </div>
+              
+              {/* Quote */}
+              <div className="border-l-4 border-orange pl-4 py-2">
+                <p className="text-gray-300 italic text-base leading-relaxed">
+                  "A strong horse doesn't become light by being held. It becomes light when the communication becomes clear and the self-carriage is established"
+                </p>
+                <p className="text-orange font-semibold mt-2">— Dan Bizzarro</p>
+              </div>
+            </div>
+            
+            {/* Right Card */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl">
+              <h2 className="text-2xl font-playfair font-bold text-navy text-center mb-2">
+                Start Learning Now
+              </h2>
+              <p className="text-gray-600 text-center mb-6">
+                Choose your free resource to get started right away.
+              </p>
+              
+              <div className="space-y-4">
                 <Button 
                   onClick={() => setShowAudioModal(true)}
-                  className="bg-orange hover:bg-orange-hover text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                  className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-4 rounded-lg transition duration-300 text-base"
                   data-testid="button-hero-free-lesson"
                 >
-                  <Headphones className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                  Try a Free Lesson
+                  <Headphones className="mr-2 h-5 w-5" />
+                  Try a Free Audio Lesson
                 </Button>
-                <a href="#pricing">
+                
+                <a href="#pricing" className="block">
                   <Button 
-                    className="bg-white hover:bg-gray-100 text-navy font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base w-full sm:w-auto"
-                    data-testid="button-hero-view-options"
+                    variant="outline"
+                    className="w-full border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold py-4 rounded-lg transition duration-300 text-base"
+                    data-testid="button-hero-start-course"
                   >
+                    <ArrowRight className="mr-2 h-5 w-5" />
                     START THE COURSE NOW
-                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </a>
+              </div>
+              
+              <div className="flex items-center justify-center gap-2 mt-6 text-gray-500 text-sm">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span>Instant download • No payment required</span>
               </div>
             </div>
           </div>
