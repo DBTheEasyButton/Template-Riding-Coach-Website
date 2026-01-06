@@ -1834,7 +1834,7 @@ export default function StrongHorseAudioCourse() {
             </div>
 
             {/* A Clear Sequence */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8 text-center">
               <h3 className="text-2xl font-bold text-navy mb-4">A clear sequence that builds real change</h3>
               <p className="text-gray-700 mb-4">
                 This course is made up of six audio lessons, designed to be followed in order. Each lesson builds on the previous one. <strong>The sequence matters.</strong>
@@ -1842,27 +1842,39 @@ export default function StrongHorseAudioCourse() {
               <p className="text-gray-700 mb-4">
                 That's because lightness doesn't come from a single exercise — it comes from developing the right foundations, in the right order:
               </p>
-              <ul className="space-y-2 mb-4">
+              <div className="flex flex-wrap justify-center gap-4 mb-4">
                 {["Balance before softness", "Understanding before adjustment", "Self-carriage before refinement"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
+                  <div key={i} className="flex items-center gap-2 bg-orange/10 px-4 py-2 rounded-full">
                     <div className="w-2 h-2 bg-orange rounded-full flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
               <p className="text-gray-600 text-sm italic">
                 While the lessons can be repeated and revisited as needed, following the sequence ensures you don't skip the steps that actually make the difference.
               </p>
             </div>
 
+            {/* CTA after sequence */}
+            <div className="text-center mb-8">
+              <Button 
+                onClick={() => setShowAudioModal(true)}
+                className="bg-orange hover:bg-orange-hover text-white font-semibold px-8 py-3"
+                data-testid="cta-try-free-lesson-1"
+              >
+                <Headphones className="mr-2 h-5 w-5" />
+                Try a Free Audio Lesson
+              </Button>
+            </div>
+
             {/* What the course focuses on */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8 text-center">
               <h3 className="text-2xl font-bold text-navy mb-4">What the course focuses on</h3>
               <p className="text-gray-700 mb-4">
                 Most strong horses aren't difficult — they're trying to balance themselves the only way they know how.
               </p>
-              <p className="text-gray-700 mb-4">In this course, you'll learn how to:</p>
-              <ul className="space-y-3 mb-6">
+              <p className="text-gray-700 mb-6">In this course, you'll learn how to:</p>
+              <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto text-left mb-6">
                 {[
                   "Reduce heaviness without losing energy",
                   "Stop the horse leaning on the hand",
@@ -1870,12 +1882,12 @@ export default function StrongHorseAudioCourse() {
                   "Create softness during the work, not only afterwards",
                   "Ride with less effort and more clarity"
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
+                  <div key={i} className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
               <div className="bg-navy/5 rounded-lg p-4">
                 <p className="text-gray-700">
                   The emphasis is on <strong>how the horse carries himself</strong>, not on managing the symptoms. This reflects the principles of the Dan Bizzarro Method: helping horses move better by improving posture, balance, and understanding — rather than forcing outcomes.
@@ -1885,56 +1897,69 @@ export default function StrongHorseAudioCourse() {
 
             {/* How and where to use the lessons */}
             <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
                 <h3 className="text-xl font-bold text-navy mb-4">How and where to use the lessons</h3>
-                <ul className="space-y-3">
+                <div className="space-y-3 text-left max-w-xs mx-auto">
                   {[
                     "The lessons are primarily flatwork-based",
                     "One lesson includes a bonus jumping element",
                     "Many of the exercises can also be applied while hacking"
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
+                    <div key={i} className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-orange rounded-full mt-2 flex-shrink-0" />
                       <span className="text-gray-700">{item}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
                 <p className="text-gray-600 mt-4 text-sm">
                   You don't need a perfect arena or ideal conditions. The ideas are designed to be adaptable, so you can apply them in your normal riding environment.
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
                 <h3 className="text-xl font-bold text-navy mb-4">How the course works</h3>
-                <ul className="space-y-3">
+                <div className="space-y-3 text-left max-w-xs mx-auto">
                   {[
                     "6 audio lessons you listen to while riding",
                     "Clear guidance you can apply immediately"
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
+                    <div key={i} className="flex items-start gap-3">
                       <Headphones className="h-5 w-5 text-orange mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{item}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
                 <p className="text-gray-600 mt-4 text-sm">Each lesson gives you:</p>
-                <ul className="space-y-1 mt-2 text-sm text-gray-600">
-                  <li>• A focus for the ride</li>
-                  <li>• Specific exercises</li>
-                  <li>• What you should feel changing</li>
-                  <li>• Common mistakes to avoid</li>
-                </ul>
+                <div className="space-y-1 mt-2 text-sm text-gray-600">
+                  <p>• A focus for the ride</p>
+                  <p>• Specific exercises</p>
+                  <p>• What you should feel changing</p>
+                  <p>• Common mistakes to avoid</p>
+                </div>
                 <p className="text-gray-600 mt-4 text-sm italic">
                   The course is designed to be followed over 28 days, but you can move at a pace that suits you and your horse.
                 </p>
               </div>
             </div>
 
+            {/* CTA after how it works */}
+            <div className="text-center mb-8">
+              <a href="#pricing">
+                <Button 
+                  className="bg-navy hover:bg-navy/90 text-white font-semibold px-8 py-3"
+                  data-testid="cta-view-pricing-1"
+                >
+                  View Pricing Options
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </a>
+            </div>
+
             {/* Who this course is for */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8 text-center">
               <h3 className="text-2xl font-bold text-navy mb-4">Who this course is for</h3>
-              <p className="text-gray-700 mb-4">This course is for riders who:</p>
-              <div className="grid md:grid-cols-2 gap-3">
+              <p className="text-gray-700 mb-6">This course is for riders who:</p>
+              <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto text-left">
                 {[
                   "Feel like their horse is strong, heavy, or resistant",
                   "Want softness without losing impulsion",
@@ -1954,9 +1979,9 @@ export default function StrongHorseAudioCourse() {
             </div>
 
             {/* What this course is NOT */}
-            <div className="bg-red-50 border border-red-100 rounded-xl p-8 mb-8">
+            <div className="bg-red-50 border border-red-100 rounded-xl p-8 mb-8 text-center">
               <h3 className="text-2xl font-bold text-navy mb-4">What this course is not</h3>
-              <div className="flex flex-wrap gap-4 mb-4">
+              <div className="flex flex-wrap justify-center gap-4 mb-4">
                 {["A quick fix", "A gadget-based solution", 'A "pull less and hope" approach'].map((item, i) => (
                   <div key={i} className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg">
                     <X className="h-5 w-5 text-red-500 flex-shrink-0" />
@@ -1970,10 +1995,10 @@ export default function StrongHorseAudioCourse() {
             </div>
 
             {/* The goal after 28 days */}
-            <div className="bg-green-50 border border-green-200 rounded-xl p-8">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-8 text-center">
               <h3 className="text-2xl font-bold text-navy mb-4">The goal after 28 days</h3>
-              <p className="text-gray-700 mb-4">By the end of the course, you should notice:</p>
-              <ul className="space-y-3 mb-6">
+              <p className="text-gray-700 mb-6">By the end of the course, you should notice:</p>
+              <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto text-left mb-6">
                 {[
                   "A lighter, more consistent contact",
                   "A more balanced horse",
@@ -1981,15 +2006,35 @@ export default function StrongHorseAudioCourse() {
                   "Clearer, calmer transitions",
                   "A better understanding of how to maintain softness"
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
+                  <div key={i} className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
-              <p className="text-center text-navy font-semibold text-lg">
+              </div>
+              <p className="text-navy font-semibold text-lg mb-6">
                 Not perfection — but meaningful, repeatable progress you can build on.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  onClick={() => setShowAudioModal(true)}
+                  variant="outline"
+                  className="border-orange text-orange hover:bg-orange hover:text-white font-semibold px-6 py-3"
+                  data-testid="cta-try-free-lesson-2"
+                >
+                  <Headphones className="mr-2 h-5 w-5" />
+                  Try Free Lesson First
+                </Button>
+                <a href="#pricing">
+                  <Button 
+                    className="bg-orange hover:bg-orange-hover text-white font-semibold px-6 py-3"
+                    data-testid="cta-get-full-course"
+                  >
+                    Get the Full Course
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </section>
