@@ -1684,11 +1684,7 @@ export default function StrongHorseAudioCourse() {
                 </a>
               </div>
               
-              <div className="flex items-center justify-center gap-2 mt-6 text-gray-500 text-sm">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <span>Instant download • No payment required</span>
               </div>
-            </div>
           </div>
         </div>
       </section>
