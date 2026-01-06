@@ -322,9 +322,9 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="audio-email" className="text-navy font-medium text-sm">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="audio-email"
@@ -333,14 +333,16 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-audio-email"
                   className="border-gray-300"
                 />
+                <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number
+                  Mobile Number <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="audio-mobile"
@@ -349,6 +351,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-audio-mobile"
                   className="border-gray-300"
                 />
@@ -570,9 +573,9 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="pdf-email" className="text-navy font-medium text-sm">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="pdf-email"
@@ -581,14 +584,16 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-pdf-email"
                   className="border-gray-300"
                 />
+                <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="pdf-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number
+                  Mobile Number <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="pdf-mobile"
@@ -597,6 +602,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-pdf-mobile"
                   className="border-gray-300"
                 />
@@ -1076,7 +1082,7 @@ function AudioCoursePurchaseModal({
 
               <div className="space-y-1">
                 <Label htmlFor="audio-email" className="text-navy font-medium text-sm">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="audio-email"
@@ -1085,14 +1091,16 @@ function AudioCoursePurchaseModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-audio-email"
                   className="border-gray-300"
                 />
+                <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
               <div className="space-y-1">
                 <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number
+                  Mobile Number <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="audio-mobile"
@@ -1101,6 +1109,7 @@ function AudioCoursePurchaseModal({
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-audio-mobile"
                   className="border-gray-300"
                 />
@@ -1520,9 +1529,9 @@ function PurchaseModal({
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="purchase-email" className="text-navy font-medium text-sm">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="purchase-email"
@@ -1531,14 +1540,16 @@ function PurchaseModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-purchase-email"
                   className="border-gray-300"
                 />
+                <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="purchase-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number
+                  Mobile Number <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="purchase-mobile"
@@ -1547,6 +1558,7 @@ function PurchaseModal({
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   disabled={isSubmitting}
+                  required
                   data-testid="input-purchase-mobile"
                   className="border-gray-300"
                 />
