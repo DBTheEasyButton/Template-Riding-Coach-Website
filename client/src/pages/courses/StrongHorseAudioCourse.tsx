@@ -1568,7 +1568,19 @@ export default function StrongHorseAudioCourse() {
   const [selectedTier, setSelectedTier] = useState<PricingTier | null>(null);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const hash = window.location.hash;
+    if (hash) {
+      // If there's a hash, scroll to that element
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      // No hash, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, []);
 
   const handleTierSelect = (tierId: string) => {
