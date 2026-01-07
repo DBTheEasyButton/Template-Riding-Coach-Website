@@ -337,7 +337,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mt-4">
             <p className="text-sm text-gray-600 flex items-start gap-2">
               <Mail className="h-4 w-4 text-navy mt-0.5 flex-shrink-0" />
-              <span>Your details are safe with me. I'll only use them to send you helpful training tips and updates about clinics.</span>
+              <span>Your details are safe with me. I'll only use them to send you helpful training tips and updates about clinics and courses.</span>
             </p>
           </div>
 
