@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useVisitor } from "@/hooks/use-visitor";
@@ -453,9 +454,10 @@ export default function StrongHorseGuide() {
   return (
     <>
       <SEOHead
-        title="The Strong Horse Solution - Free Training Guide | Dan Bizzarro Method"
-        description="Turn your strong, heavy or rushing horse into a softer, lighter, more rideable partner. Free downloadable guide with practical exercises for riders of all levels."
-        canonical="/guides/strong-horse"
+        title={getSEOConfig('/guides/strong-horse').title}
+        description={getSEOConfig('/guides/strong-horse').description}
+        keywords={getSEOConfig('/guides/strong-horse').keywords}
+        canonical={getCanonicalUrl('/guides/strong-horse')}
       />
       <Navigation />
 

@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
+import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HeroPicture from "@/components/HeroPicture";
@@ -1796,9 +1797,10 @@ export default function StrongHorseAudioCourse() {
   return (
     <>
       <SEOHead
-        title="Strong to Soft & Light - Choose Your Level of Support | Dan Bizzarro Method"
-        description="Transform your strong, heavy or rushing horse with this proven audio course system. Choose from Self-Guided (£97), 28-Day Challenge (£147), or Private Mentorship (£997)."
-        canonical="/courses/strong-horse-audio"
+        title={getSEOConfig('/courses/strong-horse-audio').title}
+        description={getSEOConfig('/courses/strong-horse-audio').description}
+        keywords={getSEOConfig('/courses/strong-horse-audio').keywords}
+        canonical={getCanonicalUrl('/courses/strong-horse-audio')}
       />
       <Navigation />
       <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />

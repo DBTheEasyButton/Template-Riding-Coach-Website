@@ -28,9 +28,9 @@ export const getCanonicalUrl = (path: string): string => {
 export const seoConfig: Record<string, PageSEOConfig> = {
   // Home Page
   '/': {
-    title: 'Dan Bizzarro Method – International Eventing Coach & Training Clinics',
-    description: 'Olympic-shortlisted international event rider Dan Bizzarro offers expert eventing coaching, private lessons, group clinics, and virtual training. Based in Oxfordshire, UK, specialising in dressage, show jumping, cross country, and pole work.',
-    keywords: 'Dan Bizzarro Method, international eventing coach, Olympic eventing, private horse riding lessons, group clinics, virtual riding lessons, dressage training, show jumping coach, cross country coaching, pole work training, Oxfordshire equestrian coach',
+    title: 'Dan Bizzarro Method | Eventing Coach & Horse Training UK',
+    description: 'Olympic-shortlisted event rider Dan Bizzarro offers private lessons, clinics, and online courses. Dressage, show jumping, cross country coaching in Oxfordshire, UK.',
+    keywords: 'Dan Bizzarro Method, international eventing coach, Olympic eventing, private horse riding lessons, group clinics, virtual riding lessons, dressage training, show jumping coach, cross country coaching, pole work training, Oxfordshire equestrian coach, horse training UK',
     canonicalPath: '/',
     h1: 'Dan Bizzarro Method',
     ogImage: '/hero-background.jpg'
@@ -129,11 +129,20 @@ export const seoConfig: Record<string, PageSEOConfig> = {
   },
 
   '/news': {
-    title: 'News & Updates | Dan Bizzarro Method',
-    description: 'Latest news, updates, and insights from Dan Bizzarro Method. Read about upcoming clinics, competition results, training tips, and equestrian industry news from our Oxfordshire coaching base.',
-    keywords: 'Dan Bizzarro news, eventing news, clinic updates, competition results, training tips, equestrian blog, riding advice, coaching updates, Oxfordshire equestrian news',
+    title: 'Horse Training Blog & Tips | Dan Bizzarro Method',
+    description: 'Expert horse training tips, eventing advice, and riding insights from international event rider Dan Bizzarro. Free articles on dressage, jumping, and horse care.',
+    keywords: 'horse training blog, eventing tips, riding advice, dressage tips, show jumping tips, horse care articles, equestrian blog, Dan Bizzarro blog, training tips',
     canonicalPath: '/news',
-    h1: 'News & Updates',
+    h1: 'Training Blog',
+    ogImage: '/hero-background.jpg'
+  },
+
+  '/blog': {
+    title: 'Horse Training Blog & Tips | Dan Bizzarro Method',
+    description: 'Expert horse training tips, eventing advice, and riding insights from international event rider Dan Bizzarro. Free articles on dressage, jumping, and horse care.',
+    keywords: 'horse training blog, eventing tips, riding advice, dressage tips, show jumping tips, horse care articles, equestrian blog, Dan Bizzarro blog, training tips',
+    canonicalPath: '/blog',
+    h1: 'Training Blog',
     ogImage: '/hero-background.jpg'
   },
 
@@ -190,6 +199,43 @@ export const seoConfig: Record<string, PageSEOConfig> = {
     keywords: 'loyalty programme, clinic rewards, loyalty stamps, coaching rewards, Dan Bizzarro loyalty, clinic benefits',
     canonicalPath: '/loyalty',
     h1: 'Loyalty Rewards',
+    ogImage: '/hero-background.jpg'
+  },
+
+  // Course Pages
+  '/courses/strong-horse-audio': {
+    title: 'Fix a Strong Horse in 28 Days | Audio Training Course | Dan Bizzarro',
+    description: 'Transform your strong, heavy, or rushing horse into a soft, balanced partner with this proven audio course. Listen while you ride. From £97. Start today.',
+    keywords: 'strong horse training, fix rushing horse, horse pulls on reins, heavy horse solution, horse training audio course, soft horse training, balanced horse, light contact training, Dan Bizzarro Method, listen while you ride, online horse training',
+    canonicalPath: '/courses/strong-horse-audio',
+    h1: 'From Strong to Light and Soft (in 28 Days)',
+    ogImage: '/hero-background.jpg'
+  },
+
+  '/courses/ten-points-better': {
+    title: '10 Points Better Dressage Course | Improve Dressage Scores | Dan Bizzarro',
+    description: 'Add 10+ points to your dressage scores with this proven training system. Improve your marks with step-by-step lessons from international event rider Dan Bizzarro.',
+    keywords: '10 points better, improve dressage score, dressage training course, better dressage marks, eventing dressage, dressage improvement, Dan Bizzarro dressage, online dressage course',
+    canonicalPath: '/courses/ten-points-better',
+    h1: '10 Points Better Dressage Course',
+    ogImage: '/hero-background.jpg'
+  },
+
+  '/guides/strong-horse': {
+    title: 'FREE Strong Horse Guide | Fix a Pulling Horse | Dan Bizzarro Method',
+    description: 'Download the free Strong Horse Solution guide. Learn why horses pull, rush, and feel heavy—and discover the simple fix. Instant PDF download.',
+    keywords: 'strong horse guide, horse pulling on reins, horse rushes, heavy horse fix, free horse training guide, Dan Bizzarro guide, horse training PDF, soft horse solution',
+    canonicalPath: '/guides/strong-horse',
+    h1: 'The Strong Horse Solution Guide',
+    ogImage: '/hero-background.jpg'
+  },
+
+  '/coaching/audio-lessons': {
+    title: 'Audio Riding Lessons | Listen While You Ride | Dan Bizzarro Method',
+    description: 'Professional audio riding lessons you can listen to while you ride. Expert coaching in your ear from international event rider Dan Bizzarro. Start training smarter.',
+    keywords: 'audio riding lessons, listen while you ride, horse training audio, riding lesson audio, Dan Bizzarro audio, equestrian audio course, riding podcast lessons',
+    canonicalPath: '/coaching/audio-lessons',
+    h1: 'Audio Riding Lessons',
     ogImage: '/hero-background.jpg'
   }
 };
