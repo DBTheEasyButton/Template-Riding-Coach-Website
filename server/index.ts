@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import { registerRoutes } from "./routes";
 import { setupVite, log } from "./vite";
 import { seoMiddleware } from "./seo-middleware";
@@ -7,6 +8,10 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
+
+// Cookie parser for visitor recognition
+app.use(cookieParser());
+
 // CRITICAL: Stripe webhook needs raw body for signature verification
 // Apply raw body parser ONLY for webhook endpoint, JSON parser for everything else
 app.use((req, res, next) => {

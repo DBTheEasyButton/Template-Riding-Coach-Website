@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Gift, Mail } from "lucide-react";
+import { Loader2, Gift, Mail, User } from "lucide-react";
+import { useVisitor } from "@/hooks/use-visitor";
+import { queryClient } from "@/lib/queryClient";
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -18,11 +20,77 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
   const { toast } = useToast();
+  const { profile, isRecognized, forgetMe } = useVisitor();
+
+  useEffect(() => {
+    if (isOpen && profile && isRecognized) {
+      setFirstName(profile.firstName || "");
+      setLastName(profile.lastName || "");
+      setEmail(profile.email || "");
+      setMobile(profile.mobile || "");
+    }
+  }, [isOpen, profile, isRecognized]);
 
   const handleClose = () => {
     setShowSuccess(false);
+    setShowUpdateForm(false);
     onClose();
+  };
+
+  const handleQuickDownload = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/lead-capture/strong-horse-pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: profile?.firstName?.trim() || "",
+          lastName: profile?.lastName?.trim() || "",
+          email: profile?.email?.trim() || "",
+          mobile: profile?.mobile?.trim() || "",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process request");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "The-Strong-Horse-Solution-Dan-Bizzarro.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setShowSuccess(true);
+      // Immediately refetch visitor profile to sync with updated server state
+      queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
+    } catch (error) {
+      console.error("Quick download error:", error);
+      toast({
+        title: "Something Went Wrong",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleNotMe = () => {
+    forgetMe();
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setShowUpdateForm(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,6 +150,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       setEmail("");
       setMobile("");
       setShowSuccess(true);
+      // Immediately refetch visitor profile to sync with new cookie from server
+      queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
     } catch (error) {
       console.error("Lead capture error:", error);
       toast({
@@ -122,6 +192,62 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
             >
               Got it!
             </Button>
+          </div>
+        ) : isRecognized && profile?.firstName && !showUpdateForm ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+              <User className="h-8 w-8 text-navy" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair text-navy mb-3">
+                Welcome back, {profile.firstName}!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-base">
+                Ready to download The Strong Horse Solution?
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 my-4 text-left">
+              <p className="text-sm text-gray-600">
+                <span className="font-medium text-navy">Email:</span> {profile.email}
+              </p>
+              {profile.mobile && (
+                <p className="text-sm text-gray-600 mt-1">
+                  <span className="font-medium text-navy">Mobile:</span> {profile.mobile}
+                </p>
+              )}
+            </div>
+            <Button
+              onClick={handleQuickDownload}
+              disabled={isSubmitting}
+              className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300 mb-3"
+              data-testid="button-quick-download"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Preparing Your Guide...
+                </>
+              ) : (
+                "Download Now"
+              )}
+            </Button>
+            <div className="flex justify-center gap-4 text-sm">
+              <button
+                onClick={() => setShowUpdateForm(true)}
+                className="text-navy hover:underline"
+                data-testid="button-update-details"
+              >
+                Update my details
+              </button>
+              <span className="text-gray-300">|</span>
+              <button
+                onClick={handleNotMe}
+                className="text-gray-500 hover:text-gray-700 hover:underline"
+                data-testid="button-not-me-form"
+              >
+                Not me
+              </button>
+            </div>
           </div>
         ) : (
           <>

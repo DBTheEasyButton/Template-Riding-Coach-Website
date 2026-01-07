@@ -602,3 +602,29 @@ export const insertGhlContactSchema = createInsertSchema(ghlContacts).omit({
 
 export type GhlContact = typeof ghlContacts.$inferSelect;
 export type InsertGhlContact = z.infer<typeof insertGhlContactSchema>;
+
+// Visitor Profiles - for recognizing returning visitors
+export const visitorProfiles = pgTable("visitor_profiles", {
+  id: serial("id").primaryKey(),
+  token: text("token").notNull().unique(), // Secure random token stored in cookie
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  email: text("email").notNull(),
+  mobile: text("mobile").notNull(),
+  ghlContactId: text("ghl_contact_id"), // Reference to GHL contact if synced
+  sources: text("sources").array().notNull().default([]), // ['StrongHorsePDF', 'StrongHorseAudio', 'Clinic']
+  lastSeenAt: timestamp("last_seen_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  tokenIdx: index("visitor_profiles_token_idx").on(table.token),
+  emailIdx: index("visitor_profiles_email_idx").on(table.email),
+}));
+
+export const insertVisitorProfileSchema = createInsertSchema(visitorProfiles).omit({
+  id: true,
+  lastSeenAt: true,
+  createdAt: true,
+});
+
+export type VisitorProfile = typeof visitorProfiles.$inferSelect;
+export type InsertVisitorProfile = z.infer<typeof insertVisitorProfileSchema>;

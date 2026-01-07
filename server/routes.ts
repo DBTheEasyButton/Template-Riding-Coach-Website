@@ -404,6 +404,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
+      let ghlContactId: string | undefined;
+
       // Create or update contact in GHL with WarmUpPDF tag
       try {
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
@@ -417,12 +419,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         if (ghlResult.success) {
           console.log(`GHL contact created/updated for ${email} with WarmUpPDF tag`);
+          ghlContactId = ghlResult.contactId;
         } else {
           console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
         }
       } catch (ghlError) {
         // Log error but don't fail the request - still provide the PDF
         console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      // Create or update visitor profile for returning visitor recognition
+      try {
+        const { token } = await storage.createOrUpdateVisitorProfile(
+          firstName,
+          lastName,
+          email,
+          mobile,
+          'WarmUpPDF',
+          ghlContactId
+        );
+        
+        // Set secure cookie for 90 days
+        res.cookie('visitor_token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days
+        });
+      } catch (profileError) {
+        console.error('Visitor profile creation error (non-fatal):', profileError);
       }
 
       // Generate and send the PDF
@@ -462,6 +487,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
+      let ghlContactId: string | undefined;
+
       // Create or update contact in GHL with StrongHorse tag
       try {
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
@@ -475,12 +502,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         if (ghlResult.success) {
           console.log(`GHL contact created/updated for ${email} with StrongHorsePDF tag`);
+          ghlContactId = ghlResult.contactId;
         } else {
           console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
         }
       } catch (ghlError) {
         // Log error but don't fail the request - still provide the PDF
         console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      // Create or update visitor profile for returning visitor recognition
+      try {
+        const { token } = await storage.createOrUpdateVisitorProfile(
+          firstName,
+          lastName,
+          email,
+          mobile,
+          'StrongHorsePDF',
+          ghlContactId
+        );
+        
+        // Set secure cookie for 90 days
+        res.cookie('visitor_token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days
+        });
+      } catch (profileError) {
+        console.error('Visitor profile creation error (non-fatal):', profileError);
       }
 
       // Generate and send the PDF
@@ -505,6 +555,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
+      let ghlContactId: string | undefined;
+
       // Create or update contact in GHL with StrongHorseAudio tag
       try {
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
@@ -518,6 +570,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         if (ghlResult.success) {
           console.log(`GHL contact created/updated for ${email} with StrongHorseAudio tag`);
+          ghlContactId = ghlResult.contactId;
         } else {
           console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
         }
@@ -525,10 +578,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error('GHL contact creation error (non-fatal):', ghlError);
       }
 
+      // Create or update visitor profile for returning visitor recognition
+      try {
+        const { token } = await storage.createOrUpdateVisitorProfile(
+          firstName,
+          lastName,
+          email,
+          mobile,
+          'StrongHorseAudio',
+          ghlContactId
+        );
+        
+        // Set secure cookie for 90 days
+        res.cookie('visitor_token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days
+        });
+      } catch (profileError) {
+        console.error('Visitor profile creation error (non-fatal):', profileError);
+      }
+
       res.json({ success: true, message: 'Lead captured successfully' });
     } catch (error) {
       console.error('Error in audio lead capture endpoint:', error);
       res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
+  // ============================================
+  // VISITOR RECOGNITION SYSTEM
+  // ============================================
+
+  // Get current visitor profile (if recognized)
+  app.get("/api/visitor/me", async (req, res) => {
+    try {
+      const token = req.cookies?.visitor_token;
+      
+      if (!token) {
+        return res.json({ recognized: false });
+      }
+
+      const profile = await storage.getVisitorProfileByToken(token);
+      
+      if (!profile) {
+        // Token exists but profile not found - clear invalid cookie
+        res.clearCookie('visitor_token');
+        return res.json({ recognized: false });
+      }
+
+      // Update last seen timestamp
+      await storage.updateVisitorProfileLastSeen(token);
+
+      res.json({
+        recognized: true,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.email,
+        mobile: profile.mobile,
+        sources: profile.sources
+      });
+    } catch (error) {
+      console.error('Error getting visitor profile:', error);
+      res.json({ recognized: false });
+    }
+  });
+
+  // Forget visitor (clear profile and cookie)
+  app.post("/api/visitor/forget", async (req, res) => {
+    try {
+      const token = req.cookies?.visitor_token;
+      
+      if (token) {
+        await storage.deleteVisitorProfile(token);
+        res.clearCookie('visitor_token');
+      }
+
+      res.json({ success: true, message: 'Your details have been forgotten' });
+    } catch (error) {
+      console.error('Error forgetting visitor:', error);
+      res.status(500).json({ error: 'Failed to forget visitor' });
     }
   });
 

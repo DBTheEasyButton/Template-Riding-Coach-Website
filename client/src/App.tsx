@@ -4,6 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense, useEffect } from "react";
+import { VisitorProvider } from "@/hooks/use-visitor";
+import WelcomeBackToast from "@/components/WelcomeBackToast";
 
 // Immediately load essential pages
 import Home from "@/pages/Home";
@@ -285,16 +287,19 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" 
-          rel="stylesheet" 
-        />
-        <link 
-          rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
-        />
-        <Toaster />
-        <Router />
+        <VisitorProvider>
+          <link 
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" 
+            rel="stylesheet" 
+          />
+          <link 
+            rel="stylesheet" 
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+          />
+          <WelcomeBackToast />
+          <Toaster />
+          <Router />
+        </VisitorProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

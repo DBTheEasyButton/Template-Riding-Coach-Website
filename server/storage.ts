@@ -75,7 +75,10 @@ import {
   type CompetitionChecklist,
   type InsertCompetitionChecklist,
   type GhlContact,
-  type InsertGhlContact
+  type InsertGhlContact,
+  visitorProfiles,
+  type VisitorProfile,
+  type InsertVisitorProfile
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and, inArray, gte } from "drizzle-orm";
@@ -238,6 +241,20 @@ export interface IStorage {
     tags?: string[],
     customFields?: Record<string, any>
   ): Promise<{ success: boolean; contactId?: string; message?: string }>;
+
+  // Visitor Profile System (for recognizing returning visitors)
+  getVisitorProfileByToken(token: string): Promise<VisitorProfile | undefined>;
+  getVisitorProfileByEmail(email: string): Promise<VisitorProfile | undefined>;
+  createOrUpdateVisitorProfile(
+    firstName: string,
+    lastName: string,
+    email: string,
+    mobile: string,
+    source: string,
+    ghlContactId?: string
+  ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }>;
+  updateVisitorProfileLastSeen(token: string): Promise<void>;
+  deleteVisitorProfile(token: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2561,6 +2578,80 @@ The Dan Bizzarro Method Team`,
         message: error instanceof Error ? error.message : 'Unknown error occurred'
       };
     }
+  }
+
+  // Visitor Profile System
+  async getVisitorProfileByToken(token: string): Promise<VisitorProfile | undefined> {
+    const results = await db.select().from(visitorProfiles).where(eq(visitorProfiles.token, token)).limit(1);
+    return results[0];
+  }
+
+  async getVisitorProfileByEmail(email: string): Promise<VisitorProfile | undefined> {
+    const results = await db.select().from(visitorProfiles).where(eq(visitorProfiles.email, email.toLowerCase())).limit(1);
+    return results[0];
+  }
+
+  async createOrUpdateVisitorProfile(
+    firstName: string,
+    lastName: string,
+    email: string,
+    mobile: string,
+    source: string,
+    ghlContactId?: string
+  ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }> {
+    const normalizedEmail = email.toLowerCase();
+    
+    // Check if profile exists by email
+    const existing = await this.getVisitorProfileByEmail(normalizedEmail);
+    
+    if (existing) {
+      // Update existing profile - add source if not already present
+      const updatedSources = existing.sources.includes(source) 
+        ? existing.sources 
+        : [...existing.sources, source];
+      
+      const updated = await db.update(visitorProfiles)
+        .set({
+          firstName,
+          lastName,
+          mobile,
+          sources: updatedSources,
+          ghlContactId: ghlContactId || existing.ghlContactId,
+          lastSeenAt: new Date()
+        })
+        .where(eq(visitorProfiles.id, existing.id))
+        .returning();
+      
+      return { profile: updated[0], token: existing.token, isNew: false };
+    }
+    
+    // Create new profile with secure random token
+    const crypto = await import('crypto');
+    const token = crypto.randomBytes(32).toString('hex');
+    
+    const newProfile = await db.insert(visitorProfiles)
+      .values({
+        token,
+        firstName,
+        lastName,
+        email: normalizedEmail,
+        mobile,
+        sources: [source],
+        ghlContactId: ghlContactId || null
+      })
+      .returning();
+    
+    return { profile: newProfile[0], token, isNew: true };
+  }
+
+  async updateVisitorProfileLastSeen(token: string): Promise<void> {
+    await db.update(visitorProfiles)
+      .set({ lastSeenAt: new Date() })
+      .where(eq(visitorProfiles.token, token));
+  }
+
+  async deleteVisitorProfile(token: string): Promise<void> {
+    await db.delete(visitorProfiles).where(eq(visitorProfiles.token, token));
   }
 }
 
