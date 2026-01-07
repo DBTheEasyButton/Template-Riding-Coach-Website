@@ -768,15 +768,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       switch (courseType) {
         case 'guided-group':
-          tag = 'strongchallenge';
+          tag = 'stl-challenge';
           leadSource = 'Strong to Soft & Light - 28-Day Challenge Registration';
           break;
         case 'private-mentorship':
-          tag = 'strongmentorship';
+          tag = 'stl-mentorship';
           leadSource = 'Strong to Soft & Light - Private Mentorship Application';
           break;
         default:
-          tag = 'strongcourse';
+          tag = 'stl-audio';
           leadSource = 'Strong to Soft & Light - Course Interest';
       }
 

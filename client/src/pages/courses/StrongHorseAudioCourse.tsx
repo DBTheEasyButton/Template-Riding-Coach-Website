@@ -1327,6 +1327,25 @@ function AudioCoursePurchaseModal({
   );
 }
 
+function getNextChallengeStartDate(): string {
+  const now = new Date();
+  const currentDay = now.getDate();
+  
+  let targetDate: Date;
+  if (currentDay >= 1) {
+    targetDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  } else {
+    targetDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+  
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  
+  return `1st ${monthNames[targetDate.getMonth()]}`;
+}
+
 const pricingTiers: PricingTier[] = [
   {
     id: "self-guided",
@@ -1480,6 +1499,13 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
         {tier.buttonText}
         <ArrowRight className="ml-2 h-5 w-5" />
       </Button>
+      
+      {tier.id === "guided-group" && (
+        <p className="text-center mt-3 text-sm font-medium text-orange flex items-center justify-center gap-1.5">
+          <Calendar className="h-4 w-4" />
+          Next challenge starts {getNextChallengeStartDate()}
+        </p>
+      )}
     </div>
   );
 }
