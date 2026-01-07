@@ -1,6 +1,6 @@
 import { Instagram, Facebook, Twitter, Youtube, Gift } from "lucide-react";
 import { Link } from "wouter";
-import logoPath from "@assets/optimized/Dan Bizzarro Method_1749676680719.png";
+import logoDarkBg from "@assets/logo-dark-bg.png";
 
 export default function Footer() {
   const scrollToSection = (href: string) => {
@@ -16,7 +16,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <img 
-              src={logoPath} 
+              src={logoDarkBg} 
               alt="Dan Bizzarro Method - International Eventing Coach & Training" 
               className="h-16 w-auto mb-4"
             />

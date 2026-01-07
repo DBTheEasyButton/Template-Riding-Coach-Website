@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoPng from "@assets/optimized/logo.png";
-import logoWebp from "@assets/optimized/logo.webp";
+import logoLightBg from "@assets/logo-light-bg.png";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -102,18 +101,15 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex-shrink-0">
             <a href="/" onClick={handleLogoClick}>
-              <picture>
-                <source srcSet={logoWebp} type="image/webp" />
-                <img 
-                  src={logoPng} 
-                  alt="Dan Bizzarro Method - International Eventing Coach & Training" 
-                  className="h-12 sm:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-                  width="150"
-                  height="56"
-                  loading="eager"
-                  decoding="async"
-                />
-              </picture>
+              <img 
+                src={logoLightBg} 
+                alt="Dan Bizzarro Method - International Eventing Coach & Training" 
+                className="h-12 sm:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                width="150"
+                height="56"
+                loading="eager"
+                decoding="async"
+              />
             </a>
           </div>
           
