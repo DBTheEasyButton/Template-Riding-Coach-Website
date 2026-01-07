@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Gift, Mail, User } from "lucide-react";
+import { Loader2, Gift, Mail, User, Headphones, ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
 
@@ -338,6 +339,31 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               <Mail className="h-4 w-4 text-navy mt-0.5 flex-shrink-0" />
               <span>Your details are safe with me. I'll only use them to send you helpful training tips and updates about clinics.</span>
             </p>
+          </div>
+
+          {/* Promotional banner for full course */}
+          <div className="bg-gradient-to-r from-navy to-navy/90 rounded-lg p-4 mt-4">
+            <div className="flex items-start gap-3">
+              <div className="bg-orange/20 p-2 rounded-full flex-shrink-0">
+                <Headphones className="h-5 w-5 text-orange" />
+              </div>
+              <div className="flex-1">
+                <p className="text-white text-sm font-medium mb-1">
+                  Did you know about the Full Audio Course?
+                </p>
+                <p className="text-gray-300 text-xs mb-2">
+                  "From Strong to Light and Soft in 28 Days" - Transform your horse with daily audio lessons
+                </p>
+                <Link 
+                  href="/courses/strong-horse-audio-course"
+                  onClick={handleClose}
+                  className="inline-flex items-center gap-1 text-orange hover:text-orange-hover text-xs font-semibold transition-colors"
+                  data-testid="link-course-promo"
+                >
+                  Find out more <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+            </div>
           </div>
 
           <Button
