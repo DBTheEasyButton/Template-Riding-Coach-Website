@@ -355,7 +355,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                   "From Strong to Light and Soft in 28 Days" - Transform your horse with listen-while-you-ride audio lessons
                 </p>
                 <Link 
-                  href="/courses/strong-horse-audio-course"
+                  href="/courses/strong-horse-audio"
                   onClick={handleClose}
                   className="inline-flex items-center gap-1 text-xs font-semibold transition-colors"
                   style={{ color: '#ea580c' }}
