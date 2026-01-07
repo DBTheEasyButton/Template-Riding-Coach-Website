@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useVisitor } from "@/hooks/use-visitor";
-import { X } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function WelcomeBackToast() {
   const { showWelcomeToast, dismissWelcomeToast, firstName, forgetMe } = useVisitor();
@@ -9,47 +10,45 @@ export default function WelcomeBackToast() {
     if (showWelcomeToast) {
       const timer = setTimeout(() => {
         dismissWelcomeToast();
-      }, 6000);
+      }, 8000);
       return () => clearTimeout(timer);
     }
   }, [showWelcomeToast, dismissWelcomeToast]);
 
-  if (!showWelcomeToast || !firstName) return null;
+  if (!firstName) return null;
 
   return (
-    <div 
-      className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-300"
-      data-testid="welcome-back-toast"
-    >
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm">
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
-            <span className="text-xl">👋</span>
+    <Dialog open={showWelcomeToast} onOpenChange={(open) => !open && dismissWelcomeToast()}>
+      <DialogContent className="sm:max-w-md text-center" data-testid="welcome-back-modal">
+        <div className="flex flex-col items-center py-4">
+          <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center mb-4">
+            <span className="text-3xl">👋</span>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-navy">
-              Welcome back, {firstName}!
-            </p>
-            <p className="text-sm text-gray-600 mt-0.5">
-              Great to see you again
-            </p>
-            <button
-              onClick={forgetMe}
-              className="text-xs text-gray-400 hover:text-gray-600 mt-2 underline"
-              data-testid="button-not-me"
-            >
-              Not you? Clear my details
-            </button>
-          </div>
-          <button
+          <h2 className="text-xl font-playfair font-bold text-navy mb-2">
+            Welcome back, {firstName}!
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Great to see you again
+          </p>
+          <Button
             onClick={dismissWelcomeToast}
-            className="flex-shrink-0 text-gray-400 hover:text-gray-600"
+            className="bg-orange hover:bg-orange-hover text-white font-semibold px-8"
             data-testid="button-dismiss-welcome"
           >
-            <X className="h-4 w-4" />
+            Continue
+          </Button>
+          <button
+            onClick={() => {
+              forgetMe();
+              dismissWelcomeToast();
+            }}
+            className="text-sm text-gray-400 hover:text-gray-600 mt-4 underline"
+            data-testid="button-not-me"
+          >
+            Not you? Clear my details
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
