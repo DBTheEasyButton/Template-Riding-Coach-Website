@@ -779,6 +779,7 @@ interface PricingTier {
   buttonText: string;
   highlighted?: boolean;
   purchaseUrl?: string;
+  disabled?: boolean;
 }
 
 function AudioCoursePaymentForm({ 
@@ -1411,7 +1412,8 @@ const pricingTiers: PricingTier[] = [
       "personalised guidance at every step"
     ],
     note: "This option is limited and not always available.",
-    buttonText: "Apply for Private Mentorship"
+    buttonText: "COMING SOON",
+    disabled: true
   }
 ];
 
@@ -1489,16 +1491,19 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
       )}
       
       <Button 
-        onClick={() => onSelect(tier.id)}
-        className={`w-full py-4 text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg ${
-          tier.highlighted 
-            ? 'bg-orange hover:bg-orange-hover text-white' 
-            : 'bg-navy hover:bg-navy/90 text-white'
+        onClick={() => !tier.disabled && onSelect(tier.id)}
+        disabled={tier.disabled}
+        className={`w-full py-4 text-lg font-semibold transition-all duration-300 ${
+          tier.disabled
+            ? 'bg-gray-400 text-white cursor-not-allowed'
+            : tier.highlighted 
+              ? 'bg-orange hover:bg-orange-hover text-white hover:scale-105 hover:shadow-lg' 
+              : 'bg-navy hover:bg-navy/90 text-white hover:scale-105 hover:shadow-lg'
         }`}
         data-testid={`button-buy-${tier.id}`}
       >
         {tier.buttonText}
-        <ArrowRight className="ml-2 h-5 w-5" />
+        {!tier.disabled && <ArrowRight className="ml-2 h-5 w-5" />}
       </Button>
       
       {tier.id === "guided-group" && (
