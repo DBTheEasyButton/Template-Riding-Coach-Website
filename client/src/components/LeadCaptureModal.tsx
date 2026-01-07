@@ -342,25 +342,26 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           </div>
 
           {/* Promotional banner for full course */}
-          <div className="bg-gradient-to-r from-navy to-navy/90 rounded-lg p-4 mt-4">
+          <div className="rounded-lg p-4 mt-4" style={{ background: 'linear-gradient(to right, #1e3a5f, #2a4a6f)' }}>
             <div className="flex items-start gap-3">
-              <div className="bg-orange/20 p-2 rounded-full flex-shrink-0">
+              <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(234, 88, 12, 0.2)' }}>
                 <Headphones className="h-5 w-5 text-orange" />
               </div>
               <div className="flex-1">
-                <p className="text-white text-sm font-medium mb-1">
+                <p className="text-sm font-medium mb-1" style={{ color: '#ffffff' }}>
                   Did you know about the Full Audio Course?
                 </p>
-                <p className="text-gray-300 text-xs mb-2">
-                  "From Strong to Light and Soft in 28 Days" - Transform your horse with daily audio lessons
+                <p className="text-xs mb-2" style={{ color: '#d1d5db' }}>
+                  "From Strong to Light and Soft in 28 Days" - Transform your horse with listen-while-you-ride audio lessons
                 </p>
                 <Link 
                   href="/courses/strong-horse-audio-course"
                   onClick={handleClose}
-                  className="inline-flex items-center gap-1 text-orange hover:text-orange-hover text-xs font-semibold transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-semibold transition-colors"
+                  style={{ color: '#ea580c' }}
                   data-testid="link-course-promo"
                 >
-                  Find out more <ArrowRight className="h-3 w-3" />
+                  Try it for free <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
             </div>
