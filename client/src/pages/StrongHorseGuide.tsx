@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
-import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useVisitor } from "@/hooks/use-visitor";

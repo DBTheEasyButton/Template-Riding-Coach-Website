@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
-import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
+import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HeroPicture from "@/components/HeroPicture";
