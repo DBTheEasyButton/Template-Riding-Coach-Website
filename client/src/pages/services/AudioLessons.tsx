@@ -288,7 +288,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 Your Free Lesson is Ready!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Your download has started. You can also listen to the lesson below.
+                Your download has started. You'll also receive an email with all the details about the audio course.
               </DialogDescription>
             </DialogHeader>
             
@@ -304,8 +304,14 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             </div>
             
             <div className="flex flex-col gap-3">
+              <Link href="/courses/strong-horse-audio#pricing">
+                <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-view-courses-audio">
+                  View Full Course Options
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
               <a href={introAudio} download="From-Strong-to-Light-and-Soft-Trial-Lesson.mp3">
-                <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-download-audio-again">
+                <Button variant="outline" className="w-full" data-testid="button-download-audio-again">
                   <Download className="mr-2 h-4 w-4" />
                   Download Again
                 </Button>

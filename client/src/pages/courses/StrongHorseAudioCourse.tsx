@@ -430,7 +430,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 Your Free Lesson is Ready!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Your download has started. You can also listen to the lesson below.
+                Your download has started. You'll also receive an email with all the details about the audio course.
               </DialogDescription>
             </DialogHeader>
             
@@ -446,13 +446,19 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             </div>
             
             <div className="flex flex-col gap-3">
+              <Link href="/courses/strong-horse-audio#pricing">
+                <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-view-courses-audio">
+                  View Full Course Options
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
               <a href={introAudio} download="From-Strong-to-Light-and-Soft-Trial-Lesson.mp3">
-                <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-download-audio-again">
+                <Button variant="outline" className="w-full" data-testid="button-download-audio-again">
                   <Download className="mr-2 h-4 w-4" />
                   Download Again
                 </Button>
               </a>
-              <Button variant="outline" onClick={handleClose} data-testid="button-close-audio-modal">
+              <Button variant="ghost" onClick={handleClose} className="text-gray-500" data-testid="button-close-audio-modal">
                 Close
               </Button>
             </div>
@@ -665,6 +671,8 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showAudioConfirmation, setShowAudioConfirmation] = useState(false);
+  const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
   const { toast } = useToast();
 
   const resetForm = () => {
@@ -673,6 +681,55 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     setEmail("");
     setMobile("");
     setShowSuccess(false);
+    setShowAudioConfirmation(false);
+  };
+
+  const handleDownloadAudioLesson = async () => {
+    setIsDownloadingAudio(true);
+    
+    try {
+      // Call the API to add GHL tag (we already have their details from PDF form)
+      await fetch("/api/lead-capture/strong-horse-audio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+        }),
+      });
+
+      // Trigger the audio download
+      const link = document.createElement('a');
+      link.href = introAudio;
+      link.download = 'From-Strong-to-Light-and-Soft-Trial-Lesson.mp3';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Show audio confirmation
+      setShowAudioConfirmation(true);
+      
+    } catch (error) {
+      console.error("Audio download error:", error);
+      toast({
+        title: "Download Started",
+        description: "Your audio lesson is downloading.",
+      });
+      // Still trigger download even if API fails
+      const link = document.createElement('a');
+      link.href = introAudio;
+      link.download = 'From-Strong-to-Light-and-Soft-Trial-Lesson.mp3';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setShowAudioConfirmation(true);
+    } finally {
+      setIsDownloadingAudio(false);
+    }
   };
 
   const handleClose = () => {
@@ -749,7 +806,33 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
-        {showSuccess ? (
+        {showAudioConfirmation ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy mb-2">
+                Your Audio Lesson is Downloading!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Check your downloads folder. You'll also receive an email with all the details about the audio course.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="mt-6 space-y-3">
+              <Link href="/courses/strong-horse-audio#pricing">
+                <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-view-courses">
+                  View Full Course Options
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Button variant="outline" onClick={handleClose} className="w-full" data-testid="button-close-audio-modal">
+                Close
+              </Button>
+            </div>
+          </div>
+        ) : showSuccess ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -759,15 +842,54 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 Your PDF Guide is Ready!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Your download has started. Check your downloads folder for the PDF.
+                Your download has started. You'll also receive an email with all the details.
               </DialogDescription>
             </DialogHeader>
             
-            <div className="mt-6">
-              <Button variant="outline" onClick={handleClose} className="w-full" data-testid="button-close-pdf-modal">
-                Close
-              </Button>
+            <div className="mt-6 p-4 bg-orange/5 border border-orange/20 rounded-xl">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Headphones className="h-5 w-5 text-orange" />
+                <span className="font-semibold text-navy">Want to Go Deeper?</span>
+              </div>
+              <p className="text-sm text-gray-600 mb-4">
+                Try my "From Strong to Light and Soft" audio course — listen while you ride and transform your horse in 28 days.
+              </p>
+              
+              <div className="space-y-2">
+                <Button 
+                  onClick={handleDownloadAudioLesson}
+                  disabled={isDownloadingAudio}
+                  className="w-full bg-orange hover:bg-orange-hover text-white"
+                  data-testid="button-download-audio-from-pdf"
+                >
+                  {isDownloadingAudio ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Downloading...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Free Audio Lesson
+                    </>
+                  )}
+                </Button>
+                <Link href="/courses/strong-horse-audio">
+                  <Button variant="outline" className="w-full border-orange text-orange hover:bg-orange/10" data-testid="button-find-out-more">
+                    Find Out More
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
             </div>
+            
+            <button
+              onClick={handleClose}
+              className="mt-4 text-gray-500 hover:text-gray-700 text-sm underline transition-colors"
+              data-testid="button-close-pdf-modal"
+            >
+              No thanks, close
+            </button>
           </div>
         ) : (
           <>
@@ -1235,9 +1357,16 @@ function AudioCoursePurchaseModal({
                 Purchase Complete!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Thank you for your purchase! You will receive an email shortly with the link to access the "From Strong to Soft & Light in 28 Days" full course and the Dan Bizzarro Method Hub.
+                Thank you for your purchase! You'll receive an email shortly with the link to access the "From Strong to Soft & Light in 28 Days" full course and the Dan Bizzarro Method Hub.
               </DialogDescription>
             </DialogHeader>
+            
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+              <div className="flex items-center justify-center gap-2 text-blue-700">
+                <Mail className="h-4 w-4" />
+                <span className="text-sm font-medium">Check your inbox for course access</span>
+              </div>
+            </div>
             
             <div className="mt-6">
               <Button variant="outline" onClick={handleClose} className="w-full" data-testid="button-close-audio-purchase-modal">
@@ -1747,10 +1876,17 @@ function PurchaseModal({
               </DialogTitle>
               <DialogDescription className="text-gray-600">
                 {tier.id === "private-mentorship" 
-                  ? "I've received your application for Private Mentorship. I'll be in touch within 24 hours to discuss your goals and see if this is the right fit."
-                  : "I've received your registration for the 28-Day Challenge. I'll send you all the details shortly!"}
+                  ? "I've received your application for Private Mentorship. You'll receive an email shortly and I'll be in touch within 24 hours to discuss your goals."
+                  : "I've received your registration for the 28-Day Challenge! You'll receive an email shortly with all the details and next steps."}
               </DialogDescription>
             </DialogHeader>
+            
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+              <div className="flex items-center justify-center gap-2 text-blue-700">
+                <Mail className="h-4 w-4" />
+                <span className="text-sm font-medium">Check your inbox for confirmation</span>
+              </div>
+            </div>
             
             <div className="mt-6">
               <Button variant="outline" onClick={handleClose} className="w-full" data-testid="button-close-purchase-modal">

@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, User } from "lucide-react";
+import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, User, Headphones, ArrowRight } from "lucide-react";
+import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
@@ -45,8 +46,58 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [showAudioConfirmation, setShowAudioConfirmation] = useState(false);
+  const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
+  const [submittedDetails, setSubmittedDetails] = useState<{firstName: string; lastName: string; email: string; mobile: string} | null>(null);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
+
+  const handleDownloadAudioLesson = async () => {
+    setIsDownloadingAudio(true);
+    
+    try {
+      // Use submitted details or profile details
+      const details = submittedDetails || {
+        firstName: profile?.firstName?.trim() || "",
+        lastName: profile?.lastName?.trim() || "",
+        email: profile?.email?.trim() || "",
+        mobile: profile?.mobile?.trim() || ""
+      };
+
+      // Call the API to add GHL tag
+      await fetch("/api/lead-capture/strong-horse-audio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(details),
+      });
+
+      // Trigger the audio download
+      const link = document.createElement('a');
+      link.href = introAudio;
+      link.download = 'From-Strong-to-Light-and-Soft-Trial-Lesson.mp3';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Show audio confirmation
+      setShowAudioConfirmation(true);
+      
+    } catch (error) {
+      console.error("Audio download error:", error);
+      // Still trigger download even if API fails
+      const link = document.createElement('a');
+      link.href = introAudio;
+      link.download = 'From-Strong-to-Light-and-Soft-Trial-Lesson.mp3';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setShowAudioConfirmation(true);
+    } finally {
+      setIsDownloadingAudio(false);
+    }
+  };
 
   useEffect(() => {
     if (profile && isRecognized) {
@@ -96,6 +147,13 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
+      // Save submitted details for audio download
+      setSubmittedDetails({
+        firstName: profile?.firstName?.trim() || "",
+        lastName: profile?.lastName?.trim() || "",
+        email: profile?.email?.trim() || "",
+        mobile: profile?.mobile?.trim() || ""
+      });
       setShowSuccess(true);
       queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
     } catch (error) {
@@ -162,6 +220,13 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
+      // Save submitted details for audio download before clearing
+      setSubmittedDetails({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        mobile: mobile.trim()
+      });
       setFirstName("");
       setLastName("");
       setEmail("");
@@ -180,6 +245,46 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
     }
   };
 
+  if (showAudioConfirmation) {
+    return (
+      <div className={variant === "compact" ? "text-center py-4" : "bg-white rounded-2xl shadow-xl p-8 border border-gray-100 text-center"}>
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+          <CheckCircle className="h-8 w-8 text-green-600" />
+        </div>
+        <h3 className="text-xl font-playfair font-bold text-navy mb-3">
+          Your Audio Lesson is Downloading!
+        </h3>
+        <p className="text-gray-600 mb-4">
+          Check your downloads folder. You'll also receive an email with all the details about the audio course.
+        </p>
+        <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
+          <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+            <Mail className="h-4 w-4 text-navy flex-shrink-0" />
+            <span>Check your inbox for course details</span>
+          </p>
+        </div>
+        <div className="space-y-2">
+          <Link href="/courses/strong-horse-audio#pricing">
+            <Button className="w-full bg-orange hover:bg-orange-hover text-white" data-testid="button-view-courses-guide">
+              View Full Course Options
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+          <Button
+            onClick={() => {
+              setShowSuccess(false);
+              setShowAudioConfirmation(false);
+            }}
+            variant="outline"
+            className="w-full border-navy text-navy hover:bg-navy hover:text-white"
+          >
+            Close
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (showSuccess) {
     return (
       <div className={variant === "compact" ? "text-center py-4" : "bg-white rounded-2xl shadow-xl p-8 border border-gray-100 text-center"}>
@@ -190,21 +295,52 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           Your Guide is Downloading!
         </h3>
         <p className="text-gray-600 mb-4">
-          I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder. If you still haven't received it, please contact me at <a href="mailto:dan@danbizzarromethod.com" className="text-orange hover:underline font-medium">dan@danbizzarromethod.com</a>
+          I've also sent a copy to your email. You'll find it from Dan Bizzarro Method.
         </p>
-        <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
-          <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
-            <Mail className="h-4 w-4 text-navy flex-shrink-0" />
-            <span>Look for an email from Dan Bizzarro Method</span>
+        
+        <div className="bg-orange/5 border border-orange/20 rounded-xl p-4 mb-4">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Headphones className="h-5 w-5 text-orange" />
+            <span className="font-semibold text-navy">Want to Go Deeper?</span>
+          </div>
+          <p className="text-sm text-gray-600 mb-3">
+            Try my "From Strong to Light and Soft" audio course — listen while you ride and transform your horse in 28 days.
           </p>
+          
+          <div className="space-y-2">
+            <Button 
+              onClick={handleDownloadAudioLesson}
+              disabled={isDownloadingAudio}
+              className="w-full bg-orange hover:bg-orange-hover text-white"
+              data-testid="button-download-audio-from-guide"
+            >
+              {isDownloadingAudio ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Downloading...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Free Audio Lesson
+                </>
+              )}
+            </Button>
+            <Link href="/courses/strong-horse-audio">
+              <Button variant="outline" className="w-full border-orange text-orange hover:bg-orange/10" data-testid="button-find-out-more-guide">
+                Find Out More
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
-        <Button
+        
+        <button
           onClick={() => setShowSuccess(false)}
-          variant="outline"
-          className="border-navy text-navy hover:bg-navy hover:text-white"
+          className="text-gray-500 hover:text-gray-700 text-sm underline transition-colors"
         >
-          Download Again
-        </Button>
+          No thanks, close
+        </button>
       </div>
     );
   }
