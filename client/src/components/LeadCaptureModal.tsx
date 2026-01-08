@@ -19,6 +19,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -31,6 +32,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       setLastName(profile.lastName || "");
       setEmail(profile.email || "");
       setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
     }
   }, [isOpen, profile, isRecognized]);
 
@@ -53,6 +55,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           lastName: profile?.lastName?.trim() || "",
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
+          horseName: profile?.horseName?.trim() || "",
         }),
       });
 
@@ -91,13 +94,14 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setShowUpdateForm(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free guide.",
@@ -129,6 +133,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -150,6 +155,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       setLastName("");
       setEmail("");
       setMobile("");
+      setHorseName("");
       setShowSuccess(true);
       // Immediately refetch visitor profile to sync with new cookie from server
       queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
@@ -330,6 +336,23 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               disabled={isSubmitting}
               required
               data-testid="input-lead-mobile"
+              className="border-gray-300 focus:border-navy focus:ring-navy"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="horseName" className="text-navy font-medium">
+              Your Horse's Name <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="horseName"
+              type="text"
+              placeholder="Enter your horse's name"
+              value={horseName}
+              onChange={(e) => setHorseName(e.target.value)}
+              disabled={isSubmitting}
+              required
+              data-testid="input-lead-horsename"
               className="border-gray-300 focus:border-navy focus:ring-navy"
             />
           </div>

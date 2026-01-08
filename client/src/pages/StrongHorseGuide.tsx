@@ -43,12 +43,13 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [showAudioConfirmation, setShowAudioConfirmation] = useState(false);
   const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
-  const [submittedDetails, setSubmittedDetails] = useState<{firstName: string; lastName: string; email: string; mobile: string} | null>(null);
+  const [submittedDetails, setSubmittedDetails] = useState<{firstName: string; lastName: string; email: string; mobile: string; horseName: string} | null>(null);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
 
@@ -61,7 +62,8 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
         firstName: profile?.firstName?.trim() || "",
         lastName: profile?.lastName?.trim() || "",
         email: profile?.email?.trim() || "",
-        mobile: profile?.mobile?.trim() || ""
+        mobile: profile?.mobile?.trim() || "",
+        horseName: profile?.horseName?.trim() || ""
       };
 
       // Call the API to add GHL tag
@@ -105,6 +107,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
       setLastName(profile.lastName || "");
       setEmail(profile.email || "");
       setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
     }
   }, [profile, isRecognized]);
 
@@ -114,6 +117,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setShowUpdateForm(false);
   };
 
@@ -130,6 +134,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           lastName: profile?.lastName?.trim() || "",
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
+          horseName: profile?.horseName?.trim() || "",
         }),
       });
 
@@ -152,7 +157,8 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
         firstName: profile?.firstName?.trim() || "",
         lastName: profile?.lastName?.trim() || "",
         email: profile?.email?.trim() || "",
-        mobile: profile?.mobile?.trim() || ""
+        mobile: profile?.mobile?.trim() || "",
+        horseName: profile?.horseName?.trim() || ""
       });
       setShowSuccess(true);
       queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
@@ -171,7 +177,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free guide.",
@@ -203,6 +209,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -225,12 +232,14 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.trim(),
-        mobile: mobile.trim()
+        mobile: mobile.trim(),
+        horseName: horseName.trim()
       });
       setFirstName("");
       setLastName("");
       setEmail("");
       setMobile("");
+      setHorseName("");
       setShowSuccess(true);
       queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
     } catch (error) {
@@ -548,6 +557,23 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             required
             disabled={isSubmitting}
             data-testid="input-strong-horse-mobile"
+            className="border-gray-300 focus:border-navy focus:ring-navy"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="horseName" className="text-navy font-medium">
+            Your Horse's Name <span className="text-red-500">*</span>
+          </Label>
+          <Input
+            id="horseName"
+            type="text"
+            placeholder="Enter your horse's name"
+            value={horseName}
+            onChange={(e) => setHorseName(e.target.value)}
+            required
+            disabled={isSubmitting}
+            data-testid="input-strong-horse-horsename"
             className="border-gray-300 focus:border-navy focus:ring-navy"
           />
         </div>

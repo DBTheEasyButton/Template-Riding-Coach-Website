@@ -181,6 +181,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -191,6 +192,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setShowSuccess(false);
     setShowProgress(false);
   };
@@ -212,7 +214,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free audio lesson.",
@@ -244,6 +246,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -399,6 +402,22 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                   onChange={(e) => setMobile(e.target.value)}
                   disabled={isSubmitting}
                   data-testid="input-audio-mobile"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="audio-horseName" className="text-navy font-medium text-sm">
+                  Your Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="audio-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  data-testid="input-audio-horsename"
                   className="border-gray-300"
                 />
               </div>

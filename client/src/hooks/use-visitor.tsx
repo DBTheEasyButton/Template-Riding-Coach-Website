@@ -8,6 +8,7 @@ interface VisitorProfile {
   lastName?: string;
   email?: string;
   mobile?: string;
+  horseName?: string;
   sources?: string[];
 }
 

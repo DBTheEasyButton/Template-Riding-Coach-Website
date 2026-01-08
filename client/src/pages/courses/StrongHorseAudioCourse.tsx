@@ -254,6 +254,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
@@ -268,6 +269,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       setLastName(profile.lastName || "");
       setEmail(profile.email || "");
       setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
       setTermsAccepted(true);
     }
   }, [isOpen, profile, isRecognized]);
@@ -277,6 +279,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setTermsAccepted(false);
     setShowSuccess(false);
     setShowProgress(false);
@@ -294,6 +297,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setTermsAccepted(false);
     setShowUpdateForm(false);
   };
@@ -311,6 +315,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           lastName: profile?.lastName?.trim() || "",
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
+          horseName: profile?.horseName?.trim() || "",
         }),
       });
 
@@ -345,7 +350,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free audio lesson.",
@@ -386,6 +391,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -609,6 +615,23 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="audio-horseName" className="text-navy font-medium text-sm">
+                  Your Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="audio-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  required
+                  data-testid="input-audio-horsename"
+                  className="border-gray-300"
+                />
+              </div>
+
               <div className="flex items-start gap-2 pt-2">
                 <Checkbox
                   id="audio-lead-terms"
@@ -669,6 +692,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showAudioConfirmation, setShowAudioConfirmation] = useState(false);
@@ -680,6 +704,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setShowSuccess(false);
     setShowAudioConfirmation(false);
   };
@@ -699,6 +724,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -740,7 +766,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free PDF guide.",
@@ -772,6 +798,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -974,6 +1001,23 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                   disabled={isSubmitting}
                   required
                   data-testid="input-pdf-mobile"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="pdf-horseName" className="text-navy font-medium text-sm">
+                  Your Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="pdf-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  required
+                  data-testid="input-pdf-horsename"
                   className="border-gray-300"
                 />
               </div>

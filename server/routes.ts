@@ -481,10 +481,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture for Strong Horse PDF - creates/updates GHL contact with StrongHorsePDF tag
   app.post("/api/lead-capture/strong-horse-pdf", async (req, res) => {
     try {
-      const { firstName, lastName, email, mobile } = req.body;
+      const { firstName, lastName, email, mobile, horseName } = req.body;
 
-      if (!firstName || !lastName || !email || !mobile) {
-        return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
+      if (!firstName || !lastName || !email || !mobile || !horseName) {
+        return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
       }
 
       let ghlContactId: string | undefined;
@@ -497,7 +497,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           lastName,
           mobile, // phone number
           ['StrongHorse'], // tag for tracking this lead source
-          { lead_source: 'Strong Horse PDF Download' }
+          { lead_source: 'Strong Horse PDF Download', horse_name: horseName }
         );
         
         if (ghlResult.success) {
@@ -549,7 +549,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture for Strong Horse Audio Course - creates/updates GHL contact with StrongHorseAudio tag
   app.post("/api/lead-capture/strong-horse-audio", async (req, res) => {
     try {
-      const { firstName, lastName, email, mobile } = req.body;
+      const { firstName, lastName, email, mobile, horseName } = req.body;
 
       if (!firstName || !lastName || !email || !mobile) {
         return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
@@ -559,13 +559,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Create or update contact in GHL with StrongHorseAudio tag
       try {
+        const customFields: Record<string, string> = { lead_source: 'Strong Horse Trial Lesson' };
+        if (horseName) {
+          customFields.horse_name = horseName;
+        }
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
           email,
           firstName,
           lastName,
           mobile,
           ['StrongHorseAudio'],
-          { lead_source: 'Strong Horse Trial Lesson' }
+          customFields
         );
         
         if (ghlResult.success) {
