@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar, Download, CheckCircle, Mail, Loader2 } from "lucide-react";
+import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar, Download, CheckCircle, Mail, Loader2, X } from "lucide-react";
 import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
 
 function DownloadProgressOverlay({ onComplete }: { onComplete: () => void }) {
@@ -54,6 +54,125 @@ function DownloadProgressOverlay({ onComplete }: { onComplete: () => void }) {
         <p className="text-sm text-gray-500">{progress}%</p>
       </div>
     </div>
+  );
+}
+
+function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [hasShown, setHasShown] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const alreadyShown = sessionStorage.getItem('exitPopupShownAudioLessons');
+    if (alreadyShown) {
+      setHasShown(true);
+      return;
+    }
+
+    const handleScroll = () => {
+      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      if (scrollPercent > 25) {
+        setHasScrolled(true);
+      }
+    };
+
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && hasScrolled && !hasShown) {
+        setIsOpen(true);
+        setHasShown(true);
+        sessionStorage.setItem('exitPopupShownAudioLessons', 'true');
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && hasScrolled && !hasShown) {
+        sessionStorage.setItem('showExitPopupOnReturnAudioLessons', 'true');
+      } else if (document.visibilityState === 'visible') {
+        const shouldShow = sessionStorage.getItem('showExitPopupOnReturnAudioLessons');
+        if (shouldShow && !hasShown) {
+          setIsOpen(true);
+          setHasShown(true);
+          sessionStorage.setItem('exitPopupShownAudioLessons', 'true');
+          sessionStorage.removeItem('showExitPopupOnReturnAudioLessons');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [hasScrolled, hasShown]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleDownloadClick = () => {
+    setIsOpen(false);
+    onDownload();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-lg">
+        <button
+          onClick={handleClose}
+          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          data-testid="button-close-exit-popup"
+        >
+          <X className="h-5 w-5" />
+          <span className="sr-only">Close</span>
+        </button>
+        
+        <div className="text-center py-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-orange/10 rounded-full mb-4">
+            <Headphones className="h-8 w-8 text-orange" />
+          </div>
+          
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-playfair font-bold text-navy mb-3">
+              Wait! Do You Have a Strong or Heavy Horse?
+            </DialogTitle>
+            <DialogDescription className="text-gray-600 text-base leading-relaxed">
+              If your horse pulls, leans on the bit, or feels like hard work — I'd love to help.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <p className="text-gray-700 mt-4 mb-2">
+            Why not download my <strong>free audio lesson</strong> and try it with your horse?
+          </p>
+          
+          <p className="text-lg font-semibold text-navy mb-6">
+            You have nothing to lose.
+          </p>
+          
+          <Button
+            onClick={handleDownloadClick}
+            className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            data-testid="button-exit-popup-download"
+          >
+            <Download className="mr-2 h-5 w-5" />
+            Get My Free Audio Lesson
+          </Button>
+          
+          <button
+            onClick={handleClose}
+            className="mt-4 text-gray-500 hover:text-gray-700 text-sm underline transition-colors"
+            data-testid="button-exit-popup-no-thanks"
+          >
+            No thanks, I'll pass
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -476,6 +595,8 @@ export default function AudioLessons() {
         canonical="https://danbizzarromethod.com/coaching/audio-lessons"
       />
       <Navigation />
+      <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
+      <ExitIntentPopup onDownload={() => setShowAudioModal(true)} />
       {/* Hero Section */}
       <section className="relative min-h-[450px] sm:min-h-[400px] overflow-hidden mt-14 sm:mt-16 flex">
         <HeroPicture
@@ -730,7 +851,6 @@ export default function AudioLessons() {
           </p>
         </div>
       </section>
-      <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
       <Footer />
     </div>
   );
