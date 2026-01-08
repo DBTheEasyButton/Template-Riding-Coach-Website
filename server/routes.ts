@@ -568,12 +568,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName,
           lastName,
           mobile,
-          ['StrongHorseAudio'],
+          ['stl-trial'],
           customFields
         );
         
         if (ghlResult.success) {
-          console.log(`GHL contact created/updated for ${email} with StrongHorseAudio tag`);
+          console.log(`GHL contact created/updated for ${email} with stl-trial tag`);
           ghlContactId = ghlResult.contactId;
         } else {
           console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
@@ -721,14 +721,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Payment not completed' });
       }
 
-      // Create or update contact in GHL with stl-audio tag
+      // Create or update contact in GHL with stl-fullcourse tag
       try {
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
           email,
           firstName,
           lastName,
           mobile,
-          ['stl-audio'],
+          ['stl-fullcourse'],
           { 
             lead_source: 'Strong to Soft & Light - Audio Course Purchase',
             purchase_date: new Date().toISOString(),
@@ -737,7 +737,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         );
         
         if (ghlResult.success) {
-          console.log(`GHL contact created/updated for ${email} with stl-audio tag after audio course purchase`);
+          console.log(`GHL contact created/updated for ${email} with stl-fullcourse tag after audio course purchase`);
         } else {
           console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
         }
@@ -780,7 +780,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           leadSource = 'Strong to Soft & Light - Private Mentorship Application';
           break;
         default:
-          tag = 'stl-audio';
+          tag = 'stl-fullcourse';
           leadSource = 'Strong to Soft & Light - Course Interest';
       }
 
