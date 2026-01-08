@@ -2009,7 +2009,7 @@ export default function StrongHorseAudioCourse() {
                     data-testid="button-hero-start-course"
                   >
                     <ArrowRight className="mr-2 h-5 w-5" />
-                    START THE COURSE NOW
+                    View Available Courses
                   </Button>
                 </a>
               </div>
