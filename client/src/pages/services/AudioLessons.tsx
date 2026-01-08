@@ -507,7 +507,7 @@ export default function AudioLessons() {
                   className="bg-white hover:bg-gray-100 text-navy font-semibold px-8 py-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg"
                   data-testid="button-hero-course"
                 >
-                  View Course Options
+                  View Available Courses
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
