@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X } from "lucide-react";
+import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X, Gift } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
@@ -20,6 +20,7 @@ import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRI
 import beforeImage from "@assets/67_1766025322880.png";
 import afterImage from "@assets/14_1766025322881.png";
 import strongHorseHero from "@assets/From_THIS_(2)_1767410380848.png";
+import { StrongHorseAudioPageConfig, defaultConfig, PricingOverride } from "./StrongHorseAudioPageConfig";
 
 let stripePromiseCache: Promise<Stripe | null> | null = null;
 let stripeLoadAttempts = 0;
@@ -1060,6 +1061,7 @@ interface PricingTier {
   name: string;
   subtitle: string;
   price: string;
+  originalPrice?: string;
   badge?: string;
   limitText?: string;
   description: string;
@@ -1735,6 +1737,310 @@ const pricingTiers: PricingTier[] = [
   }
 ];
 
+function DiscountedAudioPurchaseModal({ 
+  isOpen, 
+  onClose,
+  discountCode 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+  discountCode: string;
+}) {
+  const [step, setStep] = useState<'form' | 'payment' | 'success'>('form');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [stripe, setStripe] = useState<Stripe | null>(null);
+  const [stripeLoading, setStripeLoading] = useState(false);
+  const [stripeError, setStripeError] = useState(false);
+  const { toast } = useToast();
+
+  const loadStripeInstance = async () => {
+    setStripeLoading(true);
+    setStripeError(false);
+    resetStripeCache();
+    
+    try {
+      const instance = await getStripePromise();
+      if (instance) {
+        setStripe(instance);
+        setStripeError(false);
+      } else {
+        setStripeError(true);
+      }
+    } catch (error) {
+      setStripeError(true);
+    } finally {
+      setStripeLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen && !stripe && !stripeLoading && !stripeError) {
+      loadStripeInstance();
+    }
+  }, [isOpen]);
+
+  const resetForm = () => {
+    setStep('form');
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setHorseName("");
+    setTermsAccepted(false);
+    setClientSecret(null);
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields including your horse's name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/audio-course/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+          horseName: horseName.trim(),
+          discountCode,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to create payment");
+
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      setStep('payment');
+    } catch (error) {
+      toast({
+        title: "Something Went Wrong",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePaymentSuccess = async (intentId: string) => {
+    try {
+      await fetch("/api/audio-course/complete-purchase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentIntentId: intentId,
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+          horseName: horseName.trim(),
+        }),
+      });
+      setStep('success');
+    } catch (error) {
+      setStep('success');
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast({
+      title: "Payment Failed",
+      description: error,
+      variant: "destructive",
+    });
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+        {step === 'success' ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy mb-2">
+                Purchase Complete!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Thank you for your purchase! You'll receive an email shortly with the link to access the full course and the Dan Bizzarro Method Hub.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+              <div className="flex items-center justify-center gap-2 text-blue-700">
+                <Mail className="h-4 w-4" />
+                <span className="text-sm font-medium">Check your inbox for course access</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              <Button variant="outline" onClick={handleClose} className="w-full">Close</Button>
+            </div>
+          </div>
+        ) : step === 'payment' && clientSecret && stripe ? (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100">
+                  <Gift className="h-6 w-6 text-green-600" />
+                </div>
+              </div>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy text-center">
+                Complete Your Purchase
+              </DialogTitle>
+              <DialogDescription className="text-center text-gray-600 text-sm">
+                Strong to Soft & Light — <span className="line-through text-gray-400">£97</span> <span className="text-green-600 font-semibold">£72</span>
+              </DialogDescription>
+            </DialogHeader>
+
+            <Elements stripe={stripe} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+              <AudioCoursePaymentForm
+                onPaymentSuccess={handlePaymentSuccess}
+                onPaymentError={handlePaymentError}
+                customerData={{ firstName, lastName, email, mobile, horseName }}
+                clientSecret={clientSecret}
+              />
+            </Elements>
+
+            <Button variant="ghost" onClick={() => setStep('form')} className="w-full text-gray-500 text-sm mt-2">
+              ← Back to edit details
+            </Button>
+          </>
+        ) : (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100">
+                  <Gift className="h-6 w-6 text-green-600" />
+                </div>
+              </div>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy text-center">
+                Special Offer — 25% OFF
+              </DialogTitle>
+              <DialogDescription className="text-center text-gray-600 text-sm">
+                Strong to Soft & Light — <span className="line-through text-gray-400">£97</span> <span className="text-green-600 font-semibold">£72</span>
+              </DialogDescription>
+            </DialogHeader>
+
+            <form onSubmit={handleFormSubmit} className="space-y-3 mt-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="space-y-1">
+                  <Label htmlFor="discount-firstName" className="text-navy font-medium text-sm">
+                    First Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input id="discount-firstName" type="text" placeholder="First name" value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={isSubmitting} required className="border-gray-300" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="discount-lastName" className="text-navy font-medium text-sm">
+                    Surname <span className="text-red-500">*</span>
+                  </Label>
+                  <Input id="discount-lastName" type="text" placeholder="Surname" value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={isSubmitting} required className="border-gray-300" />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="discount-email" className="text-navy font-medium text-sm">
+                  Email Address <span className="text-red-500">*</span>
+                </Label>
+                <Input id="discount-email" type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isSubmitting} required className="border-gray-300" />
+                <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="discount-mobile" className="text-navy font-medium text-sm">
+                  Mobile Number <span className="text-red-500">*</span>
+                </Label>
+                <Input id="discount-mobile" type="tel" placeholder="+44 7..." value={mobile} onChange={(e) => setMobile(e.target.value)} disabled={isSubmitting} required className="border-gray-300" />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="discount-horseName" className="text-navy font-medium text-sm">
+                  Your Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input id="discount-horseName" type="text" placeholder="Your horse's name" value={horseName} onChange={(e) => setHorseName(e.target.value)} disabled={isSubmitting} required className="border-gray-300" />
+              </div>
+
+              <div className="flex items-start gap-2 pt-2">
+                <Checkbox id="discount-terms" checked={termsAccepted} onCheckedChange={(checked) => setTermsAccepted(checked === true)} disabled={isSubmitting} className="mt-0.5" />
+                <label htmlFor="discount-terms" className="text-sm text-gray-600 leading-tight">
+                  <a href="https://danbizzarromethod.com/audio-lessons-terms" target="_blank" rel="noopener noreferrer" className="text-navy hover:text-orange underline" onClick={(e) => e.stopPropagation()}>
+                    I have read and agree to the terms and conditions
+                  </a>
+                </label>
+              </div>
+
+              {stripeError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-red-700 font-medium">Payment system unavailable</p>
+                      <p className="text-xs text-red-600 mt-1">Please try again or contact us directly.</p>
+                      <Button variant="outline" size="sm" onClick={loadStripeInstance} className="mt-2 text-xs" disabled={stripeLoading}>
+                        {stripeLoading ? 'Retrying...' : 'Try Again'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <Button type="submit" disabled={isSubmitting || stripeLoading || stripeError} className="w-full bg-green-600 hover:bg-green-700 text-white py-3 font-semibold">
+                {isSubmitting ? (
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Processing...</>
+                ) : (
+                  <><Gift className="w-4 h-4 mr-2" />Get Course for £72 (Save £25)</>
+                )}
+              </Button>
+            </form>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId: string) => void }) {
   const Icon = tier.id === "self-guided" ? Headphones : tier.id === "guided-group" ? Users : Crown;
   
@@ -1768,7 +2074,12 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
         </p>
         
         <div className="flex items-baseline justify-center gap-2 mb-2">
-          <span className={`text-4xl font-bold ${tier.highlighted ? 'text-white' : 'text-navy'}`}>
+          {tier.originalPrice && (
+            <span className={`text-xl line-through ${tier.highlighted ? 'text-gray-400' : 'text-gray-400'}`}>
+              {tier.originalPrice}
+            </span>
+          )}
+          <span className={`text-4xl font-bold ${tier.highlighted ? 'text-white' : tier.originalPrice ? 'text-green-600' : 'text-navy'}`}>
             {tier.price}
           </span>
         </div>
@@ -2109,17 +2420,17 @@ function PurchaseModal({
   );
 }
 
-export default function StrongHorseAudioCourse() {
+export function StrongHorseAudioPage({ config = defaultConfig }: { config?: StrongHorseAudioPageConfig }) {
   const [showAudioModal, setShowAudioModal] = useState(false);
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [showAudioCoursePurchaseModal, setShowAudioCoursePurchaseModal] = useState(false);
+  const [showDiscountPurchaseModal, setShowDiscountPurchaseModal] = useState(false);
   const [selectedTier, setSelectedTier] = useState<PricingTier | null>(null);
 
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
-      // If there's a hash, scroll to that element
       setTimeout(() => {
         const element = document.querySelector(hash);
         if (element) {
@@ -2127,14 +2438,17 @@ export default function StrongHorseAudioCourse() {
         }
       }, 100);
     } else {
-      // No hash, scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, []);
 
   const handleTierSelect = (tierId: string) => {
     if (tierId === 'self-guided') {
-      setShowAudioCoursePurchaseModal(true);
+      if (config.isDiscountMode) {
+        setShowDiscountPurchaseModal(true);
+      } else {
+        setShowAudioCoursePurchaseModal(true);
+      }
       return;
     }
     const tier = pricingTiers.find(t => t.id === tierId);
@@ -2144,13 +2458,39 @@ export default function StrongHorseAudioCourse() {
     }
   };
 
+  const handleHeroPrimaryClick = () => {
+    if (config.isDiscountMode) {
+      setShowDiscountPurchaseModal(true);
+    } else {
+      setShowAudioModal(true);
+    }
+  };
+
+  const getDisplayTiers = () => {
+    if (!config.pricingOverrides) return pricingTiers;
+    return pricingTiers.map(tier => {
+      const override = config.pricingOverrides?.[tier.id as keyof typeof config.pricingOverrides];
+      if (override) {
+        return {
+          ...tier,
+          price: override.price,
+          originalPrice: override.originalPrice,
+          badge: override.badge || tier.badge,
+          buttonText: override.buttonText,
+        };
+      }
+      return tier;
+    });
+  };
+
+  const displayTiers = getDisplayTiers();
+
   return (
     <>
       <SEOHead
-        title={getSEOConfig('/courses/strong-horse-audio').title}
-        description={getSEOConfig('/courses/strong-horse-audio').description}
-        keywords={getSEOConfig('/courses/strong-horse-audio').keywords}
-        canonical={getCanonicalUrl('/courses/strong-horse-audio')}
+        title={config.seo.title}
+        description={config.seo.description}
+        canonical={config.seo.canonical}
       />
       <Navigation />
       <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
@@ -2164,15 +2504,22 @@ export default function StrongHorseAudioCourse() {
         isOpen={showAudioCoursePurchaseModal}
         onClose={() => setShowAudioCoursePurchaseModal(false)}
       />
-      <ExitIntentPopup onDownload={() => setShowAudioModal(true)} />
+      {config.isDiscountMode && (
+        <DiscountedAudioPurchaseModal
+          isOpen={showDiscountPurchaseModal}
+          onClose={() => setShowDiscountPurchaseModal(false)}
+          discountCode={config.discountCode || 'DAN25'}
+        />
+      )}
+      {!config.isDiscountMode && <ExitIntentPopup onDownload={() => setShowAudioModal(true)} />}
       {/* Hero Section */}
       <section className="relative overflow-hidden mt-14 sm:mt-16 bg-gradient-to-br from-navy via-navy to-[#1a365d]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <div>
-              <span className="inline-block bg-amber-400 text-navy font-semibold text-sm px-4 py-1.5 rounded-full mb-6">
-                6-Lesson Audio Course
+              <span className={`inline-block font-semibold text-sm px-4 py-1.5 rounded-full mb-6 ${config.hero.badgeClassName}`}>
+                {config.hero.badge}
               </span>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold text-white mb-4 leading-tight">
                 From Strong to Light and Soft{" "}
@@ -2215,24 +2562,32 @@ export default function StrongHorseAudioCourse() {
               
               <div className="space-y-4">
                 <Button 
-                  onClick={() => setShowAudioModal(true)}
-                  className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-4 rounded-lg transition duration-300 text-base"
-                  data-testid="button-hero-free-lesson"
+                  onClick={handleHeroPrimaryClick}
+                  className={`w-full font-semibold py-4 rounded-lg transition duration-300 text-base ${config.hero.primaryButton.className}`}
+                  data-testid="button-hero-primary"
                 >
-                  <Headphones className="mr-2 h-5 w-5" />
-                  Try a Free Audio Lesson
+                  {config.hero.primaryButton.icon === 'gift' ? (
+                    <Gift className="mr-2 h-5 w-5" />
+                  ) : config.hero.primaryButton.icon === 'arrow' ? (
+                    <ArrowRight className="mr-2 h-5 w-5" />
+                  ) : (
+                    <Headphones className="mr-2 h-5 w-5" />
+                  )}
+                  {config.hero.primaryButton.text}
                 </Button>
                 
-                <a href="#pricing" className="block">
-                  <Button 
-                    variant="outline"
-                    className="w-full border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold py-4 rounded-lg transition duration-300 text-base"
-                    data-testid="button-hero-start-course"
-                  >
-                    <ArrowRight className="mr-2 h-5 w-5" />
-                    START THE COURSE NOW
-                  </Button>
-                </a>
+                {config.hero.secondaryButton && (
+                  <a href={config.hero.secondaryButton.href || '#pricing'} className="block">
+                    <Button 
+                      variant="outline"
+                      className="w-full border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold py-4 rounded-lg transition duration-300 text-base"
+                      data-testid="button-hero-secondary"
+                    >
+                      <ArrowRight className="mr-2 h-5 w-5" />
+                      {config.hero.secondaryButton.text}
+                    </Button>
+                  </a>
+                )}
               </div>
               
               </div>
@@ -2613,7 +2968,7 @@ export default function StrongHorseAudioCourse() {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
-              {pricingTiers.map((tier) => (
+              {displayTiers.map((tier) => (
                 <PricingCard 
                   key={tier.id} 
                   tier={tier} 
@@ -2769,25 +3124,29 @@ export default function StrongHorseAudioCourse() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Button 
                 onClick={() => handleTierSelect("self-guided")}
-                className="bg-white text-navy hover:bg-gray-100 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                className={`font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg ${config.isDiscountMode ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-white text-navy hover:bg-gray-100'}`}
                 data-testid="button-cta-self-guided"
               >
-                Audio Course Only — £97
+                {config.ctaStrip.selfGuidedText}
               </Button>
-              <Button 
-                onClick={() => handleTierSelect("guided-group")}
-                className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                data-testid="button-cta-challenge"
-              >
-                28-Day Challenge — £147
-              </Button>
-              <Button 
-                onClick={() => handleTierSelect("private-mentorship")}
-                className="bg-white text-navy hover:bg-gray-100 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                data-testid="button-cta-mentorship"
-              >
-                Private Mentorship — £997
-              </Button>
+              {config.ctaStrip.showChallenge && (
+                <Button 
+                  onClick={() => handleTierSelect("guided-group")}
+                  className="bg-orange hover:bg-orange-hover text-white font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  data-testid="button-cta-challenge"
+                >
+                  28-Day Challenge — £147
+                </Button>
+              )}
+              {config.ctaStrip.showMentorship && (
+                <Button 
+                  onClick={() => handleTierSelect("private-mentorship")}
+                  className="bg-white text-navy hover:bg-gray-100 font-semibold py-4 px-8 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  data-testid="button-cta-mentorship"
+                >
+                  Private Mentorship — £997
+                </Button>
+              )}
             </div>
           </div>
         </section>
@@ -2796,4 +3155,8 @@ export default function StrongHorseAudioCourse() {
       <Footer />
     </>
   );
+}
+
+export default function StrongHorseAudioCourse() {
+  return <StrongHorseAudioPage config={defaultConfig} />;
 }
