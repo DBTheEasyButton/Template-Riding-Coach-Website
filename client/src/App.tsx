@@ -51,6 +51,7 @@ const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 // Course pages
 const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
 const StrongHorseAudioCourse = lazy(() => import("@/pages/courses/StrongHorseAudioCourse"));
+const StrongHorseAudioOffer = lazy(() => import("@/pages/courses/StrongHorseAudioOffer"));
 
 // Tour pages
 const GATUKTour = lazy(() => import("@/pages/GATUKTour"));
@@ -152,6 +153,11 @@ function Router() {
       <Route path="/courses/strong-horse-audio">
         <Suspense fallback={<PageLoader />}>
           <StrongHorseAudioCourse />
+        </Suspense>
+      </Route>
+      <Route path="/courses/strong-horse-audio-offer">
+        <Suspense fallback={<PageLoader />}>
+          <StrongHorseAudioOffer />
         </Suspense>
       </Route>
       <Route path="/gat-uk-tour">

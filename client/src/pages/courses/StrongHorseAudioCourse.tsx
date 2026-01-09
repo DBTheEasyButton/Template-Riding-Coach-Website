@@ -1080,7 +1080,7 @@ function AudioCoursePaymentForm({
 }: {
   onPaymentSuccess: (paymentIntentId: string) => void;
   onPaymentError: (error: string) => void;
-  customerData: { firstName: string; lastName: string; email: string; mobile: string };
+  customerData: { firstName: string; lastName: string; email: string; mobile: string; horseName: string };
   clientSecret: string;
 }) {
   const stripe = useStripe();
@@ -1228,6 +1228,7 @@ function AudioCoursePurchaseModal({
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -1270,6 +1271,7 @@ function AudioCoursePurchaseModal({
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setTermsAccepted(false);
     setClientSecret(null);
     setPaymentIntentId(null);
@@ -1283,10 +1285,10 @@ function AudioCoursePurchaseModal({
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all fields.",
+        description: "Please fill in all fields including your horse's name.",
         variant: "destructive",
       });
       return;
@@ -1324,6 +1326,7 @@ function AudioCoursePurchaseModal({
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -1361,6 +1364,7 @@ function AudioCoursePurchaseModal({
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
         }),
       });
 
@@ -1438,7 +1442,7 @@ function AudioCoursePurchaseModal({
               <AudioCoursePaymentForm
                 onPaymentSuccess={handlePaymentSuccess}
                 onPaymentError={handlePaymentError}
-                customerData={{ firstName, lastName, email, mobile }}
+                customerData={{ firstName, lastName, email, mobile, horseName }}
                 clientSecret={clientSecret}
               />
             </Elements>
@@ -1535,6 +1539,23 @@ function AudioCoursePurchaseModal({
                   disabled={isSubmitting}
                   required
                   data-testid="input-audio-mobile"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="audio-horseName" className="text-navy font-medium text-sm">
+                  Your Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="audio-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  required
+                  data-testid="input-audio-horsename"
                   className="border-gray-300"
                 />
               </div>
@@ -1826,6 +1847,7 @@ function PurchaseModal({
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
+  const [horseName, setHorseName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
@@ -1835,6 +1857,7 @@ function PurchaseModal({
     setLastName("");
     setEmail("");
     setMobile("");
+    setHorseName("");
     setShowSuccess(false);
   };
 
@@ -1846,10 +1869,10 @@ function PurchaseModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all fields.",
+        description: "Please fill in all fields including your horse's name.",
         variant: "destructive",
       });
       return;
@@ -1878,6 +1901,7 @@ function PurchaseModal({
           lastName: lastName.trim(),
           email: email.trim(),
           mobile: mobile.trim(),
+          horseName: horseName.trim(),
           courseType: tier?.id,
           courseName: tier?.subtitle,
           price: tier?.price,
@@ -2023,6 +2047,23 @@ function PurchaseModal({
                   disabled={isSubmitting}
                   required
                   data-testid="input-purchase-mobile"
+                  className="border-gray-300"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="purchase-horseName" className="text-navy font-medium text-sm">
+                  Your Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="purchase-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  required
+                  data-testid="input-purchase-horsename"
                   className="border-gray-300"
                 />
               </div>

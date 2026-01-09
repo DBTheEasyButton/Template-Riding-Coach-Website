@@ -666,16 +666,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Audio Course payment intent - creates Stripe payment for £97 audio course
+  // Audio Course payment intent - creates Stripe payment for £97 audio course (or £72 with DAN25 discount)
   app.post("/api/audio-course/create-payment-intent", async (req, res) => {
     try {
-      const { firstName, lastName, email, mobile } = req.body;
+      const { firstName, lastName, email, mobile, horseName, discountCode } = req.body;
 
       if (!firstName || !lastName || !email || !mobile) {
         return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
       }
 
-      const amount = 9700; // £97 in pence
+      let amount = 9700; // £97 in pence
+      let discountApplied = false;
+      
+      // Apply DAN25 discount code for 25% off (£72)
+      if (discountCode && discountCode.toUpperCase() === 'DAN25') {
+        amount = 7200; // £72 in pence
+        discountApplied = true;
+      }
 
       const paymentIntent = await stripe.paymentIntents.create({
         amount,
@@ -690,15 +697,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           customerFirstName: firstName,
           customerLastName: lastName,
           customerMobile: mobile,
+          customerHorseName: horseName || '',
+          discountCode: discountApplied ? 'DAN25' : '',
+          discountApplied: discountApplied ? 'yes' : 'no',
         },
         receipt_email: email,
       });
 
-      console.log(`Audio course payment intent created: ${paymentIntent.id} for ${email}`);
+      console.log(`Audio course payment intent created: ${paymentIntent.id} for ${email}${discountApplied ? ' (DAN25 discount applied)' : ''}`);
 
       res.json({ 
         clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id
+        paymentIntentId: paymentIntent.id,
+        amount: amount,
+        discountApplied: discountApplied
       });
     } catch (error) {
       console.error("Error creating audio course payment intent:", error);
@@ -709,7 +721,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Audio Course purchase completion - called after successful payment
   app.post("/api/audio-course/complete-purchase", async (req, res) => {
     try {
-      const { paymentIntentId, firstName, lastName, email, mobile } = req.body;
+      const { paymentIntentId, firstName, lastName, email, mobile, horseName } = req.body;
 
       if (!paymentIntentId || !firstName || !lastName || !email || !mobile) {
         return res.status(400).json({ error: 'Payment intent ID and customer details are required' });
@@ -721,19 +733,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Payment not completed' });
       }
 
+      // Get discount info from payment metadata
+      const discountApplied = paymentIntent.metadata?.discountApplied === 'yes';
+      const purchaseAmount = discountApplied ? '£72' : '£97';
+
       // Create or update contact in GHL with stl-fullcourse tag
       try {
+        const customFields: Record<string, string> = { 
+          lead_source: 'Strong to Soft & Light - Audio Course Purchase',
+          purchase_date: new Date().toISOString(),
+          purchase_amount: purchaseAmount
+        };
+        if (horseName) {
+          customFields.horse_name = horseName;
+        }
+        if (discountApplied) {
+          customFields.discount_used = 'DAN25';
+        }
+        
         const ghlResult = await storage.createOrUpdateGhlContactInApi(
           email,
           firstName,
           lastName,
           mobile,
           ['stl-fullcourse'],
-          { 
-            lead_source: 'Strong to Soft & Light - Audio Course Purchase',
-            purchase_date: new Date().toISOString(),
-            purchase_amount: '£97'
-          }
+          customFields
         );
         
         if (ghlResult.success) {
