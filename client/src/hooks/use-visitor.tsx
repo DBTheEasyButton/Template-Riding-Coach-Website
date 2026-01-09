@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { useCookieConsent } from "@/components/CookieConsent";
 
 interface VisitorProfile {
   recognized: boolean;
@@ -30,11 +31,21 @@ export function VisitorProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const [showWelcomeToast, setShowWelcomeToast] = useState(false);
 
+  const { consentGiven } = useCookieConsent();
+
   const { data: profile, isLoading } = useQuery<VisitorProfile>({
     queryKey: ['/api/visitor/me'],
     staleTime: 5 * 60 * 1000,
-    retry: false
+    retry: false,
+    enabled: consentGiven
   });
+
+  useEffect(() => {
+    if (!consentGiven) {
+      queryClient.removeQueries({ queryKey: ['/api/visitor/me'] });
+      localStorage.removeItem(WELCOME_SHOWN_KEY);
+    }
+  }, [consentGiven, queryClient]);
 
   const forgetMutation = useMutation({
     mutationFn: async () => {

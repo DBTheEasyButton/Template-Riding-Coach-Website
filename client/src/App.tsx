@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense, useEffect } from "react";
 import { VisitorProvider } from "@/hooks/use-visitor";
 import WelcomeBackToast from "@/components/WelcomeBackToast";
+import CookieConsent, { CookieConsentProvider } from "@/components/CookieConsent";
 
 // Immediately load essential pages
 import Home from "@/pages/Home";
@@ -287,19 +288,22 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <VisitorProvider>
-          <link 
-            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" 
-            rel="stylesheet" 
-          />
-          <link 
-            rel="stylesheet" 
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
-          />
-          <WelcomeBackToast />
-          <Toaster />
-          <Router />
-        </VisitorProvider>
+        <CookieConsentProvider>
+          <VisitorProvider>
+            <link 
+              href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" 
+              rel="stylesheet" 
+            />
+            <link 
+              rel="stylesheet" 
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+            />
+            <WelcomeBackToast />
+            <Toaster />
+            <CookieConsent />
+            <Router />
+          </VisitorProvider>
+        </CookieConsentProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
