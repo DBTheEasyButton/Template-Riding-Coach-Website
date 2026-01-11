@@ -1239,6 +1239,17 @@ function AudioCoursePurchaseModal({
   const [stripeLoading, setStripeLoading] = useState(false);
   const [stripeError, setStripeError] = useState(false);
   const { toast } = useToast();
+  const { profile, isRecognized } = useVisitor();
+
+  useEffect(() => {
+    if (isOpen && profile && isRecognized) {
+      setFirstName(profile.firstName || "");
+      setLastName(profile.lastName || "");
+      setEmail(profile.email || "");
+      setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
+    }
+  }, [isOpen, profile, isRecognized]);
 
   const loadStripeInstance = async () => {
     setStripeLoading(true);
@@ -1759,6 +1770,17 @@ function DiscountedAudioPurchaseModal({
   const [stripeLoading, setStripeLoading] = useState(false);
   const [stripeError, setStripeError] = useState(false);
   const { toast } = useToast();
+  const { profile, isRecognized } = useVisitor();
+
+  useEffect(() => {
+    if (isOpen && profile && isRecognized) {
+      setFirstName(profile.firstName || "");
+      setLastName(profile.lastName || "");
+      setEmail(profile.email || "");
+      setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
+    }
+  }, [isOpen, profile, isRecognized]);
 
   const loadStripeInstance = async () => {
     setStripeLoading(true);
@@ -2159,9 +2181,21 @@ function PurchaseModal({
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [horseName, setHorseName] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
+  const { profile, isRecognized } = useVisitor();
+
+  useEffect(() => {
+    if (isOpen && profile && isRecognized) {
+      setFirstName(profile.firstName || "");
+      setLastName(profile.lastName || "");
+      setEmail(profile.email || "");
+      setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
+    }
+  }, [isOpen, profile, isRecognized]);
 
   const resetForm = () => {
     setFirstName("");
@@ -2169,6 +2203,7 @@ function PurchaseModal({
     setEmail("");
     setMobile("");
     setHorseName("");
+    setTermsAccepted(false);
     setShowSuccess(false);
   };
 
@@ -2194,6 +2229,15 @@ function PurchaseModal({
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
         variant: "destructive",
       });
       return;
@@ -2379,6 +2423,27 @@ function PurchaseModal({
                 />
               </div>
 
+              <div className="flex items-start gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <Checkbox
+                  id="purchase-terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                  className="mt-0.5"
+                  data-testid="checkbox-purchase-terms"
+                />
+                <Label htmlFor="purchase-terms" className="text-sm text-gray-600 cursor-pointer leading-relaxed">
+                  I have read and agree to the{" "}
+                  <a 
+                    href="/terms" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-orange hover:text-orange-hover underline"
+                  >
+                    terms and conditions
+                  </a>
+                </Label>
+              </div>
+
               <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
                 <p className="text-xs text-gray-600 flex items-start gap-2">
                   <Mail className="h-3 w-3 text-navy mt-0.5 flex-shrink-0" />
@@ -2392,7 +2457,7 @@ function PurchaseModal({
 
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !termsAccepted}
                 className={`w-full font-semibold py-3 ${
                   tier.id === "private-mentorship" 
                     ? 'bg-purple-600 hover:bg-purple-700 text-white' 
