@@ -2149,7 +2149,7 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
             ? 'bg-gray-400 text-white cursor-not-allowed'
             : tier.highlighted 
               ? 'bg-orange hover:bg-orange-hover text-white hover:scale-105 hover:shadow-lg' 
-              : 'bg-navy hover:bg-navy/90 text-white hover:scale-105 hover:shadow-lg'
+              : 'bg-navy hover:bg-slate-700 text-white hover:scale-105 hover:shadow-lg'
         }`}
         data-testid={`button-buy-${tier.id}`}
       >
