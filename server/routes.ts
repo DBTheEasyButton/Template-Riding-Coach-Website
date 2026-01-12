@@ -2140,6 +2140,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       Object.entries(clinicGroups).forEach(([clinicName, participants]) => {
         if (participants.length === 0) return;
 
+        // Main entries sheet
         const sheetName = clinicName.substring(0, 31);
         const worksheet = XLSX.utils.json_to_sheet(participants);
         
@@ -2158,6 +2159,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
         worksheet['!cols'] = cols;
 
         XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+        
+        // Create "Groups by Class" sheet for this clinic
+        const groupsByClass: Record<string, any[]> = {};
+        participants.forEach((p: any) => {
+          const className = p['Class'] || 'Unassigned';
+          if (!groupsByClass[className]) {
+            groupsByClass[className] = [];
+          }
+          groupsByClass[className].push({
+            rider: p['Rider Name'],
+            horse: p['Horse Name'],
+            specialRequests: p['Special Requests']
+          });
+        });
+        
+        // Build grouped data for the sheet
+        const groupedData: any[][] = [];
+        Object.entries(groupsByClass).forEach(([className, riders]) => {
+          // Add class header row
+          groupedData.push([`CLASS: ${className}`, '', '']);
+          groupedData.push(['Rider Name', 'Horse Name', 'Special Requests']);
+          
+          // Add riders in this class
+          riders.forEach((rider: any) => {
+            groupedData.push([rider.rider, rider.horse, rider.specialRequests]);
+          });
+          
+          // Add empty row between classes
+          groupedData.push(['', '', '']);
+        });
+        
+        // Create the groups sheet
+        const groupsSheetName = `${clinicName.substring(0, 22)} Groups`;
+        const groupsWorksheet = XLSX.utils.aoa_to_sheet(groupedData);
+        groupsWorksheet['!cols'] = [
+          { wch: 25 }, // Rider Name
+          { wch: 20 }, // Horse Name
+          { wch: 40 }  // Special Requests
+        ];
+        
+        XLSX.utils.book_append_sheet(workbook, groupsWorksheet, groupsSheetName);
       });
 
       // If no sheets were added, create a summary sheet
