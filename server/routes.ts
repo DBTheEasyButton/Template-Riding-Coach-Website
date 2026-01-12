@@ -3247,6 +3247,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Migrate stronghorseaudio tags to stl-trial
+  app.post("/api/admin/migrate-stl-tags", async (req, res) => {
+    try {
+      const apiKey = process.env.GHL_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ message: "GHL_API_KEY not configured" });
+      }
+
+      // Get all contacts from our local database with stronghorseaudio tag
+      const allContacts = await storage.getAllGhlContacts();
+      const contactsToUpdate = allContacts.filter(c => 
+        c.tags && c.tags.includes('stronghorseaudio') && !c.tags.includes('stl-trial')
+      );
+
+      console.log(`Found ${contactsToUpdate.length} contacts to migrate from stronghorseaudio to stl-trial`);
+
+      let successCount = 0;
+      let errorCount = 0;
+      const errors: string[] = [];
+
+      for (const contact of contactsToUpdate) {
+        try {
+          // First, search for the contact in GHL by email to get their GHL ID
+          const searchResponse = await fetch(
+            `https://services.leadconnectorhq.com/contacts/search/duplicate?locationId=${process.env.GHL_LOCATION_ID}&email=${encodeURIComponent(contact.email)}`,
+            {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Version': '2021-07-28',
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+
+          if (!searchResponse.ok) {
+            errors.push(`Search failed for ${contact.email}: ${searchResponse.status}`);
+            errorCount++;
+            continue;
+          }
+
+          const searchData = await searchResponse.json();
+          const ghlContactId = searchData.contact?.id;
+
+          if (!ghlContactId) {
+            errors.push(`No GHL contact found for ${contact.email}`);
+            errorCount++;
+            continue;
+          }
+
+          // Add the stl-trial tag to the contact
+          const tagsResponse = await fetch(
+            `https://services.leadconnectorhq.com/contacts/${ghlContactId}/tags`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Version': '2021-07-28',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ tags: ['stl-trial'] })
+            }
+          );
+
+          if (tagsResponse.ok) {
+            console.log(`Added stl-trial tag to ${contact.email}`);
+            successCount++;
+          } else {
+            const tagError = await tagsResponse.json();
+            errors.push(`Tag add failed for ${contact.email}: ${JSON.stringify(tagError)}`);
+            errorCount++;
+          }
+
+          // Small delay to avoid rate limiting
+          await new Promise(resolve => setTimeout(resolve, 200));
+        } catch (err) {
+          errors.push(`Error processing ${contact.email}: ${err}`);
+          errorCount++;
+        }
+      }
+
+      res.json({
+        message: `Migration complete: ${successCount} contacts updated, ${errorCount} errors`,
+        totalFound: contactsToUpdate.length,
+        successCount,
+        errorCount,
+        errors: errors.slice(0, 10) // Only return first 10 errors
+      });
+    } catch (error) {
+      console.error("Error migrating stl tags:", error);
+      res.status(500).json({ message: "Failed to migrate tags" });
+    }
+  });
+
   // Analytics routes
   app.get("/api/admin/analytics", async (req, res) => {
     try {
