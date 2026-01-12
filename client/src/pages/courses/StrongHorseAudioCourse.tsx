@@ -84,59 +84,86 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasShown, setHasShown] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
-    // Check if already shown this session
     const alreadyShown = sessionStorage.getItem('exitPopupShown');
     if (alreadyShown) {
       setHasShown(true);
       return;
     }
 
-    // Track scroll to ensure user has engaged with the page
-    const handleScroll = () => {
-      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      if (scrollPercent > 25) {
-        setHasScrolled(true);
-      }
-    };
+    let shownRef = false;
+    let hasReached25Percent = false;
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = Date.now();
+    let wasScrollingDown = true;
+    let rafId: number | null = null;
 
-    // Desktop: detect mouse leaving viewport (top of page)
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && hasScrolled && !hasShown) {
+    const showPopup = () => {
+      if (!shownRef) {
         setIsOpen(true);
         setHasShown(true);
+        shownRef = true;
         sessionStorage.setItem('exitPopupShown', 'true');
       }
     };
 
-    // Mobile: detect back button or tab visibility change
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden' && hasScrolled && !hasShown) {
-        // Store state for when they return
-        sessionStorage.setItem('showExitPopupOnReturn', 'true');
-      } else if (document.visibilityState === 'visible') {
-        const shouldShow = sessionStorage.getItem('showExitPopupOnReturn');
-        if (shouldShow && !hasShown) {
-          setIsOpen(true);
-          setHasShown(true);
-          sessionStorage.setItem('exitPopupShown', 'true');
-          sessionStorage.removeItem('showExitPopupOnReturn');
+    const handleScroll = () => {
+      if (shownRef) return;
+      
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        
+        const currentScrollY = window.scrollY;
+        const currentTime = Date.now();
+        const timeDelta = currentTime - lastScrollTime;
+        const scrollDelta = currentScrollY - lastScrollY;
+        
+        // Check if reached 25% scroll depth
+        const scrollPercent = (currentScrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent >= 25) {
+          hasReached25Percent = true;
         }
+        
+        // Calculate velocity (pixels per second)
+        const velocity = timeDelta > 0 ? (scrollDelta / timeDelta) * 1000 : 0;
+        
+        // Detect fast upward scroll after reaching 25%
+        // velocity < -900 means scrolling up fast (negative = upward)
+        // scrollDelta < -100 means moved up at least 100px
+        if (hasReached25Percent && wasScrollingDown && velocity < -900 && scrollDelta < -100) {
+          showPopup();
+        }
+        
+        // Track scroll direction
+        if (scrollDelta > 10) {
+          wasScrollingDown = true;
+        } else if (scrollDelta < -10) {
+          wasScrollingDown = false;
+        }
+        
+        lastScrollY = currentScrollY;
+        lastScrollTime = currentTime;
+      });
+    };
+
+    // Desktop: also detect mouse leaving top of page
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && hasReached25Percent && !shownRef) {
+        showPopup();
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [hasScrolled, hasShown]);
+  }, []);
 
   const handleClose = () => {
     setIsOpen(false);

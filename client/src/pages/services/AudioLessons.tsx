@@ -61,7 +61,6 @@ function DownloadProgressOverlay({ onComplete }: { onComplete: () => void }) {
 function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasShown, setHasShown] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const alreadyShown = sessionStorage.getItem('exitPopupShownAudioLessons');
@@ -70,9 +69,12 @@ function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
       return;
     }
 
-    let scrolledRef = false;
     let shownRef = false;
-    let mobileTimer: NodeJS.Timeout | null = null;
+    let hasReached25Percent = false;
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = Date.now();
+    let wasScrollingDown = true;
+    let rafId: number | null = null;
 
     const showPopup = () => {
       if (!shownRef) {
@@ -80,54 +82,63 @@ function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
         setHasShown(true);
         shownRef = true;
         sessionStorage.setItem('exitPopupShownAudioLessons', 'true');
-        if (mobileTimer) clearTimeout(mobileTimer);
       }
     };
 
     const handleScroll = () => {
-      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      if (scrollPercent > 25 && !scrolledRef) {
-        scrolledRef = true;
-        setHasScrolled(true);
-        // Mobile: start a timer to show popup after scrolling + delay
-        const isMobile = window.innerWidth < 768;
-        if (isMobile && !shownRef) {
-          mobileTimer = setTimeout(() => {
-            if (!shownRef) {
-              showPopup();
-            }
-          }, 15000); // Show after 15 seconds of scrolling on mobile
+      if (shownRef) return;
+      
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        
+        const currentScrollY = window.scrollY;
+        const currentTime = Date.now();
+        const timeDelta = currentTime - lastScrollTime;
+        const scrollDelta = currentScrollY - lastScrollY;
+        
+        // Check if reached 25% scroll depth
+        const scrollPercent = (currentScrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent >= 25) {
+          hasReached25Percent = true;
         }
-      }
-    };
-
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && scrolledRef && !shownRef) {
-        showPopup();
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden' && scrolledRef && !shownRef) {
-        sessionStorage.setItem('showExitPopupOnReturnAudioLessons', 'true');
-      } else if (document.visibilityState === 'visible') {
-        const shouldShow = sessionStorage.getItem('showExitPopupOnReturnAudioLessons');
-        if (shouldShow && !shownRef) {
+        
+        // Calculate velocity (pixels per second)
+        const velocity = timeDelta > 0 ? (scrollDelta / timeDelta) * 1000 : 0;
+        
+        // Detect fast upward scroll after reaching 25%
+        // velocity < -900 means scrolling up fast (negative = upward)
+        // scrollDelta < -100 means moved up at least 100px
+        if (hasReached25Percent && wasScrollingDown && velocity < -900 && scrollDelta < -100) {
           showPopup();
-          sessionStorage.removeItem('showExitPopupOnReturnAudioLessons');
         }
+        
+        // Track scroll direction
+        if (scrollDelta > 10) {
+          wasScrollingDown = true;
+        } else if (scrollDelta < -10) {
+          wasScrollingDown = false;
+        }
+        
+        lastScrollY = currentScrollY;
+        lastScrollTime = currentTime;
+      });
+    };
+
+    // Desktop: also detect mouse leaving top of page
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && hasReached25Percent && !shownRef) {
+        showPopup();
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      if (mobileTimer) clearTimeout(mobileTimer);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
