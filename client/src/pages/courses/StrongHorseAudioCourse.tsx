@@ -2914,8 +2914,8 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
               <div className="grid md:grid-cols-3 gap-4">
                 {[
                   {
-                    title: "Listen While You Prepare",
-                    description: "Pop in your earbuds while grooming, driving, or getting ready — the concepts will be fresh when you mount up."
+                    title: "Listen While You Ride",
+                    description: "Pop in your earbuds and receive real-time coaching while you're actually in the saddle — no more trying to remember what your instructor said."
                   },
                   {
                     title: "No Booking, No Fees, No Travel",
