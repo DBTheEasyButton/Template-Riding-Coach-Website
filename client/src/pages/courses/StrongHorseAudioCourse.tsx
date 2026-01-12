@@ -2881,6 +2881,41 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
               </a>
             </div>
 
+            {/* Why an Audio Course? */}
+            <div className="bg-navy text-white rounded-xl p-8 mb-8">
+              <div className="text-center mb-6">
+                <Headphones className="h-10 w-10 text-orange mx-auto mb-3" />
+                <h3 className="text-2xl font-bold mb-2">
+                  Why an Audio Course?
+                </h3>
+                <p className="text-gray-300">
+                  Real-time coaching in your earbuds — absorb the lesson before you ride.
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-4">
+                {[
+                  {
+                    title: "Listen While You Prepare",
+                    description: "Pop in your earbuds while grooming, driving, or getting ready — the concepts will be fresh when you mount up."
+                  },
+                  {
+                    title: "No Booking, No Fees, No Travel",
+                    description: "Forget scheduling lessons, paying per session, or driving to a trainer. Train at your own yard, on your own terms."
+                  },
+                  {
+                    title: "Unlimited Lessons, Anytime",
+                    description: "Repeat any lesson as many times as you want, whenever suits you — early morning, late evening, weekends."
+                  }
+                ].map((item, i) => (
+                  <div key={i} className="bg-white/10 rounded-lg p-4 text-center">
+                    <h4 className="text-base font-semibold text-orange mb-2">{item.title}</h4>
+                    <p className="text-gray-300 text-sm">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Who this course is for */}
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 mb-8 text-center">
               <h3 className="text-2xl font-bold text-navy mb-4">Who this course is for</h3>
@@ -3099,43 +3134,6 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
                   Get Free PDF Guide
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* WHY AUDIO */}
-        <section className="py-16 bg-navy text-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <Headphones className="h-12 w-12 text-orange mx-auto mb-4" />
-              <h2 className="text-3xl font-playfair font-bold mb-4">
-                Why an Audio Course?
-              </h2>
-              <p className="text-gray-300 text-lg">
-                Real-time coaching in your earbuds — absorb the lesson before you ride.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Listen While You Prepare",
-                  description: "Pop in your earbuds while grooming, driving, or getting ready — the concepts will be fresh when you mount up."
-                },
-                {
-                  title: "No Booking, No Fees, No Travel",
-                  description: "Forget scheduling lessons, paying per session, or driving to a trainer. Train at your own yard, on your own terms."
-                },
-                {
-                  title: "Unlimited Lessons, Anytime",
-                  description: "Repeat any lesson as many times as you want, whenever suits you — early morning, late evening, weekends."
-                }
-              ].map((item, i) => (
-                <div key={i} className="bg-white/10 rounded-lg p-6 text-center">
-                  <h3 className="text-lg font-semibold text-orange mb-2">{item.title}</h3>
-                  <p className="text-gray-300 text-sm">{item.description}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>
