@@ -9,6 +9,7 @@ import audioLessonsHero from "@assets/Gemini_Generated_Image_g3oiikg3oiikg3oi_17
 import audioLessonsRider from "@assets/Gemini_Generated_Image_slhck0slhck0slhc_1767410018779.png";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
@@ -182,6 +183,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [horseName, setHorseName] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -193,6 +195,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setEmail("");
     setMobile("");
     setHorseName("");
+    setTermsAccepted(false);
     setShowSuccess(false);
     setShowProgress(false);
   };
@@ -228,6 +231,15 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
         variant: "destructive",
       });
       return;
@@ -429,9 +441,32 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 </p>
               </div>
 
+              <div className="flex items-start gap-2 pt-2">
+                <Checkbox
+                  id="audio-terms"
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                  disabled={isSubmitting}
+                  data-testid="checkbox-audio-terms"
+                  className="mt-0.5"
+                />
+                <label htmlFor="audio-terms" className="text-sm text-gray-600 leading-tight cursor-pointer">
+                  I have read and agree to the{" "}
+                  <a
+                    href="https://danbizzarromethod.com/audio-lessons-terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-navy hover:text-orange underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    terms and conditions
+                  </a>
+                </label>
+              </div>
+
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !termsAccepted}
                 className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
                 data-testid="button-submit-audio-form"
               >
