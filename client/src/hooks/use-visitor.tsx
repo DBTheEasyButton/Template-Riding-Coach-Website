@@ -74,9 +74,14 @@ export function VisitorProvider({ children }: { children: React.ReactNode }) {
       const today = new Date().toDateString();
       const lastShown = localStorage.getItem(WELCOME_SHOWN_KEY);
       
-      if (lastShown !== today) {
+      // Show toast if: not shown today OR missing horse name (need to collect it)
+      const needsHorseName = !profile.horseName;
+      if (lastShown !== today || needsHorseName) {
         setShowWelcomeToast(true);
-        localStorage.setItem(WELCOME_SHOWN_KEY, today);
+        // Only mark as shown today if we have horse name (so it keeps prompting until provided)
+        if (!needsHorseName) {
+          localStorage.setItem(WELCOME_SHOWN_KEY, today);
+        }
       }
     }
   }, [profile]);
