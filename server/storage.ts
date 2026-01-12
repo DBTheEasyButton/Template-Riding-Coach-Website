@@ -252,9 +252,11 @@ export interface IStorage {
     email: string,
     mobile: string,
     source: string,
-    ghlContactId?: string
+    ghlContactId?: string,
+    horseName?: string
   ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }>;
   updateVisitorProfileLastSeen(token: string): Promise<void>;
+  updateVisitorProfileHorseName(token: string, horseName: string): Promise<VisitorProfile | undefined>;
   deleteVisitorProfile(token: string): Promise<void>;
 }
 
@@ -2602,7 +2604,8 @@ The Dan Bizzarro Method Team`,
     email: string,
     mobile: string,
     source: string,
-    ghlContactId?: string
+    ghlContactId?: string,
+    horseName?: string
   ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }> {
     const normalizedEmail = email.toLowerCase();
     
@@ -2620,6 +2623,7 @@ The Dan Bizzarro Method Team`,
           firstName,
           lastName,
           mobile,
+          horseName: horseName || existing.horseName,
           sources: updatedSources,
           ghlContactId: ghlContactId || existing.ghlContactId,
           lastSeenAt: new Date()
@@ -2641,6 +2645,7 @@ The Dan Bizzarro Method Team`,
         lastName,
         email: normalizedEmail,
         mobile,
+        horseName: horseName || null,
         sources: [source],
         ghlContactId: ghlContactId || null
       })
@@ -2653,6 +2658,14 @@ The Dan Bizzarro Method Team`,
     await db.update(visitorProfiles)
       .set({ lastSeenAt: new Date() })
       .where(eq(visitorProfiles.token, token));
+  }
+
+  async updateVisitorProfileHorseName(token: string, horseName: string): Promise<VisitorProfile | undefined> {
+    const [updated] = await db.update(visitorProfiles)
+      .set({ horseName, lastSeenAt: new Date() })
+      .where(eq(visitorProfiles.token, token))
+      .returning();
+    return updated;
   }
 
   async deleteVisitorProfile(token: string): Promise<void> {

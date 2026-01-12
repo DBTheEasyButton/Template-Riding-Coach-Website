@@ -18,7 +18,10 @@ interface VisitorContextType {
   isLoading: boolean;
   isRecognized: boolean;
   firstName: string | null;
+  horseName: string | null;
   forgetMe: () => void;
+  updateHorseName: (horseName: string) => Promise<void>;
+  isUpdatingHorseName: boolean;
   showWelcomeToast: boolean;
   dismissWelcomeToast: () => void;
 }
@@ -57,6 +60,15 @@ export function VisitorProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
+  const updateHorseNameMutation = useMutation({
+    mutationFn: async (horseName: string) => {
+      await apiRequest('POST', '/api/visitor/update-horse-name', { horseName });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/visitor/me'] });
+    }
+  });
+
   useEffect(() => {
     if (profile?.recognized && profile.firstName) {
       const today = new Date().toDateString();
@@ -78,12 +90,19 @@ export function VisitorProvider({ children }: { children: React.ReactNode }) {
     setShowWelcomeToast(false);
   }, [forgetMutation]);
 
+  const updateHorseName = useCallback(async (horseName: string) => {
+    await updateHorseNameMutation.mutateAsync(horseName);
+  }, [updateHorseNameMutation]);
+
   const value: VisitorContextType = {
     profile: profile || null,
     isLoading,
     isRecognized: profile?.recognized || false,
     firstName: profile?.firstName || null,
+    horseName: profile?.horseName || null,
     forgetMe,
+    updateHorseName,
+    isUpdatingHorseName: updateHorseNameMutation.isPending,
     showWelcomeToast,
     dismissWelcomeToast
   };

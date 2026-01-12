@@ -519,7 +519,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email,
           mobile,
           'StrongHorsePDF',
-          ghlContactId
+          ghlContactId,
+          horseName
         );
         
         // Set secure cookie for 90 days
@@ -590,7 +591,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email,
           mobile,
           'StrongHorseAudio',
-          ghlContactId
+          ghlContactId,
+          horseName
         );
         
         // Set secure cookie for 90 days
@@ -641,6 +643,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         lastName: profile.lastName,
         email: profile.email,
         mobile: profile.mobile,
+        horseName: profile.horseName,
         sources: profile.sources
       });
     } catch (error) {
@@ -663,6 +666,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error forgetting visitor:', error);
       res.status(500).json({ error: 'Failed to forget visitor' });
+    }
+  });
+
+  // Update visitor horse name and sync to GHL
+  app.post("/api/visitor/update-horse-name", async (req, res) => {
+    try {
+      const token = req.cookies?.visitor_token;
+      const { horseName } = req.body;
+
+      if (!token) {
+        return res.status(401).json({ error: 'No visitor token found' });
+      }
+
+      if (!horseName || !horseName.trim()) {
+        return res.status(400).json({ error: 'Horse name is required' });
+      }
+
+      // Update visitor profile with horse name
+      const updatedProfile = await storage.updateVisitorProfileHorseName(token, horseName.trim());
+
+      if (!updatedProfile) {
+        return res.status(404).json({ error: 'Visitor profile not found' });
+      }
+
+      // Also update horse name in GHL if we have a contact ID
+      if (updatedProfile.ghlContactId || updatedProfile.email) {
+        try {
+          await storage.createOrUpdateGhlContactInApi(
+            updatedProfile.email,
+            updatedProfile.firstName,
+            updatedProfile.lastName,
+            updatedProfile.mobile,
+            [], // No new tags
+            { horse_name: horseName.trim() }
+          );
+          console.log(`Updated horse name in GHL for ${updatedProfile.email}: ${horseName.trim()}`);
+        } catch (ghlError) {
+          console.error('GHL update error (non-fatal):', ghlError);
+        }
+      }
+
+      res.json({ 
+        success: true, 
+        message: 'Horse name updated successfully',
+        horseName: horseName.trim()
+      });
+    } catch (error) {
+      console.error('Error updating horse name:', error);
+      res.status(500).json({ error: 'Failed to update horse name' });
     }
   });
 
