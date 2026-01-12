@@ -2805,7 +2805,7 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
                   "Reduce heaviness without losing energy",
                   "Stop the horse leaning on the hand",
                   "Improve balance through correct transitions",
-                  "Create softness during the work, not only afterwards",
+                  "Use simple but effective exercises to change your horse's way of going",
                   "Ride with less effort and more clarity"
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3">
