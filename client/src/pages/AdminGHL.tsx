@@ -94,10 +94,10 @@ export default function AdminGHL() {
     <div className="min-h-screen bg-gray-50">
       <AdminNavigation />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Go High Level Integration</h1>
-          <p className="text-gray-600">Manage and sync contacts from your Go High Level account</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">Go High Level Integration</h1>
+          <p className="text-sm md:text-base text-gray-600">Manage and sync contacts from your Go High Level account</p>
         </div>
 
         {/* Sync Controls */}
@@ -112,15 +112,16 @@ export default function AdminGHL() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
-                <Label htmlFor="locationId">Go High Level Location ID</Label>
+                <Label htmlFor="locationId" className="text-sm">Go High Level Location ID</Label>
                 <Input
                   id="locationId"
                   value={locationId}
                   onChange={(e) => setLocationId(e.target.value)}
                   placeholder="Enter your GHL Location/Sub-account ID"
                   data-testid="input-location-id"
+                  className="text-sm"
                 />
               </div>
               <div className="flex items-end">
@@ -128,6 +129,7 @@ export default function AdminGHL() {
                   onClick={handleSync}
                   disabled={syncMutation.isPending}
                   data-testid="button-sync-contacts"
+                  className="w-full sm:w-auto"
                 >
                   {syncMutation.isPending ? (
                     <>
@@ -143,7 +145,7 @@ export default function AdminGHL() {
                 </Button>
               </div>
             </div>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-xs md:text-sm text-gray-500 mt-2">
               Find your Location ID in your Go High Level settings under Sub-Accounts or API settings
             </p>
           </CardContent>
@@ -152,13 +154,13 @@ export default function AdminGHL() {
         {/* Contacts List */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                  <Users className="w-4 h-4 md:w-5 md:h-5" />
                   Synced Contacts ({filteredContacts.length})
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-xs md:text-sm">
                   Contacts synced from Go High Level forms and entries
                 </CardDescription>
               </div>
@@ -166,7 +168,7 @@ export default function AdminGHL() {
                 placeholder="Search contacts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-xs"
+                className="w-full sm:max-w-xs text-sm"
                 data-testid="input-search-contacts"
               />
             </div>

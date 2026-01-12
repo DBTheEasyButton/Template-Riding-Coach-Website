@@ -1,89 +1,98 @@
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Calendar, Home, Images, FileText, Star, BarChart3, Settings, Globe } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Calendar, Home, Images, FileText, Star, BarChart3, Settings, Globe, Menu, X } from "lucide-react";
+
+const navItems = [
+  { href: "/admin/clinics", label: "Clinics", icon: Calendar },
+  { href: "/admin/gallery", label: "Gallery", icon: Images },
+  { href: "/admin/news", label: "News", icon: FileText },
+  { href: "/admin/sponsors", label: "Sponsors", icon: Star },
+  { href: "/admin/ghl", label: "Go High Level", icon: Globe },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
+];
 
 export default function AdminNavigation() {
   const [location] = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: typeof Calendar }) => (
+    <Link href={href} onClick={() => setIsOpen(false)}>
+      <Button 
+        variant={location === href ? "default" : "ghost"} 
+        size="sm"
+        className="flex items-center gap-2 w-full justify-start"
+      >
+        <Icon className="w-4 h-4" />
+        {label}
+      </Button>
+    </Link>
+  );
 
   return (
-    <div className="bg-orange-50 dark:bg-slate-800 border-b-4 border-orange-500 dark:border-slate-700 mb-8 shadow-lg">
+    <div className="bg-orange-50 dark:bg-slate-800 border-b-4 border-orange-500 dark:border-slate-700 mb-4 md:mb-8 shadow-lg">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between py-4 gap-4">
-          <h2 className="text-xl font-semibold text-navy dark:text-white">Admin Panel</h2>
-          <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
-            <nav className="grid grid-cols-3 lg:flex lg:items-center gap-1 w-full lg:w-auto">
-              <Link href="/admin/clinics">
-                <Button 
-                  variant={location === "/admin/clinics" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Clinics
+        <div className="flex items-center justify-between py-3 md:py-4">
+          <h2 className="text-lg md:text-xl font-semibold text-navy dark:text-white">Admin Panel</h2>
+          
+          {/* Mobile menu button */}
+          <div className="flex items-center gap-2 md:hidden">
+            <Link href="/">
+              <Button variant="outline" size="sm" className="flex items-center gap-1 bg-white hover:bg-gray-50 border-2 border-orange-300">
+                <Home className="w-4 h-4" />
+                <span className="sr-only md:not-sr-only">Site</span>
+              </Button>
+            </Link>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="bg-white hover:bg-gray-50 border-2 border-orange-300">
+                  <Menu className="w-5 h-5" />
                 </Button>
-              </Link>
-              <Link href="/admin/gallery">
-                <Button 
-                  variant={location === "/admin/gallery" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <Images className="w-4 h-4" />
-                  Gallery
-                </Button>
-              </Link>
-              <Link href="/admin/news">
-                <Button 
-                  variant={location === "/admin/news" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <FileText className="w-4 h-4" />
-                  News
-                </Button>
-              </Link>
-              <Link href="/admin/sponsors">
-                <Button 
-                  variant={location === "/admin/sponsors" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <Star className="w-4 h-4" />
-                  Sponsors
-                </Button>
-              </Link>
-              <Link href="/admin/ghl">
-                <Button 
-                  variant={location === "/admin/ghl" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <Globe className="w-4 h-4" />
-                  Go High Level
-                </Button>
-              </Link>
-              <Link href="/admin/analytics">
-                <Button 
-                  variant={location === "/admin/analytics" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  Analytics
-                </Button>
-              </Link>
-              <Link href="/admin/settings">
-                <Button 
-                  variant={location === "/admin/settings" ? "default" : "ghost"} 
-                  size="sm"
-                  className="flex items-center gap-2 w-full lg:w-auto"
-                >
-                  <Settings className="w-4 h-4" />
-                  Settings
-                </Button>
-              </Link>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+                <SheetHeader>
+                  <SheetTitle className="text-left text-navy">Admin Menu</SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-2 mt-6">
+                  {navItems.map((item) => (
+                    <NavLink key={item.href} {...item} />
+                  ))}
+                  <div className="border-t pt-4 mt-4">
+                    <Link href="/" onClick={() => setIsOpen(false)}>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="flex items-center gap-2 w-full justify-start border-orange-300"
+                      >
+                        <Home className="w-4 h-4" />
+                        Back to Main Site
+                      </Button>
+                    </Link>
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+          
+          {/* Desktop navigation */}
+          <div className="hidden md:flex items-center gap-2">
+            <nav className="flex items-center gap-1 flex-wrap">
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <Button 
+                    variant={location === item.href ? "default" : "ghost"} 
+                    size="sm"
+                    className="flex items-center gap-2"
+                  >
+                    <item.icon className="w-4 h-4" />
+                    {item.label}
+                  </Button>
+                </Link>
+              ))}
             </nav>
-            <Link href="/" className="lg:ml-4">
+            <Link href="/" className="ml-4">
               <Button variant="outline" size="sm" className="flex items-center gap-2 bg-white hover:bg-gray-50 border-2 border-orange-300">
                 <Home className="w-4 h-4" />
                 Back to Main Site

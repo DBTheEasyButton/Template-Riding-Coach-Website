@@ -199,20 +199,20 @@ export default function AdminRegistrations() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Clinic Registrations</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">Clinic Registrations</h1>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-2">
               {clinicFilter ? (
-                <span className="flex items-center gap-2">
+                <span className="flex flex-wrap items-center gap-2">
                   Filtered view for clinic ID {clinicFilter}
                   <Button 
                     variant="outline" 
                     size="sm" 
                     onClick={clearFilter}
-                    className="ml-2"
+                    className="text-xs"
                     data-testid="button-clear-filter"
                   >
                     <X className="w-4 h-4 mr-1" />
@@ -224,7 +224,7 @@ export default function AdminRegistrations() {
               )}
             </p>
           </div>
-          <Button onClick={generateExcelReport} className="flex items-center gap-2" data-testid="button-export-excel">
+          <Button onClick={generateExcelReport} className="flex items-center gap-2 w-full sm:w-auto" data-testid="button-export-excel">
             <Download className="w-4 h-4" />
             Export Excel
           </Button>
@@ -250,57 +250,106 @@ export default function AdminRegistrations() {
                     {clinicData.registrations.length} participant{clinicData.registrations.length !== 1 ? 's' : ''} registered
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Participant</TableHead>
-                        <TableHead>Horse</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Registered</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {clinicData.registrations.map((registration: Registration) => (
-                        <TableRow key={registration.id}>
-                          <TableCell>
+                <CardContent className="p-3 md:p-6">
+                  {/* Desktop Table View */}
+                  <div className="hidden md:block">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Participant</TableHead>
+                          <TableHead>Horse</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Registered</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {clinicData.registrations.map((registration: Registration) => (
+                          <TableRow key={registration.id}>
+                            <TableCell>
+                              <Button 
+                                variant="link" 
+                                className="p-0 h-auto font-medium text-left"
+                                onClick={() => handleViewDetails(registration)}
+                              >
+                                {registration.firstName} {registration.lastName}
+                              </Button>
+                              <div className="text-sm text-gray-500">{registration.email}</div>
+                            </TableCell>
+                            <TableCell>{registration.horseName || "N/A"}</TableCell>
+                            <TableCell>{getStatusBadge(registration.status)}</TableCell>
+                            <TableCell>{format(new Date(registration.registeredAt), "dd/MM/yyyy")}</TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => handleViewDetails(registration)}
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                {registration.status === "confirmed" && (
+                                  <Button 
+                                    variant="destructive" 
+                                    size="sm"
+                                    onClick={() => handleIssueRefund(registration)}
+                                  >
+                                    Issue Refund
+                                  </Button>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  
+                  {/* Mobile Card View */}
+                  <div className="md:hidden space-y-3">
+                    {clinicData.registrations.map((registration: Registration) => (
+                      <div key={registration.id} className="bg-white dark:bg-gray-800 border rounded-lg p-3 space-y-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1 min-w-0">
                             <Button 
                               variant="link" 
-                              className="p-0 h-auto font-medium text-left"
+                              className="p-0 h-auto font-medium text-left text-sm"
                               onClick={() => handleViewDetails(registration)}
                             >
                               {registration.firstName} {registration.lastName}
                             </Button>
-                            <div className="text-sm text-gray-500">{registration.email}</div>
-                          </TableCell>
-                          <TableCell>{registration.horseName || "N/A"}</TableCell>
-                          <TableCell>{getStatusBadge(registration.status)}</TableCell>
-                          <TableCell>{format(new Date(registration.registeredAt), "dd/MM/yyyy")}</TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => handleViewDetails(registration)}
-                              >
-                                <Eye className="w-4 h-4" />
-                              </Button>
-                              {registration.status === "confirmed" && (
-                                <Button 
-                                  variant="destructive" 
-                                  size="sm"
-                                  onClick={() => handleIssueRefund(registration)}
-                                >
-                                  Issue Refund
-                                </Button>
-                              )}
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                            <div className="text-xs text-gray-500 truncate">{registration.email}</div>
+                          </div>
+                          {getStatusBadge(registration.status)}
+                        </div>
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
+                          <span>🐴 {registration.horseName || "N/A"}</span>
+                          <span>📅 {format(new Date(registration.registeredAt), "dd/MM/yyyy")}</span>
+                        </div>
+                        <div className="flex gap-2 pt-2 border-t">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="flex-1 text-xs"
+                            onClick={() => handleViewDetails(registration)}
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            Details
+                          </Button>
+                          {registration.status === "confirmed" && (
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              className="flex-1 text-xs"
+                              onClick={() => handleIssueRefund(registration)}
+                            >
+                              Refund
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -319,55 +368,55 @@ export default function AdminRegistrations() {
             
             {selectedRegistration && (
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-medium">Participant</Label>
-                    <p>{selectedRegistration.firstName} {selectedRegistration.lastName}</p>
+                    <Label className="font-medium text-sm">Participant</Label>
+                    <p className="text-sm">{selectedRegistration.firstName} {selectedRegistration.lastName}</p>
                   </div>
                   <div>
-                    <Label className="font-medium">Email</Label>
-                    <p>{selectedRegistration.email}</p>
+                    <Label className="font-medium text-sm">Email</Label>
+                    <p className="text-sm break-all">{selectedRegistration.email}</p>
                   </div>
                 </div>
                 
                 <div>
-                  <Label className="font-medium">Phone</Label>
-                  <p>{selectedRegistration.phone}</p>
+                  <Label className="font-medium text-sm">Phone</Label>
+                  <p className="text-sm">{selectedRegistration.phone}</p>
                 </div>
 
                 {selectedRegistration.horseName && (
                   <div>
-                    <Label className="font-medium">Horse Name</Label>
-                    <p>{selectedRegistration.horseName}</p>
+                    <Label className="font-medium text-sm">Horse Name</Label>
+                    <p className="text-sm">{selectedRegistration.horseName}</p>
                   </div>
                 )}
                 
                 {selectedRegistration.specialRequests && (
                   <div>
-                    <Label className="font-medium">Special Requests & Preferences</Label>
+                    <Label className="font-medium text-sm">Special Requests & Preferences</Label>
                     <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedRegistration.specialRequests}</p>
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-medium">Emergency Contact</Label>
-                    <p>{selectedRegistration.emergencyContact || "Not provided"}</p>
+                    <Label className="font-medium text-sm">Emergency Contact</Label>
+                    <p className="text-sm">{selectedRegistration.emergencyContact || "Not provided"}</p>
                   </div>
                   <div>
-                    <Label className="font-medium">Emergency Phone</Label>
-                    <p>{selectedRegistration.emergencyPhone || "Not provided"}</p>
+                    <Label className="font-medium text-sm">Emergency Phone</Label>
+                    <p className="text-sm">{selectedRegistration.emergencyPhone || "Not provided"}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="font-medium">Status</Label>
+                    <Label className="font-medium text-sm">Status</Label>
                     <div className="mt-1">{getStatusBadge(selectedRegistration.status)}</div>
                   </div>
                   <div>
-                    <Label className="font-medium">Registered</Label>
-                    <p>{format(new Date(selectedRegistration.registeredAt), "dd/MM/yyyy HH:mm")}</p>
+                    <Label className="font-medium text-sm">Registered</Label>
+                    <p className="text-sm">{format(new Date(selectedRegistration.registeredAt), "dd/MM/yyyy HH:mm")}</p>
                   </div>
                 </div>
 

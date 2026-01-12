@@ -60,14 +60,14 @@ export default function AdminAnalytics() {
       <Navigation />
       <AdminNavigation />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
-          <p className="text-gray-600">Track your business performance and growth</p>
+      <div className="container mx-auto px-4 py-4 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">Analytics Dashboard</h1>
+          <p className="text-sm md:text-base text-gray-600">Track your business performance and growth</p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Subscribers</CardTitle>
@@ -113,12 +113,12 @@ export default function AdminAnalytics() {
           </Card>
         </div>
 
-        <Tabs defaultValue="registrations" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="registrations">Registrations</TabsTrigger>
-            <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
-            <TabsTrigger value="clinics">Clinics</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
+        <Tabs defaultValue="registrations" className="space-y-4 md:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+            <TabsTrigger value="registrations" className="text-xs sm:text-sm py-2">Registrations</TabsTrigger>
+            <TabsTrigger value="subscribers" className="text-xs sm:text-sm py-2">Subscribers</TabsTrigger>
+            <TabsTrigger value="clinics" className="text-xs sm:text-sm py-2">Clinics</TabsTrigger>
+            <TabsTrigger value="activity" className="text-xs sm:text-sm py-2">Activity</TabsTrigger>
           </TabsList>
 
           <TabsContent value="registrations" className="space-y-6">

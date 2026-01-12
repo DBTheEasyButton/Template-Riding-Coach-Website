@@ -165,13 +165,13 @@ export default function AdminSponsors() {
     <div className="min-h-screen bg-gray-50">
       <AdminNavigation />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Sponsor Management</h1>
-            <p className="text-gray-600 mt-2">Manage rotating sponsor banners and track their performance</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Sponsor Management</h1>
+            <p className="text-sm md:text-base text-gray-600 mt-1 md:mt-2">Manage rotating sponsor banners and track their performance</p>
           </div>
-          <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
+          <Button onClick={() => setShowForm(true)} className="flex items-center gap-2 w-full sm:w-auto">
             <Plus className="w-4 h-4" />
             Add Sponsor
           </Button>

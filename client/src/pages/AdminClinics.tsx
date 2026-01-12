@@ -468,14 +468,14 @@ export default function AdminClinics() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
       <AdminNavigation />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 md:py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 md:mb-8">
             <div>
-              <h1 className="text-4xl font-bold text-navy dark:text-white mb-2">Clinic Management</h1>
-              <p className="text-slate-600 dark:text-slate-300">Manage your upcoming clinics and events</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-navy dark:text-white mb-1 md:mb-2">Clinic Management</h1>
+              <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">Manage your upcoming clinics and events</p>
             </div>
-            <Button onClick={() => setIsCreateOpen(true)} className="bg-navy hover:bg-slate-800">
+            <Button onClick={() => setIsCreateOpen(true)} className="bg-navy hover:bg-slate-800 w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-2" />
               Create New Clinic
             </Button>
@@ -496,28 +496,28 @@ export default function AdminClinics() {
           <div className="grid gap-6">
             {clinics.map((clinic) => (
               <Card key={clinic.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-xl text-navy dark:text-white">{clinic.title}</CardTitle>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <CardHeader className="p-4 md:p-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg md:text-xl text-navy dark:text-white truncate">{clinic.title}</CardTitle>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs md:text-sm text-slate-600 dark:text-slate-300">
                         <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          {formatDate(clinic.date)}
+                          <Calendar className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" />
+                          <span className="whitespace-nowrap">{formatDate(clinic.date)}</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
+                        <div className="flex items-center gap-1 min-w-0">
+                          <MapPin className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" />
                           <a 
                             href={`https://maps.google.com/maps?q=${encodeURIComponent(clinic.location)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-orange underline"
+                            className="hover:text-orange underline truncate"
                           >
                             {clinic.location}
                           </a>
                         </div>
                         <div className="flex items-center gap-1">
-                          <span className="text-orange font-bold">
+                          <span className="text-orange font-bold whitespace-nowrap">
                             {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0
                               ? `from £${(Math.min(...clinic.sessions.map((s: any) => s.price)) / 100).toFixed(0)}`
                               : clinic.price > 0 
@@ -527,39 +527,42 @@ export default function AdminClinics() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4" />
-                          {clinic.maxParticipants > 0 
-                            ? `${clinic.maxParticipants} max`
-                            : 'Unlimited'
-                          }
+                          <Users className="w-3 h-3 md:w-4 md:h-4 flex-shrink-0" />
+                          <span className="whitespace-nowrap">
+                            {clinic.maxParticipants > 0 
+                              ? `${clinic.maxParticipants} max`
+                              : 'Unlimited'
+                            }
+                          </span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant={clinic.isActive ? "default" : "secondary"}>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Badge variant={clinic.isActive ? "default" : "secondary"} className="text-xs">
                         {clinic.isActive ? "Active" : "Inactive"}
                       </Badge>
-                      <Badge variant="outline">{clinic.type}</Badge>
+                      <Badge variant="outline" className="text-xs">{clinic.type}</Badge>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-slate-600 dark:text-slate-300 mb-4">{clinic.description}</p>
+                <CardContent className="p-4 md:p-6 pt-0 md:pt-0">
+                  <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 mb-4 line-clamp-2">{clinic.description}</p>
                   
                   {clinic.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0 && (
-                    <div className="mb-4 space-y-2 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <div className="mb-4 space-y-2 bg-gray-50 dark:bg-gray-800 p-3 md:p-4 rounded-lg">
                       <h4 className="font-semibold text-sm text-navy dark:text-white mb-2">Sessions</h4>
                       {clinic.sessions.map((session: any) => (
-                        <div key={session.id} className="flex items-center justify-between bg-white dark:bg-gray-700 p-3 rounded border">
-                          <div className="flex-1">
-                            <span className="font-medium">{session.sessionName}</span>
-                            <span className="text-sm text-gray-600 dark:text-gray-300 ml-3">
+                        <div key={session.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white dark:bg-gray-700 p-3 rounded border">
+                          <div className="flex-1 min-w-0">
+                            <span className="font-medium text-sm md:text-base block sm:inline">{session.sessionName}</span>
+                            <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 sm:ml-3 block sm:inline">
                               {session.skillLevel} · £{(session.price / 100).toFixed(0)}
                             </span>
                           </div>
                           <Button
                             variant="outline"
                             size="sm"
+                            className="w-full sm:w-auto text-xs md:text-sm"
                             onClick={() => setGroupManagementSession({ sessionId: session.id, sessionName: session.sessionName })}
                             data-testid={`button-manage-groups-${session.id}`}
                           >
@@ -571,23 +574,23 @@ export default function AdminClinics() {
                     </div>
                   )}
                   
-                  <div className="flex gap-2 flex-wrap">
-                    <Link href={`/admin/registrations?clinic=${clinic.id}`}>
-                      <Button variant="default" size="sm" data-testid={`button-entries-${clinic.id}`}>
+                  <div className="grid grid-cols-2 sm:flex gap-2 flex-wrap">
+                    <Link href={`/admin/registrations?clinic=${clinic.id}`} className="col-span-2 sm:col-span-1">
+                      <Button variant="default" size="sm" className="w-full sm:w-auto text-xs md:text-sm" data-testid={`button-entries-${clinic.id}`}>
                         <FileText className="w-4 h-4 mr-1" />
                         Entries
                       </Button>
                     </Link>
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(clinic)} data-testid={`button-edit-${clinic.id}`}>
+                    <Button variant="outline" size="sm" className="text-xs md:text-sm" onClick={() => handleEdit(clinic)} data-testid={`button-edit-${clinic.id}`}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </Button>
-                    <Button variant="secondary" size="sm" onClick={() => handleClone(clinic)} data-testid={`button-clone-${clinic.id}`}>
+                    <Button variant="secondary" size="sm" className="text-xs md:text-sm" onClick={() => handleClone(clinic)} data-testid={`button-clone-${clinic.id}`}>
                       <Copy className="w-4 h-4 mr-1" />
                       Clone
                     </Button>
                     <SocialShare clinic={clinic} />
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(clinic.id)} data-testid={`button-delete-${clinic.id}`}>
+                    <Button variant="destructive" size="sm" className="col-span-2 sm:col-span-1 text-xs md:text-sm" onClick={() => handleDelete(clinic.id)} data-testid={`button-delete-${clinic.id}`}>
                       <Trash2 className="w-4 h-4 mr-1" />
                       Delete
                     </Button>
@@ -886,7 +889,7 @@ export default function AdminClinics() {
                       )}
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="grid gap-2">
                         <Label>Session Name *</Label>
                         <Input
@@ -922,7 +925,7 @@ export default function AdminClinics() {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="grid gap-2">
                         <Label>Level</Label>
                         <Select value={session.skillLevel} onValueChange={(value) => updateSession(index, 'skillLevel', value)}>
@@ -947,7 +950,7 @@ export default function AdminClinics() {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="grid gap-2">
                         <Label>Price (£) *</Label>
                         <Input

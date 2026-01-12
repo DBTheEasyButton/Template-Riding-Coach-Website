@@ -202,19 +202,19 @@ export default function AdminSettings() {
       <Navigation />
       <AdminNavigation />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">System Settings</h1>
-          <p className="text-gray-600">Manage your platform configuration and preferences</p>
+      <div className="container mx-auto px-4 py-4 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">System Settings</h1>
+          <p className="text-sm md:text-base text-gray-600">Manage your platform configuration and preferences</p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="features">Features</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 h-auto gap-1">
+            <TabsTrigger value="general" className="text-xs sm:text-sm py-2">General</TabsTrigger>
+            <TabsTrigger value="features" className="text-xs sm:text-sm py-2">Features</TabsTrigger>
+            <TabsTrigger value="notifications" className="text-xs sm:text-sm py-2">Notifications</TabsTrigger>
+            <TabsTrigger value="maintenance" className="text-xs sm:text-sm py-2">Maintenance</TabsTrigger>
+            <TabsTrigger value="security" className="text-xs sm:text-sm py-2 col-span-2 sm:col-span-1">Security</TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-6">

@@ -271,14 +271,14 @@ export default function AdminNews() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
       <AdminNavigation />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 md:py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 md:mb-8">
             <div>
-              <h1 className="text-4xl font-bold text-navy dark:text-white mb-2">News & Blog Management</h1>
-              <p className="text-slate-600 dark:text-slate-300">Create and manage news articles and blog posts</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-navy dark:text-white mb-1 md:mb-2">News & Blog Management</h1>
+              <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">Create and manage news articles and blog posts</p>
             </div>
-            <Button onClick={() => setIsCreateOpen(true)} className="flex items-center gap-2">
+            <Button onClick={() => setIsCreateOpen(true)} className="flex items-center gap-2 w-full sm:w-auto">
               <Plus className="w-4 h-4" />
               Create Article
             </Button>
@@ -287,26 +287,26 @@ export default function AdminNews() {
           {isLoading ? (
             <div className="text-center py-8">Loading articles...</div>
           ) : (
-            <div className="grid gap-6">
+            <div className="grid gap-4 md:gap-6">
               {newsItems.map((news) => (
                 <Card key={news.id}>
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-semibold">{news.title}</h3>
-                          <Badge variant="default">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
+                      <div className="flex-1 min-w-0 order-2 sm:order-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                          <h3 className="text-base md:text-xl font-semibold">{news.title}</h3>
+                          <Badge variant="default" className="text-xs">
                             Published
                           </Badge>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-300 mb-2">{news.excerpt}</p>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">{news.excerpt}</p>
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs md:text-sm text-gray-500">
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
+                            <Calendar className="w-3 h-3 md:w-4 md:h-4" />
                             {formatDate(news.publishedAt)}
                           </span>
                           <span className="flex items-center gap-1">
-                            <FileText className="w-4 h-4" />
+                            <FileText className="w-3 h-3 md:w-4 md:h-4" />
                             {news.content.length} characters
                           </span>
                         </div>
@@ -315,16 +315,16 @@ export default function AdminNews() {
                         <OptimizedImage 
                           src={news.image} 
                           alt={news.title}
-                          className="w-24 h-24 object-cover rounded-lg ml-4"
+                          className="w-full sm:w-24 h-32 sm:h-24 object-cover rounded-lg order-1 sm:order-2"
                         />
                       )}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-2 sm:flex gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(news)}
-                        className="flex items-center gap-1"
+                        className="flex items-center justify-center gap-1 text-xs md:text-sm"
                       >
                         <Edit className="w-3 h-3" />
                         Edit
@@ -333,16 +333,16 @@ export default function AdminNews() {
                         variant="outline"
                         size="sm"
                         onClick={() => openShareModal(news)}
-                        className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                        className="flex items-center justify-center gap-1 text-blue-600 hover:text-blue-700 text-xs md:text-sm"
                       >
                         <Share2 className="w-3 h-3" />
-                        Share to Facebook
+                        <span className="hidden sm:inline">Share to</span> Facebook
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(news.id)}
-                        className="flex items-center gap-1 text-red-600 hover:text-red-700"
+                        className="flex items-center justify-center gap-1 text-red-600 hover:text-red-700 text-xs md:text-sm col-span-2 sm:col-span-1"
                       >
                         <Trash2 className="w-3 h-3" />
                         Delete

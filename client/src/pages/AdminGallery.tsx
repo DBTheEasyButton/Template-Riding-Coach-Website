@@ -201,22 +201,22 @@ export default function AdminGallery() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
       <AdminNavigation />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 md:py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6 md:mb-8">
             <div>
-              <h1 className="text-4xl font-bold text-navy dark:text-white mb-2">Gallery Management</h1>
-              <p className="text-slate-600 dark:text-slate-300">Manage competition photos and media gallery</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-navy dark:text-white mb-1 md:mb-2">Gallery Management</h1>
+              <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">Manage competition photos and media gallery</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <Button 
                 onClick={() => optimizeImagesMutation.mutate()}
                 disabled={optimizeImagesMutation.isPending}
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 text-xs md:text-sm"
               >
                 <Settings className="w-4 h-4" />
-                {optimizeImagesMutation.isPending ? 'Optimizing...' : 'Optimize All Images'}
+                {optimizeImagesMutation.isPending ? 'Optimizing...' : 'Optimize All'}
               </Button>
               <Button onClick={() => setIsCreateOpen(true)} className="flex items-center gap-2">
                 <Plus className="w-4 h-4" />
