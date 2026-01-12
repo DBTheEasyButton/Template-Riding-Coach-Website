@@ -115,6 +115,7 @@ export interface IStorage {
   createClinicSession(session: InsertClinicSession): Promise<ClinicSession>;
   updateClinicSession(sessionId: number, updates: Partial<InsertClinicSession>): Promise<ClinicSession | undefined>;
   hasSessionRegistrations(sessionId: number): Promise<boolean>;
+  getAllClinicSessions(): Promise<ClinicSession[]>;
   
   // Group Management
   createClinicGroup(group: InsertClinicGroup): Promise<ClinicGroup>;
@@ -910,6 +911,10 @@ The Dan Bizzarro Method Team`,
       .where(eq(clinicRegistrations.sessionId, sessionId));
     
     return registrations[0].count > 0;
+  }
+
+  async getAllClinicSessions(): Promise<ClinicSession[]> {
+    return await db.select().from(clinicSessions);
   }
 
   // Group Management Methods

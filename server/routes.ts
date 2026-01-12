@@ -1905,11 +1905,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Admin Registration Management Routes
 
-  // Get all registrations for admin
+  // Get all registrations for admin (with session names)
   app.get("/api/admin/registrations", async (req, res) => {
     try {
       const registrations = await storage.getAllClinicRegistrations();
-      res.json(registrations);
+      const allSessions = await storage.getAllClinicSessions();
+      
+      // Create session lookup by ID
+      const sessionLookup = allSessions.reduce((acc, session) => {
+        acc[session.id] = session;
+        return acc;
+      }, {} as Record<number, any>);
+      
+      // Enrich registrations with session name
+      const enrichedRegistrations = registrations.map(reg => ({
+        ...reg,
+        sessionName: reg.sessionId ? sessionLookup[reg.sessionId]?.sessionName : null
+      }));
+      
+      res.json(enrichedRegistrations);
     } catch (error) {
       console.error("Error fetching all registrations:", error);
       res.status(500).json({ message: "Failed to fetch registrations" });
@@ -2076,17 +2090,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const XLSX = require('xlsx');
       
-      // Get all registrations with clinic details
+      // Get all registrations with clinic and session details
       const registrations = await storage.getAllClinicRegistrations();
       const clinics = await storage.getAllClinics();
+      const allSessions = await storage.getAllClinicSessions();
       
-      // Create clinic lookup
+      // Create lookups
       const clinicLookup = clinics.reduce((acc, clinic) => {
         acc[clinic.id] = clinic;
         return acc;
       }, {} as Record<number, any>);
+      
+      const sessionLookup = allSessions.reduce((acc, session) => {
+        acc[session.id] = session;
+        return acc;
+      }, {} as Record<number, any>);
 
-      // Group registrations by clinic and organize by sessions/disciplines
+      // Group registrations by clinic
       const clinicGroups = registrations.reduce((acc, reg) => {
         if (reg.status !== 'confirmed') return acc;
         
@@ -2094,27 +2114,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (!clinic) return acc;
 
         if (!acc[clinic.title]) {
-          acc[clinic.title] = {
-            showJumping: [],
-            crossCountry: [],
-            general: []
-          };
+          acc[clinic.title] = [];
         }
 
-        // Determine discipline based on session or default to general
-        let discipline = 'general';
-        if (clinic.hasMultipleSessions && reg.sessionId) {
-          // Would need session lookup for specific discipline
-          discipline = 'general';
-        } else if (clinic.title.toLowerCase().includes('show jumping')) {
-          discipline = 'showJumping';
-        } else if (clinic.title.toLowerCase().includes('cross country')) {
-          discipline = 'crossCountry';
-        }
+        // Get session name if available
+        const sessionName = reg.sessionId ? sessionLookup[reg.sessionId]?.sessionName : null;
 
-        acc[clinic.title][discipline].push({
+        acc[clinic.title].push({
           'Rider Name': `${reg.firstName} ${reg.lastName}`,
           'Horse Name': reg.horseName || 'N/A',
+          'Class': sessionName || '—',
           'Special Requests': reg.specialRequests || 'None',
           'Email': reg.email,
           'Phone': reg.phone,
@@ -2124,34 +2133,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
 
         return acc;
-      }, {} as Record<string, any>);
+      }, {} as Record<string, any[]>);
 
       // Create workbook
       const workbook = XLSX.utils.book_new();
 
-      // Add sheets for each clinic and discipline
-      Object.entries(clinicGroups).forEach(([clinicName, disciplines]) => {
-        Object.entries(disciplines).forEach(([discipline, participants]) => {
-          if ((participants as any[]).length === 0) return;
+      // Add sheets for each clinic
+      Object.entries(clinicGroups).forEach(([clinicName, participants]) => {
+        if (participants.length === 0) return;
 
-          const sheetName = `${clinicName.substring(0, 20)} - ${discipline}`.substring(0, 31);
-          const worksheet = XLSX.utils.json_to_sheet(participants as any[]);
-          
-          // Auto-size columns
-          const cols = [
-            { wch: 20 }, // Rider Name
-            { wch: 20 }, // Horse Name
-            { wch: 30 }, // Special Requests
-            { wch: 25 }, // Email
-            { wch: 15 }, // Phone
-            { wch: 20 }, // Emergency Contact
-            { wch: 15 }, // Emergency Phone
-            { wch: 15 }  // Registration Date
-          ];
-          worksheet['!cols'] = cols;
+        const sheetName = clinicName.substring(0, 31);
+        const worksheet = XLSX.utils.json_to_sheet(participants);
+        
+        // Auto-size columns
+        const cols = [
+          { wch: 20 }, // Rider Name
+          { wch: 20 }, // Horse Name
+          { wch: 20 }, // Class
+          { wch: 30 }, // Special Requests
+          { wch: 25 }, // Email
+          { wch: 15 }, // Phone
+          { wch: 20 }, // Emergency Contact
+          { wch: 15 }, // Emergency Phone
+          { wch: 15 }  // Registration Date
+        ];
+        worksheet['!cols'] = cols;
 
-          XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-        });
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
       });
 
       // If no sheets were added, create a summary sheet

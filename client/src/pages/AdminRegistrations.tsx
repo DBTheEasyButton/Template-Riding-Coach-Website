@@ -16,6 +16,8 @@ import { useLocation } from "wouter";
 interface Registration {
   id: number;
   clinicId: number;
+  sessionId?: number;
+  sessionName?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -164,10 +166,15 @@ export default function AdminRegistrations() {
 
   const generateExcelReport = async () => {
     try {
-      const response = await apiRequest("GET", "/api/admin/registrations/excel-export");
-      const blob = new Blob([response], { 
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+      const response = await fetch("/api/admin/registrations/excel-export", {
+        credentials: "include",
       });
+      
+      if (!response.ok) {
+        throw new Error("Failed to generate Excel report");
+      }
+      
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -258,6 +265,7 @@ export default function AdminRegistrations() {
                         <TableRow>
                           <TableHead>Participant</TableHead>
                           <TableHead>Horse</TableHead>
+                          <TableHead>Class</TableHead>
                           <TableHead>Status</TableHead>
                           <TableHead>Registered</TableHead>
                           <TableHead>Actions</TableHead>
@@ -277,6 +285,7 @@ export default function AdminRegistrations() {
                               <div className="text-sm text-gray-500">{registration.email}</div>
                             </TableCell>
                             <TableCell>{registration.horseName || "N/A"}</TableCell>
+                            <TableCell>{registration.sessionName || "—"}</TableCell>
                             <TableCell>{getStatusBadge(registration.status)}</TableCell>
                             <TableCell>{format(new Date(registration.registeredAt), "dd/MM/yyyy")}</TableCell>
                             <TableCell>
@@ -324,6 +333,7 @@ export default function AdminRegistrations() {
                         </div>
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600 dark:text-gray-400">
                           <span>🐴 {registration.horseName || "N/A"}</span>
+                          {registration.sessionName && <span>📋 {registration.sessionName}</span>}
                           <span>📅 {format(new Date(registration.registeredAt), "dd/MM/yyyy")}</span>
                         </div>
                         <div className="flex gap-2 pt-2 border-t">
