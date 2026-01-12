@@ -551,8 +551,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { firstName, lastName, email, mobile, horseName } = req.body;
 
-      if (!firstName || !lastName || !email || !mobile) {
-        return res.status(400).json({ error: 'First name, surname, email and mobile are required' });
+      if (!firstName || !lastName || !email || !mobile || !horseName) {
+        return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
       }
 
       let ghlContactId: string | undefined;
