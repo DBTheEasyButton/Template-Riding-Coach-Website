@@ -70,30 +70,50 @@ function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
       return;
     }
 
+    let scrolledRef = false;
+    let shownRef = false;
+    let mobileTimer: NodeJS.Timeout | null = null;
+
+    const showPopup = () => {
+      if (!shownRef) {
+        setIsOpen(true);
+        setHasShown(true);
+        shownRef = true;
+        sessionStorage.setItem('exitPopupShownAudioLessons', 'true');
+        if (mobileTimer) clearTimeout(mobileTimer);
+      }
+    };
+
     const handleScroll = () => {
       const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      if (scrollPercent > 25) {
+      if (scrollPercent > 25 && !scrolledRef) {
+        scrolledRef = true;
         setHasScrolled(true);
+        // Mobile: start a timer to show popup after scrolling + delay
+        const isMobile = window.innerWidth < 768;
+        if (isMobile && !shownRef) {
+          mobileTimer = setTimeout(() => {
+            if (!shownRef) {
+              showPopup();
+            }
+          }, 15000); // Show after 15 seconds of scrolling on mobile
+        }
       }
     };
 
     const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && hasScrolled && !hasShown) {
-        setIsOpen(true);
-        setHasShown(true);
-        sessionStorage.setItem('exitPopupShownAudioLessons', 'true');
+      if (e.clientY <= 0 && scrolledRef && !shownRef) {
+        showPopup();
       }
     };
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden' && hasScrolled && !hasShown) {
+      if (document.visibilityState === 'hidden' && scrolledRef && !shownRef) {
         sessionStorage.setItem('showExitPopupOnReturnAudioLessons', 'true');
       } else if (document.visibilityState === 'visible') {
         const shouldShow = sessionStorage.getItem('showExitPopupOnReturnAudioLessons');
-        if (shouldShow && !hasShown) {
-          setIsOpen(true);
-          setHasShown(true);
-          sessionStorage.setItem('exitPopupShownAudioLessons', 'true');
+        if (shouldShow && !shownRef) {
+          showPopup();
           sessionStorage.removeItem('showExitPopupOnReturnAudioLessons');
         }
       }
@@ -107,8 +127,9 @@ function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (mobileTimer) clearTimeout(mobileTimer);
     };
-  }, [hasScrolled, hasShown]);
+  }, []);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -790,11 +811,12 @@ export default function AudioLessons() {
                 </Button>
                 <a href="/courses/strong-horse-audio#pricing">
                   <Button 
-                    className="bg-navy hover:bg-[#1e3a5f] text-white hover:text-white font-semibold py-4 px-8 text-lg rounded-xl w-full sm:w-auto border-2 border-navy hover:border-[#1e3a5f] transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                    className="bg-navy hover:bg-[#1e3a5f] text-white hover:text-white font-semibold py-3 sm:py-4 px-4 sm:px-8 text-sm sm:text-lg rounded-xl w-full sm:w-auto border-2 border-navy hover:border-[#1e3a5f] transition-all duration-300 hover:scale-105 hover:shadow-lg"
                     data-testid="button-featured-buy"
                   >
-                    ACCESS THE FULL COURSE
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <span className="hidden sm:inline">ACCESS THE FULL COURSE</span>
+                    <span className="sm:hidden">VIEW FULL COURSE</span>
+                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </a>
               </div>
