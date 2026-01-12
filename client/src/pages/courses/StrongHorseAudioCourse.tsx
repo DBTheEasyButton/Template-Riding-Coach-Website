@@ -2863,7 +2863,7 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
             <div className="text-center mb-8">
               <a href="#pricing">
                 <Button 
-                  className="bg-navy hover:bg-navy/90 text-white font-semibold px-8 py-3"
+                  className="bg-navy hover:bg-slate-700 text-white font-semibold px-8 py-3"
                   data-testid="cta-view-pricing-1"
                 >
                   View Pricing Options
