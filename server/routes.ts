@@ -2088,8 +2088,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Excel export for registrations
   app.get("/api/admin/registrations/excel-export", async (req, res) => {
     try {
-      const XLSX = require('xlsx');
-      
       // Get all registrations with clinic and session details
       const registrations = await storage.getAllClinicRegistrations();
       const clinics = await storage.getAllClinics();
