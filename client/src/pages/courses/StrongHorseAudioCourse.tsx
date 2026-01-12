@@ -152,15 +152,6 @@ function ExitIntentPopup({ onDownload }: { onDownload: () => void }) {
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-lg">
-        <button
-          onClick={handleClose}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-          data-testid="button-close-exit-popup"
-        >
-          <X className="h-5 w-5" />
-          <span className="sr-only">Close</span>
-        </button>
-        
         <div className="text-center py-4">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-orange/10 rounded-full mb-4">
             <Headphones className="h-8 w-8 text-orange" />
