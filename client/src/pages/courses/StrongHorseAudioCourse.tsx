@@ -375,8 +375,10 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Form submit triggered", { firstName, lastName, email, mobile, horseName, termsAccepted, isPhoneVerified: phoneVerification.isPhoneVerified });
     
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
+      console.log("Validation failed: missing fields");
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to receive your free audio lesson.",
@@ -387,6 +389,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      console.log("Validation failed: invalid email");
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
@@ -396,6 +399,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     }
 
     if (!termsAccepted) {
+      console.log("Validation failed: terms not accepted");
       toast({
         title: "Terms Required",
         description: "Please read and accept the terms and conditions.",
@@ -405,6 +409,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     }
 
     if (!phoneVerification.isPhoneVerified) {
+      console.log("Validation failed: phone not verified");
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before downloading.",
@@ -413,6 +418,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       return;
     }
 
+    console.log("All validations passed, making API call...");
     setIsSubmitting(true);
 
     try {
@@ -431,10 +437,13 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
         }),
       });
 
+      console.log("API response status:", response.status);
+      
       if (!response.ok) {
         throw new Error("Failed to process request");
       }
 
+      console.log("API call succeeded, starting download...");
       setShowProgress(true);
       triggerDownload();
       queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
