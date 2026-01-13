@@ -454,8 +454,8 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           </div>
         ) : isVerifiedUser && profile ? (
           <div className="text-center py-4">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-orange/10 rounded-full mb-4">
-              <Headphones className="h-8 w-8 text-orange" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+              <Headphones className="h-8 w-8 text-navy" />
             </div>
             <DialogHeader>
               <DialogTitle className="text-xl font-playfair font-bold text-navy mb-3">
@@ -466,67 +466,79 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               </DialogDescription>
             </DialogHeader>
             
-            {needsHorseName ? (
-              <div className="mt-6 space-y-4">
-                <div className="space-y-2 text-left">
-                  <Label htmlFor="quick-horseName" className="text-navy font-medium text-sm">
-                    Your Horse's Name <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="quick-horseName"
-                    type="text"
-                    placeholder="Your horse's name"
-                    value={horseName}
-                    onChange={(e) => setHorseName(e.target.value)}
-                    disabled={isSubmitting}
-                    data-testid="input-quick-horsename"
-                    className="border-gray-300"
-                  />
-                </div>
-                
-                <Button
-                  onClick={handleQuickDownload}
-                  disabled={isSubmitting || !horseName.trim()}
-                  className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
-                  data-testid="button-quick-download"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Preparing...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Free Lesson
-                    </>
-                  )}
-                </Button>
-              </div>
-            ) : (
-              <div className="mt-6">
-                <Button
-                  onClick={handleQuickDownload}
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 my-4 text-left">
+              <p className="text-sm text-gray-600">
+                <span className="font-medium text-navy">Email:</span> {profile.email}
+              </p>
+              {profile.mobile && (
+                <p className="text-sm text-gray-600 mt-1">
+                  <span className="font-medium text-navy">Mobile:</span> {profile.mobile}
+                </p>
+              )}
+            </div>
+            
+            {needsHorseName && (
+              <div className="space-y-2 mb-4 text-left">
+                <Label htmlFor="quick-horseName" className="text-navy font-medium text-sm">
+                  Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="quick-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
                   disabled={isSubmitting}
-                  className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
-                  data-testid="button-quick-download"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Preparing...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Free Lesson
-                    </>
-                  )}
-                </Button>
+                  data-testid="input-quick-horsename"
+                  className="border-gray-300"
+                />
               </div>
             )}
             
-            <div className="flex justify-center gap-4 mt-4">
+            <div className="flex items-start gap-2 mb-4 text-left">
+              <Checkbox
+                id="quick-terms"
+                checked={termsAccepted}
+                onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                disabled={isSubmitting}
+                data-testid="checkbox-quick-terms"
+                className="mt-0.5"
+              />
+              <label htmlFor="quick-terms" className="text-xs text-gray-600">
+                I agree to the{" "}
+                <a
+                  href="https://danbizzarromethod.com/audio-lessons-terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-navy hover:text-orange underline"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  terms and conditions
+                </a>{" "}
+                and consent to receive updates from Dan Bizzarro Method.
+              </label>
+            </div>
+            
+            <Button
+              onClick={handleQuickDownload}
+              disabled={isSubmitting || !termsAccepted || (needsHorseName && !horseName.trim())}
+              className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 mb-3 disabled:opacity-50"
+              data-testid="button-quick-download"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Preparing...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Free Lesson
+                </>
+              )}
+            </Button>
+            
+            <div className="flex justify-center gap-4">
               <button
                 onClick={() => setShowUpdateForm(true)}
                 className="text-sm text-gray-500 hover:text-navy underline"
