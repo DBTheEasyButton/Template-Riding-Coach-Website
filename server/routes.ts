@@ -238,6 +238,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       verificationCodes.delete(phoneKey);
       
       console.log(`Phone verified: ${stored.phone}`);
+      
+      // Remove sms-verification-pending tag and add newsletter tag
+      try {
+        await storage.removeGhlTagsByPhone(stored.phone, ['sms-verification-pending']);
+        await storage.addGhlTagsByPhone(stored.phone, ['newsletter']);
+      } catch (tagError) {
+        console.error('Error updating tags after verification:', tagError);
+        // Don't fail the verification if tag update fails
+      }
+      
       res.json({ success: true, verified: true });
       
     } catch (error) {
@@ -560,7 +570,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName,
           lastName,
           mobile, // phone number
-          ['WarmUpPDF'], // tag for tracking this lead source
+          ['WarmUpPDF', 'newsletter'], // tag for tracking this lead source
           { lead_source: 'Warm-Up PDF Download' }
         );
         
@@ -643,7 +653,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName,
           lastName,
           mobile, // phone number
-          ['StrongHorse'], // tag for tracking this lead source
+          ['StrongHorse', 'newsletter'], // tag for tracking this lead source
           { lead_source: 'Strong Horse PDF Download', horse_name: horseName }
         );
         
@@ -716,7 +726,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName,
           lastName,
           mobile,
-          ['stl-trial'],
+          ['stl-trial', 'newsletter'],
           customFields
         );
         
@@ -955,7 +965,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName,
           lastName,
           mobile,
-          ['stl-fullcourse'],
+          ['stl-fullcourse', 'newsletter'],
           customFields
         );
         
@@ -1014,7 +1024,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName,
           lastName,
           mobile,
-          [tag],
+          [tag, 'newsletter'],
           { 
             lead_source: leadSource,
             course_interest: courseName || courseType,
@@ -1482,7 +1492,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           registration.firstName,
           registration.lastName || undefined,
           registration.phone || undefined,
-          ['Clinic Registration'],
+          ['Clinic Registration', 'newsletter'],
           { horse_name: registration.horseName }
         );
         console.log(`Created/updated GHL contact for clinic registration: ${registration.email}`);
@@ -2524,7 +2534,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           firstName, 
           lastName, 
           undefined, 
-          ["try audio"]
+          ["try audio", "newsletter"]
         );
         
         if (!ghlResult.success) {

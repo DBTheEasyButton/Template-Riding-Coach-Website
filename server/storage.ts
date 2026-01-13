@@ -2676,6 +2676,154 @@ The Dan Bizzarro Method Team`,
     await db.delete(visitorProfiles).where(eq(visitorProfiles.token, token));
   }
 
+  async removeGhlTagsByPhone(
+    phone: string,
+    tagsToRemove: string[]
+  ): Promise<{ success: boolean; message?: string }> {
+    const apiKey = process.env.GHL_API_KEY;
+    const locationId = process.env.GHL_LOCATION_ID;
+
+    if (!apiKey || !locationId) {
+      return { success: false, message: 'GHL not configured' };
+    }
+
+    try {
+      // Normalize phone number
+      let normalizedPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+      if (normalizedPhone.startsWith('07') && normalizedPhone.length === 11) {
+        normalizedPhone = '+44' + normalizedPhone.substring(1);
+      } else if (normalizedPhone.startsWith('447')) {
+        normalizedPhone = '+' + normalizedPhone;
+      } else if (!normalizedPhone.startsWith('+')) {
+        normalizedPhone = '+' + normalizedPhone;
+      }
+
+      // Find contact by phone
+      const searchResponse = await fetch(
+        `https://services.leadconnectorhq.com/contacts/?locationId=${locationId}&query=${encodeURIComponent(normalizedPhone)}&limit=1`,
+        {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (!searchResponse.ok) {
+        return { success: false, message: 'Failed to search for contact' };
+      }
+
+      const searchData = await searchResponse.json();
+      if (!searchData.contacts || searchData.contacts.length === 0) {
+        return { success: false, message: 'Contact not found' };
+      }
+
+      const contactId = searchData.contacts[0].id;
+
+      // Remove tags using DELETE endpoint
+      const removeResponse = await fetch(
+        `https://services.leadconnectorhq.com/contacts/${contactId}/tags`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tags: tagsToRemove })
+        }
+      );
+
+      if (!removeResponse.ok) {
+        const errorData = await removeResponse.json();
+        console.error('Failed to remove tags:', errorData);
+        return { success: false, message: 'Failed to remove tags' };
+      }
+
+      console.log(`Removed tags ${tagsToRemove.join(', ')} from contact ${contactId}`);
+      return { success: true };
+
+    } catch (error) {
+      console.error('Error removing GHL tags:', error);
+      return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  async addGhlTagsByPhone(
+    phone: string,
+    tagsToAdd: string[]
+  ): Promise<{ success: boolean; message?: string }> {
+    const apiKey = process.env.GHL_API_KEY;
+    const locationId = process.env.GHL_LOCATION_ID;
+
+    if (!apiKey || !locationId) {
+      return { success: false, message: 'GHL not configured' };
+    }
+
+    try {
+      // Normalize phone number
+      let normalizedPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+      if (normalizedPhone.startsWith('07') && normalizedPhone.length === 11) {
+        normalizedPhone = '+44' + normalizedPhone.substring(1);
+      } else if (normalizedPhone.startsWith('447')) {
+        normalizedPhone = '+' + normalizedPhone;
+      } else if (!normalizedPhone.startsWith('+')) {
+        normalizedPhone = '+' + normalizedPhone;
+      }
+
+      // Find contact by phone
+      const searchResponse = await fetch(
+        `https://services.leadconnectorhq.com/contacts/?locationId=${locationId}&query=${encodeURIComponent(normalizedPhone)}&limit=1`,
+        {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (!searchResponse.ok) {
+        return { success: false, message: 'Failed to search for contact' };
+      }
+
+      const searchData = await searchResponse.json();
+      if (!searchData.contacts || searchData.contacts.length === 0) {
+        return { success: false, message: 'Contact not found' };
+      }
+
+      const contactId = searchData.contacts[0].id;
+
+      // Add tags using POST endpoint
+      const addResponse = await fetch(
+        `https://services.leadconnectorhq.com/contacts/${contactId}/tags`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tags: tagsToAdd })
+        }
+      );
+
+      if (!addResponse.ok) {
+        const errorData = await addResponse.json();
+        console.error('Failed to add tags:', errorData);
+        return { success: false, message: 'Failed to add tags' };
+      }
+
+      console.log(`Added tags ${tagsToAdd.join(', ')} to contact ${contactId}`);
+      return { success: true };
+
+    } catch (error) {
+      console.error('Error adding GHL tags:', error);
+      return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
   async sendSmsViaGhl(
     phone: string,
     message: string
