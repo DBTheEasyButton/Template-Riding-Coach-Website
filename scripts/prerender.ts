@@ -28,9 +28,14 @@ const ROUTES = [
   '/competition-checklists',
   '/readiness-quiz',
   '/packing-list-generator',
+  '/packing-list',
   '/terms-and-conditions',
+  '/audio-lessons-terms',
   '/courses/10-points-better',
   '/courses/strong-horse-audio',
+  '/courses/strong-horse-audio-offer',
+  '/gat-uk-tour',
+  '/guides/strong-horse',
 ];
 
 async function prerenderPage(browser: Browser, route: string): Promise<void> {
