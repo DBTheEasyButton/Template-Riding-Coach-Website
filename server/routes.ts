@@ -785,6 +785,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get current visitor profile (if recognized)
   app.get("/api/visitor/me", async (req, res) => {
+    // Disable caching and ETag to ensure fresh phoneVerifiedAt status
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.set('ETag', '');
+    
     try {
       const token = req.cookies?.visitor_token;
       
