@@ -248,6 +248,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Don't fail the verification if tag update fails
       }
       
+      // Mark phone as verified on visitor profile
+      try {
+        await storage.updateVisitorProfilePhoneVerified(stored.phone);
+      } catch (profileError) {
+        console.error('Error updating visitor profile phone verified:', profileError);
+      }
+      
       res.json({ success: true, verified: true });
       
     } catch (error) {
@@ -801,7 +808,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: profile.email,
         mobile: profile.mobile,
         horseName: profile.horseName,
-        sources: profile.sources
+        sources: profile.sources,
+        phoneVerifiedAt: profile.phoneVerifiedAt?.toISOString() || null
       });
     } catch (error) {
       console.error('Error getting visitor profile:', error);

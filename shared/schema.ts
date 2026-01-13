@@ -614,6 +614,7 @@ export const visitorProfiles = pgTable("visitor_profiles", {
   horseName: text("horse_name"), // Horse name for personalization
   ghlContactId: text("ghl_contact_id"), // Reference to GHL contact if synced
   sources: text("sources").array().notNull().default([]), // ['StrongHorsePDF', 'StrongHorseAudio', 'Clinic']
+  phoneVerifiedAt: timestamp("phone_verified_at"), // When phone was last verified via SMS
   lastSeenAt: timestamp("last_seen_at").notNull().defaultNow(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 }, (table) => ({

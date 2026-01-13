@@ -261,6 +261,7 @@ export interface IStorage {
   ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }>;
   updateVisitorProfileLastSeen(token: string): Promise<void>;
   updateVisitorProfileHorseName(token: string, horseName: string): Promise<VisitorProfile | undefined>;
+  updateVisitorProfilePhoneVerified(phone: string): Promise<void>;
   deleteVisitorProfile(token: string): Promise<void>;
 }
 
@@ -2670,6 +2671,21 @@ The Dan Bizzarro Method Team`,
       .where(eq(visitorProfiles.token, token))
       .returning();
     return updated;
+  }
+
+  async updateVisitorProfilePhoneVerified(phone: string): Promise<void> {
+    let normalizedPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+    if (normalizedPhone.startsWith('07') && normalizedPhone.length === 11) {
+      normalizedPhone = '+44' + normalizedPhone.substring(1);
+    } else if (normalizedPhone.startsWith('447')) {
+      normalizedPhone = '+' + normalizedPhone;
+    } else if (!normalizedPhone.startsWith('+')) {
+      normalizedPhone = '+' + normalizedPhone;
+    }
+    
+    await db.update(visitorProfiles)
+      .set({ phoneVerifiedAt: new Date() })
+      .where(eq(visitorProfiles.mobile, normalizedPhone));
   }
 
   async deleteVisitorProfile(token: string): Promise<void> {

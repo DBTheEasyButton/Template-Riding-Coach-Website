@@ -354,7 +354,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
     );
   }
 
-  if (isRecognized && profile?.firstName && !showUpdateForm) {
+  if (isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showUpdateForm) {
     return (
       <div className={variant === "compact" ? "text-center py-4" : "bg-white rounded-2xl shadow-xl p-8 border border-gray-100 text-center"}>
         <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-3">

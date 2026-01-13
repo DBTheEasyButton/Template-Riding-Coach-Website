@@ -502,7 +502,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               </Button>
             </div>
           </div>
-        ) : isRecognized && profile?.firstName && !showUpdateForm ? (
+        ) : isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showUpdateForm ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <User className="h-8 w-8 text-navy" />

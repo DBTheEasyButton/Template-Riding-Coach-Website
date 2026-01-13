@@ -11,6 +11,7 @@ interface VisitorProfile {
   mobile?: string;
   horseName?: string;
   sources?: string[];
+  phoneVerifiedAt?: string;
 }
 
 interface VisitorContextType {
