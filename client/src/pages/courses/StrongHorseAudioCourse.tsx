@@ -288,6 +288,18 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showUpdateForm;
   const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
 
+  console.log('[AudioLeadCaptureModal] Debug:', {
+    isOpen,
+    isLoading,
+    isRecognized,
+    profileExists: !!profile,
+    profileFirstName: profile?.firstName,
+    profilePhoneVerifiedAt: profile?.phoneVerifiedAt,
+    showUpdateForm,
+    isVerifiedUser,
+    needsHorseName
+  });
+
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
       setFirstName(profile.firstName || "");
