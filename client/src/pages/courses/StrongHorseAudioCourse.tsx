@@ -1326,8 +1326,12 @@ function AudioCoursePurchaseModal({
   const [stripe, setStripe] = useState<Stripe | null>(null);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [stripeError, setStripeError] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const { toast } = useToast();
-  const { profile, isRecognized } = useVisitor();
+  const { profile, isRecognized, forgetMe } = useVisitor();
+  
+  const isVerifiedUser = isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showEditForm;
+  const needsHorseName = isVerifiedUser && !profile?.horseName;
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -1376,11 +1380,87 @@ function AudioCoursePurchaseModal({
     setTermsAccepted(false);
     setClientSecret(null);
     setPaymentIntentId(null);
+    setShowEditForm(false);
   };
 
   const handleClose = () => {
     resetForm();
     onClose();
+  };
+
+  const handleNotMe = () => {
+    forgetMe();
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setHorseName("");
+    setTermsAccepted(false);
+    setShowEditForm(false);
+  };
+
+  const handleQuickProceed = async () => {
+    const horseNameToUse = profile?.horseName?.trim() || horseName.trim();
+    
+    if (!horseNameToUse) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter your horse's name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setFirstName(profile?.firstName || "");
+    setLastName(profile?.lastName || "");
+    setEmail(profile?.email || "");
+    setMobile(profile?.mobile || "");
+    setHorseName(horseNameToUse);
+
+    try {
+      const response = await fetch("/api/audio-course/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: profile?.firstName?.trim() || "",
+          lastName: profile?.lastName?.trim() || "",
+          email: profile?.email?.trim() || "",
+          mobile: profile?.mobile?.trim() || "",
+          horseName: horseNameToUse,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create payment");
+      }
+
+      setClientSecret(data.clientSecret);
+      setPaymentIntentId(data.paymentIntentId);
+      setStep('payment');
+    } catch (error) {
+      console.error("Payment intent error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to initialize payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -1557,6 +1637,111 @@ function AudioCoursePurchaseModal({
               ← Back to edit details
             </Button>
           </>
+        ) : isVerifiedUser ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-3">
+              <User className="h-7 w-7 text-navy" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy mb-2">
+                Welcome back, {profile.firstName}!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-sm">
+                Ready to get the audio course? Confirm your details below.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 my-4 text-left">
+              <p className="text-sm text-gray-600">
+                <span className="font-medium text-navy">Email:</span> {profile.email}
+              </p>
+              {profile.mobile && (
+                <p className="text-sm text-gray-600 mt-1">
+                  <span className="font-medium text-navy">Mobile:</span> {profile.mobile}
+                </p>
+              )}
+              {profile.horseName && (
+                <p className="text-sm text-gray-600 mt-1">
+                  <span className="font-medium text-navy">Horse:</span> {profile.horseName}
+                </p>
+              )}
+            </div>
+            
+            {needsHorseName && (
+              <div className="space-y-2 mb-4 text-left">
+                <Label htmlFor="quick-purchase-horseName" className="text-navy font-medium text-sm">
+                  Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="quick-purchase-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  className="border-gray-300"
+                  data-testid="input-quick-purchase-horsename"
+                />
+              </div>
+            )}
+            
+            <div className="flex items-start gap-2 mb-4 text-left">
+              <input
+                type="checkbox"
+                id="quick-purchase-terms"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-orange focus:ring-orange"
+                data-testid="checkbox-quick-purchase-terms"
+              />
+              <label htmlFor="quick-purchase-terms" className="text-xs text-gray-600">
+                I agree to the{" "}
+                <a 
+                  href="https://danbizzarromethod.com/audio-lessons-terms" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-orange hover:underline"
+                >
+                  Terms & Conditions
+                </a>
+              </label>
+            </div>
+            
+            <Button
+              onClick={handleQuickProceed}
+              disabled={isSubmitting || !termsAccepted || (needsHorseName && !horseName.trim())}
+              className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg mb-3 disabled:opacity-50"
+              data-testid="button-quick-purchase-proceed"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Proceed to Payment — £97
+                </>
+              )}
+            </Button>
+            <div className="flex justify-center gap-4 text-sm">
+              <button
+                onClick={() => setShowEditForm(true)}
+                className="text-navy hover:underline"
+                data-testid="button-edit-purchase-details"
+              >
+                Edit my details
+              </button>
+              <span className="text-gray-300">|</span>
+              <button
+                onClick={handleNotMe}
+                className="text-gray-500 hover:text-gray-700 hover:underline"
+                data-testid="button-not-me-purchase"
+              >
+                Not me
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             <DialogHeader>
@@ -2377,9 +2562,13 @@ function PurchaseModal({
   const [stripe, setStripe] = useState<Stripe | null>(null);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [stripeError, setStripeError] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const { toast } = useToast();
-  const { profile, isRecognized } = useVisitor();
+  const { profile, isRecognized, forgetMe } = useVisitor();
   const phoneVerification = usePhoneVerification();
+  
+  const isVerifiedUser = isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showEditForm;
+  const needsHorseName = isVerifiedUser && !profile?.horseName;
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -2426,12 +2615,102 @@ function PurchaseModal({
     setHorseName("");
     setTermsAccepted(false);
     setClientSecret(null);
+    setShowEditForm(false);
     phoneVerification.reset();
   };
 
   const handleClose = () => {
     resetForm();
     onClose();
+  };
+
+  const handleNotMeChallenge = () => {
+    forgetMe();
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setHorseName("");
+    setTermsAccepted(false);
+    setShowEditForm(false);
+  };
+
+  const handleQuickProceedChallenge = async () => {
+    const horseNameToUse = profile?.horseName?.trim() || horseName.trim();
+    
+    if (!horseNameToUse) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter your horse's name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setFirstName(profile?.firstName || "");
+    setLastName(profile?.lastName || "");
+    setEmail(profile?.email || "");
+    setMobile(profile?.mobile || "");
+    setHorseName(horseNameToUse);
+
+    try {
+      if (tier?.id === 'guided-group') {
+        const response = await fetch("/api/challenge/create-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: profile?.firstName?.trim() || "",
+            lastName: profile?.lastName?.trim() || "",
+            email: profile?.email?.trim() || "",
+            mobile: profile?.mobile?.trim() || "",
+            horseName: horseNameToUse,
+          }),
+        });
+
+        if (!response.ok) throw new Error("Failed to create payment");
+
+        const data = await response.json();
+        setClientSecret(data.clientSecret);
+        setStep('payment');
+      } else {
+        const response = await fetch("/api/course-interest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: profile?.firstName?.trim() || "",
+            lastName: profile?.lastName?.trim() || "",
+            email: profile?.email?.trim() || "",
+            mobile: profile?.mobile?.trim() || "",
+            horseName: horseNameToUse,
+            courseType: tier?.id,
+            courseName: tier?.subtitle,
+            price: tier?.price,
+          }),
+        });
+
+        if (!response.ok) throw new Error("Failed to process request");
+        setStep('success');
+      }
+    } catch (error) {
+      console.error("Quick proceed error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to process. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -2642,6 +2921,122 @@ function PurchaseModal({
               ← Back to details
             </Button>
           </>
+        ) : isVerifiedUser ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-3">
+              <User className="h-7 w-7 text-navy" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy mb-2">
+                Welcome back, {profile.firstName}!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-sm">
+                Ready to {isChallenge ? "join the 28-Day Challenge" : "apply for Private Mentorship"}?
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 my-4 text-left">
+              <p className="text-sm text-gray-600">
+                <span className="font-medium text-navy">Email:</span> {profile.email}
+              </p>
+              {profile.mobile && (
+                <p className="text-sm text-gray-600 mt-1">
+                  <span className="font-medium text-navy">Mobile:</span> {profile.mobile}
+                </p>
+              )}
+              {profile.horseName && (
+                <p className="text-sm text-gray-600 mt-1">
+                  <span className="font-medium text-navy">Horse:</span> {profile.horseName}
+                </p>
+              )}
+            </div>
+            
+            {needsHorseName && (
+              <div className="space-y-2 mb-4 text-left">
+                <Label htmlFor="quick-challenge-horseName" className="text-navy font-medium text-sm">
+                  Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="quick-challenge-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  className="border-gray-300"
+                  data-testid="input-quick-challenge-horsename"
+                />
+              </div>
+            )}
+            
+            <div className="flex items-start gap-2 mb-4 text-left">
+              <input
+                type="checkbox"
+                id="quick-challenge-terms"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-orange focus:ring-orange"
+                data-testid="checkbox-quick-challenge-terms"
+              />
+              <label htmlFor="quick-challenge-terms" className="text-xs text-gray-600">
+                I agree to the{" "}
+                <a 
+                  href="https://danbizzarromethod.com/audio-lessons-terms" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-orange hover:underline"
+                >
+                  Terms & Conditions
+                </a>
+              </label>
+            </div>
+            
+            {stripeError && isChallenge && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
+                <p className="text-sm text-red-600">
+                  Payment system unavailable. Please try again.
+                </p>
+                <Button variant="outline" size="sm" onClick={loadStripeInstance} className="mt-2">
+                  Retry
+                </Button>
+              </div>
+            )}
+            
+            <Button
+              onClick={handleQuickProceedChallenge}
+              disabled={isSubmitting || !termsAccepted || (needsHorseName && !horseName.trim()) || (stripeError && isChallenge)}
+              className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg mb-3 disabled:opacity-50"
+              data-testid="button-quick-challenge-proceed"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  {isChallenge ? <CreditCard className="mr-2 h-4 w-4" /> : <ArrowRight className="mr-2 h-4 w-4" />}
+                  {isChallenge ? `Proceed to Payment — ${tier.price}` : "Submit Application"}
+                </>
+              )}
+            </Button>
+            <div className="flex justify-center gap-4 text-sm">
+              <button
+                onClick={() => setShowEditForm(true)}
+                className="text-navy hover:underline"
+                data-testid="button-edit-challenge-details"
+              >
+                Edit my details
+              </button>
+              <span className="text-gray-300">|</span>
+              <button
+                onClick={handleNotMeChallenge}
+                className="text-gray-500 hover:text-gray-700 hover:underline"
+                data-testid="button-not-me-challenge"
+              >
+                Not me
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             <DialogHeader>
