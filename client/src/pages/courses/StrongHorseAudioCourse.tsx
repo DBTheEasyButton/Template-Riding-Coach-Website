@@ -282,8 +282,11 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const { toast } = useToast();
-  const { profile, isRecognized, forgetMe } = useVisitor();
+  const { profile, isRecognized, forgetMe, isLoading } = useVisitor();
   const phoneVerification = usePhoneVerification();
+  
+  const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showUpdateForm;
+  const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -514,7 +517,15 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               </Button>
             </div>
           </div>
-        ) : isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showUpdateForm ? (
+        ) : isLoading ? (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-orange mx-auto mb-4" />
+            <DialogHeader>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy">Loading...</DialogTitle>
+              <DialogDescription className="text-gray-500 text-sm">Please wait</DialogDescription>
+            </DialogHeader>
+          </div>
+        ) : isVerifiedUser && profile ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
               <User className="h-8 w-8 text-navy" />
@@ -538,7 +549,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               )}
             </div>
             
-            {!profile.horseName && (
+            {needsHorseName && (
               <div className="space-y-2 mb-4 text-left">
                 <Label htmlFor="quick-horseName" className="text-navy font-medium text-sm">
                   Horse's Name <span className="text-red-500">*</span>
@@ -576,7 +587,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
             
             <Button
               onClick={handleQuickDownload}
-              disabled={isSubmitting || !termsAccepted || (!profile.horseName && !horseName.trim())}
+              disabled={isSubmitting || !termsAccepted || (needsHorseName && !horseName.trim())}
               className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300 mb-3 disabled:opacity-50"
               data-testid="button-quick-download-audio"
             >
@@ -2576,7 +2587,7 @@ function PurchaseModal({
   const [stripeError, setStripeError] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const { toast } = useToast();
-  const { profile, isRecognized, forgetMe } = useVisitor();
+  const { profile, isRecognized, forgetMe, isLoading } = useVisitor();
   const phoneVerification = usePhoneVerification();
   
   const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showEditForm;
@@ -2933,6 +2944,14 @@ function PurchaseModal({
               ← Back to details
             </Button>
           </>
+        ) : isLoading ? (
+          <div className="text-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin text-orange mx-auto mb-4" />
+            <DialogHeader>
+              <DialogTitle className="text-lg font-playfair font-bold text-navy">Loading...</DialogTitle>
+              <DialogDescription className="text-gray-500 text-sm">Please wait</DialogDescription>
+            </DialogHeader>
+          </div>
         ) : isVerifiedUser && profile ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-3">
