@@ -645,7 +645,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture for Strong Horse PDF - creates/updates GHL contact with StrongHorsePDF tag
   app.post("/api/lead-capture/strong-horse-pdf", async (req, res) => {
     try {
-      const { firstName, lastName, email, mobile, horseName } = req.body;
+      const { firstName, lastName, email, mobile, horseName, phoneVerified } = req.body;
 
       if (!firstName || !lastName || !email || !mobile || !horseName) {
         return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
@@ -684,7 +684,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           mobile,
           'StrongHorsePDF',
           ghlContactId,
-          horseName
+          horseName,
+          phoneVerified === true ? new Date() : undefined
         );
         
         // Set secure cookie for 90 days
@@ -714,7 +715,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Lead capture for Strong Horse Audio Course - creates/updates GHL contact with StrongHorseAudio tag
   app.post("/api/lead-capture/strong-horse-audio", async (req, res) => {
     try {
-      const { firstName, lastName, email, mobile, horseName } = req.body;
+      const { firstName, lastName, email, mobile, horseName, phoneVerified } = req.body;
 
       if (!firstName || !lastName || !email || !mobile || !horseName) {
         return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
@@ -756,7 +757,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           mobile,
           'StrongHorseAudio',
           ghlContactId,
-          horseName
+          horseName,
+          phoneVerified === true ? new Date() : undefined
         );
         
         // Set secure cookie for 90 days

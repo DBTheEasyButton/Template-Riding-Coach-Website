@@ -58,6 +58,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
           horseName: horseNameToUse,
+          phoneVerified: Boolean(profile?.phoneVerifiedAt),
         }),
       });
 
@@ -136,6 +137,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           email: email.trim(),
           mobile: mobile.trim(),
           horseName: horseName.trim(),
+          phoneVerified: false,
         }),
       });
 

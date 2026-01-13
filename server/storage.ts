@@ -257,7 +257,8 @@ export interface IStorage {
     mobile: string,
     source: string,
     ghlContactId?: string,
-    horseName?: string
+    horseName?: string,
+    phoneVerifiedAt?: Date
   ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }>;
   updateVisitorProfileLastSeen(token: string): Promise<void>;
   updateVisitorProfileHorseName(token: string, horseName: string): Promise<VisitorProfile | undefined>;
@@ -2610,7 +2611,8 @@ The Dan Bizzarro Method Team`,
     mobile: string,
     source: string,
     ghlContactId?: string,
-    horseName?: string
+    horseName?: string,
+    phoneVerifiedAt?: Date
   ): Promise<{ profile: VisitorProfile; token: string; isNew: boolean }> {
     const normalizedEmail = email.toLowerCase();
     
@@ -2623,16 +2625,23 @@ The Dan Bizzarro Method Team`,
         ? existing.sources 
         : [...existing.sources, source];
       
+      const updateData: Record<string, any> = {
+        firstName,
+        lastName,
+        mobile,
+        horseName: horseName || existing.horseName,
+        sources: updatedSources,
+        ghlContactId: ghlContactId || existing.ghlContactId,
+        lastSeenAt: new Date()
+      };
+      
+      // Update phoneVerifiedAt if provided, or keep existing
+      if (phoneVerifiedAt) {
+        updateData.phoneVerifiedAt = phoneVerifiedAt;
+      }
+      
       const updated = await db.update(visitorProfiles)
-        .set({
-          firstName,
-          lastName,
-          mobile,
-          horseName: horseName || existing.horseName,
-          sources: updatedSources,
-          ghlContactId: ghlContactId || existing.ghlContactId,
-          lastSeenAt: new Date()
-        })
+        .set(updateData)
         .where(eq(visitorProfiles.id, existing.id))
         .returning();
       
@@ -2652,7 +2661,8 @@ The Dan Bizzarro Method Team`,
         mobile,
         horseName: horseName || null,
         sources: [source],
-        ghlContactId: ghlContactId || null
+        ghlContactId: ghlContactId || null,
+        phoneVerifiedAt: phoneVerifiedAt || null
       })
       .returning();
     

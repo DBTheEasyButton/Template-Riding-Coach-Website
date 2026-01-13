@@ -341,6 +341,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
           horseName: horseNameToUse,
+          phoneVerified: true,
         }),
       });
 
@@ -426,6 +427,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
           email: email.trim(),
           mobile: mobile.trim(),
           horseName: horseName.trim(),
+          phoneVerified: phoneVerification.isPhoneVerified,
         }),
       });
 
@@ -804,6 +806,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           email: email.trim(),
           mobile: mobile.trim(),
           horseName: horseName.trim(),
+          phoneVerified: true,
         }),
       });
 
@@ -1330,8 +1333,8 @@ function AudioCoursePurchaseModal({
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
   
-  const isVerifiedUser = isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showEditForm;
-  const needsHorseName = isVerifiedUser && !profile?.horseName;
+  const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showEditForm;
+  const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -1637,7 +1640,7 @@ function AudioCoursePurchaseModal({
               ← Back to edit details
             </Button>
           </>
-        ) : isVerifiedUser ? (
+        ) : isVerifiedUser && profile ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-3">
               <User className="h-7 w-7 text-navy" />
@@ -2567,8 +2570,8 @@ function PurchaseModal({
   const { profile, isRecognized, forgetMe } = useVisitor();
   const phoneVerification = usePhoneVerification();
   
-  const isVerifiedUser = isRecognized && profile?.firstName && profile?.phoneVerifiedAt && !showEditForm;
-  const needsHorseName = isVerifiedUser && !profile?.horseName;
+  const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showEditForm;
+  const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -2921,7 +2924,7 @@ function PurchaseModal({
               ← Back to details
             </Button>
           </>
-        ) : isVerifiedUser ? (
+        ) : isVerifiedUser && profile ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-100 rounded-full mb-3">
               <User className="h-7 w-7 text-navy" />
