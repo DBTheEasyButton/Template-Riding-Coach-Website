@@ -19,6 +19,7 @@ interface UsePhoneVerificationReturn extends PhoneVerificationState {
   sendVerificationCode: (phone: string) => Promise<void>;
   verifyCode: (phone: string) => Promise<boolean>;
   setVerificationCode: (code: string) => void;
+  handlePhoneChange: (phone: string) => void;
   reset: () => void;
   clearError: () => void;
 }
@@ -33,6 +34,7 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
   const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationError, setVerificationError] = useState("");
+  const [verifiedPhone, setVerifiedPhone] = useState("");
 
   const reset = useCallback(() => {
     setIsPhoneVerified(false);
@@ -41,7 +43,14 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
     setIsVerifyingCode(false);
     setVerificationCode("");
     setVerificationError("");
+    setVerifiedPhone("");
   }, []);
+  
+  const handlePhoneChange = useCallback((newPhone: string) => {
+    if (isPhoneVerified && newPhone.trim() !== verifiedPhone.trim()) {
+      reset();
+    }
+  }, [isPhoneVerified, verifiedPhone, reset]);
 
   const clearError = useCallback(() => {
     setVerificationError("");
@@ -129,6 +138,7 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
       }
 
       setIsPhoneVerified(true);
+      setVerifiedPhone(phone.trim());
       onVerified?.();
       toast({
         title: "Phone Verified!",
@@ -160,6 +170,7 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
     sendVerificationCode,
     verifyCode,
     setVerificationCode: handleSetVerificationCode,
+    handlePhoneChange,
     reset,
     clearError,
   };

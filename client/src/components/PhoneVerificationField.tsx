@@ -16,6 +16,7 @@ interface PhoneVerificationFieldProps {
   onVerifyCode: () => void;
   onCodeChange: (code: string) => void;
   onPhoneChange: (phone: string) => void;
+  onReset: () => void;
   disabled?: boolean;
   label?: string;
   placeholder?: string;
@@ -35,6 +36,7 @@ export function PhoneVerificationField({
   onVerifyCode,
   onCodeChange,
   onPhoneChange,
+  onReset,
   disabled = false,
   label = "Mobile Number",
   placeholder = "07xxx xxxxxx",
@@ -79,8 +81,20 @@ export function PhoneVerificationField({
           </Button>
         )}
         {isPhoneVerified && (
-          <div className="flex items-center text-green-600 px-2">
-            <CheckCircle className="h-5 w-5" />
+          <div className="flex items-center gap-2">
+            <div className="flex items-center text-green-600 px-1">
+              <CheckCircle className="h-5 w-5" />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onReset}
+              disabled={disabled}
+              className="text-xs text-gray-500 hover:text-gray-700"
+            >
+              Change
+            </Button>
           </div>
         )}
       </div>

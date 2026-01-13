@@ -460,7 +460,8 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
                 onVerifyCode={() => phoneVerification.verifyCode(mobile)}
                 onCodeChange={phoneVerification.setVerificationCode}
-                onPhoneChange={() => phoneVerification.reset()}
+                onPhoneChange={phoneVerification.handlePhoneChange}
+                onReset={phoneVerification.reset}
                 disabled={isSubmitting}
                 testIdPrefix="audio"
               />

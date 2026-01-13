@@ -32,6 +32,7 @@ interface VerificationCode {
   code: string;
   phone: string;
   expiresAt: Date;
+  lastSentAt: Date;
   attempts: number;
 }
 const verificationCodes = new Map<string, VerificationCode>();
@@ -148,27 +149,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const phoneKey = normalizePhoneForKey(phone);
+      const now = new Date();
       
-      // Rate limiting - check if we recently sent a code
+      // Rate limiting - check if we recently sent a code (60 second cooldown)
       const existing = verificationCodes.get(phoneKey);
-      if (existing && existing.expiresAt > new Date()) {
-        const timeLeft = Math.ceil((existing.expiresAt.getTime() - Date.now()) / 1000);
-        if (timeLeft > 540) { // More than 9 minutes left (code was sent less than 1 minute ago)
+      if (existing) {
+        const timeSinceLastSent = now.getTime() - existing.lastSentAt.getTime();
+        const cooldownMs = 60 * 1000; // 60 seconds
+        
+        if (timeSinceLastSent < cooldownMs) {
+          const retryAfter = Math.ceil((cooldownMs - timeSinceLastSent) / 1000);
           return res.status(429).json({ 
-            error: 'Please wait before requesting another code',
-            retryAfter: 60 - (600 - timeLeft)
+            error: `Please wait ${retryAfter} seconds before requesting another code`,
+            retryAfter
           });
         }
       }
 
       // Generate and store verification code
       const code = generateVerificationCode();
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      const expiresAt = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes
       
       verificationCodes.set(phoneKey, {
         code,
         phone: cleanPhone,
         expiresAt,
+        lastSentAt: now,
         attempts: 0
       });
 
