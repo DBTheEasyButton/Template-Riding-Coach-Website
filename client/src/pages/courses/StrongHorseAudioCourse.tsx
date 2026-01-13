@@ -1821,6 +1821,7 @@ function DiscountedAudioPurchaseModal({
   const [stripeError, setStripeError] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized } = useVisitor();
+  const phoneVerification = usePhoneVerification();
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -2070,12 +2071,23 @@ function DiscountedAudioPurchaseModal({
                 <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="discount-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number <span className="text-red-500">*</span>
-                </Label>
-                <Input id="discount-mobile" type="tel" placeholder="+44 7..." value={mobile} onChange={(e) => setMobile(e.target.value)} disabled={isSubmitting} required className="border-gray-300" />
-              </div>
+              <PhoneVerificationField
+                mobile={mobile}
+                setMobile={setMobile}
+                isPhoneVerified={phoneVerification.isPhoneVerified}
+                codeSent={phoneVerification.codeSent}
+                isSendingCode={phoneVerification.isSendingCode}
+                isVerifyingCode={phoneVerification.isVerifyingCode}
+                verificationCode={phoneVerification.verificationCode}
+                verificationError={phoneVerification.verificationError}
+                onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+                onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+                onCodeChange={phoneVerification.setVerificationCode}
+                onPhoneChange={phoneVerification.handlePhoneChange}
+                onReset={phoneVerification.reset}
+                disabled={isSubmitting}
+                testIdPrefix="discount"
+              />
 
               <div className="space-y-1">
                 <Label htmlFor="discount-horseName" className="text-navy font-medium text-sm">
@@ -2246,6 +2258,7 @@ function PurchaseModal({
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized } = useVisitor();
+  const phoneVerification = usePhoneVerification();
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -2265,6 +2278,7 @@ function PurchaseModal({
     setHorseName("");
     setTermsAccepted(false);
     setShowSuccess(false);
+    phoneVerification.reset();
   };
 
   const handleClose = () => {
@@ -2298,6 +2312,15 @@ function PurchaseModal({
       toast({
         title: "Terms Required",
         description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!phoneVerification.isPhoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your mobile number before continuing.",
         variant: "destructive",
       });
       return;
@@ -2449,22 +2472,23 @@ function PurchaseModal({
                 <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="purchase-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="purchase-mobile"
-                  type="tel"
-                  placeholder="+44 7..."
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  disabled={isSubmitting}
-                  required
-                  data-testid="input-purchase-mobile"
-                  className="border-gray-300"
-                />
-              </div>
+              <PhoneVerificationField
+                mobile={mobile}
+                setMobile={setMobile}
+                isPhoneVerified={phoneVerification.isPhoneVerified}
+                codeSent={phoneVerification.codeSent}
+                isSendingCode={phoneVerification.isSendingCode}
+                isVerifyingCode={phoneVerification.isVerifyingCode}
+                verificationCode={phoneVerification.verificationCode}
+                verificationError={phoneVerification.verificationError}
+                onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+                onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+                onCodeChange={phoneVerification.setVerificationCode}
+                onPhoneChange={phoneVerification.handlePhoneChange}
+                onReset={phoneVerification.reset}
+                disabled={isSubmitting}
+                testIdPrefix="purchase"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="purchase-horseName" className="text-navy font-medium text-sm">
