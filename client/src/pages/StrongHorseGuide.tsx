@@ -50,6 +50,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const [showAudioConfirmation, setShowAudioConfirmation] = useState(false);
   const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
   const [submittedDetails, setSubmittedDetails] = useState<{firstName: string; lastName: string; email: string; mobile: string; horseName: string} | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
 
@@ -124,6 +125,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
   const handleQuickDownload = async () => {
     setIsSubmitting(true);
     try {
+      const horseNameToUse = profile?.horseName?.trim() || horseName.trim();
       const response = await fetch("/api/lead-capture/strong-horse-pdf", {
         method: "POST",
         headers: {
@@ -134,7 +136,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           lastName: profile?.lastName?.trim() || "",
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
-          horseName: profile?.horseName?.trim() || "",
+          horseName: horseNameToUse,
         }),
       });
 
@@ -371,10 +373,47 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             <span className="font-medium text-navy">Email:</span> {profile.email}
           </p>
         </div>
+        
+        {!profile.horseName && (
+          <div className="space-y-2 mb-4 text-left">
+            <Label htmlFor="quick-guide-horseName" className="text-navy font-medium text-sm">
+              Horse's Name <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="quick-guide-horseName"
+              type="text"
+              placeholder="Your horse's name"
+              value={horseName}
+              onChange={(e) => setHorseName(e.target.value)}
+              disabled={isSubmitting}
+              className="border-gray-300"
+              data-testid="input-quick-guide-horsename"
+            />
+          </div>
+        )}
+        
+        <div className="flex items-start gap-2 mb-4 text-left">
+          <input
+            type="checkbox"
+            id="quick-guide-terms"
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-gray-300 text-orange focus:ring-orange"
+            data-testid="checkbox-quick-guide-terms"
+          />
+          <label htmlFor="quick-guide-terms" className="text-xs text-gray-600">
+            I agree to the{" "}
+            <Link href="/terms" className="text-orange hover:underline">
+              Terms & Conditions
+            </Link>{" "}
+            and consent to receive updates from Dan Bizzarro Method.
+          </label>
+        </div>
+        
         <Button
           onClick={handleQuickDownload}
-          disabled={isSubmitting}
-          className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 mb-3"
+          disabled={isSubmitting || !termsAccepted || (!profile.horseName && !horseName.trim())}
+          className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 mb-3 disabled:opacity-50"
           data-testid="button-quick-download-pdf"
         >
           {isSubmitting ? (

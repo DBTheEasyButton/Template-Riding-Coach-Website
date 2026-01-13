@@ -23,6 +23,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
 
@@ -45,6 +46,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const handleQuickDownload = async () => {
     setIsSubmitting(true);
     try {
+      const horseNameToUse = profile?.horseName?.trim() || horseName.trim();
       const response = await fetch("/api/lead-capture/strong-horse-pdf", {
         method: "POST",
         headers: {
@@ -55,7 +57,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           lastName: profile?.lastName?.trim() || "",
           email: profile?.email?.trim() || "",
           mobile: profile?.mobile?.trim() || "",
-          horseName: profile?.horseName?.trim() || "",
+          horseName: horseNameToUse,
         }),
       });
 
@@ -223,10 +225,47 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                 </p>
               )}
             </div>
+            
+            {!profile.horseName && (
+              <div className="space-y-2 mb-4 text-left">
+                <Label htmlFor="quick-pdf-horseName" className="text-navy font-medium text-sm">
+                  Horse's Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="quick-pdf-horseName"
+                  type="text"
+                  placeholder="Your horse's name"
+                  value={horseName}
+                  onChange={(e) => setHorseName(e.target.value)}
+                  disabled={isSubmitting}
+                  className="border-gray-300"
+                  data-testid="input-quick-pdf-horsename"
+                />
+              </div>
+            )}
+            
+            <div className="flex items-start gap-2 mb-4 text-left">
+              <input
+                type="checkbox"
+                id="quick-pdf-terms"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-orange focus:ring-orange"
+                data-testid="checkbox-quick-pdf-terms"
+              />
+              <label htmlFor="quick-pdf-terms" className="text-xs text-gray-600">
+                I agree to the{" "}
+                <Link href="/terms" className="text-orange hover:underline">
+                  Terms & Conditions
+                </Link>{" "}
+                and consent to receive updates from Dan Bizzarro Method.
+              </label>
+            </div>
+            
             <Button
               onClick={handleQuickDownload}
-              disabled={isSubmitting}
-              className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300 mb-3"
+              disabled={isSubmitting || !termsAccepted || (!profile.horseName && !horseName.trim())}
+              className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300 mb-3 disabled:opacity-50"
               data-testid="button-quick-download"
             >
               {isSubmitting ? (
