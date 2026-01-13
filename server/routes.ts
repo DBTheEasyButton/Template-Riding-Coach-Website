@@ -990,6 +990,102 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // 28 Days Challenge payment intent - creates Stripe payment for £147
+  app.post("/api/challenge/create-payment-intent", async (req, res) => {
+    try {
+      const { firstName, lastName, email, mobile, horseName } = req.body;
+
+      if (!firstName || !lastName || !email || !mobile || !horseName) {
+        return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
+      }
+
+      const amount = 14700; // £147 in pence
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: "gbp",
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        metadata: {
+          productType: '28-day-challenge',
+          productName: 'Strong to Soft & Light - 28 Days Challenge',
+          customerEmail: email,
+          customerFirstName: firstName,
+          customerLastName: lastName,
+          customerMobile: mobile,
+          customerHorseName: horseName || '',
+        },
+        receipt_email: email,
+      });
+
+      console.log(`28 Days Challenge payment intent created: ${paymentIntent.id} for ${email}`);
+
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+        amount: amount
+      });
+    } catch (error) {
+      console.error("Error creating challenge payment intent:", error);
+      res.status(500).json({ error: 'Failed to create payment' });
+    }
+  });
+
+  // 28 Days Challenge purchase completion - called after successful payment
+  app.post("/api/challenge/complete-purchase", async (req, res) => {
+    try {
+      const { paymentIntentId, firstName, lastName, email, mobile, horseName } = req.body;
+
+      if (!paymentIntentId || !firstName || !lastName || !email || !mobile || !horseName) {
+        return res.status(400).json({ error: 'Payment intent ID, customer details and horse name are required' });
+      }
+
+      // Verify the payment was successful
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      if (paymentIntent.status !== 'succeeded') {
+        return res.status(400).json({ error: 'Payment not completed' });
+      }
+
+      // Create or update contact in GHL with stl-challenge tag
+      try {
+        const customFields: Record<string, string> = { 
+          lead_source: 'Strong to Soft & Light - 28 Days Challenge Purchase',
+          purchase_date: new Date().toISOString(),
+          purchase_amount: '£147',
+          horse_name: horseName || ''
+        };
+        
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          mobile,
+          ['stl-challenge', 'newsletter'],
+          customFields
+        );
+        
+        if (ghlResult.success) {
+          console.log(`GHL contact created/updated for ${email} with stl-challenge tag after challenge purchase`);
+        } else {
+          console.warn(`GHL contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        console.error('GHL contact creation error (non-fatal):', ghlError);
+      }
+
+      console.log(`28 Days Challenge purchase completed for ${email}, payment: ${paymentIntentId}`);
+
+      res.json({ 
+        success: true, 
+        message: 'Purchase completed successfully. You will receive an email with details about the challenge.' 
+      });
+    } catch (error) {
+      console.error("Error completing challenge purchase:", error);
+      res.status(500).json({ error: 'Failed to complete purchase' });
+    }
+  });
+
   // Course interest/registration - creates/updates GHL contact with specific course tags
   app.post("/api/course-interest", async (req, res) => {
     try {
