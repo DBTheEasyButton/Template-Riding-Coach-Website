@@ -15,6 +15,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useToast } from "@/hooks/use-toast";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
 import { PhoneVerificationField } from "@/components/PhoneVerificationField";
+import { useVisitor } from "@/hooks/use-visitor";
+import { queryClient } from "@/lib/queryClient";
 import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar, Download, CheckCircle, Mail, Loader2, X } from "lucide-react";
 import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
 
@@ -221,9 +223,25 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
   
   const { toast } = useToast();
+  const { profile, isRecognized, forgetMe } = useVisitor();
   const phoneVerification = usePhoneVerification();
+  
+  const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showUpdateForm;
+  const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
+
+  useEffect(() => {
+    if (isOpen && profile && isRecognized) {
+      setFirstName(profile.firstName || "");
+      setLastName(profile.lastName || "");
+      setEmail(profile.email || "");
+      setMobile(profile.mobile || "");
+      setHorseName(profile.horseName || "");
+      setTermsAccepted(true);
+    }
+  }, [isOpen, profile, isRecognized]);
 
   const resetForm = () => {
     setFirstName("");
@@ -234,12 +252,25 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setTermsAccepted(false);
     setShowSuccess(false);
     setShowProgress(false);
+    setShowUpdateForm(false);
     phoneVerification.reset();
   };
 
   const handleClose = () => {
     resetForm();
     onClose();
+  };
+
+  const handleNotMe = () => {
+    forgetMe();
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setMobile("");
+    setHorseName("");
+    setTermsAccepted(false);
+    setShowUpdateForm(false);
+    phoneVerification.reset();
   };
 
   const triggerDownload = () => {
@@ -249,6 +280,44 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleQuickDownload = async () => {
+    setIsSubmitting(true);
+    try {
+      const horseNameToUse = profile?.horseName?.trim() || horseName.trim();
+      const response = await fetch("/api/lead-capture/strong-horse-audio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: profile?.firstName?.trim() || "",
+          lastName: profile?.lastName?.trim() || "",
+          email: profile?.email?.trim() || "",
+          mobile: profile?.mobile?.trim() || "",
+          horseName: horseNameToUse,
+          phoneVerified: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process request");
+      }
+
+      setShowProgress(true);
+      triggerDownload();
+      queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
+    } catch (error) {
+      console.error("Quick download error:", error);
+      toast({
+        title: "Something Went Wrong",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -314,6 +383,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
       setShowProgress(true);
       triggerDownload();
+      queryClient.refetchQueries({ queryKey: ['/api/visitor/me'] });
       
     } catch (error) {
       console.error("Lead capture error:", error);
@@ -380,6 +450,97 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               <Button variant="outline" onClick={handleClose} data-testid="button-close-audio-modal">
                 Close
               </Button>
+            </div>
+          </div>
+        ) : isVerifiedUser && profile ? (
+          <div className="text-center py-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-orange/10 rounded-full mb-4">
+              <Headphones className="h-8 w-8 text-orange" />
+            </div>
+            <DialogHeader>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy mb-3">
+                Welcome back, {profile.firstName}!
+              </DialogTitle>
+              <DialogDescription className="text-gray-600 text-base">
+                Ready to download your free audio lesson?
+              </DialogDescription>
+            </DialogHeader>
+            
+            {needsHorseName ? (
+              <div className="mt-6 space-y-4">
+                <div className="space-y-2 text-left">
+                  <Label htmlFor="quick-horseName" className="text-navy font-medium text-sm">
+                    Your Horse's Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="quick-horseName"
+                    type="text"
+                    placeholder="Your horse's name"
+                    value={horseName}
+                    onChange={(e) => setHorseName(e.target.value)}
+                    disabled={isSubmitting}
+                    data-testid="input-quick-horsename"
+                    className="border-gray-300"
+                  />
+                </div>
+                
+                <Button
+                  onClick={handleQuickDownload}
+                  disabled={isSubmitting || !horseName.trim()}
+                  className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
+                  data-testid="button-quick-download"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Preparing...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Free Lesson
+                    </>
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <div className="mt-6">
+                <Button
+                  onClick={handleQuickDownload}
+                  disabled={isSubmitting}
+                  className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
+                  data-testid="button-quick-download"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Preparing...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Free Lesson
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
+            
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                onClick={() => setShowUpdateForm(true)}
+                className="text-sm text-gray-500 hover:text-navy underline"
+                data-testid="button-update-details"
+              >
+                Update my details
+              </button>
+              <button
+                onClick={handleNotMe}
+                className="text-sm text-gray-500 hover:text-navy underline"
+                data-testid="button-not-me"
+              >
+                Not me
+              </button>
             </div>
           </div>
         ) : (
