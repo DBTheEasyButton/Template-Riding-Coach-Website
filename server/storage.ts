@@ -2476,8 +2476,8 @@ The Dan Bizzarro Method Team`,
           console.log('Duplicate contact detected, updating existing contact:', existingContactId);
           
           // Create update body without tags (tags are handled separately via dedicated endpoint)
+          // Note: locationId must NOT be included in PUT requests - GHL rejects it
           const updateBody: any = {
-            locationId,
             email,
             firstName,
             source: requestBody.source
