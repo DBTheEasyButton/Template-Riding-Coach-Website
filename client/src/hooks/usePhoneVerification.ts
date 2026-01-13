@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { queryClient } from "@/lib/queryClient";
 
 interface UsePhoneVerificationOptions {
   onVerified?: () => void;
@@ -139,6 +140,10 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
 
       setIsPhoneVerified(true);
       setVerifiedPhone(phone.trim());
+      
+      // Invalidate visitor cache to refresh phoneVerifiedAt status
+      queryClient.invalidateQueries({ queryKey: ['/api/visitor/me'] });
+      
       onVerified?.();
       toast({
         title: "Phone Verified!",
