@@ -2727,6 +2727,7 @@ The Dan Bizzarro Method Team`,
       }
 
       // If no contact found, create a temporary one for SMS verification
+      // Use minimal data - the actual name will be updated when the form is submitted
       if (!contactId) {
         const createResponse = await fetch(
           'https://services.leadconnectorhq.com/contacts/',
@@ -2740,9 +2741,10 @@ The Dan Bizzarro Method Team`,
             body: JSON.stringify({
               locationId,
               phone: normalizedPhone,
-              firstName: 'SMS Verification',
+              firstName: 'Pending',
+              lastName: 'Verification',
               tags: ['sms-verification-pending'],
-              source: 'SMS Verification'
+              source: 'Phone Verification'
             })
           }
         );
