@@ -1,0 +1,126 @@
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Loader2, CheckCircle } from "lucide-react";
+
+interface PhoneVerificationFieldProps {
+  mobile: string;
+  setMobile: (value: string) => void;
+  isPhoneVerified: boolean;
+  codeSent: boolean;
+  isSendingCode: boolean;
+  isVerifyingCode: boolean;
+  verificationCode: string;
+  verificationError: string;
+  onSendCode: () => void;
+  onVerifyCode: () => void;
+  onCodeChange: (code: string) => void;
+  onPhoneChange: (phone: string) => void;
+  disabled?: boolean;
+  label?: string;
+  placeholder?: string;
+  testIdPrefix?: string;
+}
+
+export function PhoneVerificationField({
+  mobile,
+  setMobile,
+  isPhoneVerified,
+  codeSent,
+  isSendingCode,
+  isVerifyingCode,
+  verificationCode,
+  verificationError,
+  onSendCode,
+  onVerifyCode,
+  onCodeChange,
+  onPhoneChange,
+  disabled = false,
+  label = "Mobile Number",
+  placeholder = "07xxx xxxxxx",
+  testIdPrefix = "phone",
+}: PhoneVerificationFieldProps) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={`${testIdPrefix}-mobile`} className="text-navy font-medium text-sm">
+        {label} <span className="text-red-500">*</span>
+      </Label>
+      <div className="flex gap-2">
+        <Input
+          id={`${testIdPrefix}-mobile`}
+          type="tel"
+          placeholder={placeholder}
+          value={mobile}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setMobile(newValue);
+            onPhoneChange(newValue);
+          }}
+          disabled={disabled || isPhoneVerified}
+          data-testid={`input-${testIdPrefix}-mobile`}
+          className={`border-gray-300 flex-1 ${isPhoneVerified ? 'bg-green-50 border-green-300' : ''}`}
+        />
+        {!isPhoneVerified && (
+          <Button
+            type="button"
+            onClick={onSendCode}
+            disabled={isSendingCode || !mobile.trim() || disabled}
+            variant={codeSent ? "outline" : "default"}
+            className={codeSent ? "border-orange text-orange hover:bg-orange/10" : "bg-navy hover:bg-navy/90"}
+            size="sm"
+          >
+            {isSendingCode ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : codeSent ? (
+              "Resend"
+            ) : (
+              "Verify"
+            )}
+          </Button>
+        )}
+        {isPhoneVerified && (
+          <div className="flex items-center text-green-600 px-2">
+            <CheckCircle className="h-5 w-5" />
+          </div>
+        )}
+      </div>
+      
+      {codeSent && !isPhoneVerified && (
+        <div className="space-y-2 mt-2">
+          <Label htmlFor={`${testIdPrefix}-verification-code`} className="text-navy font-medium text-sm">
+            Enter the 6-digit code sent to your phone
+          </Label>
+          <div className="flex gap-2">
+            <Input
+              id={`${testIdPrefix}-verification-code`}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={6}
+              placeholder="000000"
+              value={verificationCode}
+              onChange={(e) => onCodeChange(e.target.value)}
+              disabled={isVerifyingCode}
+              className="border-gray-300 flex-1 text-center tracking-widest font-mono text-lg"
+            />
+            <Button
+              type="button"
+              onClick={onVerifyCode}
+              disabled={isVerifyingCode || verificationCode.length !== 6}
+              className="bg-orange hover:bg-orange-hover"
+            >
+              {isVerifyingCode ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Confirm"
+              )}
+            </Button>
+          </div>
+          {verificationError && (
+            <p className="text-red-500 text-sm">{verificationError}</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

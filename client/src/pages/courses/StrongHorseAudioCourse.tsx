@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import { PhoneVerificationField } from "@/components/PhoneVerificationField";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X, Gift } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
@@ -281,6 +283,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
+  const phoneVerification = usePhoneVerification();
 
   useEffect(() => {
     if (isOpen && profile && isRecognized) {
@@ -303,6 +306,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setShowSuccess(false);
     setShowProgress(false);
     setShowUpdateForm(false);
+    phoneVerification.reset();
   };
 
   const handleClose = () => {
@@ -319,6 +323,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setHorseName("");
     setTermsAccepted(false);
     setShowUpdateForm(false);
+    phoneVerification.reset();
   };
 
   const handleQuickDownload = async () => {
@@ -392,6 +397,15 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       toast({
         title: "Terms Required",
         description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!phoneVerification.isPhoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your mobile number before downloading.",
         variant: "destructive",
       });
       return;
@@ -617,22 +631,22 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="audio-mobile"
-                  type="tel"
-                  placeholder="+44 7..."
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  disabled={isSubmitting}
-                  required
-                  data-testid="input-audio-mobile"
-                  className="border-gray-300"
-                />
-              </div>
+              <PhoneVerificationField
+                mobile={mobile}
+                setMobile={setMobile}
+                isPhoneVerified={phoneVerification.isPhoneVerified}
+                codeSent={phoneVerification.codeSent}
+                isSendingCode={phoneVerification.isSendingCode}
+                isVerifyingCode={phoneVerification.isVerifyingCode}
+                verificationCode={phoneVerification.verificationCode}
+                verificationError={phoneVerification.verificationError}
+                onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+                onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+                onCodeChange={phoneVerification.setVerificationCode}
+                onPhoneChange={() => phoneVerification.reset()}
+                disabled={isSubmitting}
+                testIdPrefix="audio"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="audio-horseName" className="text-navy font-medium text-sm">
@@ -682,14 +696,19 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
               <Button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted}
-                className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
+                disabled={isSubmitting || !termsAccepted || !phoneVerification.isPhoneVerified}
+                className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 disabled:opacity-50"
                 data-testid="button-submit-audio-form"
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Preparing...
+                  </>
+                ) : !phoneVerification.isPhoneVerified ? (
+                  <>
+                    <Download className="mr-2 h-4 w-4" />
+                    Verify Phone to Download
                   </>
                 ) : (
                   <>

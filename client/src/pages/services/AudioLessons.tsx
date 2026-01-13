@@ -13,6 +13,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import { PhoneVerificationField } from "@/components/PhoneVerificationField";
 import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar, Download, CheckCircle, Mail, Loader2, X } from "lucide-react";
 import introAudio from "@assets/From_Strong_to_Light_and_Soft_(in_28_days)_-_TRIAL_LESSON_1766111816502.mp3";
 
@@ -220,15 +222,8 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const [showProgress, setShowProgress] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   
-  // Phone verification states
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const [isSendingCode, setIsSendingCode] = useState(false);
-  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
-  const [codeSent, setCodeSent] = useState(false);
-  const [verificationError, setVerificationError] = useState("");
-  
   const { toast } = useToast();
+  const phoneVerification = usePhoneVerification();
 
   const resetForm = () => {
     setFirstName("");
@@ -239,102 +234,12 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     setTermsAccepted(false);
     setShowSuccess(false);
     setShowProgress(false);
-    setIsPhoneVerified(false);
-    setVerificationCode("");
-    setCodeSent(false);
-    setVerificationError("");
+    phoneVerification.reset();
   };
 
   const handleClose = () => {
     resetForm();
     onClose();
-  };
-
-  const sendVerificationCode = async () => {
-    if (!mobile.trim()) {
-      toast({
-        title: "Mobile Number Required",
-        description: "Please enter your mobile number first.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSendingCode(true);
-    setVerificationError("");
-
-    try {
-      const response = await fetch("/api/sms/send-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: mobile.trim() }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setVerificationError(data.error || "Failed to send code");
-        toast({
-          title: "Could Not Send Code",
-          description: data.error || "Please check your number and try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setCodeSent(true);
-      toast({
-        title: "Code Sent!",
-        description: "Check your phone for the 6-digit verification code.",
-      });
-    } catch (error) {
-      setVerificationError("Failed to send verification code");
-      toast({
-        title: "Error",
-        description: "Could not send verification code. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSendingCode(false);
-    }
-  };
-
-  const verifyCode = async () => {
-    if (!verificationCode.trim() || verificationCode.length !== 6) {
-      setVerificationError("Please enter the 6-digit code");
-      return;
-    }
-
-    setIsVerifyingCode(true);
-    setVerificationError("");
-
-    try {
-      const response = await fetch("/api/sms/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          phone: mobile.trim(), 
-          code: verificationCode.trim() 
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setVerificationError(data.error || "Invalid code");
-        return;
-      }
-
-      setIsPhoneVerified(true);
-      toast({
-        title: "Phone Verified!",
-        description: "Your mobile number has been verified.",
-      });
-    } catch (error) {
-      setVerificationError("Failed to verify code");
-    } finally {
-      setIsVerifyingCode(false);
-    }
   };
 
   const triggerDownload = () => {
@@ -377,7 +282,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       return;
     }
 
-    if (!isPhoneVerified) {
+    if (!phoneVerification.isPhoneVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before downloading.",
@@ -543,94 +448,22 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number <span className="text-red-500">*</span>
-                </Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="audio-mobile"
-                    type="tel"
-                    placeholder="07xxx xxxxxx"
-                    value={mobile}
-                    onChange={(e) => {
-                      setMobile(e.target.value);
-                      if (isPhoneVerified) {
-                        setIsPhoneVerified(false);
-                        setCodeSent(false);
-                        setVerificationCode("");
-                      }
-                    }}
-                    disabled={isSubmitting || isPhoneVerified}
-                    data-testid="input-audio-mobile"
-                    className={`border-gray-300 flex-1 ${isPhoneVerified ? 'bg-green-50 border-green-300' : ''}`}
-                  />
-                  {!isPhoneVerified && (
-                    <Button
-                      type="button"
-                      onClick={sendVerificationCode}
-                      disabled={isSendingCode || !mobile.trim() || isSubmitting}
-                      variant={codeSent ? "outline" : "default"}
-                      className={codeSent ? "border-orange text-orange hover:bg-orange/10" : "bg-navy hover:bg-navy/90"}
-                      size="sm"
-                    >
-                      {isSendingCode ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : codeSent ? (
-                        "Resend"
-                      ) : (
-                        "Verify"
-                      )}
-                    </Button>
-                  )}
-                  {isPhoneVerified && (
-                    <div className="flex items-center text-green-600 px-2">
-                      <CheckCircle className="h-5 w-5" />
-                    </div>
-                  )}
-                </div>
-                
-                {codeSent && !isPhoneVerified && (
-                  <div className="space-y-2 mt-2">
-                    <Label htmlFor="verification-code" className="text-navy font-medium text-sm">
-                      Enter the 6-digit code sent to your phone
-                    </Label>
-                    <div className="flex gap-2">
-                      <Input
-                        id="verification-code"
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        maxLength={6}
-                        placeholder="000000"
-                        value={verificationCode}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, '');
-                          setVerificationCode(value);
-                          setVerificationError("");
-                        }}
-                        disabled={isVerifyingCode}
-                        className="border-gray-300 flex-1 text-center tracking-widest font-mono text-lg"
-                      />
-                      <Button
-                        type="button"
-                        onClick={verifyCode}
-                        disabled={isVerifyingCode || verificationCode.length !== 6}
-                        className="bg-orange hover:bg-orange-hover"
-                      >
-                        {isVerifyingCode ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          "Confirm"
-                        )}
-                      </Button>
-                    </div>
-                    {verificationError && (
-                      <p className="text-red-500 text-sm">{verificationError}</p>
-                    )}
-                  </div>
-                )}
-              </div>
+              <PhoneVerificationField
+                mobile={mobile}
+                setMobile={setMobile}
+                isPhoneVerified={phoneVerification.isPhoneVerified}
+                codeSent={phoneVerification.codeSent}
+                isSendingCode={phoneVerification.isSendingCode}
+                isVerifyingCode={phoneVerification.isVerifyingCode}
+                verificationCode={phoneVerification.verificationCode}
+                verificationError={phoneVerification.verificationError}
+                onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+                onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+                onCodeChange={phoneVerification.setVerificationCode}
+                onPhoneChange={() => phoneVerification.reset()}
+                disabled={isSubmitting}
+                testIdPrefix="audio"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="audio-horseName" className="text-navy font-medium text-sm">
@@ -680,7 +513,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
               <Button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted || !isPhoneVerified}
+                disabled={isSubmitting || !termsAccepted || !phoneVerification.isPhoneVerified}
                 className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 disabled:opacity-50"
                 data-testid="button-submit-audio-form"
               >
@@ -689,7 +522,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Preparing...
                   </>
-                ) : !isPhoneVerified ? (
+                ) : !phoneVerification.isPhoneVerified ? (
                   <>
                     <Download className="mr-2 h-4 w-4" />
                     Verify Phone to Download
