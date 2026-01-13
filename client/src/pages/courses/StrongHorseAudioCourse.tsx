@@ -737,6 +737,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
   const [showAudioConfirmation, setShowAudioConfirmation] = useState(false);
   const [isDownloadingAudio, setIsDownloadingAudio] = useState(false);
   const { toast } = useToast();
+  const phoneVerification = usePhoneVerification();
 
   const resetForm = () => {
     setFirstName("");
@@ -746,6 +747,7 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     setHorseName("");
     setShowSuccess(false);
     setShowAudioConfirmation(false);
+    phoneVerification.reset();
   };
 
   const handleDownloadAudioLesson = async () => {
@@ -819,6 +821,15 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!phoneVerification.isPhoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your mobile number before downloading.",
         variant: "destructive",
       });
       return;
@@ -1027,22 +1038,23 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                 <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="pdf-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="pdf-mobile"
-                  type="tel"
-                  placeholder="+44 7..."
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  disabled={isSubmitting}
-                  required
-                  data-testid="input-pdf-mobile"
-                  className="border-gray-300"
-                />
-              </div>
+              <PhoneVerificationField
+                mobile={mobile}
+                setMobile={setMobile}
+                isPhoneVerified={phoneVerification.isPhoneVerified}
+                codeSent={phoneVerification.codeSent}
+                isSendingCode={phoneVerification.isSendingCode}
+                isVerifyingCode={phoneVerification.isVerifyingCode}
+                verificationCode={phoneVerification.verificationCode}
+                verificationError={phoneVerification.verificationError}
+                onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+                onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+                onCodeChange={phoneVerification.setVerificationCode}
+                onPhoneChange={phoneVerification.handlePhoneChange}
+                onReset={phoneVerification.reset}
+                disabled={isSubmitting}
+                testIdPrefix="pdf"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="pdf-horseName" className="text-navy font-medium text-sm">
@@ -1855,6 +1867,7 @@ function DiscountedAudioPurchaseModal({
     setHorseName("");
     setTermsAccepted(false);
     setClientSecret(null);
+    phoneVerification.reset();
   };
 
   const handleClose = () => {
@@ -1888,6 +1901,15 @@ function DiscountedAudioPurchaseModal({
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!phoneVerification.isPhoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your mobile number before continuing.",
         variant: "destructive",
       });
       return;
