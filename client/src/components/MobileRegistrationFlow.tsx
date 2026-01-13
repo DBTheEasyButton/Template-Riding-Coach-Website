@@ -12,6 +12,7 @@ import type { ClinicWithSessions, ClinicSession } from "@shared/schema";
 import { ChevronLeft, ChevronRight, Calendar, MapPin, PoundSterling, Users, Clock, Check, CreditCard, User, Phone, Mail, Zap, AlertTriangle, X } from "lucide-react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 
 // Runtime Stripe key loading - fetches from server instead of build-time env var
 let stripePromiseCache: Promise<Stripe | null> | null = null;
@@ -460,16 +461,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
 
               <div>
                 <Label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number *</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={registrationData.phone}
-                  onChange={(e) => updateRegistrationData('phone', e.target.value)}
-                  className={`mt-2 h-12 text-base ${errors.phone ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} rounded-lg transition-colors`}
-                  placeholder="+44 7xxx xxx xxx"
-                  autoComplete="tel"
-                  inputMode="tel"
-                />
+                <div className={`mt-2 ${errors.phone ? '[&_input]:border-red-500 [&_input]:bg-red-50' : ''}`}>
+                  <PhoneNumberInput
+                    id="phone"
+                    value={registrationData.phone}
+                    onChange={(value) => updateRegistrationData('phone', value)}
+                    data-testid="input-phone"
+                  />
+                </div>
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
 
@@ -624,14 +623,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
 
               <div>
                 <Label htmlFor="emergencyPhone" className="text-sm font-medium">Emergency Contact Phone *</Label>
-                <Input
-                  id="emergencyPhone"
-                  type="tel"
-                  value={registrationData.emergencyPhone}
-                  onChange={(e) => updateRegistrationData('emergencyPhone', e.target.value)}
-                  className={`mt-1 ${errors.emergencyPhone ? 'border-red-500' : ''}`}
-                  placeholder="+44 7xxx xxx xxx"
-                />
+                <div className={`mt-1 ${errors.emergencyPhone ? '[&_input]:border-red-500' : ''}`}>
+                  <PhoneNumberInput
+                    id="emergencyPhone"
+                    value={registrationData.emergencyPhone}
+                    onChange={(value) => updateRegistrationData('emergencyPhone', value)}
+                    data-testid="input-emergency-phone"
+                  />
+                </div>
                 {errors.emergencyPhone && <p className="text-xs text-red-500 mt-1">{errors.emergencyPhone}</p>}
               </div>
 

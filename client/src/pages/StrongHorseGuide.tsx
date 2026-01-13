@@ -12,6 +12,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -484,15 +485,12 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           data-testid="input-strong-horse-email-compact"
           className="border-gray-300"
         />
-        <Input
-          type="tel"
-          placeholder="Mobile Number *"
+        <PhoneNumberInput
           value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
+          onChange={setMobile}
           disabled={isSubmitting}
-          required
+          placeholder="7700 900123"
           data-testid="input-strong-horse-mobile-compact"
-          className="border-gray-300"
         />
         <Button
           type="submit"
@@ -587,16 +585,12 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           <Label htmlFor="mobile" className="text-navy font-medium">
             Mobile Number <span className="text-red-500">*</span>
           </Label>
-          <Input
+          <PhoneNumberInput
             id="mobile"
-            type="tel"
-            placeholder="Enter your mobile number"
             value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
-            required
+            onChange={setMobile}
             disabled={isSubmitting}
             data-testid="input-strong-horse-mobile"
-            className="border-gray-300 focus:border-navy focus:ring-navy"
           />
         </div>
 

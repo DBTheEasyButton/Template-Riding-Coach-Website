@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Mail, Phone, MapPin } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -128,12 +129,10 @@ export default function ContactForm() {
 
             <div>
               <Label htmlFor="phone">Phone Number</Label>
-              <Input
+              <PhoneNumberInput
                 id="phone"
-                type="tel"
                 value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                placeholder="+44 7xxx xxx xxx"
+                onChange={(value) => handleInputChange("phone", value)}
               />
             </div>
 

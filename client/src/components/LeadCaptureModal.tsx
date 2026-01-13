@@ -8,6 +8,7 @@ import { Loader2, Gift, Mail, User, Headphones, ArrowRight } from "lucide-react"
 import { Link } from "wouter";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -379,16 +380,12 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
             <Label htmlFor="mobile" className="text-navy font-medium">
               Mobile Number <span className="text-red-500">*</span>
             </Label>
-            <Input
+            <PhoneNumberInput
               id="mobile"
-              type="tel"
-              placeholder="Enter your mobile number"
               value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              onChange={setMobile}
               disabled={isSubmitting}
-              required
               data-testid="input-lead-mobile"
-              className="border-gray-300 focus:border-navy focus:ring-navy"
             />
           </div>
 

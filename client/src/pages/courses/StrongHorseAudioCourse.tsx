@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { useToast } from "@/hooks/use-toast";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
 import { PhoneVerificationField } from "@/components/PhoneVerificationField";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X, Gift, Lock } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
@@ -1839,16 +1840,12 @@ function AudioCoursePurchaseModal({
                 <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
                   Mobile Number <span className="text-red-500">*</span>
                 </Label>
-                <Input
+                <PhoneNumberInput
                   id="audio-mobile"
-                  type="tel"
-                  placeholder="+44 7..."
                   value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  onChange={setMobile}
                   disabled={isSubmitting}
-                  required
                   data-testid="input-audio-mobile"
-                  className="border-gray-300"
                 />
               </div>
 
