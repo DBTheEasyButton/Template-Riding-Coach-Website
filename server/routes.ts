@@ -25,6 +25,34 @@ import {
 import { prerenderService } from "./prerenderService";
 import { generateWarmupSystemPDF } from "./generateWarmupPDF";
 import { generateStrongHorsePDF } from "./generateStrongHorsePDF";
+import crypto from "crypto";
+
+// SMS Verification Code Storage (in-memory with auto-cleanup)
+interface VerificationCode {
+  code: string;
+  phone: string;
+  expiresAt: Date;
+  attempts: number;
+}
+const verificationCodes = new Map<string, VerificationCode>();
+
+// Cleanup expired codes every 5 minutes
+setInterval(() => {
+  const now = new Date();
+  for (const [key, value] of verificationCodes.entries()) {
+    if (value.expiresAt < now) {
+      verificationCodes.delete(key);
+    }
+  }
+}, 5 * 60 * 1000);
+
+function generateVerificationCode(): string {
+  return crypto.randomInt(100000, 999999).toString();
+}
+
+function normalizePhoneForKey(phone: string): string {
+  return phone.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+}
 
 // In production, always use the live key. Only use testing key in development if explicitly set.
 const isProduction = process.env.NODE_ENV === 'production';
@@ -97,6 +125,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ error: 'Stripe not configured' });
     }
     res.json({ publishableKey: stripePublishableKey });
+  });
+
+  // SMS Verification Endpoints
+  app.post("/api/sms/send-code", async (req, res) => {
+    try {
+      const { phone } = req.body;
+      
+      if (!phone) {
+        return res.status(400).json({ error: 'Phone number is required' });
+      }
+
+      // Validate UK phone number format
+      const cleanPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+      const isValidUK = /^(07\d{9}|(\+44|44)7\d{9})$/.test(cleanPhone);
+      
+      if (!isValidUK) {
+        return res.status(400).json({ 
+          error: 'Please enter a valid UK mobile number (e.g., 07xxx xxxxxx)' 
+        });
+      }
+
+      const phoneKey = normalizePhoneForKey(phone);
+      
+      // Rate limiting - check if we recently sent a code
+      const existing = verificationCodes.get(phoneKey);
+      if (existing && existing.expiresAt > new Date()) {
+        const timeLeft = Math.ceil((existing.expiresAt.getTime() - Date.now()) / 1000);
+        if (timeLeft > 540) { // More than 9 minutes left (code was sent less than 1 minute ago)
+          return res.status(429).json({ 
+            error: 'Please wait before requesting another code',
+            retryAfter: 60 - (600 - timeLeft)
+          });
+        }
+      }
+
+      // Generate and store verification code
+      const code = generateVerificationCode();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      
+      verificationCodes.set(phoneKey, {
+        code,
+        phone: cleanPhone,
+        expiresAt,
+        attempts: 0
+      });
+
+      // Send SMS via GHL
+      const message = `Your Dan Bizzarro Method verification code is: ${code}. This code expires in 10 minutes.`;
+      const result = await storage.sendSmsViaGhl(cleanPhone, message);
+
+      if (!result.success) {
+        console.error('Failed to send SMS:', result.message);
+        return res.status(500).json({ 
+          error: 'Failed to send verification code. Please check your phone number and try again.' 
+        });
+      }
+
+      console.log(`Verification code sent to ${cleanPhone}`);
+      res.json({ success: true, message: 'Verification code sent' });
+      
+    } catch (error) {
+      console.error('Error sending verification code:', error);
+      res.status(500).json({ error: 'Failed to send verification code' });
+    }
+  });
+
+  app.post("/api/sms/verify-code", async (req, res) => {
+    try {
+      const { phone, code } = req.body;
+      
+      if (!phone || !code) {
+        return res.status(400).json({ error: 'Phone and code are required' });
+      }
+
+      const phoneKey = normalizePhoneForKey(phone);
+      const stored = verificationCodes.get(phoneKey);
+
+      if (!stored) {
+        return res.status(400).json({ error: 'No verification code found. Please request a new code.' });
+      }
+
+      if (stored.expiresAt < new Date()) {
+        verificationCodes.delete(phoneKey);
+        return res.status(400).json({ error: 'Verification code has expired. Please request a new code.' });
+      }
+
+      // Increment attempts
+      stored.attempts += 1;
+
+      // Max 5 attempts
+      if (stored.attempts > 5) {
+        verificationCodes.delete(phoneKey);
+        return res.status(400).json({ error: 'Too many incorrect attempts. Please request a new code.' });
+      }
+
+      if (stored.code !== code.trim()) {
+        return res.status(400).json({ 
+          error: 'Incorrect code. Please try again.',
+          attemptsRemaining: 5 - stored.attempts
+        });
+      }
+
+      // Success - delete the code
+      verificationCodes.delete(phoneKey);
+      
+      console.log(`Phone verified: ${stored.phone}`);
+      res.json({ success: true, verified: true });
+      
+    } catch (error) {
+      console.error('Error verifying code:', error);
+      res.status(500).json({ error: 'Failed to verify code' });
+    }
   });
 
   // Stripe webhook endpoint - raw body parsing is handled in server/index.ts

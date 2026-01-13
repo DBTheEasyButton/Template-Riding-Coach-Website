@@ -242,6 +242,10 @@ export interface IStorage {
     tags?: string[],
     customFields?: Record<string, any>
   ): Promise<{ success: boolean; contactId?: string; message?: string }>;
+  sendSmsViaGhl(
+    phone: string,
+    message: string
+  ): Promise<{ success: boolean; message?: string }>;
 
   // Visitor Profile System (for recognizing returning visitors)
   getVisitorProfileByToken(token: string): Promise<VisitorProfile | undefined>;
@@ -2670,6 +2674,130 @@ The Dan Bizzarro Method Team`,
 
   async deleteVisitorProfile(token: string): Promise<void> {
     await db.delete(visitorProfiles).where(eq(visitorProfiles.token, token));
+  }
+
+  async sendSmsViaGhl(
+    phone: string,
+    message: string
+  ): Promise<{ success: boolean; message?: string }> {
+    const apiKey = process.env.GHL_API_KEY;
+    const locationId = process.env.GHL_LOCATION_ID;
+
+    if (!apiKey) {
+      throw new Error('GHL_API_KEY not configured');
+    }
+
+    if (!locationId) {
+      throw new Error('GHL_LOCATION_ID not configured');
+    }
+
+    try {
+      // Normalize phone number to E.164 format for UK
+      let normalizedPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+      
+      // Convert UK format 07xxx to +447xxx
+      if (normalizedPhone.startsWith('07') && normalizedPhone.length === 11) {
+        normalizedPhone = '+44' + normalizedPhone.substring(1);
+      } else if (normalizedPhone.startsWith('447')) {
+        normalizedPhone = '+' + normalizedPhone;
+      } else if (!normalizedPhone.startsWith('+')) {
+        normalizedPhone = '+' + normalizedPhone;
+      }
+
+      // First, we need to find or create a contact with this phone number
+      // Try to find existing contact by phone
+      const searchResponse = await fetch(
+        `https://services.leadconnectorhq.com/contacts/?locationId=${locationId}&query=${encodeURIComponent(normalizedPhone)}&limit=1`,
+        {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      let contactId: string | null = null;
+
+      if (searchResponse.ok) {
+        const searchData = await searchResponse.json();
+        if (searchData.contacts && searchData.contacts.length > 0) {
+          contactId = searchData.contacts[0].id;
+        }
+      }
+
+      // If no contact found, create a temporary one for SMS verification
+      if (!contactId) {
+        const createResponse = await fetch(
+          'https://services.leadconnectorhq.com/contacts/',
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Version': '2021-07-28',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              locationId,
+              phone: normalizedPhone,
+              firstName: 'SMS Verification',
+              tags: ['sms-verification-pending'],
+              source: 'SMS Verification'
+            })
+          }
+        );
+
+        if (createResponse.ok) {
+          const createData = await createResponse.json();
+          contactId = createData.contact?.id;
+        } else {
+          const errorData = await createResponse.json();
+          // Check for duplicate contact
+          if (errorData.meta?.contactId) {
+            contactId = errorData.meta.contactId;
+          } else {
+            console.error('Failed to create contact for SMS:', errorData);
+            return { success: false, message: 'Failed to create contact for SMS' };
+          }
+        }
+      }
+
+      if (!contactId) {
+        return { success: false, message: 'Could not find or create contact for SMS' };
+      }
+
+      // Now send SMS via the conversations API
+      const smsResponse = await fetch(
+        'https://services.leadconnectorhq.com/conversations/messages',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            type: 'SMS',
+            contactId,
+            message
+          })
+        }
+      );
+
+      if (!smsResponse.ok) {
+        const errorData = await smsResponse.json();
+        console.error('GHL SMS error:', errorData);
+        return { success: false, message: errorData.message || 'Failed to send SMS' };
+      }
+
+      const smsData = await smsResponse.json();
+      console.log('SMS sent successfully:', smsData);
+      return { success: true, message: 'SMS sent successfully' };
+
+    } catch (error) {
+      console.error('Error sending SMS via GHL:', error);
+      return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
   }
 }
 
