@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { useToast } from "@/hooks/use-toast";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
 import { PhoneVerificationField } from "@/components/PhoneVerificationField";
-import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X, Gift } from "lucide-react";
+import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X, Gift, Lock } from "lucide-react";
 import { Link } from "wouter";
 import SEOHead from "@/components/SEOHead";
 import { getSEOConfig, getCanonicalUrl } from "@/data/seoConfig";
@@ -2239,6 +2239,85 @@ function PricingCard({ tier, onSelect }: { tier: PricingTier; onSelect: (tierId:
   );
 }
 
+function ChallengePaymentForm({ 
+  onPaymentSuccess, 
+  onPaymentError,
+  customerData,
+  clientSecret
+}: { 
+  onPaymentSuccess: (paymentIntentId: string) => void;
+  onPaymentError: (error: string) => void;
+  customerData: { firstName: string; lastName: string; email: string; mobile: string; horseName: string };
+  clientSecret: string;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin,
+        },
+        redirect: 'if_required',
+      });
+
+      if (error) {
+        onPaymentError(error.message || 'Payment failed');
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        onPaymentSuccess(paymentIntent.id);
+      }
+    } catch (error) {
+      onPaymentError('Payment processing failed');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <PaymentElement />
+      </div>
+
+      <div className="bg-orange/5 border border-orange/20 rounded-lg p-3">
+        <div className="flex items-center gap-2 text-orange">
+          <Lock className="h-4 w-4" />
+          <span className="text-sm font-medium">Secure payment powered by Stripe</span>
+        </div>
+      </div>
+
+      <Button 
+        type="submit" 
+        disabled={!stripe || isProcessing}
+        className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3"
+      >
+        {isProcessing ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Processing Payment...
+          </>
+        ) : (
+          <>
+            <CreditCard className="mr-2 h-4 w-4" />
+            Pay £147
+          </>
+        )}
+      </Button>
+    </form>
+  );
+}
+
 function PurchaseModal({ 
   isOpen, 
   onClose, 
@@ -2248,6 +2327,7 @@ function PurchaseModal({
   onClose: () => void; 
   tier: PricingTier | null;
 }) {
+  const [step, setStep] = useState<'form' | 'payment' | 'success'>('form');
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -2255,7 +2335,10 @@ function PurchaseModal({
   const [horseName, setHorseName] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [stripe, setStripe] = useState<Stripe | null>(null);
+  const [stripeLoading, setStripeLoading] = useState(false);
+  const [stripeError, setStripeError] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized } = useVisitor();
   const phoneVerification = usePhoneVerification();
@@ -2270,14 +2353,41 @@ function PurchaseModal({
     }
   }, [isOpen, profile, isRecognized]);
 
+  const loadStripeInstance = async () => {
+    setStripeLoading(true);
+    setStripeError(false);
+    resetStripeCache();
+    
+    try {
+      const instance = await getStripePromise();
+      if (instance) {
+        setStripe(instance);
+        setStripeError(false);
+      } else {
+        setStripeError(true);
+      }
+    } catch (error) {
+      setStripeError(true);
+    } finally {
+      setStripeLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen && tier?.id === 'guided-group' && !stripe && !stripeLoading && !stripeError) {
+      loadStripeInstance();
+    }
+  }, [isOpen, tier]);
+
   const resetForm = () => {
+    setStep('form');
     setFirstName("");
     setLastName("");
     setEmail("");
     setMobile("");
     setHorseName("");
     setTermsAccepted(false);
-    setShowSuccess(false);
+    setClientSecret(null);
     phoneVerification.reset();
   };
 
@@ -2286,7 +2396,7 @@ function PurchaseModal({
     onClose();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !mobile.trim() || !horseName.trim()) {
@@ -2329,31 +2439,47 @@ function PurchaseModal({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/course-interest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.trim(),
-          mobile: mobile.trim(),
-          horseName: horseName.trim(),
-          courseType: tier?.id,
-          courseName: tier?.subtitle,
-          price: tier?.price,
-        }),
-      });
+      // For 28 Days Challenge, create payment intent
+      if (tier?.id === 'guided-group') {
+        const response = await fetch("/api/challenge/create-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email: email.trim(),
+            mobile: mobile.trim(),
+            horseName: horseName.trim(),
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to process request");
+        if (!response.ok) throw new Error("Failed to create payment");
+
+        const data = await response.json();
+        setClientSecret(data.clientSecret);
+        setStep('payment');
+      } else {
+        // For Private Mentorship, just register interest
+        const response = await fetch("/api/course-interest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email: email.trim(),
+            mobile: mobile.trim(),
+            horseName: horseName.trim(),
+            courseType: tier?.id,
+            courseName: tier?.subtitle,
+            price: tier?.price,
+          }),
+        });
+
+        if (!response.ok) throw new Error("Failed to process request");
+        setStep('success');
       }
-
-      setShowSuccess(true);
-      
     } catch (error) {
-      console.error("Course interest error:", error);
+      console.error("Form submission error:", error);
       toast({
         title: "Something Went Wrong",
         description: "Please try again or contact us directly.",
@@ -2364,26 +2490,63 @@ function PurchaseModal({
     }
   };
 
+  const handlePaymentSuccess = async (intentId: string) => {
+    try {
+      const response = await fetch("/api/challenge/complete-purchase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentIntentId: intentId,
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim(),
+          mobile: mobile.trim(),
+          horseName: horseName.trim(),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to complete purchase");
+      setStep('success');
+    } catch (error) {
+      console.error("Purchase completion error:", error);
+      toast({
+        title: "Payment Received - Action Required",
+        description: "Your payment was successful but there was an issue completing your registration. Please contact us at dan@danbizzarromethod.com with your payment confirmation.",
+        variant: "destructive",
+      });
+      // Stay on payment step - don't advance to success since completion failed
+    }
+  };
+
+  const handlePaymentError = (errorMessage: string) => {
+    toast({
+      title: "Payment Failed",
+      description: errorMessage,
+      variant: "destructive",
+    });
+  };
+
   if (!tier) return null;
 
   const Icon = tier.id === "guided-group" ? Users : Crown;
+  const isChallenge = tier.id === 'guided-group';
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
-        {showSuccess ? (
+        {step === 'success' ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <DialogHeader>
               <DialogTitle className="text-xl font-playfair font-bold text-navy mb-2">
-                Thank You!
+                {isChallenge ? "Welcome to the Challenge!" : "Thank You!"}
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                {tier.id === "private-mentorship" 
-                  ? "I've received your application for Private Mentorship. You'll receive an email shortly and I'll be in touch within 24 hours to discuss your goals."
-                  : "I've received your registration for the 28-Day Challenge! You'll receive an email shortly with all the details and next steps."}
+                {isChallenge 
+                  ? "Your payment was successful! You'll receive an email shortly with all the details about the 28-Day Challenge and how to get started."
+                  : "I've received your application for Private Mentorship. You'll receive an email shortly and I'll be in touch within 24 hours to discuss your goals."}
               </DialogDescription>
             </DialogHeader>
             
@@ -2400,6 +2563,47 @@ function PurchaseModal({
               </Button>
             </div>
           </div>
+        ) : step === 'payment' && clientSecret && stripe ? (
+          <>
+            <DialogHeader>
+              <div className="flex justify-center mb-4">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-orange/10">
+                  <CreditCard className="h-7 w-7 text-orange" />
+                </div>
+              </div>
+              <DialogTitle className="text-xl font-playfair font-bold text-navy text-center">
+                Complete Your Payment
+              </DialogTitle>
+              <DialogDescription className="text-center text-gray-600">
+                28 Days Challenge — £147
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg mb-4">
+              <p className="text-sm text-gray-600">
+                <strong>Name:</strong> {firstName} {lastName}<br />
+                <strong>Email:</strong> {email}<br />
+                <strong>Horse:</strong> {horseName}
+              </p>
+            </div>
+
+            <Elements stripe={stripe} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+              <ChallengePaymentForm
+                onPaymentSuccess={handlePaymentSuccess}
+                onPaymentError={handlePaymentError}
+                customerData={{ firstName, lastName, email, mobile, horseName }}
+                clientSecret={clientSecret}
+              />
+            </Elements>
+
+            <Button 
+              variant="ghost" 
+              onClick={() => setStep('form')} 
+              className="w-full mt-2 text-gray-500"
+            >
+              ← Back to details
+            </Button>
+          </>
         ) : (
           <>
             <DialogHeader>
@@ -2418,7 +2622,18 @@ function PurchaseModal({
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            {stripeError && isChallenge && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
+                <p className="text-sm text-red-600">
+                  Payment system unavailable. Please try again or contact us directly.
+                </p>
+                <Button variant="outline" size="sm" onClick={loadStripeInstance} className="mt-2">
+                  Retry
+                </Button>
+              </div>
+            )}
+
+            <form onSubmit={handleFormSubmit} className="space-y-4 mt-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <Label htmlFor="purchase-firstName" className="text-navy font-medium text-sm">
@@ -2534,14 +2749,14 @@ function PurchaseModal({
                   <span>
                     {tier.id === "private-mentorship"
                       ? "I'll contact you within 24 hours to discuss your goals and confirm availability."
-                      : "You'll receive confirmation and challenge details via email."}
+                      : "You'll receive confirmation and challenge details via email after payment."}
                   </span>
                 </p>
               </div>
 
               <Button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted}
+                disabled={isSubmitting || !termsAccepted || (isChallenge && stripeLoading)}
                 className={`w-full font-semibold py-3 ${
                   tier.id === "private-mentorship" 
                     ? 'bg-purple-600 hover:bg-purple-700 text-white' 
@@ -2549,14 +2764,14 @@ function PurchaseModal({
                 }`}
                 data-testid="button-submit-purchase-form"
               >
-                {isSubmitting ? (
+                {isSubmitting || (isChallenge && stripeLoading) ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processing...
+                    {stripeLoading ? 'Loading...' : 'Processing...'}
                   </>
                 ) : (
                   <>
-                    {tier.id === "private-mentorship" ? "Submit Application" : "Register Now"}
+                    {tier.id === "private-mentorship" ? "Submit Application" : "Continue to Payment"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 )}
