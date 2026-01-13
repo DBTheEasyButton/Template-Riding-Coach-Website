@@ -2684,18 +2684,50 @@ The Dan Bizzarro Method Team`,
   }
 
   async updateVisitorProfilePhoneVerified(phone: string): Promise<void> {
-    let normalizedPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
-    if (normalizedPhone.startsWith('07') && normalizedPhone.length === 11) {
-      normalizedPhone = '+44' + normalizedPhone.substring(1);
-    } else if (normalizedPhone.startsWith('447')) {
-      normalizedPhone = '+' + normalizedPhone;
-    } else if (!normalizedPhone.startsWith('+')) {
-      normalizedPhone = '+' + normalizedPhone;
+    let cleanPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
+    
+    // Build all possible phone formats to match against
+    const possibleFormats: string[] = [];
+    
+    // Add the original cleaned phone
+    possibleFormats.push(cleanPhone);
+    
+    // Handle UK phone numbers - try multiple formats
+    if (cleanPhone.startsWith('+44')) {
+      // +447767291713 -> also try 07767291713 and 7767291713
+      const withoutPlus44 = cleanPhone.substring(3);
+      possibleFormats.push('0' + withoutPlus44);
+      possibleFormats.push(withoutPlus44);
+    } else if (cleanPhone.startsWith('44')) {
+      // 447767291713 -> also try +447767291713, 07767291713
+      possibleFormats.push('+' + cleanPhone);
+      const withoutPrefix = cleanPhone.substring(2);
+      possibleFormats.push('0' + withoutPrefix);
+      possibleFormats.push(withoutPrefix);
+    } else if (cleanPhone.startsWith('07')) {
+      // 07767291713 -> also try +447767291713
+      possibleFormats.push('+44' + cleanPhone.substring(1));
+      possibleFormats.push('44' + cleanPhone.substring(1));
+    } else if (cleanPhone.startsWith('7') && cleanPhone.length === 10) {
+      // 7767291713 -> also try +447767291713, 07767291713
+      possibleFormats.push('+44' + cleanPhone);
+      possibleFormats.push('0' + cleanPhone);
     }
     
-    await db.update(visitorProfiles)
-      .set({ phoneVerifiedAt: new Date() })
-      .where(eq(visitorProfiles.mobile, normalizedPhone));
+    // Try to update using any of the possible formats
+    for (const format of possibleFormats) {
+      const result = await db.update(visitorProfiles)
+        .set({ phoneVerifiedAt: new Date() })
+        .where(eq(visitorProfiles.mobile, format))
+        .returning();
+      
+      if (result.length > 0) {
+        console.log(`Phone verified successfully for format: ${format}`);
+        return;
+      }
+    }
+    
+    console.log(`No visitor profile found matching phone: ${phone} (tried formats: ${possibleFormats.join(', ')})`);
   }
 
   async deleteVisitorProfile(token: string): Promise<void> {
