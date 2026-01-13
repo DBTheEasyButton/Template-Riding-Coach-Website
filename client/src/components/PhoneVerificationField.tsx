@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle } from "lucide-react";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 
 interface PhoneVerificationFieldProps {
   mobile: string;
@@ -47,28 +48,26 @@ export function PhoneVerificationField({
       <Label htmlFor={`${testIdPrefix}-mobile`} className="text-navy font-medium text-sm">
         {label} <span className="text-red-500">*</span>
       </Label>
-      <div className="flex gap-2">
-        <Input
-          id={`${testIdPrefix}-mobile`}
-          type="tel"
-          placeholder={placeholder}
-          value={mobile}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            setMobile(newValue);
-            onPhoneChange(newValue);
-          }}
-          disabled={disabled || isPhoneVerified}
-          data-testid={`input-${testIdPrefix}-mobile`}
-          className={`border-gray-300 flex-1 ${isPhoneVerified ? 'bg-green-50 border-green-300' : ''}`}
-        />
+      <div className="flex gap-2 items-start">
+        <div className={`flex-1 ${isPhoneVerified ? '[&_input]:bg-green-50 [&_input]:border-green-300' : ''}`}>
+          <PhoneNumberInput
+            id={`${testIdPrefix}-mobile`}
+            value={mobile}
+            onChange={(newValue) => {
+              setMobile(newValue);
+              onPhoneChange(newValue);
+            }}
+            disabled={disabled || isPhoneVerified}
+            data-testid={`input-${testIdPrefix}-mobile`}
+          />
+        </div>
         {!isPhoneVerified && (
           <Button
             type="button"
             onClick={onSendCode}
-            disabled={isSendingCode || !mobile.trim() || disabled}
+            disabled={isSendingCode || !mobile.trim() || mobile.length < 10 || disabled}
             variant={codeSent ? "outline" : "default"}
-            className={codeSent ? "border-orange text-orange hover:bg-orange/10" : "bg-navy hover:bg-navy/90"}
+            className={`flex-shrink-0 ${codeSent ? "border-orange text-orange hover:bg-orange/10" : "bg-navy hover:bg-navy/90"}`}
             size="sm"
           >
             {isSendingCode ? (
@@ -81,7 +80,7 @@ export function PhoneVerificationField({
           </Button>
         )}
         {isPhoneVerified && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <div className="flex items-center text-green-600 px-1">
               <CheckCircle className="h-5 w-5" />
             </div>
