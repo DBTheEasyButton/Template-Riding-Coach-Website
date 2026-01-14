@@ -70,17 +70,23 @@ export default function PhoneNumberInput({
   const parsed = parsePhoneNumber(value);
   const [countryCode, setCountryCode] = useState(parsed.countryCode);
   const [nationalNumber, setNationalNumber] = useState(parsed.nationalNumber);
+  const [lastExternalValue, setLastExternalValue] = useState(value);
 
   useEffect(() => {
-    const parsed = parsePhoneNumber(value);
-    setCountryCode(parsed.countryCode);
-    setNationalNumber(parsed.nationalNumber);
-  }, [value]);
+    if (value !== lastExternalValue) {
+      const parsed = parsePhoneNumber(value);
+      setCountryCode(parsed.countryCode);
+      setNationalNumber(parsed.nationalNumber);
+      setLastExternalValue(value);
+    }
+  }, [value, lastExternalValue]);
 
   const handleCountryChange = (newCode: string) => {
     setCountryCode(newCode);
     if (nationalNumber) {
-      onChange(newCode + nationalNumber);
+      const newValue = newCode + nationalNumber;
+      setLastExternalValue(newValue);
+      onChange(newValue);
     }
   };
 
@@ -90,11 +96,9 @@ export default function PhoneNumberInput({
       num = num.substring(1);
     }
     setNationalNumber(num);
-    if (num) {
-      onChange(countryCode + num);
-    } else {
-      onChange("");
-    }
+    const newValue = num ? countryCode + num : "";
+    setLastExternalValue(newValue);
+    onChange(newValue);
   };
 
   const selectedCountry = COUNTRY_CODES.find(c => c.dial === countryCode) || COUNTRY_CODES[0];

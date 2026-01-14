@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Gift, Mail, User, Headphones, ArrowRight } from "lucide-react";
+import { Loader2, Gift, Mail, User, Headphones, ArrowRight, Phone, CheckCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
+import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import { PhoneVerificationField } from "@/components/PhoneVerificationField";
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const [termsAccepted, setTermsAccepted] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe, isLoading } = useVisitor();
+  const phoneVerification = usePhoneVerification();
   
   const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showUpdateForm;
   const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
@@ -44,6 +46,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
   const handleClose = () => {
     setShowSuccess(false);
     setShowUpdateForm(false);
+    phoneVerification.reset();
     onClose();
   };
 
@@ -103,6 +106,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
     setMobile("");
     setHorseName("");
     setShowUpdateForm(false);
+    setTermsAccepted(false);
+    phoneVerification.reset();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -127,6 +132,24 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       return;
     }
 
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!phoneVerification.isPhoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your mobile number before downloading.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -141,7 +164,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
           email: email.trim(),
           mobile: mobile.trim(),
           horseName: horseName.trim(),
-          phoneVerified: false,
+          phoneVerified: phoneVerification.isPhoneVerified,
         }),
       });
 
@@ -376,18 +399,22 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
             <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="mobile" className="text-navy font-medium">
-              Mobile Number <span className="text-red-500">*</span>
-            </Label>
-            <PhoneNumberInput
-              id="mobile"
-              value={mobile}
-              onChange={setMobile}
-              disabled={isSubmitting}
-              data-testid="input-lead-mobile"
-            />
-          </div>
+          <PhoneVerificationField
+            mobile={mobile}
+            setMobile={setMobile}
+            isPhoneVerified={phoneVerification.isPhoneVerified}
+            codeSent={phoneVerification.codeSent}
+            isSendingCode={phoneVerification.isSendingCode}
+            isVerifyingCode={phoneVerification.isVerifyingCode}
+            verificationCode={phoneVerification.verificationCode}
+            verificationError={phoneVerification.verificationError}
+            onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+            onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+            onCodeChange={phoneVerification.setVerificationCode}
+            onPhoneChange={phoneVerification.handlePhoneChange}
+            onReset={phoneVerification.reset}
+            disabled={isSubmitting}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="horseName" className="text-navy font-medium">
@@ -406,7 +433,25 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
             />
           </div>
 
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mt-4">
+          <div className="flex items-start gap-2">
+            <input
+              type="checkbox"
+              id="lead-terms"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-orange focus:ring-orange"
+              data-testid="checkbox-lead-terms"
+            />
+            <label htmlFor="lead-terms" className="text-xs text-gray-600">
+              I agree to the{" "}
+              <Link href="/terms" className="text-orange hover:underline">
+                Terms & Conditions
+              </Link>{" "}
+              and consent to receive updates from Dan Bizzarro Method.
+            </label>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
             <p className="text-sm text-gray-600 flex items-start gap-2">
               <Mail className="h-4 w-4 text-navy mt-0.5 flex-shrink-0" />
               <span>Your details are safe with me. I'll only use them to send you helpful training tips and updates about clinics and courses.</span>
@@ -441,8 +486,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
 
           <Button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300"
+            disabled={isSubmitting || !phoneVerification.isPhoneVerified || !termsAccepted}
+            className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50"
             data-testid="button-submit-lead-form"
           >
             {isSubmitting ? (
