@@ -59,13 +59,15 @@ export function PhoneVerificationField({
           />
         </div>
         {!isPhoneVerified && (
-          <Button
+          <button
             type="button"
             onClick={onSendCode}
             disabled={isSendingCode || !mobile.trim() || mobile.length < 10 || disabled}
-            variant={codeSent ? "outline" : "default"}
-            className={`flex-shrink-0 ${codeSent ? "border-orange text-orange hover:bg-orange/10 hover:text-orange" : "bg-navy hover:bg-navy/80 text-white hover:text-white"}`}
-            size="sm"
+            className={`flex-shrink-0 h-9 px-3 rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 ${
+              codeSent 
+                ? "border border-orange text-orange bg-transparent hover:bg-orange/10" 
+                : "bg-navy text-white hover:bg-[#1a3a5c]"
+            }`}
           >
             {isSendingCode ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -74,7 +76,7 @@ export function PhoneVerificationField({
             ) : (
               "Verify"
             )}
-          </Button>
+          </button>
         )}
         {isPhoneVerified && (
           <div className="flex items-center gap-2 flex-shrink-0">
