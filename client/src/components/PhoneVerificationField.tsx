@@ -64,7 +64,7 @@ export function PhoneVerificationField({
             onClick={onSendCode}
             disabled={isSendingCode || !mobile.trim() || mobile.length < 10 || disabled}
             variant={codeSent ? "outline" : "default"}
-            className={`flex-shrink-0 ${codeSent ? "border-orange text-orange hover:bg-orange/10" : "bg-navy hover:bg-navy/90"}`}
+            className={`flex-shrink-0 ${codeSent ? "border-orange text-orange hover:bg-orange/10 hover:text-orange" : "bg-navy hover:bg-navy/80 text-white hover:text-white"}`}
             size="sm"
           >
             {isSendingCode ? (
