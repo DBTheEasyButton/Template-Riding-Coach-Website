@@ -63,10 +63,10 @@ export function PhoneVerificationField({
             type="button"
             onClick={onSendCode}
             disabled={isSendingCode || !mobile.trim() || mobile.length < 10 || disabled}
-            className={`flex-shrink-0 h-9 px-3 rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 ${
+            className={`flex-shrink-0 h-9 px-3 rounded-md text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 cursor-pointer ${
               codeSent 
-                ? "border border-orange text-orange bg-transparent hover:bg-orange/10" 
-                : "bg-navy text-white hover:bg-[#1a3a5c]"
+                ? "border border-orange text-orange bg-transparent hover:bg-orange hover:text-white" 
+                : "bg-navy text-white hover:bg-[#0f2a45] hover:shadow-md"
             }`}
           >
             {isSendingCode ? (

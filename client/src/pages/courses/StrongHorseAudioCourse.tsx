@@ -1353,6 +1353,7 @@ function AudioCoursePurchaseModal({
   const [showEditForm, setShowEditForm] = useState(false);
   const { toast } = useToast();
   const { profile, isRecognized, forgetMe } = useVisitor();
+  const phoneVerification = usePhoneVerification();
   
   const isVerifiedUser = Boolean(isRecognized && profile?.firstName && profile?.phoneVerifiedAt) && !showEditForm;
   const needsHorseName = Boolean(isVerifiedUser && !profile?.horseName);
@@ -1405,6 +1406,7 @@ function AudioCoursePurchaseModal({
     setClientSecret(null);
     setPaymentIntentId(null);
     setShowEditForm(false);
+    phoneVerification.reset();
   };
 
   const handleClose = () => {
@@ -1503,6 +1505,15 @@ function AudioCoursePurchaseModal({
       toast({
         title: "Terms Required",
         description: "Please read and accept the terms and conditions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!phoneVerification.isPhoneVerified) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your mobile number before proceeding.",
         variant: "destructive",
       });
       return;
@@ -1836,18 +1847,23 @@ function AudioCoursePurchaseModal({
                 <p className="text-xs text-gray-500">Please double-check your email address is correct</p>
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="audio-mobile" className="text-navy font-medium text-sm">
-                  Mobile Number <span className="text-red-500">*</span>
-                </Label>
-                <PhoneNumberInput
-                  id="audio-mobile"
-                  value={mobile}
-                  onChange={setMobile}
-                  disabled={isSubmitting}
-                  data-testid="input-audio-mobile"
-                />
-              </div>
+              <PhoneVerificationField
+                mobile={mobile}
+                setMobile={setMobile}
+                isPhoneVerified={phoneVerification.isPhoneVerified}
+                codeSent={phoneVerification.codeSent}
+                isSendingCode={phoneVerification.isSendingCode}
+                isVerifyingCode={phoneVerification.isVerifyingCode}
+                verificationCode={phoneVerification.verificationCode}
+                verificationError={phoneVerification.verificationError}
+                onSendCode={() => phoneVerification.sendVerificationCode(mobile)}
+                onVerifyCode={() => phoneVerification.verifyCode(mobile)}
+                onCodeChange={phoneVerification.setVerificationCode}
+                onPhoneChange={phoneVerification.handlePhoneChange}
+                onReset={phoneVerification.reset}
+                disabled={isSubmitting}
+                testIdPrefix="audio"
+              />
 
               <div className="space-y-1">
                 <Label htmlFor="audio-horseName" className="text-navy font-medium text-sm">
