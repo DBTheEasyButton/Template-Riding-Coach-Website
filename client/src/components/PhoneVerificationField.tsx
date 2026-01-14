@@ -16,7 +16,7 @@ interface PhoneVerificationFieldProps {
   onSendCode: () => void;
   onVerifyCode: () => void;
   onCodeChange: (code: string) => void;
-  onPhoneChange: (phone: string) => void;
+  onPhoneChange?: (phone: string) => void;
   onReset: () => void;
   disabled?: boolean;
   label?: string;
@@ -53,10 +53,7 @@ export function PhoneVerificationField({
           <PhoneNumberInput
             id={`${testIdPrefix}-mobile`}
             value={mobile}
-            onChange={(newValue) => {
-              setMobile(newValue);
-              onPhoneChange(newValue);
-            }}
+            onChange={setMobile}
             disabled={disabled || isPhoneVerified}
             data-testid={`input-${testIdPrefix}-mobile`}
           />
