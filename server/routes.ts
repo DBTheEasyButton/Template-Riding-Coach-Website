@@ -138,13 +138,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Phone number is required' });
       }
 
-      // Validate UK phone number format
+      // Validate phone number format - support international E.164 format
       const cleanPhone = phone.replace(/\s+/g, '').replace(/[^0-9+]/g, '');
-      const isValidUK = /^(07\d{9}|(\+44|44)7\d{9})$/.test(cleanPhone);
       
-      if (!isValidUK) {
+      // Supported country codes (must match PhoneNumberInput component)
+      const validPatterns = [
+        /^\+44\d{10}$/,      // UK: +44 followed by 10 digits
+        /^\+353\d{9}$/,      // Ireland: +353 followed by 9 digits
+        /^\+1\d{10}$/,       // US/Canada: +1 followed by 10 digits
+        /^\+33\d{9}$/,       // France: +33 followed by 9 digits
+        /^\+49\d{10,11}$/,   // Germany: +49 followed by 10-11 digits
+        /^\+34\d{9}$/,       // Spain: +34 followed by 9 digits
+        /^\+39\d{9,10}$/,    // Italy: +39 followed by 9-10 digits
+        /^\+31\d{9}$/,       // Netherlands: +31 followed by 9 digits
+        /^\+32\d{8,9}$/,     // Belgium: +32 followed by 8-9 digits
+        /^\+351\d{9}$/,      // Portugal: +351 followed by 9 digits
+        /^\+61\d{9}$/,       // Australia: +61 followed by 9 digits
+        /^\+64\d{8,10}$/,    // New Zealand: +64 followed by 8-10 digits
+      ];
+      
+      const isValidPhone = validPatterns.some(pattern => pattern.test(cleanPhone));
+      
+      if (!isValidPhone) {
         return res.status(400).json({ 
-          error: 'Please enter a valid UK mobile number (e.g., 07xxx xxxxxx)' 
+          error: 'Please enter a valid mobile number with your country code selected' 
         });
       }
 
