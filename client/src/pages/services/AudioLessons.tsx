@@ -422,19 +422,18 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 Your Free Lesson is Ready!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Your download has started. You'll also receive an email with all the details about the audio course.
+                The audio file has been downloaded to your device. You can now listen to it whenever you want, wherever you are - even offline!
               </DialogDescription>
             </DialogHeader>
             
-            <div className="bg-navy rounded-xl p-4 my-6">
+            <div className="bg-navy rounded-xl p-6 my-6">
               <div className="flex items-center justify-center gap-2 text-white mb-3">
-                <Headphones className="h-5 w-5 text-orange" />
-                <span className="font-semibold text-sm">Trial Lesson</span>
+                <Headphones className="h-6 w-6 text-orange" />
+                <span className="font-semibold">Trial Lesson Downloaded</span>
               </div>
-              <audio controls className="w-full" data-testid="audio-intro-lesson">
-                <source src={introAudio} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
+              <p className="text-white/80 text-sm">
+                Check your device's Downloads folder to find your audio lesson. Open it with your favourite music or podcast app to start listening!
+              </p>
             </div>
             
             <div className="flex flex-col gap-3">
