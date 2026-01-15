@@ -9,7 +9,7 @@ import { Link } from "wouter";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
-import { PhoneVerificationField } from "@/components/PhoneVerificationField";
+import { PhoneVerificationField, requiresSmsVerification } from "@/components/PhoneVerificationField";
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -141,7 +141,10 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+    
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before downloading.",
@@ -486,7 +489,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
 
           <Button
             type="submit"
-            disabled={isSubmitting || !phoneVerification.isPhoneVerified || !termsAccepted}
+            disabled={isSubmitting || (!phoneVerification.isPhoneVerified && requiresSmsVerification(mobile)) || (mobile.trim().length < 10) || !termsAccepted}
             className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50"
             data-testid="button-submit-lead-form"
           >

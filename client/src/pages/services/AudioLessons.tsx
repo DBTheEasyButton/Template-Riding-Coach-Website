@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
-import { PhoneVerificationField } from "@/components/PhoneVerificationField";
+import { PhoneVerificationField, requiresSmsVerification } from "@/components/PhoneVerificationField";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
 import { Headphones, Check, Clock, MapPin, Wallet, RefreshCw, Play, ArrowRight, Star, Calendar, Download, CheckCircle, Mail, Loader2, X } from "lucide-react";
@@ -351,7 +351,10 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before downloading.",
@@ -687,7 +690,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
               <Button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted || !phoneVerification.isPhoneVerified}
+                disabled={isSubmitting || !termsAccepted || (!phoneVerification.isPhoneVerified && requiresSmsVerification(mobile)) || mobile.trim().length < 10}
                 className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 disabled:opacity-50"
                 data-testid="button-submit-audio-form"
               >
@@ -696,7 +699,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Preparing...
                   </>
-                ) : !phoneVerification.isPhoneVerified ? (
+                ) : (!phoneVerification.isPhoneVerified && requiresSmsVerification(mobile)) ? (
                   <>
                     <Download className="mr-2 h-4 w-4" />
                     Verify Phone to Download

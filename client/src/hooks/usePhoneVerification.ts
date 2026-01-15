@@ -21,6 +21,7 @@ interface UsePhoneVerificationReturn extends PhoneVerificationState {
   verifyCode: (phone: string) => Promise<boolean>;
   setVerificationCode: (code: string) => void;
   handlePhoneChange: (phone: string) => void;
+  markAsVerified: (phone: string) => void;
   reset: () => void;
   clearError: () => void;
 }
@@ -165,6 +166,12 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
     setVerificationError("");
   }, []);
 
+  const markAsVerified = useCallback((phone: string) => {
+    setIsPhoneVerified(true);
+    setVerifiedPhone(phone.trim());
+    onVerified?.();
+  }, [onVerified]);
+
   return {
     isPhoneVerified,
     codeSent,
@@ -176,6 +183,7 @@ export function usePhoneVerification(options: UsePhoneVerificationOptions = {}):
     verifyCode,
     setVerificationCode: handleSetVerificationCode,
     handlePhoneChange,
+    markAsVerified,
     reset,
     clearError,
   };

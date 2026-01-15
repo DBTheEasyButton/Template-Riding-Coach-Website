@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Loader2, CheckCircle } from "lucide-react";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
+import { Loader2, CheckCircle, Globe } from "lucide-react";
+import PhoneNumberInput, { requiresSmsVerification } from "@/components/PhoneNumberInput";
 
 interface PhoneVerificationFieldProps {
   mobile: string;
@@ -18,6 +18,7 @@ interface PhoneVerificationFieldProps {
   onCodeChange: (code: string) => void;
   onPhoneChange?: (phone: string) => void;
   onReset: () => void;
+  onMarkAsVerified?: (phone: string) => void;
   disabled?: boolean;
   label?: string;
   placeholder?: string;
@@ -38,18 +39,22 @@ export function PhoneVerificationField({
   onCodeChange,
   onPhoneChange,
   onReset,
+  onMarkAsVerified,
   disabled = false,
   label = "Mobile Number",
   placeholder = "07xxx xxxxxx",
   testIdPrefix = "phone",
 }: PhoneVerificationFieldProps) {
+  const needsSmsVerification = requiresSmsVerification(mobile);
+  const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
   return (
     <div className="space-y-2">
       <Label htmlFor={`${testIdPrefix}-mobile`} className="text-navy font-medium text-sm">
         {label} <span className="text-red-500">*</span>
       </Label>
       <div className="flex gap-2 items-start">
-        <div className={`flex-1 ${isPhoneVerified ? '[&_input]:bg-green-50 [&_input]:border-green-300' : ''}`}>
+        <div className={`flex-1 ${(isPhoneVerified || isInternationalVerified) ? '[&_input]:bg-green-50 [&_input]:border-green-300' : ''}`}>
           <PhoneNumberInput
             id={`${testIdPrefix}-mobile`}
             value={mobile}
@@ -58,7 +63,7 @@ export function PhoneVerificationField({
             data-testid={`input-${testIdPrefix}-mobile`}
           />
         </div>
-        {!isPhoneVerified && (
+        {!isPhoneVerified && needsSmsVerification && (
           <button
             type="button"
             onClick={onSendCode}
@@ -78,6 +83,12 @@ export function PhoneVerificationField({
             )}
           </button>
         )}
+        {!isPhoneVerified && isInternationalVerified && (
+          <div className="flex items-center gap-1 flex-shrink-0 h-9 px-2 text-green-600">
+            <Globe className="h-4 w-4" />
+            <CheckCircle className="h-4 w-4" />
+          </div>
+        )}
         {isPhoneVerified && (
           <div className="flex items-center gap-2 flex-shrink-0">
             <div className="flex items-center text-green-600 px-1">
@@ -96,8 +107,15 @@ export function PhoneVerificationField({
           </div>
         )}
       </div>
+
+      {!needsSmsVerification && mobile.trim().length >= 10 && (
+        <p className="text-xs text-gray-500 flex items-center gap-1">
+          <Globe className="h-3 w-3" />
+          International number - no SMS verification required
+        </p>
+      )}
       
-      {codeSent && !isPhoneVerified && (
+      {codeSent && !isPhoneVerified && needsSmsVerification && (
         <div className="space-y-2 mt-2">
           <Label htmlFor={`${testIdPrefix}-verification-code`} className="text-navy font-medium text-sm">
             Enter the 6-digit code sent to your phone
@@ -136,3 +154,5 @@ export function PhoneVerificationField({
     </div>
   );
 }
+
+export { requiresSmsVerification };

@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { usePhoneVerification } from "@/hooks/usePhoneVerification";
-import { PhoneVerificationField } from "@/components/PhoneVerificationField";
+import { PhoneVerificationField, requiresSmsVerification } from "@/components/PhoneVerificationField";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Loader2, Download, CheckCircle, Mail, ChevronDown, ChevronUp, Headphones, FileText, Clock, Target, Users, Star, Crown, ArrowRight, Calendar, Video, MessageCircle, User, CreditCard, AlertTriangle, ExternalLink, X, Gift, Lock } from "lucide-react";
 import { Link } from "wouter";
@@ -412,7 +412,10 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       console.log("Validation failed: phone not verified");
       toast({
         title: "Phone Verification Required",
@@ -758,7 +761,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
               <Button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted || !phoneVerification.isPhoneVerified}
+                disabled={isSubmitting || !termsAccepted || (!phoneVerification.isPhoneVerified && requiresSmsVerification(mobile)) || mobile.trim().length < 10}
                 className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 disabled:opacity-50"
                 data-testid="button-submit-audio-form"
               >
@@ -767,7 +770,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Preparing...
                   </>
-                ) : !phoneVerification.isPhoneVerified ? (
+                ) : (!phoneVerification.isPhoneVerified && requiresSmsVerification(mobile)) ? (
                   <>
                     <Download className="mr-2 h-4 w-4" />
                     Verify Phone to Download
@@ -888,7 +891,10 @@ function PDFLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before downloading.",
@@ -1510,7 +1516,10 @@ function AudioCoursePurchaseModal({
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before proceeding.",
@@ -2166,7 +2175,10 @@ function DiscountedAudioPurchaseModal({
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before continuing.",
@@ -2780,7 +2792,10 @@ function PurchaseModal({
       return;
     }
 
-    if (!phoneVerification.isPhoneVerified) {
+    const needsSmsVerification = requiresSmsVerification(mobile);
+    const isInternationalVerified = !needsSmsVerification && mobile.trim().length >= 10;
+
+    if (!phoneVerification.isPhoneVerified && !isInternationalVerified) {
       toast({
         title: "Phone Verification Required",
         description: "Please verify your mobile number before continuing.",

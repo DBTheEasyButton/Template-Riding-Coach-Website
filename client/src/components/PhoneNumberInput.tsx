@@ -223,3 +223,9 @@ export function isValidPhoneNumber(phone: string): boolean {
   const { nationalNumber } = parsePhoneNumber(phone);
   return nationalNumber.length >= 9 && nationalNumber.length <= 12;
 }
+
+export function requiresSmsVerification(phone: string): boolean {
+  if (!phone) return true;
+  const cleaned = phone.replace(/\s+/g, "");
+  return cleaned.startsWith("+44") || cleaned.startsWith("+353");
+}
