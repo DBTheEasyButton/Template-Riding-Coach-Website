@@ -3452,8 +3452,51 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
 
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         
-        {/* THE TRANSFORMATION - BEFORE & AFTER */}
+        {/* ABOUT DAN SECTION */}
         <section className="py-16 md:py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-4">
+                Your Coach: Dan Bizzarro
+              </h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                Learn from an international event rider with over 20 years of experience transforming strong, heavy horses into light, responsive partners.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+              <div className="grid md:grid-cols-3 gap-8 mb-8">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange mb-2">20+</div>
+                  <div className="text-gray-600">Years of Experience</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange mb-2">1000s</div>
+                  <div className="text-gray-600">Riders Coached</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange mb-2">3</div>
+                  <div className="text-gray-600">Disciplines Mastered</div>
+                </div>
+              </div>
+              
+              <div className="space-y-4 text-gray-700">
+                <p>
+                  I've coached thousands of riders dealing with strong, heavy, and rushing horses. The solution is never more force, more pulling, or stronger bits. The solution is clarity, balance, rhythm, and better reactions — the pillars of the Dan Bizzarro Method.
+                </p>
+                <p>
+                  As an international event rider and coach, I've spent more than 20 years helping riders develop horses who are softer, lighter, and more confident. This audio course gives you the same simple tools I use in my lessons every day.
+                </p>
+                <p>
+                  <strong>If your horse is strong, heavy, or rushing</strong> — I've helped hundreds of riders solve exactly this problem. Now you can access my proven system through these audio lessons, guiding you step by step while you ride.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* THE TRANSFORMATION - BEFORE & AFTER */}
+        <section className="py-16 md:py-20 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-4 text-center">
               The Transformation

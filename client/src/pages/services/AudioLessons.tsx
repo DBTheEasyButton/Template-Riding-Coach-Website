@@ -975,8 +975,52 @@ export default function AudioLessons() {
           </div>
         </div>
       </section>
-      {/* Featured Course Box */}
+
+      {/* About Dan Section */}
       <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-playfair font-bold text-navy mb-4">
+              Your Coach: Dan Bizzarro
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Learn from an international event rider with over 20 years of experience helping riders just like you.
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-orange mb-2">20+</div>
+                <div className="text-gray-600">Years of Experience</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-orange mb-2">1000s</div>
+                <div className="text-gray-600">Riders Coached</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-orange mb-2">3</div>
+                <div className="text-gray-600">Disciplines Mastered</div>
+              </div>
+            </div>
+            
+            <div className="space-y-4 text-gray-700">
+              <p>
+                As an international event rider and coach, I've dedicated my career to helping riders communicate better with their horses. I've worked with thousands of riders — from complete beginners to international competitors — and I've seen the same patterns over and over.
+              </p>
+              <p>
+                The riders who make real progress aren't the ones with the most talent or the most expensive horses. They're the ones who understand <strong>why</strong> things work, not just what to do.
+              </p>
+              <p>
+                That's exactly what I've built into these audio lessons — the same approach I use in my private coaching, now available to guide you in real time while you ride.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Course Box */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200">
             <div className="bg-orange px-6 py-3">
