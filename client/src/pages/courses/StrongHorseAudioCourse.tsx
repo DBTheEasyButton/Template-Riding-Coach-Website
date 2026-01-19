@@ -1228,8 +1228,18 @@ function AudioCoursePaymentForm({
 
       if (error) {
         onPaymentError(error.message || 'Payment failed');
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        onPaymentSuccess(paymentIntent.id);
+      } else if (paymentIntent) {
+        if (paymentIntent.status === 'succeeded') {
+          onPaymentSuccess(paymentIntent.id);
+        } else if (paymentIntent.status === 'requires_action' || paymentIntent.status === 'requires_confirmation') {
+          onPaymentError('Additional verification required. Please complete the authentication in the popup window.');
+        } else if (paymentIntent.status === 'processing') {
+          onPaymentError('Payment is still processing. Please wait a moment and check your email for confirmation.');
+        } else {
+          onPaymentError(`Payment incomplete. Status: ${paymentIntent.status}. Please try again.`);
+        }
+      } else {
+        onPaymentError('Payment failed. Please try again.');
       }
     } catch (error) {
       onPaymentError('Payment processing failed');
@@ -1239,6 +1249,11 @@ function AudioCoursePaymentForm({
   };
 
   const handleExpressCheckout = async (event: any) => {
+    if (!stripe) {
+      onPaymentError('Payment system not ready. Please try again.');
+      return;
+    }
+
     const { error } = event;
     
     if (error) {
@@ -1246,8 +1261,27 @@ function AudioCoursePaymentForm({
       return;
     }
 
-    const paymentIntentId = clientSecret.split('_secret_')[0];
-    onPaymentSuccess(paymentIntentId);
+    // After Express Checkout confirms, we must verify the actual payment status
+    try {
+      const { paymentIntent, error: retrieveError } = await stripe.retrievePaymentIntent(clientSecret);
+      
+      if (retrieveError) {
+        onPaymentError(retrieveError.message || 'Failed to verify payment');
+        return;
+      }
+
+      if (paymentIntent?.status === 'succeeded') {
+        onPaymentSuccess(paymentIntent.id);
+      } else if (paymentIntent?.status === 'requires_action' || paymentIntent?.status === 'requires_confirmation') {
+        onPaymentError('Additional verification required. Please complete the authentication.');
+      } else if (paymentIntent?.status === 'processing') {
+        onPaymentError('Payment is processing. Please wait and check your email for confirmation.');
+      } else {
+        onPaymentError(`Payment not completed. Status: ${paymentIntent?.status || 'unknown'}. Please try again.`);
+      }
+    } catch (err) {
+      onPaymentError('Failed to verify payment. Please check your email or contact support.');
+    }
   };
 
   return (
@@ -2544,8 +2578,18 @@ function ChallengePaymentForm({
 
       if (error) {
         onPaymentError(error.message || 'Payment failed');
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        onPaymentSuccess(paymentIntent.id);
+      } else if (paymentIntent) {
+        if (paymentIntent.status === 'succeeded') {
+          onPaymentSuccess(paymentIntent.id);
+        } else if (paymentIntent.status === 'requires_action' || paymentIntent.status === 'requires_confirmation') {
+          onPaymentError('Additional verification required. Please complete the authentication in the popup window.');
+        } else if (paymentIntent.status === 'processing') {
+          onPaymentError('Payment is still processing. Please wait a moment and check your email for confirmation.');
+        } else {
+          onPaymentError(`Payment incomplete. Status: ${paymentIntent.status}. Please try again.`);
+        }
+      } else {
+        onPaymentError('Payment failed. Please try again.');
       }
     } catch (error) {
       onPaymentError('Payment processing failed');
