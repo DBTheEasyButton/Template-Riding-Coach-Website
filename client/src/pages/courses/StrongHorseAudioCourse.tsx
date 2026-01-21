@@ -1195,12 +1195,14 @@ function AudioCoursePaymentForm({
   onPaymentSuccess, 
   onPaymentError, 
   customerData,
-  clientSecret 
+  clientSecret,
+  price = "£97"
 }: {
   onPaymentSuccess: (paymentIntentId: string) => void;
   onPaymentError: (error: string) => void;
   customerData: { firstName: string; lastName: string; email: string; mobile: string; horseName: string };
   clientSecret: string;
+  price?: string;
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -1289,7 +1291,7 @@ function AudioCoursePaymentForm({
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
         <div className="flex items-center text-blue-800 mb-1">
           <CreditCard className="w-4 h-4 mr-2" />
-          <span className="font-semibold text-sm">Secure Payment - £97</span>
+          <span className="font-semibold text-sm">Secure Payment - {price}</span>
         </div>
         <p className="text-xs text-blue-700">
           Complete your purchase with secure payment
@@ -1360,7 +1362,7 @@ function AudioCoursePaymentForm({
           ) : (
             <>
               <CreditCard className="w-4 h-4 mr-2" />
-              Pay £97 Now
+              Pay {price} Now
             </>
           )}
         </Button>
@@ -2328,6 +2330,7 @@ function DiscountedAudioPurchaseModal({
                 onPaymentError={handlePaymentError}
                 customerData={{ firstName, lastName, email, mobile, horseName }}
                 clientSecret={clientSecret}
+                price="£72"
               />
             </Elements>
 
