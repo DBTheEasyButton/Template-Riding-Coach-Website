@@ -1386,7 +1386,7 @@ function AudioCoursePaymentForm({
         <Button
           type="submit"
           disabled={!stripe || isProcessing || !isPaymentReady}
-          className="w-full bg-navy hover:bg-slate-800 text-white py-3"
+          className="w-full bg-navy hover:bg-slate-800 text-white py-3 mb-2"
           data-testid="button-audio-course-pay"
         >
           {isProcessing ? (
@@ -1689,7 +1689,7 @@ function AudioCoursePurchaseModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md">
         {step === 'success' ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
@@ -2319,7 +2319,7 @@ function DiscountedAudioPurchaseModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md">
         {step === 'success' ? (
           <div className="text-center py-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
