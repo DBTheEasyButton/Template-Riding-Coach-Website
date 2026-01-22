@@ -1209,6 +1209,18 @@ function AudioCoursePaymentForm({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaymentReady, setIsPaymentReady] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
+
+  useEffect(() => {
+    if (!isPaymentReady && !paymentError) {
+      const timer = setTimeout(() => {
+        if (!isPaymentReady) {
+          setLoadingTimeout(true);
+        }
+      }, 12000);
+      return () => clearTimeout(timer);
+    }
+  }, [isPaymentReady, paymentError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1328,11 +1340,34 @@ function AudioCoursePaymentForm({
         )}
         
         {!isPaymentReady && !paymentError && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-600 text-sm">
-            <div className="flex items-center">
-              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-600 mr-2"></div>
-              Loading payment form...
-            </div>
+          <div className={`border rounded-lg p-3 text-sm ${loadingTimeout ? 'bg-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}>
+            {loadingTimeout ? (
+              <div className="space-y-2">
+                <div className="flex items-center text-amber-700">
+                  <AlertTriangle className="h-4 w-4 mr-2" />
+                  <span className="font-medium">Payment form taking longer than usual</span>
+                </div>
+                <p className="text-xs text-amber-600">
+                  If the card form doesn't appear, please try:
+                </p>
+                <ul className="text-xs text-amber-600 list-disc list-inside space-y-1">
+                  <li>Disabling any ad-blocker or privacy extensions</li>
+                  <li>Using a different browser (Chrome or Safari work best)</li>
+                  <li>Refreshing the page and trying again</li>
+                </ul>
+                <p className="text-xs text-amber-700 mt-2">
+                  Still having trouble? Contact us at{' '}
+                  <a href="mailto:dan@danbizzarromethod.com" className="underline font-medium">
+                    dan@danbizzarromethod.com
+                  </a>
+                </p>
+              </div>
+            ) : (
+              <div className="flex items-center text-gray-600">
+                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-600 mr-2"></div>
+                Loading secure payment form...
+              </div>
+            )}
           </div>
         )}
         
