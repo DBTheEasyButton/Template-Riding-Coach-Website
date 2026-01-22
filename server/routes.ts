@@ -3585,6 +3585,148 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Check for audio course purchases missing GHL tags
+  app.get("/api/admin/check-missing-ghl-tags", async (req, res) => {
+    try {
+      const apiKey = process.env.GHL_API_KEY;
+      const locationId = process.env.GHL_LOCATION_ID;
+      if (!apiKey || !locationId) {
+        return res.status(400).json({ message: "GHL_API_KEY or GHL_LOCATION_ID not configured" });
+      }
+
+      // Get successful audio course payments from Stripe (last 90 days)
+      const ninetyDaysAgo = Math.floor(Date.now() / 1000) - (90 * 24 * 60 * 60);
+      const payments = await stripe.paymentIntents.list({
+        limit: 100,
+        created: { gte: ninetyDaysAgo },
+      });
+
+      // Filter for successful audio course payments
+      const audioCoursePayments = payments.data.filter(pi => 
+        pi.status === 'succeeded' && 
+        pi.metadata?.productType === 'audio-course'
+      );
+
+      console.log(`Found ${audioCoursePayments.length} successful audio course payments in Stripe`);
+
+      const missingTags: Array<{
+        email: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        paymentDate: string;
+        amount: string;
+        paymentIntentId: string;
+        ghlContactId?: string;
+        currentTags?: string[];
+      }> = [];
+
+      for (const payment of audioCoursePayments) {
+        const email = payment.metadata?.customerEmail;
+        const firstName = payment.metadata?.customerFirstName || '';
+        const lastName = payment.metadata?.customerLastName || '';
+        const phone = payment.metadata?.customerMobile || '';
+        
+        if (!email) continue;
+
+        // Check if this contact has the stl-fullcourse tag in GHL
+        try {
+          const searchResponse = await fetch(
+            `https://services.leadconnectorhq.com/contacts/search/duplicate?locationId=${locationId}&email=${encodeURIComponent(email)}`,
+            {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Version': '2021-07-28',
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+
+          if (searchResponse.ok) {
+            const searchData = await searchResponse.json();
+            const contact = searchData.contact;
+            
+            if (contact) {
+              const tags = contact.tags || [];
+              if (!tags.includes('stl-fullcourse')) {
+                missingTags.push({
+                  email,
+                  firstName,
+                  lastName,
+                  phone,
+                  paymentDate: new Date(payment.created * 1000).toISOString(),
+                  amount: `£${(payment.amount / 100).toFixed(2)}`,
+                  paymentIntentId: payment.id,
+                  ghlContactId: contact.id,
+                  currentTags: tags
+                });
+              }
+            } else {
+              // Contact doesn't exist in GHL at all
+              missingTags.push({
+                email,
+                firstName,
+                lastName,
+                phone,
+                paymentDate: new Date(payment.created * 1000).toISOString(),
+                amount: `£${(payment.amount / 100).toFixed(2)}`,
+                paymentIntentId: payment.id
+              });
+            }
+          }
+          
+          // Small delay to avoid rate limiting
+          await new Promise(resolve => setTimeout(resolve, 100));
+        } catch (err) {
+          console.error(`Error checking GHL for ${email}:`, err);
+        }
+      }
+
+      res.json({
+        totalPayments: audioCoursePayments.length,
+        missingCount: missingTags.length,
+        missing: missingTags
+      });
+    } catch (error) {
+      console.error("Error checking missing GHL tags:", error);
+      res.status(500).json({ message: "Failed to check missing GHL tags" });
+    }
+  });
+
+  // Add stl-fullcourse tag to a specific contact
+  app.post("/api/admin/add-ghl-tag", async (req, res) => {
+    try {
+      const { email, firstName, lastName, phone, tag } = req.body;
+      
+      if (!email || !tag) {
+        return res.status(400).json({ message: "Email and tag are required" });
+      }
+
+      const result = await storage.createOrUpdateGhlContactInApi(
+        email,
+        firstName || '',
+        lastName || '',
+        phone || '',
+        [tag, 'newsletter'],
+        { lead_source: 'Manual Admin Sync' }
+      );
+
+      if (result.success) {
+        res.json({ 
+          success: true, 
+          message: `Tag '${tag}' added to ${email}`,
+          contactId: result.contactId 
+        });
+      } else {
+        res.status(400).json({ success: false, message: result.message });
+      }
+    } catch (error) {
+      console.error("Error adding GHL tag:", error);
+      res.status(500).json({ message: "Failed to add GHL tag" });
+    }
+  });
+
   // Migrate stronghorseaudio tags to stl-trial - searches GHL directly
   app.post("/api/admin/migrate-stl-tags", async (req, res) => {
     try {

@@ -7,15 +7,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Loader2, RefreshCw, Trash2, Users, Globe, Tag, Calendar } from "lucide-react";
+import { Loader2, RefreshCw, Trash2, Users, Globe, Tag, Calendar, AlertTriangle, CheckCircle, CreditCard } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import AdminNavigation from "@/components/AdminNavigation";
 import Footer from "@/components/Footer";
 
+interface MissingTagContact {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  paymentDate: string;
+  amount: string;
+  paymentIntentId: string;
+  ghlContactId?: string;
+  currentTags?: string[];
+}
+
+interface MissingTagsResponse {
+  totalPayments: number;
+  missingCount: number;
+  missing: MissingTagContact[];
+}
+
 export default function AdminGHL() {
   const [locationId, setLocationId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [showMissingTags, setShowMissingTags] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -53,6 +72,37 @@ export default function AdminGHL() {
         description: "Go High Level contact deleted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/ghl/contacts'] });
+    },
+  });
+
+  const { data: missingTagsData, isLoading: isLoadingMissingTags, refetch: refetchMissingTags } = useQuery<MissingTagsResponse>({
+    queryKey: ['/api/admin/check-missing-ghl-tags'],
+    enabled: showMissingTags,
+  });
+
+  const addTagMutation = useMutation({
+    mutationFn: async (contact: MissingTagContact) => {
+      return await apiRequest('POST', '/api/admin/add-ghl-tag', {
+        email: contact.email,
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        phone: contact.phone,
+        tag: 'stl-fullcourse'
+      });
+    },
+    onSuccess: (_, contact) => {
+      toast({
+        title: "Tag Added",
+        description: `Added 'stl-fullcourse' tag to ${contact.email}`,
+      });
+      refetchMissingTags();
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to Add Tag",
+        description: error.message || "Failed to add tag to contact",
+        variant: "destructive",
+      });
     },
   });
 
@@ -148,6 +198,138 @@ export default function AdminGHL() {
             <p className="text-xs md:text-sm text-gray-500 mt-2">
               Find your Location ID in your Go High Level settings under Sub-Accounts or API settings
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Missing GHL Tags Check */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Check Missing Course Tags
+            </CardTitle>
+            <CardDescription>
+              Find audio course customers who paid in Stripe but don't have the 'stl-fullcourse' tag in GHL
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4">
+              <Button 
+                onClick={() => {
+                  setShowMissingTags(true);
+                  if (showMissingTags) {
+                    refetchMissingTags();
+                  }
+                }}
+                disabled={isLoadingMissingTags}
+                variant="outline"
+                className="w-full sm:w-auto"
+              >
+                {isLoadingMissingTags ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Checking Stripe & GHL...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    Check for Missing Tags
+                  </>
+                )}
+              </Button>
+
+              {showMissingTags && missingTagsData && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="text-gray-600">
+                      Total payments (last 90 days): <strong>{missingTagsData.totalPayments}</strong>
+                    </span>
+                    {missingTagsData.missingCount === 0 ? (
+                      <Badge className="bg-green-100 text-green-800">
+                        <CheckCircle className="w-3 h-3 mr-1" />
+                        All synced
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-amber-100 text-amber-800">
+                        <AlertTriangle className="w-3 h-3 mr-1" />
+                        {missingTagsData.missingCount} missing tags
+                      </Badge>
+                    )}
+                  </div>
+
+                  {missingTagsData.missing.length > 0 && (
+                    <div className="border rounded-lg overflow-hidden">
+                      <table className="w-full text-sm">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-4 py-2 text-left font-medium text-gray-600">Customer</th>
+                            <th className="px-4 py-2 text-left font-medium text-gray-600">Email</th>
+                            <th className="px-4 py-2 text-left font-medium text-gray-600">Payment</th>
+                            <th className="px-4 py-2 text-left font-medium text-gray-600">Current Tags</th>
+                            <th className="px-4 py-2 text-left font-medium text-gray-600">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                          {missingTagsData.missing.map((contact, idx) => (
+                            <tr key={idx} className="hover:bg-gray-50">
+                              <td className="px-4 py-3">
+                                {contact.firstName} {contact.lastName}
+                              </td>
+                              <td className="px-4 py-3 text-gray-600">{contact.email}</td>
+                              <td className="px-4 py-3">
+                                <div className="text-gray-900">{contact.amount}</div>
+                                <div className="text-xs text-gray-500">
+                                  {new Date(contact.paymentDate).toLocaleDateString('en-GB', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric'
+                                  })}
+                                </div>
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="flex flex-wrap gap-1">
+                                  {contact.currentTags?.slice(0, 3).map((tag, i) => (
+                                    <Badge key={i} variant="outline" className="text-xs">
+                                      {tag}
+                                    </Badge>
+                                  ))}
+                                  {(contact.currentTags?.length || 0) > 3 && (
+                                    <Badge variant="outline" className="text-xs">
+                                      +{(contact.currentTags?.length || 0) - 3}
+                                    </Badge>
+                                  )}
+                                  {!contact.ghlContactId && (
+                                    <Badge className="bg-red-100 text-red-700 text-xs">
+                                      Not in GHL
+                                    </Badge>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-4 py-3">
+                                <Button
+                                  size="sm"
+                                  onClick={() => addTagMutation.mutate(contact)}
+                                  disabled={addTagMutation.isPending}
+                                >
+                                  {addTagMutation.isPending ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <>
+                                      <Tag className="h-3 w-3 mr-1" />
+                                      Add Tag
+                                    </>
+                                  )}
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
 
