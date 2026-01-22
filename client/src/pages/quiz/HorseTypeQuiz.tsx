@@ -453,15 +453,15 @@ export default function HorseTypeQuiz() {
                 </p>
                 <Button 
                   size="lg"
-                  className="bg-orange hover:bg-orange/90 text-white px-8 py-6 text-lg rounded-xl shadow-lg"
-                  onClick={() => setLocation("/coaching/audio-lessons")}
+                  className="bg-orange hover:bg-orange/90 text-white px-6 py-4 text-base sm:text-lg rounded-xl shadow-lg w-full sm:w-auto"
+                  onClick={() => setLocation("/courses/strong-horse-audio")}
                 >
                   {archetypes[result].group === "pdf" ? (
-                    <Download className="w-5 h-5 mr-2" />
+                    <Download className="w-5 h-5 mr-2 flex-shrink-0" />
                   ) : (
-                    <ChevronRight className="w-5 h-5 mr-2" />
+                    <ChevronRight className="w-5 h-5 mr-2 flex-shrink-0" />
                   )}
-                  {archetypes[result].ctaLabel}
+                  <span>{archetypes[result].ctaLabel}</span>
                 </Button>
               </div>
 
