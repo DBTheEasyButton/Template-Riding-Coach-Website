@@ -93,6 +93,14 @@ export default function Footer() {
                   Free Strong Horse Guide
                 </a>
               </li>
+              <li>
+                <Link 
+                  href="/quiz/horse-type"
+                  className="text-gray-300 hover:text-orange transition-colors"
+                >
+                  Horse Type Quiz
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
