@@ -12,7 +12,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoPath from "@assets/optimized/logo.webp";
+import logoPath from "@assets/logo-light-bg.png";
 
 type ArchetypeKey = "freight_train" | "powerhouse" | "overthinker" | "sofa" | "plank" | "partner";
 
