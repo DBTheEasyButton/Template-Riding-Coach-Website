@@ -53,6 +53,9 @@ const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
 const StrongHorseAudioCourse = lazy(() => import("@/pages/courses/StrongHorseAudioCourse"));
 const StrongHorseAudioOffer = lazy(() => import("@/pages/courses/StrongHorseAudioOffer"));
 
+// Quiz pages
+const HorseTypeQuiz = lazy(() => import("@/pages/quiz/HorseTypeQuiz"));
+
 // Tour pages
 const GATUKTour = lazy(() => import("@/pages/GATUKTour"));
 
@@ -228,6 +231,11 @@ function Router() {
       <Route path="/guides/strong-horse">
         <Suspense fallback={<PageLoader />}>
           <StrongHorseGuide />
+        </Suspense>
+      </Route>
+      <Route path="/quiz/horse-type">
+        <Suspense fallback={<PageLoader />}>
+          <HorseTypeQuiz />
         </Suspense>
       </Route>
       <Route path="/admin">
