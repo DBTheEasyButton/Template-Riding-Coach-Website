@@ -334,16 +334,16 @@ export default function HorseTypeQuiz() {
   const question = questions[currentQuestion];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="flex justify-center py-6 sm:py-8">
+    <div className="min-h-screen sm:min-h-screen h-[100dvh] sm:h-auto bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      <div className="flex justify-center py-3 sm:py-8 flex-shrink-0">
         <img 
           src={logoPath} 
           alt="Dan Bizzarro Method" 
-          className="h-12 sm:h-16 object-contain"
+          className="h-10 sm:h-16 object-contain"
         />
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 pb-12">
+      <div className="max-w-2xl mx-auto px-4 pb-4 sm:pb-12 flex-1 flex flex-col">
         <AnimatePresence mode="wait">
           {!showResult ? (
             <motion.div
@@ -351,17 +351,18 @@ export default function HorseTypeQuiz() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              className="flex flex-col flex-1"
             >
-              <div className="mb-8">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-navy">
+              <div className="mb-4 sm:mb-8 flex-shrink-0">
+                <div className="flex justify-between items-center mb-1 sm:mb-2">
+                  <span className="text-xs sm:text-sm font-medium text-navy">
                     Question {currentQuestion + 1} of {questions.length}
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-xs sm:text-sm text-gray-500">
                     {Math.round(progress)}% complete
                   </span>
                 </div>
-                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-1.5 sm:h-2 bg-gray-200 rounded-full overflow-hidden">
                   <motion.div 
                     className="h-full bg-orange rounded-full"
                     initial={{ width: 0 }}
@@ -378,34 +379,35 @@ export default function HorseTypeQuiz() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
+                  className="flex flex-col flex-1"
                 >
-                  <h2 className="text-xl sm:text-2xl font-playfair font-bold text-navy mb-6 leading-relaxed">
+                  <h2 className="text-lg sm:text-2xl font-playfair font-bold text-navy mb-3 sm:mb-6 leading-snug sm:leading-relaxed flex-shrink-0">
                     {question.text}
                   </h2>
 
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3 flex-1">
                     {question.options.map((option, index) => (
                       <motion.button
                         key={option.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: index * 0.05 }}
                         onClick={() => handleOptionSelect(option)}
                         disabled={isTransitioning}
-                        className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 flex items-start gap-4 group ${
+                        className={`w-full text-left px-3 py-2.5 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all duration-200 flex items-center gap-3 sm:gap-4 group ${
                           selectedOption === option.id
                             ? "border-orange bg-orange/10 shadow-md"
                             : "border-gray-200 hover:border-orange/50 hover:bg-orange/5"
                         } ${isTransitioning && selectedOption !== option.id ? "opacity-50" : ""}`}
                       >
-                        <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                        <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-colors ${
                           selectedOption === option.id
                             ? "bg-orange text-white"
                             : "bg-navy/10 text-navy group-hover:bg-orange/20 group-hover:text-orange"
                         }`}>
-                          {getIcon(option.icon)}
+                          {getIcon(option.icon, "w-4 h-4 sm:w-5 sm:h-5")}
                         </div>
-                        <span className={`text-base sm:text-lg leading-relaxed ${
+                        <span className={`text-sm sm:text-lg leading-snug sm:leading-relaxed ${
                           selectedOption === option.id ? "text-navy font-medium" : "text-gray-700"
                         }`}>
                           {option.text}
