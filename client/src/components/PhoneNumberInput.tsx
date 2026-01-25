@@ -107,7 +107,7 @@ interface PhoneNumberInputProps {
 
 function parsePhoneNumber(fullNumber: string): { countryCode: string; nationalNumber: string } {
   if (!fullNumber) {
-    return { countryCode: "+44", nationalNumber: "" };
+    return { countryCode: "GB", nationalNumber: "" };
   }
 
   const cleaned = fullNumber.replace(/\s+/g, "");
@@ -115,7 +115,7 @@ function parsePhoneNumber(fullNumber: string): { countryCode: string; nationalNu
   for (const country of COUNTRY_CODES) {
     if (cleaned.startsWith(country.dial)) {
       return {
-        countryCode: country.dial,
+        countryCode: country.code,
         nationalNumber: cleaned.substring(country.dial.length),
       };
     }
@@ -123,10 +123,10 @@ function parsePhoneNumber(fullNumber: string): { countryCode: string; nationalNu
 
   if (cleaned.startsWith("07") || cleaned.startsWith("7")) {
     const num = cleaned.startsWith("0") ? cleaned.substring(1) : cleaned;
-    return { countryCode: "+44", nationalNumber: num };
+    return { countryCode: "GB", nationalNumber: num };
   }
 
-  return { countryCode: "+44", nationalNumber: cleaned.replace(/^0+/, "") };
+  return { countryCode: "GB", nationalNumber: cleaned.replace(/^0+/, "") };
 }
 
 export default function PhoneNumberInput({
@@ -152,10 +152,11 @@ export default function PhoneNumberInput({
     }
   }, [value, lastExternalValue]);
 
-  const handleCountryChange = (newCode: string) => {
-    setCountryCode(newCode);
-    if (nationalNumber) {
-      const newValue = newCode + nationalNumber;
+  const handleCountryChange = (newCountryCode: string) => {
+    setCountryCode(newCountryCode);
+    const country = COUNTRY_CODES.find(c => c.code === newCountryCode);
+    if (country && nationalNumber) {
+      const newValue = country.dial + nationalNumber;
       setLastExternalValue(newValue);
       onChange(newValue);
     }
@@ -167,12 +168,14 @@ export default function PhoneNumberInput({
       num = num.substring(1);
     }
     setNationalNumber(num);
-    const newValue = num ? countryCode + num : "";
+    const country = COUNTRY_CODES.find(c => c.code === countryCode);
+    const dialCode = country ? country.dial : "+44";
+    const newValue = num ? dialCode + num : "";
     setLastExternalValue(newValue);
     onChange(newValue);
   };
 
-  const selectedCountry = COUNTRY_CODES.find(c => c.dial === countryCode) || COUNTRY_CODES[0];
+  const selectedCountry = COUNTRY_CODES.find(c => c.code === countryCode) || COUNTRY_CODES[0];
 
   return (
     <div className={`flex gap-2 ${className}`}>
@@ -187,7 +190,7 @@ export default function PhoneNumberInput({
         </SelectTrigger>
         <SelectContent>
           {COUNTRY_CODES.map((country) => (
-            <SelectItem key={country.code} value={country.dial}>
+            <SelectItem key={country.code} value={country.code}>
               <span className="flex items-center gap-2">
                 <span>{country.flag}</span>
                 <span>{country.name}</span>
@@ -215,7 +218,9 @@ export default function PhoneNumberInput({
 export function formatPhoneForDisplay(phone: string): string {
   if (!phone) return "";
   const { countryCode, nationalNumber } = parsePhoneNumber(phone);
-  return `${countryCode} ${nationalNumber}`;
+  const country = COUNTRY_CODES.find(c => c.code === countryCode);
+  const dialCode = country ? country.dial : "+44";
+  return `${dialCode} ${nationalNumber}`;
 }
 
 export function isValidPhoneNumber(phone: string): boolean {
