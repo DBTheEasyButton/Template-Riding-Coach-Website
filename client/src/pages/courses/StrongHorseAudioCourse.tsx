@@ -1664,18 +1664,24 @@ function AudioCoursePurchaseModal({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to complete purchase");
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || "Payment could not be completed";
+        toast({
+          title: "Payment Not Completed",
+          description: `${errorMessage}. Please try again or contact us at dan@danbizzarromethod.com`,
+          variant: "destructive",
+        });
+        return;
       }
 
       setStep('success');
     } catch (error) {
       console.error("Purchase completion error:", error);
       toast({
-        title: "Payment Received",
-        description: "Your payment was successful. Please contact us if you don't receive your course access email.",
-        variant: "default",
+        title: "Something Went Wrong",
+        description: "There was an issue completing your purchase. Please try again or contact us at dan@danbizzarromethod.com",
+        variant: "destructive",
       });
-      setStep('success');
     }
   };
 
@@ -2291,7 +2297,7 @@ function DiscountedAudioPurchaseModal({
 
   const handlePaymentSuccess = async (intentId: string) => {
     try {
-      await fetch("/api/audio-course/complete-purchase", {
+      const response = await fetch("/api/audio-course/complete-purchase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -2303,9 +2309,26 @@ function DiscountedAudioPurchaseModal({
           horseName: horseName.trim(),
         }),
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || "Payment could not be completed";
+        toast({
+          title: "Payment Not Completed",
+          description: `${errorMessage}. Please try again or contact us at dan@danbizzarromethod.com`,
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setStep('success');
     } catch (error) {
-      setStep('success');
+      console.error("Purchase completion error:", error);
+      toast({
+        title: "Something Went Wrong",
+        description: "There was an issue completing your purchase. Please try again or contact us at dan@danbizzarromethod.com",
+        variant: "destructive",
+      });
     }
   };
 
@@ -2954,16 +2977,25 @@ function PurchaseModal({
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to complete purchase");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || "Payment could not be completed";
+        toast({
+          title: "Payment Not Completed",
+          description: `${errorMessage}. Please try again or contact us at dan@danbizzarromethod.com`,
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setStep('success');
     } catch (error) {
       console.error("Purchase completion error:", error);
       toast({
-        title: "Payment Received - Action Required",
-        description: "Your payment was successful but there was an issue completing your registration. Please contact us at dan@danbizzarromethod.com with your payment confirmation.",
+        title: "Something Went Wrong",
+        description: "There was an issue completing your purchase. Please try again or contact us at dan@danbizzarromethod.com",
         variant: "destructive",
       });
-      // Stay on payment step - don't advance to success since completion failed
     }
   };
 
