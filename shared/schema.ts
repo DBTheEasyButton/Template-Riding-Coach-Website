@@ -86,6 +86,7 @@ export const clinics = pgTable("clinics", {
   // Automation fields
   autoPostToFacebook: boolean("auto_post_to_facebook").notNull().default(false),
   excludeTagsFromEmail: text("exclude_tags_from_email").default(""), // comma-separated tags
+  emailTagMode: text("email_tag_mode").notNull().default("exclude"), // "include" = only send to contacts with tags, "exclude" = exclude contacts with tags
 }, (table) => ({
   isActiveIdx: index("clinics_is_active_idx").on(table.isActive),
   dateIdx: index("clinics_date_idx").on(table.date),

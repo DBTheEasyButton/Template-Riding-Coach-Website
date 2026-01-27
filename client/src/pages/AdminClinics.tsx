@@ -45,7 +45,8 @@ export default function AdminClinics() {
     hasMultipleSessions: false,
     clinicType: "single",
     autoPostToFacebook: false,
-    excludeTagsFromEmail: ""
+    excludeTagsFromEmail: "",
+    emailTagMode: "exclude"
   });
 
   const [sessions, setSessions] = useState([
@@ -139,7 +140,8 @@ export default function AdminClinics() {
       hasMultipleSessions: false,
       clinicType: "single",
       autoPostToFacebook: false,
-      excludeTagsFromEmail: ""
+      excludeTagsFromEmail: "",
+      emailTagMode: "exclude"
     });
     setSessions([{
       sessionName: "",
@@ -273,7 +275,8 @@ export default function AdminClinics() {
       hasMultipleSessions: freshClinic.hasMultipleSessions || false,
       clinicType: freshClinic.clinicType || "single",
       autoPostToFacebook: freshClinic.autoPostToFacebook || false,
-      excludeTagsFromEmail: freshClinic.excludeTagsFromEmail || ""
+      excludeTagsFromEmail: freshClinic.excludeTagsFromEmail || "",
+      emailTagMode: freshClinic.emailTagMode || "exclude"
     };
     
     setFormData(newFormData);
@@ -337,7 +340,8 @@ export default function AdminClinics() {
       hasMultipleSessions: clinic.hasMultipleSessions || false,
       clinicType: clinic.clinicType || "single",
       autoPostToFacebook: clinic.autoPostToFacebook ?? false,
-      excludeTagsFromEmail: clinic.excludeTagsFromEmail || ""
+      excludeTagsFromEmail: clinic.excludeTagsFromEmail || "",
+      emailTagMode: clinic.emailTagMode || "exclude"
     });
     
     // Copy session data if it exists
@@ -425,6 +429,7 @@ export default function AdminClinics() {
       maxParticipants: Number(formData.maxParticipants),
       autoPostToFacebook: formData.autoPostToFacebook || false,
       excludeTagsFromEmail: formData.excludeTagsFromEmail || "",
+      emailTagMode: formData.emailTagMode || "exclude",
       sessions: formData.hasMultipleSessions ? sessions : []
     };
     
@@ -1049,7 +1054,37 @@ export default function AdminClinics() {
               </p>
               
               <div className="grid gap-2 mt-4">
-                <Label htmlFor="excludeTagsFromEmail">Exclude GHL Tags from Email (Optional)</Label>
+                <Label className="font-medium">Email Tag Filter (Optional)</Label>
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      id="tagModeInclude"
+                      name="emailTagMode"
+                      value="include"
+                      checked={formData.emailTagMode === 'include'}
+                      onChange={() => setFormData({ ...formData, emailTagMode: 'include' })}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <Label htmlFor="tagModeInclude" className="cursor-pointer text-sm">
+                      Only send to contacts WITH these tags
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      id="tagModeExclude"
+                      name="emailTagMode"
+                      value="exclude"
+                      checked={formData.emailTagMode === 'exclude'}
+                      onChange={() => setFormData({ ...formData, emailTagMode: 'exclude' })}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <Label htmlFor="tagModeExclude" className="cursor-pointer text-sm">
+                      Send to all EXCEPT contacts with these tags
+                    </Label>
+                  </div>
+                </div>
                 <Input
                   id="excludeTagsFromEmail"
                   value={formData.excludeTagsFromEmail}
@@ -1058,7 +1093,9 @@ export default function AdminClinics() {
                   data-testid="input-exclude-tags"
                 />
                 <p className="text-sm text-gray-500">
-                  Enter comma-separated GHL contact tags to exclude from clinic announcement emails. Contacts with these tags won't receive this clinic's email.
+                  {formData.emailTagMode === 'include' 
+                    ? 'Enter comma-separated GHL tags. Only contacts WITH at least one of these tags will receive this clinic\'s email.'
+                    : 'Enter comma-separated GHL tags. Contacts WITH any of these tags will NOT receive this clinic\'s email.'}
                 </p>
               </div>
             </div>
