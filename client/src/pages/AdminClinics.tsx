@@ -45,6 +45,7 @@ export default function AdminClinics() {
     hasMultipleSessions: false,
     clinicType: "single",
     autoPostToFacebook: false,
+    sendEmailAnnouncement: true,
     excludeTagsFromEmail: "",
     emailTagMode: "exclude"
   });
@@ -140,6 +141,7 @@ export default function AdminClinics() {
       hasMultipleSessions: false,
       clinicType: "single",
       autoPostToFacebook: false,
+      sendEmailAnnouncement: true,
       excludeTagsFromEmail: "",
       emailTagMode: "exclude"
     });
@@ -275,6 +277,7 @@ export default function AdminClinics() {
       hasMultipleSessions: freshClinic.hasMultipleSessions || false,
       clinicType: freshClinic.clinicType || "single",
       autoPostToFacebook: freshClinic.autoPostToFacebook || false,
+      sendEmailAnnouncement: true,
       excludeTagsFromEmail: freshClinic.excludeTagsFromEmail || "",
       emailTagMode: freshClinic.emailTagMode || "exclude"
     };
@@ -340,6 +343,7 @@ export default function AdminClinics() {
       hasMultipleSessions: clinic.hasMultipleSessions || false,
       clinicType: clinic.clinicType || "single",
       autoPostToFacebook: clinic.autoPostToFacebook ?? false,
+      sendEmailAnnouncement: true,
       excludeTagsFromEmail: clinic.excludeTagsFromEmail || "",
       emailTagMode: clinic.emailTagMode || "exclude"
     });
@@ -428,6 +432,7 @@ export default function AdminClinics() {
       price: formData.clinicType === 'single' ? Number(formData.price) : 0,
       maxParticipants: Number(formData.maxParticipants),
       autoPostToFacebook: formData.autoPostToFacebook || false,
+      sendEmailAnnouncement: formData.sendEmailAnnouncement ?? true,
       excludeTagsFromEmail: formData.excludeTagsFromEmail || "",
       emailTagMode: formData.emailTagMode || "exclude",
       sessions: formData.hasMultipleSessions ? sessions : []
@@ -1053,7 +1058,22 @@ export default function AdminClinics() {
                 Automatically post this clinic to your Facebook page when created, including booking link with UTM tracking.
               </p>
               
-              <div className="grid gap-2 mt-4">
+              <div className="flex items-center space-x-2 mt-4">
+                <Checkbox
+                  id="sendEmailAnnouncement"
+                  checked={formData.sendEmailAnnouncement}
+                  onCheckedChange={(checked) => setFormData({ ...formData, sendEmailAnnouncement: checked as boolean })}
+                />
+                <Label htmlFor="sendEmailAnnouncement" className="font-medium cursor-pointer">
+                  Send email announcement to GHL contacts
+                </Label>
+              </div>
+              <p className="text-sm text-gray-500 ml-6">
+                Send an email to your GHL contacts announcing this new clinic.
+              </p>
+              
+              {formData.sendEmailAnnouncement && (
+              <div className="grid gap-2 mt-4 ml-6 p-4 bg-gray-50 rounded-lg border">
                 <Label className="font-medium">Email Tag Filter (Optional)</Label>
                 <div className="flex items-center gap-4 mb-2">
                   <div className="flex items-center gap-2">
@@ -1098,6 +1118,7 @@ export default function AdminClinics() {
                     : 'Enter comma-separated GHL tags. Contacts WITH any of these tags will NOT receive this clinic\'s email.'}
                 </p>
               </div>
+              )}
             </div>
             
             <div className="grid gap-2">

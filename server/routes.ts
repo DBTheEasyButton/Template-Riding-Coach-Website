@@ -1762,7 +1762,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Convert date strings to Date objects before validation
       const rawData = req.body;
-      const { sessions, autoPostToFacebook, excludeTagsFromEmail, emailTagMode, ...clinicData } = rawData;
+      const { sessions, autoPostToFacebook, sendEmailAnnouncement, excludeTagsFromEmail, emailTagMode, ...clinicData } = rawData;
       
       // Log incoming data for debugging
       console.log('\n📋 [CLINIC CREATION] Received request:');
@@ -1837,14 +1837,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log('  - ⏭️ Skipping Facebook post (conditions not met)');
       }
 
-      // Send GHL emails to all contacts (tag-filtered)
-      try {
-        const filterTags: string[] = excludeTagsFromEmail ? excludeTagsFromEmail.split(',').map((t: string) => t.trim()).filter((t: string) => t) : [];
-        const tagMode = emailTagMode || "exclude";
-        await emailService.sendClinicAnnouncementToContacts(clinic, filterTags, tagMode);
-      } catch (emailError) {
-        console.error('Error sending clinic announcement emails:', emailError);
-        // Don't fail the clinic creation if emails fail
+      // Send GHL emails to all contacts (tag-filtered) - only if enabled
+      if (sendEmailAnnouncement !== false) {
+        try {
+          console.log('  - ✅ Sending email announcement to GHL contacts...');
+          const filterTags: string[] = excludeTagsFromEmail ? excludeTagsFromEmail.split(',').map((t: string) => t.trim()).filter((t: string) => t) : [];
+          const tagMode = emailTagMode || "exclude";
+          await emailService.sendClinicAnnouncementToContacts(clinic, filterTags, tagMode);
+        } catch (emailError) {
+          console.error('Error sending clinic announcement emails:', emailError);
+          // Don't fail the clinic creation if emails fail
+        }
+      } else {
+        console.log('  - ⏭️ Skipping email announcement (disabled by user)');
       }
 
       // Trigger SEO pre-rendering in background (5 second delay to allow for any follow-up changes)
