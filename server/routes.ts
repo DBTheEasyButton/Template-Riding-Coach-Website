@@ -1762,7 +1762,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Convert date strings to Date objects before validation
       const rawData = req.body;
-      const { sessions, autoPostToFacebook, excludeTagsFromEmail, ...clinicData } = rawData;
+      const { sessions, autoPostToFacebook, excludeTagsFromEmail, emailTagMode, ...clinicData } = rawData;
       
       // Log incoming data for debugging
       console.log('\n📋 [CLINIC CREATION] Received request:');
@@ -1781,7 +1781,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         entryClosingDate: clinicData.entryClosingDate ? new Date(clinicData.entryClosingDate) : null,
         price: processedPrice,
         autoPostToFacebook: autoPostToFacebook || false,
-        excludeTagsFromEmail: excludeTagsFromEmail || ""
+        excludeTagsFromEmail: excludeTagsFromEmail || "",
+        emailTagMode: emailTagMode || "exclude"
       };
       
       // Validate the clinic data
@@ -1838,8 +1839,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Send GHL emails to all contacts (tag-filtered)
       try {
-        const excludeTags: string[] = excludeTagsFromEmail ? excludeTagsFromEmail.split(',').map((t: string) => t.trim()) : [];
-        await emailService.sendClinicAnnouncementToContacts(clinic, excludeTags);
+        const filterTags: string[] = excludeTagsFromEmail ? excludeTagsFromEmail.split(',').map((t: string) => t.trim()).filter((t: string) => t) : [];
+        const tagMode = emailTagMode || "exclude";
+        await emailService.sendClinicAnnouncementToContacts(clinic, filterTags, tagMode);
       } catch (emailError) {
         console.error('Error sending clinic announcement emails:', emailError);
         // Don't fail the clinic creation if emails fail
@@ -1865,7 +1867,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         'title', 'description', 'date', 'endDate', 'entryOpenDate', 'entryClosingDate', 'location', 'googleMapsLink', 'price', 
         'maxParticipants', 'level', 'type', 'image', 'isActive', 'startTime', 'endTime',
         'hasMultipleSessions', 'clinicType', 'crossCountryMaxParticipants', 
-        'showJumpingMaxParticipants'
+        'showJumpingMaxParticipants', 'autoPostToFacebook', 'excludeTagsFromEmail', 'emailTagMode'
       ];
       
       const cleanedData: any = {};

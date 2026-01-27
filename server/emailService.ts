@@ -1005,7 +1005,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
     }
   }
 
-  async sendClinicAnnouncementToContacts(clinic: any, excludeTags: string[]): Promise<void> {
+  async sendClinicAnnouncementToContacts(clinic: any, filterTags: string[], tagMode: string = "exclude"): Promise<void> {
     try {
       const simulationMode = process.env.SIMULATE_EMAILS === 'true';
       const ghlContacts = await storage.getAllGhlContacts();
@@ -1014,7 +1014,9 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         console.log('\n📧 [EMAIL SIMULATION MODE]');
         console.log(`Clinic: ${clinic.title}`);
         console.log(`Date: ${new Date(clinic.date).toLocaleDateString('en-GB')}`);
-        console.log(`Location: ${clinic.location}\n`);
+        console.log(`Location: ${clinic.location}`);
+        console.log(`Tag Mode: ${tagMode.toUpperCase()}`);
+        console.log(`Tags: ${filterTags.length > 0 ? filterTags.join(', ') : '(none)'}\n`);
       }
 
       let emailsSent = 0;
@@ -1026,11 +1028,27 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         if (!contact.email) continue;
         
         const contactTags = contact.tags || [];
-        const shouldExclude = excludeTags.some(tag => contactTags.includes(tag));
+        const hasMatchingTag = filterTags.length > 0 && filterTags.some(tag => contactTags.includes(tag));
         
-        if (shouldExclude) {
+        // Include mode: only send to contacts WITH the specified tags
+        // Exclude mode: send to all EXCEPT contacts with the specified tags
+        let shouldSkip = false;
+        if (filterTags.length > 0) {
+          if (tagMode === "include") {
+            // Include mode: skip if contact does NOT have any of the specified tags
+            shouldSkip = !hasMatchingTag;
+          } else {
+            // Exclude mode: skip if contact HAS any of the specified tags
+            shouldSkip = hasMatchingTag;
+          }
+        }
+        
+        if (shouldSkip) {
           if (simulationMode) {
-            console.log(`⊘ ${contact.email} - EXCLUDED (tags: ${contactTags.join(', ')})`);
+            const reason = tagMode === "include" 
+              ? `NOT in included tags (has: ${contactTags.join(', ') || 'none'})`
+              : `EXCLUDED (tags: ${contactTags.join(', ')})`;
+            console.log(`⊘ ${contact.email} - ${reason}`);
           }
           emailsSkipped++;
           continue;
@@ -1065,7 +1083,8 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         console.log(`   Emails to send: ${emailsSent}`);
         console.log(`   - Existing clients: ${existingClients}`);
         console.log(`   - New contacts: ${newContacts}`);
-        console.log(`   Emails skipped (excluded tags): ${emailsSkipped}`);
+        const skipReason = tagMode === "include" ? "not in included tags" : "excluded by tags";
+        console.log(`   Emails skipped (${skipReason}): ${emailsSkipped}`);
         console.log('✓ Simulation complete - no actual emails sent\n');
       } else {
         console.log(`Sent clinic announcement emails for clinic: ${clinic.title}`);
