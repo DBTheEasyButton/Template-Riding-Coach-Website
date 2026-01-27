@@ -2613,6 +2613,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Lazy Horse (Sofa) course waitlist signup
+  app.post("/api/lazy-horse-waitlist", async (req, res) => {
+    try {
+      const { firstName, lastName, email, phone, horseName } = req.body;
+      
+      if (!firstName || !lastName || !email || !phone || !horseName) {
+        return res.status(400).json({ error: "All fields are required" });
+      }
+
+      console.log(`\n🛋️ [LAZY HORSE WAITLIST] New signup:`);
+      console.log(`  - Name: ${firstName} ${lastName}`);
+      console.log(`  - Email: ${email}`);
+      console.log(`  - Phone: ${phone}`);
+      console.log(`  - Horse: ${horseName}`);
+
+      // Create or update contact in Go High Level with "newsletter" and "lazy-horse" tags
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email, 
+          firstName, 
+          lastName, 
+          phone, 
+          ["newsletter", "lazy-horse"],
+          { horseName }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`  - ✅ GHL contact created/updated successfully`);
+        } else {
+          console.warn(`  - ⚠️ GHL contact creation failed:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        console.error(`  - ❌ Error creating GHL contact:`, ghlError);
+        // Continue even if GHL fails - we'll log it but not fail the request
+      }
+
+      res.json({ message: "Successfully joined the waitlist" });
+    } catch (error) {
+      console.error("Error joining lazy horse waitlist:", error);
+      res.status(500).json({ error: "Failed to join the waitlist" });
+    }
+  });
+
   // Newsletter unsubscribe
   app.get("/api/unsubscribe", async (req, res) => {
     try {

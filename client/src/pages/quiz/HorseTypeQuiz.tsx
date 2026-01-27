@@ -9,9 +9,17 @@ import {
   Scale,
   ChevronRight,
   Download,
-  RotateCcw
+  RotateCcw,
+  Heart,
+  X,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PhoneVerificationField, requiresSmsVerification } from "@/components/PhoneVerificationField";
+import { usePhoneVerification } from "@/hooks/usePhoneVerification";
+import { useToast } from "@/hooks/use-toast";
 import logoPath from "@assets/logo-light-bg.png";
 
 type ArchetypeKey = "freight_train" | "powerhouse" | "overthinker" | "sofa" | "plank" | "partner";
@@ -124,7 +132,7 @@ const questions: Question[] = [
 
 const archetypes: Record<ArchetypeKey, {
   label: string;
-  group: "course" | "pdf" | "none";
+  group: "course" | "pdf" | "none" | "waitlist";
   title: string;
   shortDescription: string;
   headline: string;
@@ -164,13 +172,13 @@ const archetypes: Record<ArchetypeKey, {
   },
   sofa: {
     label: "The Sofa",
-    group: "pdf",
+    group: "waitlist",
     title: "Your Horse is: The Sofa",
     shortDescription: "Laid-back and unflappable, this horse is calm and easy-going but can lack energy or responsiveness. Often behind the leg and slow to react. With the right motivation and exercises, he/she can become more forward without losing that lovely temperament.",
-    headline: "Wake up your Sofa without losing the calm.",
-    body: "Your horse is lovely to be around but needs help finding more energy and responsiveness. The right exercises can build forward thinking without creating tension.",
-    offerText: "Get a free guide with exercises to build more responsiveness.",
-    ctaLabel: "Send Me the Free Guide"
+    headline: "An audio course designed just for Sofa horses is coming soon!",
+    body: "I'm currently developing a dedicated audio course specifically for riders like you — those with wonderful, calm horses who just need a little more spark. This course will give you step-by-step exercises to build responsiveness and forward thinking without losing that lovely temperament.",
+    offerText: "Be the first to know when it launches and get exclusive early access.",
+    ctaLabel: "I'd love to be the first to try the course!"
   },
   plank: {
     label: "The Plank",
@@ -249,6 +257,7 @@ const ARCHETYPE_PRIORITY: ArchetypeKey[] = [
 
 export default function HorseTypeQuiz() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState<Scores>({
     freight_train: 0,
@@ -262,10 +271,88 @@ export default function HorseTypeQuiz() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [result, setResult] = useState<ArchetypeKey | null>(null);
+  
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  const [waitlistForm, setWaitlistForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    horseName: ""
+  });
+  const [isSubmittingWaitlist, setIsSubmittingWaitlist] = useState(false);
+  const [waitlistSuccess, setWaitlistSuccess] = useState(false);
+  
+  const phoneVerification = usePhoneVerification();
+  const needsSmsVerification = requiresSmsVerification(waitlistForm.mobile);
+  const isPhoneValid = phoneVerification.isPhoneVerified || (!needsSmsVerification && waitlistForm.mobile.trim().length >= 10);
 
   useEffect(() => {
     document.body.style.overflow = 'auto';
   }, []);
+  
+  const handleWaitlistSubmit = async () => {
+    if (!waitlistForm.firstName.trim() || !waitlistForm.lastName.trim() || 
+        !waitlistForm.email.trim() || !waitlistForm.mobile.trim() || !waitlistForm.horseName.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!isPhoneValid) {
+      toast({
+        title: "Phone Verification Required",
+        description: "Please verify your phone number before continuing.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsSubmittingWaitlist(true);
+    
+    try {
+      const response = await fetch("/api/lazy-horse-waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: waitlistForm.firstName.trim(),
+          lastName: waitlistForm.lastName.trim(),
+          email: waitlistForm.email.trim(),
+          phone: waitlistForm.mobile.trim(),
+          horseName: waitlistForm.horseName.trim()
+        })
+      });
+      
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to join waitlist");
+      }
+      
+      setWaitlistSuccess(true);
+      toast({
+        title: "You're on the list!",
+        description: "We'll notify you as soon as the course is ready."
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: error instanceof Error ? error.message : "Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmittingWaitlist(false);
+    }
+  };
+  
+  const closeWaitlistModal = () => {
+    setShowWaitlistModal(false);
+    setWaitlistForm({ firstName: "", lastName: "", email: "", mobile: "", horseName: "" });
+    setWaitlistSuccess(false);
+    phoneVerification.reset();
+  };
 
   const determineWinningArchetype = (finalScores: Scores): ArchetypeKey => {
     const maxScore = Math.max(...Object.values(finalScores));
@@ -456,9 +543,17 @@ export default function HorseTypeQuiz() {
                 <Button 
                   size="lg"
                   className="bg-orange hover:bg-orange/90 text-white px-6 py-4 text-base sm:text-lg rounded-xl shadow-lg w-full sm:w-auto"
-                  onClick={() => setLocation("/courses/strong-horse-audio")}
+                  onClick={() => {
+                    if (archetypes[result].group === "waitlist") {
+                      setShowWaitlistModal(true);
+                    } else {
+                      setLocation("/courses/strong-horse-audio");
+                    }
+                  }}
                 >
-                  {archetypes[result].group === "pdf" ? (
+                  {archetypes[result].group === "waitlist" ? (
+                    <Heart className="w-5 h-5 mr-2 flex-shrink-0" />
+                  ) : archetypes[result].group === "pdf" ? (
                     <Download className="w-5 h-5 mr-2 flex-shrink-0" />
                   ) : (
                     <ChevronRight className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -478,6 +573,144 @@ export default function HorseTypeQuiz() {
           )}
         </AnimatePresence>
       </div>
+      
+      {showWaitlistModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-playfair font-bold text-navy">
+                  {waitlistSuccess ? "You're on the list!" : "Join the Waitlist"}
+                </h2>
+                <button
+                  onClick={closeWaitlistModal}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              {waitlistSuccess ? (
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Heart className="w-8 h-8 text-green-600" />
+                  </div>
+                  <p className="text-gray-600 mb-6">
+                    Thanks for your interest! We'll let you know as soon as the course for "Sofa" horses is ready.
+                  </p>
+                  <Button onClick={closeWaitlistModal} className="bg-navy hover:bg-navy/90">
+                    Close
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <p className="text-gray-600 mb-6">
+                    Be the first to access the new audio course designed specifically for riders with laid-back horses.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="waitlist-firstName" className="text-navy font-medium text-sm">
+                          First Name <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="waitlist-firstName"
+                          value={waitlistForm.firstName}
+                          onChange={(e) => setWaitlistForm(prev => ({ ...prev, firstName: e.target.value }))}
+                          placeholder="Your first name"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="waitlist-lastName" className="text-navy font-medium text-sm">
+                          Surname <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="waitlist-lastName"
+                          value={waitlistForm.lastName}
+                          onChange={(e) => setWaitlistForm(prev => ({ ...prev, lastName: e.target.value }))}
+                          placeholder="Your surname"
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="waitlist-email" className="text-navy font-medium text-sm">
+                        Email <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="waitlist-email"
+                        type="email"
+                        value={waitlistForm.email}
+                        onChange={(e) => setWaitlistForm(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="your@email.com"
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <PhoneVerificationField
+                      mobile={waitlistForm.mobile}
+                      setMobile={(val) => {
+                        setWaitlistForm(prev => ({ ...prev, mobile: val }));
+                        phoneVerification.handlePhoneChange(val);
+                      }}
+                      isPhoneVerified={phoneVerification.isPhoneVerified}
+                      codeSent={phoneVerification.codeSent}
+                      isSendingCode={phoneVerification.isSendingCode}
+                      isVerifyingCode={phoneVerification.isVerifyingCode}
+                      verificationCode={phoneVerification.verificationCode}
+                      verificationError={phoneVerification.verificationError}
+                      onSendCode={() => phoneVerification.sendVerificationCode(waitlistForm.mobile)}
+                      onVerifyCode={() => phoneVerification.verifyCode(waitlistForm.mobile)}
+                      onCodeChange={phoneVerification.setVerificationCode}
+                      onPhoneChange={phoneVerification.handlePhoneChange}
+                      onReset={phoneVerification.reset}
+                      label="Mobile Number"
+                    />
+                    
+                    <div>
+                      <Label htmlFor="waitlist-horseName" className="text-navy font-medium text-sm">
+                        Horse's Name <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="waitlist-horseName"
+                        value={waitlistForm.horseName}
+                        onChange={(e) => setWaitlistForm(prev => ({ ...prev, horseName: e.target.value }))}
+                        placeholder="Your horse's name"
+                        className="mt-1"
+                      />
+                    </div>
+                    
+                    <Button
+                      onClick={handleWaitlistSubmit}
+                      disabled={isSubmittingWaitlist || !isPhoneValid}
+                      className="w-full bg-orange hover:bg-orange/90 text-white py-3"
+                    >
+                      {isSubmittingWaitlist ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Joining...
+                        </>
+                      ) : (
+                        <>
+                          <Heart className="w-4 h-4 mr-2" />
+                          Join the Waitlist
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
