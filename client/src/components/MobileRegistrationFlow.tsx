@@ -37,6 +37,37 @@ async function getStripePromise(): Promise<Stripe | null> {
   return null;
 }
 
+// Helper function to sort sessions by difficulty (easiest first)
+function sortSessionsByDifficulty(sessions: ClinicSession[]): ClinicSession[] {
+  const difficultyOrder: Record<string, number> = {
+    // Height-based levels (jumping)
+    '70cm': 1,
+    '70cm/80cm': 2,
+    '80cm': 3,
+    '90cm': 4,
+    '1m': 5,
+    '100cm': 5,
+    '1.10m': 6,
+    '110cm': 6,
+    '1.20m': 7,
+    '120cm': 7,
+    // Text-based levels
+    'beginner': 1,
+    'novice': 2,
+    'intermediate': 3,
+    'experienced': 4,
+    'advanced': 5,
+  };
+  
+  return [...sessions].sort((a, b) => {
+    const aLevel = (a.skillLevel || '').toLowerCase();
+    const bLevel = (b.skillLevel || '').toLowerCase();
+    const aOrder = difficultyOrder[aLevel] ?? 99;
+    const bOrder = difficultyOrder[bLevel] ?? 99;
+    return aOrder - bOrder;
+  });
+}
+
 interface MobileRegistrationFlowProps {
   clinic: ClinicWithSessions;
   isOpen: boolean;
@@ -568,7 +599,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 <div>
                   <Label className="text-sm font-medium">Select Sessions</Label>
                   <div className="mt-3 space-y-3">
-                    {clinic.sessions.map((session) => (
+                    {sortSessionsByDifficulty(clinic.sessions).map((session) => (
                       <div key={session.id} className="flex items-start space-x-3 p-3 border rounded-lg">
                         <Checkbox
                           id={`session-${session.id}`}

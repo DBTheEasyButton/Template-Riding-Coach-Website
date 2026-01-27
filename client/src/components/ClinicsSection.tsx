@@ -42,6 +42,37 @@ async function getStripePromiseClinic(): Promise<Stripe | null> {
   return null;
 }
 
+// Helper function to sort sessions by difficulty (easiest first)
+function sortSessionsByDifficulty(sessions: ClinicSession[]): ClinicSession[] {
+  const difficultyOrder: Record<string, number> = {
+    // Height-based levels (jumping)
+    '70cm': 1,
+    '70cm/80cm': 2,
+    '80cm': 3,
+    '90cm': 4,
+    '1m': 5,
+    '100cm': 5,
+    '1.10m': 6,
+    '110cm': 6,
+    '1.20m': 7,
+    '120cm': 7,
+    // Text-based levels
+    'beginner': 1,
+    'novice': 2,
+    'intermediate': 3,
+    'experienced': 4,
+    'advanced': 5,
+  };
+  
+  return [...sessions].sort((a, b) => {
+    const aLevel = (a.skillLevel || '').toLowerCase();
+    const bLevel = (b.skillLevel || '').toLowerCase();
+    const aOrder = difficultyOrder[aLevel] ?? 99;
+    const bOrder = difficultyOrder[bLevel] ?? 99;
+    return aOrder - bOrder;
+  });
+}
+
 function ClinicEventsSchema({ clinics }: { clinics: ClinicWithSessions[] }) {
   const baseUrl = "https://danbizzarromethod.com";
   
@@ -960,7 +991,7 @@ export default function ClinicsSection() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Session Selection</h3>
                   <div className="space-y-3">
-                    {selectedClinic.sessions.map((session) => {
+                    {sortSessionsByDifficulty(selectedClinic.sessions).map((session) => {
                       const maxParticipants = session.maxParticipants;
                       const isFull = maxParticipants !== null && session.currentParticipants >= maxParticipants;
                       const spotsRemaining = maxParticipants !== null ? maxParticipants - session.currentParticipants : null;
@@ -1463,7 +1494,7 @@ export default function ClinicsSection() {
                     <div className="border-t pt-4">
                       <h4 className="font-semibold text-navy mb-3">Available Classes</h4>
                       <div className="space-y-3">
-                        {selectedClinic.sessions.map((session) => (
+                        {sortSessionsByDifficulty(selectedClinic.sessions).map((session) => (
                             <div key={session.id} className="p-4 rounded-lg border bg-gray-50 border-gray-200">
                               <div className="flex justify-between items-start mb-2">
                                 <div>
