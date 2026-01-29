@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -62,6 +63,64 @@ export default function AdminClinics() {
   ]);
   
   const [missingFields, setMissingFields] = useState<string[]>([]);
+  const [showCloseConfirmation, setShowCloseConfirmation] = useState(false);
+  
+  const initialFormData = {
+    title: "",
+    description: "",
+    date: "",
+    endDate: "",
+    entryOpenDate: "",
+    entryClosingDate: "",
+    startTime: "",
+    endTime: "",
+    location: "",
+    googleMapsLink: "",
+    price: "",
+    maxParticipants: "",
+    type: "dressage",
+    level: "intermediate",
+    image: "",
+    isActive: true,
+    hasMultipleSessions: false,
+    clinicType: "single",
+    autoPostToFacebook: false,
+    sendEmailAnnouncement: true,
+    excludeTagsFromEmail: "",
+    emailTagMode: "exclude"
+  };
+  
+  const hasUnsavedChanges = () => {
+    const hasFormData = formData.title !== "" || 
+           formData.description !== "" || 
+           formData.date !== "" || 
+           formData.endDate !== "" ||
+           formData.location !== "" ||
+           formData.price !== "" ||
+           formData.maxParticipants !== "" ||
+           formData.image !== "" ||
+           formData.googleMapsLink !== "" ||
+           formData.entryOpenDate !== "" ||
+           formData.entryClosingDate !== "";
+    
+    const hasSessionData = sessions.some(s => 
+      s.sessionName !== "" || 
+      s.requirements !== "" ||
+      s.maxParticipants !== ""
+    );
+    
+    return hasFormData || hasSessionData;
+  };
+  
+  const handleCloseDialog = (forceClose = false) => {
+    if (!forceClose && hasUnsavedChanges()) {
+      setShowCloseConfirmation(true);
+    } else {
+      setIsCreateOpen(false);
+      setEditingClinic(null);
+      resetForm();
+    }
+  };
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -614,12 +673,17 @@ export default function AdminClinics() {
 
       <Dialog key={dialogKey} open={isCreateOpen || !!editingClinic} onOpenChange={(open) => {
         if (!open) {
-          setIsCreateOpen(false);
-          setEditingClinic(null);
-          resetForm();
+          handleCloseDialog();
         }
       }}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent 
+          className="max-w-4xl max-h-[90vh] overflow-y-auto"
+          onInteractOutside={(e) => e.preventDefault()}
+          onEscapeKeyDown={(e) => {
+            e.preventDefault();
+            handleCloseDialog();
+          }}
+        >
           <DialogHeader>
             <DialogTitle>{editingClinic ? 'Edit Clinic' : 'Create New Clinic'}</DialogTitle>
             <DialogDescription>
@@ -1141,11 +1205,7 @@ export default function AdminClinics() {
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => {
-              setIsCreateOpen(false);
-              setEditingClinic(null);
-              resetForm();
-            }}>
+            <Button variant="outline" onClick={() => handleCloseDialog()}>
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending}>
@@ -1163,6 +1223,31 @@ export default function AdminClinics() {
           onOpenChange={(open) => !open && setGroupManagementSession(null)}
         />
       )}
+
+      <AlertDialog open={showCloseConfirmation} onOpenChange={setShowCloseConfirmation}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Discard changes?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You have unsaved changes. Are you sure you want to close without saving? Your changes will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowCloseConfirmation(false)}>
+              Keep Editing
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => {
+                setShowCloseConfirmation(false);
+                handleCloseDialog(true);
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Discard Changes
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Footer />
     </div>
