@@ -53,6 +53,21 @@ export default function GroupClinics() {
     });
   };
 
+  const getDisciplineColor = (discipline: string) => {
+    const disciplineColors: Record<string, string> = {
+      'jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
+      'show-jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
+      'showjumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
+      'cross-country': 'linear-gradient(to right, #16a34a, #15803d)',
+      'cross country': 'linear-gradient(to right, #16a34a, #15803d)',
+      'polework': 'linear-gradient(to right, #9333ea, #7c3aed)',
+      'dressage': 'linear-gradient(to right, #dc2626, #b91c1c)',
+      'gridwork': 'linear-gradient(to right, #0891b2, #0e7490)',
+      'eventing': 'linear-gradient(to right, #ea580c, #c2410c)',
+    };
+    return disciplineColors[(discipline || '').toLowerCase()] || 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)';
+  };
+
   const features = [
     "Single-day training sessions for all levels",
     "Show-jumping, polework, and cross country options",
@@ -205,7 +220,7 @@ export default function GroupClinics() {
                     }, 600);
                   }}
                 >
-                  <div className="p-4 text-white" style={{ background: 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)' }}>
+                  <div className="p-4 text-white" style={{ background: getDisciplineColor(clinic.discipline) }}>
                     <h3 className="text-xl font-playfair font-bold mb-1 line-clamp-2">{clinic.title}</h3>
                     <div className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
