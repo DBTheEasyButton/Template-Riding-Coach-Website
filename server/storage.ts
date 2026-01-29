@@ -1040,7 +1040,7 @@ The Dan Bizzarro Method Team`,
   }
 
   async createClinicRegistration(insertRegistration: InsertClinicRegistration): Promise<ClinicRegistration> {
-    // Check clinic capacity
+    // First verify clinic exists and get session info if applicable
     const [clinic] = await db.select()
       .from(clinics)
       .where(eq(clinics.id, insertRegistration.clinicId));
@@ -1049,11 +1049,7 @@ The Dan Bizzarro Method Team`,
       throw new Error("Clinic not found");
     }
     
-    if (clinic.currentParticipants >= clinic.maxParticipants) {
-      throw new Error("Clinic is full");
-    }
-    
-    // Check session capacity if this is a multi-session clinic
+    // Validate session belongs to clinic if provided
     if (insertRegistration.sessionId) {
       const [session] = await db.select()
         .from(clinicSessions)
@@ -1063,32 +1059,64 @@ The Dan Bizzarro Method Team`,
         throw new Error("Session not found");
       }
       
-      // Verify session belongs to the target clinic (prevent tampered requests)
       if (session.clinicId !== insertRegistration.clinicId) {
         throw new Error("Session does not belong to this clinic");
       }
-      
-      if (session.maxParticipants !== null && session.currentParticipants >= session.maxParticipants) {
-        throw new Error("Session is full");
-      }
-      
-      // Increment session participant count
-      await db.update(clinicSessions)
-        .set({ currentParticipants: sql`${clinicSessions.currentParticipants} + 1` })
-        .where(eq(clinicSessions.id, insertRegistration.sessionId));
     }
     
-    // Increment clinic participant count
-    await db.update(clinics)
+    // STEP 1: ATOMIC clinic capacity reservation (main bottleneck)
+    // Check AND increment in one operation - prevents race conditions
+    const clinicUpdateResult = await db.update(clinics)
       .set({ currentParticipants: sql`${clinics.currentParticipants} + 1` })
-      .where(eq(clinics.id, insertRegistration.clinicId));
-    
-    // Create the registration
-    const [registration] = await db.insert(clinicRegistrations)
-      .values(insertRegistration)
+      .where(and(
+        eq(clinics.id, insertRegistration.clinicId),
+        sql`${clinics.currentParticipants} < ${clinics.maxParticipants}`
+      ))
       .returning();
     
-    return registration;
+    if (clinicUpdateResult.length === 0) {
+      throw new Error("Clinic is full");
+    }
+    
+    // STEP 2: ATOMIC session capacity reservation (if session-based)
+    if (insertRegistration.sessionId) {
+      const sessionUpdateResult = await db.update(clinicSessions)
+        .set({ currentParticipants: sql`${clinicSessions.currentParticipants} + 1` })
+        .where(and(
+          eq(clinicSessions.id, insertRegistration.sessionId),
+          sql`(${clinicSessions.maxParticipants} IS NULL OR ${clinicSessions.currentParticipants} < ${clinicSessions.maxParticipants})`
+        ))
+        .returning();
+      
+      if (sessionUpdateResult.length === 0) {
+        // Rollback clinic increment - session is full
+        await db.update(clinics)
+          .set({ currentParticipants: sql`${clinics.currentParticipants} - 1` })
+          .where(eq(clinics.id, insertRegistration.clinicId));
+        throw new Error("Session is full");
+      }
+    }
+    
+    // STEP 3: Create registration - capacity already reserved
+    try {
+      const [registration] = await db.insert(clinicRegistrations)
+        .values(insertRegistration)
+        .returning();
+      
+      return registration;
+    } catch (error) {
+      // Rollback capacity reservations if registration fails
+      await db.update(clinics)
+        .set({ currentParticipants: sql`${clinics.currentParticipants} - 1` })
+        .where(eq(clinics.id, insertRegistration.clinicId));
+      
+      if (insertRegistration.sessionId) {
+        await db.update(clinicSessions)
+          .set({ currentParticipants: sql`${clinicSessions.currentParticipants} - 1` })
+          .where(eq(clinicSessions.id, insertRegistration.sessionId));
+      }
+      throw error;
+    }
   }
 
   async getClinicRegistrations(clinicId: number): Promise<ClinicRegistration[]> {
