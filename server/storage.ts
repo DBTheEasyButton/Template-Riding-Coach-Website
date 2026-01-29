@@ -136,7 +136,11 @@ export interface IStorage {
   addToWaitlist(waitlistEntry: InsertClinicWaitlist): Promise<ClinicWaitlist>;
   getWaitlist(clinicId: number): Promise<ClinicWaitlist[]>;
   removeFromWaitlist(id: number): Promise<void>;
-  promoteFromWaitlist(clinicId: number): Promise<ClinicWaitlist | null>;
+  removeFromWaitlistByEmail(clinicId: number, email: string, sessionId?: number): Promise<void>;
+  getNextInWaitlist(clinicId: number, sessionId?: number): Promise<ClinicWaitlist | null>;
+  notifyWaitlistEntry(id: number): Promise<ClinicWaitlist | null>;
+  getExpiredWaitlistNotifications(): Promise<ClinicWaitlist[]>;
+  expireWaitlistEntry(id: number): Promise<void>;
   
   getAllTrainingVideos(): Promise<TrainingVideo[]>;
   getTrainingVideosByCategory(category: string): Promise<TrainingVideo[]>;
@@ -1248,13 +1252,71 @@ The Dan Bizzarro Method Team`,
     await db.delete(clinicWaitlist).where(eq(clinicWaitlist.id, id));
   }
 
-  async promoteFromWaitlist(clinicId: number): Promise<ClinicWaitlist | null> {
+  async removeFromWaitlistByEmail(clinicId: number, email: string, sessionId?: number): Promise<void> {
+    const conditions = [
+      eq(clinicWaitlist.clinicId, clinicId),
+      eq(clinicWaitlist.email, email)
+    ];
+    
+    // If sessionId provided, only remove from that specific session waitlist
+    if (sessionId !== undefined) {
+      conditions.push(eq(clinicWaitlist.sessionId, sessionId));
+    }
+    
+    await db.delete(clinicWaitlist).where(and(...conditions));
+  }
+
+  async getNextInWaitlist(clinicId: number, sessionId?: number): Promise<ClinicWaitlist | null> {
+    // Get next person who hasn't been notified yet, matching session if specified
+    const conditions = [
+      eq(clinicWaitlist.clinicId, clinicId),
+      eq(clinicWaitlist.notified, false)
+    ];
+    
+    // If sessionId provided, only get from that specific session waitlist
+    if (sessionId !== undefined) {
+      conditions.push(eq(clinicWaitlist.sessionId, sessionId));
+    } else {
+      // If no sessionId, get entries without a sessionId (clinic-level waitlist)
+      conditions.push(sql`${clinicWaitlist.sessionId} IS NULL`);
+    }
+    
     const [nextInLine] = await db.select().from(clinicWaitlist)
-      .where(eq(clinicWaitlist.clinicId, clinicId))
+      .where(and(...conditions))
       .orderBy(clinicWaitlist.position)
       .limit(1);
     
     return nextInLine || null;
+  }
+
+  async notifyWaitlistEntry(id: number): Promise<ClinicWaitlist | null> {
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
+    
+    const [updated] = await db.update(clinicWaitlist)
+      .set({ 
+        notified: true, 
+        notifiedAt: now,
+        expiresAt: expiresAt
+      })
+      .where(eq(clinicWaitlist.id, id))
+      .returning();
+    
+    return updated || null;
+  }
+
+  async getExpiredWaitlistNotifications(): Promise<ClinicWaitlist[]> {
+    const now = new Date();
+    return await db.select().from(clinicWaitlist)
+      .where(and(
+        eq(clinicWaitlist.notified, true),
+        sql`${clinicWaitlist.expiresAt} < ${now}`
+      ));
+  }
+
+  async expireWaitlistEntry(id: number): Promise<void> {
+    // Remove from waitlist when their time expires without booking
+    await db.delete(clinicWaitlist).where(eq(clinicWaitlist.id, id));
   }
 
   async getAllTrainingVideos(): Promise<TrainingVideo[]> {

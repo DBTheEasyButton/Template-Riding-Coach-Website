@@ -1517,6 +1517,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create registration (capacity checks are handled atomically in the storage layer)
       const registration = await storage.createClinicRegistration(validatedData);
 
+      // Remove from waitlist if they were on it (they booked successfully)
+      try {
+        // Pass sessionId to only remove from the specific session waitlist they booked
+        await storage.removeFromWaitlistByEmail(clinicId, registration.email, registration.sessionId || undefined);
+      } catch (error) {
+        // Don't fail if they weren't on the waitlist
+      }
+
       // CRITICAL FIX: Mark discount code as used after successful registration
       if (discountCodeUsed) {
         try {
@@ -2313,46 +2321,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
           reason || `Automatic refund processed - £5 admin fee deducted`
         );
 
-        let promotedParticipant = null;
+        let notifiedWaitlistEntry: any = null;
         
-        // If there's a waitlist, automatically promote the first person
-        if (refundCheck.reason.includes("waiting list") && cancelledReg) {
-          promotedParticipant = await storage.promoteFromWaitlist(cancelledReg.clinicId);
-          if (promotedParticipant) {
-            // Create a confirmed registration for the promoted participant
-            const newRegistration = await storage.createClinicRegistration({
-              clinicId: cancelledReg.clinicId,
-              sessionId: cancelledReg.sessionId || undefined,
-              firstName: promotedParticipant.firstName,
-              lastName: promotedParticipant.lastName,
-              email: promotedParticipant.email,
-              phone: promotedParticipant.phone,
-              horseName: promotedParticipant.horseName || "To be provided",
-              specialRequests: promotedParticipant.specialRequests || undefined,
-              emergencyContact: "To be provided", // Waitlist entries don't have emergency contact info
-              emergencyPhone: "To be provided",
-              medicalConditions: undefined,
-              paymentMethod: "bank_transfer",
-              agreeToTerms: true,
-              status: "confirmed"
-            });
+        // If there's a waitlist, notify the next person (they have 2 hours to book)
+        if (cancelledReg) {
+          // Pass sessionId to get the next person waiting for the same session
+          const nextInWaitlist = await storage.getNextInWaitlist(cancelledReg.clinicId, cancelledReg.sessionId || undefined);
+          if (nextInWaitlist) {
+            // Mark as notified and set 2-hour expiry
+            notifiedWaitlistEntry = await storage.notifyWaitlistEntry(nextInWaitlist.id);
             
-            // Ensure promoted participant is in email list
-            try {
-              const existingSubscriber = await storage.getEmailSubscriberByEmail(promotedParticipant.email);
-              if (!existingSubscriber) {
-                await emailService.subscribeToNewsletter(
-                  promotedParticipant.email, 
-                  promotedParticipant.firstName, 
-                  promotedParticipant.lastName, 
-                  "waitlist_promotion"
-                );
+            if (notifiedWaitlistEntry) {
+              // Get clinic details for the email
+              const clinic = await storage.getClinic(cancelledReg.clinicId);
+              if (clinic) {
+                const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                });
+                
+                // Get session price if applicable
+                let price = clinic.price;
+                if (notifiedWaitlistEntry.sessionId) {
+                  const allSessions = await storage.getAllClinicSessions();
+                  const session = allSessions.find((s) => s.id === notifiedWaitlistEntry.sessionId);
+                  if (session?.price) {
+                    price = session.price;
+                  }
+                }
+                
+                // Send notification email
+                try {
+                  await emailService.sendWaitlistSpotAvailable(
+                    notifiedWaitlistEntry.email,
+                    notifiedWaitlistEntry.firstName,
+                    clinic.title,
+                    clinicDate,
+                    clinic.location,
+                    price,
+                    clinic.id,
+                    notifiedWaitlistEntry.sessionId || undefined
+                  );
+                  console.log(`Waitlist spot available email sent to ${notifiedWaitlistEntry.email} - 2 hour window started`);
+                } catch (emailError) {
+                  console.error("Failed to send waitlist notification email:", emailError);
+                }
               }
-            } catch (error) {
-              console.error("Failed to add promoted participant to email list:", error);
             }
-            
-            console.log(`Automatically promoted waitlist participant: ${promotedParticipant.email}`);
           }
         }
 
@@ -2390,15 +2407,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         const adminFeeText = refundCheck.adminFee ? ` (£${(refundCheck.adminFee / 100).toFixed(2)} admin fee deducted)` : '';
-        const promotionText = promotedParticipant ? ` - ${promotedParticipant.firstName} ${promotedParticipant.lastName} has been automatically accepted from the waiting list` : '';
+        const waitlistText = notifiedWaitlistEntry ? ` - ${notifiedWaitlistEntry.firstName} ${notifiedWaitlistEntry.lastName} has been notified (2 hour window to book)` : '';
 
         res.json({
           success: true,
-          message: `Refund processed: £${(refundCheck.amount! / 100).toFixed(2)}${adminFeeText}${promotionText}. 10 loyalty points deducted.`,
+          message: `Refund processed: £${(refundCheck.amount! / 100).toFixed(2)}${adminFeeText}${waitlistText}. 10 loyalty points deducted.`,
           registration: updatedRegistration,
           refundAmount: refundCheck.amount,
           adminFee: refundCheck.adminFee,
-          promotedParticipant: promotedParticipant
+          notifiedWaitlistEntry: notifiedWaitlistEntry
         });
       } else {
         // Cancel without refund - still deduct points

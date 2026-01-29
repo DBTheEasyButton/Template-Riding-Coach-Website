@@ -641,6 +641,110 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
     return this.sendEmail(email, `Refund Confirmation - ${clinicName}`, htmlContent, textContent);
   }
 
+  async sendWaitlistSpotAvailable(
+    email: string,
+    firstName: string,
+    clinicName: string,
+    clinicDate: string,
+    clinicLocation: string,
+    clinicPrice: number,
+    clinicId: number,
+    sessionId?: number
+  ): Promise<boolean> {
+    const priceText = clinicPrice > 0 ? `£${(clinicPrice / 100).toFixed(2)}` : 'Free';
+    const bookingUrl = sessionId 
+      ? `https://danbizzarromethod.com/coaching/clinics?clinicId=${clinicId}&sessionId=${sessionId}`
+      : `https://danbizzarromethod.com/coaching/clinics?clinicId=${clinicId}`;
+    
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+        <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <h1 style="color: #16a34a; margin-top: 0; font-size: 28px;">🎉 A Spot Has Opened Up!</h1>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear ${firstName},</p>
+          
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Great news! A spot has become available for a clinic you were on the waiting list for.
+          </p>
+
+          <div style="background-color: #dcfce7; border-left: 4px solid #16a34a; padding: 15px; margin: 25px 0; border-radius: 4px;">
+            <h3 style="color: #15803d; margin-top: 0; font-size: 18px;">Clinic Details</h3>
+            <p style="color: #374151; margin: 5px 0; font-size: 15px;"><strong>Clinic:</strong> ${clinicName}</p>
+            <p style="color: #374151; margin: 5px 0; font-size: 15px;"><strong>Date:</strong> ${clinicDate}</p>
+            <p style="color: #374151; margin: 5px 0; font-size: 15px;"><strong>Location:</strong> ${clinicLocation}</p>
+            <p style="color: #374151; margin: 5px 0; font-size: 15px;"><strong>Price:</strong> ${priceText}</p>
+          </div>
+
+          <div style="background-color: #fef3c7; padding: 20px; border-radius: 8px; margin: 25px 0; border: 2px solid #f59e0b;">
+            <h3 style="color: #b45309; margin-top: 0; font-size: 20px;">⏰ Act Fast - 2 Hours Only!</h3>
+            <p style="color: #374151; font-size: 15px; margin-bottom: 15px;">
+              This spot is reserved for you for the next <strong>2 hours</strong>. 
+              If you don't complete your booking by then, the spot will be offered to the next person on the waiting list.
+            </p>
+          </div>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${bookingUrl}" 
+               style="background-color: #16a34a; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 700; display: inline-block; font-size: 18px;">
+              Book Your Spot Now
+            </a>
+          </div>
+
+          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
+            Don't miss this opportunity to join the clinic! Click the button above to complete your registration and payment.
+          </p>
+
+          <p style="color: #374151; font-size: 16px; margin-top: 30px;">
+            See you at the clinic!<br>
+            <strong>Dan Bizzarro</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+          </p>
+
+          <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+            </p>
+            <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
+              Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const textContent = `
+A SPOT HAS OPENED UP!
+
+Dear ${firstName},
+
+Great news! A spot has become available for a clinic you were on the waiting list for.
+
+CLINIC DETAILS:
+Clinic: ${clinicName}
+Date: ${clinicDate}
+Location: ${clinicLocation}
+Price: ${priceText}
+
+⏰ ACT FAST - 2 HOURS ONLY!
+This spot is reserved for you for the next 2 hours. 
+If you don't complete your booking by then, the spot will be offered to the next person on the waiting list.
+
+Book your spot now: ${bookingUrl}
+
+Don't miss this opportunity to join the clinic!
+
+See you at the clinic!
+Dan Bizzarro
+Dan Bizzarro Method
+
+---
+📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
+    `;
+
+    return this.sendEmail(email, `🎉 A Spot Has Opened Up - ${clinicName}`, htmlContent, textContent);
+  }
+
   private async getUpcomingClinicsForEmail(): Promise<{ html: string; text: string }> {
     try {
       const allClinics = await storage.getAllClinics();

@@ -4,6 +4,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, log } from "./vite";
 import { seoMiddleware } from "./seo-middleware";
 import { botDetectionMiddleware, isPrerenderingAvailable } from "./botDetection";
+import { waitlistService } from "./waitlistService";
 import fs from "fs";
 import path from "path";
 
@@ -122,5 +123,8 @@ app.use((req, res, next) => {
     reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    
+    // Start background services
+    waitlistService.start();
   });
 })();

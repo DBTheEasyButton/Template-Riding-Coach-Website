@@ -157,14 +157,17 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
 export const clinicWaitlist = pgTable("clinic_waitlist", {
   id: serial("id").primaryKey(),
   clinicId: integer("clinic_id").notNull().references(() => clinics.id),
+  sessionId: integer("session_id").references(() => clinicSessions.id),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
   horseName: text("horse_name"),
   specialRequests: text("special_requests"),
-  position: integer("position").notNull(), // position in waitlist
+  position: integer("position").notNull(),
   notified: boolean("notified").notNull().default(false),
+  notifiedAt: timestamp("notified_at"),
+  expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
