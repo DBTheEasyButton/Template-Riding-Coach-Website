@@ -41,7 +41,7 @@ export default function GroupClinics() {
   ];
   
   const { data: upcomingClinics = [] } = useQuery<any[]>({
-    queryKey: ['/api/clinics', { upcoming: 'true', limit: 3 }],
+    queryKey: ['/api/clinics?upcoming=true&limit=3'],
   });
 
   const formatDate = (date: string | Date) => {
@@ -54,34 +54,26 @@ export default function GroupClinics() {
   };
 
   const getClinicColor = (clinic: any) => {
-    const disciplineColors: Record<string, string> = {
-      'jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
-      'show-jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
-      'showjumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
-      'show jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
-      'cross-country': 'linear-gradient(to right, #16a34a, #15803d)',
-      'cross country': 'linear-gradient(to right, #16a34a, #15803d)',
-      'polework': 'linear-gradient(to right, #9333ea, #7c3aed)',
-      'pole work': 'linear-gradient(to right, #9333ea, #7c3aed)',
-      'dressage': 'linear-gradient(to right, #dc2626, #b91c1c)',
-      'gridwork': 'linear-gradient(to right, #0891b2, #0e7490)',
-      'grid work': 'linear-gradient(to right, #0891b2, #0e7490)',
-      'eventing': 'linear-gradient(to right, #ea580c, #c2410c)',
-      'arena eventing': 'linear-gradient(to right, #ea580c, #c2410c)',
+    const colors = {
+      polework: 'linear-gradient(to right, #9333ea, #7c3aed)',
+      crossCountry: 'linear-gradient(to right, #16a34a, #15803d)',
+      jumping: 'linear-gradient(to right, #2563eb, #1d4ed8)',
+      eventing: 'linear-gradient(to right, #ea580c, #c2410c)',
+      dressage: 'linear-gradient(to right, #dc2626, #b91c1c)',
+      gridwork: 'linear-gradient(to right, #0891b2, #0e7490)',
+      default: 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)',
     };
     
-    const type = (clinic.type || '').toLowerCase();
-    if (disciplineColors[type]) return disciplineColors[type];
-    
     const title = (clinic.title || '').toLowerCase();
-    if (title.includes('pole') || title.includes('polework')) return disciplineColors['polework'];
-    if (title.includes('cross country') || title.includes('xc')) return disciplineColors['cross-country'];
-    if (title.includes('show jump') || title.includes('jumping')) return disciplineColors['jumping'];
-    if (title.includes('eventing') || title.includes('arena eventing')) return disciplineColors['eventing'];
-    if (title.includes('dressage')) return disciplineColors['dressage'];
-    if (title.includes('grid')) return disciplineColors['gridwork'];
     
-    return 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)';
+    if (title.includes('pole')) return colors.polework;
+    if (title.includes('cross country') || title.includes('xc')) return colors.crossCountry;
+    if (title.includes('show jump') || title.includes('jumping')) return colors.jumping;
+    if (title.includes('eventing')) return colors.eventing;
+    if (title.includes('grid')) return colors.gridwork;
+    if (title.includes('dressage')) return colors.dressage;
+    
+    return colors.default;
   };
 
   const features = [
