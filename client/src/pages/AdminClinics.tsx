@@ -46,7 +46,7 @@ export default function AdminClinics() {
     hasMultipleSessions: false,
     clinicType: "single",
     autoPostToFacebook: false,
-    sendEmailAnnouncement: true,
+    sendEmailAnnouncement: false,
     excludeTagsFromEmail: "",
     emailTagMode: "exclude"
   });
@@ -85,7 +85,7 @@ export default function AdminClinics() {
     hasMultipleSessions: false,
     clinicType: "single",
     autoPostToFacebook: false,
-    sendEmailAnnouncement: true,
+    sendEmailAnnouncement: false,
     excludeTagsFromEmail: "",
     emailTagMode: "exclude"
   };
@@ -200,7 +200,7 @@ export default function AdminClinics() {
       hasMultipleSessions: false,
       clinicType: "single",
       autoPostToFacebook: false,
-      sendEmailAnnouncement: true,
+      sendEmailAnnouncement: false,
       excludeTagsFromEmail: "",
       emailTagMode: "exclude"
     });
@@ -336,7 +336,7 @@ export default function AdminClinics() {
       hasMultipleSessions: freshClinic.hasMultipleSessions || false,
       clinicType: freshClinic.clinicType || "single",
       autoPostToFacebook: freshClinic.autoPostToFacebook || false,
-      sendEmailAnnouncement: true,
+      sendEmailAnnouncement: false,
       excludeTagsFromEmail: freshClinic.excludeTagsFromEmail || "",
       emailTagMode: freshClinic.emailTagMode || "exclude"
     };
@@ -402,7 +402,7 @@ export default function AdminClinics() {
       hasMultipleSessions: clinic.hasMultipleSessions || false,
       clinicType: clinic.clinicType || "single",
       autoPostToFacebook: clinic.autoPostToFacebook ?? false,
-      sendEmailAnnouncement: true,
+      sendEmailAnnouncement: false,
       excludeTagsFromEmail: clinic.excludeTagsFromEmail || "",
       emailTagMode: clinic.emailTagMode || "exclude"
     });
@@ -491,7 +491,7 @@ export default function AdminClinics() {
       price: formData.clinicType === 'single' ? Number(formData.price) : 0,
       maxParticipants: Number(formData.maxParticipants),
       autoPostToFacebook: formData.autoPostToFacebook || false,
-      sendEmailAnnouncement: formData.sendEmailAnnouncement ?? true,
+      sendEmailAnnouncement: formData.sendEmailAnnouncement ?? false,
       excludeTagsFromEmail: formData.excludeTagsFromEmail || "",
       emailTagMode: formData.emailTagMode || "exclude",
       sessions: formData.hasMultipleSessions ? sessions : []
