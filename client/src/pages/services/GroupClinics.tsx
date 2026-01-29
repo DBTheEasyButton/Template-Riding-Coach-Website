@@ -53,19 +53,35 @@ export default function GroupClinics() {
     });
   };
 
-  const getDisciplineColor = (discipline: string) => {
+  const getClinicColor = (clinic: any) => {
     const disciplineColors: Record<string, string> = {
       'jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
       'show-jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
       'showjumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
+      'show jumping': 'linear-gradient(to right, #2563eb, #1d4ed8)',
       'cross-country': 'linear-gradient(to right, #16a34a, #15803d)',
       'cross country': 'linear-gradient(to right, #16a34a, #15803d)',
       'polework': 'linear-gradient(to right, #9333ea, #7c3aed)',
+      'pole work': 'linear-gradient(to right, #9333ea, #7c3aed)',
       'dressage': 'linear-gradient(to right, #dc2626, #b91c1c)',
       'gridwork': 'linear-gradient(to right, #0891b2, #0e7490)',
+      'grid work': 'linear-gradient(to right, #0891b2, #0e7490)',
       'eventing': 'linear-gradient(to right, #ea580c, #c2410c)',
+      'arena eventing': 'linear-gradient(to right, #ea580c, #c2410c)',
     };
-    return disciplineColors[(discipline || '').toLowerCase()] || 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)';
+    
+    const type = (clinic.type || '').toLowerCase();
+    if (disciplineColors[type]) return disciplineColors[type];
+    
+    const title = (clinic.title || '').toLowerCase();
+    if (title.includes('pole') || title.includes('polework')) return disciplineColors['polework'];
+    if (title.includes('cross country') || title.includes('xc')) return disciplineColors['cross-country'];
+    if (title.includes('show jump') || title.includes('jumping')) return disciplineColors['jumping'];
+    if (title.includes('eventing') || title.includes('arena eventing')) return disciplineColors['eventing'];
+    if (title.includes('dressage')) return disciplineColors['dressage'];
+    if (title.includes('grid')) return disciplineColors['gridwork'];
+    
+    return 'linear-gradient(to right, #ee7d3f, #ee7d3fcc)';
   };
 
   const features = [
@@ -220,7 +236,7 @@ export default function GroupClinics() {
                     }, 600);
                   }}
                 >
-                  <div className="p-4 text-white" style={{ background: getDisciplineColor(clinic.discipline) }}>
+                  <div className="p-4 text-white" style={{ background: getClinicColor(clinic) }}>
                     <h3 className="text-xl font-playfair font-bold mb-1 line-clamp-2">{clinic.title}</h3>
                     <div className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
