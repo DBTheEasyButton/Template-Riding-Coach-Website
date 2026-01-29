@@ -229,6 +229,7 @@ export default function Footer() {
               href="/admin/clinics" 
               className="text-xs text-gray-600 hover:text-orange transition-colors"
               title="Admin Access"
+              onClick={() => window.scrollTo(0, 0)}
             >
               •
             </Link>

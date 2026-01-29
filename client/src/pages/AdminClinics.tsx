@@ -625,7 +625,7 @@ export default function AdminClinics() {
                           <div className="flex-1 min-w-0">
                             <span className="font-medium text-sm md:text-base block sm:inline">{session.sessionName}</span>
                             <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300 sm:ml-3 block sm:inline">
-                              {session.skillLevel} · £{(session.price / 100).toFixed(0)}
+                              ({session.currentParticipants || 0} entered)
                             </span>
                           </div>
                           <Button
