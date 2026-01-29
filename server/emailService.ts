@@ -1132,7 +1132,9 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         if (!contact.email) continue;
         
         const contactTags = contact.tags || [];
-        const hasMatchingTag = filterTags.length > 0 && filterTags.some(tag => contactTags.includes(tag));
+        // Case-insensitive tag matching
+        const contactTagsLower = contactTags.map(t => t.toLowerCase());
+        const hasMatchingTag = filterTags.length > 0 && filterTags.some(tag => contactTagsLower.includes(tag.toLowerCase()));
         
         // Include mode: only send to contacts WITH the specified tags
         // Exclude mode: send to all EXCEPT contacts with the specified tags
