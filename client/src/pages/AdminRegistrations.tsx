@@ -128,9 +128,11 @@ export default function AdminRegistrations() {
     return groups;
   }, {} as Record<number, { name: string; registrations: Registration[] }>);
   
-  // Filter by clinic if specified in URL
-  const groupedRegistrations = clinicFilter && allGroupedRegistrations[clinicFilter]
-    ? { [clinicFilter]: allGroupedRegistrations[clinicFilter] }
+  // Filter by clinic if specified in URL - if clinic has no registrations, show empty state (not all clinics)
+  const groupedRegistrations = clinicFilter 
+    ? (allGroupedRegistrations[clinicFilter] 
+        ? { [clinicFilter]: allGroupedRegistrations[clinicFilter] }
+        : {}) // Empty object if clinic has no registrations
     : allGroupedRegistrations;
     
   // Filter out undefined entries (in case clinic doesn't exist)
@@ -244,7 +246,16 @@ export default function AdminRegistrations() {
         {filteredGroupedRegistrations.length === 0 ? (
           <Card>
             <CardContent className="text-center py-8 text-gray-500 dark:text-gray-400">
-              No registrations found
+              {clinicFilter ? (
+                <>
+                  No registrations yet for this clinic.
+                  <Button variant="link" onClick={clearFilter} className="ml-2">
+                    View all registrations
+                  </Button>
+                </>
+              ) : (
+                "No registrations found"
+              )}
             </CardContent>
           </Card>
         ) : (
