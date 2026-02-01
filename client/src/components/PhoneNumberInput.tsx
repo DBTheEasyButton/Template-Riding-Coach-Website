@@ -232,5 +232,6 @@ export function isValidPhoneNumber(phone: string): boolean {
 export function requiresSmsVerification(phone: string): boolean {
   if (!phone) return true;
   const cleaned = phone.replace(/\s+/g, "");
-  return cleaned.startsWith("+44") || cleaned.startsWith("+353");
+  // Only UK numbers require SMS verification - GHL can't reliably send to other countries
+  return cleaned.startsWith("+44");
 }
