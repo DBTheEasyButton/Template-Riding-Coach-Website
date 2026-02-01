@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Calendar, Home, Images, FileText, Star, BarChart3, Settings, Globe, Menu, X } from "lucide-react";
+import { Calendar, Home, Images, FileText, Star, BarChart3, Settings, Globe, Menu, X, Users } from "lucide-react";
 
 const navItems = [
   { href: "/admin/clinics", label: "Clinics", icon: Calendar },
+  { href: "/admin/registrations", label: "Entries", icon: Users },
   { href: "/admin/gallery", label: "Gallery", icon: Images },
   { href: "/admin/news", label: "News", icon: FileText },
   { href: "/admin/sponsors", label: "Sponsors", icon: Star },
