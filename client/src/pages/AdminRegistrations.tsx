@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { format } from "date-fns";
 import { CalendarDays, User, Phone, Mail, Clock, AlertTriangle, Download, Eye, X, Check } from "lucide-react";
-import { useLocation } from "wouter";
+import { useLocation, useSearch } from "wouter";
 
 interface Registration {
   id: number;
@@ -54,9 +54,13 @@ export default function AdminRegistrations() {
   const [refundSuccessData, setRefundSuccessData] = useState<{ name: string; amount: number } | null>(null);
   const clinicRefs = useRef<Record<number, HTMLDivElement | null>>({});
   
-  // Get clinic filter from URL parameter
-  const urlParams = new URLSearchParams(window.location.search);
-  const clinicFilter = urlParams.get('clinic') ? parseInt(urlParams.get('clinic')!) : null;
+  // Get clinic filter from URL parameter - use wouter's useSearch for reactive updates
+  const searchString = useSearch();
+  const clinicFilter = useMemo(() => {
+    const urlParams = new URLSearchParams(searchString);
+    const clinicParam = urlParams.get('clinic');
+    return clinicParam ? parseInt(clinicParam) : null;
+  }, [searchString]);
 
   const { data: registrations = [], isLoading } = useQuery<Registration[]>({
     queryKey: ["/api/admin/registrations"],
