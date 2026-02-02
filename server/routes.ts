@@ -20,7 +20,9 @@ import {
   insertEmailAutomationSchema,
   insertGallerySchema,
   insertCompetitionChecklistSchema,
-  insertSponsorSchema
+  insertSponsorSchema,
+  type ClinicSession,
+  type ClinicRegistration
 } from "@shared/schema";
 import { prerenderService } from "./prerenderService";
 import { generateWarmupSystemPDF } from "./generateWarmupPDF";
@@ -2329,6 +2331,287 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error auto-organizing groups:", error);
       res.status(500).json({ message: "Failed to auto-organize groups" });
+    }
+  });
+
+  // Get all groups for a clinic (unified view)
+  app.get("/api/admin/clinics/:clinicId/all-groups", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.clinicId);
+      
+      // Get all sessions for this clinic
+      const allSessions = await storage.getAllClinicSessions();
+      const sessions = allSessions.filter(s => s.clinicId === clinicId);
+      
+      // Get all confirmed registrations for this clinic
+      const allRegistrations = await storage.getClinicRegistrations(clinicId);
+      const confirmedRegistrations = allRegistrations.filter(r => r.status === 'confirmed');
+      
+      // Build session data with groups
+      const sessionsWithGroups = await Promise.all(
+        sessions.map(async (session: ClinicSession) => {
+          const groups = await storage.getSessionGroups(session.id);
+          const groupsWithParticipants = groups.map(group => ({
+            ...group,
+            participants: confirmedRegistrations.filter(r => r.groupId === group.id)
+          }));
+          return {
+            id: session.id,
+            sessionName: session.sessionName,
+            discipline: session.discipline,
+            skillLevel: session.skillLevel,
+            groups: groupsWithParticipants
+          };
+        })
+      );
+      
+      // Get unassigned participants (confirmed but no group)
+      const unassigned = confirmedRegistrations.filter(r => !r.groupId);
+      
+      res.json({
+        sessions: sessionsWithGroups,
+        unassigned,
+        allParticipants: confirmedRegistrations
+      });
+    } catch (error) {
+      console.error("Error fetching clinic groups:", error);
+      res.status(500).json({ message: "Failed to fetch clinic groups" });
+    }
+  });
+
+  // Smart organize groups for a clinic (considers notes)
+  app.post("/api/admin/clinics/:clinicId/smart-organize", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.clinicId);
+      
+      // Get all sessions for this clinic
+      const allSessions = await storage.getAllClinicSessions();
+      const sessions = allSessions.filter(s => s.clinicId === clinicId);
+      const allRegistrations = await storage.getClinicRegistrations(clinicId);
+      const confirmedRegistrations = allRegistrations.filter(r => r.status === 'confirmed');
+      
+      // Parse special requests to extract key info
+      const parseNotes = (notes: string | null | undefined): { timePrefs: string[], groupWith: string[] } => {
+        if (!notes) return { timePrefs: [], groupWith: [] };
+        
+        const timePrefs: string[] = [];
+        const groupWith: string[] = [];
+        
+        // Time patterns
+        const timeMatches = notes.match(/(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)/gi) || [];
+        timePrefs.push(...timeMatches);
+        
+        if (/earliest|first|morning/i.test(notes)) timePrefs.push('early');
+        if (/latest|last|afternoon|late/i.test(notes)) timePrefs.push('late');
+        
+        // Group-with patterns
+        const withMatches = notes.match(/(?:with|same.*as|together.*with|put.*with|travelling.*with)\s+([a-z]+(?:\s+[a-z]+)?)/gi) || [];
+        for (const match of withMatches) {
+          const nameMatch = match.match(/(?:with|as)\s+([a-z]+(?:\s+[a-z]+)?)/i);
+          if (nameMatch?.[1]) {
+            groupWith.push(nameMatch[1].trim().toLowerCase());
+          }
+        }
+        
+        return { timePrefs, groupWith };
+      };
+      
+      type ParticipantData = {
+        reg: ClinicRegistration;
+        notes: { timePrefs: string[], groupWith: string[] };
+        matchedWith: number[];
+      };
+      
+      // Build participant map with parsed notes
+      const participantMap = new Map<number, ParticipantData>();
+      
+      for (const reg of confirmedRegistrations) {
+        const notes = parseNotes(reg.specialRequests);
+        participantMap.set(reg.id, { reg, notes, matchedWith: [] });
+      }
+      
+      // Find group-with matches
+      const participantEntries = Array.from(participantMap.entries());
+      for (const [id, data] of participantEntries) {
+        for (const nameToFind of data.notes.groupWith) {
+          for (const [otherId, otherData] of participantEntries) {
+            if (otherId === id) continue;
+            const fullName = `${otherData.reg.firstName} ${otherData.reg.lastName}`.toLowerCase();
+            const firstName = otherData.reg.firstName.toLowerCase();
+            const lastName = otherData.reg.lastName.toLowerCase();
+            
+            if (fullName.includes(nameToFind) || 
+                nameToFind.includes(firstName) || 
+                nameToFind.includes(lastName) ||
+                firstName === nameToFind ||
+                lastName === nameToFind) {
+              if (!data.matchedWith.includes(otherId)) {
+                data.matchedWith.push(otherId);
+              }
+            }
+          }
+        }
+      }
+      
+      // Process each session
+      for (const session of sessions) {
+        // First, clear all group assignments for registrations in this session
+        // This prevents orphaned groupId references when groups are deleted
+        const sessionAllRegs = allRegistrations.filter(r => r.sessionId === session.id);
+        for (const reg of sessionAllRegs) {
+          if (reg.groupId) {
+            await storage.moveParticipantToGroup(reg.id, null);
+          }
+        }
+        
+        // Delete existing groups (now safe since no registrations reference them)
+        const existingGroups = await storage.getSessionGroups(session.id);
+        for (const group of existingGroups) {
+          await storage.deleteClinicGroup(group.id);
+        }
+        
+        // Get confirmed registrations for this session (only confirmed get assigned to groups)
+        const sessionRegs = confirmedRegistrations.filter(r => r.sessionId === session.id);
+        if (sessionRegs.length === 0) continue;
+        
+        // Group by skill level first
+        const bySkillLevel = new Map<string, ClinicRegistration[]>();
+        for (const reg of sessionRegs) {
+          const level = (reg.skillLevel || 'open').toLowerCase();
+          if (!bySkillLevel.has(level)) bySkillLevel.set(level, []);
+          bySkillLevel.get(level)!.push(reg);
+        }
+        
+        // Sort time preferences (early first, then no preference, then late)
+        const getTimeScore = (id: number): number => {
+          const data = participantMap.get(id);
+          if (!data) return 0;
+          if (data.notes.timePrefs.some(t => /early|first|morning/i.test(t))) return -1;
+          if (data.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) return 1;
+          // Check for specific times
+          const timeMatch = data.notes.timePrefs.find(t => /\d/.test(t));
+          if (timeMatch) {
+            const hour = parseInt(timeMatch.match(/\d+/)?.[0] || '12');
+            return hour < 14 ? -0.5 : 0.5;
+          }
+          return 0;
+        };
+        
+        let groupOrder = 0;
+        
+        // Create groups for each skill level
+        const skillLevelEntries = Array.from(bySkillLevel.entries());
+        for (const [level, regs] of skillLevelEntries) {
+          // Sort by time preference
+          regs.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
+          
+          // Keep group-with pairs together
+          const assigned = new Set<number>();
+          const groups: number[][] = [];
+          
+          for (const reg of regs) {
+            if (assigned.has(reg.id)) continue;
+            
+            const group: number[] = [reg.id];
+            assigned.add(reg.id);
+            
+            // Add matched people to same group
+            const data = participantMap.get(reg.id);
+            if (data) {
+              for (const matchId of data.matchedWith) {
+                if (!assigned.has(matchId)) {
+                  const matchedReg = regs.find((r: ClinicRegistration) => r.id === matchId);
+                  if (matchedReg) {
+                    group.push(matchId);
+                    assigned.add(matchId);
+                  }
+                }
+              }
+            }
+            
+            groups.push(group);
+          }
+          
+          // Merge small groups (keep max 4 per group)
+          const mergedGroups: number[][] = [];
+          let currentGroup: number[] = [];
+          
+          for (const group of groups) {
+            if (currentGroup.length + group.length <= 4) {
+              currentGroup.push(...group);
+            } else {
+              if (currentGroup.length > 0) mergedGroups.push(currentGroup);
+              currentGroup = [...group];
+            }
+          }
+          if (currentGroup.length > 0) mergedGroups.push(currentGroup);
+          
+          // Create database groups
+          for (let i = 0; i < mergedGroups.length; i++) {
+            const groupRegs = mergedGroups[i];
+            
+            // Determine time slot based on first participant's preference
+            const firstData = participantMap.get(groupRegs[0]);
+            let startTime = '';
+            let endTime = '';
+            
+            if (firstData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
+              startTime = '10:00';
+              endTime = '11:00';
+            } else if (firstData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
+              startTime = '16:00';
+              endTime = '17:00';
+            }
+            
+            const newGroup = await storage.createClinicGroup({
+              sessionId: session.id,
+              groupName: `${level.charAt(0).toUpperCase() + level.slice(1)} - Group ${i + 1}`,
+              skillLevel: level,
+              maxParticipants: 4,
+              startTime: startTime || null,
+              endTime: endTime || null,
+              displayOrder: groupOrder++
+            });
+            
+            // Assign participants to this group
+            for (const regId of groupRegs) {
+              await storage.moveParticipantToGroup(regId, newGroup.id);
+            }
+          }
+        }
+      }
+      
+      // Return updated data
+      const sessionsWithGroups = await Promise.all(
+        sessions.map(async (session: ClinicSession) => {
+          const groups = await storage.getSessionGroups(session.id);
+          const freshRegs = await storage.getClinicRegistrations(clinicId);
+          const confirmed = freshRegs.filter(r => r.status === 'confirmed');
+          const groupsWithParticipants = groups.map(group => ({
+            ...group,
+            participants: confirmed.filter(r => r.groupId === group.id)
+          }));
+          return {
+            id: session.id,
+            sessionName: session.sessionName,
+            discipline: session.discipline,
+            skillLevel: session.skillLevel,
+            groups: groupsWithParticipants
+          };
+        })
+      );
+      
+      const freshRegs = await storage.getClinicRegistrations(clinicId);
+      const unassigned = freshRegs.filter(r => r.status === 'confirmed' && !r.groupId);
+      
+      res.json({
+        sessions: sessionsWithGroups,
+        unassigned,
+        allParticipants: freshRegs.filter(r => r.status === 'confirmed')
+      });
+    } catch (error) {
+      console.error("Error smart-organizing groups:", error);
+      res.status(500).json({ message: "Failed to smart-organize groups" });
     }
   });
 

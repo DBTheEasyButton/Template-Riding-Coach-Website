@@ -20,12 +20,14 @@ import { Plus, Edit, Trash2, Calendar, MapPin, Users, Copy, Share2, FileText } f
 import SocialShare from "@/components/SocialShare";
 import { Link } from "wouter";
 import GroupManagement from "@/components/GroupManagement";
+import ClinicGroupsManager from "@/components/ClinicGroupsManager";
 
 export default function AdminClinics() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingClinic, setEditingClinic] = useState<ClinicWithSessions | null>(null);
   const [dialogKey, setDialogKey] = useState(0); // Force dialog re-render
   const [groupManagementSession, setGroupManagementSession] = useState<{ sessionId: number; sessionName: string } | null>(null);
+  const [clinicGroupsManager, setClinicGroupsManager] = useState<{ clinicId: number; clinicTitle: string } | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -650,6 +652,16 @@ export default function AdminClinics() {
                         Entries
                       </Button>
                     </Link>
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-xs md:text-sm" 
+                      onClick={() => setClinicGroupsManager({ clinicId: clinic.id, clinicTitle: clinic.title })}
+                      data-testid={`button-groups-${clinic.id}`}
+                    >
+                      <Users className="w-4 h-4 mr-1" />
+                      Groups
+                    </Button>
                     <Button variant="outline" size="sm" className="text-xs md:text-sm" onClick={() => handleEdit(clinic)} data-testid={`button-edit-${clinic.id}`}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
@@ -1221,6 +1233,15 @@ export default function AdminClinics() {
           sessionName={groupManagementSession.sessionName}
           open={!!groupManagementSession}
           onOpenChange={(open) => !open && setGroupManagementSession(null)}
+        />
+      )}
+
+      {clinicGroupsManager && (
+        <ClinicGroupsManager
+          clinicId={clinicGroupsManager.clinicId}
+          clinicTitle={clinicGroupsManager.clinicTitle}
+          open={!!clinicGroupsManager}
+          onOpenChange={(open) => !open && setClinicGroupsManager(null)}
         />
       )}
 
