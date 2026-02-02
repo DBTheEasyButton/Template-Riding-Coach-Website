@@ -5762,9 +5762,14 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
         return sum + (session?.price || 0);
       }, 0);
 
+      // Count only future active clinics
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const futureClinics = clinics.filter(c => c.isActive && new Date(c.date) >= today);
+
       res.json({
         totalSubscribers: newsletterSubscriberCount,
-        totalClinics: clinics.filter(c => c.isActive).length,
+        totalClinics: futureClinics.length,
         totalRegistrations: confirmedRegs.length,
         totalRevenue: totalClinicRevenue,
         monthlyRegistrations: monthlyData,
