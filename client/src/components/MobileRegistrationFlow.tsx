@@ -316,7 +316,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
     
     if (step === 2) {
       if (!registrationData.horseName.trim()) newErrors.horseName = "Horse name required";
-      if (!registrationData.skillLevel.trim()) newErrors.skillLevel = "Skill level required";
       if (clinic?.hasMultipleSessions && selectedSessions.length === 0) {
         newErrors.sessions = "Please select at least one session";
       }
@@ -324,7 +323,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
         if (!registrationData.otherRiderFirstName?.trim()) newErrors.otherRiderFirstName = "First name required";
         if (!registrationData.otherRiderLastName?.trim()) newErrors.otherRiderLastName = "Last name required";
         if (!registrationData.otherRiderHorseName?.trim()) newErrors.otherRiderHorseName = "Horse name required";
-        if (!registrationData.otherRiderSkillLevel?.trim()) newErrors.otherRiderSkillLevel = "Skill level required";
       }
       if (registrationData.isAdditionalHorse && !registrationData.gapPreference) {
         newErrors.gapPreference = "Please select how you'd like your sessions scheduled";
@@ -657,37 +655,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 {errors.horseName && <p className="text-xs text-red-500 mt-1">{errors.horseName}</p>}
               </div>
 
-              <div>
-                <Label htmlFor="skillLevel" className="text-sm font-medium text-gray-700">Skill Level *</Label>
-                <select
-                  id="skillLevel"
-                  value={registrationData.skillLevel}
-                  onChange={(e) => updateRegistrationData('skillLevel', e.target.value)}
-                  className={`mt-2 w-full h-12 text-base px-3 ${errors.skillLevel ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} border rounded-lg transition-colors`}
-                >
-                  <option value="">Select your skill level</option>
-                  {/* Show beginner/intermediate/advanced for polework clinics, heights for jumping */}
-                  {clinic?.sessions?.some(s => s.discipline === 'polework') ? (
-                    <>
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="70cm">70cm</option>
-                      <option value="80cm">80cm</option>
-                      <option value="90cm">90cm</option>
-                      <option value="1m">1m</option>
-                      <option value="1.10m">1.10m</option>
-                      <option value="1.20m">1.20m</option>
-                    </>
-                  )}
-                </select>
-                {errors.skillLevel && <p className="text-xs text-red-500 mt-1">{errors.skillLevel}</p>}
-              </div>
-
-
               {clinic?.hasMultipleSessions && clinic?.sessions && clinic.sessions.length > 0 && (
                 <div>
                   <Label className="text-sm font-medium">Select Sessions</Label>
@@ -814,7 +781,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                     <div>
                       <p className="font-medium text-gray-900">{registrationData.firstName} {registrationData.lastName}</p>
                       <p className="text-sm text-gray-600">Horse: {registrationData.horseName}</p>
-                      <p className="text-xs text-gray-500">Level: {registrationData.skillLevel}</p>
                     </div>
                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Primary</span>
                   </div>
@@ -827,7 +793,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                       <div>
                         <p className="font-medium text-gray-900">{entry.firstName} {entry.lastName}</p>
                         <p className="text-sm text-gray-600">Horse: {entry.horseName}</p>
-                        <p className="text-xs text-gray-500">Level: {entry.skillLevel}</p>
                         {entry.gapPreference && (
                           <p className="text-xs text-blue-600">
                             {entry.gapPreference === 'back_to_back' ? 'Back-to-back' : 'One session gap'}
@@ -1002,34 +967,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                         />
                       </div>
                       
-                      <div>
-                        <Label className="text-xs">Skill Level *</Label>
-                        <select
-                          value={newEntryData.skillLevel || ''}
-                          onChange={(e) => setNewEntryData(prev => ({ ...prev, skillLevel: e.target.value }))}
-                          className="w-full h-10 px-3 border rounded-md text-sm"
-                        >
-                          <option value="">Select level...</option>
-                          {clinic?.sessions?.some(s => s.discipline === 'polework') || clinic?.title?.toLowerCase().includes('pole') ? (
-                            <>
-                              <option value="beginner">Beginner</option>
-                              <option value="intermediate">Intermediate</option>
-                              <option value="advanced">Advanced</option>
-                            </>
-                          ) : (
-                            <>
-                              <option value="60cm">60cm</option>
-                              <option value="70cm">70cm</option>
-                              <option value="80cm">80cm</option>
-                              <option value="90cm">90cm</option>
-                              <option value="1m">1m</option>
-                              <option value="1.10m">1.10m</option>
-                              <option value="1.20m">1.20m</option>
-                            </>
-                          )}
-                        </select>
-                      </div>
-                      
                       {addingEntryType === 'same_rider_different_horse' && (
                         <div className="bg-blue-50 p-3 rounded-lg">
                           <Label className="text-xs font-medium text-blue-800">Session Scheduling Preference *</Label>
@@ -1075,8 +1012,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                       <button
                         onClick={() => {
                           // Validate and add entry
-                          if (!newEntryData.horseName || !newEntryData.skillLevel) {
-                            toast({ title: "Please fill in all required fields", variant: "destructive" });
+                          if (!newEntryData.horseName) {
+                            toast({ title: "Please enter the horse's name", variant: "destructive" });
                             return;
                           }
                           if (addingEntryType === 'different_rider' && (!newEntryData.firstName || !newEntryData.lastName || !newEntryData.email)) {

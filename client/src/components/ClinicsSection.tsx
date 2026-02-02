@@ -1386,7 +1386,7 @@ export default function ClinicsSection() {
                       <div key={idx} className="bg-white p-3 rounded border flex justify-between items-start">
                         <div>
                           <p className="text-sm font-medium">{entry.firstName} {entry.lastName}</p>
-                          <p className="text-xs text-gray-600">Horse: {entry.horseName} • {entry.skillLevel}</p>
+                          <p className="text-xs text-gray-600">Horse: {entry.horseName}</p>
                           {entry.gapPreference && (
                             <p className="text-xs text-blue-600">Gap: {entry.gapPreference === 'back_to_back' ? 'Back-to-back' : 'One session gap'}</p>
                           )}
@@ -1683,35 +1683,6 @@ export default function ClinicsSection() {
                   />
                 </div>
                 
-                <div>
-                  <Label htmlFor="newEntry_skillLevel" className="text-sm">Skill Level *</Label>
-                  <select
-                    id="newEntry_skillLevel"
-                    value={newEntryData.skillLevel}
-                    onChange={(e) => setNewEntryData(prev => ({ ...prev, skillLevel: e.target.value }))}
-                    className="w-full h-10 px-3 border rounded-md text-sm"
-                  >
-                    <option value="">Select level...</option>
-                    {selectedClinic?.sessions?.some(s => s.discipline === 'polework') || selectedClinic?.title?.toLowerCase().includes('pole') ? (
-                      <>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="advanced">Advanced</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="60cm">60cm</option>
-                        <option value="70cm">70cm</option>
-                        <option value="80cm">80cm</option>
-                        <option value="90cm">90cm</option>
-                        <option value="1m">1m</option>
-                        <option value="1.10m">1.10m</option>
-                        <option value="1.20m">1.20m</option>
-                      </>
-                    )}
-                  </select>
-                </div>
-                
                 {addEntryType === 'another_horse' && (
                   <div>
                     <Label className="text-sm">Session Scheduling Preference *</Label>
@@ -1765,10 +1736,10 @@ export default function ClinicsSection() {
                   <Button
                     type="button"
                     onClick={() => {
-                      if (!newEntryData.horseName || !newEntryData.skillLevel) {
+                      if (!newEntryData.horseName) {
                         toast({
                           title: "Missing information",
-                          description: "Please fill in all required fields",
+                          description: "Please enter the horse's name",
                           variant: "destructive"
                         });
                         return;
