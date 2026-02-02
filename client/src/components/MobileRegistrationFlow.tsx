@@ -133,6 +133,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
   const [hasSavedData, setHasSavedData] = useState(false);
   const [savedFirstName, setSavedFirstName] = useState('');
+  const [emailChecked, setEmailChecked] = useState(false); // Track if we've checked the email
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -160,8 +161,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
           setSavedFirstName(data.firstName);
         }
       }
+      setEmailChecked(true); // Mark that we've checked this email
     } catch (error) {
       // Silently fail - it just means no previous registration
+      setEmailChecked(true); // Still mark as checked even on error
     } finally {
       setIsLookingUpEmail(false);
     }
@@ -554,8 +557,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
 
-              {/* Referral Code - Only show for new clients (not returning clients) */}
-              {!hasSavedData && (
+              {/* Referral Code - Only show for confirmed new clients (after email check) */}
+              {emailChecked && !hasSavedData && (
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
                 <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
                 <p className="text-xs text-gray-700 mt-1 mb-2">
