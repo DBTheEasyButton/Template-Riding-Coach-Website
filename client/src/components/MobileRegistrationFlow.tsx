@@ -90,6 +90,13 @@ interface RegistrationData {
   paymentMethod: string;
   discountCode?: string;
   referralCode?: string;
+  isBookingForOther?: boolean;
+  otherRiderFirstName?: string;
+  otherRiderLastName?: string;
+  otherRiderHorseName?: string;
+  otherRiderSkillLevel?: string;
+  isAdditionalHorse?: boolean;
+  gapPreference?: 'back_to_back' | 'one_session_gap';
 }
 
 const STEPS = [
@@ -264,6 +271,15 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
       if (clinic?.hasMultipleSessions && selectedSessions.length === 0) {
         newErrors.sessions = "Please select at least one session";
       }
+      if (registrationData.isBookingForOther) {
+        if (!registrationData.otherRiderFirstName?.trim()) newErrors.otherRiderFirstName = "First name required";
+        if (!registrationData.otherRiderLastName?.trim()) newErrors.otherRiderLastName = "Last name required";
+        if (!registrationData.otherRiderHorseName?.trim()) newErrors.otherRiderHorseName = "Horse name required";
+        if (!registrationData.otherRiderSkillLevel?.trim()) newErrors.otherRiderSkillLevel = "Skill level required";
+      }
+      if (registrationData.isAdditionalHorse && !registrationData.gapPreference) {
+        newErrors.gapPreference = "Please select how you'd like your sessions scheduled";
+      }
     }
     
     if (step === 3) {
@@ -315,7 +331,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
           paymentMethod: registrationData.paymentMethod,
           agreeToTerms: registrationData.agreeToTerms,
           referralCode: registrationData.referralCode || undefined,
-          sessionId: sessionId
+          sessionId: sessionId,
+          isEnteringForOther: registrationData.isBookingForOther || false,
+          otherRiderFirstName: registrationData.isBookingForOther ? registrationData.otherRiderFirstName : undefined,
+          otherRiderLastName: registrationData.isBookingForOther ? registrationData.otherRiderLastName : undefined,
+          otherRiderHorseName: registrationData.isBookingForOther ? registrationData.otherRiderHorseName : undefined,
+          otherRiderSkillLevel: registrationData.isBookingForOther ? registrationData.otherRiderSkillLevel : undefined,
+          isAdditionalHorse: registrationData.isAdditionalHorse || false,
+          gapPreference: registrationData.gapPreference || undefined
         }
       };
       
@@ -617,6 +640,155 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                   )}
                 </select>
                 {errors.skillLevel && <p className="text-xs text-red-500 mt-1">{errors.skillLevel}</p>}
+              </div>
+
+              {/* Booking for someone else toggle */}
+              <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="isBookingForOther"
+                    checked={registrationData.isBookingForOther || false}
+                    onCheckedChange={(checked) => updateRegistrationData('isBookingForOther', checked)}
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="isBookingForOther" className="text-sm font-medium cursor-pointer">
+                      I'm booking for someone else
+                    </Label>
+                    <p className="text-xs text-gray-600 mt-1">
+                      Check this if you're registering on behalf of another rider
+                    </p>
+                  </div>
+                </div>
+
+                {registrationData.isBookingForOther && (
+                  <div className="mt-4 space-y-3 border-t border-amber-200 pt-4">
+                    <p className="text-xs text-amber-700 font-medium">Enter the rider's details:</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label htmlFor="otherRiderFirstName" className="text-xs font-medium text-gray-700">First Name *</Label>
+                        <Input
+                          id="otherRiderFirstName"
+                          value={registrationData.otherRiderFirstName || ''}
+                          onChange={(e) => updateRegistrationData('otherRiderFirstName', e.target.value)}
+                          className={`mt-1 h-10 text-sm ${errors.otherRiderFirstName ? 'border-red-500 bg-red-50' : ''}`}
+                          placeholder="Rider's first name"
+                        />
+                        {errors.otherRiderFirstName && <p className="text-xs text-red-500 mt-1">{errors.otherRiderFirstName}</p>}
+                      </div>
+                      <div>
+                        <Label htmlFor="otherRiderLastName" className="text-xs font-medium text-gray-700">Last Name *</Label>
+                        <Input
+                          id="otherRiderLastName"
+                          value={registrationData.otherRiderLastName || ''}
+                          onChange={(e) => updateRegistrationData('otherRiderLastName', e.target.value)}
+                          className={`mt-1 h-10 text-sm ${errors.otherRiderLastName ? 'border-red-500 bg-red-50' : ''}`}
+                          placeholder="Rider's last name"
+                        />
+                        {errors.otherRiderLastName && <p className="text-xs text-red-500 mt-1">{errors.otherRiderLastName}</p>}
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="otherRiderHorseName" className="text-xs font-medium text-gray-700">Horse Name *</Label>
+                      <Input
+                        id="otherRiderHorseName"
+                        value={registrationData.otherRiderHorseName || ''}
+                        onChange={(e) => updateRegistrationData('otherRiderHorseName', e.target.value)}
+                        className={`mt-1 h-10 text-sm ${errors.otherRiderHorseName ? 'border-red-500 bg-red-50' : ''}`}
+                        placeholder="Horse's name"
+                      />
+                      {errors.otherRiderHorseName && <p className="text-xs text-red-500 mt-1">{errors.otherRiderHorseName}</p>}
+                    </div>
+                    <div>
+                      <Label htmlFor="otherRiderSkillLevel" className="text-xs font-medium text-gray-700">Skill Level *</Label>
+                      <select
+                        id="otherRiderSkillLevel"
+                        value={registrationData.otherRiderSkillLevel || ''}
+                        onChange={(e) => updateRegistrationData('otherRiderSkillLevel', e.target.value)}
+                        className={`mt-1 w-full h-10 text-sm px-3 border rounded-lg ${errors.otherRiderSkillLevel ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
+                      >
+                        <option value="">Select skill level</option>
+                        {clinic?.sessions?.some(s => s.discipline === 'polework') ? (
+                          <>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="70cm">70cm</option>
+                            <option value="80cm">80cm</option>
+                            <option value="90cm">90cm</option>
+                            <option value="1m">1m</option>
+                            <option value="1.10m">1.10m</option>
+                            <option value="1.20m">1.20m</option>
+                          </>
+                        )}
+                      </select>
+                      {errors.otherRiderSkillLevel && <p className="text-xs text-red-500 mt-1">{errors.otherRiderSkillLevel}</p>}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Additional horse toggle with gap preference */}
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="isAdditionalHorse"
+                    checked={registrationData.isAdditionalHorse || false}
+                    onCheckedChange={(checked) => updateRegistrationData('isAdditionalHorse', checked)}
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="isAdditionalHorse" className="text-sm font-medium cursor-pointer">
+                      I'm entering with multiple horses today
+                    </Label>
+                    <p className="text-xs text-gray-600 mt-1">
+                      Check this if you're riding more than one horse at this clinic
+                    </p>
+                  </div>
+                </div>
+
+                {registrationData.isAdditionalHorse && (
+                  <div className="mt-4 space-y-3 border-t border-blue-200 pt-4">
+                    <p className="text-xs text-blue-700 font-medium">How would you like your sessions scheduled?</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          id="gap_back_to_back"
+                          name="gapPreference"
+                          value="back_to_back"
+                          checked={registrationData.gapPreference === 'back_to_back'}
+                          onChange={(e) => updateRegistrationData('gapPreference', e.target.value as 'back_to_back' | 'one_session_gap')}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <Label htmlFor="gap_back_to_back" className="text-sm cursor-pointer">
+                          <span className="font-medium">Back-to-back</span>
+                          <span className="text-gray-500 ml-1">- Ride one horse right after the other</span>
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          id="gap_one_session"
+                          name="gapPreference"
+                          value="one_session_gap"
+                          checked={registrationData.gapPreference === 'one_session_gap'}
+                          onChange={(e) => updateRegistrationData('gapPreference', e.target.value as 'back_to_back' | 'one_session_gap')}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <Label htmlFor="gap_one_session" className="text-sm cursor-pointer">
+                          <span className="font-medium">One session gap</span>
+                          <span className="text-gray-500 ml-1">- Have a break between horses</span>
+                        </Label>
+                      </div>
+                    </div>
+                    {errors.gapPreference && <p className="text-xs text-red-500 mt-2">{errors.gapPreference}</p>}
+                    <p className="text-xs text-blue-600 mt-2">
+                      Please complete a separate registration for each horse you're entering.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {clinic?.hasMultipleSessions && clinic?.sessions && clinic.sessions.length > 0 && (

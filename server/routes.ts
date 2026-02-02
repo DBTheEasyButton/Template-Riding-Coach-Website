@@ -1582,6 +1582,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.reg_agreeToTerms = registrationData.agreeToTerms ? 'true' : 'false';
         metadata.reg_referralCode = registrationData.referralCode || '';
         metadata.reg_sessionId = registrationData.sessionId?.toString() || '';
+        metadata.reg_isEnteringForOther = registrationData.isEnteringForOther ? 'true' : 'false';
+        metadata.reg_otherRiderFirstName = registrationData.otherRiderFirstName || '';
+        metadata.reg_otherRiderLastName = registrationData.otherRiderLastName || '';
+        metadata.reg_otherRiderHorseName = registrationData.otherRiderHorseName || '';
+        metadata.reg_otherRiderSkillLevel = registrationData.otherRiderSkillLevel || '';
+        metadata.reg_isAdditionalHorse = registrationData.isAdditionalHorse ? 'true' : 'false';
+        metadata.reg_gapPreference = registrationData.gapPreference || '';
       }
 
       const paymentIntent = await stripe.paymentIntents.create({
@@ -3060,6 +3067,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return scoreA.score - scoreB.score;
       });
       
+      // STEP 3b: Handle gap preferences for same-rider multiple entries
+      // Build map of registrations by email to find riders with multiple horses
+      const registrationsByEmail = new Map<string, typeof confirmedRegistrations>();
+      for (const reg of confirmedRegistrations) {
+        const email = reg.email?.toLowerCase().trim() || '';
+        if (!email) continue;
+        if (!registrationsByEmail.has(email)) {
+          registrationsByEmail.set(email, []);
+        }
+        registrationsByEmail.get(email)!.push(reg);
+      }
+      
+      // Find riders with multiple entries and their gap preferences
+      const multiEntryRiders = Array.from(registrationsByEmail.entries())
+        .filter(([_, regs]) => regs.length > 1);
+      
+      // Track scheduling notes for gap preferences
+      const gapSchedulingNotes = new Map<number, string>();
+      
+      // For each multi-entry rider, ensure proper spacing between their entries
+      for (const [email, riderRegs] of multiEntryRiders) {
+        // Find gap preference (use the first one found, or default to one_session_gap)
+        const gapPref = riderRegs.find(r => r.gapPreference)?.gapPreference || 'one_session_gap';
+        const firstName = riderRegs[0].firstName;
+        const lastName = riderRegs[0].lastName;
+        
+        // Find which groups contain this rider's registrations
+        const riderGroupIndices: number[] = [];
+        for (let i = 0; i < allGroupsData.length; i++) {
+          const groupData = allGroupsData[i];
+          const hasRiderEntry = groupData.memberIds.some(id => 
+            riderRegs.some(r => r.id === id)
+          );
+          if (hasRiderEntry) {
+            riderGroupIndices.push(i);
+          }
+        }
+        
+        // If rider has entries in multiple groups, enforce spacing
+        if (riderGroupIndices.length > 1) {
+          console.log(`${firstName} ${lastName} has ${riderGroupIndices.length} entries - ${gapPref === 'one_session_gap' ? 'one session gap' : 'back-to-back'} requested`);
+          
+          // Sort indices to process in order
+          riderGroupIndices.sort((a, b) => a - b);
+          
+          // Calculate required gap (1 = back-to-back, 2 = one slot between)
+          const requiredGap = gapPref === 'one_session_gap' ? 2 : 1;
+          
+          // For each subsequent group, ensure proper spacing by moving it if needed
+          for (let i = 1; i < riderGroupIndices.length; i++) {
+            const prevIdx = riderGroupIndices[i - 1];
+            let currIdx = riderGroupIndices[i];
+            const currentGap = currIdx - prevIdx;
+            
+            if (currentGap < requiredGap) {
+              // Need to move this group later in the order
+              const targetIdx = prevIdx + requiredGap;
+              
+              if (targetIdx < allGroupsData.length && targetIdx !== currIdx) {
+                // Move the group to the target position
+                const [groupToMove] = allGroupsData.splice(currIdx, 1);
+                allGroupsData.splice(targetIdx, 0, groupToMove);
+                
+                // Update the index for subsequent checks
+                riderGroupIndices[i] = targetIdx;
+                
+                // Add scheduling note
+                const noteKey = groupToMove.group.id;
+                const existingNote = gapSchedulingNotes.get(noteKey) || '';
+                gapSchedulingNotes.set(noteKey, existingNote + 
+                  (existingNote ? ' ' : '') + 
+                  `Moved to accommodate ${firstName} ${lastName}'s ${gapPref === 'one_session_gap' ? 'break' : 'back-to-back'} preference.`);
+                
+                console.log(`  Moved group ${currIdx} to position ${targetIdx} to ensure ${gapPref} for ${firstName} ${lastName}`);
+              }
+            }
+          }
+        }
+      }
+      
       let slotIndex = 0;
       for (const groupData of allGroupsData) {
         const slotHour = startHour + slotIndex;
@@ -3104,6 +3191,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 `${participantName} is alone in this group - only ${skillLevel} level participant with compatible time preferences.`;
             }
           }
+        }
+        
+        // Merge in any gap preference scheduling notes
+        const gapNote = gapSchedulingNotes.get(groupData.group.id);
+        if (gapNote) {
+          schedulingNote = (schedulingNote || '') + (schedulingNote ? ' ' : '') + gapNote;
         }
         
         await storage.updateClinicGroup(groupData.group.id, {
