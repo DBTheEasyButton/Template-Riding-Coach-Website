@@ -99,11 +99,26 @@ interface RegistrationData {
   gapPreference?: 'back_to_back' | 'one_session_gap';
 }
 
+interface AdditionalEntry {
+  type: 'same_rider_different_horse' | 'different_rider';
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  horseName: string;
+  horseInfo: string;
+  skillLevel: string;
+  emergencyContact: string;
+  emergencyPhone: string;
+  gapPreference?: 'back_to_back' | 'one_session_gap';
+}
+
 const STEPS = [
   { id: 1, title: "Personal Info", icon: User },
   { id: 2, title: "Enter session", icon: Zap },
   { id: 3, title: "Emergency", icon: Phone },
-  { id: 4, title: "Payment", icon: CreditCard }
+  { id: 4, title: "Review", icon: Users },
+  { id: 5, title: "Payment", icon: CreditCard }
 ];
 
 export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSuccess }: MobileRegistrationFlowProps) {
@@ -133,7 +148,13 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
   const [hasSavedData, setHasSavedData] = useState(false);
   const [savedFirstName, setSavedFirstName] = useState('');
-  const [emailChecked, setEmailChecked] = useState(false); // Track if we've checked the email
+  const [emailChecked, setEmailChecked] = useState(false);
+  
+  // Multi-entry state
+  const [additionalEntries, setAdditionalEntries] = useState<AdditionalEntry[]>([]);
+  const [showAddEntryDialog, setShowAddEntryDialog] = useState(false);
+  const [addingEntryType, setAddingEntryType] = useState<'same_rider_different_horse' | 'different_rider' | null>(null);
+  const [newEntryData, setNewEntryData] = useState<Partial<AdditionalEntry>>({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -309,8 +330,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      if (currentStep === 3) {
-        // Create payment intent
+      if (currentStep === 4) {
+        // Create payment intent after Review step
         createPaymentIntentMutation.mutate();
       } else {
         setCurrentStep(prev => prev + 1);
@@ -346,22 +367,16 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
           paymentMethod: registrationData.paymentMethod,
           agreeToTerms: registrationData.agreeToTerms,
           referralCode: registrationData.referralCode || undefined,
-          sessionId: sessionId,
-          isEnteringForOther: registrationData.isBookingForOther || false,
-          otherRiderFirstName: registrationData.isBookingForOther ? registrationData.otherRiderFirstName : undefined,
-          otherRiderLastName: registrationData.isBookingForOther ? registrationData.otherRiderLastName : undefined,
-          otherRiderHorseName: registrationData.isBookingForOther ? registrationData.otherRiderHorseName : undefined,
-          otherRiderSkillLevel: registrationData.isBookingForOther ? registrationData.otherRiderSkillLevel : undefined,
-          isAdditionalHorse: registrationData.isAdditionalHorse || false,
-          gapPreference: registrationData.gapPreference || undefined
-        }
+          sessionId: sessionId
+        },
+        additionalEntries: additionalEntries.length > 0 ? additionalEntries : undefined
       };
       
       return await apiRequest('POST', `/api/clinics/${clinic?.id}/create-payment-intent`, payload);
     },
     onSuccess: (data: { clientSecret: string }) => {
       setClientSecret(data.clientSecret);
-      setCurrentStep(4);
+      setCurrentStep(5);
     },
     onError: (error) => {
       toast({
@@ -659,154 +674,6 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 {errors.skillLevel && <p className="text-xs text-red-500 mt-1">{errors.skillLevel}</p>}
               </div>
 
-              {/* Booking for someone else toggle */}
-              <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="isBookingForOther"
-                    checked={registrationData.isBookingForOther || false}
-                    onCheckedChange={(checked) => updateRegistrationData('isBookingForOther', checked)}
-                  />
-                  <div className="flex-1">
-                    <Label htmlFor="isBookingForOther" className="text-sm font-medium cursor-pointer">
-                      I'm booking for someone else
-                    </Label>
-                    <p className="text-xs text-gray-600 mt-1">
-                      Check this if you're registering on behalf of another rider
-                    </p>
-                  </div>
-                </div>
-
-                {registrationData.isBookingForOther && (
-                  <div className="mt-4 space-y-3 border-t border-amber-200 pt-4">
-                    <p className="text-xs text-amber-700 font-medium">Enter the rider's details:</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor="otherRiderFirstName" className="text-xs font-medium text-gray-700">First Name *</Label>
-                        <Input
-                          id="otherRiderFirstName"
-                          value={registrationData.otherRiderFirstName || ''}
-                          onChange={(e) => updateRegistrationData('otherRiderFirstName', e.target.value)}
-                          className={`mt-1 h-10 text-sm ${errors.otherRiderFirstName ? 'border-red-500 bg-red-50' : ''}`}
-                          placeholder="Rider's first name"
-                        />
-                        {errors.otherRiderFirstName && <p className="text-xs text-red-500 mt-1">{errors.otherRiderFirstName}</p>}
-                      </div>
-                      <div>
-                        <Label htmlFor="otherRiderLastName" className="text-xs font-medium text-gray-700">Last Name *</Label>
-                        <Input
-                          id="otherRiderLastName"
-                          value={registrationData.otherRiderLastName || ''}
-                          onChange={(e) => updateRegistrationData('otherRiderLastName', e.target.value)}
-                          className={`mt-1 h-10 text-sm ${errors.otherRiderLastName ? 'border-red-500 bg-red-50' : ''}`}
-                          placeholder="Rider's last name"
-                        />
-                        {errors.otherRiderLastName && <p className="text-xs text-red-500 mt-1">{errors.otherRiderLastName}</p>}
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="otherRiderHorseName" className="text-xs font-medium text-gray-700">Horse Name *</Label>
-                      <Input
-                        id="otherRiderHorseName"
-                        value={registrationData.otherRiderHorseName || ''}
-                        onChange={(e) => updateRegistrationData('otherRiderHorseName', e.target.value)}
-                        className={`mt-1 h-10 text-sm ${errors.otherRiderHorseName ? 'border-red-500 bg-red-50' : ''}`}
-                        placeholder="Horse's name"
-                      />
-                      {errors.otherRiderHorseName && <p className="text-xs text-red-500 mt-1">{errors.otherRiderHorseName}</p>}
-                    </div>
-                    <div>
-                      <Label htmlFor="otherRiderSkillLevel" className="text-xs font-medium text-gray-700">Skill Level *</Label>
-                      <select
-                        id="otherRiderSkillLevel"
-                        value={registrationData.otherRiderSkillLevel || ''}
-                        onChange={(e) => updateRegistrationData('otherRiderSkillLevel', e.target.value)}
-                        className={`mt-1 w-full h-10 text-sm px-3 border rounded-lg ${errors.otherRiderSkillLevel ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
-                      >
-                        <option value="">Select skill level</option>
-                        {clinic?.sessions?.some(s => s.discipline === 'polework') ? (
-                          <>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
-                          </>
-                        ) : (
-                          <>
-                            <option value="70cm">70cm</option>
-                            <option value="80cm">80cm</option>
-                            <option value="90cm">90cm</option>
-                            <option value="1m">1m</option>
-                            <option value="1.10m">1.10m</option>
-                            <option value="1.20m">1.20m</option>
-                          </>
-                        )}
-                      </select>
-                      {errors.otherRiderSkillLevel && <p className="text-xs text-red-500 mt-1">{errors.otherRiderSkillLevel}</p>}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Additional horse toggle with gap preference */}
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
-                    id="isAdditionalHorse"
-                    checked={registrationData.isAdditionalHorse || false}
-                    onCheckedChange={(checked) => updateRegistrationData('isAdditionalHorse', checked)}
-                  />
-                  <div className="flex-1">
-                    <Label htmlFor="isAdditionalHorse" className="text-sm font-medium cursor-pointer">
-                      I'm entering with multiple horses today
-                    </Label>
-                    <p className="text-xs text-gray-600 mt-1">
-                      Check this if you're riding more than one horse at this clinic
-                    </p>
-                  </div>
-                </div>
-
-                {registrationData.isAdditionalHorse && (
-                  <div className="mt-4 space-y-3 border-t border-blue-200 pt-4">
-                    <p className="text-xs text-blue-700 font-medium">How would you like your sessions scheduled?</p>
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          id="gap_back_to_back"
-                          name="gapPreference"
-                          value="back_to_back"
-                          checked={registrationData.gapPreference === 'back_to_back'}
-                          onChange={(e) => updateRegistrationData('gapPreference', e.target.value as 'back_to_back' | 'one_session_gap')}
-                          className="w-4 h-4 text-blue-600"
-                        />
-                        <Label htmlFor="gap_back_to_back" className="text-sm cursor-pointer">
-                          <span className="font-medium">Back-to-back</span>
-                          <span className="text-gray-500 ml-1">- Ride one horse right after the other</span>
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          id="gap_one_session"
-                          name="gapPreference"
-                          value="one_session_gap"
-                          checked={registrationData.gapPreference === 'one_session_gap'}
-                          onChange={(e) => updateRegistrationData('gapPreference', e.target.value as 'back_to_back' | 'one_session_gap')}
-                          className="w-4 h-4 text-blue-600"
-                        />
-                        <Label htmlFor="gap_one_session" className="text-sm cursor-pointer">
-                          <span className="font-medium">One session gap</span>
-                          <span className="text-gray-500 ml-1">- Have a break between horses</span>
-                        </Label>
-                      </div>
-                    </div>
-                    {errors.gapPreference && <p className="text-xs text-red-500 mt-2">{errors.gapPreference}</p>}
-                    <p className="text-xs text-blue-600 mt-2">
-                      Please complete a separate registration for each horse you're entering.
-                    </p>
-                  </div>
-                )}
-              </div>
 
               {clinic?.hasMultipleSessions && clinic?.sessions && clinic.sessions.length > 0 && (
                 <div>
@@ -922,7 +789,317 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
             </div>
           )}
 
+          {/* Step 4: Review & Add More Entries */}
           {currentStep === 4 && (
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                <h3 className="font-semibold text-blue-900 mb-3">Your Entries</h3>
+                
+                {/* Primary Entry */}
+                <div className="bg-white p-3 rounded-lg mb-3 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">{registrationData.firstName} {registrationData.lastName}</p>
+                      <p className="text-sm text-gray-600">Horse: {registrationData.horseName}</p>
+                      <p className="text-xs text-gray-500">Level: {registrationData.skillLevel}</p>
+                    </div>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Primary</span>
+                  </div>
+                </div>
+                
+                {/* Additional Entries */}
+                {additionalEntries.map((entry, index) => (
+                  <div key={index} className="bg-white p-3 rounded-lg mb-3 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-gray-900">{entry.firstName} {entry.lastName}</p>
+                        <p className="text-sm text-gray-600">Horse: {entry.horseName}</p>
+                        <p className="text-xs text-gray-500">Level: {entry.skillLevel}</p>
+                        {entry.gapPreference && (
+                          <p className="text-xs text-blue-600">
+                            {entry.gapPreference === 'back_to_back' ? 'Back-to-back' : 'One session gap'}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">
+                          {entry.type === 'different_rider' ? 'Other Rider' : 'Same Rider'}
+                        </span>
+                        <button
+                          onClick={() => setAdditionalEntries(prev => prev.filter((_, i) => i !== index))}
+                          className="text-xs text-red-600 hover:text-red-800"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Add Another Entry Button */}
+                <button
+                  onClick={() => setShowAddEntryDialog(true)}
+                  className="w-full py-3 border-2 border-dashed border-blue-300 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Users className="w-5 h-5" />
+                  Add Another Entry
+                </button>
+              </div>
+              
+              {/* Add Entry Dialog */}
+              {showAddEntryDialog && !addingEntryType && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-xl p-6 max-w-sm w-full">
+                    <h3 className="text-lg font-semibold mb-4">Add Another Entry</h3>
+                    <div className="space-y-3">
+                      <button
+                        onClick={() => {
+                          setAddingEntryType('same_rider_different_horse');
+                          setNewEntryData({
+                            type: 'same_rider_different_horse',
+                            firstName: registrationData.firstName,
+                            lastName: registrationData.lastName,
+                            email: registrationData.email,
+                            phone: registrationData.phone,
+                            emergencyContact: registrationData.emergencyContact,
+                            emergencyPhone: registrationData.emergencyPhone,
+                            horseName: '',
+                            horseInfo: '',
+                            skillLevel: ''
+                          });
+                        }}
+                        className="w-full p-4 border rounded-lg hover:bg-blue-50 text-left"
+                      >
+                        <p className="font-medium text-gray-900">I'm entering with another horse</p>
+                        <p className="text-sm text-gray-600">Same rider, different horse</p>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setAddingEntryType('different_rider');
+                          setNewEntryData({
+                            type: 'different_rider',
+                            firstName: '',
+                            lastName: '',
+                            email: '',
+                            phone: '',
+                            emergencyContact: '',
+                            emergencyPhone: '',
+                            horseName: '',
+                            horseInfo: '',
+                            skillLevel: ''
+                          });
+                        }}
+                        className="w-full p-4 border rounded-lg hover:bg-amber-50 text-left"
+                      >
+                        <p className="font-medium text-gray-900">I'm booking for someone else</p>
+                        <p className="text-sm text-gray-600">Different rider entirely</p>
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => setShowAddEntryDialog(false)}
+                      className="w-full mt-4 py-2 text-gray-600 hover:text-gray-800"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {/* Entry Form Dialog */}
+              {showAddEntryDialog && addingEntryType && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+                  <div className="bg-white rounded-xl p-6 max-w-md w-full my-4">
+                    <h3 className="text-lg font-semibold mb-4">
+                      {addingEntryType === 'different_rider' ? 'Add Another Rider' : 'Add Another Horse'}
+                    </h3>
+                    
+                    <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+                      {addingEntryType === 'different_rider' && (
+                        <>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <Label className="text-xs">First Name *</Label>
+                              <Input
+                                value={newEntryData.firstName || ''}
+                                onChange={(e) => setNewEntryData(prev => ({ ...prev, firstName: e.target.value }))}
+                                placeholder="First name"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-xs">Last Name *</Label>
+                              <Input
+                                value={newEntryData.lastName || ''}
+                                onChange={(e) => setNewEntryData(prev => ({ ...prev, lastName: e.target.value }))}
+                                placeholder="Last name"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Label className="text-xs">Email *</Label>
+                            <Input
+                              type="email"
+                              value={newEntryData.email || ''}
+                              onChange={(e) => setNewEntryData(prev => ({ ...prev, email: e.target.value }))}
+                              placeholder="Email address"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Phone *</Label>
+                            <Input
+                              value={newEntryData.phone || ''}
+                              onChange={(e) => setNewEntryData(prev => ({ ...prev, phone: e.target.value }))}
+                              placeholder="Phone number"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Emergency Contact *</Label>
+                            <Input
+                              value={newEntryData.emergencyContact || ''}
+                              onChange={(e) => setNewEntryData(prev => ({ ...prev, emergencyContact: e.target.value }))}
+                              placeholder="Emergency contact name"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Emergency Phone *</Label>
+                            <Input
+                              value={newEntryData.emergencyPhone || ''}
+                              onChange={(e) => setNewEntryData(prev => ({ ...prev, emergencyPhone: e.target.value }))}
+                              placeholder="Emergency phone"
+                            />
+                          </div>
+                        </>
+                      )}
+                      
+                      <div>
+                        <Label className="text-xs">Horse Name *</Label>
+                        <Input
+                          value={newEntryData.horseName || ''}
+                          onChange={(e) => setNewEntryData(prev => ({ ...prev, horseName: e.target.value }))}
+                          placeholder="Horse name"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label className="text-xs">Info About This Horse</Label>
+                        <Textarea
+                          value={newEntryData.horseInfo || ''}
+                          onChange={(e) => setNewEntryData(prev => ({ ...prev, horseInfo: e.target.value }))}
+                          placeholder="Age, breed, temperament, experience level..."
+                          rows={2}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label className="text-xs">Skill Level *</Label>
+                        <select
+                          value={newEntryData.skillLevel || ''}
+                          onChange={(e) => setNewEntryData(prev => ({ ...prev, skillLevel: e.target.value }))}
+                          className="w-full h-10 px-3 border rounded-md text-sm"
+                        >
+                          <option value="">Select level...</option>
+                          <option value="60cm">60cm</option>
+                          <option value="70cm">70cm</option>
+                          <option value="80cm">80cm</option>
+                          <option value="90cm">90cm</option>
+                          <option value="1m">1m</option>
+                          <option value="1.10m">1.10m</option>
+                          <option value="1.20m">1.20m</option>
+                        </select>
+                      </div>
+                      
+                      {addingEntryType === 'same_rider_different_horse' && (
+                        <div className="bg-blue-50 p-3 rounded-lg">
+                          <Label className="text-xs font-medium text-blue-800">Session Scheduling Preference *</Label>
+                          <div className="mt-2 space-y-2">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="gapPreference"
+                                value="back_to_back"
+                                checked={newEntryData.gapPreference === 'back_to_back'}
+                                onChange={() => setNewEntryData(prev => ({ ...prev, gapPreference: 'back_to_back' }))}
+                                className="w-4 h-4"
+                              />
+                              <span className="text-sm">Back-to-back sessions</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="gapPreference"
+                                value="one_session_gap"
+                                checked={newEntryData.gapPreference === 'one_session_gap'}
+                                onChange={() => setNewEntryData(prev => ({ ...prev, gapPreference: 'one_session_gap' }))}
+                                className="w-4 h-4"
+                              />
+                              <span className="text-sm">One session gap between horses</span>
+                            </label>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex gap-3 mt-6">
+                      <button
+                        onClick={() => {
+                          setShowAddEntryDialog(false);
+                          setAddingEntryType(null);
+                          setNewEntryData({});
+                        }}
+                        className="flex-1 py-2 border rounded-lg text-gray-600 hover:bg-gray-50"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          // Validate and add entry
+                          if (!newEntryData.horseName || !newEntryData.skillLevel) {
+                            toast({ title: "Please fill in all required fields", variant: "destructive" });
+                            return;
+                          }
+                          if (addingEntryType === 'different_rider' && (!newEntryData.firstName || !newEntryData.lastName || !newEntryData.email)) {
+                            toast({ title: "Please fill in all rider details", variant: "destructive" });
+                            return;
+                          }
+                          if (addingEntryType === 'same_rider_different_horse' && !newEntryData.gapPreference) {
+                            toast({ title: "Please select your session scheduling preference", variant: "destructive" });
+                            return;
+                          }
+                          
+                          setAdditionalEntries(prev => [...prev, newEntryData as AdditionalEntry]);
+                          setShowAddEntryDialog(false);
+                          setAddingEntryType(null);
+                          setNewEntryData({});
+                          toast({ title: "Entry added successfully" });
+                        }}
+                        className="flex-1 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                      >
+                        Add Entry
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Price Summary */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700">Total Entries:</span>
+                  <span className="font-semibold">{1 + additionalEntries.length}</span>
+                </div>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-gray-700">Price per Entry:</span>
+                  <span className="font-semibold">£{clinic?.price || 0}</span>
+                </div>
+                <div className="border-t mt-3 pt-3 flex justify-between items-center">
+                  <span className="font-semibold text-gray-900">Total:</span>
+                  <span className="font-bold text-lg text-blue-600">£{(clinic?.price || 0) * (1 + additionalEntries.length)}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 5: Payment */}
+          {currentStep === 5 && (
             <div className="space-y-6">
               {/* Discount Code Section */}
               <div className="bg-gray-50 p-4 rounded-lg">
@@ -1036,7 +1213,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
               className="flex-1 h-12 text-base font-semibold"
               data-testid="button-next-step"
             >
-              {currentStep === 3 ? 'Review & Pay' : 'Continue'}
+              {currentStep === 3 ? 'Review Entries' : currentStep === 4 ? 'Proceed to Payment' : 'Continue'}
               <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
           </div>

@@ -1452,8 +1452,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create payment intent for clinic registration
   app.post("/api/clinics/:id/create-payment-intent", async (req, res) => {
     const clinicId = parseInt(req.params.id);
-    const { sessionIds, discountCode, registrationData } = req.body;
+    const { sessionIds, discountCode, registrationData, additionalEntries } = req.body;
     let amount: number = 0;
+    const totalEntries = 1 + (additionalEntries?.length || 0);
     
     try {
       
@@ -1485,10 +1486,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: "No valid sessions selected" });
         }
         
-        amount = selectedSessions.reduce((total, session) => total + session.price, 0);
+        amount = selectedSessions.reduce((total, session) => total + session.price, 0) * totalEntries;
       } else {
-        // Single session clinic
-        amount = clinic.price;
+        // Single session clinic - multiply by total entries
+        amount = clinic.price * totalEntries;
       }
 
       // Validate minimum amount before applying discount
@@ -1589,6 +1590,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.reg_otherRiderSkillLevel = registrationData.otherRiderSkillLevel || '';
         metadata.reg_isAdditionalHorse = registrationData.isAdditionalHorse ? 'true' : 'false';
         metadata.reg_gapPreference = registrationData.gapPreference || '';
+      }
+      
+      // Add additional entries count and summary for webhook recovery
+      if (additionalEntries && additionalEntries.length > 0) {
+        metadata.additionalEntriesCount = additionalEntries.length.toString();
+        // Store compact summary of additional entries (Stripe has 500 char limit per value)
+        const entrySummaries = additionalEntries.map((entry: any, idx: number) => ({
+          type: entry.type,
+          firstName: entry.firstName,
+          lastName: entry.lastName,
+          horseName: entry.horseName,
+          skillLevel: entry.skillLevel,
+          gapPreference: entry.gapPreference
+        }));
+        metadata.additionalEntries = JSON.stringify(entrySummaries).substring(0, 500);
       }
 
       const paymentIntent = await stripe.paymentIntents.create({
