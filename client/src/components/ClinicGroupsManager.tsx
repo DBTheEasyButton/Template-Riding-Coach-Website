@@ -46,6 +46,7 @@ interface ClinicRegistration {
   status: string;
   specialRequests?: string | null;
   keyRequests?: KeyRequest[];
+  unassignedReason?: string | null;
 }
 
 interface ClinicGroup {
@@ -455,11 +456,18 @@ function UnassignedSection({
               </div>
             ) : (
               confirmedUnassigned.map(participant => (
-                <ParticipantCard
-                  key={participant.id}
-                  participant={participant}
-                  allParticipants={allParticipants}
-                />
+                <div key={participant.id} className="space-y-1">
+                  <ParticipantCard
+                    participant={participant}
+                    allParticipants={allParticipants}
+                  />
+                  {participant.unassignedReason && (
+                    <div className="ml-6 px-2 py-1 bg-orange-100 border border-orange-300 rounded text-xs text-orange-800 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                      <span>{participant.unassignedReason}</span>
+                    </div>
+                  )}
+                </div>
               ))
             )}
           </SortableContext>

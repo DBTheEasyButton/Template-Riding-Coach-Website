@@ -2365,8 +2365,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
       );
       
-      // Get unassigned participants (confirmed but no group)
-      const unassigned = confirmedRegistrations.filter(r => !r.groupId);
+      // Get unassigned participants (confirmed but no group) with reasons
+      const unassignedRaw = confirmedRegistrations.filter(r => !r.groupId);
+      
+      // Get clinic start time to determine if time requests are impossible
+      const clinic = await storage.getClinic(clinicId);
+      const clinicStartTime = clinic?.startTime || '15:00';
+      const [startHour] = clinicStartTime.split(':').map(Number);
+      
+      // Helper to parse time strings
+      const parseTimeToHour = (timeStr: string): number | null => {
+        const match = timeStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+        if (!match) return null;
+        let hour = parseInt(match[1]);
+        const ampm = match[3]?.toLowerCase();
+        if (ampm === 'pm' && hour !== 12) hour += 12;
+        if (ampm === 'am' && hour === 12) hour = 0;
+        if (!ampm && hour >= 1 && hour <= 6) hour += 12;
+        return hour;
+      };
+      
+      // Add unassignment reason for each participant
+      const unassigned = unassignedRaw.map(r => {
+        let unassignedReason: string | null = null;
+        const notes = r.specialRequests || '';
+        
+        // Check for specific time requests before clinic start
+        const timeMatches = notes.match(/(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)/gi) || [];
+        for (const timeStr of timeMatches) {
+          const requestedHour = parseTimeToHour(timeStr);
+          if (requestedHour !== null && requestedHour < startHour) {
+            unassignedReason = `Requested ${timeStr} but clinic starts at ${clinicStartTime}`;
+            break;
+          }
+        }
+        
+        // Check for "before X" patterns
+        if (!unassignedReason) {
+          const beforeMatch = notes.match(/before\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+          if (beforeMatch) {
+            let beforeHour = parseInt(beforeMatch[1]);
+            const isPM = beforeMatch[3] && beforeMatch[3].toLowerCase() === 'pm';
+            if (isPM && beforeHour !== 12) beforeHour += 12;
+            if (!beforeMatch[3] && beforeHour >= 1 && beforeHour <= 6) beforeHour += 12;
+            
+            if (beforeHour <= startHour) {
+              const displayHour = beforeHour > 12 ? beforeHour - 12 : beforeHour;
+              const displayAmPm = beforeHour >= 12 ? 'pm' : 'am';
+              unassignedReason = `Requested before ${displayHour}${displayAmPm} but clinic starts at ${clinicStartTime}`;
+            }
+          }
+        }
+        
+        return { ...r, unassignedReason };
+      });
       
       res.json({
         sessions: sessionsWithGroups,
