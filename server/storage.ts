@@ -164,6 +164,8 @@ export interface IStorage {
   getAllTestimonials(): Promise<Testimonial[]>;
   getFeaturedTestimonials(): Promise<Testimonial[]>;
   createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial>;
+  updateTestimonial(id: number, updates: Partial<InsertTestimonial>): Promise<Testimonial | undefined>;
+  deleteTestimonial(id: number): Promise<void>;
 
   // Email Marketing System
   getAllEmailSubscribers(): Promise<EmailSubscriber[]>;
@@ -1422,6 +1424,15 @@ The Dan Bizzarro Method Team`,
   async createTestimonial(insertTestimonial: InsertTestimonial): Promise<Testimonial> {
     const [testimonial] = await db.insert(testimonials).values(insertTestimonial).returning();
     return testimonial;
+  }
+
+  async updateTestimonial(id: number, updates: Partial<InsertTestimonial>): Promise<Testimonial | undefined> {
+    const [testimonial] = await db.update(testimonials).set(updates).where(eq(testimonials.id, id)).returning();
+    return testimonial;
+  }
+
+  async deleteTestimonial(id: number): Promise<void> {
+    await db.delete(testimonials).where(eq(testimonials.id, id));
   }
 
   // Email Marketing System Implementation

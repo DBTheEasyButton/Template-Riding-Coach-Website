@@ -45,6 +45,7 @@ const AdminSponsors = lazy(() => import("@/pages/AdminSponsors"));
 const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
 const AdminSettings = lazy(() => import("@/pages/AdminSettings"));
 const AdminGHL = lazy(() => import("@/pages/AdminGHL"));
+const AdminTestimonials = lazy(() => import("@/pages/AdminTestimonials"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 const ConfirmClinicTimes = lazy(() => import("@/pages/ConfirmClinicTimes"));
@@ -270,6 +271,11 @@ function Router() {
       <Route path="/admin/ghl">
         <Suspense fallback={<PageLoader />}>
           <AdminGHL />
+        </Suspense>
+      </Route>
+      <Route path="/admin/testimonials">
+        <Suspense fallback={<PageLoader />}>
+          <AdminTestimonials />
         </Suspense>
       </Route>
       <Route path="/admin/analytics">

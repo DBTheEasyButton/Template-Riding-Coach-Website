@@ -3775,6 +3775,42 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
     }
   });
 
+  // Admin testimonials CRUD
+  app.post("/api/admin/testimonials", async (req, res) => {
+    try {
+      const testimonial = await storage.createTestimonial(req.body);
+      res.status(201).json(testimonial);
+    } catch (error) {
+      console.error("Error creating testimonial:", error);
+      res.status(500).json({ message: "Failed to create testimonial" });
+    }
+  });
+
+  app.patch("/api/admin/testimonials/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const testimonial = await storage.updateTestimonial(id, req.body);
+      if (!testimonial) {
+        return res.status(404).json({ message: "Testimonial not found" });
+      }
+      res.json(testimonial);
+    } catch (error) {
+      console.error("Error updating testimonial:", error);
+      res.status(500).json({ message: "Failed to update testimonial" });
+    }
+  });
+
+  app.delete("/api/admin/testimonials/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteTestimonial(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting testimonial:", error);
+      res.status(500).json({ message: "Failed to delete testimonial" });
+    }
+  });
+
   // Get all gallery images (public route for website display)
   app.get("/api/gallery", async (req, res) => {
     try {
