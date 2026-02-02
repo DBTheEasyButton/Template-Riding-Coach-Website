@@ -459,11 +459,11 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
 
   return (
     <div 
-      className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-2 overflow-hidden"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg w-full max-w-md max-h-[95vh] flex flex-col shadow-xl"
+        className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -483,8 +483,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
         </div>
 
         {/* Progress Bar */}
-        <div className="px-6 py-4 bg-gray-50 border-b">
-          <div className="flex items-center justify-between mb-3">
+        <div className="px-4 py-3 bg-gray-50 border-b">
+          <div className="flex items-center justify-between mb-2">
             {STEPS.map((step, index) => {
               const Icon = step.icon;
               const isActive = currentStep === step.id;
@@ -492,14 +492,14 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
               
               return (
                 <div key={step.id} className="flex items-center">
-                  <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
+                  <div className={`flex items-center justify-center w-7 h-7 rounded-full text-xs font-medium ${
                     isCompleted ? 'bg-green-500 text-white' :
                     isActive ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
                   }`}>
-                    {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                    {isCompleted ? <Check className="w-3 h-3" /> : <Icon className="w-3 h-3" />}
                   </div>
                   {index < STEPS.length - 1 && (
-                    <div className={`w-8 h-0.5 mx-2 ${
+                    <div className={`w-4 sm:w-6 h-0.5 mx-1 ${
                       isCompleted ? 'bg-green-500' : 'bg-gray-300'
                     }`} />
                   )}
@@ -507,7 +507,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
               );
             })}
           </div>
-          <p className="text-sm text-gray-600 text-center font-medium">
+          <p className="text-xs text-gray-600 text-center font-medium">
             Step {currentStep} of {STEPS.length}: {STEPS[currentStep - 1]?.title}
           </p>
         </div>
@@ -1217,7 +1217,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
         </div>
 
         {/* Navigation */}
-        {currentStep < 4 && (
+        {currentStep < 5 && (
           <div className="px-6 py-4 border-t bg-gray-50 flex gap-3 flex-shrink-0">
             {currentStep > 1 && (
               <Button
