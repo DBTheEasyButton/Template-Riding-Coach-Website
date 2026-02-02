@@ -2590,35 +2590,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
         
-        // STEP 2: Group remaining participants by skill level
+        // STEP 2: Try to add remaining participants to existing groups first, then create new groups
         const remaining = sessionRegs.filter((r: ClinicRegistration) => !globalAssigned.has(r.id));
-        const bySkillLevel = new Map<string, ClinicRegistration[]>();
-        for (const reg of remaining) {
-          const level = normalizeSkillLevel(reg.skillLevel);
-          if (!bySkillLevel.has(level)) bySkillLevel.set(level, []);
-          bySkillLevel.get(level)!.push(reg);
+        remaining.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
+        
+        // Get groups we just created to try filling them first
+        const createdGroups = await storage.getSessionGroups(session.id);
+        
+        // Track actual counts from clusters - map group id to participant ids
+        const clusterGroupMap = new Map<number, number[]>();
+        for (let i = 0; i < groupWithClusters.length; i++) {
+          if (createdGroups[i]) {
+            clusterGroupMap.set(createdGroups[i].id, [...groupWithClusters[i]]);
+          }
         }
         
-        for (const [level, regs] of Array.from(bySkillLevel.entries())) {
-          regs.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
+        for (const reg of remaining) {
+          const level = normalizeSkillLevel(reg.skillLevel);
+          let assigned = false;
           
-          // Merge into groups of max 4
-          const groups: number[][] = [];
-          let currentGroup: number[] = [];
-          
-          for (const reg of regs) {
-            if (currentGroup.length >= 4) {
-              groups.push(currentGroup);
-              currentGroup = [];
+          // Try to add to an existing group of the same skill level with space
+          for (const group of createdGroups) {
+            if (group.skillLevel === level) {
+              const groupMembers = clusterGroupMap.get(group.id);
+              const currentCount = groupMembers?.length || 0;
+              if (currentCount < 4) {
+                await storage.moveParticipantToGroup(reg.id, group.id);
+                if (groupMembers) groupMembers.push(reg.id);
+                else clusterGroupMap.set(group.id, [reg.id]);
+                assigned = true;
+                globalAssigned.add(reg.id);
+                break;
+              }
             }
-            currentGroup.push(reg.id);
           }
-          if (currentGroup.length > 0) groups.push(currentGroup);
           
-          // Create database groups
-          for (let i = 0; i < groups.length; i++) {
-            const groupRegs = groups[i];
-            const firstData = participantMap.get(groupRegs[0]);
+          if (!assigned) {
+            // Create a new group for this skill level
+            const firstData = participantMap.get(reg.id);
             let startTime = '';
             let endTime = '';
             
@@ -2638,9 +2647,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
               displayOrder: groupOrder++
             });
             
-            for (const regId of groupRegs) {
-              await storage.moveParticipantToGroup(regId, newGroup.id);
-            }
+            await storage.moveParticipantToGroup(reg.id, newGroup.id);
+            globalAssigned.add(reg.id);
+            createdGroups.push(newGroup);
+            clusterGroupMap.set(newGroup.id, [reg.id]);
           }
         }
       }

@@ -545,24 +545,51 @@ export default function ClinicGroupsManager({
                   allParticipants={allParticipants}
                 />
 
-                {sessions.map(session => (
-                  <div key={session.id} className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-semibold text-gray-800">{session.sessionName}</h3>
-                      <Badge variant="outline" className="capitalize">{session.discipline}</Badge>
-                      <Badge variant="outline">{session.skillLevel}</Badge>
+                {/* Organize all groups by time slot */}
+                {(() => {
+                  // Collect all groups from all sessions
+                  const allGroupsFlat = sessions.flatMap(s => 
+                    s.groups.map(g => ({ ...g, sessionName: s.sessionName }))
+                  );
+                  
+                  // Group by start time (or "Unscheduled" if no time)
+                  const byTimeSlot = new Map<string, typeof allGroupsFlat>();
+                  for (const group of allGroupsFlat) {
+                    const timeKey = group.startTime || 'unscheduled';
+                    if (!byTimeSlot.has(timeKey)) byTimeSlot.set(timeKey, []);
+                    byTimeSlot.get(timeKey)!.push(group);
+                  }
+                  
+                  // Sort time slots (scheduled first, then unscheduled)
+                  const sortedTimeSlots = Array.from(byTimeSlot.entries()).sort((a, b) => {
+                    if (a[0] === 'unscheduled') return 1;
+                    if (b[0] === 'unscheduled') return -1;
+                    return a[0].localeCompare(b[0]);
+                  });
+                  
+                  return sortedTimeSlots.map(([timeSlot, groups]) => (
+                    <div key={timeSlot} className="space-y-3">
+                      <div className="flex items-center gap-2 bg-gray-100 p-3 rounded-lg">
+                        <Clock className="w-5 h-5 text-blue-600" />
+                        <h3 className="text-lg font-bold text-gray-800">
+                          {timeSlot === 'unscheduled' ? 'Time To Be Assigned' : timeSlot}
+                        </h3>
+                        <span className="text-sm text-gray-500">
+                          ({groups.reduce((sum, g) => sum + g.participants.length, 0)} participants)
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {groups.map(group => (
+                          <GroupCard 
+                            key={group.id} 
+                            group={group} 
+                            allParticipants={allParticipants}
+                          />
+                        ))}
+                      </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                      {session.groups.map(group => (
-                        <GroupCard 
-                          key={group.id} 
-                          group={group} 
-                          allParticipants={allParticipants}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ));
+                })()}
 
                 {sessions.length === 0 && (
                   <div className="text-center text-gray-500 py-12 border-2 border-dashed border-gray-300 rounded-lg">
