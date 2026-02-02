@@ -158,6 +158,19 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Reset multi-entry state when modal closes or reopens
+  useEffect(() => {
+    if (!isOpen) {
+      setAdditionalEntries([]);
+      setShowAddEntryDialog(false);
+      setAddingEntryType(null);
+      setNewEntryData({});
+      setCurrentStep(1);
+      setClientSecret(null);
+      setErrors({});
+    }
+  }, [isOpen]);
+
   // Auto-fill data lookup by email
   const lookupByEmail = async (email: string) => {
     if (!email || !email.includes('@')) return;

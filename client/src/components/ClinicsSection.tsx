@@ -372,6 +372,25 @@ export default function ClinicsSection() {
     }
   }, [isRegistrationOpen, stripePromise, isStripeLoading]);
 
+  // Reset multi-entry and review state when dialog closes (covers programmatic closes)
+  useEffect(() => {
+    if (!isRegistrationOpen) {
+      setShowReviewStep(false);
+      setAdditionalEntries([]);
+      setClientSecret(null);
+      setShowAddEntryDialog(false);
+      setAddEntryType(null);
+      setNewEntryData({
+        firstName: '',
+        lastName: '',
+        horseName: '',
+        skillLevel: '',
+        specialRequests: '',
+        gapPreference: ''
+      });
+    }
+  }, [isRegistrationOpen]);
+
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -1028,7 +1047,16 @@ export default function ClinicsSection() {
           </div>
         </div>
 
-        <Dialog open={isRegistrationOpen && !isMobileFlow} onOpenChange={setIsRegistrationOpen}>
+        <Dialog open={isRegistrationOpen && !isMobileFlow} onOpenChange={(open) => {
+          setIsRegistrationOpen(open);
+          if (!open) {
+            setShowReviewStep(false);
+            setAdditionalEntries([]);
+            setClientSecret(null);
+            setShowAddEntryDialog(false);
+            setAddEntryType(null);
+          }
+        }}>
           <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-2xl font-playfair text-navy">
@@ -1511,7 +1539,12 @@ export default function ClinicsSection() {
               <DialogFooter className="flex flex-col sm:flex-row gap-3">
                 <Button
                   variant="outline"
-                  onClick={() => setIsRegistrationOpen(false)}
+                  onClick={() => {
+                    setIsRegistrationOpen(false);
+                    setShowReviewStep(false);
+                    setAdditionalEntries([]);
+                    setClientSecret(null);
+                  }}
                   className="border-gray-300"
                 >
                   Cancel
