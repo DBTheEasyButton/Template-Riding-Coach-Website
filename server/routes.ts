@@ -5555,20 +5555,70 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
   app.get("/api/admin/analytics", async (req, res) => {
     try {
       const [
-        subscribers,
         clinics,
         registrations,
         contacts,
         loyaltyPrograms,
         sessions
       ] = await Promise.all([
-        storage.getAllEmailSubscribers(),
         storage.getAllClinics(),
         storage.getAllClinicRegistrations(),
         storage.getAllContacts(),
         storage.getAllLoyaltyPrograms(),
         storage.getAllClinicSessions()
       ]);
+
+      // Get newsletter subscriber count from CRM (contacts with "newsletter" tag)
+      let newsletterSubscriberCount = 0;
+      try {
+        const apiKey = process.env.GHL_API_KEY;
+        const locationId = process.env.GHL_LOCATION_ID;
+        
+        if (apiKey && locationId) {
+          let allNewsletterContacts: any[] = [];
+          let page = 1;
+          let hasMore = true;
+          
+          while (hasMore) {
+            const searchResponse = await fetch('https://services.leadconnectorhq.com/contacts/search', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Version': '2021-07-28',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                locationId,
+                filters: [{
+                  field: 'tags',
+                  operator: 'contains',
+                  value: 'newsletter'
+                }],
+                page,
+                pageLimit: 100
+              })
+            });
+            
+            if (searchResponse.ok) {
+              const searchData = await searchResponse.json();
+              const contacts = searchData.contacts || [];
+              allNewsletterContacts = allNewsletterContacts.concat(contacts);
+              
+              // Check if there are more pages
+              hasMore = contacts.length === 100;
+              page++;
+            } else {
+              console.error('Failed to fetch newsletter contacts from CRM');
+              hasMore = false;
+            }
+          }
+          
+          newsletterSubscriberCount = allNewsletterContacts.length;
+          console.log(`Found ${newsletterSubscriberCount} newsletter subscribers in CRM`);
+        }
+      } catch (ghlError) {
+        console.error('Error fetching newsletter subscribers from CRM:', ghlError);
+      }
 
       // Get audio course payments from Stripe (last 6 months)
       let audioCourseData = {
@@ -5657,20 +5707,15 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
         });
       }
 
-      // Subscriber growth data
+      // Subscriber growth data - showing current count for all months since we use CRM data
       const subscriberGrowth = [];
       for (let i = 5; i >= 0; i--) {
         const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
         const monthStr = month.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        
-        const monthSubscribers = subscribers.filter(sub => {
-          const subDate = new Date(sub.subscribedAt);
-          return subDate <= new Date(month.getFullYear(), month.getMonth() + 1, 0);
-        }).length;
 
         subscriberGrowth.push({
           month: monthStr,
-          subscribers: monthSubscribers
+          subscribers: newsletterSubscriberCount
         });
       }
 
@@ -5718,7 +5763,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
       }, 0);
 
       res.json({
-        totalSubscribers: subscribers.length,
+        totalSubscribers: newsletterSubscriberCount,
         totalClinics: clinics.filter(c => c.isActive).length,
         totalRegistrations: confirmedRegs.length,
         totalRevenue: totalClinicRevenue,
