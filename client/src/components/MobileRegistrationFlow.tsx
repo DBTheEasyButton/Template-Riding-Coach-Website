@@ -167,6 +167,18 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
     }
   };
 
+  // Debounced email lookup - triggers as user types
+  useEffect(() => {
+    const email = registrationData.email?.trim();
+    if (!email || !email.includes('@') || email.length < 5) return;
+    
+    const timeoutId = setTimeout(() => {
+      lookupByEmail(email);
+    }, 500); // 500ms debounce
+    
+    return () => clearTimeout(timeoutId);
+  }, [registrationData.email]);
+
   // Validate referral code
   const validateReferralCode = async (code: string) => {
     if (!code || code.trim().length === 0) {
