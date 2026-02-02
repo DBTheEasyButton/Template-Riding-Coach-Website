@@ -2526,6 +2526,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return hour;
       };
       
+      // Helper: check if a participant has an impossible time request
+      const hasImpossibleTimeRequest = (regId: number): { impossible: boolean, reason?: string } => {
+        const data = participantMap.get(regId);
+        if (!data) return { impossible: false };
+        
+        // Check for specific time requests before clinic start
+        for (const pref of data.notes.timePrefs) {
+          const requestedHour = parseTimeToHour(pref);
+          if (requestedHour !== null && requestedHour < startHour) {
+            return { 
+              impossible: true, 
+              reason: `Requested ${pref} but clinic starts at ${clinicStartTime}`
+            };
+          }
+        }
+        
+        // Check for "before X" patterns
+        const beforeMatch = (data.reg.specialRequests || '').match(/before\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+        if (beforeMatch) {
+          let beforeHour = parseInt(beforeMatch[1]);
+          const isPM = beforeMatch[3] && beforeMatch[3].toLowerCase() === 'pm';
+          if (isPM && beforeHour !== 12) beforeHour += 12;
+          if (!beforeMatch[3] && beforeHour >= 1 && beforeHour <= 6) beforeHour += 12;
+          
+          if (beforeHour <= startHour) {
+            return { 
+              impossible: true, 
+              reason: `Requested before ${beforeHour > 12 ? beforeHour - 12 : beforeHour}${beforeHour >= 12 ? 'pm' : 'am'} but clinic starts at ${clinicStartTime}`
+            };
+          }
+        }
+        
+        return { impossible: false };
+      };
+      
       // Helper: determine time score for sorting
       const getGlobalTimeScore = (memberIds: number[]): { score: number, requestedTime?: string, isImpossible?: boolean, originalRequest?: string } => {
         for (const id of memberIds) {
@@ -2566,6 +2601,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return { score: 0 };
       };
       
+      // Track participants with impossible time requests - they stay unassigned
+      const impossibleTimeParticipants = new Set<number>();
+      for (const reg of confirmedRegistrations) {
+        const check = hasImpossibleTimeRequest(reg.id);
+        if (check.impossible) {
+          impossibleTimeParticipants.add(reg.id);
+          console.log(`Leaving ${reg.firstName} ${reg.lastName} unassigned: ${check.reason}`);
+        }
+      }
+      
       // Process each session
       for (const session of sessions) {
         // First, clear all group assignments for registrations in this session
@@ -2584,7 +2629,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // Get confirmed registrations for this session (only confirmed get assigned to groups)
-        const sessionRegs = confirmedRegistrations.filter(r => r.sessionId === session.id);
+        // EXCLUDE participants with impossible time requests - they stay unassigned for manual placement
+        const sessionRegs = confirmedRegistrations.filter(r => 
+          r.sessionId === session.id && !impossibleTimeParticipants.has(r.id)
+        );
         if (sessionRegs.length === 0) continue;
         
         // Normalize skill levels for grouping (convert jumping heights to beginner/intermediate/advanced)
