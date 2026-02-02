@@ -2373,6 +2373,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clinicStartTime = clinic?.startTime || '15:00';
       const [startHour] = clinicStartTime.split(':').map(Number);
       
+      // Format hour as 12-hour time (e.g., 15 -> "3pm")
+      const formatHour12 = (hour24: number): string => {
+        const hour12 = hour24 > 12 ? hour24 - 12 : (hour24 === 0 ? 12 : hour24);
+        const ampm = hour24 >= 12 ? 'pm' : 'am';
+        return `${hour12}${ampm}`;
+      };
+      
+      const clinicStartDisplay = formatHour12(startHour);
+      
       // Helper to parse time strings
       const parseTimeToHour = (timeStr: string): number | null => {
         const match = timeStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
@@ -2395,7 +2404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         for (const timeStr of timeMatches) {
           const requestedHour = parseTimeToHour(timeStr);
           if (requestedHour !== null && requestedHour < startHour) {
-            unassignedReason = `Requested ${timeStr} but clinic starts at ${clinicStartTime}`;
+            unassignedReason = `Requested ${timeStr.trim()} but clinic starts at ${clinicStartDisplay}`;
             break;
           }
         }
@@ -2410,9 +2419,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             if (!beforeMatch[3] && beforeHour >= 1 && beforeHour <= 6) beforeHour += 12;
             
             if (beforeHour <= startHour) {
-              const displayHour = beforeHour > 12 ? beforeHour - 12 : beforeHour;
-              const displayAmPm = beforeHour >= 12 ? 'pm' : 'am';
-              unassignedReason = `Requested before ${displayHour}${displayAmPm} but clinic starts at ${clinicStartTime}`;
+              unassignedReason = `Requested before ${formatHour12(beforeHour)} but clinic starts at ${clinicStartDisplay}`;
             }
           }
         }
