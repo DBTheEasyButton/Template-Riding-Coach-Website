@@ -2474,10 +2474,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const sessionRegs = confirmedRegistrations.filter(r => r.sessionId === session.id);
         if (sessionRegs.length === 0) continue;
         
-        // Group by skill level first
+        // Normalize skill levels for grouping (convert jumping heights to beginner/intermediate/advanced)
+        const normalizeSkillLevel = (level: string | null | undefined): string => {
+          if (!level) return 'open';
+          const l = level.toLowerCase().trim();
+          if (l === 'beginner' || l === '70cm') return 'beginner';
+          if (l === 'intermediate' || l === '80cm' || l === '90cm') return 'intermediate';
+          if (l === 'advanced' || l === '1m' || l === '1.10m' || l === '1.20m') return 'advanced';
+          return l;
+        };
+        
+        // Group by normalized skill level
         const bySkillLevel = new Map<string, ClinicRegistration[]>();
         for (const reg of sessionRegs) {
-          const level = (reg.skillLevel || 'open').toLowerCase();
+          const level = normalizeSkillLevel(reg.skillLevel);
           if (!bySkillLevel.has(level)) bySkillLevel.set(level, []);
           bySkillLevel.get(level)!.push(reg);
         }

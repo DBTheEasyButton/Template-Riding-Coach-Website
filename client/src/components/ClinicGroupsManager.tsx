@@ -176,6 +176,15 @@ const skillLevelColors: Record<string, { bg: string; text: string; border: strin
   open: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-300' },
 };
 
+function normalizeSkillLevel(level: string | null | undefined): string {
+  if (!level) return 'Open';
+  const l = level.toLowerCase().trim();
+  if (l === 'beginner' || l === '70cm') return 'Beginner';
+  if (l === 'intermediate' || l === '80cm' || l === '90cm') return 'Intermediate';
+  if (l === 'advanced' || l === '1m' || l === '1.10m' || l === '1.20m') return 'Advanced';
+  return level.charAt(0).toUpperCase() + level.slice(1);
+}
+
 function getSkillLevelColor(level: string | null | undefined) {
   if (!level) return skillLevelColors.open;
   return skillLevelColors[level.toLowerCase()] || skillLevelColors.open;
@@ -223,7 +232,7 @@ function ParticipantCard({
             </span>
             {participant.skillLevel && (
               <Badge variant="outline" className={`text-xs ${levelColor.bg} ${levelColor.text} ${levelColor.border}`}>
-                {participant.skillLevel}
+                {normalizeSkillLevel(participant.skillLevel)}
               </Badge>
             )}
           </div>
