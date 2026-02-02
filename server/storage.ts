@@ -9,6 +9,7 @@ import {
   clinicGroups,
   clinicRegistrations,
   clinicWaitlist,
+  clinicEmailConfirmations,
   trainingVideos,
   testimonials,
   emailSubscribers,
@@ -45,6 +46,8 @@ import {
   type InsertClinicRegistration,
   type ClinicWaitlist,
   type InsertClinicWaitlist,
+  type ClinicEmailConfirmation,
+  type InsertClinicEmailConfirmation,
   type TrainingVideo,
   type InsertTrainingVideo,
   type Testimonial,
@@ -146,6 +149,12 @@ export interface IStorage {
   notifyWaitlistEntry(id: number): Promise<ClinicWaitlist | null>;
   getExpiredWaitlistNotifications(): Promise<ClinicWaitlist[]>;
   expireWaitlistEntry(id: number): Promise<void>;
+  
+  // Clinic Email Confirmations
+  createClinicEmailConfirmation(confirmation: InsertClinicEmailConfirmation): Promise<ClinicEmailConfirmation>;
+  getClinicEmailConfirmations(clinicId: number): Promise<ClinicEmailConfirmation[]>;
+  confirmClinicEmail(token: string): Promise<ClinicEmailConfirmation | undefined>;
+  getClinicEmailConfirmationByToken(token: string): Promise<ClinicEmailConfirmation | undefined>;
   
   getAllTrainingVideos(): Promise<TrainingVideo[]>;
   getTrainingVideosByCategory(category: string): Promise<TrainingVideo[]>;
@@ -1339,6 +1348,34 @@ The Dan Bizzarro Method Team`,
   async expireWaitlistEntry(id: number): Promise<void> {
     // Remove from waitlist when their time expires without booking
     await db.delete(clinicWaitlist).where(eq(clinicWaitlist.id, id));
+  }
+
+  // Clinic Email Confirmations
+  async createClinicEmailConfirmation(confirmation: InsertClinicEmailConfirmation): Promise<ClinicEmailConfirmation> {
+    const [result] = await db.insert(clinicEmailConfirmations).values(confirmation).returning();
+    return result;
+  }
+
+  async getClinicEmailConfirmations(clinicId: number): Promise<ClinicEmailConfirmation[]> {
+    return await db.select()
+      .from(clinicEmailConfirmations)
+      .where(eq(clinicEmailConfirmations.clinicId, clinicId))
+      .orderBy(clinicEmailConfirmations.emailSentAt);
+  }
+
+  async confirmClinicEmail(token: string): Promise<ClinicEmailConfirmation | undefined> {
+    const [result] = await db.update(clinicEmailConfirmations)
+      .set({ confirmed: true, confirmedAt: new Date() })
+      .where(eq(clinicEmailConfirmations.confirmationToken, token))
+      .returning();
+    return result;
+  }
+
+  async getClinicEmailConfirmationByToken(token: string): Promise<ClinicEmailConfirmation | undefined> {
+    const [result] = await db.select()
+      .from(clinicEmailConfirmations)
+      .where(eq(clinicEmailConfirmations.confirmationToken, token));
+    return result;
   }
 
   async getAllTrainingVideos(): Promise<TrainingVideo[]> {

@@ -183,6 +183,23 @@ export const clinicWaitlist = pgTable("clinic_waitlist", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+// Email confirmation tracking for clinic time notifications
+export const clinicEmailConfirmations = pgTable("clinic_email_confirmations", {
+  id: serial("id").primaryKey(),
+  clinicId: integer("clinic_id").notNull().references(() => clinics.id, { onDelete: 'cascade' }),
+  registrationId: integer("registration_id").notNull().references(() => clinicRegistrations.id, { onDelete: 'cascade' }),
+  email: text("email").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  confirmationToken: text("confirmation_token").notNull(), // Unique token for confirmation link
+  emailSentAt: timestamp("email_sent_at").notNull().defaultNow(),
+  confirmed: boolean("confirmed").notNull().default(false),
+  confirmedAt: timestamp("confirmed_at"),
+}, (table) => ({
+  clinicIdIdx: index("clinic_email_confirmations_clinic_id_idx").on(table.clinicId),
+  tokenIdx: uniqueIndex("clinic_email_confirmations_token_unique").on(table.confirmationToken),
+}));
+
 export const trainingVideos = pgTable("training_videos", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
@@ -344,6 +361,13 @@ export const insertClinicWaitlistSchema = createInsertSchema(clinicWaitlist).omi
   createdAt: true,
 });
 
+export const insertClinicEmailConfirmationSchema = createInsertSchema(clinicEmailConfirmations).omit({
+  id: true,
+  emailSentAt: true,
+  confirmed: true,
+  confirmedAt: true,
+});
+
 export const insertTrainingVideoSchema = createInsertSchema(trainingVideos).omit({
   id: true,
   viewCount: true,
@@ -413,6 +437,8 @@ export type ClinicRegistration = typeof clinicRegistrations.$inferSelect;
 export type InsertClinicRegistration = z.infer<typeof insertClinicRegistrationSchema>;
 export type ClinicWaitlist = typeof clinicWaitlist.$inferSelect;
 export type InsertClinicWaitlist = z.infer<typeof insertClinicWaitlistSchema>;
+export type ClinicEmailConfirmation = typeof clinicEmailConfirmations.$inferSelect;
+export type InsertClinicEmailConfirmation = z.infer<typeof insertClinicEmailConfirmationSchema>;
 export type ClinicSession = typeof clinicSessions.$inferSelect;
 export type InsertClinicSession = z.infer<typeof insertClinicSessionSchema>;
 export type ClinicGroup = typeof clinicGroups.$inferSelect;
