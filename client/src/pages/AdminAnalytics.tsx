@@ -29,6 +29,11 @@ interface AnalyticsData {
   subscriberGrowth: { month: string; subscribers: number }[];
   contactsByType: { type: string; count: number }[];
   loyaltyTiers: { tier: string; count: number }[];
+  audioCourse: {
+    totalPurchases: number;
+    totalRevenue: number;
+    monthlyData: { month: string; count: number; revenue: number }[];
+  };
 }
 
 const COLORS = ['#f97316', '#1e40af', '#059669', '#dc2626', '#7c3aed', '#ea580c'];
@@ -64,7 +69,7 @@ export default function AdminAnalytics() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-6 md:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Subscribers</CardTitle>
@@ -100,19 +105,31 @@ export default function AdminAnalytics() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Revenue</CardTitle>
+              <CardTitle className="text-sm font-medium">Clinic Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">£{((analytics?.totalRevenue || 0) / 100).toFixed(0)}</div>
-              <p className="text-xs text-muted-foreground">Total from clinic registrations</p>
+              <p className="text-xs text-muted-foreground">From clinic registrations</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Audio Course Sales</CardTitle>
+              <Target className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{analytics?.audioCourse?.totalPurchases || 0}</div>
+              <p className="text-xs text-muted-foreground">£{((analytics?.audioCourse?.totalRevenue || 0) / 100).toFixed(0)} revenue</p>
             </CardContent>
           </Card>
         </div>
 
         <Tabs defaultValue="registrations" className="space-y-4 md:space-y-6">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 h-auto">
             <TabsTrigger value="registrations" className="text-xs sm:text-sm py-2">Registrations</TabsTrigger>
+            <TabsTrigger value="audiocourse" className="text-xs sm:text-sm py-2">Audio Course</TabsTrigger>
             <TabsTrigger value="subscribers" className="text-xs sm:text-sm py-2">Subscribers</TabsTrigger>
             <TabsTrigger value="clinics" className="text-xs sm:text-sm py-2">Clinics</TabsTrigger>
             <TabsTrigger value="activity" className="text-xs sm:text-sm py-2">Activity</TabsTrigger>
@@ -156,6 +173,77 @@ export default function AdminAnalytics() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="audiocourse" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Audio Course Sales Trends</CardTitle>
+                  <CardDescription>Monthly purchases of Strong to Soft & Light audio course</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={analytics?.audioCourse?.monthlyData || []}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="#7c3aed" name="Sales" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Audio Course Revenue</CardTitle>
+                  <CardDescription>Monthly revenue from audio course sales</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={analytics?.audioCourse?.monthlyData || []}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip formatter={(value: number) => [`£${(value / 100).toFixed(0)}`, 'Revenue']} />
+                      <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Audio Course Summary</CardTitle>
+                <CardDescription>Last 6 months performance overview</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <div className="text-3xl font-bold text-purple-700">{analytics?.audioCourse?.totalPurchases || 0}</div>
+                    <div className="text-sm text-purple-600">Total Sales</div>
+                  </div>
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <div className="text-3xl font-bold text-purple-700">£{((analytics?.audioCourse?.totalRevenue || 0) / 100).toFixed(0)}</div>
+                    <div className="text-sm text-purple-600">Total Revenue</div>
+                  </div>
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <div className="text-3xl font-bold text-purple-700">
+                      £{analytics?.audioCourse?.totalPurchases ? ((analytics.audioCourse.totalRevenue / analytics.audioCourse.totalPurchases) / 100).toFixed(0) : 0}
+                    </div>
+                    <div className="text-sm text-purple-600">Avg. Order Value</div>
+                  </div>
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <div className="text-3xl font-bold text-purple-700">
+                      {((analytics?.audioCourse?.monthlyData || []).reduce((sum, m) => sum + m.count, 0) / 6).toFixed(1)}
+                    </div>
+                    <div className="text-sm text-purple-600">Avg. Monthly Sales</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="subscribers" className="space-y-6">

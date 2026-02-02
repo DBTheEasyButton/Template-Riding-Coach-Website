@@ -5559,16 +5559,80 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
         clinics,
         registrations,
         contacts,
-        loyaltyPrograms
+        loyaltyPrograms,
+        sessions
       ] = await Promise.all([
         storage.getAllEmailSubscribers(),
         storage.getAllClinics(),
         storage.getAllClinicRegistrations(),
         storage.getAllContacts(),
-        storage.getAllLoyaltyPrograms()
+        storage.getAllLoyaltyPrograms(),
+        storage.getAllClinicSessions()
       ]);
 
-      // Calculate monthly registration trends
+      // Get audio course payments from Stripe (last 6 months)
+      let audioCourseData = {
+        totalPurchases: 0,
+        totalRevenue: 0,
+        monthlyData: [] as { month: string; count: number; revenue: number }[]
+      };
+      
+      try {
+        const sixMonthsAgo = Math.floor(Date.now() / 1000) - (180 * 24 * 60 * 60);
+        
+        // Fetch all payment intents with pagination
+        let allPayments: Stripe.PaymentIntent[] = [];
+        let hasMore = true;
+        let startingAfter: string | undefined;
+        
+        while (hasMore) {
+          const params: Stripe.PaymentIntentListParams = {
+            limit: 100,
+            created: { gte: sixMonthsAgo },
+          };
+          if (startingAfter) {
+            params.starting_after = startingAfter;
+          }
+          
+          const payments = await stripe.paymentIntents.list(params);
+          allPayments = allPayments.concat(payments.data);
+          hasMore = payments.has_more;
+          if (payments.data.length > 0) {
+            startingAfter = payments.data[payments.data.length - 1].id;
+          }
+        }
+        
+        const audioCoursePayments = allPayments.filter(pi => 
+          pi.status === 'succeeded' && 
+          pi.metadata?.productType === 'audio-course'
+        );
+        
+        audioCourseData.totalPurchases = audioCoursePayments.length;
+        audioCourseData.totalRevenue = audioCoursePayments.reduce((sum, pi) => sum + (pi.amount || 0), 0);
+        
+        // Calculate monthly audio course data
+        const now = new Date();
+        for (let i = 5; i >= 0; i--) {
+          const month = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+          const monthStr = month.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+          
+          const monthPayments = audioCoursePayments.filter(pi => {
+            const payDate = new Date(pi.created * 1000);
+            return payDate >= month && payDate <= monthEnd;
+          });
+          
+          audioCourseData.monthlyData.push({
+            month: monthStr,
+            count: monthPayments.length,
+            revenue: monthPayments.reduce((sum, pi) => sum + (pi.amount || 0), 0)
+          });
+        }
+      } catch (stripeError) {
+        console.error("Error fetching Stripe data for analytics:", stripeError);
+      }
+
+      // Calculate monthly registration trends with session prices
       const now = new Date();
       const monthlyData = [];
       for (let i = 5; i >= 0; i--) {
@@ -5577,12 +5641,13 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
         
         const monthRegistrations = registrations.filter(reg => {
           const regDate = new Date(reg.registeredAt);
-          return regDate.getMonth() === month.getMonth() && regDate.getFullYear() === month.getFullYear();
+          return regDate.getMonth() === month.getMonth() && regDate.getFullYear() === month.getFullYear() && reg.status === 'confirmed';
         });
         
+        // Calculate revenue from session prices
         const revenue = monthRegistrations.reduce((sum, reg) => {
-          const clinic = clinics.find(c => c.id === reg.clinicId);
-          return sum + (clinic?.price || 0);
+          const session = sessions.find(s => s.id === reg.sessionId);
+          return sum + (session?.price || 0);
         }, 0);
 
         monthlyData.push({
@@ -5645,21 +5710,24 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
         count
       }));
 
-      const totalRevenue = registrations.reduce((sum, reg) => {
-        const clinic = clinics.find(c => c.id === reg.clinicId);
-        return sum + (clinic?.price || 0);
+      // Calculate total clinic revenue from session prices
+      const confirmedRegs = registrations.filter(r => r.status === 'confirmed');
+      const totalClinicRevenue = confirmedRegs.reduce((sum, reg) => {
+        const session = sessions.find(s => s.id === reg.sessionId);
+        return sum + (session?.price || 0);
       }, 0);
 
       res.json({
         totalSubscribers: subscribers.length,
         totalClinics: clinics.filter(c => c.isActive).length,
-        totalRegistrations: registrations.length,
-        totalRevenue,
+        totalRegistrations: confirmedRegs.length,
+        totalRevenue: totalClinicRevenue,
         monthlyRegistrations: monthlyData,
         subscriberGrowth,
         clinicsByLevel,
         contactsByType,
-        loyaltyTiers
+        loyaltyTiers,
+        audioCourse: audioCourseData
       });
     } catch (error) {
       console.error("Error fetching analytics:", error);
