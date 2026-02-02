@@ -314,7 +314,14 @@ export default function ClinicsSection() {
     medicalConditions: '',
     agreeToTerms: false,
     paymentMethod: 'debit_card',
-    referralCode: ''
+    referralCode: '',
+    isBookingForOther: false,
+    otherRiderFirstName: '',
+    otherRiderLastName: '',
+    otherRiderHorseName: '',
+    otherRiderSkillLevel: '',
+    isAdditionalHorse: false,
+    gapPreference: '' as '' | 'back_to_back' | 'one_session_gap'
   });
   const [isValidatingReferral, setIsValidatingReferral] = useState(false);
   const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
@@ -467,6 +474,13 @@ export default function ClinicsSection() {
           paymentMethod: registrationData.paymentMethod,
           agreeToTerms: registrationData.agreeToTerms,
           referralCode: registrationData.referralCode || undefined,
+          isEnteringForOther: registrationData.isBookingForOther || false,
+          otherRiderFirstName: registrationData.isBookingForOther ? registrationData.otherRiderFirstName : undefined,
+          otherRiderLastName: registrationData.isBookingForOther ? registrationData.otherRiderLastName : undefined,
+          otherRiderHorseName: registrationData.isBookingForOther ? registrationData.otherRiderHorseName : undefined,
+          otherRiderSkillLevel: registrationData.isBookingForOther ? registrationData.otherRiderSkillLevel : undefined,
+          isAdditionalHorse: registrationData.isAdditionalHorse || false,
+          gapPreference: registrationData.isAdditionalHorse ? registrationData.gapPreference : undefined,
           sessionId: sessionId
         }
       };
@@ -518,7 +532,14 @@ export default function ClinicsSection() {
         medicalConditions: '',
         agreeToTerms: false,
         paymentMethod: 'debit_card',
-        referralCode: ''
+        referralCode: '',
+        isBookingForOther: false,
+        otherRiderFirstName: '',
+        otherRiderLastName: '',
+        otherRiderHorseName: '',
+        otherRiderSkillLevel: '',
+        isAdditionalHorse: false,
+        gapPreference: '' as '' | 'back_to_back' | 'one_session_gap'
       });
       setReferralValidation(null);
       setFormErrors({});
@@ -612,7 +633,14 @@ export default function ClinicsSection() {
       medicalConditions: '',
       agreeToTerms: false,
       paymentMethod: 'bank_transfer',
-      referralCode: ''
+      referralCode: '',
+      isBookingForOther: false,
+      otherRiderFirstName: '',
+      otherRiderLastName: '',
+      otherRiderHorseName: '',
+      otherRiderSkillLevel: '',
+      isAdditionalHorse: false,
+      gapPreference: '' as '' | 'back_to_back' | 'one_session_gap'
     });
     setReferralValidation(null);
     toast({
@@ -635,6 +663,19 @@ export default function ClinicsSection() {
     if (!registrationData.emergencyContact.trim()) errors.emergencyContact = "Emergency contact is required";
     if (!registrationData.emergencyPhone.trim()) errors.emergencyPhone = "Emergency phone is required";
     if (!registrationData.agreeToTerms) errors.agreeToTerms = "You must agree to the terms and conditions";
+    
+    // Validate booking for other rider details
+    if (registrationData.isBookingForOther) {
+      if (!registrationData.otherRiderFirstName?.trim()) errors.otherRiderFirstName = "Rider's first name is required";
+      if (!registrationData.otherRiderLastName?.trim()) errors.otherRiderLastName = "Rider's last name is required";
+      if (!registrationData.otherRiderHorseName?.trim()) errors.otherRiderHorseName = "Horse name is required";
+      if (!registrationData.otherRiderSkillLevel) errors.otherRiderSkillLevel = "Skill level is required";
+    }
+    
+    // Validate gap preference for multiple horses
+    if (registrationData.isAdditionalHorse && !registrationData.gapPreference) {
+      errors.gapPreference = "Please select your preferred session scheduling";
+    }
     
     // Validate session selection for multi-session clinics
     if (selectedClinic?.hasMultipleSessions && selectedSessions.length === 0) {
@@ -1266,6 +1307,142 @@ export default function ClinicsSection() {
                       <AlertCircle className="w-4 h-4 mr-1" />
                       {formErrors.horseName}
                     </p>
+                  )}
+                </div>
+
+                {/* Booking for someone else toggle */}
+                <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="isBookingForOther"
+                      checked={registrationData.isBookingForOther}
+                      onCheckedChange={(checked) => handleInputChange('isBookingForOther', checked)}
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor="isBookingForOther" className="text-sm font-medium cursor-pointer">
+                        I'm booking for someone else
+                      </Label>
+                      <p className="text-xs text-gray-600 mt-1">
+                        Check this if you're registering on behalf of another rider
+                      </p>
+                    </div>
+                  </div>
+
+                  {registrationData.isBookingForOther && (
+                    <div className="mt-4 space-y-3 border-t border-amber-200 pt-4">
+                      <p className="text-xs text-amber-700 font-medium">Enter the rider's details:</p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label htmlFor="otherRiderFirstName" className="text-xs">First Name *</Label>
+                          <Input
+                            id="otherRiderFirstName"
+                            value={registrationData.otherRiderFirstName}
+                            onChange={(e) => handleInputChange('otherRiderFirstName', e.target.value)}
+                            placeholder="Rider's first name"
+                            className="h-10"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="otherRiderLastName" className="text-xs">Last Name *</Label>
+                          <Input
+                            id="otherRiderLastName"
+                            value={registrationData.otherRiderLastName}
+                            onChange={(e) => handleInputChange('otherRiderLastName', e.target.value)}
+                            placeholder="Rider's last name"
+                            className="h-10"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="otherRiderHorseName" className="text-xs">Horse Name *</Label>
+                        <Input
+                          id="otherRiderHorseName"
+                          value={registrationData.otherRiderHorseName}
+                          onChange={(e) => handleInputChange('otherRiderHorseName', e.target.value)}
+                          placeholder="Their horse's name"
+                          className="h-10"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="otherRiderSkillLevel" className="text-xs">Skill Level *</Label>
+                        <select
+                          id="otherRiderSkillLevel"
+                          value={registrationData.otherRiderSkillLevel}
+                          onChange={(e) => handleInputChange('otherRiderSkillLevel', e.target.value)}
+                          className="w-full h-10 px-3 border rounded-md text-sm"
+                        >
+                          <option value="">Select level...</option>
+                          <option value="60cm">60cm</option>
+                          <option value="70cm">70cm</option>
+                          <option value="80cm">80cm</option>
+                          <option value="90cm">90cm</option>
+                          <option value="1m">1m</option>
+                          <option value="1.10m">1.10m</option>
+                          <option value="1.20m">1.20m</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional horse toggle with gap preference */}
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="isAdditionalHorse"
+                      checked={registrationData.isAdditionalHorse}
+                      onCheckedChange={(checked) => handleInputChange('isAdditionalHorse', checked)}
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor="isAdditionalHorse" className="text-sm font-medium cursor-pointer">
+                        I'm entering with multiple horses today
+                      </Label>
+                      <p className="text-xs text-gray-600 mt-1">
+                        Check this if you're riding more than one horse at this clinic
+                      </p>
+                    </div>
+                  </div>
+
+                  {registrationData.isAdditionalHorse && (
+                    <div className="mt-4 space-y-3 border-t border-blue-200 pt-4">
+                      <p className="text-xs text-blue-700 font-medium">How would you like your sessions scheduled?</p>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="gap_back_to_back_desktop"
+                            name="gapPreference"
+                            value="back_to_back"
+                            checked={registrationData.gapPreference === 'back_to_back'}
+                            onChange={(e) => handleInputChange('gapPreference', e.target.value)}
+                            className="w-4 h-4 text-blue-600"
+                          />
+                          <Label htmlFor="gap_back_to_back_desktop" className="text-sm cursor-pointer">
+                            <span className="font-medium">Back-to-back</span>
+                            <span className="text-gray-500 ml-1">- Ride one horse right after the other</span>
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="gap_one_session_desktop"
+                            name="gapPreference"
+                            value="one_session_gap"
+                            checked={registrationData.gapPreference === 'one_session_gap'}
+                            onChange={(e) => handleInputChange('gapPreference', e.target.value)}
+                            className="w-4 h-4 text-blue-600"
+                          />
+                          <Label htmlFor="gap_one_session_desktop" className="text-sm cursor-pointer">
+                            <span className="font-medium">One session gap</span>
+                            <span className="text-gray-500 ml-1">- Have a break between horses</span>
+                          </Label>
+                        </div>
+                      </div>
+                      {formErrors.gapPreference && <p className="text-xs text-red-500 mt-2">{formErrors.gapPreference}</p>}
+                      <p className="text-xs text-blue-600 mt-2">
+                        Please complete a separate registration for each horse you're entering.
+                      </p>
+                    </div>
                   )}
                 </div>
                 
