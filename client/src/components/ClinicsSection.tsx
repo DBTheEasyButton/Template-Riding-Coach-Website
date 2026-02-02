@@ -342,6 +342,7 @@ export default function ClinicsSection() {
     skillLevel: string;
     specialRequests?: string;
     gapPreference?: string;
+    timePreference?: string;
   }>>([]);
   const [showAddEntryDialog, setShowAddEntryDialog] = useState(false);
   const [addEntryType, setAddEntryType] = useState<'other_rider' | 'another_horse' | null>(null);
@@ -351,7 +352,8 @@ export default function ClinicsSection() {
     horseName: '',
     skillLevel: '',
     specialRequests: '',
-    gapPreference: '' as '' | 'back_to_back' | 'one_session_gap'
+    gapPreference: '' as '' | 'back_to_back' | 'one_session_gap',
+    timePreference: ''
   });
 
   // Load Stripe at runtime - start loading immediately when dialog opens
@@ -386,7 +388,8 @@ export default function ClinicsSection() {
         horseName: '',
         skillLevel: '',
         specialRequests: '',
-        gapPreference: ''
+        gapPreference: '',
+        timePreference: ''
       });
     }
   }, [isRegistrationOpen]);
@@ -1387,6 +1390,9 @@ export default function ClinicsSection() {
                         <div>
                           <p className="text-sm font-medium">{entry.firstName} {entry.lastName}</p>
                           <p className="text-xs text-gray-600">Horse: {entry.horseName}</p>
+                          {entry.timePreference && (
+                            <p className="text-xs text-green-600">Preferred time: {entry.timePreference}</p>
+                          )}
                           {entry.gapPreference && (
                             <p className="text-xs text-blue-600">Gap: {entry.gapPreference === 'back_to_back' ? 'Back-to-back' : 'One session gap'}</p>
                           )}
@@ -1617,7 +1623,8 @@ export default function ClinicsSection() {
                       horseName: '',
                       skillLevel: '',
                       specialRequests: '',
-                      gapPreference: ''
+                      gapPreference: '',
+                      timePreference: ''
                     });
                   }}
                 >
@@ -1638,7 +1645,8 @@ export default function ClinicsSection() {
                       horseName: '',
                       skillLevel: '',
                       specialRequests: '',
-                      gapPreference: ''
+                      gapPreference: '',
+                      timePreference: ''
                     });
                   }}
                 >
@@ -1682,6 +1690,19 @@ export default function ClinicsSection() {
                     placeholder="Horse's name"
                   />
                 </div>
+                
+                {addEntryType === 'other_rider' && (
+                  <div>
+                    <Label htmlFor="newEntry_timePreference" className="text-sm">Time Preference</Label>
+                    <Input
+                      id="newEntry_timePreference"
+                      value={newEntryData.timePreference}
+                      onChange={(e) => setNewEntryData(prev => ({ ...prev, timePreference: e.target.value }))}
+                      placeholder="e.g. Morning, After 2pm, Early session..."
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Let us know if this rider has any scheduling preferences</p>
+                  </div>
+                )}
                 
                 {addEntryType === 'another_horse' && (
                   <div>
@@ -1778,7 +1799,8 @@ export default function ClinicsSection() {
                         horseName: '',
                         skillLevel: '',
                         specialRequests: '',
-                        gapPreference: ''
+                        gapPreference: '',
+                        timePreference: ''
                       });
                     }}
                     className="flex-1 bg-navy hover:bg-slate-800"

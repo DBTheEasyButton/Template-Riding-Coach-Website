@@ -111,6 +111,7 @@ interface AdditionalEntry {
   emergencyContact: string;
   emergencyPhone: string;
   gapPreference?: 'back_to_back' | 'one_session_gap';
+  timePreference?: string;
 }
 
 const STEPS = [
@@ -787,6 +788,9 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                       <div>
                         <p className="font-medium text-gray-900">{entry.firstName} {entry.lastName}</p>
                         <p className="text-sm text-gray-600">Horse: {entry.horseName}</p>
+                        {entry.timePreference && (
+                          <p className="text-xs text-green-600">Preferred time: {entry.timePreference}</p>
+                        )}
                         {entry.gapPreference && (
                           <p className="text-xs text-blue-600">
                             {entry.gapPreference === 'back_to_back' ? 'Back-to-back' : 'One session gap'}
@@ -960,6 +964,18 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                           rows={2}
                         />
                       </div>
+                      
+                      {addingEntryType === 'different_rider' && (
+                        <div>
+                          <Label className="text-xs">Time Preference</Label>
+                          <Input
+                            value={newEntryData.timePreference || ''}
+                            onChange={(e) => setNewEntryData(prev => ({ ...prev, timePreference: e.target.value }))}
+                            placeholder="e.g. Morning, After 2pm, Early session..."
+                          />
+                          <p className="text-xs text-gray-500 mt-1">Let us know if this rider has any scheduling preferences</p>
+                        </div>
+                      )}
                       
                       {addingEntryType === 'same_rider_different_horse' && (
                         <div className="bg-blue-50 p-3 rounded-lg">
