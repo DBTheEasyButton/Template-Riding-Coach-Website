@@ -339,10 +339,12 @@ export default function ClinicsSection() {
     firstName: string;
     lastName: string;
     horseName: string;
+    horseInfo?: string;
     skillLevel: string;
     specialRequests?: string;
     gapPreference?: string;
     timePreference?: string;
+    selectedSessionId?: number;
   }>>([]);
   const [showAddEntryDialog, setShowAddEntryDialog] = useState(false);
   const [addEntryType, setAddEntryType] = useState<'other_rider' | 'another_horse' | null>(null);
@@ -350,10 +352,12 @@ export default function ClinicsSection() {
     firstName: '',
     lastName: '',
     horseName: '',
+    horseInfo: '',
     skillLevel: '',
     specialRequests: '',
     gapPreference: '' as '' | 'back_to_back' | 'one_session_gap',
-    timePreference: ''
+    timePreference: '',
+    selectedSessionId: null as number | null
   });
 
   // Load Stripe at runtime - start loading immediately when dialog opens
@@ -386,10 +390,12 @@ export default function ClinicsSection() {
         firstName: '',
         lastName: '',
         horseName: '',
+        horseInfo: '',
         skillLevel: '',
         specialRequests: '',
         gapPreference: '',
-        timePreference: ''
+        timePreference: '',
+        selectedSessionId: null
       });
     }
   }, [isRegistrationOpen]);
@@ -1385,11 +1391,20 @@ export default function ClinicsSection() {
                       <p className="text-xs text-gray-600">Horse: {registrationData.horseName}</p>
                     </div>
                     
-                    {additionalEntries.map((entry, idx) => (
+                    {additionalEntries.map((entry, idx) => {
+                      const entrySession = entry.selectedSessionId 
+                        ? selectedClinic?.sessions?.find(s => s.id === entry.selectedSessionId) 
+                        : null;
+                      return (
                       <div key={idx} className="bg-white p-3 rounded border flex justify-between items-start">
                         <div>
                           <p className="text-sm font-medium">{entry.firstName} {entry.lastName}</p>
                           <p className="text-xs text-gray-600">Horse: {entry.horseName}</p>
+                          {entrySession && (
+                            <p className="text-xs text-purple-600 font-medium">
+                              {entrySession.discipline} - {entrySession.skillLevel}
+                            </p>
+                          )}
                           {entry.timePreference && (
                             <p className="text-xs text-green-600">Preferred time: {entry.timePreference}</p>
                           )}
@@ -1407,7 +1422,8 @@ export default function ClinicsSection() {
                           <X className="w-4 h-4" />
                         </Button>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-2">
@@ -1621,10 +1637,12 @@ export default function ClinicsSection() {
                       firstName: registrationData.firstName,
                       lastName: registrationData.lastName,
                       horseName: '',
+                      horseInfo: '',
                       skillLevel: '',
                       specialRequests: '',
                       gapPreference: '',
-                      timePreference: ''
+                      timePreference: '',
+                      selectedSessionId: null
                     });
                   }}
                 >
@@ -1643,10 +1661,12 @@ export default function ClinicsSection() {
                       firstName: '',
                       lastName: '',
                       horseName: '',
+                      horseInfo: '',
                       skillLevel: '',
                       specialRequests: '',
                       gapPreference: '',
-                      timePreference: ''
+                      timePreference: '',
+                      selectedSessionId: null
                     });
                   }}
                 >
@@ -1690,6 +1710,44 @@ export default function ClinicsSection() {
                     placeholder="Horse's name"
                   />
                 </div>
+                
+                <div>
+                  <Label htmlFor="newEntry_horseInfo" className="text-sm">Info About This Horse</Label>
+                  <Textarea
+                    id="newEntry_horseInfo"
+                    value={newEntryData.horseInfo}
+                    onChange={(e) => setNewEntryData(prev => ({ ...prev, horseInfo: e.target.value }))}
+                    placeholder="Age, breed, temperament, experience level..."
+                    rows={2}
+                  />
+                </div>
+                
+                {selectedClinic?.hasMultipleSessions && selectedClinic.sessions && selectedClinic.sessions.length > 0 && (
+                  <div>
+                    <Label htmlFor="newEntry_session" className="text-sm">Select Session (Category & Level) *</Label>
+                    <select
+                      id="newEntry_session"
+                      value={newEntryData.selectedSessionId || ''}
+                      onChange={(e) => {
+                        const sessionId = parseInt(e.target.value);
+                        const session = selectedClinic.sessions?.find(s => s.id === sessionId);
+                        setNewEntryData(prev => ({ 
+                          ...prev, 
+                          selectedSessionId: sessionId,
+                          skillLevel: session ? `${session.discipline} - ${session.skillLevel}` : ''
+                        }));
+                      }}
+                      className="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">Choose a session...</option>
+                      {selectedClinic.sessions.map((session) => (
+                        <option key={session.id} value={session.id}>
+                          {session.discipline} - {session.skillLevel} (£{(session.price / 100).toFixed(0)})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 
                 {addEntryType === 'other_rider' && (
                   <div>
@@ -1781,14 +1839,24 @@ export default function ClinicsSection() {
                         });
                         return;
                       }
+                      if (selectedClinic?.hasMultipleSessions && !newEntryData.selectedSessionId) {
+                        toast({
+                          title: "Missing information",
+                          description: "Please select a session (category & level)",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
                       
                       setAdditionalEntries(prev => [...prev, {
                         type: addEntryType!,
                         firstName: addEntryType === 'another_horse' ? registrationData.firstName : newEntryData.firstName,
                         lastName: addEntryType === 'another_horse' ? registrationData.lastName : newEntryData.lastName,
                         horseName: newEntryData.horseName,
+                        horseInfo: newEntryData.horseInfo,
                         skillLevel: newEntryData.skillLevel,
-                        gapPreference: addEntryType === 'another_horse' ? newEntryData.gapPreference : undefined
+                        gapPreference: addEntryType === 'another_horse' ? newEntryData.gapPreference : undefined,
+                        selectedSessionId: newEntryData.selectedSessionId || undefined
                       }]);
                       
                       setAddEntryType(null);
@@ -1797,10 +1865,12 @@ export default function ClinicsSection() {
                         firstName: '',
                         lastName: '',
                         horseName: '',
+                        horseInfo: '',
                         skillLevel: '',
                         specialRequests: '',
                         gapPreference: '',
-                        timePreference: ''
+                        timePreference: '',
+                        selectedSessionId: null
                       });
                     }}
                     className="flex-1 bg-navy hover:bg-slate-800"

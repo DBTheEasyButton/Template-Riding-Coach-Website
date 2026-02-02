@@ -112,6 +112,7 @@ interface AdditionalEntry {
   emergencyPhone: string;
   gapPreference?: 'back_to_back' | 'one_session_gap';
   timePreference?: string;
+  selectedSessionId?: number;
 }
 
 const STEPS = [
@@ -782,12 +783,21 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 </div>
                 
                 {/* Additional Entries */}
-                {additionalEntries.map((entry, index) => (
+                {additionalEntries.map((entry, index) => {
+                  const entrySession = entry.selectedSessionId 
+                    ? clinic?.sessions?.find(s => s.id === entry.selectedSessionId) 
+                    : null;
+                  return (
                   <div key={index} className="bg-white p-3 rounded-lg mb-3 shadow-sm">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-gray-900">{entry.firstName} {entry.lastName}</p>
                         <p className="text-sm text-gray-600">Horse: {entry.horseName}</p>
+                        {entrySession && (
+                          <p className="text-xs text-purple-600 font-medium">
+                            {entrySession.discipline} - {entrySession.skillLevel}
+                          </p>
+                        )}
                         {entry.timePreference && (
                           <p className="text-xs text-green-600">Preferred time: {entry.timePreference}</p>
                         )}
@@ -810,7 +820,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
                 
                 {/* Add Another Entry Button */}
                 <button
@@ -965,6 +976,32 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                         />
                       </div>
                       
+                      {clinic?.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0 && (
+                        <div>
+                          <Label className="text-xs">Select Session (Category & Level) *</Label>
+                          <select
+                            value={newEntryData.selectedSessionId || ''}
+                            onChange={(e) => {
+                              const sessionId = parseInt(e.target.value);
+                              const session = clinic.sessions?.find(s => s.id === sessionId);
+                              setNewEntryData(prev => ({ 
+                                ...prev, 
+                                selectedSessionId: sessionId,
+                                skillLevel: session ? `${session.discipline} - ${session.skillLevel}` : ''
+                              }));
+                            }}
+                            className="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm"
+                          >
+                            <option value="">Choose a session...</option>
+                            {clinic.sessions.map((session) => (
+                              <option key={session.id} value={session.id}>
+                                {session.discipline} - {session.skillLevel} (£{(session.price / 100).toFixed(0)})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      
                       {addingEntryType === 'different_rider' && (
                         <div>
                           <Label className="text-xs">Time Preference</Label>
@@ -1024,6 +1061,10 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                           // Validate and add entry
                           if (!newEntryData.horseName) {
                             toast({ title: "Please enter the horse's name", variant: "destructive" });
+                            return;
+                          }
+                          if (clinic?.hasMultipleSessions && !newEntryData.selectedSessionId) {
+                            toast({ title: "Please select a session (category & level)", variant: "destructive" });
                             return;
                           }
                           if (addingEntryType === 'different_rider' && (!newEntryData.firstName || !newEntryData.lastName || !newEntryData.email)) {
