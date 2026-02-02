@@ -2404,12 +2404,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (/earliest|first|morning/i.test(notes)) timePrefs.push('early');
         if (/latest|last|afternoon|late/i.test(notes)) timePrefs.push('late');
         
-        // Group-with patterns
-        const withMatches = notes.match(/(?:with|same.*as|together.*with|put.*with|travelling.*with)\s+([a-z]+(?:\s+[a-z]+)?)/gi) || [];
+        // Group-with patterns - improved to capture multiple names
+        // Patterns like: "with X", "with X and Y", "put me with X and Y", "travelling with X"
+        const withPattern = /(?:with|same.*as|together.*with|put.*with|travelling.*with)\s+([a-z]+(?:\s+[a-z]+)?(?:\s+and\s+[a-z]+(?:\s+[a-z]+)?)*)/gi;
+        const withMatches = notes.match(withPattern) || [];
+        
         for (const match of withMatches) {
-          const nameMatch = match.match(/(?:with|as)\s+([a-z]+(?:\s+[a-z]+)?)/i);
-          if (nameMatch?.[1]) {
-            groupWith.push(nameMatch[1].trim().toLowerCase());
+          // Extract the names part after "with" or "as"
+          const namesMatch = match.match(/(?:with|as)\s+(.+)/i);
+          if (namesMatch?.[1]) {
+            const namesPart = namesMatch[1].trim().toLowerCase();
+            // Split by "and" to get individual names
+            const names = namesPart.split(/\s+and\s+/);
+            for (const name of names) {
+              const cleanName = name.trim().replace(/\s+as\s+.*$/i, ''); // Remove trailing "as we are..."
+              if (cleanName && cleanName.length > 2 && !/^(we|all|they|please)$/i.test(cleanName)) {
+                groupWith.push(cleanName);
+              }
+            }
           }
         }
         
@@ -2484,21 +2496,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return l;
         };
         
-        // Group by normalized skill level
-        const bySkillLevel = new Map<string, ClinicRegistration[]>();
-        for (const reg of sessionRegs) {
-          const level = normalizeSkillLevel(reg.skillLevel);
-          if (!bySkillLevel.has(level)) bySkillLevel.set(level, []);
-          bySkillLevel.get(level)!.push(reg);
-        }
-        
         // Sort time preferences (early first, then no preference, then late)
         const getTimeScore = (id: number): number => {
           const data = participantMap.get(id);
           if (!data) return 0;
           if (data.notes.timePrefs.some(t => /early|first|morning/i.test(t))) return -1;
           if (data.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) return 1;
-          // Check for specific times
           const timeMatch = data.notes.timePrefs.find(t => /\d/.test(t));
           if (timeMatch) {
             const hour = parseInt(timeMatch.match(/\d+/)?.[0] || '12');
@@ -2508,74 +2511,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
         };
         
         let groupOrder = 0;
+        const globalAssigned = new Set<number>();
         
-        // Create groups for each skill level
-        const skillLevelEntries = Array.from(bySkillLevel.entries());
-        for (const [level, regs] of skillLevelEntries) {
-          // Sort by time preference
-          regs.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
+        // STEP 1: First, process "group with" requests across ALL skill levels
+        // This ensures people who want to be together ARE together regardless of skill
+        const groupWithClusters: number[][] = [];
+        
+        for (const reg of sessionRegs) {
+          if (globalAssigned.has(reg.id)) continue;
           
-          // Keep group-with pairs together
-          const assigned = new Set<number>();
-          const groups: number[][] = [];
-          
-          for (const reg of regs) {
-            if (assigned.has(reg.id)) continue;
+          const data = participantMap.get(reg.id);
+          if (data && data.matchedWith.length > 0) {
+            const cluster: number[] = [reg.id];
+            globalAssigned.add(reg.id);
             
-            const group: number[] = [reg.id];
-            assigned.add(reg.id);
-            
-            // Add matched people to same group
-            const data = participantMap.get(reg.id);
-            if (data) {
-              for (const matchId of data.matchedWith) {
-                if (!assigned.has(matchId)) {
-                  const matchedReg = regs.find((r: ClinicRegistration) => r.id === matchId);
-                  if (matchedReg) {
-                    group.push(matchId);
-                    assigned.add(matchId);
+            // Add all matched people from this session
+            for (const matchId of data.matchedWith) {
+              if (!globalAssigned.has(matchId)) {
+                const matchedReg = sessionRegs.find((r: ClinicRegistration) => r.id === matchId);
+                if (matchedReg) {
+                  cluster.push(matchId);
+                  globalAssigned.add(matchId);
+                  
+                  // Also check if matched person has their own matches
+                  const matchedData = participantMap.get(matchId);
+                  if (matchedData) {
+                    for (const subMatchId of matchedData.matchedWith) {
+                      if (!globalAssigned.has(subMatchId)) {
+                        const subMatchReg = sessionRegs.find((r: ClinicRegistration) => r.id === subMatchId);
+                        if (subMatchReg && cluster.length < 4) {
+                          cluster.push(subMatchId);
+                          globalAssigned.add(subMatchId);
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
             
-            groups.push(group);
-          }
-          
-          // Merge small groups (keep max 4 per group)
-          const mergedGroups: number[][] = [];
-          let currentGroup: number[] = [];
-          
-          for (const group of groups) {
-            if (currentGroup.length + group.length <= 4) {
-              currentGroup.push(...group);
+            if (cluster.length > 1) {
+              groupWithClusters.push(cluster);
             } else {
-              if (currentGroup.length > 0) mergedGroups.push(currentGroup);
-              currentGroup = [...group];
+              globalAssigned.delete(reg.id);
             }
           }
-          if (currentGroup.length > 0) mergedGroups.push(currentGroup);
+        }
+        
+        // Create groups for "group with" clusters
+        for (const cluster of groupWithClusters) {
+          const clusterRegs = cluster.map(id => sessionRegs.find((r: ClinicRegistration) => r.id === id)!);
+          const levels = clusterRegs.map(r => normalizeSkillLevel(r.skillLevel));
+          const mostCommonLevel = levels.sort((a, b) =>
+            levels.filter(v => v === b).length - levels.filter(v => v === a).length
+          )[0] || 'mixed';
+          
+          const firstData = participantMap.get(cluster[0]);
+          let startTime = '';
+          let endTime = '';
+          if (firstData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
+            startTime = '10:00'; endTime = '11:00';
+          } else if (firstData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
+            startTime = '16:00'; endTime = '17:00';
+          }
+          
+          const newGroup = await storage.createClinicGroup({
+            sessionId: session.id,
+            groupName: `${mostCommonLevel.charAt(0).toUpperCase() + mostCommonLevel.slice(1)} - Group ${groupOrder + 1}`,
+            skillLevel: mostCommonLevel,
+            maxParticipants: 4,
+            startTime: startTime || null,
+            endTime: endTime || null,
+            displayOrder: groupOrder++
+          });
+          
+          for (const regId of cluster) {
+            await storage.moveParticipantToGroup(regId, newGroup.id);
+          }
+        }
+        
+        // STEP 2: Group remaining participants by skill level
+        const remaining = sessionRegs.filter((r: ClinicRegistration) => !globalAssigned.has(r.id));
+        const bySkillLevel = new Map<string, ClinicRegistration[]>();
+        for (const reg of remaining) {
+          const level = normalizeSkillLevel(reg.skillLevel);
+          if (!bySkillLevel.has(level)) bySkillLevel.set(level, []);
+          bySkillLevel.get(level)!.push(reg);
+        }
+        
+        for (const [level, regs] of Array.from(bySkillLevel.entries())) {
+          regs.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
+          
+          // Merge into groups of max 4
+          const groups: number[][] = [];
+          let currentGroup: number[] = [];
+          
+          for (const reg of regs) {
+            if (currentGroup.length >= 4) {
+              groups.push(currentGroup);
+              currentGroup = [];
+            }
+            currentGroup.push(reg.id);
+          }
+          if (currentGroup.length > 0) groups.push(currentGroup);
           
           // Create database groups
-          for (let i = 0; i < mergedGroups.length; i++) {
-            const groupRegs = mergedGroups[i];
-            
-            // Determine time slot based on first participant's preference
+          for (let i = 0; i < groups.length; i++) {
+            const groupRegs = groups[i];
             const firstData = participantMap.get(groupRegs[0]);
             let startTime = '';
             let endTime = '';
             
             if (firstData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
-              startTime = '10:00';
-              endTime = '11:00';
+              startTime = '10:00'; endTime = '11:00';
             } else if (firstData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
-              startTime = '16:00';
-              endTime = '17:00';
+              startTime = '16:00'; endTime = '17:00';
             }
             
             const newGroup = await storage.createClinicGroup({
               sessionId: session.id,
-              groupName: `${level.charAt(0).toUpperCase() + level.slice(1)} - Group ${i + 1}`,
+              groupName: `${level.charAt(0).toUpperCase() + level.slice(1)} - Group ${groupOrder + 1}`,
               skillLevel: level,
               maxParticipants: 4,
               startTime: startTime || null,
@@ -2583,7 +2638,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               displayOrder: groupOrder++
             });
             
-            // Assign participants to this group
             for (const regId of groupRegs) {
               await storage.moveParticipantToGroup(regId, newGroup.id);
             }
