@@ -3794,6 +3794,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin endpoint to manually send clinic confirmation email
+  app.post("/api/admin/send-clinic-confirmation", async (req, res) => {
+    try {
+      const { registrationId } = req.body;
+      
+      if (!registrationId) {
+        return res.status(400).json({ message: "Registration ID is required" });
+      }
+
+      const allRegistrations = await storage.getAllClinicRegistrations();
+      const registration = allRegistrations.find(r => r.id === registrationId);
+      if (!registration) {
+        return res.status(404).json({ message: "Registration not found" });
+      }
+
+      const clinic = await storage.getClinic(registration.clinicId);
+      if (!clinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+
+      // Get or create loyalty program for referral code
+      let loyaltyProgram = await storage.getLoyaltyProgram(registration.email);
+      if (!loyaltyProgram) {
+        const newProgram = await storage.createLoyaltyProgram({
+          email: registration.email,
+          firstName: registration.firstName,
+          lastName: registration.lastName || ''
+        });
+        loyaltyProgram = { ...newProgram, availableDiscounts: [] };
+      }
+      const referralCode = loyaltyProgram.referralCode || 'PENDING';
+      const currentPoints = loyaltyProgram.points;
+
+      // Check if this is a first-time clinic registration
+      const userRegistrations = allRegistrations.filter(r => r.email === registration.email);
+      const isFirstClinic = userRegistrations.length <= 1;
+
+      // Format clinic date
+      const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      if (isFirstClinic) {
+        await emailService.sendFirstTimeClinicConfirmation(
+          registration.email,
+          registration.firstName,
+          clinic.title,
+          clinicDate,
+          referralCode,
+          clinic.location,
+          clinic.googleMapsLink || undefined
+        );
+      } else {
+        await emailService.sendReturningClinicConfirmation(
+          registration.email,
+          registration.firstName,
+          clinic.title,
+          clinicDate,
+          referralCode,
+          currentPoints,
+          clinic.location,
+          clinic.googleMapsLink || undefined
+        );
+      }
+
+      res.json({ 
+        success: true, 
+        message: `Confirmation email sent to ${registration.email} for ${clinic.title}`,
+        isFirstClinic
+      });
+    } catch (error) {
+      console.error("Error sending clinic confirmation:", error);
+      res.status(500).json({ message: "Failed to send confirmation email" });
+    }
+  });
+
   // Migrate stronghorseaudio tags to stl-trial - searches GHL directly
   app.post("/api/admin/migrate-stl-tags", async (req, res) => {
     try {
