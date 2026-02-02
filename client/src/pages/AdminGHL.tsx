@@ -164,12 +164,12 @@ export default function AdminGHL() {
           <CardContent>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
-                <Label htmlFor="locationId" className="text-sm">Go High Level Location ID</Label>
+                <Label htmlFor="locationId" className="text-sm">CRM Location ID</Label>
                 <Input
                   id="locationId"
                   value={locationId}
                   onChange={(e) => setLocationId(e.target.value)}
-                  placeholder="Enter your GHL Location/Sub-account ID"
+                  placeholder="Enter your CRM Location/Sub-account ID"
                   data-testid="input-location-id"
                   className="text-sm"
                 />
@@ -196,12 +196,12 @@ export default function AdminGHL() {
               </div>
             </div>
             <p className="text-xs md:text-sm text-gray-500 mt-2">
-              Find your Location ID in your Go High Level settings under Sub-Accounts or API settings
+              Find your Location ID in your CRM settings under Sub-Accounts or API settings
             </p>
           </CardContent>
         </Card>
 
-        {/* Missing GHL Tags Check */}
+        {/* Missing CRM Tags Check */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -209,7 +209,7 @@ export default function AdminGHL() {
               Check Missing Course Tags
             </CardTitle>
             <CardDescription>
-              Find audio course customers who paid in Stripe but don't have the 'stl-fullcourse' tag in GHL
+              Find audio course customers who paid in Stripe but don't have the 'stl-fullcourse' tag in CRM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -228,7 +228,7 @@ export default function AdminGHL() {
                 {isLoadingMissingTags ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Checking Stripe & GHL...
+                    Checking Stripe & CRM...
                   </>
                 ) : (
                   <>
@@ -300,7 +300,7 @@ export default function AdminGHL() {
                                   )}
                                   {!contact.ghlContactId && (
                                     <Badge className="bg-red-100 text-red-700 text-xs">
-                                      Not in GHL
+                                      Not in CRM
                                     </Badge>
                                   )}
                                 </div>

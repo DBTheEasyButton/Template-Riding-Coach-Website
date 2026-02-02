@@ -1141,11 +1141,11 @@ export default function AdminClinics() {
                   onCheckedChange={(checked) => setFormData({ ...formData, sendEmailAnnouncement: checked as boolean })}
                 />
                 <Label htmlFor="sendEmailAnnouncement" className="font-medium cursor-pointer">
-                  Send email announcement to GHL contacts
+                  Send email announcement to CRM contacts
                 </Label>
               </div>
               <p className="text-sm text-gray-500 ml-6">
-                Send an email to your GHL contacts announcing this new clinic.
+                Send an email to your CRM contacts announcing this new clinic.
               </p>
               
               {formData.sendEmailAnnouncement && (
@@ -1190,8 +1190,8 @@ export default function AdminClinics() {
                 />
                 <p className="text-sm text-gray-500">
                   {formData.emailTagMode === 'include' 
-                    ? 'Enter comma-separated GHL tags. Only contacts WITH at least one of these tags will receive this clinic\'s email.'
-                    : 'Enter comma-separated GHL tags. Contacts WITH any of these tags will NOT receive this clinic\'s email.'}
+                    ? 'Enter comma-separated CRM tags. Only contacts WITH at least one of these tags will receive this clinic\'s email.'
+                    : 'Enter comma-separated CRM tags. Contacts WITH any of these tags will NOT receive this clinic\'s email.'}
                 </p>
               </div>
               )}

@@ -517,13 +517,13 @@ export default function AdminSettings() {
                   Email Marketing
                 </CardTitle>
                 <CardDescription>
-                  Send email blasts to GHL contacts by tag
+                  Send email blasts to CRM contacts by tag
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
-                    <Label htmlFor="emailTag">GHL Tag</Label>
+                    <Label htmlFor="emailTag">CRM Tag</Label>
                     <Input
                       id="emailTag"
                       value={emailTag}
@@ -553,7 +553,7 @@ export default function AdminSettings() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Sends the pole clinic invitation and rewards program email to all GHL contacts with the specified tag.
+                  Sends the pole clinic invitation and rewards program email to all CRM contacts with the specified tag.
                 </p>
               </CardContent>
             </Card>

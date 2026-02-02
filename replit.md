@@ -13,6 +13,7 @@ A digital platform for the Dan Bizzarro Method, providing horse training tools a
 - **Clinic Format:** Emphasis on single-day sessions; polework, show jumping, and cross country specialties
 - **SEO Keywords:** Dan Bizzarro Method, show-jumping/polework/cross country clinics, Private Horse Riding Lessons, Virtual Riding Lessons, Remote Equestrian Coaching, Equestrian Lessons Oxfordshire, Show Jumping/Eventing/Cross Country Coach, polework training, grid work, gymnastic jumping, pole exercises
 - **NAP (Name, Address, Phone) Standard:** Consistent across all pages for local SEO: Business Name: Dan Bizzarro Method | Address: Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom | Phone: +44 7767 291713 | Email: dan@danbizzarromethod.com
+- **Terminology:** Always refer to Go High Level (GHL) as "CRM" in user-facing text. Use "CRM contacts", "CRM tags", etc. instead of "GHL contacts", "GHL tags".
 
 ## System Architecture
 The platform utilizes React.js (TypeScript), Tailwind CSS, Express.js, and PostgreSQL, employing a multi-page architecture for SEO and user experience.
@@ -36,12 +37,12 @@ The platform utilizes React.js (TypeScript), Tailwind CSS, Express.js, and Postg
 - **Interactive Tools:** Readiness Quiz, Stride Calculator, and Packing List Generator.
 - **Main Pages:** Home, About, Coaching, Gallery, News, Podcast, and Contact pages, designed for independent ranking.
 - **Podcast:** "Our Equestrian Life" integrated on the Home page and a dedicated `/podcast` page.
-- **Admin Interface:** Manages clinics, news articles, and Go High Level contact synchronization.
+- **Admin Interface:** Manages clinics, news articles, and CRM contact synchronization.
 - **Points and Referral System:** A loyalty program with bi-annual prizes, automatic rewards (points per clinic entry, bonus for referrals), and automatic discount code generation. Features a public, privacy-protected leaderboard and real-time referral code validation.
 - **Group Management System:** Organizes clinic participants by skill level (max 4 participants per group) with drag-and-drop functionality. Displays time slots, skill level, capacity, and participant names with their skill levels, including a persistent "Not Assigned" box.
 - **Clinic Marketing Automation System:**
     - **Facebook Auto-Posting:** Automatically posts new clinics to Facebook with details, Google Maps link, price, capacity, and trackable booking links. Toggleable per clinic and includes a simulation mode.
-    - **Personalized GHL Email Blasts:** Automatically emails all GHL contacts upon clinic creation, with tag-based filtering. Uses two templates (Existing Clients: includes referral code/points balance; New Contacts: introduces rewards program) and includes Google Maps links and UTM tracking. Also has a simulation mode.
+    - **Personalized CRM Email Blasts:** Automatically emails all CRM contacts upon clinic creation, with tag-based filtering. Uses two templates (Existing Clients: includes referral code/points balance; New Contacts: introduces rewards program) and includes Google Maps links and UTM tracking. Also has a simulation mode.
     - **Blog → Clinic Connection:** An "Upcoming Clinic" banner at the end of blog posts displays the next clinic's details and a "Book Now" button.
     - **Clinic Capacity Display:** Visual warnings on clinic pages for low capacity ("Only X spots left!") or full clinics ("This clinic is full") with waitlist options.
     - **Admin Controls:** Clinic creation form includes options for `autoPostToFacebook` and `excludeTagsFromEmail`.
@@ -50,7 +51,7 @@ The platform utilizes React.js (TypeScript), Tailwind CSS, Express.js, and Postg
 - **Google Analytics 4:** For website traffic and user behavior analytics.
 - **Google Search Console:** For site ownership verification and search performance monitoring.
 - **Meta Pixel (Facebook Pixel):** For advertising campaign tracking and conversion events.
-- **Go High Level (GHL) API:** Integrated for contact management, synchronization, and automated email communications (newsletter, clinic registrations, confirmation emails, referral bonus notifications). Requires `GHL_API_KEY` and `GHL_LOCATION_ID`.
+- **CRM (Go High Level) API:** Integrated for contact management, synchronization, and automated email communications (newsletter, clinic registrations, confirmation emails, referral bonus notifications). Requires `GHL_API_KEY` and `GHL_LOCATION_ID`. Note: In user-facing text, always refer to this as "CRM" not "GHL" or "Go High Level".
 - **Stripe Payment Integration:** Configured for clinic registrations with server-side payment validation, Stripe Elements, and Express Checkout (Apple Pay/Google Pay). Requires `STRIPE_SECRET_KEY` and `VITE_STRIPE_PUBLIC_KEY`.
 - **Facebook Marketing Automation:** Integrates with Facebook Graph API to automatically post new clinics to the Facebook page. Requires `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, `FACEBOOK_PAGE_ACCESS_TOKEN`.
 
