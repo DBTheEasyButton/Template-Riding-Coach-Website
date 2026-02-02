@@ -542,7 +542,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
 
-              {/* Referral Code - Prominent placement */}
+              {/* Referral Code - Only show for new clients (not returning clients) */}
+              {!hasSavedData && (
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
                 <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
                 <p className="text-xs text-gray-700 mt-1 mb-2">
@@ -594,6 +595,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                   </p>
                 )}
               </div>
+              )}
             </div>
           )}
 
