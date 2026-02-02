@@ -6,7 +6,7 @@ import type { Clinic } from "@shared/schema";
 
 export default function UpcomingClinicsBanner() {
   const { data: clinics = [] } = useQuery<Clinic[]>({
-    queryKey: ['/api/clinics', { upcoming: 'true', limit: 1 }],
+    queryKey: ['/api/clinics?upcoming=true&limit=1'],
   });
   const [, navigate] = useLocation();
 
