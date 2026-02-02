@@ -2577,7 +2577,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           const newGroup = await storage.createClinicGroup({
             sessionId: session.id,
-            groupName: `${mostCommonLevel.charAt(0).toUpperCase() + mostCommonLevel.slice(1)} - Group ${groupOrder + 1}`,
+            groupName: `Group ${groupOrder + 1}`,
             skillLevel: mostCommonLevel,
             maxParticipants: 4,
             startTime: startTime || null,
@@ -2639,7 +2639,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             
             const newGroup = await storage.createClinicGroup({
               sessionId: session.id,
-              groupName: `${level.charAt(0).toUpperCase() + level.slice(1)} - Group ${groupOrder + 1}`,
+              groupName: `Group ${groupOrder + 1}`,
               skillLevel: level,
               maxParticipants: 4,
               startTime: startTime || null,

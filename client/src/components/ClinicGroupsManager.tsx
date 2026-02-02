@@ -307,7 +307,21 @@ function GroupCard({
     <Card className={`transition-all ${isOver ? 'ring-2 ring-blue-400 bg-blue-50' : ''} ${levelColor.border} border-2`}>
       <CardHeader className={`pb-2 ${levelColor.bg}`}>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold">{group.groupName}</CardTitle>
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-base font-semibold">{group.groupName}</CardTitle>
+            {group.skillLevel && (
+              <Badge className={`${levelColor.bg} ${levelColor.text} border ${levelColor.border} font-semibold`}>
+                {group.skillLevel}
+              </Badge>
+            )}
+          </div>
+          <Badge 
+            variant="outline" 
+            className={`text-xs ${capacityWarning ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white'}`}
+          >
+            <Users className="w-3 h-3 mr-1" />
+            {confirmedParticipants.length}/{group.maxParticipants || '∞'}
+          </Badge>
         </div>
         <div className="flex flex-wrap gap-2 mt-1">
           {group.startTime && group.endTime && (
@@ -316,18 +330,6 @@ function GroupCard({
               {group.startTime} - {group.endTime}
             </Badge>
           )}
-          {group.skillLevel && (
-            <Badge variant="outline" className={`text-xs ${levelColor.bg} ${levelColor.text}`}>
-              {group.skillLevel}
-            </Badge>
-          )}
-          <Badge 
-            variant="outline" 
-            className={`text-xs ${capacityWarning ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white'}`}
-          >
-            <Users className="w-3 h-3 mr-1" />
-            {confirmedParticipants.length}/{group.maxParticipants || '∞'}
-          </Badge>
         </div>
       </CardHeader>
       <CardContent className="pt-2">
