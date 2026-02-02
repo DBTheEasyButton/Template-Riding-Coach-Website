@@ -1,7 +1,10 @@
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import AdminNavigation from "@/components/AdminNavigation";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
@@ -17,7 +20,7 @@ import {
   Clock,
   Target
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from "recharts";
 
 interface AnalyticsData {
   totalSubscribers: number;
@@ -39,6 +42,10 @@ interface AnalyticsData {
 const COLORS = ['#f97316', '#1e40af', '#059669', '#dc2626', '#7c3aed', '#ea580c'];
 
 export default function AdminAnalytics() {
+  const [showTotal, setShowTotal] = useState(true);
+  const [showClinics, setShowClinics] = useState(true);
+  const [showAudioCourse, setShowAudioCourse] = useState(true);
+
   const { data: analytics, isLoading } = useQuery<AnalyticsData>({
     queryKey: ['/api/admin/analytics'],
   });
@@ -46,6 +53,25 @@ export default function AdminAnalytics() {
   const { data: recentActivity } = useQuery<any[]>({
     queryKey: ['/api/admin/recent-activity'],
   });
+
+  const combinedRevenueData = useMemo(() => {
+    if (!analytics) return [];
+    
+    const clinicData = analytics.monthlyRegistrations || [];
+    const audioData = analytics.audioCourse?.monthlyData || [];
+    
+    return clinicData.map((clinic, index) => {
+      const audioMonth = audioData[index] || { revenue: 0 };
+      const clinicRevenue = clinic.revenue / 100;
+      const audioRevenue = audioMonth.revenue / 100;
+      return {
+        month: clinic.month,
+        clinicRevenue,
+        audioRevenue,
+        totalRevenue: clinicRevenue + audioRevenue
+      };
+    });
+  }, [analytics]);
 
   if (isLoading) {
     return (
@@ -158,16 +184,78 @@ export default function AdminAnalytics() {
               <Card>
                 <CardHeader>
                   <CardTitle>Revenue Trends</CardTitle>
-                  <CardDescription>Monthly revenue from clinic registrations</CardDescription>
+                  <CardDescription>Monthly revenue breakdown by source</CardDescription>
                 </CardHeader>
                 <CardContent>
+                  <div className="flex flex-wrap gap-4 mb-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="showTotal" 
+                        checked={showTotal} 
+                        onCheckedChange={(checked) => setShowTotal(checked === true)}
+                      />
+                      <Label htmlFor="showTotal" className="text-sm font-medium flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-green-600"></span>
+                        Total Revenue
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="showClinics" 
+                        checked={showClinics} 
+                        onCheckedChange={(checked) => setShowClinics(checked === true)}
+                      />
+                      <Label htmlFor="showClinics" className="text-sm font-medium flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-blue-700"></span>
+                        Clinic Revenue
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="showAudioCourse" 
+                        checked={showAudioCourse} 
+                        onCheckedChange={(checked) => setShowAudioCourse(checked === true)}
+                      />
+                      <Label htmlFor="showAudioCourse" className="text-sm font-medium flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-purple-600"></span>
+                        Audio Course Revenue
+                      </Label>
+                    </div>
+                  </div>
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={analytics?.monthlyRegistrations || []}>
+                    <LineChart data={combinedRevenueData}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip formatter={(value: number) => [`£${(value / 100).toFixed(0)}`, 'Revenue']} />
-                      <Line type="monotone" dataKey="revenue" stroke="#1e40af" strokeWidth={2} />
+                      <YAxis tickFormatter={(value) => `£${value}`} />
+                      <Tooltip formatter={(value: number) => [`£${value.toFixed(0)}`, '']} />
+                      <Legend />
+                      {showTotal && (
+                        <Line 
+                          type="monotone" 
+                          dataKey="totalRevenue" 
+                          name="Total Revenue"
+                          stroke="#059669" 
+                          strokeWidth={3} 
+                        />
+                      )}
+                      {showClinics && (
+                        <Line 
+                          type="monotone" 
+                          dataKey="clinicRevenue" 
+                          name="Clinic Revenue"
+                          stroke="#1e40af" 
+                          strokeWidth={2} 
+                        />
+                      )}
+                      {showAudioCourse && (
+                        <Line 
+                          type="monotone" 
+                          dataKey="audioRevenue" 
+                          name="Audio Course Revenue"
+                          stroke="#7c3aed" 
+                          strokeWidth={2} 
+                        />
+                      )}
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
