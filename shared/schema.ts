@@ -148,6 +148,16 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
   refundProcessedAt: timestamp("refund_processed_at"),
   cancellationReason: text("cancellation_reason"),
   paymentIntentId: text("payment_intent_id"),
+  // Multi-entry support: Entering for another rider
+  isEnteringForOther: boolean("is_entering_for_other").notNull().default(false),
+  otherRiderFirstName: text("other_rider_first_name"),
+  otherRiderLastName: text("other_rider_last_name"),
+  otherRiderHorseName: text("other_rider_horse_name"),
+  otherRiderSkillLevel: text("other_rider_skill_level"),
+  // Multi-entry support: Same rider, second horse (links to parent registration)
+  parentRegistrationId: integer("parent_registration_id"), // Links additional horse entries to main entry
+  isAdditionalHorse: boolean("is_additional_horse").notNull().default(false),
+  gapPreference: text("gap_preference"), // "back_to_back" or "one_session_gap"
 }, (table) => ({
   clinicIdIdx: index("clinic_registrations_clinic_id_idx").on(table.clinicId),
   statusIdx: index("clinic_registrations_status_idx").on(table.status),

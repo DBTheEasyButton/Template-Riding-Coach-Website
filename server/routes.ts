@@ -2791,18 +2791,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return l;
         };
         
+        // Define adjacent skill levels - participants can be placed in adjacent levels if time requires
+        // Format: [level]: [lower_adjacent, higher_adjacent]
+        const adjacentLevels: Record<string, string[]> = {
+          'beginner': ['intermediate'],           // beginner can go up to intermediate
+          '70cm': ['80cm'],                       // 70cm can go up to 80cm
+          'intermediate': ['beginner', 'advanced'], // intermediate can go to either
+          '80cm': ['70cm', '90cm'],               // 80cm can go to 70cm or 90cm
+          '90cm': ['80cm', '1m'],                 // 90cm can go to 80cm or 1m
+          'advanced': ['intermediate'],           // advanced can go down to intermediate
+          '1m': ['90cm', '1.10m'],                // 1m can go to 90cm or 1.10m
+          '1.10m': ['1m', '1.20m'],               // 1.10m can go to 1m or 1.20m
+          '1.20m': ['1.10m'],                     // 1.20m can go down to 1.10m
+        };
+        
+        // Check if two skill levels are adjacent (can be grouped together for time preferences)
+        const areSkillLevelsAdjacent = (level1: string, level2: string): boolean => {
+          const l1 = level1.toLowerCase().trim();
+          const l2 = level2.toLowerCase().trim();
+          if (l1 === l2) return true;
+          const adjacent1 = adjacentLevels[l1] || [];
+          const adjacent2 = adjacentLevels[l2] || [];
+          return adjacent1.includes(l2) || adjacent2.includes(l1);
+        };
+        
         // Sort time preferences (early first, then no preference, then late)
         const getTimeScore = (id: number): number => {
           const data = participantMap.get(id);
           if (!data) return 0;
+          
+          // Check for "earliest" first - strongest early preference
+          if (data.notes.timePrefs.some(t => /earliest/i.test(t))) return -1;
           if (data.notes.timePrefs.some(t => /early|first|morning/i.test(t))) return -1;
+          
+          // Check for "X or after" patterns - these indicate late preference (relative to clinic start)
+          if (/or\s*after/i.test(data.reg.specialRequests || '')) return 1;
           if (data.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) return 1;
+          
           const timeMatch = data.notes.timePrefs.find(t => /\d/.test(t));
           if (timeMatch) {
             const hour = parseInt(timeMatch.match(/\d+/)?.[0] || '12');
             return hour < 14 ? -0.5 : 0.5;
           }
           return 0;
+        };
+        
+        // Get time preference category for group assignment
+        const getTimePrefCategory = (id: number): 'early' | 'late' | 'none' => {
+          const data = participantMap.get(id);
+          if (!data) return 'none';
+          
+          if (data.notes.timePrefs.some(t => /earliest|early|first|morning/i.test(t))) return 'early';
+          if (/or\s*after/i.test(data.reg.specialRequests || '')) return 'late';
+          if (data.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) return 'late';
+          return 'none';
         };
         
         let groupOrder = 0;
@@ -2864,15 +2906,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             levels.filter(v => v === b).length - levels.filter(v => v === a).length
           )[0] || 'mixed';
           
-          // Determine time preference for this group
+          // Determine time preference for this group using the new category function
           let timePref: 'early' | 'late' | 'none' = 'none';
           for (const id of cluster) {
-            const data = participantMap.get(id);
-            if (data?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
-              timePref = 'early';
-              break;
-            } else if (data?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
-              timePref = 'late';
+            const pref = getTimePrefCategory(id);
+            if (pref !== 'none') {
+              timePref = pref;
               break;
             }
           }
@@ -2895,25 +2934,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // STEP 2: Try to add remaining participants to existing groups first, then create new groups
+        // Sort by time preference strength - those with strong preferences get priority
         const remaining = sessionRegs.filter((r: ClinicRegistration) => !globalAssigned.has(r.id));
         remaining.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
         
+        // Track participants moved to adjacent groups for scheduling notes
+        const movedToAdjacentLevel: Map<number, { from: string; to: string }> = new Map();
+        
         for (const reg of remaining) {
           const level = normalizeSkillLevel(reg.skillLevel);
+          const originalLevel = reg.skillLevel?.toLowerCase().trim() || 'open';
           let assigned = false;
           
-          // Determine this participant's time preference
-          const regData = participantMap.get(reg.id);
-          let regTimePref: 'early' | 'late' | 'none' = 'none';
-          if (regData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
-            regTimePref = 'early';
-          } else if (regData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
-            regTimePref = 'late';
-          }
+          // Determine this participant's time preference using the category function
+          const regTimePref = getTimePrefCategory(reg.id);
+          const hasStrongTimePref = regTimePref !== 'none';
           
-          // Try to add to an existing group of the same skill level with space
+          // First try: add to an existing group of the same skill level with space AND compatible time preference
           for (const groupData of sessionGroupsData) {
             if (groupData.group.skillLevel === level && groupData.memberIds.length < 4) {
+              // Check for time preference conflict
+              const hasTimeConflict = (regTimePref === 'early' && groupData.timePref === 'late') ||
+                                       (regTimePref === 'late' && groupData.timePref === 'early');
+              
+              // Skip this group if there's a strong time preference conflict
+              if (hasTimeConflict && hasStrongTimePref) {
+                console.log(`Skipping group ${groupData.group.groupName} for ${reg.firstName} ${reg.lastName} due to time conflict (wants ${regTimePref}, group has ${groupData.timePref})`);
+                continue;
+              }
+              
               await storage.moveParticipantToGroup(reg.id, groupData.group.id);
               groupData.memberIds.push(reg.id);
               // Update group time preference if this participant has one
@@ -2926,6 +2975,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           }
           
+          // Second try: if participant has strong time preference and no same-level group has matching preference,
+          // try to place in an adjacent level group with compatible time preference
+          if (!assigned && hasStrongTimePref) {
+            const adjacentLevelsList = adjacentLevels[originalLevel] || adjacentLevels[level] || [];
+            
+            for (const adjLevel of adjacentLevelsList) {
+              const normalizedAdj = normalizeSkillLevel(adjLevel);
+              
+              // Find a group at adjacent level with matching time preference and space
+              for (const groupData of sessionGroupsData) {
+                const groupLevel = groupData.group.skillLevel;
+                if ((groupLevel === adjLevel || groupLevel === normalizedAdj) && 
+                    groupData.memberIds.length < 4 &&
+                    groupData.timePref === regTimePref) {
+                  await storage.moveParticipantToGroup(reg.id, groupData.group.id);
+                  groupData.memberIds.push(reg.id);
+                  assigned = true;
+                  globalAssigned.add(reg.id);
+                  movedToAdjacentLevel.set(reg.id, { from: level, to: groupLevel || adjLevel });
+                  console.log(`Moved ${reg.firstName} ${reg.lastName} from ${level} to ${groupLevel} group to honor ${regTimePref} time preference`);
+                  break;
+                }
+              }
+              if (assigned) break;
+            }
+          }
+          
+          // Third try: if still not assigned and has strong time preference, try any adjacent level group with space
+          if (!assigned && hasStrongTimePref) {
+            const adjacentLevelsList = adjacentLevels[originalLevel] || adjacentLevels[level] || [];
+            
+            for (const adjLevel of adjacentLevelsList) {
+              const normalizedAdj = normalizeSkillLevel(adjLevel);
+              
+              for (const groupData of sessionGroupsData) {
+                const groupLevel = groupData.group.skillLevel;
+                if ((groupLevel === adjLevel || groupLevel === normalizedAdj) && 
+                    groupData.memberIds.length < 4) {
+                  await storage.moveParticipantToGroup(reg.id, groupData.group.id);
+                  groupData.memberIds.push(reg.id);
+                  if (groupData.timePref === 'none') {
+                    groupData.timePref = regTimePref; // regTimePref is 'early' or 'late' here since hasStrongTimePref is true
+                  }
+                  assigned = true;
+                  globalAssigned.add(reg.id);
+                  movedToAdjacentLevel.set(reg.id, { from: level, to: groupLevel || adjLevel });
+                  console.log(`Moved ${reg.firstName} ${reg.lastName} from ${level} to ${groupLevel} group (adjacent) to honor ${regTimePref} time preference`);
+                  break;
+                }
+              }
+              if (assigned) break;
+            }
+          }
+          
+          // Final fallback: create new group at original level
           if (!assigned) {
             const newGroup = await storage.createClinicGroup({
               sessionId: session.id,
