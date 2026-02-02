@@ -1894,7 +1894,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      res.status(201).json(registration);
+      // Handle additional entries (e.g., same person with multiple horses)
+      const additionalRegistrations: any[] = [];
+      if (registrationData.additionalEntries && Array.isArray(registrationData.additionalEntries)) {
+        for (const entry of registrationData.additionalEntries) {
+          try {
+            // Determine session ID for additional entry
+            let additionalSessionId = validatedData.sessionId;
+            if (entry.selectedSessionId && clinic.hasMultipleSessions) {
+              additionalSessionId = entry.selectedSessionId;
+            }
+            
+            // Create registration for additional entry
+            const additionalData = {
+              clinicId,
+              sessionId: additionalSessionId,
+              firstName: entry.type === 'horse' ? registration.firstName : (entry.firstName || registration.firstName),
+              lastName: entry.type === 'horse' ? registration.lastName : (entry.lastName || registration.lastName),
+              email: registration.email,
+              phone: registration.phone,
+              horseName: entry.horseName || 'Additional Horse',
+              skillLevel: entry.skillLevel || validatedData.skillLevel,
+              emergencyContact: registration.emergencyContact,
+              emergencyPhone: registration.emergencyPhone,
+              medicalConditions: registration.medicalConditions,
+              specialRequests: entry.gapPreference ? `Gap preference: ${entry.gapPreference}` : undefined,
+              status: 'confirmed',
+              paymentIntentId: paymentIntentId || null,
+              agreeToTerms: true,
+              paymentMethod: registration.paymentMethod,
+            };
+            
+            const additionalReg = await storage.createClinicRegistration(additionalData as any);
+            additionalRegistrations.push(additionalReg);
+            
+            // Award points for additional entry
+            await storage.awardPoints(registration.email, 10, `Additional clinic entry: ${clinic.title} - ${entry.horseName || 'Additional Horse'}`, registration.firstName);
+            console.log(`Created additional registration ${additionalReg.id} for ${entry.horseName || 'Additional Horse'}`);
+          } catch (error) {
+            console.error('Failed to create additional registration:', error);
+            // Continue with other entries even if one fails
+          }
+        }
+      }
+      
+      res.status(201).json({ 
+        primary: registration, 
+        additional: additionalRegistrations,
+        totalRegistrations: 1 + additionalRegistrations.length
+      });
     } catch (error) {
       console.error("Error creating clinic registration:", error);
       

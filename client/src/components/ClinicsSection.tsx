@@ -741,6 +741,7 @@ export default function ClinicsSection() {
       medicalConditions: registrationData.medicalConditions || undefined,
       paymentMethod: registrationData.paymentMethod,
       agreeToTerms: registrationData.agreeToTerms,
+      additionalEntries: additionalEntries.length > 0 ? additionalEntries : undefined,
     });
   };
 

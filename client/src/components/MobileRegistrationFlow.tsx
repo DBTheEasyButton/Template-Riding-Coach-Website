@@ -424,6 +424,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
         paymentMethod: registrationData.paymentMethod,
         agreeToTerms: registrationData.agreeToTerms,
         referralCode: registrationData.referralCode || undefined,
+        additionalEntries: additionalEntries.length > 0 ? additionalEntries : undefined,
       });
     },
     onSuccess: () => {
