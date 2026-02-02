@@ -254,7 +254,8 @@ function ParticipantCard({
                       {req.text}
                     </Badge>
                   )}
-                  {req.type === 'other' && (
+                  {/* Only show time and groupWith badges - skip "other" type (goals/general notes) */}
+                  {req.type === 'other' && false && (
                     <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-700 border-gray-300 whitespace-normal text-left">
                       {req.text}
                     </Badge>

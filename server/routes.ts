@@ -2384,6 +2384,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const clinicId = parseInt(req.params.clinicId);
       
+      // Get the clinic to know start time
+      const clinic = await storage.getClinic(clinicId);
+      if (!clinic) {
+        return res.status(404).json({ error: "Clinic not found" });
+      }
+      
+      // Parse clinic start time (default to 15:00 if not set)
+      const clinicStartTime = clinic.startTime || '15:00';
+      const [startHour, startMinute] = clinicStartTime.split(':').map(Number);
+      
       // Get all sessions for this clinic
       const allSessions = await storage.getAllClinicSessions();
       const sessions = allSessions.filter(s => s.clinicId === clinicId);
@@ -2558,7 +2568,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
         
-        // Create groups for "group with" clusters
+        // Create groups for "group with" clusters (without time initially)
+        const createdGroupsData: { group: any, memberIds: number[], timePref: 'early' | 'late' | 'none' }[] = [];
+        
         for (const cluster of groupWithClusters) {
           const clusterRegs = cluster.map(id => sessionRegs.find((r: ClinicRegistration) => r.id === id)!);
           const levels = clusterRegs.map(r => normalizeSkillLevel(r.skillLevel));
@@ -2566,13 +2578,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             levels.filter(v => v === b).length - levels.filter(v => v === a).length
           )[0] || 'mixed';
           
-          const firstData = participantMap.get(cluster[0]);
-          let startTime = '';
-          let endTime = '';
-          if (firstData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
-            startTime = '10:00'; endTime = '11:00';
-          } else if (firstData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
-            startTime = '16:00'; endTime = '17:00';
+          // Determine time preference for this group
+          let timePref: 'early' | 'late' | 'none' = 'none';
+          for (const id of cluster) {
+            const data = participantMap.get(id);
+            if (data?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
+              timePref = 'early';
+              break;
+            } else if (data?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
+              timePref = 'late';
+              break;
+            }
           }
           
           const newGroup = await storage.createClinicGroup({
@@ -2580,78 +2596,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
             groupName: `Group ${groupOrder + 1}`,
             skillLevel: mostCommonLevel,
             maxParticipants: 4,
-            startTime: startTime || null,
-            endTime: endTime || null,
+            startTime: null,
+            endTime: null,
             displayOrder: groupOrder++
           });
           
           for (const regId of cluster) {
             await storage.moveParticipantToGroup(regId, newGroup.id);
           }
+          
+          createdGroupsData.push({ group: newGroup, memberIds: [...cluster], timePref });
         }
         
         // STEP 2: Try to add remaining participants to existing groups first, then create new groups
         const remaining = sessionRegs.filter((r: ClinicRegistration) => !globalAssigned.has(r.id));
         remaining.sort((a: ClinicRegistration, b: ClinicRegistration) => getTimeScore(a.id) - getTimeScore(b.id));
         
-        // Get groups we just created to try filling them first
-        const createdGroups = await storage.getSessionGroups(session.id);
-        
-        // Track actual counts from clusters - map group id to participant ids
-        const clusterGroupMap = new Map<number, number[]>();
-        for (let i = 0; i < groupWithClusters.length; i++) {
-          if (createdGroups[i]) {
-            clusterGroupMap.set(createdGroups[i].id, [...groupWithClusters[i]]);
-          }
-        }
-        
         for (const reg of remaining) {
           const level = normalizeSkillLevel(reg.skillLevel);
           let assigned = false;
           
+          // Determine this participant's time preference
+          const regData = participantMap.get(reg.id);
+          let regTimePref: 'early' | 'late' | 'none' = 'none';
+          if (regData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
+            regTimePref = 'early';
+          } else if (regData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
+            regTimePref = 'late';
+          }
+          
           // Try to add to an existing group of the same skill level with space
-          for (const group of createdGroups) {
-            if (group.skillLevel === level) {
-              const groupMembers = clusterGroupMap.get(group.id);
-              const currentCount = groupMembers?.length || 0;
-              if (currentCount < 4) {
-                await storage.moveParticipantToGroup(reg.id, group.id);
-                if (groupMembers) groupMembers.push(reg.id);
-                else clusterGroupMap.set(group.id, [reg.id]);
-                assigned = true;
-                globalAssigned.add(reg.id);
-                break;
+          for (const groupData of createdGroupsData) {
+            if (groupData.group.skillLevel === level && groupData.memberIds.length < 4) {
+              await storage.moveParticipantToGroup(reg.id, groupData.group.id);
+              groupData.memberIds.push(reg.id);
+              // Update group time preference if this participant has one
+              if (regTimePref !== 'none' && groupData.timePref === 'none') {
+                groupData.timePref = regTimePref;
               }
+              assigned = true;
+              globalAssigned.add(reg.id);
+              break;
             }
           }
           
           if (!assigned) {
-            // Create a new group for this skill level
-            const firstData = participantMap.get(reg.id);
-            let startTime = '';
-            let endTime = '';
-            
-            if (firstData?.notes.timePrefs.some(t => /early|first|morning/i.test(t))) {
-              startTime = '10:00'; endTime = '11:00';
-            } else if (firstData?.notes.timePrefs.some(t => /late|last|afternoon/i.test(t))) {
-              startTime = '16:00'; endTime = '17:00';
-            }
-            
             const newGroup = await storage.createClinicGroup({
               sessionId: session.id,
               groupName: `Group ${groupOrder + 1}`,
               skillLevel: level,
               maxParticipants: 4,
-              startTime: startTime || null,
-              endTime: endTime || null,
+              startTime: null,
+              endTime: null,
               displayOrder: groupOrder++
             });
             
             await storage.moveParticipantToGroup(reg.id, newGroup.id);
             globalAssigned.add(reg.id);
-            createdGroups.push(newGroup);
-            clusterGroupMap.set(newGroup.id, [reg.id]);
+            createdGroupsData.push({ group: newGroup, memberIds: [reg.id], timePref: regTimePref });
           }
+        }
+        
+        // STEP 3: Assign sequential times to all groups starting from clinic start time
+        // Sort groups: early preference first, then no preference, then late preference
+        createdGroupsData.sort((a, b) => {
+          const order = { early: 0, none: 1, late: 2 };
+          return order[a.timePref] - order[b.timePref];
+        });
+        
+        let slotIndex = 0;
+        for (const groupData of createdGroupsData) {
+          const slotHour = startHour + slotIndex;
+          const formattedStartTime = `${slotHour.toString().padStart(2, '0')}:${(startMinute || 0).toString().padStart(2, '0')}`;
+          const formattedEndTime = `${(slotHour + 1).toString().padStart(2, '0')}:${(startMinute || 0).toString().padStart(2, '0')}`;
+          
+          await storage.updateClinicGroup(groupData.group.id, {
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+            displayOrder: slotIndex
+          });
+          
+          slotIndex++;
         }
       }
       
