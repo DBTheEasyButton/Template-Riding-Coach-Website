@@ -1692,13 +1692,23 @@ export default function ClinicsSection() {
                     className="w-full h-10 px-3 border rounded-md text-sm"
                   >
                     <option value="">Select level...</option>
-                    <option value="60cm">60cm</option>
-                    <option value="70cm">70cm</option>
-                    <option value="80cm">80cm</option>
-                    <option value="90cm">90cm</option>
-                    <option value="1m">1m</option>
-                    <option value="1.10m">1.10m</option>
-                    <option value="1.20m">1.20m</option>
+                    {selectedClinic?.sessions?.some(s => s.discipline === 'polework') || selectedClinic?.title?.toLowerCase().includes('pole') ? (
+                      <>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="60cm">60cm</option>
+                        <option value="70cm">70cm</option>
+                        <option value="80cm">80cm</option>
+                        <option value="90cm">90cm</option>
+                        <option value="1m">1m</option>
+                        <option value="1.10m">1.10m</option>
+                        <option value="1.20m">1.20m</option>
+                      </>
+                    )}
                   </select>
                 </div>
                 
