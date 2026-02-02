@@ -49,14 +49,14 @@ export default function AdminGHL() {
     onSuccess: (data: any) => {
       toast({
         title: "Sync Successful",
-        description: data.message || `Synced ${data.count} contacts from Go High Level`,
+        description: data.message || `Synced ${data.count} contacts from CRM`,
       });
       queryClient.invalidateQueries({ queryKey: ['/api/ghl/contacts'] });
     },
     onError: (error: any) => {
       toast({
         title: "Sync Failed",
-        description: error.message || "Failed to sync contacts from Go High Level",
+        description: error.message || "Failed to sync contacts from CRM",
         variant: "destructive",
       });
     },
@@ -69,7 +69,7 @@ export default function AdminGHL() {
     onSuccess: () => {
       toast({
         title: "Contact Deleted",
-        description: "Go High Level contact deleted successfully",
+        description: "CRM contact deleted successfully",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/ghl/contacts'] });
     },
@@ -110,7 +110,7 @@ export default function AdminGHL() {
     if (!locationId.trim()) {
       toast({
         title: "Location ID Required",
-        description: "Please enter your Go High Level Location ID to sync contacts",
+        description: "Please enter your CRM Location ID to sync contacts",
         variant: "destructive",
       });
       return;
@@ -146,8 +146,8 @@ export default function AdminGHL() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
         <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">Go High Level Integration</h1>
-          <p className="text-sm md:text-base text-gray-600">Manage and sync contacts from your Go High Level account</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">CRM Integration</h1>
+          <p className="text-sm md:text-base text-gray-600">Manage and sync contacts from The Easy Button CRM</p>
         </div>
 
         {/* Sync Controls */}
@@ -158,7 +158,7 @@ export default function AdminGHL() {
               Sync Contacts
             </CardTitle>
             <CardDescription>
-              Sync contacts from your Go High Level account using your Location ID
+              Sync contacts from The Easy Button CRM using your Location ID
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -343,7 +343,7 @@ export default function AdminGHL() {
                   Synced Contacts ({filteredContacts.length})
                 </CardTitle>
                 <CardDescription className="text-xs md:text-sm">
-                  Contacts synced from Go High Level forms and entries
+                  Contacts synced from The Easy Button CRM forms and entries
                 </CardDescription>
               </div>
               <Input
@@ -366,7 +366,7 @@ export default function AdminGHL() {
                 <p className="text-gray-500 mb-2">No contacts found</p>
                 <p className="text-sm text-gray-400">
                   {contacts.length === 0 
-                    ? "Sync contacts from Go High Level to get started"
+                    ? "Sync contacts from CRM to get started"
                     : "Try adjusting your search filters"
                   }
                 </p>
