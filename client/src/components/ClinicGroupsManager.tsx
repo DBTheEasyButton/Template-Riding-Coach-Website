@@ -47,6 +47,8 @@ interface ClinicRegistration {
   specialRequests?: string | null;
   keyRequests?: KeyRequest[];
   unassignedReason?: string | null;
+  suggestedGroupId?: number | null;
+  suggestionText?: string | null;
 }
 
 interface ClinicGroup {
@@ -166,6 +168,20 @@ function parseKeyRequests(specialRequests: string | null | undefined, allPartici
   }
   
   return requests;
+}
+
+// Helper to convert 24-hour time (15:00) to 12-hour format (3pm)
+function formatTimeTo12Hour(time: string | null | undefined): string {
+  if (!time) return 'TBD';
+  const [hourStr, minuteStr] = time.split(':');
+  const hour = parseInt(hourStr);
+  const minute = parseInt(minuteStr || '0');
+  const hour12 = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+  const ampm = hour >= 12 ? 'pm' : 'am';
+  if (minute === 0) {
+    return `${hour12}${ampm}`;
+  }
+  return `${hour12}:${minuteStr}${ampm}`;
 }
 
 const skillLevelColors: Record<string, { bg: string; text: string; border: string }> = {
@@ -363,7 +379,7 @@ function GroupCard({
                         className="w-full text-left text-sm py-1.5 px-2 hover:bg-gray-100 rounded flex items-center justify-between"
                       >
                         <span>{g.groupName}</span>
-                        <span className="text-xs text-gray-500">{g.startTime || 'TBD'}</span>
+                        <span className="text-xs text-gray-500">{formatTimeTo12Hour(g.startTime)}</span>
                       </button>
                     ))
                   )}
@@ -385,7 +401,7 @@ function GroupCard({
           {group.startTime && group.endTime && (
             <Badge variant="outline" className="text-xs bg-white">
               <Clock className="w-3 h-3 mr-1" />
-              {group.startTime} - {group.endTime}
+              {formatTimeTo12Hour(group.startTime)} - {formatTimeTo12Hour(group.endTime)}
             </Badge>
           )}
         </div>
@@ -425,9 +441,11 @@ function GroupCard({
 function UnassignedSection({
   participants,
   allParticipants,
+  onMoveToGroup,
 }: {
   participants: ClinicRegistration[];
   allParticipants: ClinicRegistration[];
+  onMoveToGroup: (registrationId: number, groupId: number) => void;
 }) {
   const { setNodeRef, isOver } = useDroppable({
     id: 'unassigned',
@@ -462,9 +480,25 @@ function UnassignedSection({
                     allParticipants={allParticipants}
                   />
                   {participant.unassignedReason && (
-                    <div className="ml-6 px-2 py-1 bg-orange-100 border border-orange-300 rounded text-xs text-orange-800 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3 flex-shrink-0" />
-                      <span>{participant.unassignedReason}</span>
+                    <div className="ml-6 px-2 py-1.5 bg-orange-100 border border-orange-300 rounded text-xs text-orange-800">
+                      <div className="flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                        <span>{participant.unassignedReason}</span>
+                      </div>
+                      {participant.suggestedGroupId && participant.suggestionText && (
+                        <div className="flex items-center gap-2 mt-1.5 ml-4">
+                          <span className="text-gray-600">{participant.suggestionText}</span>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-6 px-2 text-xs bg-green-50 border-green-300 text-green-700 hover:bg-green-100"
+                            onClick={() => onMoveToGroup(participant.id, participant.suggestedGroupId!)}
+                          >
+                            Yes
+                          </Button>
+                          <span className="text-gray-400 text-xs">or drag manually</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -745,6 +779,9 @@ export default function ClinicGroupsManager({
                 <UnassignedSection 
                   participants={unassignedParticipants} 
                   allParticipants={allParticipants}
+                  onMoveToGroup={(registrationId, groupId) => {
+                    moveParticipantMutation.mutate({ registrationId, groupId });
+                  }}
                 />
 
                 {/* Organize all groups by time slot */}

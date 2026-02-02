@@ -2394,9 +2394,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return hour;
       };
       
-      // Add unassignment reason for each participant
+      // Get all groups with their times for suggestion matching
+      const allGroupsFlat: Array<{ id: number; sessionId: number; startTime: string | null; endTime: string | null; participantCount: number; maxParticipants: number }> = [];
+      for (const session of sessionsWithGroups) {
+        for (const group of session.groups) {
+          allGroupsFlat.push({
+            id: group.id,
+            sessionId: session.id,
+            startTime: group.startTime || null,
+            endTime: group.endTime || null,
+            participantCount: group.participants.length,
+            maxParticipants: group.maxParticipants || 4
+          });
+        }
+      }
+      
+      // Add unassignment reason and suggestions for each participant
       const unassigned = unassignedRaw.map(r => {
         let unassignedReason: string | null = null;
+        let suggestedGroupId: number | null = null;
+        let suggestionText: string | null = null;
         const notes = r.specialRequests || '';
         
         // Check for specific time requests before clinic start
@@ -2405,6 +2422,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const requestedHour = parseTimeToHour(timeStr);
           if (requestedHour !== null && requestedHour < startHour) {
             unassignedReason = `Requested ${timeStr.trim()} but clinic starts at ${clinicStartDisplay}`;
+            
+            // Check if there's space in the first group (clinic start time)
+            const sessionId = r.sessionId;
+            const firstGroup = allGroupsFlat.find(g => 
+              g.sessionId === sessionId && 
+              g.startTime === clinicStartTime && 
+              g.participantCount < g.maxParticipants
+            );
+            if (firstGroup) {
+              suggestedGroupId = firstGroup.id;
+              suggestionText = `Add to ${clinicStartDisplay} slot?`;
+            }
             break;
           }
         }
@@ -2420,11 +2449,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
             
             if (beforeHour <= startHour) {
               unassignedReason = `Requested before ${formatHour12(beforeHour)} but clinic starts at ${clinicStartDisplay}`;
+              
+              // Check if there's space in the first group
+              const sessionId = r.sessionId;
+              const firstGroup = allGroupsFlat.find(g => 
+                g.sessionId === sessionId && 
+                g.startTime === clinicStartTime && 
+                g.participantCount < g.maxParticipants
+              );
+              if (firstGroup) {
+                suggestedGroupId = firstGroup.id;
+                suggestionText = `Add to ${clinicStartDisplay} slot?`;
+              }
             }
           }
         }
         
-        return { ...r, unassignedReason };
+        return { ...r, unassignedReason, suggestedGroupId, suggestionText };
       });
       
       res.json({
@@ -2621,30 +2662,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       // Helper: determine time score for sorting
-      const getGlobalTimeScore = (memberIds: number[]): { score: number, requestedTime?: string, isImpossible?: boolean, originalRequest?: string } => {
+      const getGlobalTimeScore = (memberIds: number[]): { score: number, requestedTime?: string, isImpossible?: boolean, originalRequest?: string, minTime?: number } => {
+        let maxMinTime = 0; // Track highest "X or after" request in the group - this is a HARD constraint
+        let hasEarlyRequest = false;
+        let hasLateRequest = false;
+        let specificTimeScore: number | null = null;
+        let impossibleResult: { score: number, requestedTime?: string, isImpossible?: boolean, originalRequest?: string } | null = null;
+        
+        // First pass: collect ALL constraints from all group members
         for (const id of memberIds) {
           const data = participantMap.get(id);
           if (!data) continue;
           
-          // Check for specific time requests
+          // Check for "X or after" pattern - this sets a MINIMUM time (hard constraint)
+          const orAfterMatch = (data.reg.specialRequests || '').match(/(\d{1,2})(?::\d{2})?\s*(?:pm|am)?\s*or\s*after/i);
+          if (orAfterMatch) {
+            const timeStr = orAfterMatch[0];
+            const requestedHour = parseTimeToHour(orAfterMatch[1] + (timeStr.toLowerCase().includes('pm') ? 'pm' : (timeStr.toLowerCase().includes('am') ? 'am' : '')));
+            if (requestedHour !== null && requestedHour >= startHour) {
+              maxMinTime = Math.max(maxMinTime, requestedHour - startHour);
+            }
+          }
+          
+          // Check for specific time requests and other preferences
           for (const pref of data.notes.timePrefs) {
             const requestedHour = parseTimeToHour(pref);
             if (requestedHour !== null) {
               // If they asked for a time before clinic start, mark as impossible
               if (requestedHour < startHour) {
-                return { score: -2, requestedTime: pref, isImpossible: true, originalRequest: data.reg.specialRequests || '' };
+                impossibleResult = { score: -2, requestedTime: pref, isImpossible: true, originalRequest: data.reg.specialRequests || '' };
+                continue;
               }
-              return { score: requestedHour - startHour, requestedTime: pref };
+              // For "X or after", skip - handled above
+              if (/or\s*after/i.test(data.reg.specialRequests || '')) {
+                continue;
+              }
+              if (specificTimeScore === null) {
+                specificTimeScore = requestedHour - startHour;
+              }
             }
             if (/early|first|morning/i.test(pref)) {
-              return { score: -1 };
+              hasEarlyRequest = true;
             }
-            if (/late|last|afternoon/i.test(pref) || /or after/i.test(data.reg.specialRequests || '')) {
-              return { score: 100 };
+            if (/late|last|afternoon/i.test(pref)) {
+              hasLateRequest = true;
             }
           }
           
-          // Check for "before X" patterns - these are impossible if X is at or before clinic start
+          // Check for "before X" patterns
           const beforeMatch = (data.reg.specialRequests || '').match(/before\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
           if (beforeMatch) {
             let beforeHour = parseInt(beforeMatch[1]);
@@ -2653,10 +2718,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
             if (!beforeMatch[3] && beforeHour >= 1 && beforeHour <= 6) beforeHour += 12;
             
             if (beforeHour <= startHour) {
-              return { score: -2, requestedTime: `before ${beforeMatch[0]}`, isImpossible: true, originalRequest: data.reg.specialRequests || '' };
+              impossibleResult = { score: -2, requestedTime: `before ${beforeMatch[0]}`, isImpossible: true, originalRequest: data.reg.specialRequests || '' };
             }
           }
         }
+        
+        // If there's an impossible result and no minimum time constraint, return impossible
+        if (impossibleResult && maxMinTime === 0) {
+          return impossibleResult;
+        }
+        
+        // "X or after" is a HARD constraint - it overrides "early" requests
+        if (maxMinTime > 0) {
+          return { score: maxMinTime, minTime: maxMinTime };
+        }
+        
+        // Otherwise, use soft preferences
+        if (specificTimeScore !== null) {
+          return { score: specificTimeScore };
+        }
+        if (hasEarlyRequest) {
+          return { score: -1 };
+        }
+        if (hasLateRequest) {
+          return { score: 100 };
+        }
+        
         return { score: 0 };
       };
       
