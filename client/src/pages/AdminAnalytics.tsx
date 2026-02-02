@@ -290,12 +290,12 @@ export default function AdminAnalytics() {
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={analytics?.audioCourse?.monthlyData || []}>
+                    <LineChart data={(analytics?.audioCourse?.monthlyData || []).map(d => ({ ...d, revenue: d.revenue / 100 }))}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip formatter={(value: number) => [`£${(value / 100).toFixed(0)}`, 'Revenue']} />
-                      <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={2} />
+                      <YAxis tickFormatter={(value) => `£${value}`} />
+                      <Tooltip formatter={(value: number) => [`£${value.toFixed(0)}`, 'Revenue']} />
+                      <Line type="monotone" dataKey="revenue" stroke="#eab308" strokeWidth={2} />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
