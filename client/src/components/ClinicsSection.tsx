@@ -324,6 +324,7 @@ export default function ClinicsSection() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [hasSavedData, setHasSavedData] = useState(false);
   const [isLookingUpEmail, setIsLookingUpEmail] = useState(false);
+  const [emailChecked, setEmailChecked] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   // Load Stripe at runtime - start loading immediately when dialog opens
@@ -372,8 +373,10 @@ export default function ClinicsSection() {
           description: "Your details have been pre-filled from your last registration.",
         });
       }
+      setEmailChecked(true);
     } catch (error) {
       // Silently fail - it just means no previous registration
+      setEmailChecked(true);
     } finally {
       setIsLookingUpEmail(false);
     }
@@ -1150,7 +1153,8 @@ export default function ClinicsSection() {
                   )}
                 </div>
 
-                {/* Referral Code - Prominent placement */}
+                {/* Referral Code - Only show for confirmed new clients (after email check) */}
+                {emailChecked && !hasSavedData && (
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
                   <Label htmlFor="referralCode" className="text-sm font-semibold text-gray-800">Referred by a friend? Enter their code!</Label>
                   <p className="text-xs text-gray-700 mt-1 mb-2">
@@ -1202,6 +1206,7 @@ export default function ClinicsSection() {
                     </p>
                   )}
                 </div>
+                )}
               </div>
 
               {/* Emergency Contact */}
