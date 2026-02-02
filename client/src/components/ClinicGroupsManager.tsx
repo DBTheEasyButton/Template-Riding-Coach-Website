@@ -4,7 +4,10 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wand2, Clock, Users, UserPlus, GripVertical, ChevronDown, ChevronUp, AlertCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Wand2, Clock, Users, UserPlus, GripVertical, ChevronDown, ChevronUp, AlertCircle, Plus, ArrowUpDown, Trash2, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   DndContext,
@@ -291,10 +294,17 @@ function ParticipantCard({
 function GroupCard({
   group,
   allParticipants,
+  onDelete,
+  onSwapWith,
+  allGroups,
 }: {
   group: ClinicGroup;
   allParticipants: ClinicRegistration[];
+  onDelete: (groupId: number) => void;
+  onSwapWith: (groupId1: number, groupId2: number) => void;
+  allGroups: ClinicGroup[];
 }) {
+  const [showSwapMenu, setShowSwapMenu] = useState(false);
   const confirmedParticipants = group.participants.filter(p => p.status === "confirmed");
   const levelColor = getSkillLevelColor(group.skillLevel);
 
@@ -304,6 +314,7 @@ function GroupCard({
   });
 
   const capacityWarning = group.maxParticipants && confirmedParticipants.length >= group.maxParticipants;
+  const otherGroups = allGroups.filter(g => g.id !== group.id);
 
   return (
     <Card className={`transition-all ${isOver ? 'ring-2 ring-blue-400 bg-blue-50' : ''} ${levelColor.border} border-2`}>
@@ -317,13 +328,57 @@ function GroupCard({
               </Badge>
             )}
           </div>
-          <Badge 
-            variant="outline" 
-            className={`text-xs ${capacityWarning ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white'}`}
-          >
-            <Users className="w-3 h-3 mr-1" />
-            {confirmedParticipants.length}/{group.maxParticipants || '∞'}
-          </Badge>
+          <div className="flex items-center gap-1">
+            <Badge 
+              variant="outline" 
+              className={`text-xs ${capacityWarning ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white'}`}
+            >
+              <Users className="w-3 h-3 mr-1" />
+              {confirmedParticipants.length}/{group.maxParticipants || '∞'}
+            </Badge>
+            <div className="relative">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6"
+                onClick={() => setShowSwapMenu(!showSwapMenu)}
+                title="Swap time slot with another group"
+              >
+                <ArrowUpDown className="w-3 h-3" />
+              </Button>
+              {showSwapMenu && (
+                <div className="absolute right-0 top-7 z-50 bg-white border rounded-lg shadow-lg p-2 min-w-[180px]">
+                  <div className="text-xs text-gray-500 mb-1 font-medium">Swap time slot with:</div>
+                  {otherGroups.length === 0 ? (
+                    <div className="text-xs text-gray-400 py-2">No other groups</div>
+                  ) : (
+                    otherGroups.map(g => (
+                      <button
+                        key={g.id}
+                        onClick={() => {
+                          onSwapWith(group.id, g.id);
+                          setShowSwapMenu(false);
+                        }}
+                        className="w-full text-left text-sm py-1.5 px-2 hover:bg-gray-100 rounded flex items-center justify-between"
+                      >
+                        <span>{g.groupName}</span>
+                        <span className="text-xs text-gray-500">{g.startTime || 'TBD'}</span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-6 w-6 text-red-500 hover:text-red-700 hover:bg-red-50"
+              onClick={() => onDelete(group.id)}
+              title="Delete group"
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+          </div>
         </div>
         <div className="flex flex-wrap gap-2 mt-1">
           {group.startTime && group.endTime && (
@@ -414,6 +469,98 @@ function UnassignedSection({
   );
 }
 
+function CreateGroupDialog({
+  sessionId,
+  onClose,
+  onSuccess,
+}: {
+  sessionId: number;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const { toast } = useToast();
+  const [groupName, setGroupName] = useState("");
+  const [skillLevel, setSkillLevel] = useState("");
+  const [maxParticipants, setMaxParticipants] = useState("4");
+
+  const createGroupMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", `/api/admin/sessions/${sessionId}/groups`, {
+        groupName: groupName || undefined,
+        skillLevel: skillLevel || undefined,
+        maxParticipants: parseInt(maxParticipants) || 4,
+      });
+    },
+    onSuccess: () => {
+      toast({ title: "Group created successfully" });
+      onSuccess();
+      onClose();
+    },
+    onError: () => {
+      toast({ title: "Failed to create group", variant: "destructive" });
+    },
+  });
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Create New Group</h3>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="groupName">Group Name (optional)</Label>
+            <Input
+              id="groupName"
+              value={groupName}
+              onChange={e => setGroupName(e.target.value)}
+              placeholder="e.g., Group 1"
+            />
+          </div>
+          <div>
+            <Label htmlFor="skillLevel">Skill Level</Label>
+            <Select value={skillLevel} onValueChange={setSkillLevel}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select skill level" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="beginner">Beginner</SelectItem>
+                <SelectItem value="intermediate">Intermediate</SelectItem>
+                <SelectItem value="advanced">Advanced</SelectItem>
+                <SelectItem value="open">Open (any level)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="maxParticipants">Max Participants</Label>
+            <Input
+              id="maxParticipants"
+              type="number"
+              min="1"
+              max="10"
+              value={maxParticipants}
+              onChange={e => setMaxParticipants(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-2 pt-2">
+            <Button variant="outline" onClick={onClose} className="flex-1">Cancel</Button>
+            <Button
+              onClick={() => createGroupMutation.mutate()}
+              disabled={createGroupMutation.isPending}
+              className="flex-1"
+            >
+              {createGroupMutation.isPending ? "Creating..." : "Create Group"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ClinicGroupsManager({
   clinicId,
   clinicTitle,
@@ -422,6 +569,7 @@ export default function ClinicGroupsManager({
 }: ClinicGroupsManagerProps) {
   const { toast } = useToast();
   const [activeId, setActiveId] = useState<number | null>(null);
+  const [showCreateGroupDialog, setShowCreateGroupDialog] = useState<number | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -459,6 +607,42 @@ export default function ClinicGroupsManager({
       toast({ title: "Failed to organize groups", variant: "destructive" });
     },
   });
+
+  const deleteGroupMutation = useMutation({
+    mutationFn: async (groupId: number) => {
+      return apiRequest("DELETE", `/api/admin/groups/${groupId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/clinics/${clinicId}/all-groups`] });
+      toast({ title: "Group deleted", description: "Participants moved to unassigned." });
+    },
+    onError: () => {
+      toast({ title: "Failed to delete group", variant: "destructive" });
+    },
+  });
+
+  const swapTimesMutation = useMutation({
+    mutationFn: async ({ groupId1, groupId2 }: { groupId1: number; groupId2: number }) => {
+      return apiRequest("POST", `/api/admin/groups/swap-times`, { groupId1, groupId2 });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/clinics/${clinicId}/all-groups`] });
+      toast({ title: "Time slots swapped" });
+    },
+    onError: () => {
+      toast({ title: "Failed to swap time slots", variant: "destructive" });
+    },
+  });
+
+  const handleDeleteGroup = (groupId: number) => {
+    if (confirm("Delete this group? Participants will be moved to unassigned.")) {
+      deleteGroupMutation.mutate(groupId);
+    }
+  };
+
+  const handleSwapTimes = (groupId1: number, groupId2: number) => {
+    swapTimesMutation.mutate({ groupId1, groupId2 });
+  };
 
   // Auto-organize when dialog opens if there are unassigned participants but no groups
   const hasAutoOrganized = useRef(false);
@@ -594,12 +778,32 @@ export default function ClinicGroupsManager({
                             key={group.id} 
                             group={group} 
                             allParticipants={allParticipants}
+                            onDelete={handleDeleteGroup}
+                            onSwapWith={handleSwapTimes}
+                            allGroups={allGroups}
                           />
                         ))}
                       </div>
                     </div>
                   ));
                 })()}
+
+                {sessions.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {sessions.map(session => (
+                      <Button
+                        key={session.id}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowCreateGroupDialog(session.id)}
+                        className="border-dashed"
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add Group to {session.sessionName}
+                      </Button>
+                    ))}
+                  </div>
+                )}
 
                 {sessions.length === 0 && (
                   <div className="text-center text-gray-500 py-12 border-2 border-dashed border-gray-300 rounded-lg">
@@ -623,17 +827,31 @@ export default function ClinicGroupsManager({
         </div>
 
         <div className="p-3 border-t bg-gray-50 text-xs text-gray-500">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3 text-amber-600" /> Time preference
             </span>
             <span className="flex items-center gap-1">
               <UserPlus className="w-3 h-3 text-purple-600" /> Group with request
             </span>
-            <span>Drag participants between groups to reassign them</span>
+            <span className="flex items-center gap-1">
+              <ArrowUpDown className="w-3 h-3" /> Swap time slots
+            </span>
+            <span className="flex items-center gap-1">
+              <Trash2 className="w-3 h-3 text-red-500" /> Delete group
+            </span>
+            <span>Drag participants to move them</span>
           </div>
         </div>
       </div>
+
+      {showCreateGroupDialog !== null && (
+        <CreateGroupDialog
+          sessionId={showCreateGroupDialog}
+          onClose={() => setShowCreateGroupDialog(null)}
+          onSuccess={() => queryClient.invalidateQueries({ queryKey: [`/api/admin/clinics/${clinicId}/all-groups`] })}
+        />
+      )}
     </div>
   );
 }

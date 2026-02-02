@@ -2852,6 +2852,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Create a new group for a session
+  app.post("/api/admin/sessions/:sessionId/groups", async (req, res) => {
+    try {
+      const sessionId = parseInt(req.params.sessionId);
+      const { groupName, skillLevel, maxParticipants, startTime, endTime } = req.body;
+      
+      const session = await storage.getClinicSession(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: "Session not found" });
+      }
+      
+      // Get existing groups to determine display order
+      const existingGroups = await storage.getSessionGroups(sessionId);
+      const maxOrder = existingGroups.reduce((max, g) => Math.max(max, g.displayOrder || 0), -1);
+      
+      const newGroup = await storage.createClinicGroup({
+        sessionId,
+        groupName: groupName || `Group ${existingGroups.length + 1}`,
+        skillLevel: skillLevel || null,
+        maxParticipants: maxParticipants || 4,
+        startTime: startTime || null,
+        endTime: endTime || null,
+        displayOrder: maxOrder + 1,
+        schedulingNote: null
+      });
+      
+      res.json(newGroup);
+    } catch (error) {
+      console.error("Error creating group:", error);
+      res.status(500).json({ message: "Failed to create group" });
+    }
+  });
+
+  // Update a group (for editing name, time, skill level, etc.)
+  app.put("/api/admin/groups/:groupId", async (req, res) => {
+    try {
+      const groupId = parseInt(req.params.groupId);
+      const updates = req.body;
+      
+      const updatedGroup = await storage.updateClinicGroup(groupId, updates);
+      res.json(updatedGroup);
+    } catch (error) {
+      console.error("Error updating group:", error);
+      res.status(500).json({ message: "Failed to update group" });
+    }
+  });
+
+  // Swap time slots between two groups
+  app.post("/api/admin/groups/swap-times", async (req, res) => {
+    try {
+      const { groupId1, groupId2 } = req.body;
+      
+      // Get both groups
+      const group1 = await storage.getClinicGroup(groupId1);
+      const group2 = await storage.getClinicGroup(groupId2);
+      
+      if (!group1 || !group2) {
+        return res.status(404).json({ message: "One or both groups not found" });
+      }
+      
+      // Swap their times and display orders
+      await storage.updateClinicGroup(groupId1, {
+        startTime: group2.startTime,
+        endTime: group2.endTime,
+        displayOrder: group2.displayOrder
+      });
+      
+      await storage.updateClinicGroup(groupId2, {
+        startTime: group1.startTime,
+        endTime: group1.endTime,
+        displayOrder: group1.displayOrder
+      });
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error swapping group times:", error);
+      res.status(500).json({ message: "Failed to swap group times" });
+    }
+  });
+
+  // Delete a group
+  app.delete("/api/admin/groups/:groupId", async (req, res) => {
+    try {
+      const groupId = parseInt(req.params.groupId);
+      
+      // First, unassign all participants from this group
+      await storage.unassignParticipantsFromGroup(groupId);
+      
+      // Then delete the group
+      await storage.deleteClinicGroup(groupId);
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      res.status(500).json({ message: "Failed to delete group" });
+    }
+  });
+
   // Admin contact management
   app.get('/api/admin/contacts', async (req, res) => {
     try {

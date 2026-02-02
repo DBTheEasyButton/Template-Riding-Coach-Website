@@ -119,11 +119,16 @@ export interface IStorage {
   
   // Group Management
   createClinicGroup(group: InsertClinicGroup): Promise<ClinicGroup>;
+  getClinicGroup(groupId: number): Promise<ClinicGroup | undefined>;
   getSessionGroups(sessionId: number): Promise<ClinicGroup[]>;
   updateClinicGroup(groupId: number, updates: Partial<InsertClinicGroup>): Promise<ClinicGroup | undefined>;
   deleteClinicGroup(groupId: number): Promise<void>;
   moveParticipantToGroup(registrationId: number, groupId: number | null): Promise<void>;
   getGroupParticipants(groupId: number): Promise<ClinicRegistration[]>;
+  unassignParticipantsFromGroup(groupId: number): Promise<void>;
+  
+  // Session Management
+  getClinicSession(sessionId: number): Promise<ClinicSession | undefined>;
   getSessionRegistrations(sessionId: number, confirmedOnly?: boolean): Promise<ClinicRegistration[]>;
   autoOrganizeGroups(sessionId: number): Promise<ClinicGroup[]>;
   
@@ -933,6 +938,23 @@ The Dan Bizzarro Method Team`,
   async createClinicGroup(group: InsertClinicGroup): Promise<ClinicGroup> {
     const [newGroup] = await db.insert(clinicGroups).values(group).returning();
     return newGroup;
+  }
+
+  async getClinicGroup(groupId: number): Promise<ClinicGroup | undefined> {
+    const [group] = await db.select().from(clinicGroups).where(eq(clinicGroups.id, groupId));
+    return group;
+  }
+
+  async getClinicSession(sessionId: number): Promise<ClinicSession | undefined> {
+    const [session] = await db.select().from(clinicSessions).where(eq(clinicSessions.id, sessionId));
+    return session;
+  }
+
+  async unassignParticipantsFromGroup(groupId: number): Promise<void> {
+    await db
+      .update(clinicRegistrations)
+      .set({ groupId: null })
+      .where(eq(clinicRegistrations.groupId, groupId));
   }
 
   async getSessionGroups(sessionId: number): Promise<ClinicGroup[]> {
