@@ -676,17 +676,11 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                           <Label htmlFor={`session-${session.id}`} className="text-sm font-medium cursor-pointer">
                             {session.sessionName}
                           </Label>
-                          <div className="text-xs text-gray-600 mt-1 space-y-1">
+                          <div className="text-xs text-gray-600 mt-1">
                             <span className="flex items-center gap-1">
                               <PoundSterling className="w-3 h-3" />
                               {(session.price / 100).toFixed(0)}
                             </span>
-                            {session.maxParticipants && (
-                              <span className="flex items-center gap-1">
-                                <Users className="w-3 h-3" />
-                                {session.maxParticipants - (session.currentParticipants || 0)} spaces left
-                              </span>
-                            )}
                           </div>
                         </div>
                       </div>
