@@ -1052,18 +1052,31 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
               
               {/* Price Summary */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">Total Entries:</span>
-                  <span className="font-semibold">{1 + additionalEntries.length}</span>
-                </div>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-gray-700">Price per Entry:</span>
-                  <span className="font-semibold">£{clinic?.price || 0}</span>
-                </div>
-                <div className="border-t mt-3 pt-3 flex justify-between items-center">
-                  <span className="font-semibold text-gray-900">Total:</span>
-                  <span className="font-bold text-lg text-blue-600">£{(clinic?.price || 0) * (1 + additionalEntries.length)}</span>
-                </div>
+                {(() => {
+                  const pricePerEntry = clinic?.hasMultipleSessions && selectedSessions.length > 0
+                    ? selectedSessions.reduce((sum, sessionId) => {
+                        const session = clinic.sessions?.find(s => s.id === sessionId);
+                        return sum + (session?.price || 0);
+                      }, 0) / 100
+                    : (clinic?.price || 0) / 100;
+                  const totalEntries = 1 + additionalEntries.length;
+                  return (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700">Total Entries:</span>
+                        <span className="font-semibold">{totalEntries}</span>
+                      </div>
+                      <div className="flex justify-between items-center mt-2">
+                        <span className="text-gray-700">Price per Entry:</span>
+                        <span className="font-semibold">£{pricePerEntry.toFixed(0)}</span>
+                      </div>
+                      <div className="border-t mt-3 pt-3 flex justify-between items-center">
+                        <span className="font-semibold text-gray-900">Total:</span>
+                        <span className="font-bold text-lg text-blue-600">£{(pricePerEntry * totalEntries).toFixed(0)}</span>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             </div>
           )}
