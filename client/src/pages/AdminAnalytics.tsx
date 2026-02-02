@@ -45,19 +45,16 @@ export default function AdminAnalytics() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
         <AdminNavigation />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading analytics...</div>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
       <AdminNavigation />
       
       <div className="container mx-auto px-4 py-4 md:py-8">
@@ -263,8 +260,6 @@ export default function AdminAnalytics() {
           </TabsContent>
         </Tabs>
       </div>
-
-      <Footer />
     </div>
   );
 }

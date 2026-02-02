@@ -187,19 +187,16 @@ export default function AdminSettings() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
         <AdminNavigation />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading settings...</div>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
       <AdminNavigation />
       
       <div className="container mx-auto px-4 py-4 md:py-8">
@@ -616,8 +613,6 @@ export default function AdminSettings() {
           </Button>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }
