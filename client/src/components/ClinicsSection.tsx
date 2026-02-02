@@ -1485,6 +1485,26 @@ export default function ClinicsSection() {
               ) : clientSecret ? (
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-navy border-b border-gray-200 pb-2">Secure Payment</h3>
+                  
+                  {/* Payment Total Summary */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700">Total Entries:</span>
+                      <span className="font-semibold">{1 + additionalEntries.length}</span>
+                    </div>
+                    <div className="border-t border-blue-200 mt-2 pt-2 flex justify-between items-center">
+                      <span className="font-semibold text-gray-900">Amount to Pay:</span>
+                      <span className="font-bold text-xl text-blue-600">
+                        £{selectedClinic ? (
+                          (selectedClinic.hasMultipleSessions && selectedSessions.length > 0
+                            ? selectedClinic.sessions.filter(s => selectedSessions.includes(s.id)).reduce((total, s) => total + s.price, 0)
+                            : (selectedClinic.price > 100 ? selectedClinic.price : selectedClinic.price * 100)
+                          ) * (1 + additionalEntries.length) / 100
+                        ).toFixed(0) : ''}
+                      </span>
+                    </div>
+                  </div>
+                  
                   {stripePromise ? (
                     <Elements stripe={stripePromise} options={{ clientSecret }}>
                       <PaymentForm
