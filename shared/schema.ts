@@ -119,6 +119,7 @@ export const clinicGroups = pgTable("clinic_groups", {
   startTime: text("start_time"), // Group start time (e.g., "15:00")
   endTime: text("end_time"), // Group end time (e.g., "16:00")
   displayOrder: integer("display_order").notNull().default(0), // For sorting groups
+  schedulingNote: text("scheduling_note"), // Note when scheduling conflicts exist
   createdAt: timestamp("created_at").notNull().defaultNow(),
 }, (table) => ({
   sessionIdIdx: index("clinic_groups_session_id_idx").on(table.sessionId),

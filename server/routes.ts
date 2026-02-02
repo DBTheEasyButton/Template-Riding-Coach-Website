@@ -2452,6 +2452,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
         participantMap.set(reg.id, { reg, notes, matchedWith: [] });
       }
       
+      // Inherit time preferences for same person with multiple horses
+      // Group registrations by normalized name
+      const byPerson = new Map<string, number[]>();
+      for (const entry of Array.from(participantMap.entries())) {
+        const [id, data] = entry;
+        const personKey = `${data.reg.firstName.toLowerCase().trim()}_${data.reg.lastName.toLowerCase().trim()}`;
+        if (!byPerson.has(personKey)) byPerson.set(personKey, []);
+        byPerson.get(personKey)!.push(id);
+      }
+      
+      // Share time preferences within same person's entries
+      for (const entry of Array.from(byPerson.entries())) {
+        const [, regIds] = entry;
+        if (regIds.length > 1) {
+          // Collect all time preferences from all entries
+          const allTimePrefs: string[] = [];
+          for (const id of regIds) {
+            const data = participantMap.get(id);
+            if (data) allTimePrefs.push(...data.notes.timePrefs);
+          }
+          // Apply combined preferences to all entries
+          for (const id of regIds) {
+            const data = participantMap.get(id);
+            if (data) data.notes.timePrefs = Array.from(new Set([...data.notes.timePrefs, ...allTimePrefs]));
+          }
+        }
+      }
+      
       // Find group-with matches
       const participantEntries = Array.from(participantMap.entries());
       for (const [id, data] of participantEntries) {
@@ -2474,6 +2502,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
         }
       }
+      
+      // Collect all groups from all sessions for global time assignment
+      type GroupData = { group: any, memberIds: number[], timePref: 'early' | 'late' | 'none', sessionId: number, schedulingNote?: string };
+      const allGroupsData: GroupData[] = [];
+      let globalGroupOrder = 0;
+      
+      // Helper: parse time string to 24-hour format
+      const parseTimeToHour = (timeStr: string): number | null => {
+        const match = timeStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+        if (!match) return null;
+        let hour = parseInt(match[1]);
+        const isPM = match[3] && match[3].toLowerCase() === 'pm';
+        const isAM = match[3] && match[3].toLowerCase() === 'am';
+        
+        // Convert to 24-hour format
+        if (isPM && hour !== 12) hour += 12;
+        if (isAM && hour === 12) hour = 0;
+        
+        // If no AM/PM specified and hour is small (1-6), assume PM for afternoon clinic
+        if (!match[3] && hour >= 1 && hour <= 6) hour += 12;
+        
+        return hour;
+      };
+      
+      // Helper: determine time score for sorting
+      const getGlobalTimeScore = (memberIds: number[]): { score: number, requestedTime?: string, isImpossible?: boolean, originalRequest?: string } => {
+        for (const id of memberIds) {
+          const data = participantMap.get(id);
+          if (!data) continue;
+          
+          // Check for specific time requests
+          for (const pref of data.notes.timePrefs) {
+            const requestedHour = parseTimeToHour(pref);
+            if (requestedHour !== null) {
+              // If they asked for a time before clinic start, mark as impossible
+              if (requestedHour < startHour) {
+                return { score: -2, requestedTime: pref, isImpossible: true, originalRequest: data.reg.specialRequests || '' };
+              }
+              return { score: requestedHour - startHour, requestedTime: pref };
+            }
+            if (/early|first|morning/i.test(pref)) {
+              return { score: -1 };
+            }
+            if (/late|last|afternoon/i.test(pref) || /or after/i.test(data.reg.specialRequests || '')) {
+              return { score: 100 };
+            }
+          }
+          
+          // Check for "before X" patterns - these are impossible if X is at or before clinic start
+          const beforeMatch = (data.reg.specialRequests || '').match(/before\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+          if (beforeMatch) {
+            let beforeHour = parseInt(beforeMatch[1]);
+            const isPM = beforeMatch[3] && beforeMatch[3].toLowerCase() === 'pm';
+            if (isPM && beforeHour !== 12) beforeHour += 12;
+            if (!beforeMatch[3] && beforeHour >= 1 && beforeHour <= 6) beforeHour += 12;
+            
+            if (beforeHour <= startHour) {
+              return { score: -2, requestedTime: `before ${beforeMatch[0]}`, isImpossible: true, originalRequest: data.reg.specialRequests || '' };
+            }
+          }
+        }
+        return { score: 0 };
+      };
       
       // Process each session
       for (const session of sessions) {
@@ -2569,7 +2660,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         // Create groups for "group with" clusters (without time initially)
-        const createdGroupsData: { group: any, memberIds: number[], timePref: 'early' | 'late' | 'none' }[] = [];
+        // Use session-local tracking but add to global list
+        const sessionGroupsData: GroupData[] = [];
         
         for (const cluster of groupWithClusters) {
           const clusterRegs = cluster.map(id => sessionRegs.find((r: ClinicRegistration) => r.id === id)!);
@@ -2593,19 +2685,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           
           const newGroup = await storage.createClinicGroup({
             sessionId: session.id,
-            groupName: `Group ${groupOrder + 1}`,
+            groupName: `Group ${globalGroupOrder + 1}`,
             skillLevel: mostCommonLevel,
             maxParticipants: 4,
             startTime: null,
             endTime: null,
-            displayOrder: groupOrder++
+            displayOrder: globalGroupOrder++
           });
           
           for (const regId of cluster) {
             await storage.moveParticipantToGroup(regId, newGroup.id);
           }
           
-          createdGroupsData.push({ group: newGroup, memberIds: [...cluster], timePref });
+          sessionGroupsData.push({ group: newGroup, memberIds: [...cluster], timePref, sessionId: session.id });
         }
         
         // STEP 2: Try to add remaining participants to existing groups first, then create new groups
@@ -2626,7 +2718,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }
           
           // Try to add to an existing group of the same skill level with space
-          for (const groupData of createdGroupsData) {
+          for (const groupData of sessionGroupsData) {
             if (groupData.group.skillLevel === level && groupData.memberIds.length < 4) {
               await storage.moveParticipantToGroup(reg.id, groupData.group.id);
               groupData.memberIds.push(reg.id);
@@ -2643,41 +2735,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
           if (!assigned) {
             const newGroup = await storage.createClinicGroup({
               sessionId: session.id,
-              groupName: `Group ${groupOrder + 1}`,
+              groupName: `Group ${globalGroupOrder + 1}`,
               skillLevel: level,
               maxParticipants: 4,
               startTime: null,
               endTime: null,
-              displayOrder: groupOrder++
+              displayOrder: globalGroupOrder++
             });
             
             await storage.moveParticipantToGroup(reg.id, newGroup.id);
             globalAssigned.add(reg.id);
-            createdGroupsData.push({ group: newGroup, memberIds: [reg.id], timePref: regTimePref });
+            sessionGroupsData.push({ group: newGroup, memberIds: [reg.id], timePref: regTimePref, sessionId: session.id });
           }
         }
         
-        // STEP 3: Assign sequential times to all groups starting from clinic start time
-        // Sort groups: early preference first, then no preference, then late preference
-        createdGroupsData.sort((a, b) => {
-          const order = { early: 0, none: 1, late: 2 };
-          return order[a.timePref] - order[b.timePref];
+        // Add session groups to global list
+        allGroupsData.push(...sessionGroupsData);
+      }
+      
+      // STEP 3: Assign sequential times to ALL groups globally
+      // Sort groups by time preference: groups with impossible requests first (to give them earliest slot), 
+      // then early preference, then no preference, then late preference
+      allGroupsData.sort((a, b) => {
+        const scoreA = getGlobalTimeScore(a.memberIds);
+        const scoreB = getGlobalTimeScore(b.memberIds);
+        return scoreA.score - scoreB.score;
+      });
+      
+      let slotIndex = 0;
+      for (const groupData of allGroupsData) {
+        const slotHour = startHour + slotIndex;
+        const formattedStartTime = `${slotHour.toString().padStart(2, '0')}:${(startMinute || 0).toString().padStart(2, '0')}`;
+        const formattedEndTime = `${(slotHour + 1).toString().padStart(2, '0')}:${(startMinute || 0).toString().padStart(2, '0')}`;
+        
+        // Check if this group has scheduling conflicts (requested impossible time)
+        const timeInfo = getGlobalTimeScore(groupData.memberIds);
+        let schedulingNote: string | null = null;
+        
+        if (timeInfo.isImpossible && timeInfo.requestedTime) {
+          // Get participant names for the note
+          const participantNames = groupData.memberIds.map(id => {
+            const data = participantMap.get(id);
+            return data ? `${data.reg.firstName} ${data.reg.lastName}` : '';
+          }).filter(Boolean).join(', ');
+          
+          schedulingNote = `Requested ${timeInfo.requestedTime} but clinic starts at ${clinicStartTime}. Assigned earliest available slot.`;
+        }
+        
+        // Check if person is alone in group due to unique skill level
+        if (groupData.memberIds.length === 1) {
+          const data = participantMap.get(groupData.memberIds[0]);
+          if (data) {
+            const skillLevel = groupData.group.skillLevel;
+            const sameSkillCount = confirmedRegistrations.filter(r => {
+              const normalized = r.skillLevel?.toLowerCase().trim();
+              if (!normalized) return false;
+              if (normalized === skillLevel) return true;
+              // Check normalized versions
+              if (skillLevel === 'advanced' && (normalized === '1m' || normalized === '1.10m' || normalized === '1.20m')) return true;
+              if (skillLevel === 'beginner' && normalized === '70cm') return true;
+              if (skillLevel === 'intermediate' && (normalized === '80cm' || normalized === '90cm')) return true;
+              return false;
+            }).length;
+            
+            if (sameSkillCount === 1) {
+              const existingNote = schedulingNote || '';
+              const participantName = `${data.reg.firstName} ${data.reg.lastName}`;
+              schedulingNote = existingNote + 
+                (existingNote ? ' ' : '') + 
+                `${participantName} is alone in this group - only ${skillLevel} level participant with compatible time preferences.`;
+            }
+          }
+        }
+        
+        await storage.updateClinicGroup(groupData.group.id, {
+          startTime: formattedStartTime,
+          endTime: formattedEndTime,
+          displayOrder: slotIndex,
+          schedulingNote: schedulingNote
         });
         
-        let slotIndex = 0;
-        for (const groupData of createdGroupsData) {
-          const slotHour = startHour + slotIndex;
-          const formattedStartTime = `${slotHour.toString().padStart(2, '0')}:${(startMinute || 0).toString().padStart(2, '0')}`;
-          const formattedEndTime = `${(slotHour + 1).toString().padStart(2, '0')}:${(startMinute || 0).toString().padStart(2, '0')}`;
-          
-          await storage.updateClinicGroup(groupData.group.id, {
-            startTime: formattedStartTime,
-            endTime: formattedEndTime,
-            displayOrder: slotIndex
-          });
-          
-          slotIndex++;
-        }
+        slotIndex++;
       }
       
       // Return updated data

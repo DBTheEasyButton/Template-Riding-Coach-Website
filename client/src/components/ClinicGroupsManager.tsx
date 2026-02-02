@@ -4,7 +4,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wand2, Clock, Users, UserPlus, GripVertical, ChevronDown, ChevronUp } from "lucide-react";
+import { Wand2, Clock, Users, UserPlus, GripVertical, ChevronDown, ChevronUp, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   DndContext,
@@ -54,6 +54,7 @@ interface ClinicGroup {
   startTime?: string | null;
   endTime?: string | null;
   displayOrder: number;
+  schedulingNote?: string | null;
   participants: ClinicRegistration[];
 }
 
@@ -332,6 +333,12 @@ function GroupCard({
             </Badge>
           )}
         </div>
+        {group.schedulingNote && (
+          <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
+            <AlertCircle className="w-3 h-3 inline mr-1" />
+            {group.schedulingNote}
+          </div>
+        )}
       </CardHeader>
       <CardContent className="pt-2">
         <div ref={setNodeRef} className="space-y-2 min-h-[80px]">
