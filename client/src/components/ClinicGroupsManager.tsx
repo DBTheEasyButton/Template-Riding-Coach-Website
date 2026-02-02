@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Wand2, Clock, Users, UserPlus, GripVertical, ChevronDown, ChevronUp, AlertCircle, Plus, ArrowUpDown, Trash2, X } from "lucide-react";
+import { Wand2, Clock, Users, UserPlus, GripVertical, ChevronDown, ChevronUp, AlertCircle, Plus, ArrowUpDown, Trash2, X, Mail, CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   DndContext,
@@ -623,6 +623,18 @@ export default function ClinicGroupsManager({
     enabled: open,
   });
 
+  const { data: emailConfirmations } = useQuery<Array<{
+    id: number;
+    email: string;
+    firstName: string;
+    lastName: string;
+    confirmed: boolean;
+    confirmedAt: string | null;
+  }>>({
+    queryKey: [`/api/admin/clinics/${clinicId}/email-confirmations`],
+    enabled: open,
+  });
+
   const sessions = data?.sessions || [];
   const unassignedParticipants = data?.unassigned || [];
   const allParticipants = data?.allParticipants || [];
@@ -673,6 +685,26 @@ export default function ClinicGroupsManager({
     },
     onError: () => {
       toast({ title: "Failed to swap time slots", variant: "destructive" });
+    },
+  });
+
+  const emailTimesMutation = useMutation({
+    mutationFn: async () => {
+      return apiRequest("POST", `/api/admin/clinics/${clinicId}/email-times`);
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: [`/api/admin/clinics/${clinicId}/email-confirmations`] });
+      toast({ 
+        title: "Emails Sent", 
+        description: data.message || `Emails sent to all participants.` 
+      });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Failed to send emails", 
+        description: error.message || "An error occurred",
+        variant: "destructive" 
+      });
     },
   });
 
@@ -756,6 +788,18 @@ export default function ClinicGroupsManager({
             >
               <Wand2 className="w-4 h-4 mr-2" />
               {smartOrganizeMutation.isPending ? 'Organizing...' : 'Smart Organize'}
+            </Button>
+            <Button
+              onClick={() => {
+                if (confirm("Send clinic times email to all participants? They will receive the full schedule with their assigned time highlighted.")) {
+                  emailTimesMutation.mutate();
+                }
+              }}
+              disabled={emailTimesMutation.isPending || allParticipants.length === 0}
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              {emailTimesMutation.isPending ? 'Sending...' : 'Email Times'}
             </Button>
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Close
@@ -870,6 +914,34 @@ export default function ClinicGroupsManager({
             </DndContext>
           )}
         </div>
+
+        {/* Email Confirmation Status */}
+        {emailConfirmations && emailConfirmations.length > 0 && (
+          <div className="px-4 py-3 border-t bg-blue-50">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-900">Email Confirmations</span>
+              </div>
+              <div className="flex items-center gap-4 text-sm">
+                <span className="flex items-center gap-1 text-green-700">
+                  <CheckCircle2 className="w-4 h-4" />
+                  {emailConfirmations.filter(c => c.confirmed).length} confirmed
+                </span>
+                <span className="flex items-center gap-1 text-amber-700">
+                  <XCircle className="w-4 h-4" />
+                  {emailConfirmations.filter(c => !c.confirmed).length} awaiting
+                </span>
+              </div>
+            </div>
+            {emailConfirmations.some(c => !c.confirmed) && (
+              <div className="mt-2 text-xs text-gray-600">
+                <span className="font-medium">Awaiting confirmation: </span>
+                {emailConfirmations.filter(c => !c.confirmed).map(c => `${c.firstName} ${c.lastName}`).join(', ')}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="p-3 border-t bg-gray-50 text-xs text-gray-500">
           <div className="flex items-center gap-4 flex-wrap">

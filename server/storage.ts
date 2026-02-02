@@ -1352,6 +1352,13 @@ The Dan Bizzarro Method Team`,
 
   // Clinic Email Confirmations
   async createClinicEmailConfirmation(confirmation: InsertClinicEmailConfirmation): Promise<ClinicEmailConfirmation> {
+    // Delete any existing confirmation for this clinic+registration to prevent duplicates on re-send
+    await db.delete(clinicEmailConfirmations).where(
+      and(
+        eq(clinicEmailConfirmations.clinicId, confirmation.clinicId),
+        eq(clinicEmailConfirmations.registrationId, confirmation.registrationId)
+      )
+    );
     const [result] = await db.insert(clinicEmailConfirmations).values(confirmation).returning();
     return result;
   }

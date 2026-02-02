@@ -2550,6 +2550,313 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Send email times to all participants in a clinic
+  app.post("/api/admin/clinics/:clinicId/email-times", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.clinicId);
+      
+      // Get clinic details
+      const clinic = await storage.getClinic(clinicId);
+      if (!clinic) {
+        return res.status(404).json({ message: "Clinic not found" });
+      }
+      
+      // Get all sessions and groups for this clinic
+      const allSessions = await storage.getAllClinicSessions();
+      const sessions = allSessions.filter(s => s.clinicId === clinicId);
+      
+      // Get all confirmed registrations
+      const allRegistrations = await storage.getClinicRegistrations(clinicId);
+      const confirmedRegistrations = allRegistrations.filter(r => r.status === 'confirmed');
+      
+      if (confirmedRegistrations.length === 0) {
+        return res.status(400).json({ message: "No confirmed registrations to email" });
+      }
+      
+      // Build schedule for each session
+      const fullSchedule: Array<{
+        sessionName: string;
+        discipline: string;
+        skillLevel: string;
+        groups: Array<{
+          groupName: string;
+          startTime: string | null;
+          endTime: string | null;
+          participants: Array<{ firstName: string; lastName: string; horseName: string }>;
+        }>;
+      }> = [];
+      
+      for (const session of sessions) {
+        const groups = await storage.getSessionGroups(session.id);
+        const groupsData = [];
+        
+        for (const group of groups) {
+          const participants = confirmedRegistrations.filter(r => r.groupId === group.id);
+          groupsData.push({
+            groupName: group.groupName,
+            startTime: group.startTime,
+            endTime: group.endTime,
+            participants: participants.map(p => ({
+              firstName: p.firstName,
+              lastName: p.lastName,
+              horseName: p.horseName
+            }))
+          });
+        }
+        
+        fullSchedule.push({
+          sessionName: session.sessionName,
+          discipline: session.discipline,
+          skillLevel: session.skillLevel,
+          groups: groupsData.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''))
+        });
+      }
+      
+      // Format clinic date
+      const clinicDate = new Date(clinic.date);
+      const formattedDate = clinicDate.toLocaleDateString('en-GB', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      
+      // Track emails sent
+      const emailsSent: Array<{ email: string; name: string; success: boolean }> = [];
+      
+      // Send email to each participant
+      for (const reg of confirmedRegistrations) {
+        // Generate unique confirmation token
+        const confirmationToken = `${clinicId}-${reg.id}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+        
+        // Find participant's group and time
+        let participantGroup: { groupName: string; startTime: string | null; endTime: string | null } | null = null;
+        for (const session of fullSchedule) {
+          for (const group of session.groups) {
+            if (group.participants.some(p => p.firstName === reg.firstName && p.lastName === reg.lastName && p.horseName === reg.horseName)) {
+              participantGroup = group;
+              break;
+            }
+          }
+        }
+        
+        // Create confirmation record
+        await storage.createClinicEmailConfirmation({
+          clinicId,
+          registrationId: reg.id,
+          email: reg.email,
+          firstName: reg.firstName,
+          lastName: reg.lastName,
+          confirmationToken
+        });
+        
+        // Build email HTML
+        const confirmUrl = `https://danbizzarromethod.com/confirm-clinic-times/${confirmationToken}`;
+        
+        const scheduleHtml = fullSchedule.map(session => {
+          const groupsHtml = session.groups.map(group => {
+            const participantsHtml = group.participants.map(p => {
+              const isCurrentParticipant = p.firstName === reg.firstName && p.lastName === reg.lastName && p.horseName === reg.horseName;
+              return `<li style="${isCurrentParticipant ? 'font-weight: bold; color: #2563eb;' : ''}">${p.firstName} ${p.lastName} - ${p.horseName}${isCurrentParticipant ? ' ⭐' : ''}</li>`;
+            }).join('');
+            
+            return `
+              <div style="margin-bottom: 16px; padding: 12px; background: #f3f4f6; border-radius: 8px;">
+                <p style="margin: 0 0 8px 0; font-weight: bold;">${group.groupName} - ${group.startTime || 'TBC'}${group.endTime ? ` to ${group.endTime}` : ''}</p>
+                <ul style="margin: 0; padding-left: 20px;">${participantsHtml}</ul>
+              </div>
+            `;
+          }).join('');
+          
+          return `
+            <div style="margin-bottom: 24px;">
+              <h3 style="margin: 0 0 12px 0; color: #1e3a5f;">${session.sessionName} - ${session.discipline} (${session.skillLevel})</h3>
+              ${groupsHtml}
+            </div>
+          `;
+        }).join('');
+        
+        const yourTimeHtml = participantGroup ? `
+          <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+            <h2 style="margin: 0 0 8px 0;">Your Time</h2>
+            <p style="margin: 0; font-size: 1.25rem; font-weight: bold;">${participantGroup.groupName}: ${participantGroup.startTime || 'TBC'}${participantGroup.endTime ? ` - ${participantGroup.endTime}` : ''}</p>
+            <p style="margin: 8px 0 0 0;">Horse: ${reg.horseName}</p>
+          </div>
+        ` : `
+          <div style="background: #fef3c7; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+            <p style="margin: 0; color: #92400e;">Your time slot has not been assigned yet. Please check with Dan.</p>
+          </div>
+        `;
+        
+        const emailHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #1e3a5f; color: white; padding: 24px; text-align: center;">
+              <h1 style="margin: 0;">Clinic Times Confirmed</h1>
+            </div>
+            
+            <div style="padding: 24px;">
+              <p>Hi ${reg.firstName},</p>
+              
+              <p>Your clinic times for <strong>${clinic.title}</strong> on <strong>${formattedDate}</strong> are now ready!</p>
+              
+              ${yourTimeHtml}
+              
+              <h2 style="color: #1e3a5f; border-bottom: 2px solid #f97316; padding-bottom: 8px;">Clinic Details</h2>
+              <p><strong>Date:</strong> ${formattedDate}</p>
+              <p><strong>Location:</strong> ${clinic.location}</p>
+              ${clinic.googleMapsLink ? `<p><a href="${clinic.googleMapsLink}" style="color: #2563eb;">View on Google Maps</a></p>` : ''}
+              
+              <h2 style="color: #1e3a5f; border-bottom: 2px solid #f97316; padding-bottom: 8px;">Full Schedule</h2>
+              ${scheduleHtml}
+              
+              <div style="background: #f3f4f6; padding: 24px; border-radius: 8px; text-align: center; margin-top: 24px;">
+                <p style="margin: 0 0 16px 0;"><strong>Please confirm you have received this email:</strong></p>
+                <a href="${confirmUrl}" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Confirm Receipt</a>
+              </div>
+              
+              <p style="margin-top: 24px; color: #6b7280; font-size: 0.875rem;">
+                If you have any questions, please contact Dan at dan@danbizzarromethod.com
+              </p>
+            </div>
+          </div>
+        `;
+        
+        const emailText = `
+Hi ${reg.firstName},
+
+Your clinic times for ${clinic.title} on ${formattedDate} are now ready!
+
+Your Time: ${participantGroup ? `${participantGroup.groupName}: ${participantGroup.startTime || 'TBC'}${participantGroup.endTime ? ` - ${participantGroup.endTime}` : ''}` : 'Not yet assigned'}
+Horse: ${reg.horseName}
+
+Clinic Details:
+Date: ${formattedDate}
+Location: ${clinic.location}
+${clinic.googleMapsLink ? `Google Maps: ${clinic.googleMapsLink}` : ''}
+
+Please confirm you have received this email by clicking: ${confirmUrl}
+
+If you have any questions, please contact Dan at dan@danbizzarromethod.com
+        `;
+        
+        try {
+          const success = await emailService.sendEmail(
+            reg.email,
+            `Your Clinic Times - ${clinic.title} - ${formattedDate}`,
+            emailHtml,
+            emailText
+          );
+          emailsSent.push({ email: reg.email, name: `${reg.firstName} ${reg.lastName}`, success });
+        } catch (error) {
+          console.error(`Failed to send email to ${reg.email}:`, error);
+          emailsSent.push({ email: reg.email, name: `${reg.firstName} ${reg.lastName}`, success: false });
+        }
+      }
+      
+      // Send summary email to Dan
+      const summaryHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: #1e3a5f; color: white; padding: 24px; text-align: center;">
+            <h1 style="margin: 0;">Clinic Times Emails Sent</h1>
+          </div>
+          
+          <div style="padding: 24px;">
+            <p><strong>Clinic:</strong> ${clinic.title}</p>
+            <p><strong>Date:</strong> ${formattedDate}</p>
+            <p><strong>Emails Sent:</strong> ${emailsSent.filter(e => e.success).length} of ${emailsSent.length}</p>
+            
+            <h2 style="color: #1e3a5f;">Recipients</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="background: #f3f4f6;">
+                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Name</th>
+                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Email</th>
+                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Status</th>
+              </tr>
+              ${emailsSent.map(e => `
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${e.name}</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${e.email}</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">${e.success ? '✅ Sent' : '❌ Failed'}</td>
+                </tr>
+              `).join('')}
+            </table>
+            
+            <p style="margin-top: 24px;">
+              <a href="https://danbizzarromethod.com/admin/clinics" style="color: #2563eb;">
+                View confirmation status in Admin Panel
+              </a>
+            </p>
+          </div>
+        </div>
+      `;
+      
+      await emailService.sendEmail(
+        'dan@danbizzarromethod.com',
+        `Clinic Times Sent - ${clinic.title} - ${emailsSent.filter(e => e.success).length} recipients`,
+        summaryHtml,
+        `Clinic times emails sent for ${clinic.title}. ${emailsSent.filter(e => e.success).length} of ${emailsSent.length} sent successfully.`
+      );
+      
+      res.json({
+        success: true,
+        message: `Emails sent to ${emailsSent.filter(e => e.success).length} of ${emailsSent.length} participants`,
+        results: emailsSent
+      });
+    } catch (error) {
+      console.error("Error sending clinic time emails:", error);
+      res.status(500).json({ message: "Failed to send clinic time emails" });
+    }
+  });
+
+  // Get email confirmation status for a clinic
+  app.get("/api/admin/clinics/:clinicId/email-confirmations", async (req, res) => {
+    try {
+      const clinicId = parseInt(req.params.clinicId);
+      const confirmations = await storage.getClinicEmailConfirmations(clinicId);
+      res.json(confirmations);
+    } catch (error) {
+      console.error("Error fetching email confirmations:", error);
+      res.status(500).json({ message: "Failed to fetch email confirmations" });
+    }
+  });
+
+  // Public endpoint for participants to confirm receipt
+  app.get("/api/confirm-clinic-times/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      
+      // Check if token exists and get confirmation record
+      const existing = await storage.getClinicEmailConfirmationByToken(token);
+      if (!existing) {
+        return res.status(404).json({ message: "Invalid confirmation link" });
+      }
+      
+      // If already confirmed, just return success
+      if (existing.confirmed) {
+        return res.json({ 
+          success: true, 
+          alreadyConfirmed: true,
+          firstName: existing.firstName 
+        });
+      }
+      
+      // Confirm the email
+      const confirmed = await storage.confirmClinicEmail(token);
+      if (!confirmed) {
+        return res.status(500).json({ message: "Failed to confirm" });
+      }
+      
+      res.json({ 
+        success: true, 
+        alreadyConfirmed: false,
+        firstName: confirmed.firstName 
+      });
+    } catch (error) {
+      console.error("Error confirming clinic email:", error);
+      res.status(500).json({ message: "Confirmation failed" });
+    }
+  });
+
   // Smart organize groups for a clinic (considers notes)
   app.post("/api/admin/clinics/:clinicId/smart-organize", async (req, res) => {
     try {

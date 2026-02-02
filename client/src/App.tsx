@@ -47,6 +47,7 @@ const AdminSettings = lazy(() => import("@/pages/AdminSettings"));
 const AdminGHL = lazy(() => import("@/pages/AdminGHL"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
+const ConfirmClinicTimes = lazy(() => import("@/pages/ConfirmClinicTimes"));
 
 // Course pages
 const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
@@ -289,6 +290,11 @@ function Router() {
       <Route path="/unsubscribe">
         <Suspense fallback={<PageLoader />}>
           <Unsubscribe />
+        </Suspense>
+      </Route>
+      <Route path="/confirm-clinic-times/:token">
+        <Suspense fallback={<PageLoader />}>
+          <ConfirmClinicTimes />
         </Suspense>
       </Route>
       <Route component={NotFound} />
