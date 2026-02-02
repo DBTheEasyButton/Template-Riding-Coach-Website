@@ -343,7 +343,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             
             // Find registration by payment intent ID
             const allRegistrations = await storage.getAllClinicRegistrations();
-            const registration = allRegistrations.find(r => r.paymentIntentId === paymentIntent.id);
+            let registration = allRegistrations.find(r => r.paymentIntentId === paymentIntent.id);
             
             if (registration) {
               // Ensure registration status is confirmed
@@ -355,7 +355,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
               // Mark discount code as used (backup in case registration endpoint failed)
               if (discountCode) {
                 try {
-                  // Check if discount is already marked as used
                   const discount = await storage.getDiscountByCode(discountCode);
                   if (discount && !discount.isUsed) {
                     await storage.useLoyaltyDiscount(discountCode, registration.id);
@@ -365,8 +364,139 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   console.error('Failed to mark discount as used in webhook:', error);
                 }
               }
+            } else if (clinicId && paymentIntent.metadata?.reg_email) {
+              // RECOVERY: Create registration from metadata if frontend call failed
+              console.log(`[WEBHOOK RECOVERY] Creating registration from metadata for payment ${paymentIntent.id}`);
+              
+              try {
+                const meta = paymentIntent.metadata;
+                const parsedClinicId = parseInt(clinicId);
+                
+                // Check if clinic exists
+                const clinic = await storage.getClinic(parsedClinicId);
+                if (!clinic) {
+                  console.error(`[WEBHOOK RECOVERY] Clinic ${clinicId} not found for payment ${paymentIntent.id}`);
+                  break;
+                }
+                
+                // Create the registration from metadata
+                const newRegistration = await storage.createClinicRegistration({
+                  clinicId: parsedClinicId,
+                  firstName: meta.reg_firstName || 'Unknown',
+                  lastName: meta.reg_lastName || 'Unknown',
+                  email: meta.reg_email || '',
+                  phone: meta.reg_phone || '',
+                  horseName: meta.reg_horseName || '',
+                  skillLevel: meta.reg_skillLevel || '',
+                  specialRequests: meta.reg_specialRequests || '',
+                  emergencyContact: meta.reg_emergencyContact || '',
+                  emergencyPhone: meta.reg_emergencyPhone || '',
+                  medicalConditions: meta.reg_medicalConditions || '',
+                  paymentMethod: meta.reg_paymentMethod || 'card',
+                  agreeToTerms: meta.reg_agreeToTerms === 'true',
+                  status: 'confirmed',
+                  paymentIntentId: paymentIntent.id,
+                  sessionId: meta.reg_sessionId ? parseInt(meta.reg_sessionId) : undefined
+                });
+                
+                console.log(`[WEBHOOK RECOVERY] Created registration ${newRegistration.id} for ${meta.reg_email}`);
+                registration = newRegistration;
+                
+                // Handle referral code if provided
+                if (meta.reg_referralCode) {
+                  try {
+                    const referralValidation = await storage.validateReferralCode(meta.reg_referralCode);
+                    if (referralValidation.valid && referralValidation.referrerId && referralValidation.referrerEmail) {
+                      const isNew = await storage.isNewClient(newRegistration.email);
+                      await storage.trackReferral(referralValidation.referrerId, newRegistration.email, isNew, newRegistration.id);
+                      if (isNew) {
+                        await storage.awardPoints(referralValidation.referrerEmail, 20, `Referral bonus: ${newRegistration.firstName} ${newRegistration.lastName}`);
+                        console.log(`[WEBHOOK RECOVERY] Awarded referral points to ${referralValidation.referrerEmail}`);
+                      }
+                    }
+                  } catch (error) {
+                    console.error('[WEBHOOK RECOVERY] Failed to process referral:', error);
+                  }
+                }
+                
+                // Award points for clinic entry
+                try {
+                  await storage.awardPoints(newRegistration.email, 10, `Clinic registration: ${clinic.title}`, newRegistration.firstName);
+                  console.log(`[WEBHOOK RECOVERY] Awarded 10 points to ${newRegistration.email}`);
+                } catch (error) {
+                  console.error('[WEBHOOK RECOVERY] Failed to award points:', error);
+                }
+                
+                // Sync to GHL
+                try {
+                  await storage.createOrUpdateGhlContactInApi(
+                    newRegistration.email,
+                    newRegistration.firstName,
+                    newRegistration.lastName,
+                    newRegistration.phone,
+                    ['Clinic Registration', 'newsletter'],
+                    { lead_source: 'Website Clinic Registration (Webhook Recovery)' }
+                  );
+                  console.log(`[WEBHOOK RECOVERY] Synced to GHL: ${newRegistration.email}`);
+                } catch (error) {
+                  console.error('[WEBHOOK RECOVERY] Failed to sync to GHL:', error);
+                }
+                
+                // Send confirmation email
+                try {
+                  const allRegs = await storage.getAllClinicRegistrations();
+                  const userRegs = allRegs.filter(r => r.email === newRegistration.email);
+                  const isFirstClinic = userRegs.length <= 1;
+                  
+                  let loyaltyProgram = await storage.getLoyaltyProgram(newRegistration.email);
+                  if (!loyaltyProgram) {
+                    const newProgram = await storage.createLoyaltyProgram({
+                      email: newRegistration.email,
+                      firstName: newRegistration.firstName,
+                      lastName: newRegistration.lastName || ''
+                    });
+                    loyaltyProgram = { ...newProgram, availableDiscounts: [] };
+                  }
+                  
+                  const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                  });
+                  
+                  if (isFirstClinic) {
+                    await emailService.sendFirstTimeClinicConfirmation(
+                      newRegistration.email, newRegistration.firstName, clinic.title, clinicDate,
+                      loyaltyProgram.referralCode || 'PENDING', clinic.location, clinic.googleMapsLink || undefined
+                    );
+                  } else {
+                    await emailService.sendReturningClinicConfirmation(
+                      newRegistration.email, newRegistration.firstName, clinic.title, clinicDate,
+                      loyaltyProgram.referralCode || 'PENDING', loyaltyProgram.points,
+                      clinic.location, clinic.googleMapsLink || undefined
+                    );
+                  }
+                  console.log(`[WEBHOOK RECOVERY] Sent confirmation email to ${newRegistration.email}`);
+                } catch (error) {
+                  console.error('[WEBHOOK RECOVERY] Failed to send confirmation email:', error);
+                }
+                
+                // Mark discount as used if applicable
+                if (discountCode) {
+                  try {
+                    const discount = await storage.getDiscountByCode(discountCode);
+                    if (discount && !discount.isUsed) {
+                      await storage.useLoyaltyDiscount(discountCode, newRegistration.id);
+                      console.log(`[WEBHOOK RECOVERY] Marked discount ${discountCode} as used`);
+                    }
+                  } catch (error) {
+                    console.error('[WEBHOOK RECOVERY] Failed to mark discount as used:', error);
+                  }
+                }
+                
+              } catch (error) {
+                console.error(`[WEBHOOK RECOVERY] Failed to create registration from metadata:`, error);
+              }
             } else {
-              console.warn(`No registration found for payment intent ${paymentIntent.id}`);
+              console.warn(`No registration found for payment intent ${paymentIntent.id} and no metadata for recovery`);
             }
             break;
           }
@@ -1320,7 +1450,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create payment intent for clinic registration
   app.post("/api/clinics/:id/create-payment-intent", async (req, res) => {
     const clinicId = parseInt(req.params.id);
-    const { sessionIds, discountCode } = req.body;
+    const { sessionIds, discountCode, registrationData } = req.body;
     let amount: number = 0;
     
     try {
@@ -1424,19 +1554,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // For now, we rely on Stripe's built-in duplicate detection and the registration endpoint's
       // payment verification to prevent double-charging
       
+      // Build metadata with registration data for webhook recovery
+      // Stripe metadata values must be strings, max 500 chars each
+      const metadata: Record<string, string> = {
+        clinicId: clinicId.toString(),
+        sessionIds: sessionIds ? JSON.stringify(sessionIds) : '',
+        discountCode: discountCode || '',
+        discountApplied: discountApplied.toString(),
+        discountAmount: discountAmount.toString(),
+      };
+
+      // Add registration data for webhook recovery if frontend call fails
+      if (registrationData) {
+        metadata.reg_firstName = registrationData.firstName || '';
+        metadata.reg_lastName = registrationData.lastName || '';
+        metadata.reg_email = registrationData.email || '';
+        metadata.reg_phone = registrationData.phone || '';
+        metadata.reg_horseName = registrationData.horseName || '';
+        metadata.reg_skillLevel = registrationData.skillLevel || '';
+        metadata.reg_specialRequests = (registrationData.specialRequests || '').substring(0, 400);
+        metadata.reg_emergencyContact = registrationData.emergencyContact || '';
+        metadata.reg_emergencyPhone = registrationData.emergencyPhone || '';
+        metadata.reg_medicalConditions = (registrationData.medicalConditions || '').substring(0, 400);
+        metadata.reg_paymentMethod = registrationData.paymentMethod || 'card';
+        metadata.reg_agreeToTerms = registrationData.agreeToTerms ? 'true' : 'false';
+        metadata.reg_referralCode = registrationData.referralCode || '';
+        metadata.reg_sessionId = registrationData.sessionId?.toString() || '';
+      }
+
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount), // Amount is already in cents
         currency: "gbp",
         automatic_payment_methods: {
           enabled: true,
         },
-        metadata: {
-          clinicId: clinicId.toString(),
-          sessionIds: sessionIds ? JSON.stringify(sessionIds) : null,
-          discountCode: discountCode || null,
-          discountApplied: discountApplied.toString(),
-          discountAmount: discountAmount.toString(),
-        },
+        metadata,
       });
       
       console.log(`Payment intent created successfully: ${paymentIntent.id} for clinic ${clinicId}, amount: £${amount/100}${discountApplied ? ` (discount applied: -£${discountAmount/100})` : ''}`);

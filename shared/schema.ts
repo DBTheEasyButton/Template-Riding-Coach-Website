@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar, index } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -152,6 +152,7 @@ export const clinicRegistrations = pgTable("clinic_registrations", {
   statusIdx: index("clinic_registrations_status_idx").on(table.status),
   sessionIdIdx: index("clinic_registrations_session_id_idx").on(table.sessionId),
   clinicIdStatusIdx: index("clinic_registrations_clinic_id_status_idx").on(table.clinicId, table.status),
+  paymentIntentIdIdx: uniqueIndex("clinic_registrations_payment_intent_id_unique").on(table.paymentIntentId),
 }));
 
 export const clinicWaitlist = pgTable("clinic_waitlist", {

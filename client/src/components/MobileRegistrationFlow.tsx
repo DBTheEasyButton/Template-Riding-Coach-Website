@@ -294,14 +294,30 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   // Payment intent mutation
   const createPaymentIntentMutation = useMutation({
     mutationFn: async () => {
-      const payload: { sessionIds?: number[]; discountCode?: string } = clinic?.hasMultipleSessions 
-        ? { sessionIds: selectedSessions }
-        : {};
-      
-      // Include discount code if provided
-      if (registrationData.discountCode) {
-        payload.discountCode = registrationData.discountCode;
-      }
+      const sessionId = clinic?.hasMultipleSessions && selectedSessions.length > 0 
+        ? selectedSessions[0] 
+        : undefined;
+
+      const payload: Record<string, unknown> = {
+        sessionIds: clinic?.hasMultipleSessions ? selectedSessions : undefined,
+        discountCode: registrationData.discountCode || undefined,
+        registrationData: {
+          firstName: registrationData.firstName,
+          lastName: registrationData.lastName,
+          email: registrationData.email,
+          phone: registrationData.phone,
+          horseName: registrationData.horseName || undefined,
+          skillLevel: registrationData.skillLevel || undefined,
+          specialRequests: registrationData.specialRequests || undefined,
+          emergencyContact: registrationData.emergencyContact,
+          emergencyPhone: registrationData.emergencyPhone,
+          medicalConditions: registrationData.medicalConditions || undefined,
+          paymentMethod: registrationData.paymentMethod,
+          agreeToTerms: registrationData.agreeToTerms,
+          referralCode: registrationData.referralCode || undefined,
+          sessionId: sessionId
+        }
+      };
       
       return await apiRequest('POST', `/api/clinics/${clinic?.id}/create-payment-intent`, payload);
     },
