@@ -195,7 +195,7 @@ export default function AdminAnalytics() {
                         onCheckedChange={(checked) => setShowTotal(checked === true)}
                       />
                       <Label htmlFor="showTotal" className="text-sm font-medium flex items-center gap-2">
-                        <span className="w-3 h-3 rounded-full bg-green-600"></span>
+                        <span className="w-3 h-3 rounded-full bg-black"></span>
                         Total Revenue
                       </Label>
                     </div>
@@ -206,7 +206,7 @@ export default function AdminAnalytics() {
                         onCheckedChange={(checked) => setShowClinics(checked === true)}
                       />
                       <Label htmlFor="showClinics" className="text-sm font-medium flex items-center gap-2">
-                        <span className="w-3 h-3 rounded-full bg-blue-700"></span>
+                        <span className="w-3 h-3 rounded-full bg-blue-600"></span>
                         Clinic Revenue
                       </Label>
                     </div>
@@ -217,7 +217,7 @@ export default function AdminAnalytics() {
                         onCheckedChange={(checked) => setShowAudioCourse(checked === true)}
                       />
                       <Label htmlFor="showAudioCourse" className="text-sm font-medium flex items-center gap-2">
-                        <span className="w-3 h-3 rounded-full bg-purple-600"></span>
+                        <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
                         Audio Course Revenue
                       </Label>
                     </div>
@@ -234,7 +234,7 @@ export default function AdminAnalytics() {
                           type="monotone" 
                           dataKey="totalRevenue" 
                           name="Total Revenue"
-                          stroke="#059669" 
+                          stroke="#000000" 
                           strokeWidth={3} 
                         />
                       )}
@@ -243,7 +243,7 @@ export default function AdminAnalytics() {
                           type="monotone" 
                           dataKey="clinicRevenue" 
                           name="Clinic Revenue"
-                          stroke="#1e40af" 
+                          stroke="#2563eb" 
                           strokeWidth={2} 
                         />
                       )}
@@ -252,7 +252,7 @@ export default function AdminAnalytics() {
                           type="monotone" 
                           dataKey="audioRevenue" 
                           name="Audio Course Revenue"
-                          stroke="#7c3aed" 
+                          stroke="#eab308" 
                           strokeWidth={2} 
                         />
                       )}
