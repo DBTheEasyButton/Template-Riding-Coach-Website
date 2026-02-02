@@ -598,15 +598,23 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                   className={`mt-2 w-full h-12 text-base px-3 ${errors.skillLevel ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500'} border rounded-lg transition-colors`}
                 >
                   <option value="">Select your skill level</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                  <option value="70cm">70cm</option>
-                  <option value="80cm">80cm</option>
-                  <option value="90cm">90cm</option>
-                  <option value="1m">1m</option>
-                  <option value="1.10m">1.10m</option>
-                  <option value="1.20m">1.20m</option>
+                  {/* Show beginner/intermediate/advanced for polework clinics, heights for jumping */}
+                  {clinic?.sessions?.some(s => s.discipline === 'polework') ? (
+                    <>
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="70cm">70cm</option>
+                      <option value="80cm">80cm</option>
+                      <option value="90cm">90cm</option>
+                      <option value="1m">1m</option>
+                      <option value="1.10m">1.10m</option>
+                      <option value="1.20m">1.20m</option>
+                    </>
+                  )}
                 </select>
                 {errors.skillLevel && <p className="text-xs text-red-500 mt-1">{errors.skillLevel}</p>}
               </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
@@ -449,6 +449,25 @@ export default function ClinicGroupsManager({
       toast({ title: "Failed to organize groups", variant: "destructive" });
     },
   });
+
+  // Auto-organize when dialog opens if there are unassigned participants but no groups
+  const hasAutoOrganized = useRef(false);
+  useEffect(() => {
+    if (open && data && !hasAutoOrganized.current) {
+      const hasGroups = sessions.some(s => s.groups.length > 0);
+      const hasUnassigned = unassignedParticipants.length > 0;
+      
+      // Auto-organize if there are unassigned participants and no existing groups
+      if (hasUnassigned && !hasGroups && !smartOrganizeMutation.isPending) {
+        hasAutoOrganized.current = true;
+        smartOrganizeMutation.mutate();
+      }
+    }
+    // Reset the flag when dialog closes
+    if (!open) {
+      hasAutoOrganized.current = false;
+    }
+  }, [open, data, sessions, unassignedParticipants, smartOrganizeMutation]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as number);
