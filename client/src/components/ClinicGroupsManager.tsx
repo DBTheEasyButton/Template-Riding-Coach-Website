@@ -240,7 +240,7 @@ function ParticipantCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`p-2 bg-white border-2 rounded-lg cursor-move hover:border-blue-400 hover:shadow-md transition-all ${levelColor.border} min-w-[140px] max-w-[160px]`}
+      className={`p-2 bg-white border-2 rounded-lg cursor-move hover:border-blue-400 hover:shadow-md transition-all ${levelColor.border} flex-1 min-w-[180px] max-w-[220px]`}
     >
       <div className="flex items-start gap-2">
         <div {...attributes} {...listeners} className="mt-1 text-gray-400 hover:text-gray-600">
@@ -860,7 +860,7 @@ export default function ClinicGroupsManager({
                           ({groups.reduce((sum, g) => sum + g.participants.length, 0)} participants)
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-4">
                         {groups.map(group => (
                           <GroupCard 
                             key={group.id} 
