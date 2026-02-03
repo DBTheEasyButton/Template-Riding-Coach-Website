@@ -240,7 +240,7 @@ function ParticipantCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`p-3 bg-white border-2 rounded-lg cursor-move hover:border-blue-400 hover:shadow-md transition-all ${levelColor.border}`}
+      className={`p-3 bg-white border-2 rounded-lg cursor-move hover:border-blue-400 hover:shadow-md transition-all ${levelColor.border} w-[180px] flex-shrink-0`}
     >
       <div className="flex items-start gap-2">
         <div {...attributes} {...listeners} className="mt-1 text-gray-400 hover:text-gray-600">
@@ -413,13 +413,13 @@ function GroupCard({
         )}
       </CardHeader>
       <CardContent className="pt-2">
-        <div ref={setNodeRef} className="space-y-2 min-h-[80px]">
+        <div ref={setNodeRef} className="flex flex-wrap gap-2 min-h-[80px]">
           <SortableContext
             items={confirmedParticipants.map(p => p.id)}
             strategy={verticalListSortingStrategy}
           >
             {confirmedParticipants.length === 0 ? (
-              <div className="text-center text-gray-400 py-6 border-2 border-dashed border-gray-200 rounded-lg text-sm">
+              <div className="w-full text-center text-gray-400 py-6 border-2 border-dashed border-gray-200 rounded-lg text-sm">
                 Drop participants here
               </div>
             ) : (
@@ -463,30 +463,30 @@ function UnassignedSection({
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-2">
-        <div ref={setNodeRef} className="space-y-2 min-h-[80px]">
+        <div ref={setNodeRef} className="flex flex-wrap gap-2 min-h-[80px]">
           <SortableContext
             items={confirmedUnassigned.map(p => p.id)}
             strategy={verticalListSortingStrategy}
           >
             {confirmedUnassigned.length === 0 ? (
-              <div className="text-center text-gray-500 py-6 border-2 border-dashed border-yellow-300 rounded-lg text-sm">
+              <div className="w-full text-center text-gray-500 py-6 border-2 border-dashed border-yellow-300 rounded-lg text-sm">
                 All participants are assigned
               </div>
             ) : (
               confirmedUnassigned.map(participant => (
-                <div key={participant.id} className="space-y-1">
+                <div key={participant.id} className="flex flex-col gap-1">
                   <ParticipantCard
                     participant={participant}
                     allParticipants={allParticipants}
                   />
                   {participant.unassignedReason && (
-                    <div className="ml-6 px-2 py-1.5 bg-orange-100 border border-orange-300 rounded text-xs text-orange-800">
+                    <div className="px-2 py-1.5 bg-orange-100 border border-orange-300 rounded text-xs text-orange-800 max-w-[200px]">
                       <div className="flex items-center gap-1">
                         <AlertCircle className="w-3 h-3 flex-shrink-0" />
                         <span>{participant.unassignedReason}</span>
                       </div>
                       {participant.suggestedGroupId && participant.suggestionText && (
-                        <div className="flex items-center gap-2 mt-1.5 ml-4">
+                        <div className="flex flex-col gap-1 mt-1.5">
                           <span className="text-gray-600">{participant.suggestionText}</span>
                           <Button
                             size="sm"
@@ -496,7 +496,6 @@ function UnassignedSection({
                           >
                             Yes
                           </Button>
-                          <span className="text-gray-400 text-xs">or drag manually</span>
                         </div>
                       )}
                     </div>
