@@ -381,6 +381,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   break;
                 }
                 
+                // Derive skill level from session if provided
+                let webhookSkillLevel = meta.reg_skillLevel || '';
+                const sessionIdFromMeta = meta.reg_sessionId ? parseInt(meta.reg_sessionId) : undefined;
+                if (sessionIdFromMeta) {
+                  try {
+                    const allClinics = await storage.getAllClinics();
+                    const clinicForWebhook = allClinics.find(c => c.id === parsedClinicId);
+                    const sessionForWebhook = clinicForWebhook?.sessions?.find((s: any) => s.id === sessionIdFromMeta);
+                    if (sessionForWebhook) {
+                      webhookSkillLevel = sessionForWebhook.skillLevel || webhookSkillLevel;
+                    }
+                  } catch (e) {
+                    console.error('[WEBHOOK RECOVERY] Error deriving skill level:', e);
+                  }
+                }
+                
                 // Create the registration from metadata
                 const newRegistration = await storage.createClinicRegistration({
                   clinicId: parsedClinicId,
@@ -389,7 +405,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   email: meta.reg_email || '',
                   phone: meta.reg_phone || '',
                   horseName: meta.reg_horseName || '',
-                  skillLevel: meta.reg_skillLevel || '',
+                  skillLevel: webhookSkillLevel,
                   specialRequests: meta.reg_specialRequests || '',
                   emergencyContact: meta.reg_emergencyContact || '',
                   emergencyPhone: meta.reg_emergencyPhone || '',
@@ -398,7 +414,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   agreeToTerms: meta.reg_agreeToTerms === 'true',
                   status: 'confirmed',
                   paymentIntentId: paymentIntent.id,
-                  sessionId: meta.reg_sessionId ? parseInt(meta.reg_sessionId) : undefined
+                  sessionId: sessionIdFromMeta
                 });
                 
                 console.log(`[WEBHOOK RECOVERY] Created registration ${newRegistration.id} for ${meta.reg_email}`);
@@ -1670,14 +1686,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
+      const clinic = await storage.getClinic(clinicId);
+      
+      // Derive skill level from the selected session (not from client input)
+      // This ensures polework clinics always get text-based levels (Beginner/Intermediate/Experienced)
+      // and jumping clinics get height-based levels
+      let derivedSkillLevel = registrationData.skillLevel || '';
+      if (registrationData.sessionId) {
+        const clinics = await storage.getAllClinics();
+        const clinicWithSessions = clinics.find(c => c.id === clinicId);
+        const session = clinicWithSessions?.sessions?.find(s => s.id === registrationData.sessionId);
+        if (session) {
+          derivedSkillLevel = session.skillLevel || '';
+        }
+      }
+      
       const validatedData = insertClinicRegistrationSchema.parse({
         ...registrationData,
+        skillLevel: derivedSkillLevel,
         clinicId,
         status: 'confirmed', // Set to confirmed since payment succeeded
         paymentIntentId: paymentIntentId || null // Save the payment intent ID
       });
-      
-      const clinic = await storage.getClinic(clinicId);
       if (!clinic) {
         return res.status(404).json({ message: "Clinic not found" });
       }
@@ -1897,6 +1927,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Handle additional entries (e.g., same person with multiple horses)
       const additionalRegistrations: any[] = [];
       if (registrationData.additionalEntries && Array.isArray(registrationData.additionalEntries)) {
+        // Get clinic with sessions for skill level derivation
+        const allClinicsForEntries = await storage.getAllClinics();
+        const clinicForEntries = allClinicsForEntries.find(c => c.id === clinicId);
+        
         for (const entry of registrationData.additionalEntries) {
           try {
             // Determine session ID for additional entry
@@ -1906,6 +1940,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
             
             // Create registration for additional entry
+            // Derive skill level from the additional entry's session
+            let additionalSkillLevel = entry.skillLevel || validatedData.skillLevel;
+            if (additionalSessionId) {
+              const addSession = clinicForEntries?.sessions?.find((s: any) => s.id === additionalSessionId);
+              if (addSession) {
+                additionalSkillLevel = addSession.skillLevel || additionalSkillLevel;
+              }
+            }
+            
             const additionalData = {
               clinicId,
               sessionId: additionalSessionId,
@@ -1914,7 +1957,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               email: registration.email,
               phone: registration.phone,
               horseName: entry.horseName || 'Additional Horse',
-              skillLevel: entry.skillLevel || validatedData.skillLevel,
+              skillLevel: additionalSkillLevel,
               emergencyContact: registration.emergencyContact,
               emergencyPhone: registration.emergencyPhone,
               medicalConditions: registration.medicalConditions,
