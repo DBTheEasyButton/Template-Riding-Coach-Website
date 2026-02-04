@@ -65,30 +65,15 @@ interface SiteSettings {
 }
 
 const featureSettingsConfig = {
-  booking_system_enabled: {
-    label: "Booking System",
-    description: "Enable clinic registration and booking functionality",
+  online_booking_system: {
+    label: "Online Booking System",
+    description: "Enable clinic registration, online payments, email announcements to tagged contacts, and Facebook auto-posting when new clinics are created",
     icon: Calendar
   },
-  online_payments_enabled: {
-    label: "Online Payments",
-    description: "Enable Stripe payment processing for bookings",
-    icon: CreditCard
-  },
-  email_automations_enabled: {
-    label: "Email Automations",
-    description: "Enable automated emails to participants",
-    icon: Mail
-  },
-  auto_grouping_enabled: {
-    label: "Automatic Groupings",
-    description: "Enable automatic group assignments and schedule generation",
+  advanced_clinic_system: {
+    label: "Advanced Clinic System",
+    description: "Enable email automations, automatic group assignments, schedule generation, and schedule notification emails",
     icon: Users
-  },
-  schedule_email_enabled: {
-    label: "Schedule Emails",
-    description: "Send automated emails when clinic schedules are generated",
-    icon: Bell
   }
 };
 

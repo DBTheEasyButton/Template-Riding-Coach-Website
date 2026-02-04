@@ -2972,11 +2972,8 @@ Your Coaching Team`,
 
   async initializeDefaultSettings(): Promise<void> {
     const defaultSettings = [
-      { settingKey: 'booking_system_enabled', settingValue: true, description: 'Enable/disable clinic booking and registration' },
-      { settingKey: 'online_payments_enabled', settingValue: true, description: 'Enable/disable Stripe payment processing' },
-      { settingKey: 'email_automations_enabled', settingValue: true, description: 'Enable/disable automated emails to participants' },
-      { settingKey: 'auto_grouping_enabled', settingValue: true, description: 'Enable/disable automatic groupings and schedule generation' },
-      { settingKey: 'schedule_email_enabled', settingValue: true, description: 'Enable/disable automated clinic email when schedule is generated' }
+      { settingKey: 'online_booking_system', settingValue: true, description: 'Enable/disable clinic registration, online payments, email announcements, and Facebook auto-posting' },
+      { settingKey: 'advanced_clinic_system', settingValue: true, description: 'Enable/disable email automations, automatic groupings, schedule generation, and schedule emails' }
     ];
 
     for (const setting of defaultSettings) {

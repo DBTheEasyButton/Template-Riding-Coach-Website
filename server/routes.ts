@@ -208,11 +208,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Public feature toggles endpoint - for frontend to check which features are enabled
   app.get("/api/config/features", async (req, res) => {
     try {
-      const bookingEnabled = await isFeatureEnabled('booking_system_enabled');
-      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      const onlineBookingSystem = await isFeatureEnabled('online_booking_system');
       res.json({
-        bookingEnabled,
-        paymentsEnabled
+        bookingEnabled: onlineBookingSystem,
+        paymentsEnabled: onlineBookingSystem
       });
     } catch (error) {
       console.error('Error fetching feature config:', error);
@@ -669,7 +668,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 }
                 
                 // Send confirmation email (check if email automations are enabled)
-                const emailAutomationsEnabledWebhook = await isFeatureEnabled('email_automations_enabled');
+                const emailAutomationsEnabledWebhook = await isFeatureEnabled('advanced_clinic_system');
                 if (emailAutomationsEnabledWebhook) {
                   try {
                     const allRegs = await storage.getAllClinicRegistrations();
@@ -1342,7 +1341,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/audio-course/create-payment-intent", async (req, res) => {
     try {
       // Check if online payments are enabled
-      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      const paymentsEnabled = await isFeatureEnabled('online_booking_system');
       if (!paymentsEnabled) {
         return res.status(403).json({ error: 'Online payments are currently disabled' });
       }
@@ -1471,7 +1470,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/challenge/create-payment-intent", async (req, res) => {
     try {
       // Check if online payments are enabled
-      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      const paymentsEnabled = await isFeatureEnabled('online_booking_system');
       if (!paymentsEnabled) {
         return res.status(403).json({ error: 'Online payments are currently disabled' });
       }
@@ -1866,7 +1865,7 @@ This inquiry was submitted via the website when online booking was unavailable.
     
     try {
       // Check if online payments are enabled
-      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      const paymentsEnabled = await isFeatureEnabled('online_booking_system');
       if (!paymentsEnabled) {
         return res.status(403).json({ message: "Online payments are currently disabled" });
       }
@@ -2090,7 +2089,7 @@ This inquiry was submitted via the website when online booking was unavailable.
   app.post("/api/clinics/:id/register", async (req, res) => {
     try {
       // Check if booking system is enabled
-      const bookingEnabled = await isFeatureEnabled('booking_system_enabled');
+      const bookingEnabled = await isFeatureEnabled('online_booking_system');
       if (!bookingEnabled) {
         return res.status(403).json({ message: "Clinic registration is currently disabled" });
       }
@@ -2274,7 +2273,7 @@ This inquiry was submitted via the website when online booking was unavailable.
 
       // Send confirmation email based on whether this is first-time or returning client
       // Check if email automations are enabled first
-      const emailAutomationsEnabled = await isFeatureEnabled('email_automations_enabled');
+      const emailAutomationsEnabled = await isFeatureEnabled('advanced_clinic_system');
       if (emailAutomationsEnabled) {
         try {
           // Check if this is their first clinic (before the current registration)
@@ -2545,7 +2544,7 @@ This inquiry was submitted via the website when online booking was unavailable.
       }
 
       // Send GHL emails to all contacts (tag-filtered) - only if enabled and email automations are on
-      const emailAutomationsForAnnouncement = await isFeatureEnabled('email_automations_enabled');
+      const emailAutomationsForAnnouncement = await isFeatureEnabled('advanced_clinic_system');
       if (sendEmailAnnouncement !== false && emailAutomationsForAnnouncement) {
         try {
           console.log('  - ✅ Sending email announcement to GHL contacts...');
@@ -2865,7 +2864,7 @@ This inquiry was submitted via the website when online booking was unavailable.
   app.post("/api/admin/sessions/:sessionId/auto-organize", async (req, res) => {
     try {
       // Check if auto-grouping is enabled
-      const autoGroupingEnabled = await isFeatureEnabled('auto_grouping_enabled');
+      const autoGroupingEnabled = await isFeatureEnabled('advanced_clinic_system');
       if (!autoGroupingEnabled) {
         return res.status(403).json({ message: "Automatic group assignment is currently disabled" });
       }
@@ -3037,7 +3036,7 @@ This inquiry was submitted via the website when online booking was unavailable.
   app.post("/api/admin/clinics/:clinicId/email-times", async (req, res) => {
     try {
       // Check if schedule emails are enabled
-      const scheduleEmailEnabled = await isFeatureEnabled('schedule_email_enabled');
+      const scheduleEmailEnabled = await isFeatureEnabled('advanced_clinic_system');
       if (!scheduleEmailEnabled) {
         return res.status(403).json({ message: "Schedule email notifications are currently disabled" });
       }
@@ -5109,7 +5108,7 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
   app.post("/api/admin/email-campaigns/:id/send", async (req, res) => {
     try {
       // Check if email automations are enabled
-      const emailEnabled = await isFeatureEnabled('email_automations_enabled');
+      const emailEnabled = await isFeatureEnabled('advanced_clinic_system');
       if (!emailEnabled) {
         return res.status(403).json({ message: "Email automations are currently disabled" });
       }

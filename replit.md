@@ -114,11 +114,8 @@ Super admins are automatically created on server startup from the `ADMIN_EMAIL_1
 
 **Feature Toggles (Super Admin Only):**
 Located in Settings > Feature Toggles, these control core functionality:
-1. **Booking System** - Enable/disable clinic registration
-2. **Online Payments** - Enable/disable Stripe payment processing
-3. **Email Automations** - Enable/disable automated emails
-4. **Automatic Groupings** - Enable/disable auto group assignments
-5. **Schedule Emails** - Enable/disable schedule notification emails
+1. **Online Booking System** - Enable/disable clinic registration, online payments, email announcements to tagged contacts, and Facebook auto-posting when new clinics are created
+2. **Advanced Clinic System** - Enable/disable email automations, automatic group assignments, schedule generation, and schedule notification emails
 
 ### Payment System
 - Stripe integration for clinic bookings
