@@ -1,4 +1,4 @@
-import { Instagram, Facebook, Twitter, Youtube, Gift } from "lucide-react";
+import { Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 import { Link } from "wouter";
 import logoDarkBg from "@assets/logo-dark-bg.png";
 
@@ -72,37 +72,6 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              {/* TEMPLATE: Update or remove these download links as needed */}
-              <li>
-                <a 
-                  href="/api/downloads/warmup-system-pdf"
-                  download="Warmup-System-Guide.pdf"
-                  className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
-                  data-testid="link-footer-free-guide"
-                >
-                  <Gift className="w-4 h-4" />
-                  Free Warm Up Guide
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="/api/downloads/strong-horse-pdf"
-                  download="Strong-Horse-Solution-Guide.pdf"
-                  className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
-                  data-testid="link-footer-strong-horse-guide"
-                >
-                  <Gift className="w-4 h-4" />
-                  Free Strong Horse Guide
-                </a>
-              </li>
-              <li>
-                <Link 
-                  href="/quiz/horse-type"
-                  className="text-gray-300 hover:text-orange transition-colors"
-                >
-                  Horse Type Quiz
-                </Link>
-              </li>
             </ul>
           </div>
           <div>
@@ -167,38 +136,8 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4">Courses</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link 
-                  href="/courses/10-points-better"
-                  className="text-gray-300 hover:text-orange transition-colors"
-                  data-testid="link-footer-10-points-better"
-                >
-                  10 Points Better
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/courses/strong-horse-audio"
-                  className="text-gray-300 hover:text-orange transition-colors"
-                  data-testid="link-footer-strong-horse-audio"
-                >
-                  Strong Horse Audio Course
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/gat-uk-tour"
-                  className="text-gray-300 hover:text-orange transition-colors"
-                  data-testid="link-footer-gat-uk-tour"
-                >
-                  GAT UK Eventing Tour
-                </Link>
-              </li>
-            </ul>
             {/* TEMPLATE: Update contact details below */}
-            <h3 className="font-semibold mb-4 mt-6">Contact</h3>
+            <h3 className="font-semibold mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-300">
               <li>[Your Address Line 1]</li>
               <li>[Your Address Line 2]</li>

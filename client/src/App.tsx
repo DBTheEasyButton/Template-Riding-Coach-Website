@@ -17,7 +17,6 @@ const About = lazy(() => import("@/pages/About"));
 const Coaching = lazy(() => import("@/pages/Services"));
 const Gallery = lazy(() => import("@/pages/Gallery"));
 const Blog = lazy(() => import("@/pages/News"));
-const Podcast = lazy(() => import("@/pages/Podcast"));
 const Contact = lazy(() => import("@/pages/Contact"));
 
 // Service-specific pages
@@ -28,15 +27,10 @@ const Dressage = lazy(() => import("@/pages/services/Dressage"));
 const ShowJumping = lazy(() => import("@/pages/services/ShowJumping"));
 const CrossCountry = lazy(() => import("@/pages/services/CrossCountry"));
 const Polework = lazy(() => import("@/pages/services/Polework"));
-const AudioLessons = lazy(() => import("@/pages/services/AudioLessons"));
 const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
-const AudioLessonsTerms = lazy(() => import("@/pages/AudioLessonsTerms"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
-const CompetitionChecklists = lazy(() => import("@/pages/CompetitionChecklists"));
-const StrideCalculator = lazy(() => import("@/pages/StrideCalculator"));
-const ReadinessQuiz = lazy(() => import("@/pages/ReadinessQuiz"));
-const PackingListGenerator = lazy(() => import("@/pages/PackingListGenerator"));
-const StrongHorseGuide = lazy(() => import("@/pages/StrongHorseGuide"));
+
+// Admin pages
 const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
 const AdminRegistrations = lazy(() => import("@/pages/AdminRegistrations"));
 const AdminGallery = lazy(() => import("@/pages/AdminGallery"));
@@ -49,17 +43,6 @@ const AdminTestimonials = lazy(() => import("@/pages/AdminTestimonials"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 const ConfirmClinicTimes = lazy(() => import("@/pages/ConfirmClinicTimes"));
-
-// Course pages
-const TenPointsBetter = lazy(() => import("@/pages/courses/TenPointsBetter"));
-const StrongHorseAudioCourse = lazy(() => import("@/pages/courses/StrongHorseAudioCourse"));
-const StrongHorseAudioOffer = lazy(() => import("@/pages/courses/StrongHorseAudioOffer"));
-
-// Quiz pages
-const HorseTypeQuiz = lazy(() => import("@/pages/quiz/HorseTypeQuiz"));
-
-// Tour pages
-const GATUKTour = lazy(() => import("@/pages/GATUKTour"));
 
 // Simple redirect component for wouter
 function RedirectToAdminClinics() {
@@ -79,10 +62,9 @@ const useDesktopPreloading = () => {
     if (isDesktop) {
       // Preload commonly accessed pages after a short delay
       const timer = setTimeout(() => {
-        import("@/pages/StrideCalculator");
-        import("@/pages/CompetitionChecklists");
+        import("@/pages/Services");
         import("@/pages/Loyalty");
-      }, 2000); // 2 second delay to let main page load first
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
@@ -145,31 +127,6 @@ function Router() {
           <Polework />
         </Suspense>
       </Route>
-      <Route path="/coaching/audio-lessons">
-        <Suspense fallback={<PageLoader />}>
-          <AudioLessons />
-        </Suspense>
-      </Route>
-      <Route path="/courses/10-points-better">
-        <Suspense fallback={<PageLoader />}>
-          <TenPointsBetter />
-        </Suspense>
-      </Route>
-      <Route path="/courses/strong-horse-audio">
-        <Suspense fallback={<PageLoader />}>
-          <StrongHorseAudioCourse />
-        </Suspense>
-      </Route>
-      <Route path="/courses/strong-horse-audio-offer">
-        <Suspense fallback={<PageLoader />}>
-          <StrongHorseAudioOffer />
-        </Suspense>
-      </Route>
-      <Route path="/gat-uk-tour">
-        <Suspense fallback={<PageLoader />}>
-          <GATUKTour />
-        </Suspense>
-      </Route>
       <Route path="/gallery">
         <Suspense fallback={<PageLoader />}>
           <Gallery />
@@ -178,11 +135,6 @@ function Router() {
       <Route path="/blog">
         <Suspense fallback={<PageLoader />}>
           <Blog />
-        </Suspense>
-      </Route>
-      <Route path="/podcast">
-        <Suspense fallback={<PageLoader />}>
-          <Podcast />
         </Suspense>
       </Route>
       <Route path="/contact">
@@ -195,49 +147,9 @@ function Router() {
           <TermsAndConditions />
         </Suspense>
       </Route>
-      <Route path="/audio-lessons-terms">
-        <Suspense fallback={<PageLoader />}>
-          <AudioLessonsTerms />
-        </Suspense>
-      </Route>
       <Route path="/loyalty">
         <Suspense fallback={<PageLoader />}>
           <Loyalty />
-        </Suspense>
-      </Route>
-      <Route path="/competition-checklists">
-        <Suspense fallback={<PageLoader />}>
-          <CompetitionChecklists />
-        </Suspense>
-      </Route>
-      <Route path="/stride-calculator">
-        <Suspense fallback={<PageLoader />}>
-          <StrideCalculator />
-        </Suspense>
-      </Route>
-      <Route path="/readiness-quiz">
-        <Suspense fallback={<PageLoader />}>
-          <ReadinessQuiz />
-        </Suspense>
-      </Route>
-      <Route path="/packing-list-generator">
-        <Suspense fallback={<PageLoader />}>
-          <PackingListGenerator />
-        </Suspense>
-      </Route>
-      <Route path="/packing-list">
-        <Suspense fallback={<PageLoader />}>
-          <PackingListGenerator />
-        </Suspense>
-      </Route>
-      <Route path="/guides/strong-horse">
-        <Suspense fallback={<PageLoader />}>
-          <StrongHorseGuide />
-        </Suspense>
-      </Route>
-      <Route path="/quiz/horse-type">
-        <Suspense fallback={<PageLoader />}>
-          <HorseTypeQuiz />
         </Suspense>
       </Route>
       <Route path="/admin">

@@ -26,7 +26,7 @@ import {
 } from "@shared/schema";
 import { prerenderService } from "./prerenderService";
 import { generateWarmupSystemPDF } from "./generateWarmupPDF";
-import { generateStrongHorsePDF } from "./generateStrongHorsePDF";
+import { generateLeadMagnetPDF } from "./generateLeadMagnetPDF";
 import crypto from "crypto";
 
 // SMS Verification Code Storage (in-memory with auto-cleanup)
@@ -795,7 +795,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Download PDF: The Strong Horse Solution
   app.get("/api/downloads/strong-horse-pdf", async (req, res) => {
     try {
-      const pdfBuffer = generateStrongHorsePDF();
+      const pdfBuffer = generateLeadMagnetPDF();
       
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', 'attachment; filename="The-Strong-Horse-Solution-Dan-Bizzarro.pdf"');
@@ -807,7 +807,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Lead capture for Strong Horse PDF - creates/updates GHL contact with StrongHorsePDF tag
+  // TEMPLATE: Lead capture endpoint for free guide PDF downloads
+  // This endpoint creates/updates CRM contacts and sends a PDF
+  // Rename and customize the PDF generation for your coaching business
+  app.post("/api/lead-capture/free-guide-pdf", async (req, res) => {
+    try {
+      const { firstName, lastName, email, mobile, horseName, phoneVerified } = req.body;
+
+      if (!firstName || !lastName || !email || !mobile || !horseName) {
+        return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
+      }
+
+      let ghlContactId: string | undefined;
+
+      // Create or update contact in CRM with appropriate tag
+      try {
+        const ghlResult = await storage.createOrUpdateGhlContactInApi(
+          email,
+          firstName,
+          lastName,
+          mobile,
+          ['FreeGuide', 'newsletter'],
+          { lead_source: 'Free Guide PDF Download', horse_name: horseName }
+        );
+        
+        if (ghlResult.success) {
+          console.log(`CRM contact created/updated for ${email} with FreeGuide tag`);
+          ghlContactId = ghlResult.contactId;
+        } else {
+          console.warn(`CRM contact creation warning for ${email}:`, ghlResult.message);
+        }
+      } catch (ghlError) {
+        console.error('CRM contact creation error (non-fatal):', ghlError);
+      }
+
+      // Create or update visitor profile for returning visitor recognition
+      try {
+        const { token } = await storage.createOrUpdateVisitorProfile(
+          firstName,
+          lastName,
+          email,
+          mobile,
+          'FreeGuidePDF',
+          ghlContactId,
+          horseName,
+          phoneVerified === true ? new Date() : undefined
+        );
+        
+        res.cookie('visitor_token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 90 * 24 * 60 * 60 * 1000
+        });
+      } catch (profileError) {
+        console.error('Visitor profile creation error (non-fatal):', profileError);
+      }
+
+      // TEMPLATE: Generate and send your PDF here
+      // Replace generateLeadMagnetPDF() with your own PDF generation function
+      const pdfBuffer = generateLeadMagnetPDF();
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="Free-Training-Guide.pdf"');
+      res.setHeader('Content-Length', pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error in lead capture endpoint:', error);
+      res.status(500).json({ error: 'Failed to process request' });
+    }
+  });
+
+  // Legacy endpoint - kept for backwards compatibility
   app.post("/api/lead-capture/strong-horse-pdf", async (req, res) => {
     try {
       const { firstName, lastName, email, mobile, horseName, phoneVerified } = req.body;
@@ -865,7 +936,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Generate and send the PDF
-      const pdfBuffer = generateStrongHorsePDF();
+      const pdfBuffer = generateLeadMagnetPDF();
       
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', 'attachment; filename="The-Strong-Horse-Solution-Dan-Bizzarro.pdf"');

@@ -216,15 +216,6 @@ export default function HeroSection() {
                 Book a Virtual Lesson
               </Button>
             </Link>
-            <Link href="/coaching/audio-lessons" onClick={() => setIsTrainModalOpen(false)}>
-              <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
-                data-testid="button-modal-audio"
-              >
-                <Headphones className="w-5 h-5" />
-                Audio Lessons
-              </Button>
-            </Link>
           </div>
         </DialogContent>
       </Dialog>

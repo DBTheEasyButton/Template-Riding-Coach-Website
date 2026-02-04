@@ -1,48 +1,112 @@
 # Equestrian Coaching Website Template - Project Documentation
 
 ## Overview
-A professional website template for equestrian coaches, providing horse training tools and coaching services. The platform targets both amateur and competitive riders, offering interactive tools and personalized learning experiences. This template can be cloned and customized for different coaching businesses.
+A professional, reusable website template for equestrian coaches. This minimal template provides the essential infrastructure for a coaching business including clinic booking, payment processing, loyalty programs, and admin management.
 
 ## TEMPLATE SETUP CHECKLIST
 
-When cloning this template for a new coaching business, update the following:
+When cloning this template for a new coaching business, complete the following:
 
 ### 1. Business Information
 - [ ] Update `shared/seoConfig.ts` with business name, descriptions, and keywords
-- [ ] Update `BASE_URL` in `shared/seoConfig.ts` to your domain
-- [ ] Update contact details throughout the codebase (search for placeholder values)
+- [ ] Update `client/src/data/seoConfig.ts` with page-specific SEO content
+- [ ] Update `BASE_URL` in both seoConfig files to your domain
+- [ ] Search for "[YOUR" placeholder values and replace with your details
 
 ### 2. Logo & Branding Images
+**IMPORTANT:** Clear all files in `attached_assets/` folder and replace with your own assets.
+
 Replace these placeholder logo files with your business logos:
 - [ ] `attached_assets/logo-light-bg.png` - Main logo for light backgrounds (navigation)
 - [ ] `attached_assets/logo-dark-bg.png` - Logo for dark backgrounds (footer)
-- [ ] `attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png` - Newsletter section logo
-- [ ] `attached_assets/optimized/podcast-logo-optimized.png` - Podcast logo (optimized)
+- [ ] `attached_assets/newsletter-logo.png` - Newsletter section logo
 - [ ] `client/public/logo.png` - Square logo for favicon/browser tab
-- [ ] `client/public/podcast-logo.png` - Podcast cover art (if using podcast feature)
+
+### 2b. Lead Magnet PDF
+Customize your free guide PDF in `server/generateLeadMagnetPDF.ts`:
+- [ ] Update the PDF title, subtitle, and author
+- [ ] Replace placeholder content with your coaching expertise
+- [ ] Add your logo (see template comments in the file)
 
 ### 3. Required API Keys & Secrets
 Configure these secrets in the Replit Secrets tab:
 - [ ] `STRIPE_SECRET_KEY` - Your Stripe secret key for payments
 - [ ] `VITE_STRIPE_PUBLIC_KEY` - Your Stripe publishable key
+- [ ] `STRIPE_WEBHOOK_SECRET` - Your Stripe webhook signing secret
 - [ ] `GHL_API_KEY` - Go High Level API key for CRM integration
 - [ ] `GHL_LOCATION_ID` - Go High Level location ID
+- [ ] `SESSION_SECRET` - A random string for session security
 - [ ] `FACEBOOK_APP_ID` - For Facebook marketing automation (optional)
 - [ ] `FACEBOOK_APP_SECRET` - For Facebook marketing automation (optional)
 - [ ] `FACEBOOK_PAGE_ACCESS_TOKEN` - For auto-posting to Facebook (optional)
 
-### 4. Content to Customize
-- [ ] Testimonials (add via admin panel or database)
-- [ ] Blog articles
-- [ ] Clinic offerings
-- [ ] Service descriptions on coaching pages
-- [ ] Terms and conditions
+### 4. Analytics Configuration
+Update `client/index.html` with your tracking IDs:
+- [ ] Replace `YOUR_GA4_ID` with your Google Analytics 4 measurement ID
+- [ ] Replace `YOUR_FACEBOOK_PIXEL_ID` with your Meta Pixel ID
+- [ ] Replace `YOUR_CLARITY_ID` with your Microsoft Clarity ID
+- [ ] Replace `GTM-XXXXXXXX` with your Google Tag Manager ID
+
+### 5. Content to Add
+- [ ] Testimonials (add via Admin > Testimonials)
+- [ ] Blog articles (add via Admin > Blog)
+- [ ] Clinic offerings (add via Admin > Clinics)
+- [ ] Gallery photos (add via Admin > Gallery)
+- [ ] Update service descriptions on coaching pages
+- [ ] Update Terms and Conditions page
+
+### 6. Contact Details
+Update in `client/src/components/Footer.tsx` and contact pages:
+- [ ] Business address
+- [ ] Phone number  
+- [ ] Email address
+- [ ] Social media links
+
+## Template Features
+
+### Core Pages
+- **Home** - Hero section, clinic promotions, call-to-action
+- **About** - Coach biography and credentials
+- **Coaching** - Overview of services with links to specialized pages
+- **Blog** - News articles and training tips
+- **Gallery** - Photo gallery
+- **Contact** - Contact form and details
+
+### Coaching Sub-Pages
+- Private Lessons
+- Group Clinics
+- Remote/Virtual Coaching
+- Dressage
+- Show Jumping
+- Cross Country
+- Polework
+
+### Admin Features (access at /admin)
+- **Clinics** - Create, edit, and manage clinic events
+- **Registrations** - View and manage clinic bookings
+- **Groups** - Organize participants by skill level
+- **Blog** - Create and publish articles
+- **Gallery** - Upload and manage photos
+- **Testimonials** - Manage customer reviews
+- **CRM** - Sync contacts with Go High Level
+- **Analytics** - View site statistics
+- **Settings** - Site configuration
+
+### Payment System
+- Stripe integration for clinic bookings
+- Multi-entry support (book multiple horses/participants)
+- Discount codes and loyalty rewards
+- Automatic email confirmations
+
+### Loyalty Program
+- Points system for clinic attendance
+- Referral rewards
+- Automatic discount code generation
+- Leaderboard display
 
 ## User Preferences
 - **Design Style:** Clean, professional layout with light grey navigation
-- **Branding:** Update logo and colors in `client/src/index.css` and `tailwind.config.ts`
-- **Target Audience:** Dual focus on amateur riders (riding for pleasure) and competitive riders
-- **Clinic Format:** Single-day sessions; polework, show jumping, and cross country specialties
+- **Branding:** Update colors in `client/src/index.css` and `tailwind.config.ts`
 - **Terminology:** Always refer to Go High Level (GHL) as "CRM" in user-facing text
 
 ### NAP (Name, Address, Phone) Standard
@@ -53,41 +117,26 @@ Update consistently across all pages for local SEO:
 - Email: [YOUR EMAIL]
 
 ## System Architecture
-The platform utilizes React.js (TypeScript), Tailwind CSS, Express.js, and PostgreSQL, employing a multi-page architecture for SEO and user experience.
 
-**UI/UX Decisions:**
-- Clean, professional, and mobile-optimized design focusing on readability and accessibility.
-- Consistent branding with customizable colors and logo.
-- WCAG 2.1 compliance for accessibility, including proper heading hierarchy and semantic HTML.
+**Technical Stack:**
+- **Frontend:** React.js with TypeScript, Tailwind CSS, Wouter for routing, React Hook Form with Zod, TanStack Query
+- **Backend:** Express.js
+- **Database:** PostgreSQL (Replit built-in)
+- **Payments:** Stripe
 
-**Technical Implementations:**
-- **Frontend:** React.js with TypeScript, Tailwind CSS, Wouter for routing, React Hook Form with Zod, TanStack Query.
-- **Backend:** Express.js.
-- **Database:** PostgreSQL (Replit built-in).
-- **SEO:** Centralized architecture with server-side meta tag rendering, dynamic structured data. Canonical URLs should point to your domain. LocalBusiness structured data ensures NAP consistency.
-- **Pre-Rendering & Bot Detection:** Build-time pre-rendering uses Puppeteer to generate full HTML for all pages. Bot detection middleware serves pre-rendered files to search engines and AI crawlers.
-
-**Feature Specifications:**
-- **Coaching Section:** Dedicated pages for Private Lessons, Clinics, Remote Coaching, Dressage, Show Jumping, Cross Country, and Polework.
-- **Interactive Tools:** Readiness Quiz, Stride Calculator, and Packing List Generator.
-- **Admin Interface:** Manages clinics, news articles, and CRM contact synchronization.
-- **Loyalty Program:** Points and referral system with automatic rewards and discount code generation.
-- **Group Management:** Organize clinic participants by skill level with drag-and-drop functionality.
-
-## External Dependencies
-- **Google Analytics 4:** For website traffic and user behavior analytics (configure with your tracking ID).
-- **CRM (Go High Level) API:** For contact management and automated email communications. Requires `GHL_API_KEY` and `GHL_LOCATION_ID`.
-- **Stripe Payment Integration:** For clinic registrations. Requires `STRIPE_SECRET_KEY` and `VITE_STRIPE_PUBLIC_KEY`.
-- **Facebook Marketing:** Optional integration for auto-posting clinics. Requires Facebook API credentials.
+**Key Architecture:**
+- Clean, professional, and mobile-optimized design
+- WCAG 2.1 compliance for accessibility
+- Pre-rendering system for SEO optimization
+- Bot detection middleware for search engine crawlers
 
 ## Pre-Rendering System
 
 **When making code changes to static pages, run:** `npx tsx scripts/prerender.ts`
 
 Static pages that need manual regeneration:
-- Home, About, Gallery, Podcast, Contact, Terms & Conditions
+- Home, About, Gallery, Contact, Terms & Conditions
 - All coaching pages (Private Lessons, Show Jumping, Cross Country, Dressage, Polework, Remote Coaching)
-- Tools (Stride Calculator, Readiness Quiz, Packing List Generator)
 - Loyalty programme page
 
 ### How It Works

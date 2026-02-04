@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import type { News } from "@shared/schema";
 import { OptimizedImage } from "@/components/OptimizedImage";
-import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle, ChevronDown, MapPin, Headphones } from "lucide-react";
+import { ArrowRight, Award, Users, Target, Calendar, CheckCircle, AlertTriangle, Lightbulb, TrendingUp, Video, Link2Off, Zap, Scale, Frown, TrendingDown, XCircle, ChevronDown, MapPin } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import boekeloPodiumPhotoJpg from "@assets/optimized/boekelo-podium.jpg";
 import boekeloPodiumPhotoWebp from "@assets/optimized/boekelo-podium.webp";
@@ -37,12 +37,10 @@ import privateLessonsBoxJpg from "@assets/optimized/private-lessons-box.jpg";
 import privateLessonsBoxWebp from "@assets/optimized/private-lessons-box.webp";
 import virtualLessonsBoxJpg from "@assets/optimized/virtual-lessons-box.jpg";
 import virtualLessonsBoxWebp from "@assets/optimized/virtual-lessons-box.webp";
-import audioLessonsImage from "@assets/Audio_lessons_1767409308208.jpeg";
 import { getSEOConfig, getCanonicalUrl } from "@shared/seoConfig";
 
 const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
 const ClinicsSection = lazy(() => import("@/components/ClinicsSection"));
-const PodcastSection = lazy(() => import("@/components/PodcastSection"));
 const SponsorsSection = lazy(() => import("@/components/SponsorsSection"));
 const NewsletterSubscription = lazy(() => import("@/components/NewsletterSubscription"));
 
@@ -519,38 +517,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
-              <div className="h-48 overflow-hidden">
-                <img 
-                  src={audioLessonsImage} 
-                  alt="Rider listening to audio lessons while riding"
-                  className="w-full h-full object-cover object-[center_30%]"
-                  loading="lazy"
-                />
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-playfair font-bold text-navy mb-3">Audio Lessons</h3>
-                <p className="text-dark leading-relaxed mb-6 flex-grow">
-                  Listen and learn at your own pace with guided audio coaching.
-                </p>
-                <Link href="/coaching/audio-lessons">
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium transition-all duration-300" data-testid="button-book-audio">
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <Button 
-              variant="outline"
-              className="bg-navy hover:bg-slate-800 text-white px-4 sm:px-8 py-4 text-sm sm:text-base md:text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
-              data-testid="button-get-guide-section"
-              onClick={() => setIsLeadModalOpen(true)}
-            >
-              Get the Strong Horse Solution FREE GUIDE
-            </Button>
           </div>
         </div>
       </section>
@@ -558,7 +524,7 @@ export default function Home() {
       <div className="border-t-2 border-navy"></div>
       {/* SECTION 8 — TESTIMONIALS */}
       <Suspense fallback={<SectionSkeleton />}>
-        <TestimonialsSection title="Riders See Real Progress With the Your Coaching Business" />
+        <TestimonialsSection title="What Our Riders Say" />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height="300px" />}>
         <SponsorsSection />
@@ -605,12 +571,12 @@ export default function Home() {
         onClose={() => setIsLeadModalOpen(false)} 
       />
 
-      {/* Train with Dan Options Modal */}
+      {/* Start Training Modal */}
       <Dialog open={isTrainModalOpen} onOpenChange={setIsTrainModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-playfair font-bold text-navy text-center">
-              Train with Dan
+              Start Training
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-3 mt-4">
@@ -639,15 +605,6 @@ export default function Home() {
               >
                 <Video className="w-5 h-5" />
                 Book a Virtual Lesson
-              </Button>
-            </Link>
-            <Link href="/coaching/audio-lessons" onClick={() => setIsTrainModalOpen(false)}>
-              <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-3"
-                data-testid="button-modal-audio-home"
-              >
-                <Headphones className="w-5 h-5" />
-                Audio Lessons
               </Button>
             </Link>
           </div>

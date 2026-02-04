@@ -148,43 +148,6 @@ export const seoConfig: Record<string, PageSEOConfig> = {
     ogImage: '/hero-background.jpg'
   },
 
-  '/podcast': {
-    title: 'Our Equestrian Life Podcast | Your Coaching Business',
-    description: 'Listen to Our Equestrian Life podcast hosted by Your Coach, featuring industry experts, accomplished riders, and passionate equestrian enthusiasts. Available on Spotify and Apple Podcasts.',
-    keywords: 'Our Equestrian Life, equestrian podcast, Your Coach podcast, horse riding podcast, eventing podcast, equestrian interviews, riding podcast, horse training podcast',
-    canonicalPath: '/podcast',
-    h1: 'Our Equestrian Life Podcast',
-    ogImage: '/hero-background.jpg'
-  },
-
-  // Interactive Tools
-  '/quiz': {
-    title: 'Eventing Readiness Quiz | Assess Your Competition Preparation',
-    description: 'Take our free eventing readiness quiz to assess your preparation for competition. Evaluate your training, horse fitness, mental readiness, and competitive goals with expert guidance from Your Coach.',
-    keywords: 'eventing quiz, readiness assessment, competition preparation, eventing readiness, horse competition quiz, training assessment, competition readiness test, Your Coach quiz',
-    canonicalPath: '/quiz',
-    h1: 'Eventing Readiness Quiz',
-    ogImage: '/hero-background.jpg'
-  },
-
-  '/stride-calculator': {
-    title: 'Equestrian Stride Calculator | Show Jumping Distance Tool',
-    description: 'Professional stride calculator for show jumping and cross country course design. Calculate distances between fences, related lines, and gymnastic grids. Essential tool for riders, trainers, and course designers.',
-    keywords: 'stride calculator, equestrian distance calculator, show jumping distances, related distances, gymnastic grid calculator, fence spacing, course design tool, jumping distances, eventing stride calculator',
-    canonicalPath: '/stride-calculator',
-    h1: 'Stride Calculator',
-    ogImage: '/hero-background.jpg'
-  },
-
-  '/packing-list': {
-    title: 'Competition Packing List Generator | Horse Show Checklist',
-    description: 'Create customised packing lists for horse shows and eventing competitions. Never forget essential tack, equipment, or documents. Professional checklist tool from Your Coaching Business.',
-    keywords: 'competition packing list, horse show checklist, eventing packing list, competition checklist, tack list, show preparation, competition essentials, horse show preparation',
-    canonicalPath: '/packing-list',
-    h1: 'Packing List Generator',
-    ogImage: '/hero-background.jpg'
-  },
-
   // Other Pages
   '/terms-and-conditions': {
     title: 'Terms & Conditions | Your Coaching Business',
@@ -201,43 +164,6 @@ export const seoConfig: Record<string, PageSEOConfig> = {
     keywords: 'loyalty programme, clinic rewards, loyalty stamps, coaching rewards, Your Coach loyalty, clinic benefits',
     canonicalPath: '/loyalty',
     h1: 'Loyalty Rewards',
-    ogImage: '/hero-background.jpg'
-  },
-
-  // Course Pages
-  '/courses/strong-horse-audio': {
-    title: 'Fix a Strong Horse in 28 Days | Audio Training Course | Your Coach',
-    description: 'Transform your strong, heavy, or rushing horse into a soft, balanced partner with this proven audio course. Listen while you ride. From £97. Start today.',
-    keywords: 'strong horse training, fix rushing horse, horse pulls on reins, heavy horse solution, horse training audio course, soft horse training, balanced horse, light contact training, Your Coaching Business, listen while you ride, online horse training',
-    canonicalPath: '/courses/strong-horse-audio',
-    h1: 'From Strong to Light and Soft (in 28 Days)',
-    ogImage: '/hero-background.jpg'
-  },
-
-  '/courses/ten-points-better': {
-    title: '10 Points Better Dressage Course | Improve Dressage Scores | Your Coach',
-    description: 'Add 10+ points to your dressage scores with this proven training system. Improve your marks with step-by-step lessons from international event rider Your Coach.',
-    keywords: '10 points better, improve dressage score, dressage training course, better dressage marks, eventing dressage, dressage improvement, Your Coach dressage, online dressage course',
-    canonicalPath: '/courses/ten-points-better',
-    h1: '10 Points Better Dressage Course',
-    ogImage: '/hero-background.jpg'
-  },
-
-  '/guides/strong-horse': {
-    title: 'FREE Strong Horse Guide | Fix a Pulling Horse | Your Coaching Business',
-    description: 'Download the free Strong Horse Solution guide. Learn why horses pull, rush, and feel heavy—and discover the simple fix. Instant PDF download.',
-    keywords: 'strong horse guide, horse pulling on reins, horse rushes, heavy horse fix, free horse training guide, Your Coach guide, horse training PDF, soft horse solution',
-    canonicalPath: '/guides/strong-horse',
-    h1: 'The Strong Horse Solution Guide',
-    ogImage: '/hero-background.jpg'
-  },
-
-  '/coaching/audio-lessons': {
-    title: 'Audio Riding Lessons | Listen While You Ride | Your Coaching Business',
-    description: 'Professional audio riding lessons you can listen to while you ride. Expert coaching in your ear from international event rider Your Coach. Start training smarter.',
-    keywords: 'audio riding lessons, listen while you ride, horse training audio, riding lesson audio, Your Coach audio, equestrian audio course, riding podcast lessons',
-    canonicalPath: '/coaching/audio-lessons',
-    h1: 'Audio Riding Lessons',
     ogImage: '/hero-background.jpg'
   }
 };

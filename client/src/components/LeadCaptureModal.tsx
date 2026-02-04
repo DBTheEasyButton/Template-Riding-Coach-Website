@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Gift, Mail, User, Headphones, ArrowRight, Phone, CheckCircle } from "lucide-react";
+import { Loader2, Gift, Mail, User, ArrowRight, Phone, CheckCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useVisitor } from "@/hooks/use-visitor";
 import { queryClient } from "@/lib/queryClient";
@@ -54,7 +54,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
     setIsSubmitting(true);
     try {
       const horseNameToUse = profile?.horseName?.trim() || horseName.trim();
-      const response = await fetch("/api/lead-capture/strong-horse-pdf", {
+      // TEMPLATE: Update this API endpoint for your lead capture resource
+      const response = await fetch("/api/lead-capture/free-guide-pdf", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +78,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "The-Strong-Horse-Solution-Dan-Bizzarro.pdf";
+      // TEMPLATE: Update filename for your lead capture resource
+      link.download = "Free-Training-Guide.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -156,7 +158,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/lead-capture/strong-horse-pdf", {
+      // TEMPLATE: Update this API endpoint for your lead capture resource
+      const response = await fetch("/api/lead-capture/free-guide-pdf", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -179,7 +182,8 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "The-Strong-Horse-Solution-Dan-Bizzarro.pdf";
+      // TEMPLATE: Update filename for your lead capture resource
+      link.download = "Free-Training-Guide.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -461,32 +465,6 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
             </p>
           </div>
 
-          {/* Promotional banner for full course */}
-          <div className="rounded-lg p-4 mt-4" style={{ background: 'linear-gradient(to right, #1e3a5f, #2a4a6f)' }}>
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: 'rgba(234, 88, 12, 0.2)' }}>
-                <Headphones className="h-5 w-5 text-orange" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium mb-1" style={{ color: '#ffffff' }}>
-                  Did you know about the Full Audio Course?
-                </p>
-                <p className="text-xs mb-2" style={{ color: '#d1d5db' }}>
-                  "From Strong to Light and Soft in 28 Days" - Transform your horse with listen-while-you-ride audio lessons
-                </p>
-                <Link 
-                  href="/courses/strong-horse-audio"
-                  onClick={handleClose}
-                  className="inline-flex items-center gap-1 text-xs font-semibold transition-colors"
-                  style={{ color: '#ea580c' }}
-                  data-testid="link-course-promo"
-                >
-                  Try it for free <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
           <Button
             type="submit"
             disabled={isSubmitting || (!phoneVerification.isPhoneVerified && requiresSmsVerification(mobile)) || (mobile.trim().length < 10) || !termsAccepted}
@@ -499,7 +477,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                 Preparing Your Guide...
               </>
             ) : (
-              "Get the Strong Horse Solution PDF"
+              "Get Your Free Guide"
             )}
           </Button>
         </form>
