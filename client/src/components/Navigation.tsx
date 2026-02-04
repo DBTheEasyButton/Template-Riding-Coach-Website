@@ -19,9 +19,10 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // TEMPLATE: Update navigation labels with your coach/business name
   const navItemsBefore = [
     { href: "/", label: "Home", isPage: true },
-    { href: "/about", label: "About Dan", isPage: true },
+    { href: "/about", label: "About", isPage: true },
   ];
 
   const navItemsAfter = [
@@ -101,9 +102,10 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex-shrink-0">
             <a href="/" onClick={handleLogoClick}>
+              {/* TEMPLATE: Replace logo and alt text with your business branding */}
               <img 
                 src={logoLightBg} 
-                alt="Dan Bizzarro Method - International Eventing Coach & Training" 
+                alt="Your Coaching Business - Professional Equestrian Training" 
                 className="h-12 sm:h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
                 width="150"
                 height="56"

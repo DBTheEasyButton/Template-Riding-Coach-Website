@@ -15,9 +15,10 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
+            {/* TEMPLATE: Replace with your logo */}
             <img 
               src={logoDarkBg} 
-              alt="Dan Bizzarro Method - International Eventing Coach & Training" 
+              alt="Your Coaching Business - Professional Equestrian Training" 
               className="h-16 w-auto mb-4"
             />
             <p className="text-slate-300 mb-6 leading-relaxed">Become a confident, skilled rider and get better results!</p>
@@ -71,10 +72,11 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+              {/* TEMPLATE: Update or remove these download links as needed */}
               <li>
                 <a 
                   href="/api/downloads/warmup-system-pdf"
-                  download="The-Eventers-Warmup-System-Dan-Bizzarro.pdf"
+                  download="Warmup-System-Guide.pdf"
                   className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
                   data-testid="link-footer-free-guide"
                 >
@@ -85,7 +87,7 @@ export default function Footer() {
               <li>
                 <a 
                   href="/api/downloads/strong-horse-pdf"
-                  download="The-Strong-Horse-Solution-Dan-Bizzarro.pdf"
+                  download="Strong-Horse-Solution-Guide.pdf"
                   className="text-gray-300 hover:text-orange transition-colors flex items-center gap-1.5"
                   data-testid="link-footer-strong-horse-guide"
                 >
@@ -195,35 +197,37 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+            {/* TEMPLATE: Update contact details below */}
             <h3 className="font-semibold mb-4 mt-6">Contact</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Crown Farm</li>
-              <li>Ascott-Under-Wychwood</li>
-              <li>Oxfordshire OX7</li>
-              <li>United Kingdom</li>
+              <li>[Your Address Line 1]</li>
+              <li>[Your Address Line 2]</li>
+              <li>[Your County/State]</li>
+              <li>[Your Country]</li>
               <li className="pt-2">
                 <a 
-                  href="tel:+447767291713" 
+                  href="tel:+441234567890" 
                   className="hover:text-orange transition-colors"
                   data-testid="link-footer-phone"
                 >
-                  +44 7767 291713
+                  [Your Phone Number]
                 </a>
               </li>
               <li>
                 <a 
-                  href="mailto:dan@danbizzarromethod.com" 
+                  href="mailto:contact@your-domain.com" 
                   className="hover:text-orange transition-colors"
                   data-testid="link-footer-email"
                 >
-                  dan@danbizzarromethod.com
+                  [Your Email]
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 Dan Bizzarro. All rights reserved. | Designed with excellence in mind.</p>
+          {/* TEMPLATE: Update copyright with your business name */}
+          <p>&copy; {new Date().getFullYear()} Your Coaching Business. All rights reserved.</p>
           <div className="mt-2">
             <Link 
               href="/admin/clinics" 

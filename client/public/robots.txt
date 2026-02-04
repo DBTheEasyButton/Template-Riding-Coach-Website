@@ -11,5 +11,5 @@ Allow: /terms-and-conditions
 # Block admin areas
 Disallow: /admin/
 
-# Sitemap
-Sitemap: https://danbizzarromethod.com/sitemap.xml
+# TEMPLATE: Update the sitemap URL with your domain
+Sitemap: https://your-coaching-business.com/sitemap.xml

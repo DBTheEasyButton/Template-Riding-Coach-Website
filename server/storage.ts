@@ -304,280 +304,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   private async seedData() {
-    // Seed achievements data
-    const sampleAchievements = [
-      {
-        title: "Tokyo Olympics",
-        competition: "Olympic Games",
-        year: 2021,
-        position: "Team Bronze",
-        location: "Tokyo, Japan",
-        horse: "Castello Primo",
-        category: "olympic",
-        description: "Outstanding performance in the team eventing competition"
-      },
-      {
-        title: "European Championships", 
-        competition: "European Eventing Championships",
-        year: 2021,
-        position: "Team Gold",
-        location: "Avenches, Switzerland",
-        horse: "Venetian Dream",
-        category: "european",
-        description: "Dominant team performance securing gold medal"
-      },
-      {
-        title: "World Equestrian Games",
-        competition: "FEI World Equestrian Games", 
-        year: 2018,
-        position: "Team Silver",
-        location: "Tryon, USA",
-        horse: "Milano Express",
-        category: "world",
-        description: "Strong team effort for silver medal finish"
-      }
-    ];
-
-    await db.insert(achievements).values(sampleAchievements);
-
-    // Seed events data
-    const sampleEvents = [
-      {
-        title: "Cotswold Cup",
-        location: "Waverton House", 
-        date: new Date('2024-06-22'),
-        type: "upcoming",
-        horse: "Peggy",
-        level: "90",
-        result: null
-      },
-      {
-        title: "BYEH",
-        location: "Aston Le Walls",
-        date: new Date('2024-07-02'),
-        type: "upcoming", 
-        horse: "Peggy",
-        level: "5yo class",
-        result: null
-      },
-      {
-        title: "Open Intermediate",
-        location: "Upton House",
-        date: new Date('2024-07-08'),
-        type: "upcoming",
-        horse: "Riot", 
-        level: "Intermediate",
-        result: null
-      },
-      {
-        title: "BYEH",
-        location: "Cirencester Park",
-        date: new Date('2024-07-10'),
-        type: "upcoming",
-        horse: "TBC", 
-        level: "Intermediate",
-        result: null
-      },
-      {
-        title: "Cotswold Cup",
-        location: "Cirencester Park",
-        date: new Date('2024-07-13'),
-        type: "upcoming",
-        horse: "TBC", 
-        level: "Intermediate",
-        result: null
-      },
-      {
-        title: "CIC4*",
-        location: "Burgham",
-        date: new Date('2024-07-24'),
-        type: "upcoming",
-        horse: "TBC", 
-        level: "CIC4*",
-        result: null
-      },
-      {
-        title: "Open Intermediate",
-        location: "Wellington",
-        date: new Date('2024-08-22'),
-        type: "upcoming",
-        horse: "TBC", 
-        level: "Intermediate",
-        result: null
-      },
-      {
-        title: "Cotswold Cup",
-        location: "Great Tew",
-        date: new Date('2024-08-24'),
-        type: "upcoming",
-        horse: "TBC", 
-        level: "Intermediate",
-        result: null
-      },
-      {
-        title: "European Championship",
-        location: "Blenheim Palace",
-        date: new Date('2024-09-17'),
-        type: "upcoming",
-        horse: "TBC", 
-        level: "Championship",
-        result: null
-      }
-    ];
-
-    await db.insert(events).values(sampleEvents);
-
-    // Seed news data
-    const sampleNews = [
-      {
-        title: "Badminton Preparation Underway",
-        excerpt: "Dan and Castello Primo are putting the finishing touches on their preparation for this year's Badminton Horse Trials, with final training sessions showing promising form...",
-        content: "Full article content here...",
-        image: "https://images.unsplash.com/photo-1553284966-19b8815c7817?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
-        publishedAt: new Date('2024-03-25'),
-        slug: "badminton-preparation-underway"
-      },
-      {
-        title: "New Training Facility Opens", 
-        excerpt: "The new state-of-the-art training facility in Tuscany officially opened this week, featuring world-class amenities for both horse and rider development...",
-        content: "Full article content here...",
-        image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
-        publishedAt: new Date('2024-03-20'),
-        slug: "new-training-facility-opens"
-      }
-    ];
-
-    await db.insert(news).values(sampleNews);
-
-    // Seed clinic data
-    const sampleClinics = [
-      {
-        title: "Advanced Dressage Clinic",
-        description: "Master the art of dressage with Olympic-level training techniques. Focus on precision, rhythm, and partnership with your horse.",
-        date: new Date('2024-05-15'),
-        endDate: new Date('2024-05-17'),
-        location: "Tuscany Training Center, Italy",
-        maxParticipants: 12,
-        price: 75000, // $750.00
-        level: "advanced",
-        type: "dressage",
-        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
-      },
-      {
-        title: "Cross-Country Masterclass",
-        description: "Navigate challenging cross-country courses with confidence. Learn course walking, pace management, and tactical approaches.",
-        date: new Date('2024-06-20'),
-        endDate: new Date('2024-06-22'),
-        location: "Kentucky Horse Park, USA",
-        maxParticipants: 16,
-        price: 85000, // $850.00
-        level: "intermediate",
-        type: "cross-country",
-        image: "https://images.unsplash.com/photo-1553284966-19b8815c7817?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
-      },
-      {
-        title: "Show Jumping Excellence",
-        description: "Perfect your show jumping technique with focus on accuracy, timing, and horse-rider communication over fences.",
-        date: new Date('2024-07-10'),
-        endDate: new Date('2024-07-12'),
-        location: "Aachen Training Facility, Germany",
-        maxParticipants: 14,
-        price: 80000, // $800.00
-        level: "intermediate",
-        type: "jumping",
-        image: "https://images.unsplash.com/photo-1573068629844-e4c3f8df9b1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600&q=80"
-      }
-    ];
-
-    await db.insert(clinics).values(sampleClinics);
-
-    // Seed training video data
-    const sampleVideos = [
-      {
-        title: "Dressage Basics: Building a Foundation",
-        description: "Learn the fundamental principles of dressage training, from basic position to advanced movements.",
-        videoUrl: "https://www.dbeventing.co.uk/videos/dressage-foundation-training",
-        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/01/dressage-training-thumbnail.jpg",
-        duration: 1800, // 30 minutes
-        category: "dressage",
-        level: "beginner",
-        isPremium: false
-      },
-      {
-        title: "Cross-Country: Reading the Terrain",
-        description: "Master the art of course analysis and tactical riding across challenging cross-country courses.",
-        videoUrl: "https://www.dbeventing.co.uk/videos/cross-country-terrain-analysis",
-        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/02/cross-country-analysis-thumbnail.jpg",
-        duration: 2100, // 35 minutes
-        category: "cross-country",
-        level: "intermediate",
-        isPremium: true
-      },
-      {
-        title: "Show Jumping: Advanced Techniques",
-        description: "Elevate your show jumping with Olympic-level strategies for complex courses and combinations.",
-        videoUrl: "https://www.dbeventing.co.uk/videos/advanced-show-jumping-techniques", 
-        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/03/show-jumping-advanced-thumbnail.jpg",
-        duration: 2400, // 40 minutes
-        category: "jumping",
-        level: "advanced",
-        isPremium: true
-      },
-      {
-        title: "Mental Preparation for Competition",
-        description: "Develop the mental strength and focus required for high-level equestrian competition.",
-        videoUrl: "https://www.dbeventing.co.uk/videos/mental-preparation-competition",
-        thumbnailUrl: "https://www.dbeventing.co.uk/wp-content/uploads/2023/04/mental-preparation-thumbnail.jpg",
-        duration: 1500, // 25 minutes
-        category: "general",
-        level: "intermediate",
-        isPremium: false
-      }
-    ];
-
-    await db.insert(trainingVideos).values(sampleVideos);
-
-    // Seed testimonials data
+    // TEMPLATE: This seed data is for demonstration purposes only.
+    // Replace with your own content when setting up a new coaching business site.
+    
+    // Seed sample testimonials (generic placeholder testimonials)
     const sampleTestimonials = [
       {
-        name: "Sarah Mitchell",
-        location: "Gloucestershire, UK",
-        content: "Working with Dan has completely transformed my riding. His approach to building trust and communication with my horse has taken us from struggling at novice level to confidently competing at intermediate. The Dan Bizzarro Method truly works!",
-        rating: 5,
-        featured: true
-      },
-      {
-        name: "James Richardson",
-        location: "Yorkshire, UK", 
-        content: "Dan's coaching style is exceptional. He has this unique ability to break down complex movements into simple, achievable steps. My dressage scores have improved dramatically since attending his clinics.",
-        rating: 5,
-        featured: true
-      },
-      {
-        name: "Emma Thompson",
-        location: "Devon, UK",
-        content: "I was nervous about cross-country until I worked with Dan. His methodical approach to building confidence over fences has been life-changing. We recently completed our first CCI2*!",
-        rating: 5,
-        featured: false
-      },
-      {
-        name: "Michael O'Brien",
-        location: "Ireland",
-        content: "The technical knowledge Dan shares is incredible. As a professional rider myself, I've learned so much from his biomechanics approach and how he develops both horse and rider together.",
-        rating: 5,
-        featured: true
-      },
-      {
-        name: "Charlotte Williams",
-        location: "Surrey, UK",
-        content: "Dan's training videos and clinics have been invaluable for my young horse's development. His patience and systematic approach create willing, confident horses. Highly recommend!",
-        rating: 5,
-        featured: false
-      },
-      {
-        name: "Alexander Schmidt",
-        location: "Germany",
-        content: "I traveled from Germany specifically for Dan's clinic and it was worth every mile. His understanding of the horse's psychology and biomechanics is world-class. My horse and I have never felt more connected.",
+        name: "Sample Client",
+        location: "Your Location",
+        content: "This is a placeholder testimonial. Replace with real client feedback when you have it.",
         rating: 5,
         featured: true
       }
@@ -585,11 +320,11 @@ export class DatabaseStorage implements IStorage {
 
     await db.insert(testimonials).values(sampleTestimonials);
 
-    // Seed email templates for marketing automation
+    // TEMPLATE: Email templates - update with your business name and details
     const sampleEmailTemplates = [
       {
         name: "Welcome Email",
-        subject: "Welcome to the Dan Bizzarro Method Community!",
+        subject: "Welcome to Our Equestrian Coaching Community!",
         htmlContent: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); padding: 30px; text-align: center;">
@@ -597,50 +332,47 @@ export class DatabaseStorage implements IStorage {
             </div>
             <div style="padding: 30px; background: white;">
               <h2 style="color: #1e3a8a;">Thank you for joining our community</h2>
-              <p>We're thrilled to have you as part of the Dan Bizzarro Method family. You'll now receive:</p>
+              <p>We're thrilled to have you as part of our coaching family. You'll now receive:</p>
               <ul>
                 <li>Exclusive training tips and techniques</li>
                 <li>Early access to clinic announcements</li>
-                <li>Updates on Dan's competitive journey</li>
-                <li>Special offers on training videos and courses</li>
+                <li>Updates on our coaching programmes</li>
+                <li>Special offers on training sessions</li>
               </ul>
-              <p>Best regards,<br>The Dan Bizzarro Method Team</p>
+              <p>Best regards,<br>Your Coaching Team</p>
             </div>
           </div>
         `,
         textContent: `Welcome {{firstName}}!
 
-Thank you for joining the Dan Bizzarro Method community. You'll now receive exclusive training tips, clinic announcements, competition updates, and special offers.
+Thank you for joining our coaching community. You'll now receive exclusive training tips, clinic announcements, and special offers.
 
 Best regards,
-The Dan Bizzarro Method Team`,
+Your Coaching Team`,
         templateType: "welcome",
         isActive: true
       },
       {
         name: "Monthly Newsletter",
-        subject: "{{firstName}}, Your Monthly Training Update from Dan",
+        subject: "{{firstName}}, Your Monthly Training Update",
         htmlContent: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: #1e3a8a; padding: 20px; text-align: center;">
               <h1 style="color: white; margin: 0;">Training Update</h1>
-              <p style="color: #94a3b8; margin: 5px 0;">Monthly insights from Dan Bizzarro</p>
+              <p style="color: #94a3b8; margin: 5px 0;">Monthly insights from your coach</p>
             </div>
             <div style="padding: 30px; background: white;">
               <h2 style="color: #1e3a8a;">Hello {{firstName}},</h2>
               <p>This month's focus is on building stronger partnerships with our horses through systematic training approaches.</p>
               
-              <h3 style="color: #f97316;">Latest Competition Results</h3>
-              <p>Dan recently competed at Adelaide CCI4*-L with excellent results. The preparation techniques used are now available in our latest training video series.</p>
-              
               <h3 style="color: #f97316;">Upcoming Clinics</h3>
               <p>Don't miss out on our upcoming clinics. Early bird pricing available for newsletter subscribers.</p>
               
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://www.danbizzarromethod.com/clinics" style="background: #f97316; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px;">View Clinics</a>
+                <a href="{{websiteUrl}}/coaching/clinics" style="background: #f97316; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px;">View Clinics</a>
               </div>
               
-              <p>Happy riding,<br>Dan Bizzarro</p>
+              <p>Happy riding,<br>Your Coaching Team</p>
             </div>
           </div>
         `,
@@ -648,16 +380,11 @@ The Dan Bizzarro Method Team`,
 
 This month's focus is on building stronger partnerships with our horses through systematic training approaches.
 
-Latest Competition Results:
-Dan recently competed at Adelaide CCI4*-L with excellent results. The preparation techniques used are now available in our latest training video series.
-
 Upcoming Clinics:
 Don't miss out on our upcoming clinics. Early bird pricing available for newsletter subscribers.
 
-View Clinics: https://www.danbizzarromethod.com/clinics
-
 Happy riding,
-Dan Bizzarro`,
+Your Coaching Team`,
         templateType: "newsletter",
         isActive: true
       },
@@ -682,10 +409,10 @@ Dan Bizzarro`,
               </ul>
               
               <h3 style="color: #f97316;">Location Details:</h3>
-              <p>Crown Farm, Ascott-Under-Wychwood, OX7 6AB</p>
+              <p>{{clinicLocation}}</p>
               
               <p>We're looking forward to seeing you there!</p>
-              <p>Best regards,<br>The Dan Bizzarro Method Team</p>
+              <p>Best regards,<br>Your Coaching Team</p>
             </div>
           </div>
         `,
@@ -699,12 +426,12 @@ What to Bring:
 - Notebook for taking notes
 - Water bottle and snacks
 
-Location: Crown Farm, Ascott-Under-Wychwood, OX7 6AB
+Location: {{clinicLocation}}
 
 We're looking forward to seeing you there!
 
 Best regards,
-The Dan Bizzarro Method Team`,
+Your Coaching Team`,
         templateType: "clinic_reminder",
         isActive: true
       }
@@ -717,7 +444,7 @@ The Dan Bizzarro Method Team`,
       {
         name: "Welcome Series",
         trigger: "new_subscriber",
-        templateId: 1, // Welcome Email template
+        templateId: 1,
         delayHours: 0,
         isActive: true,
         conditions: {}
@@ -725,8 +452,8 @@ The Dan Bizzarro Method Team`,
       {
         name: "Clinic Reminder Automation",
         trigger: "clinic_reminder",
-        templateId: 3, // Clinic Reminder template
-        delayHours: 24, // Send 24 hours before clinic
+        templateId: 3,
+        delayHours: 24,
         isActive: true,
         conditions: {}
       }
