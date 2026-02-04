@@ -1048,26 +1048,58 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
               {/* Price Summary */}
               <div className="bg-gray-50 p-4 rounded-lg">
                 {(() => {
-                  const pricePerEntry = clinic?.hasMultipleSessions && selectedSessions.length > 0
+                  const primaryPrice = clinic?.hasMultipleSessions && selectedSessions.length > 0
                     ? selectedSessions.reduce((sum, sessionId) => {
                         const session = clinic.sessions?.find(s => s.id === sessionId);
                         return sum + (session?.price || 0);
                       }, 0) / 100
                     : (clinic?.price || 0) / 100;
+                  
+                  const additionalEntriesPrice = additionalEntries.reduce((sum, entry) => {
+                    if (entry.selectedSessionId && clinic?.sessions) {
+                      const session = clinic.sessions.find(s => s.id === entry.selectedSessionId);
+                      return sum + ((session?.price || clinic?.price || 0) / 100);
+                    }
+                    return sum + primaryPrice;
+                  }, 0);
+                  
+                  const totalPrice = primaryPrice + additionalEntriesPrice;
                   const totalEntries = 1 + additionalEntries.length;
+                  
                   return (
                     <>
                       <div className="flex justify-between items-center">
                         <span className="text-gray-700">Total Entries:</span>
                         <span className="font-semibold">{totalEntries}</span>
                       </div>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-gray-700">Price per Entry:</span>
-                        <span className="font-semibold">£{pricePerEntry.toFixed(0)}</span>
-                      </div>
+                      {totalEntries === 1 ? (
+                        <div className="flex justify-between items-center mt-2">
+                          <span className="text-gray-700">Session Price:</span>
+                          <span className="font-semibold">£{primaryPrice.toFixed(0)}</span>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="text-xs text-gray-600 mt-2 space-y-1">
+                            <div className="flex justify-between">
+                              <span>Primary entry:</span>
+                              <span>£{primaryPrice.toFixed(0)}</span>
+                            </div>
+                            {additionalEntries.map((entry, idx) => {
+                              const entrySession = clinic?.sessions?.find(s => s.id === entry.selectedSessionId);
+                              const entryPrice = entrySession ? (entrySession.price / 100) : primaryPrice;
+                              return (
+                                <div key={idx} className="flex justify-between">
+                                  <span>{entry.horseName} ({entrySession?.skillLevel || 'Session'}):</span>
+                                  <span>£{entryPrice.toFixed(0)}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      )}
                       <div className="border-t mt-3 pt-3 flex justify-between items-center">
                         <span className="font-semibold text-gray-900">Total:</span>
-                        <span className="font-bold text-lg text-blue-600">£{(pricePerEntry * totalEntries).toFixed(0)}</span>
+                        <span className="font-bold text-lg text-blue-600">£{totalPrice.toFixed(0)}</span>
                       </div>
                     </>
                   );

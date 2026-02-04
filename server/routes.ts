@@ -1502,7 +1502,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(400).json({ message: "No valid sessions selected" });
         }
         
-        amount = selectedSessions.reduce((total, session) => total + session.price, 0) * totalEntries;
+        // Calculate primary entry price from selected sessions
+        const primaryEntryPrice = selectedSessions.reduce((total, session) => total + session.price, 0);
+        amount = primaryEntryPrice;
+        
+        // Calculate additional entries prices (each may have different session selections)
+        if (additionalEntries && Array.isArray(additionalEntries)) {
+          for (const entry of additionalEntries) {
+            if (entry.selectedSessionId) {
+              const entrySession = clinicWithSessions.sessions.find(s => s.id === entry.selectedSessionId);
+              if (entrySession) {
+                amount += entrySession.price;
+              } else {
+                // Fallback to primary entry price if session not found
+                amount += primaryEntryPrice;
+              }
+            } else {
+              // Fallback to primary entry price if no session selected
+              amount += primaryEntryPrice;
+            }
+          }
+        }
       } else {
         // Single session clinic - multiply by total entries
         amount = clinic.price * totalEntries;
