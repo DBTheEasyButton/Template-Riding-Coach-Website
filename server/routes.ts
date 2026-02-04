@@ -1693,6 +1693,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Submit clinic inquiry when booking is disabled
+  app.post("/api/clinic-inquiry", async (req, res) => {
+    try {
+      const { firstName, lastName, email, phone, clinicTitle, clinicDate, message } = req.body;
+      
+      if (!firstName || !email || !message) {
+        return res.status(400).json({ message: "Name, email, and message are required" });
+      }
+
+      // Send inquiry email to business
+      const businessEmail = "info@your-coaching-business.com"; // From site settings
+      const subject = `Clinic Inquiry: ${clinicTitle || 'General'}`;
+      
+      const htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #1e3a8a;">New Clinic Inquiry</h2>
+          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0; color: #374151;">Contact Details</h3>
+            <p><strong>Name:</strong> ${firstName} ${lastName || ''}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+          </div>
+          ${clinicTitle ? `
+          <div style="background-color: #dbeafe; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0; color: #1e40af;">Clinic Interest</h3>
+            <p><strong>Clinic:</strong> ${clinicTitle}</p>
+            ${clinicDate ? `<p><strong>Date:</strong> ${clinicDate}</p>` : ''}
+          </div>
+          ` : ''}
+          <div style="background-color: #fff; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: #374151;">Message</h3>
+            <p style="white-space: pre-wrap;">${message}</p>
+          </div>
+          <p style="color: #6b7280; font-size: 12px; margin-top: 20px;">
+            This inquiry was submitted via the website when online booking was unavailable.
+          </p>
+        </div>
+      `;
+
+      const textContent = `
+New Clinic Inquiry
+
+Contact Details:
+Name: ${firstName} ${lastName || ''}
+Email: ${email}
+${phone ? `Phone: ${phone}` : ''}
+
+${clinicTitle ? `Clinic Interest:
+Clinic: ${clinicTitle}
+${clinicDate ? `Date: ${clinicDate}` : ''}` : ''}
+
+Message:
+${message}
+
+---
+This inquiry was submitted via the website when online booking was unavailable.
+      `;
+
+      await emailService.sendEmail(businessEmail, subject, htmlContent, textContent);
+      
+      // Also save as a contact for CRM
+      try {
+        await storage.createContact({
+          firstName,
+          lastName: lastName || '',
+          email,
+          phone: phone || null,
+          subject: `Clinic Inquiry${clinicTitle ? ` - ${clinicTitle}` : ''}`,
+          message
+        });
+      } catch (contactError) {
+        console.error("Error saving contact:", contactError);
+        // Don't fail the request if contact save fails
+      }
+
+      res.json({ success: true, message: "Your inquiry has been sent. We'll get back to you soon!" });
+    } catch (error) {
+      console.error("Error sending clinic inquiry:", error);
+      res.status(500).json({ message: "Failed to send inquiry. Please try again." });
+    }
+  });
+
   // Get all clinics (with optional filtering)
   app.get("/api/clinics", async (req, res) => {
     try {

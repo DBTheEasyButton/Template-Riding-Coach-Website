@@ -360,6 +360,18 @@ export default function ClinicsSection() {
     selectedSessionId: null as number | null
   });
 
+  // Inquiry modal state (when booking is disabled)
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [inquiryClinic, setInquiryClinic] = useState<ClinicWithSessions | null>(null);
+  const [inquiryData, setInquiryData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
+
   // Load Stripe at runtime - start loading immediately when dialog opens
   useEffect(() => {
     if (isRegistrationOpen && !stripePromise && !isStripeLoading) {
@@ -647,13 +659,17 @@ export default function ClinicsSection() {
   };
 
   const handleRegistration = (clinic: ClinicWithSessions) => {
-    // Check if booking system is disabled - redirect to contact page
+    // Check if booking system is disabled - show inquiry modal instead
     if (featureConfig && !featureConfig.bookingEnabled) {
-      toast({
-        title: "Online booking currently unavailable",
-        description: "Please contact us to register for this clinic.",
+      setInquiryClinic(clinic);
+      setInquiryData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        message: `I'm interested in registering for the ${clinic.title} clinic on ${formatDate(clinic.date)}. Please let me know how I can book a spot.`
       });
-      setLocation('/contact');
+      setShowInquiryModal(true);
       return;
     }
     
@@ -668,6 +684,59 @@ export default function ClinicsSection() {
     setSelectedClinic(clinic);
     setSelectedSessions([]); // Reset session selection
     setIsRegistrationOpen(true);
+  };
+
+  const handleSubmitInquiry = async () => {
+    if (!inquiryData.firstName || !inquiryData.email || !inquiryData.message) {
+      toast({
+        title: "Please fill in required fields",
+        description: "Name, email, and message are required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmittingInquiry(true);
+    try {
+      const response = await fetch('/api/clinic-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: inquiryData.firstName,
+          lastName: inquiryData.lastName,
+          email: inquiryData.email,
+          phone: inquiryData.phone,
+          clinicTitle: inquiryClinic?.title,
+          clinicDate: inquiryClinic ? formatDate(inquiryClinic.date) : undefined,
+          message: inquiryData.message
+        })
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        toast({
+          title: "Inquiry Sent!",
+          description: "We've received your message and will get back to you soon.",
+        });
+        setShowInquiryModal(false);
+        setInquiryClinic(null);
+      } else {
+        toast({
+          title: "Failed to send",
+          description: result.message || "Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Failed to send",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingInquiry(false);
+    }
   };
 
   const handleViewDetails = (clinic: ClinicWithSessions) => {
@@ -1863,6 +1932,100 @@ export default function ClinicsSection() {
                 Close
               </Button>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Inquiry Modal (when booking is disabled) */}
+        <Dialog open={showInquiryModal} onOpenChange={setShowInquiryModal}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold text-navy">
+                Clinic Inquiry
+              </DialogTitle>
+              <DialogDescription>
+                Online booking is currently unavailable. Send us your details and we'll get back to you.
+              </DialogDescription>
+            </DialogHeader>
+            
+            {inquiryClinic && (
+              <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                <p className="font-medium text-navy">{inquiryClinic.title}</p>
+                <p className="text-sm text-gray-600">{formatDate(inquiryClinic.date)}</p>
+              </div>
+            )}
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="inquiry-firstName">First Name *</Label>
+                  <Input
+                    id="inquiry-firstName"
+                    value={inquiryData.firstName}
+                    onChange={(e) => setInquiryData(prev => ({ ...prev, firstName: e.target.value }))}
+                    placeholder="Your first name"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="inquiry-lastName">Last Name</Label>
+                  <Input
+                    id="inquiry-lastName"
+                    value={inquiryData.lastName}
+                    onChange={(e) => setInquiryData(prev => ({ ...prev, lastName: e.target.value }))}
+                    placeholder="Your last name"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="inquiry-email">Email *</Label>
+                <Input
+                  id="inquiry-email"
+                  type="email"
+                  value={inquiryData.email}
+                  onChange={(e) => setInquiryData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="inquiry-phone">Phone</Label>
+                <Input
+                  id="inquiry-phone"
+                  type="tel"
+                  value={inquiryData.phone}
+                  onChange={(e) => setInquiryData(prev => ({ ...prev, phone: e.target.value }))}
+                  placeholder="Your phone number"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="inquiry-message">Message *</Label>
+                <Textarea
+                  id="inquiry-message"
+                  value={inquiryData.message}
+                  onChange={(e) => setInquiryData(prev => ({ ...prev, message: e.target.value }))}
+                  placeholder="Tell us about your interest in this clinic..."
+                  rows={4}
+                />
+              </div>
+            </div>
+            
+            <DialogFooter className="mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowInquiryModal(false)}
+                disabled={isSubmittingInquiry}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmitInquiry}
+                disabled={isSubmittingInquiry}
+                className="bg-navy hover:bg-slate-800 text-white"
+              >
+                {isSubmittingInquiry ? "Sending..." : "Send Inquiry"}
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
 
