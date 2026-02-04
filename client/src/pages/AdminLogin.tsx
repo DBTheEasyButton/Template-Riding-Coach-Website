@@ -25,7 +25,8 @@ export default function AdminLogin() {
         // Invalidate session cache so AdminAuthWrapper sees the new session
         await queryClient.invalidateQueries({ queryKey: ['/api/admin/session'] });
         toast({ title: "Login successful", description: "Welcome to the admin panel" });
-        setLocation("/admin/clinics");
+        // Use window.location for reliable navigation after login
+        window.location.href = "/admin/clinics";
       }
     },
     onError: (error: Error) => {
