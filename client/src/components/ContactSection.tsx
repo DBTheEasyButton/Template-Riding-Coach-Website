@@ -22,7 +22,7 @@ export default function ContactSection() {
           <h3 className="text-2xl font-bold text-gray-900 mb-6">Follow Dan's Journey</h3>
           <div className="flex justify-center space-x-6">
             <a 
-              href="https://www.facebook.com/danbizzarromethod" 
+              href="https://www.facebook.com/YOUR-BUSINESS" 
               className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition duration-300 transform hover:scale-105"
               target="_blank"
               rel="noopener noreferrer"
@@ -30,7 +30,7 @@ export default function ContactSection() {
               <Facebook className="w-6 h-6" />
             </a>
             <a 
-              href="https://www.instagram.com/danbizzarromethod" 
+              href="https://www.instagram.com/YOUR-BUSINESS" 
               className="bg-pink-600 text-white p-4 rounded-full hover:bg-pink-700 transition duration-300 transform hover:scale-105"
               target="_blank"
               rel="noopener noreferrer"
@@ -38,7 +38,7 @@ export default function ContactSection() {
               <Instagram className="w-6 h-6" />
             </a>
             <a 
-              href="https://www.twitter.com/danbizzarro" 
+              href="https://www.twitter.com/YOUR-BUSINESS" 
               className="bg-blue-400 text-white p-4 rounded-full hover:bg-blue-500 transition duration-300 transform hover:scale-105"
               target="_blank"
               rel="noopener noreferrer"
@@ -46,7 +46,7 @@ export default function ContactSection() {
               <Twitter className="w-6 h-6" />
             </a>
             <a 
-              href="https://www.youtube.com/danbizzarromethod" 
+              href="https://www.youtube.com/YOUR-BUSINESS" 
               className="bg-red-600 text-white p-4 rounded-full hover:bg-red-700 transition duration-300 transform hover:scale-105"
               target="_blank"
               rel="noopener noreferrer"

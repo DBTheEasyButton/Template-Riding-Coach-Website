@@ -5,7 +5,8 @@
  * for various page types: Service, Breadcrumb, FAQ, WebPage
  */
 
-const BASE_URL = 'https://danbizzarromethod.com';
+// TEMPLATE: Update this URL with your domain
+const BASE_URL = 'https://your-coaching-business.com';
 
 interface ServiceSchemaOptions {
   name: string;
@@ -34,18 +35,19 @@ export const createServiceSchema = (options: ServiceSchemaOptions) => {
       "@type": "Country",
       name: "United Kingdom"
     },
+    // TEMPLATE: Update provider details with your business information
     provider: options.provider || {
       "@type": "LocalBusiness",
-      name: "Dan Bizzarro Method",
+      name: "Your Coaching Business",
       url: BASE_URL,
-      telephone: "+447767291713",
-      email: "dan@danbizzarromethod.com",
+      telephone: "+1234567890",
+      email: "info@your-coaching-business.com",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Crown Farm",
-        addressLocality: "Ascott-Under-Wychwood",
-        addressRegion: "Oxfordshire",
-        postalCode: "OX7",
+        streetAddress: "Your Address",
+        addressLocality: "Your City",
+        addressRegion: "Your Region",
+        postalCode: "12345",
         addressCountry: "GB"
       }
     },
@@ -167,7 +169,7 @@ export const createWebPageSchema = (options: {
 export const coachingServices = {
   privateLessons: createServiceSchema({
     name: "Private Horse Riding Lessons",
-    description: "One-to-one private riding lessons with Olympic-shortlisted international event rider Dan Bizzarro. Personalised coaching for all levels from beginner to advanced in dressage, show jumping, and cross country.",
+    description: "One-to-one private riding lessons with Olympic-shortlisted international event rider Your Coach. Personalised coaching for all levels from beginner to advanced in dressage, show jumping, and cross country.",
     serviceType: "Private Coaching",
     url: "/coaching/private-lessons"
   }),

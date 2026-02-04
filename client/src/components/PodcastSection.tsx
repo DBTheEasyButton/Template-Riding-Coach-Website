@@ -22,7 +22,7 @@ export default function PodcastSection() {
                 Welcome to your portal to the world of all things equestrian.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                I'm your host <strong>Dan Bizzarro</strong> and in each episode, we embark on a journey alongside industry experts, accomplished riders, and passionate enthusiasts.
+                I'm your host <strong>Your Coach</strong> and in each episode, we embark on a journey alongside industry experts, accomplished riders, and passionate enthusiasts.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-8">
                 We get to know them and we learn from their experiences and vast knowledge, gaining a deeper understanding of the equestrian way of life.
@@ -33,7 +33,7 @@ export default function PodcastSection() {
           <div className="relative flex justify-center">
             <img 
               src={podcastLogo} 
-              alt="Our Equestrian Life Podcast cover artwork featuring Dan Bizzarro's equestrian podcast logo" 
+              alt="Our Equestrian Life Podcast cover artwork featuring Your Coach's equestrian podcast logo" 
               className="w-full max-w-md rounded-2xl shadow-2xl"
             />
           </div>

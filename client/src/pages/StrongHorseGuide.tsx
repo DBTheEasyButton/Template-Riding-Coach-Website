@@ -307,7 +307,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
           Your Guide is Downloading!
         </h3>
         <p className="text-gray-600 mb-4">
-          I've also sent a copy to your email. You'll find it from Dan Bizzarro Method.
+          I've also sent a copy to your email. You'll find it from Your Coaching Business.
         </p>
         
         <div className="bg-orange/5 border border-orange/20 rounded-xl p-4 mb-4">
@@ -407,7 +407,7 @@ function LeadCaptureForm({ variant = "default" }: { variant?: "default" | "compa
             <Link href="/terms" className="text-orange hover:underline">
               Terms & Conditions
             </Link>{" "}
-            and consent to receive updates from Dan Bizzarro Method.
+            and consent to receive updates from Your Coaching Business.
           </label>
         </div>
         
@@ -678,7 +678,7 @@ export default function StrongHorseGuide() {
                     <p className="text-gray-700 italic">
                       "A strong horse doesn't become light by being held. It becomes light when the communication becomes clear."
                     </p>
-                    <p className="text-navy font-semibold mt-2">— Dan Bizzarro</p>
+                    <p className="text-navy font-semibold mt-2">— Your Coach</p>
                   </div>
                 </div>
               </div>
@@ -735,7 +735,7 @@ export default function StrongHorseGuide() {
               A proven, step-by-step method to create balance, softness and control
             </h2>
             <p className="text-gray-600 text-lg text-center mb-10">
-              This guide shows you exactly how I take a strong, heavy horse and turn it into a soft, adjustable, easy-to-ride partner. It comes directly from the Dan Bizzarro Method and from the work I do every day with riders who face the same challenges you do.
+              This guide shows you exactly how I take a strong, heavy horse and turn it into a soft, adjustable, easy-to-ride partner. It comes directly from the Your Coaching Business and from the work I do every day with riders who face the same challenges you do.
             </p>
             
             <div className="bg-navy rounded-2xl p-8 text-white">
@@ -776,7 +776,7 @@ export default function StrongHorseGuide() {
               A method built for everyday riders — not just professionals
             </h2>
             <p className="text-gray-600 text-lg text-center mb-8">
-              I've coached thousands of riders dealing with strong, heavy and rushing horses. The solution is never more force, more pulling, or stronger bits. The solution is clarity, balance, rhythm and better reactions — the pillars of the Dan Bizzarro Method.
+              I've coached thousands of riders dealing with strong, heavy and rushing horses. The solution is never more force, more pulling, or stronger bits. The solution is clarity, balance, rhythm and better reactions — the pillars of the Your Coaching Business.
             </p>
             
             <div className="bg-white rounded-xl p-8 shadow-sm border-l-4 border-orange">

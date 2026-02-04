@@ -20,9 +20,9 @@ export default function GATUKTour() {
   return (
     <>
       <SEOHead
-        title="GAT UK Eventing Tour - Cotswolds & Burghley 2026 | Dan Bizzarro Method"
-        description="Join Daniele Bizzarro for an 11-day eventing experience in the Cotswolds, featuring world-class coaching and the 2026 Burghley Horse Trials."
-        canonical="https://danbizzarromethod.com/gat-uk-tour"
+        title="GAT UK Eventing Tour - Cotswolds & Burghley 2026 | Your Coaching Business"
+        description="Join Your Coach for an 11-day eventing experience in the Cotswolds, featuring world-class coaching and the 2026 Burghley Horse Trials."
+        canonical="https://your-coaching-business.com/gat-uk-tour"
       />
       <Navigation />
       
@@ -66,7 +66,7 @@ export default function GATUKTour() {
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-              Imagine spending eleven days riding in the rolling English Cotswolds, building your eventing skills with international coach Daniele Bizzarro, exploring idyllic villages and finishing it all off by watching the 2026 Burghley Horse Trials from the best seats in the house. This is not a cookie-cutter package holiday – it's a thoughtfully curated experience for riders and supporters who want to learn, be inspired and soak up the heart of British eventing.
+              Imagine spending eleven days riding in the rolling English Cotswolds, building your eventing skills with international coach Your Coach, exploring idyllic villages and finishing it all off by watching the 2026 Burghley Horse Trials from the best seats in the house. This is not a cookie-cutter package holiday – it's a thoughtfully curated experience for riders and supporters who want to learn, be inspired and soak up the heart of British eventing.
             </p>
             <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg inline-block">
               <p className="text-amber-800 font-medium">
@@ -208,19 +208,19 @@ export default function GATUKTour() {
               <div>
                 <img 
                   src={coachingImage} 
-                  alt="Daniele Bizzarro coaching"
+                  alt="Your Coach coaching"
                   className="w-full h-96 object-cover rounded-xl shadow-lg"
                 />
               </div>
               <div>
                 <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-6">
-                  Meet Your Coach – Daniele Bizzarro
+                  Meet Your Coach – Your Coach
                 </h2>
                 <p className="text-white/90 mb-4">
-                  Daniele Bizzarro is an Italian international event rider with a track record that speaks for itself. He represented Italy at the 2025 European Championships at Blenheim and has competed in numerous Nations Cup events.
+                  Your Coach is an Italian international event rider with a track record that speaks for itself. He represented Italy at the 2025 European Championships at Blenheim and has competed in numerous Nations Cup events.
                 </p>
                 <p className="text-white/90 mb-4">
-                  Previously part of William Fox-Pitt's team, Dan now runs a thriving yard on the Gloucestershire/Oxfordshire border where he coaches riders at all levels. His Dan Bizzarro Method focuses on building confidence, harmony and partnership between horse and rider.
+                  Previously part of William Fox-Pitt's team, Dan now runs a thriving yard on the Gloucestershire/Oxfordshire border where he coaches riders at all levels. His Your Coaching Business focuses on building confidence, harmony and partnership between horse and rider.
                 </p>
                 <p className="text-white/90">
                   Dan's approach is structured and supportive. He explains the why behind the exercises, sets progressive challenges and celebrates small wins. Riders from past tours rave about his ability to demystify complex skills and build confidence, whether you're perfecting your transitions or tackling your first cross-country combination.
@@ -243,7 +243,7 @@ export default function GATUKTour() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
               {[
                 "Horse hire and stabling – well-trained horses matched to your level",
-                "Eight training sessions with Dan Bizzarro and team",
+                "Eight training sessions with Your Coach and team",
                 "Training competition day",
                 "Two full days at the 2026 Burghley Horse Trials, including tickets and transfers",
                 "Masterclasses & stable visits with top international riders",

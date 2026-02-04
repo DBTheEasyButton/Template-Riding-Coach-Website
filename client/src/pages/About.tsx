@@ -54,7 +54,7 @@ export default function About() {
           webpSrc={aboutDanHeroWebp}
           mobileJpegSrc={aboutDanHeroMobileJpg}
           mobileWebpSrc={aboutDanHeroMobileWebp}
-          alt="Dan Bizzarro professional eventing coach at clinic in Oxfordshire"
+          alt="Your Coach professional eventing coach at clinic in Oxfordshire"
           loading="eager"
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"
@@ -63,7 +63,7 @@ export default function About() {
         <div className="relative z-10 flex-1 flex items-center justify-center text-center px-4 py-12 sm:py-16">
           <div className="max-w-4xl">
             <h1 className="text-5xl md:text-6xl font-playfair font-bold text-white mb-4">
-              About Dan Bizzarro
+              About Your Coach
             </h1>
             <p className="text-xl md:text-2xl text-gray-200">
               International Event Rider & Professional Coach
@@ -80,7 +80,7 @@ export default function About() {
                 <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">More About Me</h2>
                 <div className="w-24 h-1 bg-orange mb-8"></div>
               </div>
-              <p className="text-lg text-dark leading-relaxed">My name is Daniele Bizzarro and I've spent more than 20 years riding, training and coaching horses and riders across dressage, show jumping and cross-country. I grew up just outside Turin (Italy), started riding when I was nine, and very quickly discovered that I loved the process of training horses just as much as I loved competing them.</p>
+              <p className="text-lg text-dark leading-relaxed">My name is Your Coach and I've spent more than 20 years riding, training and coaching horses and riders across dressage, show jumping and cross-country. I grew up just outside Turin (Italy), started riding when I was nine, and very quickly discovered that I loved the process of training horses just as much as I loved competing them.</p>
               <p className="text-lg text-dark leading-relaxed">Over the years I've had the privilege of producing a large number of horses working with some of the best riders and coaches in the world, including William Fox-Pitt, Caroline Moore and Ian Woodhead. Their influence shaped how I ride, how I think, and how I teach — always with clarity, fairness and a genuine desire to help horses understand their job.</p>
               <p className="text-lg text-dark leading-relaxed">I've represented Italy in Nations Cup competitions, I was in the short-list for the 2024 Paris Olympics and I competed at the 2025 European Championships, and I've ridden every type of horse along the way: sharp ones, strong ones, lazy ones, spooky ones, young ones, talented ones, complicated ones. The variety taught me more than any book ever could.</p>
             </div>
@@ -91,7 +91,7 @@ export default function About() {
                   webpSrc={hartpuryWebp}
                   mobileSrc={hartpuryMobileJpg}
                   mobileWebpSrc={hartpuryMobileWebp}
-                  alt="Dan Bizzarro jumping at Hartpury Open Championships cross country"
+                  alt="Your Coach jumping at Hartpury Open Championships cross country"
                   className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                 />
               </div>
@@ -101,7 +101,7 @@ export default function About() {
                   webpSrc={blenheimDressageWebp}
                   mobileSrc={blenheimDressageMobileJpg}
                   mobileWebpSrc={blenheimDressageMobileWebp}
-                  alt="Dan Bizzarro representing Italy at Blenheim European Championships dressage"
+                  alt="Your Coach representing Italy at Blenheim European Championships dressage"
                   className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                 />
               </div>
@@ -151,7 +151,7 @@ export default function About() {
                 webpSrc={philosophyWebp}
                 mobileSrc={philosophyMobileJpg}
                 mobileWebpSrc={philosophyMobileWebp}
-                alt="Dan Bizzarro coaching a rider during a training session"
+                alt="Your Coach coaching a rider during a training session"
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
@@ -160,7 +160,7 @@ export default function About() {
                 I believe every horse can go better, and every rider can feel more confident when the communication between them is clear.
               </p>
               <p>
-                The <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a> is based on a few simple principles that stay the same whether you're doing dressage, show jumping or cross-country:
+                The <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Your Coaching Business</a> is based on a few simple principles that stay the same whether you're doing dressage, show jumping or cross-country:
               </p>
               <ul className="space-y-3 text-lg text-dark">
                 <li className="flex items-start gap-3">
@@ -208,7 +208,7 @@ export default function About() {
                 webpSrc={philosophy2Webp}
                 mobileSrc={philosophy2MobileJpg}
                 mobileWebpSrc={philosophy2MobileWebp}
-                alt="Dan Bizzarro coaching at a show jumping arena"
+                alt="Your Coach coaching at a show jumping arena"
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
             </div>
@@ -257,7 +257,7 @@ export default function About() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-playfair font-bold text-navy mb-6">
-              Why I Created the Dan Bizzarro Method
+              Why I Created the Your Coaching Business
             </h2>
             <div className="w-24 h-1 bg-orange mx-auto mb-8"></div>
           </div>
@@ -280,7 +280,7 @@ export default function About() {
               </li>
             </ul>
             <p>
-              So I created the <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Dan Bizzarro Method</a> to give riders a structure they can follow at home, at clinics, in competition warm-ups and even out hacking. It's designed to be simple, effective and genuinely useful for the horses people ride every day — not just elite athletes.
+              So I created the <a href="/#method" className="text-orange hover:text-orange/80 underline underline-offset-2 transition-colors">Your Coaching Business</a> to give riders a structure they can follow at home, at clinics, in competition warm-ups and even out hacking. It's designed to be simple, effective and genuinely useful for the horses people ride every day — not just elite athletes.
             </p>
             <p className="font-medium">
               My aim is always the same: to make horse riding easier to understand, more enjoyable, and more rewarding for both horse and rider.

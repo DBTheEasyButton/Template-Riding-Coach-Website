@@ -179,7 +179,7 @@ export default function GroupClinics() {
           webpSrc={clinicsHeroWebp}
           mobileJpegSrc={clinicsHeroMobileJpg}
           mobileWebpSrc={clinicsHeroMobileWebp}
-          alt="Dan Bizzarro coaching group clinic with riders and horses"
+          alt="Your Coach coaching group clinic with riders and horses"
           loading="eager"
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"
@@ -303,7 +303,7 @@ export default function GroupClinics() {
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">My group clinics offer specialised training in show jumping, polework, and cross country. These single-day sessions welcome riders from beginner to advanced levels, whether you ride for pleasure or competition.</p>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                Each clinic focuses on the Dan Bizzarro Method, combining technical instruction with practical application. With small group sizes, you receive personalised feedback while benefiting from watching fellow riders tackle similar challenges.
+                Each clinic focuses on the Your Coaching Business, combining technical instruction with practical application. With small group sizes, you receive personalised feedback while benefiting from watching fellow riders tackle similar challenges.
               </p>
               <p className="text-lg text-dark leading-relaxed">
                 My clinics cater to both amateur riders building confidence and competitors preparing for events. From foundational polework clinics to advanced show-jumping and cross country sessions, there's a clinic designed for your goals.

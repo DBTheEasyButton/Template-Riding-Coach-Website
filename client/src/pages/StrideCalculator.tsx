@@ -153,7 +153,7 @@ export default function StrideCalculator() {
     return feetInchesToCm(userFeet, userInches);
   };
 
-  // Determine horse size category based on height in cm - Dan Bizzarro Method
+  // Determine horse size category based on height in cm - Your Coaching Business
   const getHorseSizeFromHeight = (heightCm: number): HorseSize => {
     if (heightCm < 132) return "small-pony"; // Under 13hh (132cm)
     if (heightCm < 149) return "big-pony"; // 13-14.2hh (132-148cm)
@@ -331,10 +331,10 @@ export default function StrideCalculator() {
   const strideCalculatorStructuredData = {
     name: "Equestrian Stride Calculator",
     description: "Professional stride distance calculator for horse training and course design",
-    url: "https://danbizzarromethod.com/stride-calculator",
+    url: "https://your-coaching-business.com/stride-calculator",
     provider: {
       "@type": "Organization",
-      name: "Dan Bizzarro Method"
+      name: "Your Coaching Business"
     },
     audience: {
       "@type": "Audience",
@@ -733,7 +733,7 @@ export default function StrideCalculator() {
                   <div>
                     <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-1">Important Disclaimer</h4>
                     <p className="text-sm text-amber-700 dark:text-amber-300">
-                      These calculations provide guidance based on the Dan Bizzarro Method. Always adapt distances 
+                      These calculations provide guidance based on the Your Coaching Business. Always adapt distances 
                       to your horse's individual stride, ability level, and training progression. Safety must always 
                       be the top priority in all training activities.
                     </p>

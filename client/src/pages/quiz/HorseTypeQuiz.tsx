@@ -425,7 +425,7 @@ export default function HorseTypeQuiz() {
       <div className="flex justify-center py-3 sm:py-8 flex-shrink-0">
         <img 
           src={logoPath} 
-          alt="Dan Bizzarro Method" 
+          alt="Your Coaching Business" 
           className="h-10 sm:h-16 object-contain"
         />
       </div>

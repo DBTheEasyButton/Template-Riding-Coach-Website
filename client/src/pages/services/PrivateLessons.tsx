@@ -78,7 +78,7 @@ export default function PrivateLessons() {
     },
     {
       question: "How do I book a private riding lesson?",
-      answer: "You can book a private lesson by contacting me via WhatsApp at +44 7767 291713 or by clicking the 'Book a Lesson' button on this page. Lessons are scheduled based on availability and can be arranged at times that suit your schedule. I offer flexible booking to accommodate your training needs."
+      answer: "You can book a private lesson by contacting me via WhatsApp at +1234567890 or by clicking the 'Book a Lesson' button on this page. Lessons are scheduled based on availability and can be arranged at times that suit your schedule. I offer flexible booking to accommodate your training needs."
     },
     {
       question: "What disciplines can I learn in private lessons?",
@@ -139,7 +139,7 @@ export default function PrivateLessons() {
         <HeroPicture
           jpegSrc={privateLessonHeroJpg}
           webpSrc={privateLessonHeroWebp}
-          alt="Dan Bizzarro coaching private riding lesson in Oxfordshire"
+          alt="Your Coach coaching private riding lesson in Oxfordshire"
           loading="eager"
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"
@@ -181,7 +181,7 @@ export default function PrivateLessons() {
           <div className="grid md:grid-cols-2 gap-16 items-start">
             <div>
               <p className="text-lg text-dark leading-relaxed mb-6">
-                My private horse riding lessons in Oxfordshire offer personalised instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, I bring over 20 years of experience to every session.
+                My private horse riding lessons in Oxfordshire offer personalised instruction using the Your Coaching Business. As an international eventing coach, show jumping coach, and cross country coach, I bring over 20 years of experience to every session.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 Whether you're an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. I cover all aspects of equestrian education—from foundational flatwork to advanced competition preparation.
@@ -200,7 +200,7 @@ export default function PrivateLessons() {
                 <source srcSet={privateLessonClinicWebp} type="image/webp" />
                 <img 
                   src={privateLessonClinicJpg} 
-                  alt="Dan Bizzarro teaching private riding lesson"
+                  alt="Your Coach teaching private riding lesson"
                   className="w-full rounded-2xl shadow-lg"
                   loading="lazy"
                 />

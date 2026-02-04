@@ -16,6 +16,8 @@ When cloning this template for a new coaching business, update the following:
 Replace these placeholder logo files with your business logos:
 - [ ] `attached_assets/logo-light-bg.png` - Main logo for light backgrounds (navigation)
 - [ ] `attached_assets/logo-dark-bg.png` - Logo for dark backgrounds (footer)
+- [ ] `attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png` - Newsletter section logo
+- [ ] `attached_assets/optimized/podcast-logo-optimized.png` - Podcast logo (optimized)
 - [ ] `client/public/logo.png` - Square logo for favicon/browser tab
 - [ ] `client/public/podcast-logo.png` - Podcast cover art (if using podcast feature)
 

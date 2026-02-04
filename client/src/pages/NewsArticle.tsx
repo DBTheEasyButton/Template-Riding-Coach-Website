@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import UpcomingClinicsBanner from "@/components/UpcomingClinicsBanner";
 
 function BlogPostingSchema({ article }: { article: News }) {
-  const baseUrl = "https://danbizzarromethod.com";
+  const baseUrl = "https://your-coaching-business.com";
   const articleUrl = `${baseUrl}/blog/${article.slug || article.id}`;
   const imageUrl = article.image.startsWith('http') 
     ? article.image 
@@ -27,12 +27,12 @@ function BlogPostingSchema({ article }: { article: News }) {
     "dateModified": new Date(article.publishedAt).toISOString(),
     "author": {
       "@type": "Person",
-      "name": "Dan Bizzarro",
+      "name": "Your Coach",
       "url": `${baseUrl}/about`
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Dan Bizzarro Method",
+      "name": "Your Coaching Business",
       "logo": {
         "@type": "ImageObject",
         "url": `${baseUrl}/dan-bizzarro-logo.png`

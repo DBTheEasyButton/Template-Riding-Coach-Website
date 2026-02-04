@@ -6,24 +6,24 @@ export default function AudioLessonsTerms() {
   return (
     <div className="min-h-screen bg-gray-50">
       <SEOHead 
-        title="Audio Lessons Terms & Conditions | Dan Bizzarro Method"
-        description="Review our terms and conditions for Dan Bizzarro Method Audio Lessons including assumption of risk, personal responsibility, safe use guidelines, and limitation of liability."
-        keywords="audio lessons terms, equestrian training terms, horse riding audio course, Dan Bizzarro audio lessons, liability, assumption of risk"
-        canonical="https://danbizzarromethod.com/audio-lessons-terms"
+        title="Audio Lessons Terms & Conditions | Your Coaching Business"
+        description="Review our terms and conditions for Your Coaching Business Audio Lessons including assumption of risk, personal responsibility, safe use guidelines, and limitation of liability."
+        keywords="audio lessons terms, equestrian training terms, horse riding audio course, Your Coach audio lessons, liability, assumption of risk"
+        canonical="https://your-coaching-business.com/audio-lessons-terms"
       />
       <Navigation />
       <div className="py-12">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white shadow-lg rounded-lg p-8">
-            <h1 className="text-3xl font-bold text-navy mb-8">Terms & Conditions – Dan Bizzarro Method Audio Lessons</h1>
+            <h1 className="text-3xl font-bold text-navy mb-8">Terms & Conditions – Your Coaching Business Audio Lessons</h1>
           
           <div className="space-y-8 text-gray-700">
             <section>
               <h2 className="text-xl font-semibold text-navy mb-4">1. General Information</h2>
               <ul className="space-y-3 list-disc ml-6">
-                <li>The Dan Bizzarro Method provides pre-recorded audio lessons and educational content intended to be used while riding, handling, or training horses.</li>
-                <li>All content is educational in nature and reflects the training principles and experience of Dan Bizzarro.</li>
-                <li>By purchasing, accessing, or using any audio lesson or course produced under the Dan Bizzarro Method, you agree to the terms set out below.</li>
+                <li>The Your Coaching Business provides pre-recorded audio lessons and educational content intended to be used while riding, handling, or training horses.</li>
+                <li>All content is educational in nature and reflects the training principles and experience of Your Coach.</li>
+                <li>By purchasing, accessing, or using any audio lesson or course produced under the Your Coaching Business, you agree to the terms set out below.</li>
               </ul>
             </section>
 
@@ -63,7 +63,7 @@ export default function AudioLessonsTerms() {
               <h2 className="text-xl font-semibold text-navy mb-4">5. No Supervision or Live Instruction</h2>
               <ul className="space-y-3 list-disc ml-6">
                 <li>These audio lessons do not involve live coaching, supervision, or real-time feedback.</li>
-                <li>Dan Bizzarro cannot see you, your horse, your environment, or your equipment and therefore cannot assess safety, suitability, or risk in your individual circumstances.</li>
+                <li>Your Coach cannot see you, your horse, your environment, or your equipment and therefore cannot assess safety, suitability, or risk in your individual circumstances.</li>
                 <li>All decisions made while riding or handling horses remain your responsibility.</li>
               </ul>
             </section>
@@ -90,7 +90,7 @@ export default function AudioLessonsTerms() {
               <h2 className="text-xl font-semibold text-navy mb-4">8. Limitation of Liability</h2>
               <div className="bg-gray-100 p-6 rounded-lg mb-4">
                 <p className="text-sm">
-                  To the fullest extent permitted by law, Dan Bizzarro, the Dan Bizzarro Method, and any associated platforms, partners, or distributors shall not be liable for any injury, loss, damage, accident, or claim arising directly or indirectly from the use of these audio lessons.
+                  To the fullest extent permitted by law, Your Coach, the Your Coaching Business, and any associated platforms, partners, or distributors shall not be liable for any injury, loss, damage, accident, or claim arising directly or indirectly from the use of these audio lessons.
                 </p>
               </div>
               <p className="mb-4">This includes, but is not limited to:</p>
@@ -105,7 +105,7 @@ export default function AudioLessonsTerms() {
             <section>
               <h2 className="text-xl font-semibold text-navy mb-4">9. Intellectual Property</h2>
               <ul className="space-y-3 list-disc ml-6">
-                <li>All audio lessons and related materials are the intellectual property of Dan Bizzarro.</li>
+                <li>All audio lessons and related materials are the intellectual property of Your Coach.</li>
                 <li>They are provided for personal use only and may not be copied, shared, distributed, or resold without prior written permission.</li>
               </ul>
             </section>
@@ -114,7 +114,7 @@ export default function AudioLessonsTerms() {
               <h2 className="text-xl font-semibold text-navy mb-4">10. Acceptance of Terms</h2>
               <div className="bg-navy/5 p-6 rounded-lg">
                 <p className="font-medium">
-                  By purchasing or accessing any audio lesson or course under the Dan Bizzarro Method, you confirm that you have read, understood, and agreed to these Terms & Conditions in full.
+                  By purchasing or accessing any audio lesson or course under the Your Coaching Business, you confirm that you have read, understood, and agreed to these Terms & Conditions in full.
                 </p>
               </div>
             </section>
@@ -122,8 +122,8 @@ export default function AudioLessonsTerms() {
             <section className="pt-8 border-t border-gray-200">
               <p className="text-sm text-gray-500">
                 For questions about these terms, please contact us at{" "}
-                <a href="mailto:dan@danbizzarromethod.com" className="text-orange hover:underline">
-                  dan@danbizzarromethod.com
+                <a href="mailto:info@your-coaching-business.com" className="text-orange hover:underline">
+                  info@your-coaching-business.com
                 </a>
               </p>
             </section>

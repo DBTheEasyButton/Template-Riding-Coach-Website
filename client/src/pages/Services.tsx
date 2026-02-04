@@ -77,10 +77,10 @@ export default function Services() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Eventing Coaching Services - Private Lessons & Clinics | Dan Bizzarro Method"
+        title="Eventing Coaching Services - Private Lessons & Clinics | Your Coaching Business"
         description="Professional eventing coaching in Oxfordshire. Private lessons, group clinics, and remote coaching across dressage, show jumping, and cross country. From beginners to international competitors."
         keywords="eventing coaching, private riding lessons, equestrian clinics, dressage coaching, show jumping lessons, cross country training, Oxfordshire horse training, remote coaching"
-        canonical="https://danbizzarromethod.com/coaching"
+        canonical="https://your-coaching-business.com/coaching"
       />
       
       <Navigation />
@@ -146,7 +146,7 @@ export default function Services() {
                   <source srcSet={coachingImage1MobileJpg} type="image/jpeg" media="(max-width: 768px)" />
                   <img 
                     src={coachingImage1} 
-                    alt="Dan Bizzarro coaching flat work - personalised instruction in the arena" 
+                    alt="Your Coach coaching flat work - personalised instruction in the arena" 
                     className="rounded-2xl shadow-2xl w-full h-auto object-cover"
                     loading="lazy"
                   />
@@ -167,7 +167,7 @@ export default function Services() {
                   <source srcSet={coachingImage2MobileJpg} type="image/jpeg" media="(max-width: 768px)" />
                   <img 
                     src={coachingImage2} 
-                    alt="Dan Bizzarro coaching cross-country - group instruction at training obstacles" 
+                    alt="Your Coach coaching cross-country - group instruction at training obstacles" 
                     className="rounded-2xl shadow-xl w-full h-auto object-cover"
                     loading="lazy"
                   />

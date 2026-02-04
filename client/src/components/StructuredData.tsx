@@ -37,10 +37,10 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
 
 // Common structured data configurations
 export const organizationData = {
-  name: "Dan Bizzarro Method",
-  url: "https://danbizzarromethod.com",
-  logo: "https://danbizzarromethod.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
-  description: "Professional eventing coaching and horse training services by international event rider Dan Bizzarro",
+  name: "Your Coaching Business",
+  url: "https://your-coaching-business.com",
+  logo: "https://your-coaching-business.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
+  description: "Professional eventing coaching and horse training services by international event rider Your Coach",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Crown Farm",
@@ -51,28 +51,28 @@ export const organizationData = {
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+447767291713",
-    email: "dan@danbizzarromethod.com",
+    telephone: "+1234567890",
+    email: "info@your-coaching-business.com",
     contactType: "customer service"
   },
   sameAs: [
-    "https://www.facebook.com/danbizzarromethod",
-    "https://www.instagram.com/danbizzarromethod",
-    "https://www.twitter.com/danbizzarro",
-    "https://www.youtube.com/danbizzarromethod"
+    "https://www.facebook.com/YOUR-BUSINESS",
+    "https://www.instagram.com/YOUR-BUSINESS",
+    "https://www.twitter.com/YOUR-BUSINESS",
+    "https://www.youtube.com/YOUR-BUSINESS"
   ]
 };
 
 // LocalBusiness schema with proper NAP (Name, Address, Phone) formatting
 export const localBusinessData = {
   "@type": "LocalBusiness",
-  name: "Dan Bizzarro Method",
+  name: "Your Coaching Business",
   description: "Professional equestrian coaching specialising in eventing, show jumping, dressage, cross country, and pole work training. Olympic-shortlisted international event rider offering private lessons, group clinics, and virtual coaching.",
-  url: "https://danbizzarromethod.com",
-  logo: "https://danbizzarromethod.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
-  image: "https://danbizzarromethod.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
-  telephone: "+447767291713",
-  email: "dan@danbizzarromethod.com",
+  url: "https://your-coaching-business.com",
+  logo: "https://your-coaching-business.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
+  image: "https://your-coaching-business.com/attached_assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png",
+  telephone: "+1234567890",
+  email: "info@your-coaching-business.com",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Crown Farm",
@@ -112,26 +112,26 @@ export const localBusinessData = {
   },
   founder: {
     "@type": "Person",
-    name: "Dan Bizzarro",
+    name: "Your Coach",
     jobTitle: "International Event Rider & Eventing Coach",
     description: "Olympic-shortlisted international event rider with over 20 years of competition experience. Former student of British eventing legend William Fox-Pitt."
   },
   sameAs: [
-    "https://www.facebook.com/danbizzarromethod",
-    "https://www.instagram.com/danbizzarromethod",
-    "https://www.twitter.com/danbizzarro",
-    "https://www.youtube.com/danbizzarromethod"
+    "https://www.facebook.com/YOUR-BUSINESS",
+    "https://www.instagram.com/YOUR-BUSINESS",
+    "https://www.twitter.com/YOUR-BUSINESS",
+    "https://www.youtube.com/YOUR-BUSINESS"
   ]
 };
 
 export const websiteData = {
-  name: "Dan Bizzarro Method",
-  url: "https://danbizzarromethod.com",
+  name: "Your Coaching Business",
+  url: "https://your-coaching-business.com",
   description: "Professional eventing coaching, stride calculator, and competition preparation tools",
   publisher: organizationData,
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://danbizzarromethod.com?q={search_term_string}",
+    target: "https://your-coaching-business.com?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
 };

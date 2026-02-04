@@ -293,7 +293,7 @@ export default function PackingListGenerator() {
         pdf.rect(margin, 10, 40, 30, 'F');
         pdf.setFontSize(8);
         pdf.setTextColor(25, 56, 97);
-        pdf.text('Dan Bizzarro', margin + 2, 20);
+        pdf.text('Your Coach', margin + 2, 20);
         pdf.text('Eventing', margin + 2, 27);
         pdf.text('Method', margin + 2, 34);
       }
@@ -334,7 +334,7 @@ export default function PackingListGenerator() {
           pdf.rect(0, 0, pageWidth, 25, 'F');
           pdf.setFontSize(10);
           pdf.setTextColor(255, 255, 255);
-          pdf.text('Dan Bizzarro Method - Competition Packing Checklist', margin, 15);
+          pdf.text('Your Coaching Business - Competition Packing Checklist', margin, 15);
           pdf.setTextColor(0, 0, 0);
           yPosition = 35;
         }
@@ -374,7 +374,7 @@ export default function PackingListGenerator() {
             pdf.rect(0, 0, pageWidth, 25, 'F');
             pdf.setFontSize(10);
             pdf.setTextColor(255, 255, 255);
-            pdf.text('Dan Bizzarro Method - Competition Packing Checklist', margin, 15);
+            pdf.text('Your Coaching Business - Competition Packing Checklist', margin, 15);
             pdf.setTextColor(0, 0, 0);
             yPosition = 35;
           }
@@ -427,11 +427,11 @@ export default function PackingListGenerator() {
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(255, 255, 255);
         pdf.text(`Page ${i} of ${pageCount}`, margin, pageHeight - 8);
-        pdf.text('Dan Bizzarro Method', pageWidth - margin - 40, pageHeight - 8);
+        pdf.text('Your Coaching Business', pageWidth - margin - 40, pageHeight - 8);
         
         // Add website
         pdf.setFontSize(7);
-        pdf.text('www.danbizzarromethod.com', pageWidth - margin - 50, pageHeight - 3);
+        pdf.text('www.your-coaching-business.com', pageWidth - margin - 50, pageHeight - 3);
       }
 
       pdf.save('competition-packing-checklist.pdf');
@@ -545,7 +545,7 @@ export default function PackingListGenerator() {
 
       printContent += `
             <div class="footer">
-              Dan Bizzarro Method - Competition Preparation
+              Your Coaching Business - Competition Preparation
             </div>
           </body>
         </html>
@@ -571,10 +571,10 @@ export default function PackingListGenerator() {
   const packingListStructuredData = {
     name: "Competition Packing List Generator",
     description: "Professional tool to generate personalised competition packing checklists for equestrian events",
-    url: "https://danbizzarromethod.com/packing-list-generator",
+    url: "https://your-coaching-business.com/packing-list-generator",
     provider: {
       "@type": "Organization",
-      name: "Dan Bizzarro Method"
+      name: "Your Coaching Business"
     },
     audience: {
       "@type": "Audience",

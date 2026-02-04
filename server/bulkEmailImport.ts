@@ -1,4 +1,4 @@
-// Bulk email import utility for Dan Bizzarro Method
+// Bulk email import utility for Your Coaching Business
 export const bulkEmailList = [
   "a.jamess@icloud.com",
   "abbey.clarke@outlook.com",  

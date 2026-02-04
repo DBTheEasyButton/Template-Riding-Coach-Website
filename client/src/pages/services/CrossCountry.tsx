@@ -156,7 +156,7 @@ export default function CrossCountry() {
           webpSrc={crossCountryHeroWebp}
           mobileJpegSrc={crossCountryHeroMobileJpg}
           mobileWebpSrc={crossCountryHeroMobileWebp}
-          alt="Dan Bizzarro cross country at CCI Saumur"
+          alt="Your Coach cross country at CCI Saumur"
           loading="eager"
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"
@@ -215,7 +215,7 @@ export default function CrossCountry() {
                 <source srcSet={crossCountryClinicWebp} type="image/webp" />
                 <img 
                   src={crossCountryClinicJpg} 
-                  alt="Dan Bizzarro teaching cross country at clinic"
+                  alt="Your Coach teaching cross country at clinic"
                   className="w-full rounded-2xl shadow-lg"
                   loading="lazy"
                 />

@@ -56,7 +56,7 @@ export default function ConfirmClinicTimes() {
               </p>
               <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
                 <p className="text-green-800 text-sm">
-                  If you have any questions about your time slot, please contact Dan at dan@danbizzarromethod.com
+                  If you have any questions about your time slot, please contact Dan at info@your-coaching-business.com
                 </p>
               </div>
             </>
@@ -78,7 +78,7 @@ export default function ConfirmClinicTimes() {
               <h1 className="text-2xl font-bold text-gray-900">Confirmation Failed</h1>
               <p className="text-gray-600 mt-3">{error}</p>
               <p className="text-gray-500 mt-4 text-sm">
-                If you're having trouble, please contact dan@danbizzarromethod.com
+                If you're having trouble, please contact info@your-coaching-business.com
               </p>
             </>
           )}

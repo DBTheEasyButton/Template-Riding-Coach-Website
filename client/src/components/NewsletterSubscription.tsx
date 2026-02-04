@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+// TEMPLATE: Replace this logo with your business branding
 import logoPath from "@assets/Black Vintage Illustrative Club Horse Club Logo (5)_1764213371424.png";
 
 export default function NewsletterSubscription() {
@@ -43,7 +44,7 @@ export default function NewsletterSubscription() {
 
       toast({
         title: "Successfully Subscribed!",
-        description: "Thank you for subscribing to our newsletter. You'll receive updates about clinics, training tips, and Dan's latest news.",
+        description: "Thank you for subscribing to our newsletter. You'll receive updates about clinics, training tips, and our latest news.",
       });
 
       setEmail("");
@@ -63,16 +64,18 @@ export default function NewsletterSubscription() {
     <section className="py-10 bg-gray-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
+          {/* TEMPLATE: Update logo alt text with your business name */}
           <img 
             src={logoPath} 
-            alt="Dan Bizzarro Method" 
+            alt="Your Coaching Business" 
             className="h-10 w-auto mx-auto mb-6"
           />
           <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-4">
             Get Free Training Tips & Early Access to Clinics
           </h2>
+          {/* TEMPLATE: Customize this description for your coaching business */}
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            Subscribe to receive exclusive training tips, early access to clinics, competition insights, and updates on Dan's behind the scenes, delivered straight to your inbox.
+            Subscribe to receive exclusive training tips, early access to clinics, competition insights, and behind-the-scenes updates, delivered straight to your inbox.
           </p>
         </div>
 

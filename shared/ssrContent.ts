@@ -23,11 +23,11 @@ export interface SSRPageContent {
 
 export const ssrContent: Record<string, SSRPageContent> = {
   '/': {
-    h1: 'Dan Bizzarro Method - Professional Eventing Coach in Oxfordshire',
-    intro: 'Welcome to the Dan Bizzarro Method. I help horses and riders understand each other better through clear communication, confidence building, and progressive training.',
+    h1: 'Your Coaching Business - Professional Eventing Coach in Oxfordshire',
+    intro: 'Welcome to the Your Coaching Business. I help horses and riders understand each other better through clear communication, confidence building, and progressive training.',
     sections: [
       {
-        heading: 'What is the Dan Bizzarro Method?',
+        heading: 'What is the Your Coaching Business?',
         content: [
           'A simple, structured way of helping horses and riders understand each other better.',
           'Clarity: Riders learn how to give clear instructions that horses can easily understand and follow.',
@@ -42,7 +42,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
         heading: 'My Mission Is Simple',
         content: [
           'Over the course of my career, I\'ve had the pleasure of riding every type of horse and coaching thousands of pupils. I\'ve worked alongside some of the best riders and coaches in the world. At the same time, I\'ve often found myself on challenging horses and had to discover ways to communicate clearly so that they could understand and progress.',
-          'This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you\'re aiming for a win or simply want to enjoy your time in the saddle.',
+          'This is why I dedicated myself to developing a method that works with every horse and every rider. The Your Coaching Business builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you\'re aiming for a win or simply want to enjoy your time in the saddle.',
           'Using this approach, I achieved some of my own dreams: representing my country at the 2025 European Championships and in several Nations Cup events. More importantly, my pupils have reached their goals, from winning competitions to discovering a deeper joy in their everyday rides.',
           'My mission is simple: to make horse riding easier to understand. I want to help riders and horses listen to each other, communicate with confidence, and build a partnership that\'s both effective and fun—so you can enjoy the journey and reach your goals together.'
         ]
@@ -58,14 +58,14 @@ export const ssrContent: Record<string, SSRPageContent> = {
       }
     ],
     contactInfo: {
-      phone: '+44 7767 291713',
-      email: 'dan@danbizzarromethod.com',
+      phone: '+1234567890',
+      email: 'info@your-coaching-business.com',
       address: 'Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom'
     }
   },
 
   '/about': {
-    h1: 'About Dan Bizzarro - International Event Rider & Professional Coach',
+    h1: 'About Your Coach - International Event Rider & Professional Coach',
     intro: 'International Event Rider & Professional Coach based in Oxfordshire, UK.',
     sections: [
       {
@@ -90,7 +90,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
       {
         heading: 'Training Philosophy',
         content: [
-          'Dan\'s approach to training combines classical eventing principles with modern, rider-friendly techniques, always prioritising the welfare, understanding, and long-term development of both horse and rider. This philosophy sits at the heart of the Dan Bizzarro Method—a clear, structured way of training designed to make communication easier, build trust, and help every partnership progress with purpose.',
+          'Dan\'s approach to training combines classical eventing principles with modern, rider-friendly techniques, always prioritising the welfare, understanding, and long-term development of both horse and rider. This philosophy sits at the heart of the Your Coaching Business—a clear, structured way of training designed to make communication easier, build trust, and help every partnership progress with purpose.',
           'Drawing from his experience working with William Fox-Pitt, Caroline Moore, Ian Woodhead, and many other top riders and coaches, as well as competing at the highest international levels, Dan emphasises systematic progression, clear communication, and building confidence through thoughtful preparation.',
           'Whether coaching beginners or advanced competitors, Dan\'s focus remains on developing strong foundations in dressage, show jumping, and cross-country—the three disciplines that make eventing the ultimate test of horsemanship—and ensuring that every rider has a method they can rely on both at home and in competition.'
         ]
@@ -99,14 +99,14 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/contact': {
-    h1: 'Contact Dan Bizzarro - Stay Connected',
+    h1: 'Contact Your Coach - Stay Connected',
     intro: 'Subscribe for exclusive training tips and early clinic access. Have questions? Reach out via phone, email, or WhatsApp.',
     sections: [
       {
         heading: 'Contact Information',
         content: [
-          'Phone: +44 7767 291713',
-          'Email: dan@danbizzarromethod.com',
+          'Phone: +1234567890',
+          'Email: info@your-coaching-business.com',
           'Location: Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom',
           'WhatsApp: Message on WhatsApp for quick responses',
           'Follow Dan\'s Journey: Stay updated with training tips, competition results, and behind-the-scenes content on Facebook, Instagram, Twitter, and YouTube.'
@@ -114,8 +114,8 @@ export const ssrContent: Record<string, SSRPageContent> = {
       }
     ],
     contactInfo: {
-      phone: '+44 7767 291713',
-      email: 'dan@danbizzarromethod.com',
+      phone: '+1234567890',
+      email: 'info@your-coaching-business.com',
       address: 'Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom'
     }
   },
@@ -159,7 +159,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
       {
         heading: 'Expert One-on-One Coaching',
         content: [
-          'My private horse riding lessons in Oxfordshire offer personalised instruction using the Dan Bizzarro Method. As an international eventing coach, show jumping coach, and cross country coach, I bring over 20 years of experience to every session.',
+          'My private horse riding lessons in Oxfordshire offer personalised instruction using the Your Coaching Business. As an international eventing coach, show jumping coach, and cross country coach, I bring over 20 years of experience to every session.',
           'Whether you\'re an amateur rider building confidence or a competitor preparing for events, each lesson is tailored to your specific goals and experience level. I cover all aspects of equestrian education—from foundational flatwork to advanced competition preparation.',
           'My equestrian lessons in Oxfordshire welcome riders from complete beginners to international level competitors. I balance technical excellence with an encouraging, supportive environment that makes learning enjoyable while achieving measurable results.'
         ]
@@ -220,7 +220,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
       {
         heading: 'What Are Virtual Riding Lessons?',
         content: [
-          'My virtual riding lessons use live video technology like Pivo to bring the Dan Bizzarro Method directly to you. I watch you and your horse in real-time on my laptop while you wear earbuds to hear my coaching as you ride—just like an in-person lesson, but from anywhere in the world.',
+          'My virtual riding lessons use live video technology like Pivo to bring the Your Coaching Business directly to you. I watch you and your horse in real-time on my laptop while you wear earbuds to hear my coaching as you ride—just like an in-person lesson, but from anywhere in the world.',
           'This remote coaching format uses systems like Pivo that automatically track and follow you as you ride, streaming live video to me. You hear my voice through wireless earbuds, receiving immediate corrections, encouragement, and technical guidance exactly when you need it. It\'s truly live coaching—not video submission and feedback.',
           'Whether you\'re an amateur rider building confidence or a competitor preparing for events, I provide real-time instruction across all disciplines—dressage, show jumping, cross country, and polework—from beginner to international level, all from your own training facility.'
         ]
@@ -302,7 +302,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
           'Small group sizes for personalised attention',
           'All three eventing disciplines covered',
           'Suitable for all ability levels',
-          'Expert coaching using the Dan Bizzarro Method',
+          'Expert coaching using the Your Coaching Business',
           'Earn loyalty points with every clinic attendance'
         ]
       }
@@ -311,14 +311,14 @@ export const ssrContent: Record<string, SSRPageContent> = {
 
   '/coaching/dressage': {
     h1: 'Dressage & Flatwork Coaching in Oxfordshire',
-    intro: 'Develop foundation skills, improve balance, and achieve harmony with your horse through classical dressage training with Dan Bizzarro.',
+    intro: 'Develop foundation skills, improve balance, and achieve harmony with your horse through classical dressage training with Your Coach.',
     sections: [
       {
         heading: 'Flatwork & Dressage Training',
         content: [
           'Dressage forms the foundation of all good riding. My flatwork coaching focuses on developing clear communication, balance, and harmony between horse and rider.',
           'Whether you\'re working on basic transitions or advanced movements, I help riders understand how to give clear, consistent aids that horses can easily follow.',
-          'The Dan Bizzarro Method emphasises progressive training that builds confidence without tension, creating a partnership that feels good for both horse and rider.'
+          'The Your Coaching Business emphasises progressive training that builds confidence without tension, creating a partnership that feels good for both horse and rider.'
         ]
       }
     ]
@@ -370,14 +370,14 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/podcast': {
-    h1: 'Our Equestrian Life Podcast - Dan Bizzarro',
+    h1: 'Our Equestrian Life Podcast - Your Coach',
     intro: 'Your portal to the world of all things equestrian. Listen on Spotify and Apple Podcasts.',
     sections: [
       {
         heading: 'Welcome to Our Equestrian Life',
         content: [
           'Welcome to your portal to the world of all things equestrian.',
-          'I\'m your host Dan Bizzarro and in each episode, we embark on a journey alongside industry experts, accomplished riders, and passionate enthusiasts.',
+          'I\'m your host Your Coach and in each episode, we embark on a journey alongside industry experts, accomplished riders, and passionate enthusiasts.',
           'We get to know them and we learn from their experiences and vast knowledge, gaining a deeper understanding of the equestrian way of life.'
         ]
       },
@@ -435,7 +435,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
           'Assess your current riding level and identify areas for improvement.',
           'Answer questions about your riding experience, goals, and current challenges.',
           'Receive personalised recommendations based on your responses.',
-          'Discover which Dan Bizzarro Method coaching option is right for you.'
+          'Discover which Your Coaching Business coaching option is right for you.'
         ]
       }
     ]
@@ -458,7 +458,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/competition-checklists': {
-    h1: 'Competition Preparation Checklists - Dan Bizzarro Method',
+    h1: 'Competition Preparation Checklists - Your Coaching Business',
     intro: 'Generate comprehensive preparation checklists tailored to your competition level and timeline.',
     sections: [
       {
@@ -474,8 +474,8 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/gallery': {
-    h1: 'Gallery - Dan Bizzarro Eventing Photos',
-    intro: 'Browse photos from competitions, clinics, and training sessions with Dan Bizzarro.',
+    h1: 'Gallery - Your Coach Eventing Photos',
+    intro: 'Browse photos from competitions, clinics, and training sessions with Your Coach.',
     sections: [
       {
         heading: 'Photo Gallery',
@@ -490,7 +490,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
 
   '/blog': {
     h1: 'Equestrian Training Blog - Tips & Insights',
-    intro: 'Expert tips and insights to improve your riding from Dan Bizzarro. Articles on training, competition preparation, and horse care.',
+    intro: 'Expert tips and insights to improve your riding from Your Coach. Articles on training, competition preparation, and horse care.',
     sections: [
       {
         heading: 'From the Blog',
@@ -505,7 +505,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/loyalty': {
-    h1: 'Loyalty Rewards Programme - Dan Bizzarro Method',
+    h1: 'Loyalty Rewards Programme - Your Coaching Business',
     intro: 'Earn points for every clinic attendance and referral. Redeem for discounts on future sessions.',
     sections: [
       {
@@ -522,14 +522,14 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/coaching/audio-lessons': {
-    h1: 'Audio Riding Lessons - Learn the Dan Bizzarro Method',
-    intro: 'Transform your riding with audio lessons you can listen to anywhere. The Dan Bizzarro Method distilled into clear, actionable guidance.',
+    h1: 'Audio Riding Lessons - Learn the Your Coaching Business',
+    intro: 'Transform your riding with audio lessons you can listen to anywhere. The Your Coaching Business distilled into clear, actionable guidance.',
     sections: [
       {
         heading: 'Audio Lessons Overview',
         content: [
           'Audio riding lessons designed for busy equestrians who want to improve their skills on the go.',
-          'Learn the Dan Bizzarro Method through structured audio content that explains what to feel, not just what to do.',
+          'Learn the Your Coaching Business through structured audio content that explains what to feel, not just what to do.',
           'Perfect for listening during your commute, at the yard, or while grooming your horse.',
           'Each lesson builds on the previous one, creating a progressive learning journey.'
         ]
@@ -550,7 +550,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
           'Listen and Learn: Absorb training concepts while doing other tasks.',
           'Repeat and Reinforce: Listen as many times as needed to master each concept.',
           'Apply Immediately: Take lessons straight to your next riding session.',
-          'Expert Guidance: Learn directly from Dan Bizzarro\'s 20+ years of international experience.'
+          'Expert Guidance: Learn directly from Your Coach\'s 20+ years of international experience.'
         ]
       }
     ],
@@ -565,14 +565,14 @@ export const ssrContent: Record<string, SSRPageContent> = {
   },
 
   '/courses/strong-horse-audio': {
-    h1: 'Strong to Soft & Light Audio Course - Dan Bizzarro Method',
+    h1: 'Strong to Soft & Light Audio Course - Your Coaching Business',
     intro: 'Transform your strong, pulling horse into one that is soft and light in your hands. A complete audio training programme with proven techniques from international eventing.',
     sections: [
       {
         heading: 'About the Strong to Soft & Light Course',
         content: [
           'Does your horse pull, lean on the bit, or feel heavy in your hands? The Strong to Soft & Light audio course teaches you exactly how to transform that feeling.',
-          'This complete audio programme distils Dan Bizzarro\'s 20+ years of experience working with every type of horse into clear, actionable lessons you can apply immediately.',
+          'This complete audio programme distils Your Coach\'s 20+ years of experience working with every type of horse into clear, actionable lessons you can apply immediately.',
           'Learn the exact techniques used to prepare horses for international competition, explained in a way that makes sense for riders at any level.',
           'The course focuses on what you should feel, not just what you should do - helping you develop true understanding and lasting results.'
         ]
@@ -621,7 +621,7 @@ export const ssrContent: Record<string, SSRPageContent> = {
       {
         heading: 'Why This Approach Works',
         content: [
-          'The Dan Bizzarro Method focuses on clear communication and progressive training. Rather than forcing compliance, we teach horses to choose softness because they understand what we want.',
+          'The Your Coaching Business focuses on clear communication and progressive training. Rather than forcing compliance, we teach horses to choose softness because they understand what we want.',
           'This approach comes from years of riding every type of horse - easy ones, tricky ones, sharp ones, and strong ones - and finding what consistently works.',
           'Clear results come quickly because the method addresses the root cause of heaviness, not just the symptoms.'
         ]

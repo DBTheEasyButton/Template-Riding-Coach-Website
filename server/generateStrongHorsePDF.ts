@@ -340,17 +340,17 @@ export function generateStrongHorsePDF(): Buffer {
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
-  doc.text('By Dan Bizzarro', opts.pageWidth / 2, 185, { align: 'center' });
+  doc.text('By Your Coach', opts.pageWidth / 2, 185, { align: 'center' });
 
   doc.setFontSize(13);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(200, 200, 200);
   doc.text('International Event Rider & Coach', opts.pageWidth / 2, 198, { align: 'center' });
-  doc.text('The Dan Bizzarro Method', opts.pageWidth / 2, 211, { align: 'center' });
+  doc.text('The Your Coaching Business', opts.pageWidth / 2, 211, { align: 'center' });
 
   doc.setFontSize(11);
   doc.setTextColor(170, 170, 170);
-  doc.text('https://danbizzarromethod.com', opts.pageWidth / 2, 265, { align: 'center' });
+  doc.text('https://your-coaching-business.com', opts.pageWidth / 2, 265, { align: 'center' });
 
   // ==================== PAGE 2: INTRODUCTION ====================
   doc.addPage();
@@ -421,7 +421,7 @@ export function generateStrongHorsePDF(): Buffer {
   ], y, opts);
 
   y += 3;
-  y = drawQuoteBox(doc, 'These are the foundations of the Dan Bizzarro Method.', y, opts);
+  y = drawQuoteBox(doc, 'These are the foundations of the Your Coaching Business.', y, opts);
 
   // ==================== PAGE 4: PART 2 - THE CORE SYSTEM ====================
   doc.addPage();
@@ -585,7 +585,7 @@ export function generateStrongHorsePDF(): Buffer {
   doc.addPage();
   y = opts.margin + 5;
 
-  y = drawInfoCard(doc, 'Rule 4: Teach Self-Carriage', 'Correct for one second, then release. This is the Dan Bizzarro Method: Show the horse the answer, then let it carry itself.', y, opts);
+  y = drawInfoCard(doc, 'Rule 4: Teach Self-Carriage', 'Correct for one second, then release. This is the Your Coaching Business: Show the horse the answer, then let it carry itself.', y, opts);
 
   // ==================== PAGE 10: PART 5 - IF THE HORSE GETS STRONG AT COMPETITIONS ====================
   doc.addPage();
@@ -710,7 +710,7 @@ export function generateStrongHorsePDF(): Buffer {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...WHITE);
   doc.text('Book a clinic or private lesson to work on your strong horse in person.', opts.margin + 10, y + 22);
-  doc.text('Visit: https://danbizzarromethod.com/coaching', opts.margin + 10, y + 31);
+  doc.text('Visit: https://your-coaching-business.com/coaching', opts.margin + 10, y + 31);
 
   const pdfOutput = doc.output('arraybuffer');
   return Buffer.from(pdfOutput);

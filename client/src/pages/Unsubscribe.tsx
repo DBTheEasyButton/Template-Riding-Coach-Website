@@ -60,9 +60,9 @@ export default function Unsubscribe() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
         <SEOHead 
-          title="Unsubscribed Successfully | Dan Bizzarro Method"
-          description="You have successfully unsubscribed from Dan Bizzarro Method marketing emails."
-          canonical="https://danbizzarromethod.com/unsubscribe"
+          title="Unsubscribed Successfully | Your Coaching Business"
+          description="You have successfully unsubscribed from Your Coaching Business marketing emails."
+          canonical="https://your-coaching-business.com/unsubscribe"
         />
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
@@ -106,9 +106,9 @@ export default function Unsubscribe() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 flex items-center justify-center p-4">
       <SEOHead 
-        title="Unsubscribe from Emails | Dan Bizzarro Method"
-        description="Manage your email preferences and unsubscribe from Dan Bizzarro Method communications."
-        canonical="https://danbizzarromethod.com/unsubscribe"
+        title="Unsubscribe from Emails | Your Coaching Business"
+        description="Manage your email preferences and unsubscribe from Your Coaching Business communications."
+        canonical="https://your-coaching-business.com/unsubscribe"
       />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">

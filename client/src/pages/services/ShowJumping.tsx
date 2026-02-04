@@ -156,7 +156,7 @@ export default function ShowJumping() {
           webpSrc={showJumpingHeroWebp}
           mobileJpegSrc={showJumpingHeroMobileJpg}
           mobileWebpSrc={showJumpingHeroMobileWebp}
-          alt="Dan Bizzarro show jumping at international competition"
+          alt="Your Coach show jumping at international competition"
           loading="eager"
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"
@@ -215,7 +215,7 @@ export default function ShowJumping() {
                 <source srcSet={showJumpingClinicWebp} type="image/webp" />
                 <img 
                   src={showJumpingClinicJpg} 
-                  alt="Dan Bizzarro teaching show jumping at clinic"
+                  alt="Your Coach teaching show jumping at clinic"
                   className="w-full rounded-2xl shadow-lg"
                   loading="lazy"
                 />

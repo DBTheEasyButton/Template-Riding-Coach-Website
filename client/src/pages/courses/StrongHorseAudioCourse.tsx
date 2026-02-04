@@ -584,7 +584,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 <Link href="/terms" className="text-orange hover:underline">
                   Terms & Conditions
                 </Link>{" "}
-                and consent to receive updates from Dan Bizzarro Method.
+                and consent to receive updates from Your Coaching Business.
               </label>
             </div>
             
@@ -740,7 +740,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 />
                 <label htmlFor="audio-lead-terms" className="text-sm text-gray-600 leading-tight">
                   <a 
-                    href="https://danbizzarromethod.com/audio-lessons-terms" 
+                    href="https://your-coaching-business.com/audio-lessons-terms" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-navy hover:text-orange underline"
@@ -1357,8 +1357,8 @@ function AudioCoursePaymentForm({
                 </ul>
                 <p className="text-xs text-amber-700 mt-2">
                   Still having trouble? Contact us at{' '}
-                  <a href="mailto:dan@danbizzarromethod.com" className="underline font-medium">
-                    dan@danbizzarromethod.com
+                  <a href="mailto:info@your-coaching-business.com" className="underline font-medium">
+                    info@your-coaching-business.com
                   </a>
                 </p>
               </div>
@@ -1668,7 +1668,7 @@ function AudioCoursePurchaseModal({
         const errorMessage = errorData.error || "Payment could not be completed";
         toast({
           title: "Payment Not Completed",
-          description: `${errorMessage}. Please try again or contact us at dan@danbizzarromethod.com`,
+          description: `${errorMessage}. Please try again or contact us at info@your-coaching-business.com`,
           variant: "destructive",
         });
         return;
@@ -1679,7 +1679,7 @@ function AudioCoursePurchaseModal({
       console.error("Purchase completion error:", error);
       toast({
         title: "Something Went Wrong",
-        description: "There was an issue completing your purchase. Please try again or contact us at dan@danbizzarromethod.com",
+        description: "There was an issue completing your purchase. Please try again or contact us at info@your-coaching-business.com",
         variant: "destructive",
       });
     }
@@ -1706,7 +1706,7 @@ function AudioCoursePurchaseModal({
                 Purchase Complete!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Thank you for your purchase! You'll receive an email shortly with the link to access the "From Strong to Soft & Light in 28 Days" full course and the Dan Bizzarro Method Hub.
+                Thank you for your purchase! You'll receive an email shortly with the link to access the "From Strong to Soft & Light in 28 Days" full course and the Your Coaching Business Hub.
               </DialogDescription>
             </DialogHeader>
             
@@ -1816,7 +1816,7 @@ function AudioCoursePurchaseModal({
               <label htmlFor="quick-purchase-terms" className="text-xs text-gray-600">
                 I agree to the{" "}
                 <a 
-                  href="https://danbizzarromethod.com/audio-lessons-terms" 
+                  href="https://your-coaching-business.com/audio-lessons-terms" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-orange hover:underline"
@@ -1978,7 +1978,7 @@ function AudioCoursePurchaseModal({
                 />
                 <label htmlFor="audio-terms" className="text-sm text-gray-600 leading-tight">
                   <a 
-                    href="https://danbizzarromethod.com/audio-lessons-terms" 
+                    href="https://your-coaching-business.com/audio-lessons-terms" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-navy hover:text-orange underline"
@@ -2315,7 +2315,7 @@ function DiscountedAudioPurchaseModal({
         const errorMessage = errorData.error || "Payment could not be completed";
         toast({
           title: "Payment Not Completed",
-          description: `${errorMessage}. Please try again or contact us at dan@danbizzarromethod.com`,
+          description: `${errorMessage}. Please try again or contact us at info@your-coaching-business.com`,
           variant: "destructive",
         });
         return;
@@ -2326,7 +2326,7 @@ function DiscountedAudioPurchaseModal({
       console.error("Purchase completion error:", error);
       toast({
         title: "Something Went Wrong",
-        description: "There was an issue completing your purchase. Please try again or contact us at dan@danbizzarromethod.com",
+        description: "There was an issue completing your purchase. Please try again or contact us at info@your-coaching-business.com",
         variant: "destructive",
       });
     }
@@ -2353,7 +2353,7 @@ function DiscountedAudioPurchaseModal({
                 Purchase Complete!
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Thank you for your purchase! You'll receive an email shortly with the link to access the full course and the Dan Bizzarro Method Hub.
+                Thank you for your purchase! You'll receive an email shortly with the link to access the full course and the Your Coaching Business Hub.
               </DialogDescription>
             </DialogHeader>
             <div className="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
@@ -2464,7 +2464,7 @@ function DiscountedAudioPurchaseModal({
               <div className="flex items-start gap-2 pt-2">
                 <Checkbox id="discount-terms" checked={termsAccepted} onCheckedChange={(checked) => setTermsAccepted(checked === true)} disabled={isSubmitting} className="mt-0.5" />
                 <label htmlFor="discount-terms" className="text-sm text-gray-600 leading-tight">
-                  <a href="https://danbizzarromethod.com/audio-lessons-terms" target="_blank" rel="noopener noreferrer" className="text-navy hover:text-orange underline" onClick={(e) => e.stopPropagation()}>
+                  <a href="https://your-coaching-business.com/audio-lessons-terms" target="_blank" rel="noopener noreferrer" className="text-navy hover:text-orange underline" onClick={(e) => e.stopPropagation()}>
                     I have read and agree to the terms and conditions
                   </a>
                 </label>
@@ -2982,7 +2982,7 @@ function PurchaseModal({
         const errorMessage = errorData.error || "Payment could not be completed";
         toast({
           title: "Payment Not Completed",
-          description: `${errorMessage}. Please try again or contact us at dan@danbizzarromethod.com`,
+          description: `${errorMessage}. Please try again or contact us at info@your-coaching-business.com`,
           variant: "destructive",
         });
         return;
@@ -2993,7 +2993,7 @@ function PurchaseModal({
       console.error("Purchase completion error:", error);
       toast({
         title: "Something Went Wrong",
-        description: "There was an issue completing your purchase. Please try again or contact us at dan@danbizzarromethod.com",
+        description: "There was an issue completing your purchase. Please try again or contact us at info@your-coaching-business.com",
         variant: "destructive",
       });
     }
@@ -3152,7 +3152,7 @@ function PurchaseModal({
               <label htmlFor="quick-challenge-terms" className="text-xs text-gray-600">
                 I agree to the{" "}
                 <a 
-                  href="https://danbizzarromethod.com/audio-lessons-terms" 
+                  href="https://your-coaching-business.com/audio-lessons-terms" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-orange hover:underline"
@@ -3519,7 +3519,7 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
                 <p className="text-gray-300 italic text-base leading-relaxed">
                   "A strong horse doesn't become light by being held. It becomes light when the communication becomes clear and the self-carriage is established"
                 </p>
-                <p className="text-orange font-semibold mt-2">— Dan Bizzarro</p>
+                <p className="text-orange font-semibold mt-2">— Your Coach</p>
               </div>
             </div>
             
@@ -3571,7 +3571,7 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-playfair font-bold text-navy mb-4">
-                Your Coach: Dan Bizzarro
+                Your Coach: Your Coach
               </h2>
               <p className="text-gray-600 text-lg max-w-2xl mx-auto">
                 Learn from an international event rider with over 20 years of experience transforming strong, heavy horses into light, responsive partners.
@@ -3596,7 +3596,7 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
               
               <div className="space-y-4 text-gray-700">
                 <p>
-                  I've coached thousands of riders dealing with strong, heavy, and rushing horses. The solution is never more force, more pulling, or stronger bits. The solution is clarity, balance, rhythm, and better reactions — the pillars of the Dan Bizzarro Method.
+                  I've coached thousands of riders dealing with strong, heavy, and rushing horses. The solution is never more force, more pulling, or stronger bits. The solution is clarity, balance, rhythm, and better reactions — the pillars of the Your Coaching Business.
                 </p>
                 <p>
                   As an international event rider and coach, I've spent more than 20 years helping riders develop horses who are softer, lighter, and more confident. This audio course gives you the same simple tools I use in my lessons every day.
@@ -3763,7 +3763,7 @@ export function StrongHorseAudioPage({ config = defaultConfig }: { config?: Stro
               </div>
               <div className="bg-navy/5 rounded-lg p-4">
                 <p className="text-gray-700">
-                  The emphasis is on <strong>how the horse carries himself</strong>, not on managing the symptoms. This reflects the principles of the Dan Bizzarro Method: helping horses move better by improving posture, balance, and understanding — rather than forcing outcomes.
+                  The emphasis is on <strong>how the horse carries himself</strong>, not on managing the symptoms. This reflects the principles of the Your Coaching Business: helping horses move better by improving posture, balance, and understanding — rather than forcing outcomes.
                 </p>
               </div>
             </div>

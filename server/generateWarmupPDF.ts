@@ -284,7 +284,7 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
-  doc.text('By Dan Bizzarro', opts.pageWidth / 2, 195, { align: 'center' });
+  doc.text('By Your Coach', opts.pageWidth / 2, 195, { align: 'center' });
 
   doc.setFontSize(13);
   doc.setFont('helvetica', 'normal');
@@ -293,7 +293,7 @@ export function generateWarmupSystemPDF(): Buffer {
 
   doc.setFontSize(11);
   doc.setTextColor(170, 170, 170);
-  doc.text('https://danbizzarromethod.com', opts.pageWidth / 2, 265, { align: 'center' });
+  doc.text('https://your-coaching-business.com', opts.pageWidth / 2, 265, { align: 'center' });
 
   // ==================== PAGE 2: INTRODUCTION ====================
   doc.addPage();
@@ -356,7 +356,7 @@ export function generateWarmupSystemPDF(): Buffer {
     'Simple explanations for why it works',
     'Quick fixes for common problems',
     'A printable one-page summary',
-    'The core Dan Bizzarro Method principles woven throughout'
+    'The core Your Coaching Business principles woven throughout'
   ], y, opts);
 
   y += 10;
@@ -608,7 +608,7 @@ export function generateWarmupSystemPDF(): Buffer {
   ], '', y, opts);
 
   y += 5;
-  y = drawQuoteBox(doc, 'After every jump: Land, wait, straighten, ride away. This is the Dan Bizzarro Method - balance before and after the fence.', y, opts);
+  y = drawQuoteBox(doc, 'After every jump: Land, wait, straighten, ride away. This is the Your Coaching Business - balance before and after the fence.', y, opts);
 
   // ==================== PAGE 12: CROSS-COUNTRY PART 1 ====================
   doc.addPage();
@@ -848,14 +848,14 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...ORANGE);
-  doc.text('Dan Bizzarro', opts.margin, y);
+  doc.text('Your Coach', opts.margin, y);
   y += 8;
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...DARK);
   doc.text('International Event Rider & Coach', opts.margin, y);
   y += 6;
-  doc.text('https://danbizzarromethod.com', opts.margin, y);
+  doc.text('https://your-coaching-business.com', opts.margin, y);
 
   y += 25;
   doc.setFillColor(...NAVY);
@@ -868,7 +868,7 @@ export function generateWarmupSystemPDF(): Buffer {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...WHITE);
   doc.text('Book a clinic or private lesson to work on your warm-up in person.', opts.margin + 12, y + 25);
-  doc.text('Visit: https://danbizzarromethod.com/coaching', opts.margin + 12, y + 34);
+  doc.text('Visit: https://your-coaching-business.com/coaching', opts.margin + 12, y + 34);
 
   const pdfOutput = doc.output('arraybuffer');
   return Buffer.from(pdfOutput);

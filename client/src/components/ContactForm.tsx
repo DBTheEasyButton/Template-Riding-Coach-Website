@@ -212,7 +212,7 @@ export default function ContactForm() {
               <Mail className="w-4 h-4 text-gray-600" />
               <div>
                 <p className="font-medium">Email</p>
-                <p className="text-gray-600">dan@danbizzarromethod.com</p>
+                <p className="text-gray-600">info@your-coaching-business.com</p>
               </div>
             </div>
             

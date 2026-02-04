@@ -56,7 +56,7 @@ export default function SocialShare({ clinic }: SocialShareProps) {
   };
 
   // Default sharing message
-  const defaultMessage = `🐎 Join Dan Bizzarro's ${clinic.title}!
+  const defaultMessage = `🐎 Join Your Coach's ${clinic.title}!
 
 📅 ${formatDate(clinic.date)}
 📍 ${clinic.location}

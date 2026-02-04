@@ -329,7 +329,7 @@ export default function TenPointsBetter() {
                   webpSrc={dressageHeroWebp}
                   mobileJpegSrc={dressageHeroMobileJpg}
                   mobileWebpSrc={dressageHeroMobileWebp}
-                  alt="Dressage rider performing a precise movement in the arena - the Dan Bizzarro Method transforms your test scores"
+                  alt="Dressage rider performing a precise movement in the arena - the Your Coaching Business transforms your test scores"
                   loading="eager"
                   priority={true}
                   className="w-full h-auto object-cover aspect-[4/3]"
@@ -420,7 +420,7 @@ export default function TenPointsBetter() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl lg:text-4xl font-bold text-navy mb-12 text-center">
-            Meet Your Coach: Dan Bizzarro
+            Meet Your Coach: Your Coach
           </h2>
           
           {/* First row: Image left, text right */}
@@ -431,7 +431,7 @@ export default function TenPointsBetter() {
                 <source srcSet={danPhotoMobilePath} type="image/jpeg" media="(max-width: 768px)" />
                 <img 
                   src={danPhotoPath} 
-                  alt="Dan Bizzarro - International Event Rider and Coach"
+                  alt="Your Coach - International Event Rider and Coach"
                   className="rounded-2xl shadow-2xl w-full"
                 />
               </picture>
@@ -443,7 +443,7 @@ export default function TenPointsBetter() {
               </p>
               
               <p>
-                This is why I dedicated myself to developing a method that works with every horse and every rider. The Dan Bizzarro Method builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
+                This is why I dedicated myself to developing a method that works with every horse and every rider. The Your Coaching Business builds confidence and creates a fun environment where horses and riders can learn and work together effectively—delivering real results, whether you're aiming for a win or simply want to enjoy your time in the saddle.
               </p>
             </div>
           </div>
@@ -466,7 +466,7 @@ export default function TenPointsBetter() {
                 <source srcSet={coachingClinicMobileJpg} type="image/jpeg" media="(max-width: 768px)" />
                 <img 
                   src={coachingClinicPhoto} 
-                  alt="Dan Bizzarro coaching a rider during a clinic session"
+                  alt="Your Coach coaching a rider during a clinic session"
                   className="rounded-2xl shadow-2xl w-full"
                 />
               </picture>
@@ -795,7 +795,7 @@ export default function TenPointsBetter() {
                   You're in!
                 </DialogTitle>
                 <DialogDescription className="text-gray-600">
-                  Check your inbox - your free lesson is on its way. We can't wait for you to experience the Dan Bizzarro Method.
+                  Check your inbox - your free lesson is on its way. We can't wait for you to experience the Your Coaching Business.
                 </DialogDescription>
               </DialogHeader>
               <Button 

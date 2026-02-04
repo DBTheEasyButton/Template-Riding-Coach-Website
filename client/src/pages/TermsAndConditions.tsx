@@ -5,11 +5,12 @@ import SEOHead from "@/components/SEOHead";
 export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* TEMPLATE: Update SEO details with your business name */}
       <SEOHead 
-        title="Clinic Terms & Conditions | Dan Bizzarro Method"
-        description="Review our clinic terms and conditions including registration, payment, cancellation policy, safety requirements, and liability information for Dan Bizzarro Method equestrian clinics."
-        keywords="clinic terms, booking policy, cancellation policy, equestrian clinic terms, Dan Bizzarro clinics, safety requirements"
-        canonical="https://danbizzarromethod.com/terms-and-conditions"
+        title="Clinic Terms & Conditions | Your Coaching Business"
+        description="Review our clinic terms and conditions including registration, payment, cancellation policy, safety requirements, and liability information for equestrian clinics."
+        keywords="clinic terms, booking policy, cancellation policy, equestrian clinic terms, safety requirements"
+        canonical="https://your-coaching-business.com/terms-and-conditions"
       />
       <Navigation />
       <div className="py-12">
@@ -37,15 +38,16 @@ export default function TermsAndConditions() {
                 <h3 className="font-semibold text-orange mb-3">Important: No Self-Cancellation After Payment</h3>
                 <p className="text-sm">
                   Once your clinic registration is confirmed and paid, you cannot cancel your booking through the online system. 
-                  All cancellation requests must be made directly by contacting Dan Bizzarro Method.
+                  All cancellation requests must be made directly by contacting us.
                 </p>
               </div>
               <ul className="space-y-3 list-disc ml-6">
                 <li><strong>Cancellations Made 7+ Days Before Clinic:</strong> If you cancel your booking 7 days or more before the clinic start date, you will receive a full refund minus a £5 administration fee. The refund will be processed to your original payment method within 5-10 working days.</li>
                 <li><strong>Cancellations Made Less Than 7 Days Before Clinic:</strong> If you cancel less than 7 days before the clinic start date, a refund will only be provided if there is a waiting list and your place can be filled by another participant. The refund will be the full amount minus a £5 administration fee.</li>
                 <li><strong>No Waiting List:</strong> If there is no waiting list and you cancel within 7 days of the clinic, no refund will be provided.</li>
-                <li><strong>How to Request a Cancellation:</strong> All cancellation requests must be made by email to dan@danbizzarromethod.com. Please include your booking reference and the reason for cancellation.</li>
-                <li><strong>Clinic Cancellation by Dan Bizzarro Method:</strong> In the unlikely event that we need to cancel a clinic, participants will receive a full refund (no admin fee) or the option to transfer to another available clinic.</li>
+                {/* TEMPLATE: Update email address with your business email */}
+                <li><strong>How to Request a Cancellation:</strong> All cancellation requests must be made by email to info@your-coaching-business.com. Please include your booking reference and the reason for cancellation.</li>
+                <li><strong>Clinic Cancellation by Us:</strong> In the unlikely event that we need to cancel a clinic, participants will receive a full refund (no admin fee) or the option to transfer to another available clinic.</li>
                 <li><strong>Weather Conditions:</strong> Clinics may proceed in light rain. In cases of severe weather that pose safety risks, the clinic may be rescheduled, and participants will be offered alternative dates or a full refund (no admin fee).</li>
               </ul>
             </section>
@@ -80,7 +82,8 @@ export default function TermsAndConditions() {
               <h2 className="text-xl font-semibold text-navy mb-4">Liability and Insurance</h2>
               <ul className="space-y-3 list-disc ml-6">
                 <li>Equestrian activities carry inherent risks. Participants acknowledge and accept these risks.</li>
-                <li>Dan Bizzarro Method, its instructors, and venue owners will not be liable for any injury, loss, or damage to persons, horses, or property.</li>
+                {/* TEMPLATE: Update with your business name */}
+                <li>Your Coaching Business, its instructors, and venue owners will not be liable for any injury, loss, or damage to persons, horses, or property.</li>
                 <li>Participants are strongly advised to have personal accident and public liability insurance.</li>
                 <li>Professional indemnity insurance is in place for instruction provided.</li>
               </ul>
@@ -102,10 +105,11 @@ export default function TermsAndConditions() {
             <section>
               <h2 className="text-xl font-semibold text-navy mb-4">Loyalty Points and Referral Programme</h2>
               
+              {/* TEMPLATE: Update with your business name */}
               <div className="bg-blue-50 p-6 rounded-lg mb-6">
                 <h3 className="font-semibold text-navy mb-3">Earn Rewards with Every Clinic!</h3>
                 <p className="text-sm">
-                  Dan Bizzarro Method operates a loyalty points programme to reward our regular clients and encourage you to share your positive experiences with friends.
+                  We operate a loyalty points programme to reward our regular clients and encourage you to share your positive experiences with friends.
                 </p>
               </div>
 
@@ -122,8 +126,9 @@ export default function TermsAndConditions() {
                 <div>
                   <h4 className="font-semibold text-navy mb-3">Your Unique Referral Code</h4>
                   <ul className="space-y-2 list-disc ml-6">
-                    <li>Every client automatically receives a unique referral code (format: DBM-XXXXX) when they register for their first clinic.</li>
-                    <li>Share your code with friends, family, or fellow riders who might be interested in Dan Bizzarro Method clinics.</li>
+                    {/* TEMPLATE: Update referral code format for your business */}
+                    <li>Every client automatically receives a unique referral code when they register for their first clinic.</li>
+                    <li>Share your code with friends, family, or fellow riders who might be interested in our clinics.</li>
                     <li>When a NEW client (someone who has never registered before) uses your referral code during registration, you'll earn 20 bonus points.</li>
                     <li>There is no limit to how many people you can refer or bonus points you can earn.</li>
                   </ul>
@@ -153,19 +158,20 @@ export default function TermsAndConditions() {
                 <div>
                   <h4 className="font-semibold text-navy mb-3">Important Terms</h4>
                   <ul className="space-y-2 list-disc ml-6">
-                    <li><strong>NEW Client Definition:</strong> Referral bonuses are only awarded when the referred person has never registered for a clinic with Dan Bizzarro Method before. If an existing client uses a referral code, no bonus points will be awarded.</li>
+                    <li><strong>NEW Client Definition:</strong> Referral bonuses are only awarded when the referred person has never registered for a clinic with us before. If an existing client uses a referral code, no bonus points will be awarded.</li>
                     <li><strong>Discount Code Restrictions:</strong> Discount codes cannot be combined with other offers. One discount code per booking only.</li>
                     <li><strong>Non-Transferable:</strong> Points, referral codes, and discount codes are non-transferable and must be used by the account holder only.</li>
                     <li><strong>Cancellation Impact:</strong> If you cancel a clinic booking, any points earned from that registration will be deducted from your account.</li>
-                    <li><strong>Programme Changes:</strong> Dan Bizzarro Method reserves the right to modify or discontinue the loyalty programme at any time with reasonable notice to participants.</li>
+                    <li><strong>Programme Changes:</strong> We reserve the right to modify or discontinue the loyalty programme at any time with reasonable notice to participants.</li>
                     <li><strong>Fraud Prevention:</strong> Any attempt to abuse or manipulate the points system (including creating fake accounts or fraudulent referrals) will result in immediate disqualification and removal from the programme.</li>
                   </ul>
                 </div>
 
+                {/* TEMPLATE: Update contact details */}
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-navy mb-2">Questions About Points?</h4>
                   <p className="text-sm">
-                    For any queries about your points balance, referral codes, or discount codes, please contact Dan at dan@danbizzarromethod.com
+                    For any queries about your points balance, referral codes, or discount codes, please contact us at info@your-coaching-business.com
                   </p>
                 </div>
               </div>
@@ -188,7 +194,7 @@ export default function TermsAndConditions() {
                   <ul className="space-y-2 list-disc ml-6 text-sm">
                     <li>Your email address and personal details will be automatically added to our mailing list</li>
                     <li>We will send you newsletters, clinic announcements, training tips, and promotional content</li>
-                    <li>You consent to receive marketing communications via email from Dan Bizzarro Method</li>
+                    <li>You consent to receive marketing communications via email from us</li>
                     <li>You can unsubscribe from marketing emails at any time using the unsubscribe link in any email</li>
                     <li>Your data may be used for targeted marketing based on your interests and clinic participation</li>
                   </ul>
@@ -198,11 +204,11 @@ export default function TermsAndConditions() {
                   <h4 className="font-semibold text-navy mb-3">Photography and Video Usage Rights</h4>
                   <ul className="space-y-2 list-disc ml-6 text-sm">
                     <li>During clinics, photographs and videos may be taken for promotional and educational purposes</li>
-                    <li>You consent to Dan Bizzarro Method using your image and likeness in photographs and videos</li>
+                    <li>You consent to us using your image and likeness in photographs and videos</li>
                     <li>These images and videos may be used on social media platforms including but not limited to Instagram, Facebook, YouTube, and TikTok</li>
                     <li>Images may also be used on our website, in marketing materials, and promotional content</li>
                     <li>No additional compensation will be provided for the use of your image</li>
-                    <li>If you do not wish to be photographed or filmed, please inform Dan at the start of the clinic</li>
+                    <li>If you do not wish to be photographed or filmed, please inform us at the start of the clinic</li>
                   </ul>
                 </div>
 
@@ -238,27 +244,28 @@ export default function TermsAndConditions() {
                   </ul>
                 </div>
 
+                {/* TEMPLATE: Update data controller contact details */}
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-navy mb-2">Data Controller Contact</h4>
                   <p className="text-sm">
-                    Dan Bizzarro Method is the data controller for your personal information. 
+                    Your Coaching Business is the data controller for your personal information. 
                     To exercise any of your GDPR rights or for data protection queries, contact:
                   </p>
                   <p className="text-sm mt-2">
-                    <strong>Email:</strong> dan@danbizzarromethod.com<br/>
-                    <strong>Phone:</strong> +44 7767 291713
+                    <strong>Email:</strong> info@your-coaching-business.com<br/>
+                    <strong>Phone:</strong> +1234567890
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* Contact Information */}
+            {/* Contact Information - TEMPLATE: Update contact details */}
             <section>
               <h2 className="text-xl font-semibold text-navy mb-4">Contact Information</h2>
               <div className="bg-gray-50 p-6 rounded-lg">
                 <p className="mb-2">For any questions about these terms or to make a cancellation request:</p>
-                <p className="font-semibold">Email: dan@danbizzarromethod.com</p>
-                <p className="font-semibold">Phone: +44 7767 291713</p>
+                <p className="font-semibold">Email: info@your-coaching-business.com</p>
+                <p className="font-semibold">Phone: +1234567890</p>
                 <p className="text-sm mt-4 text-gray-600">
                   By registering for a clinic, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.
                 </p>

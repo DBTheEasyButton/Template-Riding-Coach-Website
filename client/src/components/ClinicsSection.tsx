@@ -74,7 +74,7 @@ function sortSessionsByDifficulty(sessions: ClinicSession[]): ClinicSession[] {
 }
 
 function ClinicEventsSchema({ clinics }: { clinics: ClinicWithSessions[] }) {
-  const baseUrl = "https://danbizzarromethod.com";
+  const baseUrl = "https://your-coaching-business.com";
   
   const events = clinics.map(clinic => {
     const imageUrl = clinic.image.startsWith('http') 
@@ -106,12 +106,12 @@ function ClinicEventsSchema({ clinics }: { clinics: ClinicWithSessions[] }) {
       },
       "organizer": {
         "@type": "Person",
-        "name": "Dan Bizzarro",
+        "name": "Your Coach",
         "url": `${baseUrl}/about`
       },
       "performer": {
         "@type": "Person",
-        "name": "Dan Bizzarro"
+        "name": "Your Coach"
       },
       "offers": {
         "@type": "Offer",
@@ -1073,7 +1073,7 @@ export default function ClinicsSection() {
                 Register for {selectedClinic?.title}
               </DialogTitle>
               <DialogDescription>
-                Complete your registration for this exclusive training clinic with Dan Bizzarro.
+                Complete your registration for this exclusive training clinic with Your Coach.
               </DialogDescription>
               {hasSavedData && (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-3">
@@ -1546,7 +1546,7 @@ export default function ClinicsSection() {
                     <div className="text-sm text-gray-700 space-y-1">
                       <p>• Once paid, you cannot cancel through this system</p>
                       <p>• Refunds only if &gt;7 days before clinic OR waiting list exists</p>
-                      <p>• Contact dan@danbizzarromethod.com for cancellation requests</p>
+                      <p>• Contact info@your-coaching-business.com for cancellation requests</p>
                       <p>• Full terms at <a href="/terms-and-conditions" className="text-orange hover:underline">Terms & Conditions</a></p>
                     </div>
                   </div>
@@ -1569,7 +1569,7 @@ export default function ClinicsSection() {
                       <Link href="/terms-and-conditions">
                         <span className="text-orange hover:underline font-medium">Clinic Terms and Conditions</span>
                       </Link>
-                      {' '}and understand the risks involved in equestrian activities. I also consent to photos and videos being taken during the clinic which may be used on Dan Bizzarro's social media, website, and promotional materials. *
+                      {' '}and understand the risks involved in equestrian activities. I also consent to photos and videos being taken during the clinic which may be used on Your Coach's social media, website, and promotional materials. *
                     </Label>
                     {formErrors.agreeToTerms && (
                       <p className="text-sm text-red-500 flex items-center">

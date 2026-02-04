@@ -234,7 +234,7 @@ export default function Home() {
                 <source srcSet={blenheimDressageWebp} type="image/webp" />
                 <img 
                   src={blenheimDressageJpg} 
-                  alt="Dan Bizzarro competing in dressage at Blenheim Palace International Horse Trials"
+                  alt="Your Coach competing in dressage at Blenheim Palace International Horse Trials"
                   className="rounded-2xl shadow-2xl w-full"
                   loading="lazy"
                 />
@@ -251,7 +251,7 @@ export default function Home() {
                 <source srcSet={hartpuryOpenWebp} type="image/webp" />
                 <img 
                   src={hartpuryOpenJpg} 
-                  alt="Dan Bizzarro competing in cross country at Hartpury Open Championship"
+                  alt="Your Coach competing in cross country at Hartpury Open Championship"
                   className="rounded-2xl shadow-2xl w-full"
                   loading="lazy"
                 />
@@ -269,7 +269,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 order-1">
               <p className="text-lg text-navy font-medium leading-relaxed">
-                The Dan Bizzarro Method gives you clarity, improves communication, and builds real confidence — whether you ride for fun or compete at the highest level.
+                The Your Coaching Business gives you clarity, improves communication, and builds real confidence — whether you ride for fun or compete at the highest level.
               </p>
               
               <p className="text-lg text-dark leading-relaxed">
@@ -284,7 +284,7 @@ export default function Home() {
                 <source srcSet={boekeloPodiumPhotoWebp} type="image/webp" />
                 <img 
                   src={boekeloPodiumPhotoJpg} 
-                  alt="Dan Bizzarro on the podium at Boekelo international eventing competition"
+                  alt="Your Coach on the podium at Boekelo international eventing competition"
                   className="rounded-2xl shadow-2xl w-full"
                   loading="lazy"
                 />
@@ -388,7 +388,7 @@ export default function Home() {
                 <source srcSet={coachingSessionWebp} type="image/webp" />
                 <img 
                   src={coachingSessionJpg} 
-                  alt="Dan Bizzarro coaching a rider during a lesson"
+                  alt="Your Coach coaching a rider during a lesson"
                   className="rounded-2xl shadow-2xl w-full"
                   loading="lazy"
                 />
@@ -453,7 +453,7 @@ export default function Home() {
                   <source srcSet={privateLessonsBoxWebp} type="image/webp" />
                   <img 
                     src={privateLessonsBoxJpg} 
-                    alt="Dan Bizzarro coaching a private riding lesson"
+                    alt="Your Coach coaching a private riding lesson"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
@@ -558,7 +558,7 @@ export default function Home() {
       <div className="border-t-2 border-navy"></div>
       {/* SECTION 8 — TESTIMONIALS */}
       <Suspense fallback={<SectionSkeleton />}>
-        <TestimonialsSection title="Riders See Real Progress With the Dan Bizzarro Method" />
+        <TestimonialsSection title="Riders See Real Progress With the Your Coaching Business" />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height="300px" />}>
         <SponsorsSection />

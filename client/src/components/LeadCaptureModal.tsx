@@ -218,13 +218,13 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                 Your Guide is Downloading!
               </DialogTitle>
               <DialogDescription className="text-gray-600 text-base">
-                I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder. If you still haven't received it, please contact me at <a href="mailto:dan@danbizzarromethod.com" className="text-orange hover:underline font-medium">dan@danbizzarromethod.com</a>
+                I've also sent a copy to your email. If you don't see it in your inbox, please check your spam or junk folder. If you still haven't received it, please contact me at <a href="mailto:info@your-coaching-business.com" className="text-orange hover:underline font-medium">info@your-coaching-business.com</a>
               </DialogDescription>
             </DialogHeader>
             <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 my-4">
               <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
                 <Mail className="h-4 w-4 text-navy flex-shrink-0" />
-                <span>Look for an email from Dan Bizzarro Method</span>
+                <span>Look for an email from Your Coaching Business</span>
               </p>
             </div>
             <Button
@@ -298,7 +298,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
                 <Link href="/terms" className="text-orange hover:underline">
                   Terms & Conditions
                 </Link>{" "}
-                and consent to receive updates from Dan Bizzarro Method.
+                and consent to receive updates from Your Coaching Business.
               </label>
             </div>
             
@@ -450,7 +450,7 @@ export default function LeadCaptureModal({ isOpen, onClose }: LeadCaptureModalPr
               <Link href="/terms" className="text-orange hover:underline">
                 Terms & Conditions
               </Link>{" "}
-              and consent to receive updates from Dan Bizzarro Method.
+              and consent to receive updates from Your Coaching Business.
             </label>
           </div>
 

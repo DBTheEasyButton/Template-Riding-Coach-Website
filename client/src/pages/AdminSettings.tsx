@@ -66,9 +66,9 @@ export default function AdminSettings() {
   });
 
   const [formData, setFormData] = useState<SiteSettings>({
-    siteName: settings?.siteName || "Dan Bizzarro Method",
+    siteName: settings?.siteName || "Your Coaching Business",
     tagline: settings?.tagline || "Professional Horse Training & Eventing",
-    contactEmail: settings?.contactEmail || "dan@danbizzarromethod.com",
+    contactEmail: settings?.contactEmail || "info@your-coaching-business.com",
     socialMedia: settings?.socialMedia || {},
     features: settings?.features || {
       enableRegistrations: true,

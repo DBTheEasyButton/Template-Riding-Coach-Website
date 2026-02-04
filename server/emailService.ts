@@ -2,8 +2,8 @@ import { storage } from "./storage";
 import type { EmailTemplate, EmailSubscriber, EmailCampaign, InsertEmailLog } from "@shared/schema";
 
 export class EmailService {
-  private readonly fromEmail = "dan@danbizzarromethod.com";
-  private readonly fromName = "Dan Bizzarro";
+  private readonly fromEmail = "info@your-coaching-business.com";
+  private readonly fromName = "Your Coach";
   
   async sendEmail(to: string, subject: string, htmlContent: string, textContent: string, campaignId?: number): Promise<boolean> {
     try {
@@ -149,7 +149,7 @@ export class EmailService {
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
         <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Welcome to Dan Bizzarro Method!</h1>
+          <h1 style="color: #1e3a8a; margin-top: 0; font-size: 28px;">Welcome to Your Coaching Business!</h1>
           
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">Dear ${firstName},</p>
           
@@ -173,7 +173,7 @@ export class EmailService {
           <div style="background-color: #dbeafe; padding: 20px; border-radius: 8px; margin: 25px 0;">
             <h3 style="color: #1e3a8a; margin-top: 0; font-size: 20px;">🎁 Your Unique Referral Code</h3>
             <p style="color: #374151; margin-bottom: 15px; font-size: 15px;">
-              Share the Dan Bizzarro Method with friends and earn rewards!
+              Share the Your Coaching Business with friends and earn rewards!
             </p>
             <div style="background-color: white; padding: 15px; border-radius: 6px; text-align: center; border: 2px dashed #1e3a8a;">
               <p style="color: #6b7280; margin: 0 0 10px 0; font-size: 14px;">Your Referral Code:</p>
@@ -197,7 +197,7 @@ export class EmailService {
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://danbizzarromethod.com" 
+            <a href="https://your-coaching-business.com" 
                style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
               Visit Our Website
             </a>
@@ -209,19 +209,19 @@ export class EmailService {
 
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
             Best regards,<br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
 
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://your-coaching-business.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -231,7 +231,7 @@ export class EmailService {
     const locationText = clinicLocation ? `Location: ${clinicLocation}${googleMapsLink ? ` (${googleMapsLink})` : ''}\n` : '';
     
     const textContent = `
-Welcome to Dan Bizzarro Method!
+Welcome to Your Coaching Business!
 
 Dear ${firstName},
 
@@ -259,13 +259,13 @@ POINTS & REWARDS PROGRAMME:
 We're looking forward to seeing you at the clinic! If you have any questions, please don't hesitate to get in touch.
 
 Best regards,
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/unsubscribe
+Unsubscribe: https://your-coaching-business.com/unsubscribe
     `;
 
     return this.sendEmail(email, `🎉 Welcome! Your Clinic Registration is Confirmed - ${clinicName}`, htmlContent, textContent);
@@ -335,7 +335,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://danbizzarromethod.com/#leaderboard" 
+            <a href="https://your-coaching-business.com/#leaderboard" 
                style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
               View Live Leaderboard
             </a>
@@ -347,19 +347,19 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
             Best regards,<br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
 
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://your-coaching-business.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -399,13 +399,13 @@ Check out the live leaderboard on our website to see your ranking!
 Looking forward to seeing you at the clinic! If you have any questions, please get in touch.
 
 Best regards,
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/unsubscribe
+Unsubscribe: https://your-coaching-business.com/unsubscribe
     `;
 
     return this.sendEmail(email, `✅ Clinic Registration Confirmed - ${clinicName}`, htmlContent, textContent);
@@ -454,31 +454,31 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://danbizzarromethod.com/#leaderboard" 
+            <a href="https://your-coaching-business.com/#leaderboard" 
                style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
               Check Live Leaderboard
             </a>
           </div>
 
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-            Thank you for spreading the word about Dan Bizzarro Method! Your support means the world to us.
+            Thank you for spreading the word about Your Coaching Business! Your support means the world to us.
           </p>
 
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
             Best regards,<br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
 
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://your-coaching-business.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -507,16 +507,16 @@ KEEP EARNING POINTS:
 
 Check the live leaderboard on our website to see your ranking!
 
-Thank you for spreading the word about Dan Bizzarro Method! Your support means the world to us.
+Thank you for spreading the word about Your Coaching Business! Your support means the world to us.
 
 Best regards,
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/unsubscribe
+Unsubscribe: https://your-coaching-business.com/unsubscribe
     `;
 
     return this.sendEmail(email, `🎉 You Earned ${bonusPoints} Bonus Points! - ${referredPersonName} Joined`, htmlContent, textContent);
@@ -572,7 +572,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
               I'd love to see you at a future clinic! Check out the upcoming sessions on my website.
             </p>
             <div style="text-align: center;">
-              <a href="https://danbizzarromethod.com/coaching/clinics" 
+              <a href="https://your-coaching-business.com/coaching/clinics" 
                  style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
                 View Upcoming Clinics
               </a>
@@ -585,19 +585,19 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
             Best regards,<br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
 
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://your-coaching-business.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -624,18 +624,18 @@ ${adminFee > 0 ? `A £${(adminFee / 100).toFixed(2)} admin fee has been deducted
 The refund should appear in your account within 5-10 business days, depending on your bank.
 
 I'd love to see you at a future clinic! Check out the upcoming sessions on my website:
-https://danbizzarromethod.com/coaching/clinics
+https://your-coaching-business.com/coaching/clinics
 
 If you have any questions about your refund or would like to discuss booking a future clinic, please don't hesitate to get in touch.
 
 Best regards,
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/unsubscribe
+Unsubscribe: https://your-coaching-business.com/unsubscribe
     `;
 
     return this.sendEmail(email, `Refund Confirmation - ${clinicName}`, htmlContent, textContent);
@@ -653,8 +653,8 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
   ): Promise<boolean> {
     const priceText = clinicPrice > 0 ? `£${(clinicPrice / 100).toFixed(2)}` : 'Free';
     const bookingUrl = sessionId 
-      ? `https://danbizzarromethod.com/coaching/clinics?clinicId=${clinicId}&sessionId=${sessionId}`
-      : `https://danbizzarromethod.com/coaching/clinics?clinicId=${clinicId}`;
+      ? `https://your-coaching-business.com/coaching/clinics?clinicId=${clinicId}&sessionId=${sessionId}`
+      : `https://your-coaching-business.com/coaching/clinics?clinicId=${clinicId}`;
     
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
@@ -696,13 +696,13 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
             See you at the clinic!<br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
 
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
@@ -734,11 +734,11 @@ Book your spot now: ${bookingUrl}
 Don't miss this opportunity to join the clinic!
 
 See you at the clinic!
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
 ---
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
     `;
 
@@ -778,7 +778,7 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             <p style="color: #f97316; font-weight: 600; margin: 0 0 10px 0;">📅 ${clinicDate}</p>
             <p style="color: #374151; margin: 0 0 15px 0; line-height: 1.5;">${clinic.description}</p>
             <div style="text-align: center;">
-              <a href="https://danbizzarromethod.com/#clinics" style="background: #f97316; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Book Your Spot Now</a>
+              <a href="https://your-coaching-business.com/#clinics" style="background: #f97316; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block;">Book Your Spot Now</a>
             </div>
           </div>`;
       }).join('');
@@ -790,7 +790,7 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
           month: 'long',
           year: 'numeric'
         });
-        return `${clinic.title}\nDate: ${clinicDate}\n${clinic.description}\nBook now: https://danbizzarromethod.com/#clinics\n`;
+        return `${clinic.title}\nDate: ${clinicDate}\n${clinic.description}\nBook now: https://your-coaching-business.com/#clinics\n`;
       }).join('\n');
 
       return {
@@ -843,7 +843,7 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             <p style="color: #f97316; font-size: 14px; margin: 0 0 10px 0;">📅 ${publishDate}</p>
             <p style="color: #374151; margin: 0 0 15px 0; line-height: 1.5; font-size: 14px;">${summary}</p>
             <div style="text-align: center;">
-              <a href="https://danbizzarromethod.com/blog/${article.slug || article.id}" style="background: #1e3a8a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 14px;">Read Full Article</a>
+              <a href="https://your-coaching-business.com/blog/${article.slug || article.id}" style="background: #1e3a8a; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 14px;">Read Full Article</a>
             </div>
           </div>`;
       }).join('');
@@ -859,7 +859,7 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             article.content.substring(0, 150).replace(/<[^>]*>/g, '') + '...' : 
             article.content.replace(/<[^>]*>/g, ''));
         
-        return `${article.title}\nPublished: ${publishDate}\n${summary}\nRead more: https://danbizzarromethod.com/blog/${article.slug || article.id}\n`;
+        return `${article.title}\nPublished: ${publishDate}\n${summary}\nRead more: https://your-coaching-business.com/blog/${article.slug || article.id}\n`;
       }).join('\n');
 
       return {
@@ -892,7 +892,7 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dan Bizzarro Method</title>
+  <title>Your Coaching Business</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   ${htmlContent}
@@ -1029,22 +1029,22 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             <p style="font-size: 14px; margin-bottom: 0;">Use this code on your next clinic registration</p>
           </div>
           <p style="color: #374151; font-size: 16px;">This discount is valid for 12 months and can be used once on any of our upcoming clinics.</p>
-          <p style="color: #374151; font-size: 16px;">Thank you for being a loyal member of the Dan Bizzarro Method community!</p>
+          <p style="color: #374151; font-size: 16px;">Thank you for being a loyal member of the Your Coaching Business community!</p>
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
             Best regards,<br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
           
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://your-coaching-business.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -1063,16 +1063,16 @@ Your discount code: ${discountCode}
 
 This discount is valid for 12 months and can be used once on any of our upcoming clinics.
 
-Thank you for being a loyal member of the Dan Bizzarro Method community!
+Thank you for being a loyal member of the Your Coaching Business community!
 
 Best regards,
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/unsubscribe
+Unsubscribe: https://your-coaching-business.com/unsubscribe
     `;
 
     return this.sendEmail(subscriberEmail, "🎉 You've Earned a Loyalty Discount!", htmlContent, textContent);
@@ -1235,7 +1235,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         </div>
 
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://danbizzarromethod.com/coaching/clinics?utm_source=email&utm_medium=clinic-announcement&utm_campaign=${clinic.title.toLowerCase().replace(/\s+/g, '-')}" 
+          <a href="https://your-coaching-business.com/coaching/clinics?utm_source=email&utm_medium=clinic-announcement&utm_campaign=${clinic.title.toLowerCase().replace(/\s+/g, '-')}" 
              style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
             Book Your Spot
           </a>
@@ -1243,8 +1243,8 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
         <p style="color: #374151; font-size: 16px; margin-top: 30px;">
           Best regards,<br>
-          <strong>Dan Bizzarro</strong><br>
-          <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+          <strong>Your Coach</strong><br>
+          <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
         </p>
       </div>
     `;
@@ -1292,7 +1292,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
         </div>
 
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://danbizzarromethod.com/coaching/clinics?utm_source=email&utm_medium=clinic-announcement&utm_campaign=${clinic.title.toLowerCase().replace(/\s+/g, '-')}" 
+          <a href="https://your-coaching-business.com/coaching/clinics?utm_source=email&utm_medium=clinic-announcement&utm_campaign=${clinic.title.toLowerCase().replace(/\s+/g, '-')}" 
              style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
             Book Your Spot & Get Your Referral Code
           </a>
@@ -1300,8 +1300,8 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
 
         <p style="color: #374151; font-size: 16px; margin-top: 30px;">
           Looking forward to seeing you there!<br>
-          <strong>Dan Bizzarro</strong><br>
-          <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+          <strong>Your Coach</strong><br>
+          <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
         </p>
       </div>
     `;
@@ -1318,7 +1318,7 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">Hi ${firstName},</p>
           
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-            Thank you for being part of Dan Bizzarro Method! Here's your unique referral code to share with friends:
+            Thank you for being part of Your Coaching Business! Here's your unique referral code to share with friends:
           </p>
 
           <div style="background-color: #dbeafe; padding: 20px; border-radius: 8px; margin: 25px 0;">
@@ -1342,21 +1342,21 @@ Unsubscribe: https://danbizzarromethod.com/unsubscribe
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://danbizzarromethod.com/coaching/clinics" 
+            <a href="https://your-coaching-business.com/coaching/clinics" 
                style="background-color: #1e3a8a; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 16px;">
               View Upcoming Clinics
             </a>
           </div>
 
           <p style="color: #374151; font-size: 16px; margin-top: 30px;">
-            Thank you for being part of the Dan Bizzarro Method family!<br><br>
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span>
+            Thank you for being part of the Your Coaching Business family!<br><br>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span>
           </p>
         </div>
         
         <div style="text-align: center; padding: 20px; color: #6b7280; font-size: 12px;">
-          <p>📧 dan@danbizzarromethod.com | 📞 +44 7767 291713</p>
+          <p>📧 info@your-coaching-business.com | 📞 +1234567890</p>
           <p>Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom</p>
         </div>
       </div>
@@ -1367,7 +1367,7 @@ Your Referral Code is Ready!
 
 Hi ${firstName},
 
-Thank you for being part of Dan Bizzarro Method! Here's your unique referral code to share with friends:
+Thank you for being part of Your Coaching Business! Here's your unique referral code to share with friends:
 
 YOUR REFERRAL CODE: ${referralCode}
 
@@ -1379,14 +1379,14 @@ HOW IT WORKS:
 - Every 50 points earns you an automatic 20% discount code
 - Top 5 on the leaderboard win prizes twice per year!
 
-View upcoming clinics: https://danbizzarromethod.com/coaching/clinics
+View upcoming clinics: https://your-coaching-business.com/coaching/clinics
 
-Thank you for being part of the Dan Bizzarro Method family!
+Thank you for being part of the Your Coaching Business family!
 
-Dan Bizzarro
-Dan Bizzarro Method
+Your Coach
+Your Coaching Business
 
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
     `;
 
@@ -1544,13 +1544,13 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
           </div>
 
           <div style="text-align: center; margin: 25px 0;">
-            <a href="https://danbizzarromethod.com/coaching/clinics" 
+            <a href="https://your-coaching-business.com/coaching/clinics" 
                style="background-color: #f97316; color: white; padding: 16px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 18px;">
               BOOK NOW
             </a>
           </div>
 
-          <h2 style="color: #1e3a8a; font-size: 22px; margin-top: 35px; margin-bottom: 15px;">Introducing the Dan Bizzarro Method Rewards Program</h2>
+          <h2 style="color: #1e3a8a; font-size: 22px; margin-top: 35px; margin-bottom: 15px;">Introducing the Your Coaching Business Rewards Program</h2>
           
           <p style="color: #374151; font-size: 16px; line-height: 1.6;">
             I've also launched a new loyalty program to thank my regular clients:
@@ -1577,20 +1577,20 @@ Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
           </p>
 
           <p style="color: #374151; font-size: 16px; margin-top: 20px;">
-            <strong>Dan Bizzarro</strong><br>
-            <span style="color: #6b7280; font-size: 14px;">Dan Bizzarro Method</span><br>
-            <span style="color: #6b7280; font-size: 14px;">+44 7767 291713</span>
+            <strong>Your Coach</strong><br>
+            <span style="color: #6b7280; font-size: 14px;">Your Coaching Business</span><br>
+            <span style="color: #6b7280; font-size: 14px;">+1234567890</span>
           </p>
 
           <div style="border-top: 2px solid #e5e7eb; margin-top: 30px; padding-top: 20px; text-align: center;">
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
-              📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+              📧 info@your-coaching-business.com | 📞 +1234567890
             </p>
             <p style="color: #6b7280; font-size: 13px; margin: 5px 0;">
               Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
             </p>
             <p style="color: #9ca3af; font-size: 11px; margin: 15px 0 5px 0;">
-              <a href="https://danbizzarromethod.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
+              <a href="https://your-coaching-business.com/unsubscribe" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> from these emails
             </p>
           </div>
         </div>
@@ -1614,7 +1614,7 @@ POLE WORK CLINIC - 16TH JANUARY
 🕒 3:00 PM - 7:00 PM
 👥 Sessions for all levels (3-4 horses per group)
 
-Book now: https://danbizzarromethod.com/coaching/clinics
+Book now: https://your-coaching-business.com/coaching/clinics
 
 INTRODUCING THE DAN BIZZARRO METHOD REWARDS PROGRAM
 
@@ -1630,15 +1630,15 @@ I'd love to see you at an upcoming clinic. If you have any questions, just reply
 
 See you soon,
 
-Dan Bizzarro
-Dan Bizzarro Method
-+44 7767 291713
+Your Coach
+Your Coaching Business
++1234567890
 
 ---
-📧 dan@danbizzarromethod.com | 📞 +44 7767 291713
+📧 info@your-coaching-business.com | 📞 +1234567890
 Crown Farm, Ascott-Under-Wychwood, Oxfordshire OX7, United Kingdom
 
-Unsubscribe: https://danbizzarromethod.com/unsubscribe
+Unsubscribe: https://your-coaching-business.com/unsubscribe
     `;
 
     return this.sendEmail(email, subject, htmlContent, textContent);

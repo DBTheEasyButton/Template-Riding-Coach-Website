@@ -152,7 +152,7 @@ export default function Dressage() {
           webpSrc={dressageHeroWebp}
           mobileJpegSrc={dressageHeroMobileJpg}
           mobileWebpSrc={dressageHeroMobileWebp}
-          alt="Dan Bizzarro competing in dressage"
+          alt="Your Coach competing in dressage"
           loading="eager"
           priority={true}
           className="absolute inset-0 w-full h-full object-cover object-center"

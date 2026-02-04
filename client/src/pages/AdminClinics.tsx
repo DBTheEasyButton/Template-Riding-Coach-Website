@@ -830,7 +830,7 @@ export default function AdminClinics() {
                     setMissingFields(missingFields.filter(f => f !== 'location'));
                   }
                 }}
-                placeholder="e.g., Dan Bizzarro Training Center"
+                placeholder="e.g., Your Coach Training Center"
                 className={missingFields.includes('location') ? 'border-red-500 focus:border-red-500' : ''}
               />
               {missingFields.includes('location') && (

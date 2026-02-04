@@ -235,10 +235,10 @@ export default function ReadinessQuiz() {
   const readinessQuizStructuredData = {
     name: "Eventing Readiness Assessment",
     description: "Professional quiz to assess your readiness for eventing competitions",
-    url: "https://danbizzarromethod.com/readiness-quiz",
+    url: "https://your-coaching-business.com/readiness-quiz",
     provider: {
       "@type": "Organization", 
-      name: "Dan Bizzarro Method"
+      name: "Your Coaching Business"
     },
     audience: {
       "@type": "Audience",

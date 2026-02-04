@@ -61,7 +61,7 @@ export const defaultConfig: StrongHorseAudioPageConfig = {
     showMentorship: true,
   },
   seo: {
-    title: 'From Strong to Light and Soft Audio Course | Dan Bizzarro Method',
+    title: 'From Strong to Light and Soft Audio Course | Your Coaching Business',
     description: 'Transform your heavy, rushing horse into a soft, balanced partner in 28 days with our listen-while-you-ride audio course.',
     canonical: '/courses/strong-horse-audio',
   },
@@ -93,7 +93,7 @@ export const discountConfig: StrongHorseAudioPageConfig = {
     showMentorship: false,
   },
   seo: {
-    title: 'Special Offer - 25% OFF Audio Course | Dan Bizzarro Method',
+    title: 'Special Offer - 25% OFF Audio Course | Your Coaching Business',
     description: 'Exclusive offer: Get the "From Strong to Light and Soft in 28 Days" audio course for £72 (was £97). Transform your horse\'s responsiveness with proven techniques.',
     canonical: '/courses/strong-horse-audio-offer',
   },

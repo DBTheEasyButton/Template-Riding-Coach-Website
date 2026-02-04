@@ -12,9 +12,9 @@ interface SEOHeadProps {
 }
 
 function SEOHead({ 
-  title = "Dan Bizzarro Method - Professional Eventing Coaching & Training",
-  description = "Expert eventing coaching from international event rider Dan Bizzarro. Stride calculator, readiness assessments, and professional equestrian training in Oxfordshire.",
-  keywords = "eventing, horse training, dressage, show jumping, cross country, Dan Bizzarro, equestrian coaching, stride calculator, eventing quiz, competition preparation",
+  title = "Your Coaching Business - Professional Eventing Coaching & Training",
+  description = "Expert eventing coaching from international event rider Your Coach. Stride calculator, readiness assessments, and professional equestrian training in Oxfordshire.",
+  keywords = "eventing, horse training, dressage, show jumping, cross country, Your Coach, equestrian coaching, stride calculator, eventing quiz, competition preparation",
   canonical,
   ogImage = "/hero-background.jpg",
   preloadImage,

@@ -122,16 +122,16 @@ function createBlogPostSchema(config: DynamicSEOConfig): object {
   return {
     "@context": "https://schema.org",
     "@type": config.articleType || "BlogPosting",
-    "headline": config.title.replace(' | Dan Bizzarro Method', ''),
+    "headline": config.title.replace(' | Your Coaching Business', ''),
     "description": config.description,
     "author": {
       "@type": "Person",
-      "name": config.author || "Dan Bizzarro",
+      "name": config.author || "Your Coach",
       "url": `${BASE_URL}/about`
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Dan Bizzarro Method",
+      "name": "Your Coaching Business",
       "url": BASE_URL,
       "logo": {
         "@type": "ImageObject",
@@ -312,7 +312,7 @@ async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig> {
     }
     
     // Create SEO-optimized title (max ~60 chars for Google)
-    const seoTitle = `${post.title} | Dan Bizzarro Method`;
+    const seoTitle = `${post.title} | Your Coaching Business`;
     
     // Create description from excerpt (max ~155 chars for Google)
     let description = post.excerpt;
@@ -323,13 +323,13 @@ async function getBlogPostSEO(slug: string): Promise<DynamicSEOConfig> {
     return {
       title: seoTitle,
       description: description,
-      keywords: `${post.title.toLowerCase()}, horse training, equestrian tips, Dan Bizzarro Method`,
+      keywords: `${post.title.toLowerCase()}, horse training, equestrian tips, Your Coaching Business`,
       canonicalPath: `/blog/${slug}`,
       ogImage: post.image || '/hero-background.jpg',
       h1: post.title,
       publishedAt: post.publishedAt,
       modifiedAt: post.publishedAt, // Use same as published for now
-      author: 'Dan Bizzarro',
+      author: 'Your Coach',
       articleType: 'BlogPosting',
       articleContent: post.content,
       articleImage: post.image,

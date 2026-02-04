@@ -198,7 +198,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Send SMS via GHL
-      const message = `Your Dan Bizzarro Method verification code is: ${code}. This code expires in 10 minutes.`;
+      const message = `Your Your Coaching Business verification code is: ${code}. This code expires in 10 minutes.`;
       const result = await storage.sendSmsViaGhl(cleanPhone, message);
 
       if (!result.success) {
@@ -2714,7 +2714,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         
         // Build email HTML
-        const confirmUrl = `https://danbizzarromethod.com/confirm-clinic-times/${confirmationToken}`;
+        const confirmUrl = `https://your-coaching-business.com/confirm-clinic-times/${confirmationToken}`;
         
         const scheduleHtml = fullSchedule.map(session => {
           const groupsHtml = session.groups.map(group => {
@@ -2778,7 +2778,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               </div>
               
               <p style="margin-top: 24px; color: #6b7280; font-size: 0.875rem;">
-                If you have any questions, please contact Dan at dan@danbizzarromethod.com
+                If you have any questions, please contact Dan at info@your-coaching-business.com
               </p>
             </div>
           </div>
@@ -2799,7 +2799,7 @@ ${clinic.googleMapsLink ? `Google Maps: ${clinic.googleMapsLink}` : ''}
 
 Please confirm you have received this email by clicking: ${confirmUrl}
 
-If you have any questions, please contact Dan at dan@danbizzarromethod.com
+If you have any questions, please contact Dan at info@your-coaching-business.com
         `;
         
         try {
@@ -2845,7 +2845,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
             </table>
             
             <p style="margin-top: 24px;">
-              <a href="https://danbizzarromethod.com/admin/clinics" style="color: #2563eb;">
+              <a href="https://your-coaching-business.com/admin/clinics" style="color: #2563eb;">
                 View confirmation status in Admin Panel
               </a>
             </p>
@@ -2854,7 +2854,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
       `;
       
       await emailService.sendEmail(
-        'dan@danbizzarromethod.com',
+        'info@your-coaching-business.com',
         `Clinic Times Sent - ${clinic.title} - ${emailsSent.filter(e => e.success).length} recipients`,
         summaryHtml,
         `Clinic times emails sent for ${clinic.title}. ${emailsSent.filter(e => e.success).length} of ${emailsSent.length} sent successfully.`
@@ -5885,13 +5885,14 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
   app.get("/api/admin/settings", async (req, res) => {
     try {
       const settings = {
-        siteName: "Dan Bizzarro Method",
+        siteName: "Your Coaching Business",
         tagline: "Professional Horse Training & Eventing",
-        contactEmail: "dan@danbizzarromethod.com",
+        contactEmail: "info@your-coaching-business.com",
+        // TEMPLATE: Update social media URLs with your business accounts
         socialMedia: {
-          facebook: "https://facebook.com/danbizzarromethod",
-          instagram: "https://instagram.com/danbizzarromethod",
-          youtube: "https://youtube.com/@danbizzarromethod"
+          facebook: "https://facebook.com/YOUR-BUSINESS",
+          instagram: "https://instagram.com/YOUR-BUSINESS",
+          youtube: "https://youtube.com/@YOUR-BUSINESS"
         },
         features: {
           enableRegistrations: true,
@@ -6041,7 +6042,8 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
       };
 
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', `attachment; filename="danbizzarro-backup-${timestamp}.json"`);
+      // TEMPLATE: Update backup filename with your business name
+      res.setHeader('Content-Disposition', `attachment; filename="coaching-backup-${timestamp}.json"`);
       res.json(backupData);
     } catch (error) {
       console.error("Error creating backup:", error);
@@ -6053,7 +6055,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
   app.get("/sitemap-blog.xml", async (req, res) => {
     try {
       const news = await storage.getAllNews();
-      const baseUrl = "https://danbizzarromethod.com";
+      const baseUrl = "https://your-coaching-business.com";
       
       let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -6096,7 +6098,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
   app.get("/sitemap-clinics.xml", async (req, res) => {
     try {
       const clinics = await storage.getUpcomingClinics();
-      const baseUrl = "https://danbizzarromethod.com";
+      const baseUrl = "https://your-coaching-business.com";
       
       let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -6131,7 +6133,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
   // XML Sitemap for Static Pages
   app.get("/sitemap-pages.xml", async (req, res) => {
     try {
-      const baseUrl = "https://danbizzarromethod.com";
+      const baseUrl = "https://your-coaching-business.com";
       
       const staticPages = [
         { loc: '/', priority: '1.0', changefreq: 'daily' },
@@ -6180,7 +6182,7 @@ If you have any questions, please contact Dan at dan@danbizzarromethod.com
   // Main Sitemap Index
   app.get("/sitemap.xml", async (req, res) => {
     try {
-      const baseUrl = "https://danbizzarromethod.com";
+      const baseUrl = "https://your-coaching-business.com";
       const today = new Date().toISOString().split('T')[0];
       
       const xml = `<?xml version="1.0" encoding="UTF-8"?>

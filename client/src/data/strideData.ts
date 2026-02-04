@@ -1,4 +1,4 @@
-// Standard distances in meters - Dan Bizzarro Method official guidelines
+// Standard distances in meters - Your Coaching Business official guidelines
 export const standardDistances = {
   "walk-poles": {
     "small-pony": { distance: 0.6, description: "Walk poles - small pony (<13hh): 60cm" },

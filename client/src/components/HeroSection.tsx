@@ -43,28 +43,28 @@ export default function HeroSection() {
       webpSrc: heroImageWebp,
       mobileJpegSrc: heroImageMobileJpg,
       mobileWebpSrc: heroImageMobileWebp,
-      alt: "Dan Bizzarro eventing competition"
+      alt: "Your Coach eventing competition"
     },
     { 
       jpegSrc: carouselClinic2Jpg,
       webpSrc: carouselClinic2Webp,
       mobileJpegSrc: carouselClinic2MobileJpg,
       mobileWebpSrc: carouselClinic2MobileWebp,
-      alt: "Dan Bizzarro coaching clinic with riders and horses"
+      alt: "Your Coach coaching clinic with riders and horses"
     },
     { 
       jpegSrc: coachingClinicImageJpg,
       webpSrc: coachingClinicImageWebp,
       mobileJpegSrc: coachingClinicMobileJpg,
       mobileWebpSrc: coachingClinicMobileWebp,
-      alt: "Dan Bizzarro coaching at show jumping arena"
+      alt: "Your Coach coaching at show jumping arena"
     },
     { 
       jpegSrc: dressageImageJpg,
       webpSrc: dressageImageWebp,
       mobileJpegSrc: dressageImageMobileJpg,
       mobileWebpSrc: dressageImageMobileWebp,
-      alt: "Dressage training session with Dan Bizzarro",
+      alt: "Dressage training session with Your Coach",
       style: { objectPosition: 'center 30%' }
     },
     { 
@@ -120,7 +120,7 @@ export default function HeroSection() {
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 w-full">
         <h1 className="opacity-0 animate-fade-in-up leading-tight mb-6" style={{animationDelay: '0.2s'}}>
           <span className="block text-4xl md:text-6xl lg:text-7xl font-playfair font-bold">Improve Your Riding</span>
-          <span className="block text-2xl md:text-3xl lg:text-4xl font-playfair font-medium mt-2">with The Dan Bizzarro Method</span>
+          <span className="block text-2xl md:text-3xl lg:text-4xl font-playfair font-medium mt-2">with The Your Coaching Business</span>
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl font-inter font-light mb-8 opacity-0 animate-fade-in-up tracking-wide max-w-3xl mx-auto" style={{animationDelay: '0.4s'}}>Become a confident, skilled rider and get better results!</p>
         <div className="flex justify-center opacity-0 animate-fade-in-up mt-8" style={{animationDelay: '0.6s'}}>
@@ -153,20 +153,20 @@ export default function HeroSection() {
           >
             <img 
               src={facebookLogo} 
-              alt="Follow Dan Bizzarro on Facebook" 
+              alt="Follow Your Coach on Facebook" 
               className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl object-contain"
               style={{ imageRendering: 'crisp-edges' }}
             />
           </a>
           <a 
-            href="https://www.instagram.com/danbizzarro/?hl=en-gb" 
+            href="https://www.instagram.com/YOUR-BUSINESS/?hl=en-gb" 
             target="_blank" 
             rel="noopener noreferrer"
             className="transform hover:scale-110 transition-all duration-300"
           >
             <img 
               src={instagramLogo} 
-              alt="Follow Dan Bizzarro on Instagram" 
+              alt="Follow Your Coach on Instagram" 
               className="w-12 h-12 rounded-lg shadow-lg hover:shadow-xl object-contain"
               style={{ imageRendering: 'crisp-edges' }}
             />

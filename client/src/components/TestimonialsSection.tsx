@@ -26,7 +26,7 @@ export default function TestimonialsSection({ title }: TestimonialsSectionProps)
   // Create structured data for aggregate reviews
   const reviewsStructuredData = testimonials.length > 0 ? {
     "@type": "Product",
-    "name": "Dan Bizzarro Method Coaching Services",
+    "name": "Your Coaching Business Coaching Services",
     "description": "Professional eventing coaching services including private lessons, show-jumping clinics, and virtual riding lessons",
     "aggregateRating": {
       "@type": "AggregateRating",

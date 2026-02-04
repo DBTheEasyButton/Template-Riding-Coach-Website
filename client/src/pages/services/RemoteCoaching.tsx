@@ -129,7 +129,7 @@ export default function RemoteCoaching() {
     },
     {
       question: "How do I book a virtual riding lesson?",
-      answer: "You can book a virtual lesson by contacting me via WhatsApp at +44 7767 291713 or by clicking the 'Book a Virtual Lesson' button on this page. When booking, let me know you want a virtual session, and I'll help you schedule a time and ensure you have the necessary equipment setup. Sessions are arranged at times that work for your schedule and time zone."
+      answer: "You can book a virtual lesson by contacting me via WhatsApp at +1234567890 or by clicking the 'Book a Virtual Lesson' button on this page. When booking, let me know you want a virtual session, and I'll help you schedule a time and ensure you have the necessary equipment setup. Sessions are arranged at times that work for your schedule and time zone."
     },
     {
       question: "Can I have virtual lessons if I'm outside the UK?",
@@ -235,7 +235,7 @@ export default function RemoteCoaching() {
                 >
                   Pivo
                 </a>
-                {" "}to bring the Dan Bizzarro Method directly to you. I watch you and your horse in real-time on my laptop while you wear earbuds to hear my coaching as you ride—just like an in-person lesson, but from anywhere in the world.
+                {" "}to bring the Your Coaching Business directly to you. I watch you and your horse in real-time on my laptop while you wear earbuds to hear my coaching as you ride—just like an in-person lesson, but from anywhere in the world.
               </p>
               <p className="text-lg text-dark leading-relaxed mb-6">
                 This remote coaching format uses systems like{" "}

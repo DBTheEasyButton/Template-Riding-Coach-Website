@@ -64,11 +64,11 @@ export default function Contact() {
               </div>
               <h3 className="font-semibold text-navy mb-2 text-xl">Phone</h3>
               <a 
-                href="tel:+447767291713" 
+                href="tel:+1234567890" 
                 className="text-2xl font-bold text-orange hover:text-orange/80 transition"
                 data-testid="link-phone"
               >
-                +44 7767 291713
+                +1234567890
               </a>
             </div>
 
@@ -81,11 +81,11 @@ export default function Contact() {
               </div>
               <h3 className="font-semibold text-navy mb-2 text-xl">Email</h3>
               <a 
-                href="mailto:dan@danbizzarromethod.com" 
+                href="mailto:info@your-coaching-business.com" 
                 className="text-lg text-dark hover:text-orange transition break-all"
                 data-testid="link-email"
               >
-                dan@danbizzarromethod.com
+                info@your-coaching-business.com
               </a>
             </div>
 
@@ -147,7 +147,7 @@ export default function Contact() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Training with Dan Bizzarro Method Location"
+              title="Training with Your Coaching Business Location"
             ></iframe>
           </div>
         </div>
@@ -161,7 +161,7 @@ export default function Contact() {
             <p className="text-dark mb-8">Stay updated with training tips, competition results, and behind-the-scenes content</p>
             <div className="flex justify-center space-x-6">
               <a 
-                href="https://www.facebook.com/danbizzarromethod" 
+                href="https://www.facebook.com/YOUR-BUSINESS" 
                 className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition duration-300 transform hover:scale-105"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -171,7 +171,7 @@ export default function Contact() {
                 <Facebook className="w-6 h-6" />
               </a>
               <a 
-                href="https://www.instagram.com/danbizzarromethod" 
+                href="https://www.instagram.com/YOUR-BUSINESS" 
                 className="bg-pink-600 text-white p-4 rounded-full hover:bg-pink-700 transition duration-300 transform hover:scale-105"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -181,7 +181,7 @@ export default function Contact() {
                 <Instagram className="w-6 h-6" />
               </a>
               <a 
-                href="https://www.twitter.com/danbizzarro" 
+                href="https://www.twitter.com/YOUR-BUSINESS" 
                 className="bg-blue-400 text-white p-4 rounded-full hover:bg-blue-500 transition duration-300 transform hover:scale-105"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -191,7 +191,7 @@ export default function Contact() {
                 <Twitter className="w-6 h-6" />
               </a>
               <a 
-                href="https://www.youtube.com/danbizzarromethod" 
+                href="https://www.youtube.com/YOUR-BUSINESS" 
                 className="bg-red-600 text-white p-4 rounded-full hover:bg-red-700 transition duration-300 transform hover:scale-105"
                 target="_blank"
                 rel="noopener noreferrer"

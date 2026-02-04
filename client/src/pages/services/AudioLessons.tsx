@@ -509,7 +509,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
               <label htmlFor="quick-terms" className="text-xs text-gray-600">
                 I agree to the{" "}
                 <a
-                  href="https://danbizzarromethod.com/audio-lessons-terms"
+                  href="https://your-coaching-business.com/audio-lessons-terms"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-navy hover:text-orange underline"
@@ -517,7 +517,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 >
                   terms and conditions
                 </a>{" "}
-                and consent to receive updates from Dan Bizzarro Method.
+                and consent to receive updates from Your Coaching Business.
               </label>
             </div>
             
@@ -676,7 +676,7 @@ function AudioLeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
                 <label htmlFor="audio-terms" className="text-sm text-gray-600 leading-tight cursor-pointer">
                   I have read and agree to the{" "}
                   <a
-                    href="https://danbizzarromethod.com/audio-lessons-terms"
+                    href="https://your-coaching-business.com/audio-lessons-terms"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-navy hover:text-orange underline"
@@ -795,8 +795,8 @@ export default function AudioLessons() {
 
   const faqs = [
     {
-      question: "What are the Dan Bizzarro Method audio lessons?",
-      answer: "The Dan Bizzarro Method audio lessons are listen-while-you-ride coaching sessions designed to guide you in real time while you are riding. You listen to the lesson during your ride and are coached step by step, just as you would be in a lesson. The guidance helps you understand what you are doing, what you should be feeling, and how to make adjustments as you go. The aim is not just to tell you what to do, but to help you ride with more awareness, clarity, and understanding."
+      question: "What are the Your Coaching Business audio lessons?",
+      answer: "The Your Coaching Business audio lessons are listen-while-you-ride coaching sessions designed to guide you in real time while you are riding. You listen to the lesson during your ride and are coached step by step, just as you would be in a lesson. The guidance helps you understand what you are doing, what you should be feeling, and how to make adjustments as you go. The aim is not just to tell you what to do, but to help you ride with more awareness, clarity, and understanding."
     },
     {
       question: "How do these audio lessons compare to having a lesson in person?",
@@ -832,7 +832,7 @@ export default function AudioLessons() {
     },
     {
       question: "Are the audio lessons discipline-specific?",
-      answer: "No. The Dan Bizzarro Method is based on general training principles that apply across disciplines. The focus is on how the horse moves, balances, and responds to the rider, regardless of what you ride for."
+      answer: "No. The Your Coaching Business is based on general training principles that apply across disciplines. The focus is on how the horse moves, balances, and responds to the rider, regardless of what you ride for."
     },
     {
       question: "Can I use the lessons with more than one horse?",
@@ -863,8 +863,8 @@ export default function AudioLessons() {
       answer: "Horse riding always involves risk. The audio lessons are designed to be used in safe, controlled environments. You are responsible for deciding when and where to listen and for prioritising safety at all times."
     },
     {
-      question: "Are these audio lessons part of the Dan Bizzarro Method?",
-      answer: "Yes. All audio lessons are part of the wider Dan Bizzarro Method, a structured approach to training focused on clarity, balance, and understanding rather than force or shortcuts. The lessons are designed to give you tools you can continue to use long after you finish the course."
+      question: "Are these audio lessons part of the Your Coaching Business?",
+      answer: "Yes. All audio lessons are part of the wider Your Coaching Business, a structured approach to training focused on clarity, balance, and understanding rather than force or shortcuts. The lessons are designed to give you tools you can continue to use long after you finish the course."
     },
     {
       question: "I'm not sure which audio lesson or course to start with. What should I do?",
@@ -877,10 +877,10 @@ export default function AudioLessons() {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Audio Lessons - Train While You Ride | Dan Bizzarro Method"
+        title="Audio Lessons - Train While You Ride | Your Coaching Business"
         description="Access expert horse training coaching through audio lessons you can listen to while riding. No booking, no travel, no weekly fees — just real-time guidance in your earbuds whenever you want."
-        keywords="audio riding lessons, horse training audio course, listen while riding, equestrian audio lessons, Dan Bizzarro audio, online horse training, remote riding coaching"
-        canonical="https://danbizzarromethod.com/coaching/audio-lessons"
+        keywords="audio riding lessons, horse training audio course, listen while riding, equestrian audio lessons, Your Coach audio, online horse training, remote riding coaching"
+        canonical="https://your-coaching-business.com/coaching/audio-lessons"
       />
       <Navigation />
       <AudioLeadCaptureModal isOpen={showAudioModal} onClose={() => setShowAudioModal(false)} />
@@ -981,7 +981,7 @@ export default function AudioLessons() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-playfair font-bold text-navy mb-4">
-              Your Coach: Dan Bizzarro
+              Your Coach: Your Coach
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Learn from an international event rider with over 20 years of experience helping riders just like you.

@@ -78,7 +78,7 @@ export default function CoachingSection() {
             <div className="relative">
               <img 
                 src={coachingImage1} 
-                alt="Dan Bizzarro coaching flat work - personalized instruction in the arena" 
+                alt="Your Coach coaching flat work - personalized instruction in the arena" 
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
               <div className="absolute -bottom-6 -left-6 bg-orange text-white p-6 rounded-xl shadow-xl">
@@ -94,7 +94,7 @@ export default function CoachingSection() {
             <div className="relative">
               <img 
                 src={coachingImage2} 
-                alt="Dan Bizzarro coaching cross-country - group instruction at training obstacles" 
+                alt="Your Coach coaching cross-country - group instruction at training obstacles" 
                 className="rounded-2xl shadow-xl w-full h-auto object-cover"
               />
               <div className="absolute -bottom-6 -right-6 bg-navy text-white p-6 rounded-xl shadow-xl">

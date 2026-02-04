@@ -45,7 +45,7 @@ export class FacebookService {
       const spotsLeft = clinicData.maxParticipants - clinicData.currentParticipants;
       const spotsText = spotsLeft > 0 ? `Only ${spotsLeft} spots available!` : 'This clinic is full';
 
-      const bookingLink = `https://danbizzarromethod.com/coaching/clinics?utm_source=facebook&utm_medium=social&utm_campaign=clinic-${clinicData.title.toLowerCase().replace(/\s+/g, '-')}`;
+      const bookingLink = `https://your-coaching-business.com/coaching/clinics?utm_source=facebook&utm_medium=social&utm_campaign=clinic-${clinicData.title.toLowerCase().replace(/\s+/g, '-')}`;
 
       const message = `🐴 ${clinicData.title}\n\n📅 ${dateStr}\n📍 ${clinicData.location}\n\n${spotsText}\n\n💷 €${(clinicData.price / 100).toFixed(2)}\n\n${clinicData.description}\n\n✨ Ready to improve your riding? Book your spot now!\n\n${bookingLink}`;
 
