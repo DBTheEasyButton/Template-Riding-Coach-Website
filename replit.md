@@ -11,9 +11,15 @@ When cloning this template for a new coaching business, update the following:
 - [ ] Update `shared/seoConfig.ts` with business name, descriptions, and keywords
 - [ ] Update `BASE_URL` in `shared/seoConfig.ts` to your domain
 - [ ] Update contact details throughout the codebase (search for placeholder values)
-- [ ] Replace placeholder images in `client/src/assets/`
 
-### 2. Required API Keys & Secrets
+### 2. Logo & Branding Images
+Replace these placeholder logo files with your business logos:
+- [ ] `attached_assets/logo-light-bg.png` - Main logo for light backgrounds (navigation)
+- [ ] `attached_assets/logo-dark-bg.png` - Logo for dark backgrounds (footer)
+- [ ] `client/public/logo.png` - Square logo for favicon/browser tab
+- [ ] `client/public/podcast-logo.png` - Podcast cover art (if using podcast feature)
+
+### 3. Required API Keys & Secrets
 Configure these secrets in the Replit Secrets tab:
 - [ ] `STRIPE_SECRET_KEY` - Your Stripe secret key for payments
 - [ ] `VITE_STRIPE_PUBLIC_KEY` - Your Stripe publishable key
@@ -23,7 +29,7 @@ Configure these secrets in the Replit Secrets tab:
 - [ ] `FACEBOOK_APP_SECRET` - For Facebook marketing automation (optional)
 - [ ] `FACEBOOK_PAGE_ACCESS_TOKEN` - For auto-posting to Facebook (optional)
 
-### 3. Content to Customize
+### 4. Content to Customize
 - [ ] Testimonials (add via admin panel or database)
 - [ ] Blog articles
 - [ ] Clinic offerings
