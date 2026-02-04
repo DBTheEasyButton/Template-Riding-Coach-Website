@@ -64,25 +64,28 @@ const stripeKey = isProduction
   ? process.env.STRIPE_SECRET_KEY 
   : (process.env.TESTING_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY);
 
+let stripe: Stripe | null = null;
+
 if (!stripeKey) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
+  console.warn('WARNING: STRIPE_SECRET_KEY not configured. Payment features will be disabled.');
+  console.warn('Add your Stripe secret key to enable payments.');
+} else {
+  if (isProduction && process.env.TESTING_STRIPE_SECRET_KEY) {
+    console.log('Note: TESTING_STRIPE_SECRET_KEY is set but ignored in production - using STRIPE_SECRET_KEY');
+  }
 
-if (isProduction && process.env.TESTING_STRIPE_SECRET_KEY) {
-  console.log('Note: TESTING_STRIPE_SECRET_KEY is set but ignored in production - using STRIPE_SECRET_KEY');
-}
+  if (stripeKey.startsWith('pk_')) {
+    console.warn('WARNING: STRIPE_SECRET_KEY appears to be a publishable key (pk_). This should be a secret key (sk_).');
+    console.warn('Payment processing may not work correctly. Please update STRIPE_SECRET_KEY to a secret key.');
+  }
 
-if (stripeKey.startsWith('pk_')) {
-  console.warn('WARNING: STRIPE_SECRET_KEY appears to be a publishable key (pk_). This should be a secret key (sk_).');
-  console.warn('Payment processing may not work correctly. Please update STRIPE_SECRET_KEY to a secret key.');
-}
+  if (!stripeKey.startsWith('sk_') && !stripeKey.startsWith('pk_')) {
+    console.warn('WARNING: STRIPE_SECRET_KEY has unexpected format. Key prefix:', stripeKey.substring(0, 7));
+  }
 
-if (!stripeKey.startsWith('sk_') && !stripeKey.startsWith('pk_')) {
-  console.warn('WARNING: STRIPE_SECRET_KEY has unexpected format. Key prefix:', stripeKey.substring(0, 7));
+  console.log('Stripe initialized with key type:', stripeKey.substring(0, 7));
+  stripe = new Stripe(stripeKey);
 }
-
-console.log('Stripe initialized with key type:', stripeKey.substring(0, 7));
-const stripe = new Stripe(stripeKey);
 
 // Get Stripe publishable key for frontend (runtime loading)
 const stripePublishableKey = process.env.VITE_STRIPE_PUBLIC_KEY || '';
@@ -311,7 +314,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       try {
         // Verify webhook signature if secret and signature are both present
-        if (webhookSecret && sig) {
+        if (webhookSecret && sig && stripe) {
           event = stripe.webhooks.constructEvent(req.body, sig as string, webhookSecret);
           console.log(`✓ Webhook signature verified for event type: ${event.type}`);
         } else if (process.env.NODE_ENV === 'development' && !webhookSecret) {
@@ -589,7 +592,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             
             // Find the associated registration
-            if (typeof dispute.charge === 'string') {
+            if (typeof dispute.charge === 'string' && stripe) {
               try {
                 const chargeDetails = await stripe.charges.retrieve(dispute.charge);
                 const allRegsForDispute = await storage.getAllClinicRegistrations();
@@ -1130,6 +1133,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Audio Course payment intent - creates Stripe payment for £97 audio course (or £72 with DAN25 discount)
   app.post("/api/audio-course/create-payment-intent", async (req, res) => {
     try {
+      if (!stripe) {
+        return res.status(503).json({ error: 'Payment system not configured. Please add Stripe credentials.' });
+      }
+
       const { firstName, lastName, email, mobile, horseName, discountCode } = req.body;
 
       if (!firstName || !lastName || !email || !mobile || !horseName) {
@@ -1186,6 +1193,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!paymentIntentId || !firstName || !lastName || !email || !mobile || !horseName) {
         return res.status(400).json({ error: 'Payment intent ID, customer details and horse name are required' });
+      }
+
+      if (!stripe) {
+        return res.status(503).json({ error: 'Payment system not configured. Please add Stripe credentials.' });
       }
 
       // Verify the payment was successful
@@ -1251,6 +1262,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'First name, surname, email, mobile and horse name are required' });
       }
 
+      if (!stripe) {
+        return res.status(503).json({ error: 'Payment system not configured. Please add Stripe credentials.' });
+      }
+
       const amount = 14700; // £147 in pence
 
       const paymentIntent = await stripe.paymentIntents.create({
@@ -1291,6 +1306,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!paymentIntentId || !firstName || !lastName || !email || !mobile || !horseName) {
         return res.status(400).json({ error: 'Payment intent ID, customer details and horse name are required' });
+      }
+
+      if (!stripe) {
+        return res.status(503).json({ error: 'Payment system not configured. Please add Stripe credentials.' });
       }
 
       // Verify the payment was successful
@@ -1714,6 +1733,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         metadata.additionalEntries = JSON.stringify(entrySummaries).substring(0, 500);
       }
 
+      if (!stripe) {
+        return res.status(503).json({ message: 'Payment system not configured. Please add Stripe credentials.' });
+      }
+
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount), // Amount is already in cents
         currency: "gbp",
@@ -1765,7 +1788,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let discountCodeUsed: string | null = null;
       
       // Verify payment was successful
-      if (paymentIntentId) {
+      if (paymentIntentId && stripe) {
         const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
         if (paymentIntent.status !== 'succeeded') {
           return res.status(400).json({ message: "Payment not completed" });
@@ -5363,6 +5386,10 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
         return res.status(400).json({ message: "GHL_API_KEY or GHL_LOCATION_ID not configured" });
       }
 
+      if (!stripe) {
+        return res.status(503).json({ message: "Stripe not configured" });
+      }
+
       // Get successful audio course payments from Stripe (last 90 days)
       const ninetyDaysAgo = Math.floor(Date.now() / 1000) - (90 * 24 * 60 * 60);
       const payments = await stripe.paymentIntents.list({
@@ -5766,23 +5793,26 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
         
         // Fetch all payment intents with pagination
         let allPayments: Stripe.PaymentIntent[] = [];
-        let hasMore = true;
-        let startingAfter: string | undefined;
         
-        while (hasMore) {
-          const params: Stripe.PaymentIntentListParams = {
-            limit: 100,
-            created: { gte: sixMonthsAgo },
-          };
-          if (startingAfter) {
-            params.starting_after = startingAfter;
-          }
+        if (stripe) {
+          let hasMore = true;
+          let startingAfter: string | undefined;
           
-          const payments = await stripe.paymentIntents.list(params);
-          allPayments = allPayments.concat(payments.data);
-          hasMore = payments.has_more;
-          if (payments.data.length > 0) {
-            startingAfter = payments.data[payments.data.length - 1].id;
+          while (hasMore) {
+            const params: Stripe.PaymentIntentListParams = {
+              limit: 100,
+              created: { gte: sixMonthsAgo },
+            };
+            if (startingAfter) {
+              params.starting_after = startingAfter;
+            }
+            
+            const payments = await stripe.paymentIntents.list(params);
+            allPayments = allPayments.concat(payments.data);
+            hasMore = payments.has_more;
+            if (payments.data.length > 0) {
+              startingAfter = payments.data[payments.data.length - 1].id;
+            }
           }
         }
         
