@@ -672,3 +672,43 @@ export const insertVisitorProfileSchema = createInsertSchema(visitorProfiles).om
 
 export type VisitorProfile = typeof visitorProfiles.$inferSelect;
 export type InsertVisitorProfile = z.infer<typeof insertVisitorProfileSchema>;
+
+// Admin users for authentication
+export const adminUsers = pgTable("admin_users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  role: text("role").notNull().default("client_admin"), // super_admin or client_admin
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastLoginAt: timestamp("last_login_at"),
+}, (table) => ({
+  emailIdx: uniqueIndex("admin_users_email_idx").on(table.email),
+}));
+
+export const insertAdminUserSchema = createInsertSchema(adminUsers).omit({
+  id: true,
+  createdAt: true,
+  lastLoginAt: true,
+});
+
+export type AdminUser = typeof adminUsers.$inferSelect;
+export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
+
+// Site settings for feature toggles (controlled by super admin)
+export const siteSettings = pgTable("site_settings", {
+  id: serial("id").primaryKey(),
+  settingKey: text("setting_key").notNull().unique(),
+  settingValue: boolean("setting_value").notNull().default(true),
+  description: text("description"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  keyIdx: uniqueIndex("site_settings_key_idx").on(table.settingKey),
+}));
+
+export const insertSiteSettingSchema = createInsertSchema(siteSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type SiteSetting = typeof siteSettings.$inferSelect;
+export type InsertSiteSetting = z.infer<typeof insertSiteSettingSchema>;

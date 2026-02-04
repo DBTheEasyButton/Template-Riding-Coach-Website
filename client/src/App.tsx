@@ -31,6 +31,7 @@ const TermsAndConditions = lazy(() => import("@/pages/TermsAndConditions"));
 const Loyalty = lazy(() => import("@/pages/Loyalty"));
 
 // Admin pages
+const AdminLogin = lazy(() => import("@/pages/AdminLogin"));
 const AdminClinics = lazy(() => import("@/pages/AdminClinics"));
 const AdminRegistrations = lazy(() => import("@/pages/AdminRegistrations"));
 const AdminGallery = lazy(() => import("@/pages/AdminGallery"));
@@ -43,6 +44,9 @@ const AdminTestimonials = lazy(() => import("@/pages/AdminTestimonials"));
 const NewsArticle = lazy(() => import("@/pages/NewsArticle"));
 const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 const ConfirmClinicTimes = lazy(() => import("@/pages/ConfirmClinicTimes"));
+
+// Auth wrapper for admin pages
+import AdminAuthWrapper from "@/components/AdminAuthWrapper";
 
 // Simple redirect component for wouter
 function RedirectToAdminClinics() {
@@ -155,49 +159,72 @@ function Router() {
       <Route path="/admin">
         <RedirectToAdminClinics />
       </Route>
+      <Route path="/admin/login">
+        <Suspense fallback={<PageLoader />}>
+          <AdminLogin />
+        </Suspense>
+      </Route>
       <Route path="/admin/clinics">
         <Suspense fallback={<PageLoader />}>
-          <AdminClinics />
+          <AdminAuthWrapper>
+            <AdminClinics />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/registrations">
         <Suspense fallback={<PageLoader />}>
-          <AdminRegistrations />
+          <AdminAuthWrapper>
+            <AdminRegistrations />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/gallery">
         <Suspense fallback={<PageLoader />}>
-          <AdminGallery />
+          <AdminAuthWrapper>
+            <AdminGallery />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/news">
         <Suspense fallback={<PageLoader />}>
-          <AdminNews />
+          <AdminAuthWrapper>
+            <AdminNews />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/sponsors">
         <Suspense fallback={<PageLoader />}>
-          <AdminSponsors />
+          <AdminAuthWrapper>
+            <AdminSponsors />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/ghl">
         <Suspense fallback={<PageLoader />}>
-          <AdminGHL />
+          <AdminAuthWrapper>
+            <AdminGHL />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/testimonials">
         <Suspense fallback={<PageLoader />}>
-          <AdminTestimonials />
+          <AdminAuthWrapper>
+            <AdminTestimonials />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/analytics">
         <Suspense fallback={<PageLoader />}>
-          <AdminAnalytics />
+          <AdminAuthWrapper>
+            <AdminAnalytics />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/admin/settings">
         <Suspense fallback={<PageLoader />}>
-          <AdminSettings />
+          <AdminAuthWrapper requireSuperAdmin>
+            <AdminSettings />
+          </AdminAuthWrapper>
         </Suspense>
       </Route>
       <Route path="/blog/:id">

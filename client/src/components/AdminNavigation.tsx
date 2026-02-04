@@ -1,23 +1,40 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Calendar, Home, Images, FileText, Star, BarChart3, Settings, Globe, Menu, X, Quote } from "lucide-react";
+import { Calendar, Home, Images, FileText, Star, BarChart3, Settings, Globe, Menu, LogOut, Quote } from "lucide-react";
+import { useAdminAuth } from "@/components/AdminAuthWrapper";
+import { apiRequest } from "@/lib/queryClient";
 
-const navItems = [
-  { href: "/admin/clinics", label: "Clinics", icon: Calendar },
-  { href: "/admin/gallery", label: "Gallery", icon: Images },
-  { href: "/admin/news", label: "News", icon: FileText },
-  { href: "/admin/testimonials", label: "Reviews", icon: Quote },
-  { href: "/admin/sponsors", label: "Sponsors", icon: Star },
-  { href: "/admin/ghl", label: "CRM", icon: Globe },
-  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+const allNavItems = [
+  { href: "/admin/clinics", label: "Clinics", icon: Calendar, superAdminOnly: false },
+  { href: "/admin/gallery", label: "Gallery", icon: Images, superAdminOnly: false },
+  { href: "/admin/news", label: "News", icon: FileText, superAdminOnly: false },
+  { href: "/admin/testimonials", label: "Reviews", icon: Quote, superAdminOnly: false },
+  { href: "/admin/sponsors", label: "Sponsors", icon: Star, superAdminOnly: false },
+  { href: "/admin/ghl", label: "CRM", icon: Globe, superAdminOnly: false },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3, superAdminOnly: false },
+  { href: "/admin/settings", label: "Settings", icon: Settings, superAdminOnly: true },
 ];
 
 export default function AdminNavigation() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { isSuperAdmin, user } = useAdminAuth();
+  const queryClient = useQueryClient();
+
+  const navItems = allNavItems.filter(item => !item.superAdminOnly || isSuperAdmin);
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      await apiRequest('POST', '/api/admin/logout');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/session'] });
+      setLocation('/admin/login');
+    },
+  });
 
   const NavLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: typeof Calendar }) => (
     <Link href={href} onClick={() => setIsOpen(false)}>
@@ -60,7 +77,7 @@ export default function AdminNavigation() {
                   {navItems.map((item) => (
                     <NavLink key={item.href} {...item} />
                   ))}
-                  <div className="border-t pt-4 mt-4">
+                  <div className="border-t pt-4 mt-4 space-y-2">
                     <Link href="/" onClick={() => setIsOpen(false)}>
                       <Button 
                         variant="outline" 
@@ -71,6 +88,19 @@ export default function AdminNavigation() {
                         Back to Main Site
                       </Button>
                     </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        setIsOpen(false);
+                        logoutMutation.mutate();
+                      }}
+                      disabled={logoutMutation.isPending}
+                      className="flex items-center gap-2 w-full justify-start border-red-300 text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      {logoutMutation.isPending ? "Logging out..." : "Logout"}
+                    </Button>
                   </div>
                 </nav>
               </SheetContent>
@@ -99,6 +129,16 @@ export default function AdminNavigation() {
                 Back to Main Site
               </Button>
             </Link>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => logoutMutation.mutate()}
+              disabled={logoutMutation.isPending}
+              className="flex items-center gap-2 bg-white hover:bg-red-50 border-2 border-red-300 text-red-600"
+            >
+              <LogOut className="w-4 h-4" />
+              {logoutMutation.isPending ? "..." : "Logout"}
+            </Button>
           </div>
         </div>
       </div>

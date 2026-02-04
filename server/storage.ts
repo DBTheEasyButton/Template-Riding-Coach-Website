@@ -25,6 +25,8 @@ import {
   competitionChecklists,
   sponsors,
   ghlContacts,
+  adminUsers,
+  siteSettings,
   type User, 
   type InsertUser,
   type Achievement,
@@ -81,7 +83,9 @@ import {
   type InsertGhlContact,
   visitorProfiles,
   type VisitorProfile,
-  type InsertVisitorProfile
+  type InsertVisitorProfile,
+  type AdminUser,
+  type SiteSetting
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and, inArray, gte } from "drizzle-orm";
@@ -284,6 +288,20 @@ export interface IStorage {
   updateVisitorProfileHorseName(token: string, horseName: string): Promise<VisitorProfile | undefined>;
   updateVisitorProfilePhoneVerified(phone: string): Promise<void>;
   deleteVisitorProfile(token: string): Promise<void>;
+
+  // Admin Authentication System
+  getAdminUserByEmail(email: string): Promise<AdminUser | undefined>;
+  getAdminUserById(id: number): Promise<AdminUser | undefined>;
+  createAdminUser(email: string, passwordHash: string, role: string): Promise<AdminUser>;
+  updateAdminUserLastLogin(id: number): Promise<void>;
+  getAllAdminUsers(): Promise<AdminUser[]>;
+  deleteAdminUser(id: number): Promise<void>;
+
+  // Site Settings (feature toggles)
+  getSiteSetting(key: string): Promise<SiteSetting | undefined>;
+  getAllSiteSettings(): Promise<SiteSetting[]>;
+  updateSiteSetting(key: string, value: boolean): Promise<SiteSetting | undefined>;
+  initializeDefaultSettings(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2899,6 +2917,73 @@ Your Coaching Team`,
     } catch (error) {
       console.error('Error sending SMS via GHL:', error);
       return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  // Admin Authentication System
+  async getAdminUserByEmail(email: string): Promise<AdminUser | undefined> {
+    const [user] = await db.select().from(adminUsers).where(eq(adminUsers.email, email.toLowerCase()));
+    return user;
+  }
+
+  async getAdminUserById(id: number): Promise<AdminUser | undefined> {
+    const [user] = await db.select().from(adminUsers).where(eq(adminUsers.id, id));
+    return user;
+  }
+
+  async createAdminUser(email: string, passwordHash: string, role: string): Promise<AdminUser> {
+    const [user] = await db.insert(adminUsers).values({
+      email: email.toLowerCase(),
+      passwordHash,
+      role
+    }).returning();
+    return user;
+  }
+
+  async updateAdminUserLastLogin(id: number): Promise<void> {
+    await db.update(adminUsers).set({ lastLoginAt: new Date() }).where(eq(adminUsers.id, id));
+  }
+
+  async getAllAdminUsers(): Promise<AdminUser[]> {
+    return await db.select().from(adminUsers).orderBy(desc(adminUsers.createdAt));
+  }
+
+  async deleteAdminUser(id: number): Promise<void> {
+    await db.delete(adminUsers).where(eq(adminUsers.id, id));
+  }
+
+  // Site Settings (feature toggles)
+  async getSiteSetting(key: string): Promise<SiteSetting | undefined> {
+    const [setting] = await db.select().from(siteSettings).where(eq(siteSettings.settingKey, key));
+    return setting;
+  }
+
+  async getAllSiteSettings(): Promise<SiteSetting[]> {
+    return await db.select().from(siteSettings);
+  }
+
+  async updateSiteSetting(key: string, value: boolean): Promise<SiteSetting | undefined> {
+    const [setting] = await db.update(siteSettings)
+      .set({ settingValue: value, updatedAt: new Date() })
+      .where(eq(siteSettings.settingKey, key))
+      .returning();
+    return setting;
+  }
+
+  async initializeDefaultSettings(): Promise<void> {
+    const defaultSettings = [
+      { settingKey: 'booking_system_enabled', settingValue: true, description: 'Enable/disable clinic booking and registration' },
+      { settingKey: 'online_payments_enabled', settingValue: true, description: 'Enable/disable Stripe payment processing' },
+      { settingKey: 'email_automations_enabled', settingValue: true, description: 'Enable/disable automated emails to participants' },
+      { settingKey: 'auto_grouping_enabled', settingValue: true, description: 'Enable/disable automatic groupings and schedule generation' },
+      { settingKey: 'schedule_email_enabled', settingValue: true, description: 'Enable/disable automated clinic email when schedule is generated' }
+    ];
+
+    for (const setting of defaultSettings) {
+      const existing = await this.getSiteSetting(setting.settingKey);
+      if (!existing) {
+        await db.insert(siteSettings).values(setting);
+      }
     }
   }
 }

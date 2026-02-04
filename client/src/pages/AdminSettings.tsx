@@ -27,8 +27,20 @@ import {
   RefreshCw,
   Check,
   AlertCircle,
-  Trash2
+  Trash2,
+  ToggleLeft,
+  CreditCard,
+  Calendar,
+  Users
 } from "lucide-react";
+
+interface FeatureSetting {
+  id: number;
+  settingKey: string;
+  settingValue: boolean;
+  description: string | null;
+  updatedAt: string;
+}
 
 interface SiteSettings {
   siteName: string;
@@ -52,8 +64,36 @@ interface SiteSettings {
   };
 }
 
+const featureSettingsConfig = {
+  booking_system_enabled: {
+    label: "Booking System",
+    description: "Enable clinic registration and booking functionality",
+    icon: Calendar
+  },
+  online_payments_enabled: {
+    label: "Online Payments",
+    description: "Enable Stripe payment processing for bookings",
+    icon: CreditCard
+  },
+  email_automations_enabled: {
+    label: "Email Automations",
+    description: "Enable automated emails to participants",
+    icon: Mail
+  },
+  auto_grouping_enabled: {
+    label: "Automatic Groupings",
+    description: "Enable automatic group assignments and schedule generation",
+    icon: Users
+  },
+  schedule_email_enabled: {
+    label: "Schedule Emails",
+    description: "Send automated emails when clinic schedules are generated",
+    icon: Bell
+  }
+};
+
 export default function AdminSettings() {
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState("toggles");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isBackingUp, setIsBackingUp] = useState(false);
   const [isSendingEmails, setIsSendingEmails] = useState(false);
@@ -61,8 +101,25 @@ export default function AdminSettings() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: settings, isLoading } = useQuery<SiteSettings>({
+  const { data: featureSettings, isLoading: featureSettingsLoading } = useQuery<FeatureSetting[]>({
     queryKey: ['/api/admin/settings'],
+  });
+
+  const updateFeatureSettingMutation = useMutation({
+    mutationFn: async ({ key, value }: { key: string; value: boolean }) => {
+      return await apiRequest('PATCH', `/api/admin/settings/${key}`, { value });
+    },
+    onSuccess: () => {
+      toast({ title: "Setting updated successfully!" });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/settings'] });
+    },
+    onError: () => {
+      toast({ title: "Failed to update setting", variant: "destructive" });
+    },
+  });
+
+  const { data: settings, isLoading } = useQuery<SiteSettings>({
+    queryKey: ['/api/admin/site-settings'],
   });
 
   const [formData, setFormData] = useState<SiteSettings>({
@@ -206,13 +263,77 @@ export default function AdminSettings() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 md:space-y-6">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5 h-auto gap-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6 h-auto gap-1">
+            <TabsTrigger value="toggles" className="text-xs sm:text-sm py-2">Feature Toggles</TabsTrigger>
             <TabsTrigger value="general" className="text-xs sm:text-sm py-2">General</TabsTrigger>
-            <TabsTrigger value="features" className="text-xs sm:text-sm py-2">Features</TabsTrigger>
+            <TabsTrigger value="features" className="text-xs sm:text-sm py-2">Site Features</TabsTrigger>
             <TabsTrigger value="notifications" className="text-xs sm:text-sm py-2">Notifications</TabsTrigger>
             <TabsTrigger value="maintenance" className="text-xs sm:text-sm py-2">Maintenance</TabsTrigger>
             <TabsTrigger value="security" className="text-xs sm:text-sm py-2 col-span-2 sm:col-span-1">Security</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="toggles" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ToggleLeft className="h-5 w-5" />
+                  Feature Toggles
+                </CardTitle>
+                <CardDescription>
+                  Control which features are enabled on this website. These settings affect core functionality.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {featureSettingsLoading ? (
+                  <div className="text-center py-8 text-muted-foreground">Loading settings...</div>
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(featureSettingsConfig).map(([key, config]) => {
+                      const setting = featureSettings?.find(s => s.settingKey === key);
+                      const isEnabled = setting?.settingValue ?? true;
+                      const IconComponent = config.icon;
+                      
+                      return (
+                        <div key={key} className="flex items-center justify-between p-4 rounded-lg border bg-card">
+                          <div className="flex items-center gap-4">
+                            <div className="p-2 rounded-md bg-primary/10">
+                              <IconComponent className="h-5 w-5 text-primary" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">{config.label}</h4>
+                              <p className="text-sm text-muted-foreground">{config.description}</p>
+                            </div>
+                          </div>
+                          <Switch
+                            checked={isEnabled}
+                            onCheckedChange={(checked) => {
+                              updateFeatureSettingMutation.mutate({ key, value: checked });
+                            }}
+                            disabled={updateFeatureSettingMutation.isPending}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                
+                <Separator className="my-6" />
+                
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium text-amber-800">Super Admin Only</h4>
+                      <p className="text-sm text-amber-700">
+                        These toggles control core functionality and are only accessible by super administrators. 
+                        Changes take effect immediately across the entire website.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="general" className="space-y-6">
             <Card>

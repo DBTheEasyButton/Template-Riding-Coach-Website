@@ -1,10 +1,12 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import * as XLSX from "xlsx";
+import bcrypt from "bcrypt";
+import session from "express-session";
 import { storage } from "./storage";
 import { emailService } from "./emailService";
 import { facebookService } from "./facebookService";
@@ -22,12 +24,24 @@ import {
   insertCompetitionChecklistSchema,
   insertSponsorSchema,
   type ClinicSession,
-  type ClinicRegistration
+  type ClinicRegistration,
+  type AdminUser
 } from "@shared/schema";
 import { prerenderService } from "./prerenderService";
 import { generateWarmupSystemPDF } from "./generateWarmupPDF";
 import { generateLeadMagnetPDF } from "./generateLeadMagnetPDF";
 import crypto from "crypto";
+
+// Extend express-session to include admin user data
+declare module 'express-session' {
+  interface SessionData {
+    adminUser?: {
+      id: number;
+      email: string;
+      role: string;
+    };
+  }
+}
 
 // SMS Verification Code Storage (in-memory with auto-cleanup)
 interface VerificationCode {
@@ -125,13 +139,183 @@ const upload = multer({
   }
 });
 
+// Initialize super admin accounts from secrets
+async function initializeSuperAdmins(): Promise<void> {
+  const superAdmins = [
+    { email: process.env.ADMIN_EMAIL_1, password: process.env.ADMIN_PASSWORD_1 },
+    { email: process.env.ADMIN_EMAIL_2, password: process.env.ADMIN_PASSWORD_2 }
+  ];
+
+  for (const admin of superAdmins) {
+    if (admin.email && admin.password) {
+      const existing = await storage.getAdminUserByEmail(admin.email);
+      if (!existing) {
+        const passwordHash = await bcrypt.hash(admin.password, 10);
+        await storage.createAdminUser(admin.email, passwordHash, 'super_admin');
+        console.log(`Super admin created: ${admin.email}`);
+      } else if (existing.role !== 'super_admin') {
+        // Update existing user to super_admin if they were client_admin
+        console.log(`Admin ${admin.email} already exists with role ${existing.role}`);
+      }
+    }
+  }
+
+  // Initialize default site settings
+  await storage.initializeDefaultSettings();
+  console.log('Site settings initialized');
+}
+
+// Middleware to require admin authentication
+function requireAdminAuth(req: Request, res: Response, next: NextFunction): void {
+  if (!req.session?.adminUser) {
+    res.status(401).json({ error: 'Authentication required' });
+    return;
+  }
+  next();
+}
+
+// Middleware to require super admin role
+function requireSuperAdmin(req: Request, res: Response, next: NextFunction): void {
+  if (!req.session?.adminUser) {
+    res.status(401).json({ error: 'Authentication required' });
+    return;
+  }
+  if (req.session.adminUser.role !== 'super_admin') {
+    res.status(403).json({ error: 'Super admin access required' });
+    return;
+  }
+  next();
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Initialize super admin accounts on startup
+  await initializeSuperAdmins();
+
   // Runtime Stripe publishable key endpoint - allows frontend to get key without rebuild
   app.get("/api/config/stripe-key", (req, res) => {
     if (!stripePublishableKey) {
       return res.status(500).json({ error: 'Stripe not configured' });
     }
     res.json({ publishableKey: stripePublishableKey });
+  });
+
+  // ============= ADMIN AUTHENTICATION ENDPOINTS =============
+  
+  // Admin login
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+      }
+
+      const adminUser = await storage.getAdminUserByEmail(email);
+      if (!adminUser) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      const isValidPassword = await bcrypt.compare(password, adminUser.passwordHash);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // Update last login timestamp
+      await storage.updateAdminUserLastLogin(adminUser.id);
+
+      // Set session
+      req.session.adminUser = {
+        id: adminUser.id,
+        email: adminUser.email,
+        role: adminUser.role
+      };
+
+      res.json({ 
+        success: true, 
+        user: { 
+          id: adminUser.id, 
+          email: adminUser.email, 
+          role: adminUser.role 
+        } 
+      });
+    } catch (error) {
+      console.error('Admin login error:', error);
+      res.status(500).json({ error: 'Login failed' });
+    }
+  });
+
+  // Admin logout
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.destroy((err: Error | null) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).json({ error: 'Logout failed' });
+      }
+      res.clearCookie('connect.sid');
+      res.json({ success: true });
+    });
+  });
+
+  // Check admin session
+  app.get("/api/admin/session", (req, res) => {
+    if (req.session?.adminUser) {
+      res.json({ 
+        authenticated: true, 
+        user: req.session.adminUser 
+      });
+    } else {
+      res.json({ authenticated: false });
+    }
+  });
+
+  // ============= SITE SETTINGS ENDPOINTS (Super Admin Only) =============
+  
+  // Get all site settings
+  app.get("/api/admin/settings", requireSuperAdmin, async (req, res) => {
+    try {
+      const settings = await storage.getAllSiteSettings();
+      res.json(settings);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      res.status(500).json({ error: 'Failed to fetch settings' });
+    }
+  });
+
+  // Update a site setting
+  app.patch("/api/admin/settings/:key", requireSuperAdmin, async (req, res) => {
+    try {
+      const { key } = req.params;
+      const { value } = req.body;
+
+      if (typeof value !== 'boolean') {
+        return res.status(400).json({ error: 'Value must be a boolean' });
+      }
+
+      const updated = await storage.updateSiteSetting(key, value);
+      if (!updated) {
+        return res.status(404).json({ error: 'Setting not found' });
+      }
+
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating setting:', error);
+      res.status(500).json({ error: 'Failed to update setting' });
+    }
+  });
+
+  // Get settings for frontend (public - just returns enabled/disabled status)
+  app.get("/api/settings/public", async (req, res) => {
+    try {
+      const settings = await storage.getAllSiteSettings();
+      const publicSettings: Record<string, boolean> = {};
+      for (const setting of settings) {
+        publicSettings[setting.settingKey] = setting.settingValue;
+      }
+      res.json(publicSettings);
+    } catch (error) {
+      console.error('Error fetching public settings:', error);
+      res.status(500).json({ error: 'Failed to fetch settings' });
+    }
   });
 
   // SMS Verification Endpoints
@@ -5981,14 +6165,13 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
     }
   });
 
-  // Settings management
-  app.get("/api/admin/settings", async (req, res) => {
+  // Site settings management (general site configuration - not feature toggles)
+  app.get("/api/admin/site-settings", async (req, res) => {
     try {
       const settings = {
         siteName: "Your Coaching Business",
         tagline: "Professional Horse Training & Eventing",
         contactEmail: "info@your-coaching-business.com",
-        // TEMPLATE: Update social media URLs with your business accounts
         socialMedia: {
           facebook: "https://facebook.com/YOUR-BUSINESS",
           instagram: "https://instagram.com/YOUR-BUSINESS",
@@ -6009,17 +6192,17 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
       
       res.json(settings);
     } catch (error) {
-      console.error("Error fetching settings:", error);
-      res.status(500).json({ message: "Failed to fetch settings" });
+      console.error("Error fetching site settings:", error);
+      res.status(500).json({ message: "Failed to fetch site settings" });
     }
   });
 
-  app.put("/api/admin/settings", async (req, res) => {
+  app.put("/api/admin/site-settings", async (req, res) => {
     try {
-      res.json({ message: "Settings updated successfully" });
+      res.json({ message: "Site settings updated successfully" });
     } catch (error) {
-      console.error("Error updating settings:", error);
-      res.status(500).json({ message: "Failed to update settings" });
+      console.error("Error updating site settings:", error);
+      res.status(500).json({ message: "Failed to update site settings" });
     }
   });
 
