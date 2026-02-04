@@ -728,9 +728,13 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                   id="specialRequests"
                   value={registrationData.specialRequests}
                   onChange={(e) => updateRegistrationData('specialRequests', e.target.value)}
-                  className="mt-1 h-20"
-                  placeholder="Please include your preferred session times and any specific goals or requests..."
+                  className="mt-1 h-24"
+                  placeholder="e.g. I'm travelling with Sarah Smith and we'd like to be in the same session..."
                 />
+                <p className="text-xs text-gray-500 mt-2">
+                  <strong>Please note:</strong> Session times are allocated by us based on skill level and group sizes - you cannot choose your exact time. 
+                  The clinic runs during the hours shown above. If you're travelling with a friend and need to be in the same session, or if there are times you absolutely cannot do, please let us know here and we'll do our best to accommodate you.
+                </p>
               </div>
 
               <div>
