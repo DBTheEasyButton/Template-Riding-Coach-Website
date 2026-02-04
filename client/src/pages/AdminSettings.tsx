@@ -96,8 +96,6 @@ export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState("toggles");
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [isBackingUp, setIsBackingUp] = useState(false);
-  const [isSendingEmails, setIsSendingEmails] = useState(false);
-  const [emailTag, setEmailTag] = useState("pole clinic");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -177,25 +175,6 @@ export default function AdminSettings() {
     },
   });
 
-  const emailBlastMutation = useMutation({
-    mutationFn: async (tag: string) => {
-      return await apiRequest('POST', '/api/admin/email/pole-clinic-blast', { tag });
-    },
-    onSuccess: (data: any) => {
-      toast({ 
-        title: "Email blast sent!", 
-        description: `Sent ${data.sent} emails successfully.` 
-      });
-    },
-    onError: (error: any) => {
-      toast({ 
-        title: "Failed to send emails", 
-        description: error.message || "An error occurred",
-        variant: "destructive" 
-      });
-    },
-  });
-
   const handleSaveSettings = () => {
     updateSettingsMutation.mutate(formData);
   };
@@ -215,19 +194,6 @@ export default function AdminSettings() {
       await backupDataMutation.mutateAsync();
     } finally {
       setIsBackingUp(false);
-    }
-  };
-
-  const handleSendEmailBlast = async () => {
-    if (!emailTag.trim()) {
-      toast({ title: "Please enter a tag", variant: "destructive" });
-      return;
-    }
-    setIsSendingEmails(true);
-    try {
-      await emailBlastMutation.mutateAsync(emailTag);
-    } finally {
-      setIsSendingEmails(false);
     }
   };
 
@@ -628,53 +594,6 @@ export default function AdminSettings() {
               </Card>
             </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5" />
-                  Email Marketing
-                </CardTitle>
-                <CardDescription>
-                  Send email blasts to CRM contacts by tag
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
-                    <Label htmlFor="emailTag">CRM Tag</Label>
-                    <Input
-                      id="emailTag"
-                      value={emailTag}
-                      onChange={(e) => setEmailTag(e.target.value)}
-                      placeholder="Enter tag name (e.g., pole clinic)"
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <Button
-                      onClick={handleSendEmailBlast}
-                      disabled={isSendingEmails}
-                      className="w-full sm:w-auto"
-                      data-testid="button-send-email-blast"
-                    >
-                      {isSendingEmails ? (
-                        <>
-                          <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Mail className="mr-2 h-4 w-4" />
-                          Send Email Blast
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Sends the pole clinic invitation and rewards program email to all CRM contacts with the specified tag.
-                </p>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">

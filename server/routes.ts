@@ -5052,37 +5052,6 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
     }
   });
 
-  // Send pole clinic invitation email to contacts with "pole clinic" tag
-  app.post("/api/admin/email/pole-clinic-blast", async (req, res) => {
-    try {
-      // Check if email automations are enabled
-      const emailEnabled = await isFeatureEnabled('email_automations_enabled');
-      if (!emailEnabled) {
-        return res.status(403).json({ message: "Email automations are currently disabled" });
-      }
-      
-      const { tag = "pole clinic" } = req.body;
-      console.log(`Starting pole clinic email blast for tag: "${tag}"`);
-      
-      const results = await emailService.sendPoleClinicInvitationToTaggedContacts(tag);
-      
-      res.json({
-        success: true,
-        message: `Pole clinic email blast complete`,
-        sent: results.sent,
-        skipped: results.skipped,
-        errors: results.errors
-      });
-    } catch (error) {
-      console.error("Error sending pole clinic email blast:", error);
-      res.status(500).json({ 
-        success: false,
-        message: "Failed to send pole clinic email blast",
-        error: error instanceof Error ? error.message : "Unknown error"
-      });
-    }
-  });
-
   // Loyalty Program routes
   
   // NEW: Leaderboard endpoint (MUST be before /:email route to avoid being caught by it)
