@@ -1145,7 +1145,7 @@ export default function AdminClinics() {
                 </Label>
               </div>
               <p className="text-sm text-gray-500 ml-6">
-                Send an email to your CRM contacts announcing this new clinic.
+                Send an email to your CRM contacts announcing this new clinic. Tick to select which tags to target.
               </p>
               
               {formData.sendEmailAnnouncement && (
