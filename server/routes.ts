@@ -205,6 +205,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ publishableKey: stripePublishableKey });
   });
 
+  // Public feature toggles endpoint - for frontend to check which features are enabled
+  app.get("/api/config/features", async (req, res) => {
+    try {
+      const bookingEnabled = await isFeatureEnabled('booking_system_enabled');
+      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      res.json({
+        bookingEnabled,
+        paymentsEnabled
+      });
+    } catch (error) {
+      console.error('Error fetching feature config:', error);
+      res.json({ bookingEnabled: true, paymentsEnabled: true });
+    }
+  });
+
   // ============= ADMIN AUTHENTICATION ENDPOINTS =============
   
   // Admin login

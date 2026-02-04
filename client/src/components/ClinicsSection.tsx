@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Clinic, ClinicWithSessions, InsertClinicRegistration, ClinicSession } from "@shared/schema";
 import { Calendar, MapPin, Users, Clock, PoundSterling, FileText, AlertCircle, Check, CreditCard, AlertTriangle, Target, CheckSquare, Plus, X } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import SocialShare from "@/components/SocialShare";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements, ExpressCheckoutElement } from "@stripe/react-stripe-js";
@@ -500,6 +500,15 @@ export default function ClinicsSection() {
     queryFn: () => fetch('/api/clinics?upcoming=true').then(res => res.json()),
   });
 
+  // Fetch feature toggles to check if booking is enabled
+  const { data: featureConfig } = useQuery<{ bookingEnabled: boolean; paymentsEnabled: boolean }>({
+    queryKey: ['/api/config/features'],
+    queryFn: () => fetch('/api/config/features').then(res => res.json()),
+    staleTime: 60000, // Cache for 1 minute
+  });
+
+  const [, setLocation] = useLocation();
+
   // Create payment intent mutation
   const createPaymentIntentMutation = useMutation({
     mutationFn: async () => {
@@ -638,6 +647,16 @@ export default function ClinicsSection() {
   };
 
   const handleRegistration = (clinic: ClinicWithSessions) => {
+    // Check if booking system is disabled - redirect to contact page
+    if (featureConfig && !featureConfig.bookingEnabled) {
+      toast({
+        title: "Online booking currently unavailable",
+        description: "Please contact us to register for this clinic.",
+      });
+      setLocation('/contact');
+      return;
+    }
+    
     if (isRegistrationClosed(clinic)) {
       toast({
         title: "Registration Closed",
