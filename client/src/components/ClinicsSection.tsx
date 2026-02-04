@@ -325,6 +325,31 @@ export default function ClinicsSection() {
   });
   const [isValidatingReferral, setIsValidatingReferral] = useState(false);
   const [referralValidation, setReferralValidation] = useState<{ valid: boolean; message?: string } | null>(null);
+  
+  // Country code state for phone fields
+  const [phoneCountryCode, setPhoneCountryCode] = useState('+44');
+  const [emergencyPhoneCountryCode, setEmergencyPhoneCountryCode] = useState('+44');
+  
+  // Common country codes
+  const countryCodes = [
+    { code: '+44', country: 'UK' },
+    { code: '+1', country: 'US/CA' },
+    { code: '+353', country: 'IE' },
+    { code: '+33', country: 'FR' },
+    { code: '+49', country: 'DE' },
+    { code: '+34', country: 'ES' },
+    { code: '+39', country: 'IT' },
+    { code: '+31', country: 'NL' },
+    { code: '+32', country: 'BE' },
+    { code: '+41', country: 'CH' },
+    { code: '+43', country: 'AT' },
+    { code: '+45', country: 'DK' },
+    { code: '+46', country: 'SE' },
+    { code: '+47', country: 'NO' },
+    { code: '+48', country: 'PL' },
+    { code: '+61', country: 'AU' },
+    { code: '+64', country: 'NZ' },
+  ];
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
@@ -489,6 +514,13 @@ export default function ClinicsSection() {
           medicalConditions: '',
           agreeToTerms: false
         }));
+        // Restore country codes if saved
+        if (parsedData.phoneCountryCode) {
+          setPhoneCountryCode(parsedData.phoneCountryCode);
+        }
+        if (parsedData.emergencyPhoneCountryCode) {
+          setEmergencyPhoneCountryCode(parsedData.emergencyPhoneCountryCode);
+        }
         setHasSavedData(true);
       } catch (error) {
         console.error('Error loading saved client data:', error);
@@ -534,11 +566,11 @@ export default function ClinicsSection() {
           firstName: registrationData.firstName,
           lastName: registrationData.lastName,
           email: registrationData.email,
-          phone: registrationData.phone,
+          phone: `${phoneCountryCode} ${registrationData.phone}`.trim(),
           horseName: registrationData.horseName || undefined,
           specialRequests: registrationData.specialRequests || undefined,
           emergencyContact: registrationData.emergencyContact,
-          emergencyPhone: registrationData.emergencyPhone,
+          emergencyPhone: `${emergencyPhoneCountryCode} ${registrationData.emergencyPhone}`.trim(),
           medicalConditions: registrationData.medicalConditions || undefined,
           paymentMethod: registrationData.paymentMethod,
           agreeToTerms: registrationData.agreeToTerms,
@@ -574,9 +606,11 @@ export default function ClinicsSection() {
         lastName: registrationData.lastName,
         email: registrationData.email,
         phone: registrationData.phone,
+        phoneCountryCode: phoneCountryCode,
         horseName: registrationData.horseName,
         emergencyContact: registrationData.emergencyContact,
         emergencyPhone: registrationData.emergencyPhone,
+        emergencyPhoneCountryCode: emergencyPhoneCountryCode,
         paymentMethod: registrationData.paymentMethod
       };
       localStorage.setItem('clinicClientData', JSON.stringify(clientDataToSave));
@@ -821,11 +855,11 @@ export default function ClinicsSection() {
       firstName: registrationData.firstName,
       lastName: registrationData.lastName,
       email: registrationData.email,
-      phone: registrationData.phone,
+      phone: `${phoneCountryCode} ${registrationData.phone}`.trim(),
       horseName: registrationData.horseName,
       specialRequests: registrationData.specialRequests || undefined,
       emergencyContact: registrationData.emergencyContact,
-      emergencyPhone: registrationData.emergencyPhone,
+      emergencyPhone: `${emergencyPhoneCountryCode} ${registrationData.emergencyPhone}`.trim(),
       medicalConditions: registrationData.medicalConditions || undefined,
       paymentMethod: registrationData.paymentMethod,
       agreeToTerms: registrationData.agreeToTerms,
@@ -1228,13 +1262,27 @@ export default function ClinicsSection() {
                 
                 <div>
                   <Label htmlFor="phone">Phone Number *</Label>
-                  <Input
-                    id="phone"
-                    value={registrationData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="+44 123 456 7890"
-                    className={formErrors.phone ? "border-red-500" : ""}
-                  />
+                  <div className="flex gap-2">
+                    <Select value={phoneCountryCode} onValueChange={setPhoneCountryCode}>
+                      <SelectTrigger className="w-[100px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countryCodes.map(({ code, country }) => (
+                          <SelectItem key={code} value={code}>
+                            {code} {country}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="phone"
+                      value={registrationData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      placeholder="123 456 7890"
+                      className={`flex-1 ${formErrors.phone ? "border-red-500" : ""}`}
+                    />
+                  </div>
                   {formErrors.phone && (
                     <p className="text-sm text-red-500 mt-1 flex items-center">
                       <AlertCircle className="w-4 h-4 mr-1" />
@@ -1321,13 +1369,27 @@ export default function ClinicsSection() {
                   </div>
                   <div>
                     <Label htmlFor="emergencyPhone">Emergency Contact Phone *</Label>
-                    <Input
-                      id="emergencyPhone"
-                      value={registrationData.emergencyPhone}
-                      onChange={(e) => handleInputChange('emergencyPhone', e.target.value)}
-                      placeholder="+44 123 456 7890"
-                      className={formErrors.emergencyPhone ? "border-red-500" : ""}
-                    />
+                    <div className="flex gap-2">
+                      <Select value={emergencyPhoneCountryCode} onValueChange={setEmergencyPhoneCountryCode}>
+                        <SelectTrigger className="w-[100px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countryCodes.map(({ code, country }) => (
+                            <SelectItem key={code} value={code}>
+                              {code} {country}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        id="emergencyPhone"
+                        value={registrationData.emergencyPhone}
+                        onChange={(e) => handleInputChange('emergencyPhone', e.target.value)}
+                        placeholder="123 456 7890"
+                        className={`flex-1 ${formErrors.emergencyPhone ? "border-red-500" : ""}`}
+                      />
+                    </div>
                     {formErrors.emergencyPhone && (
                       <p className="text-sm text-red-500 mt-1 flex items-center">
                         <AlertCircle className="w-4 h-4 mr-1" />
