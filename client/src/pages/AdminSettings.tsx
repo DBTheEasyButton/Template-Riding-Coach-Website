@@ -140,11 +140,11 @@ export default function AdminSettings() {
 
   const updateSettingsMutation = useMutation({
     mutationFn: async (data: Partial<SiteSettings>) => {
-      return await apiRequest('PUT', '/api/admin/settings', data);
+      return await apiRequest('PUT', '/api/admin/site-settings', data);
     },
     onSuccess: () => {
       toast({ title: "Settings updated successfully!" });
-      queryClient.invalidateQueries({ queryKey: ['/api/admin/settings'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/site-settings'] });
     },
     onError: () => {
       toast({ title: "Failed to update settings", variant: "destructive" });
