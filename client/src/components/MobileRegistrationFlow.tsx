@@ -100,7 +100,7 @@ interface RegistrationData {
 }
 
 interface AdditionalEntry {
-  type: 'same_rider_different_horse' | 'different_rider';
+  type: 'same_rider_different_horse' | 'same_horse_different_session';
   firstName: string;
   lastName: string;
   email: string;
@@ -155,7 +155,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
   // Multi-entry state
   const [additionalEntries, setAdditionalEntries] = useState<AdditionalEntry[]>([]);
   const [showAddEntryDialog, setShowAddEntryDialog] = useState(false);
-  const [addingEntryType, setAddingEntryType] = useState<'same_rider_different_horse' | 'different_rider' | null>(null);
+  const [addingEntryType, setAddingEntryType] = useState<'same_rider_different_horse' | 'same_horse_different_session' | null>(null);
   const [newEntryData, setNewEntryData] = useState<Partial<AdditionalEntry>>({});
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -810,7 +810,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">
-                          {entry.type === 'different_rider' ? 'Other Rider' : 'Same Rider'}
+                          {entry.type === 'same_horse_different_session' ? 'Same Horse' : 'Different Horse'}
                         </span>
                         <button
                           onClick={() => setAdditionalEntries(prev => prev.filter((_, i) => i !== index))}
@@ -842,6 +842,27 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                     <div className="space-y-3">
                       <button
                         onClick={() => {
+                          setAddingEntryType('same_horse_different_session');
+                          setNewEntryData({
+                            type: 'same_horse_different_session',
+                            firstName: registrationData.firstName,
+                            lastName: registrationData.lastName,
+                            email: registrationData.email,
+                            phone: registrationData.phone,
+                            emergencyContact: registrationData.emergencyContact,
+                            emergencyPhone: registrationData.emergencyPhone,
+                            horseName: registrationData.horseName,
+                            horseInfo: '',
+                            skillLevel: ''
+                          });
+                        }}
+                        className="w-full p-4 border rounded-lg hover:bg-green-50 text-left"
+                      >
+                        <p className="font-medium text-gray-900">Same horse, another session</p>
+                        <p className="text-sm text-gray-600">Enter {registrationData.horseName || 'this horse'} in a different class</p>
+                      </button>
+                      <button
+                        onClick={() => {
                           setAddingEntryType('same_rider_different_horse');
                           setNewEntryData({
                             type: 'same_rider_different_horse',
@@ -858,29 +879,8 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                         }}
                         className="w-full p-4 border rounded-lg hover:bg-blue-50 text-left"
                       >
-                        <p className="font-medium text-gray-900">I'm entering with another horse</p>
-                        <p className="text-sm text-gray-600">Same rider, different horse</p>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setAddingEntryType('different_rider');
-                          setNewEntryData({
-                            type: 'different_rider',
-                            firstName: '',
-                            lastName: '',
-                            email: '',
-                            phone: '',
-                            emergencyContact: '',
-                            emergencyPhone: '',
-                            horseName: '',
-                            horseInfo: '',
-                            skillLevel: ''
-                          });
-                        }}
-                        className="w-full p-4 border rounded-lg hover:bg-amber-50 text-left"
-                      >
-                        <p className="font-medium text-gray-900">I'm booking for someone else</p>
-                        <p className="text-sm text-gray-600">Different rider entirely</p>
+                        <p className="font-medium text-gray-900">Different horse</p>
+                        <p className="text-sm text-gray-600">Enter with another horse in any session</p>
                       </button>
                     </div>
                     <button
@@ -898,85 +898,46 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
                   <div className="bg-white rounded-xl p-6 max-w-md w-full my-4">
                     <h3 className="text-lg font-semibold mb-4">
-                      {addingEntryType === 'different_rider' ? 'Add Another Rider' : 'Add Another Horse'}
+                      {addingEntryType === 'same_horse_different_session' 
+                        ? `Add ${registrationData.horseName || 'Same Horse'} to Another Session`
+                        : 'Add Another Horse'}
                     </h3>
                     
                     <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                      {addingEntryType === 'different_rider' && (
+                      {/* Only show horse name field for different horse entries */}
+                      {addingEntryType === 'same_rider_different_horse' && (
                         <>
-                          <div className="grid grid-cols-2 gap-3">
-                            <div>
-                              <Label className="text-xs">First Name *</Label>
-                              <Input
-                                value={newEntryData.firstName || ''}
-                                onChange={(e) => setNewEntryData(prev => ({ ...prev, firstName: e.target.value }))}
-                                placeholder="First name"
-                              />
-                            </div>
-                            <div>
-                              <Label className="text-xs">Last Name *</Label>
-                              <Input
-                                value={newEntryData.lastName || ''}
-                                onChange={(e) => setNewEntryData(prev => ({ ...prev, lastName: e.target.value }))}
-                                placeholder="Last name"
-                              />
-                            </div>
-                          </div>
                           <div>
-                            <Label className="text-xs">Email *</Label>
+                            <Label className="text-xs">Horse Name *</Label>
                             <Input
-                              type="email"
-                              value={newEntryData.email || ''}
-                              onChange={(e) => setNewEntryData(prev => ({ ...prev, email: e.target.value }))}
-                              placeholder="Email address"
+                              value={newEntryData.horseName || ''}
+                              onChange={(e) => setNewEntryData(prev => ({ ...prev, horseName: e.target.value }))}
+                              placeholder="Horse name"
                             />
                           </div>
+                          
                           <div>
-                            <Label className="text-xs">Phone *</Label>
-                            <Input
-                              value={newEntryData.phone || ''}
-                              onChange={(e) => setNewEntryData(prev => ({ ...prev, phone: e.target.value }))}
-                              placeholder="Phone number"
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-xs">Emergency Contact *</Label>
-                            <Input
-                              value={newEntryData.emergencyContact || ''}
-                              onChange={(e) => setNewEntryData(prev => ({ ...prev, emergencyContact: e.target.value }))}
-                              placeholder="Emergency contact name"
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-xs">Emergency Phone *</Label>
-                            <Input
-                              value={newEntryData.emergencyPhone || ''}
-                              onChange={(e) => setNewEntryData(prev => ({ ...prev, emergencyPhone: e.target.value }))}
-                              placeholder="Emergency phone"
+                            <Label className="text-xs">Info About This Horse</Label>
+                            <Textarea
+                              value={newEntryData.horseInfo || ''}
+                              onChange={(e) => setNewEntryData(prev => ({ ...prev, horseInfo: e.target.value }))}
+                              placeholder="Age, breed, temperament, experience level..."
+                              rows={2}
                             />
                           </div>
                         </>
                       )}
                       
-                      <div>
-                        <Label className="text-xs">Horse Name *</Label>
-                        <Input
-                          value={newEntryData.horseName || ''}
-                          onChange={(e) => setNewEntryData(prev => ({ ...prev, horseName: e.target.value }))}
-                          placeholder="Horse name"
-                        />
-                      </div>
+                      {/* For same horse entries, show which horse is being entered */}
+                      {addingEntryType === 'same_horse_different_session' && (
+                        <div className="bg-green-50 p-3 rounded-lg">
+                          <p className="text-sm text-green-800">
+                            <strong>Horse:</strong> {registrationData.horseName}
+                          </p>
+                        </div>
+                      )}
                       
-                      <div>
-                        <Label className="text-xs">Info About This Horse</Label>
-                        <Textarea
-                          value={newEntryData.horseInfo || ''}
-                          onChange={(e) => setNewEntryData(prev => ({ ...prev, horseInfo: e.target.value }))}
-                          placeholder="Age, breed, temperament, experience level..."
-                          rows={2}
-                        />
-                      </div>
-                      
+                      {/* Session selection - show all options for both entry types */}
                       {clinic?.hasMultipleSessions && clinic.sessions && clinic.sessions.length > 0 && (
                         <div>
                           <Label className="text-xs">Select Session (Category & Level) *</Label>
@@ -1003,47 +964,43 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                         </div>
                       )}
                       
-                      {addingEntryType === 'different_rider' && (
-                        <div>
-                          <Label className="text-xs">Time Preference</Label>
-                          <Input
-                            value={newEntryData.timePreference || ''}
-                            onChange={(e) => setNewEntryData(prev => ({ ...prev, timePreference: e.target.value }))}
-                            placeholder="e.g. Morning, After 2pm, Early session..."
-                          />
-                          <p className="text-xs text-gray-500 mt-1">Let us know if this rider has any scheduling preferences</p>
+                      {/* Gap preference - shown for all entries since same rider is doing multiple sessions */}
+                      <div className="bg-blue-50 p-3 rounded-lg">
+                        <Label className="text-xs font-medium text-blue-800">Session Scheduling Preference *</Label>
+                        <p className="text-xs text-blue-600 mt-1 mb-2">
+                          {addingEntryType === 'same_horse_different_session' 
+                            ? 'How would you like your sessions scheduled?'
+                            : 'How would you like your rides scheduled?'}
+                        </p>
+                        <div className="mt-2 space-y-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="gapPreference"
+                              value="back_to_back"
+                              checked={newEntryData.gapPreference === 'back_to_back'}
+                              onChange={() => setNewEntryData(prev => ({ ...prev, gapPreference: 'back_to_back' }))}
+                              className="w-4 h-4"
+                            />
+                            <span className="text-sm">Back-to-back sessions</span>
+                          </label>
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="radio"
+                              name="gapPreference"
+                              value="one_session_gap"
+                              checked={newEntryData.gapPreference === 'one_session_gap'}
+                              onChange={() => setNewEntryData(prev => ({ ...prev, gapPreference: 'one_session_gap' }))}
+                              className="w-4 h-4"
+                            />
+                            <span className="text-sm">
+                              {addingEntryType === 'same_horse_different_session'
+                                ? 'Gap between sessions (rest for horse)'
+                                : 'One session gap between horses'}
+                            </span>
+                          </label>
                         </div>
-                      )}
-                      
-                      {addingEntryType === 'same_rider_different_horse' && (
-                        <div className="bg-blue-50 p-3 rounded-lg">
-                          <Label className="text-xs font-medium text-blue-800">Session Scheduling Preference *</Label>
-                          <div className="mt-2 space-y-2">
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="gapPreference"
-                                value="back_to_back"
-                                checked={newEntryData.gapPreference === 'back_to_back'}
-                                onChange={() => setNewEntryData(prev => ({ ...prev, gapPreference: 'back_to_back' }))}
-                                className="w-4 h-4"
-                              />
-                              <span className="text-sm">Back-to-back sessions</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                              <input
-                                type="radio"
-                                name="gapPreference"
-                                value="one_session_gap"
-                                checked={newEntryData.gapPreference === 'one_session_gap'}
-                                onChange={() => setNewEntryData(prev => ({ ...prev, gapPreference: 'one_session_gap' }))}
-                                className="w-4 h-4"
-                              />
-                              <span className="text-sm">One session gap between horses</span>
-                            </label>
-                          </div>
-                        </div>
-                      )}
+                      </div>
                     </div>
                     
                     <div className="flex gap-3 mt-6">
@@ -1060,7 +1017,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                       <button
                         onClick={() => {
                           // Validate and add entry
-                          if (!newEntryData.horseName) {
+                          if (addingEntryType === 'same_rider_different_horse' && !newEntryData.horseName) {
                             toast({ title: "Please enter the horse's name", variant: "destructive" });
                             return;
                           }
@@ -1068,11 +1025,7 @@ export default function MobileRegistrationFlow({ clinic, isOpen, onClose, onSucc
                             toast({ title: "Please select a session (category & level)", variant: "destructive" });
                             return;
                           }
-                          if (addingEntryType === 'different_rider' && (!newEntryData.firstName || !newEntryData.lastName || !newEntryData.email)) {
-                            toast({ title: "Please fill in all rider details", variant: "destructive" });
-                            return;
-                          }
-                          if (addingEntryType === 'same_rider_different_horse' && !newEntryData.gapPreference) {
+                          if (!newEntryData.gapPreference) {
                             toast({ title: "Please select your session scheduling preference", variant: "destructive" });
                             return;
                           }
