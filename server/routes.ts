@@ -5909,8 +5909,7 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
         subscriberGrowth,
         clinicsByLevel,
         contactsByType,
-        loyaltyTiers,
-        audioCourse: audioCourseData
+        loyaltyTiers
       });
     } catch (error) {
       console.error("Error fetching analytics:", error);
