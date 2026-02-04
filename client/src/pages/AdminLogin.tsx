@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,13 +14,16 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
     mutationFn: async () => {
       return await apiRequest('POST', '/api/admin/login', { email, password });
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.success) {
+        // Invalidate session cache so AdminAuthWrapper sees the new session
+        await queryClient.invalidateQueries({ queryKey: ['/api/admin/session'] });
         toast({ title: "Login successful", description: "Welcome to the admin panel" });
         setLocation("/admin/clinics");
       }
