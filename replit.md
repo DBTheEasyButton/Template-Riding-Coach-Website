@@ -30,15 +30,27 @@ Customize your free guide PDF in `server/generateLeadMagnetPDF.ts`:
 
 ### 3. Required API Keys & Secrets
 Configure these secrets in the Replit Secrets tab:
+
+**Admin Authentication (Required):**
+- [ ] `ADMIN_EMAIL_1` - First super admin email address
+- [ ] `ADMIN_PASSWORD_1` - First super admin password
+- [ ] `ADMIN_EMAIL_2` - Second super admin email address
+- [ ] `ADMIN_PASSWORD_2` - Second super admin password
+- [ ] `SESSION_SECRET` - A random string for session security (REQUIRED in production)
+
+**Payments:**
 - [ ] `STRIPE_SECRET_KEY` - Your Stripe secret key for payments
 - [ ] `VITE_STRIPE_PUBLIC_KEY` - Your Stripe publishable key
 - [ ] `STRIPE_WEBHOOK_SECRET` - Your Stripe webhook signing secret
+
+**CRM Integration:**
 - [ ] `GHL_API_KEY` - Go High Level API key for CRM integration
 - [ ] `GHL_LOCATION_ID` - Go High Level location ID
-- [ ] `SESSION_SECRET` - A random string for session security
-- [ ] `FACEBOOK_APP_ID` - For Facebook marketing automation (optional)
-- [ ] `FACEBOOK_APP_SECRET` - For Facebook marketing automation (optional)
-- [ ] `FACEBOOK_PAGE_ACCESS_TOKEN` - For auto-posting to Facebook (optional)
+
+**Social Media (Optional):**
+- [ ] `FACEBOOK_APP_ID` - For Facebook marketing automation
+- [ ] `FACEBOOK_APP_SECRET` - For Facebook marketing automation
+- [ ] `FACEBOOK_PAGE_ACCESS_TOKEN` - For auto-posting to Facebook
 
 ### 4. Analytics Configuration
 Update `client/index.html` with your tracking IDs:
@@ -82,6 +94,14 @@ Update in `client/src/components/Footer.tsx` and contact pages:
 - Polework
 
 ### Admin Features (access at /admin)
+
+**Two-Tier Admin System:**
+- **Super Admin** (template owners): Full access including Settings and feature toggles
+- **Client Admin** (to be added per website clone): Limited access to manage content only
+
+Super admins are automatically created on server startup from the `ADMIN_EMAIL_1/2` and `ADMIN_PASSWORD_1/2` secrets.
+
+**Available Admin Pages:**
 - **Clinics** - Create, edit, and manage clinic events
 - **Registrations** - View and manage clinic bookings
 - **Groups** - Organize participants by skill level
@@ -90,7 +110,15 @@ Update in `client/src/components/Footer.tsx` and contact pages:
 - **Testimonials** - Manage customer reviews
 - **CRM** - Sync contacts with Go High Level
 - **Analytics** - View site statistics
-- **Settings** - Site configuration
+- **Settings** - Site configuration (Super Admin only)
+
+**Feature Toggles (Super Admin Only):**
+Located in Settings > Feature Toggles, these control core functionality:
+1. **Booking System** - Enable/disable clinic registration
+2. **Online Payments** - Enable/disable Stripe payment processing
+3. **Email Automations** - Enable/disable automated emails
+4. **Automatic Groupings** - Enable/disable auto group assignments
+5. **Schedule Emails** - Enable/disable schedule notification emails
 
 ### Payment System
 - Stripe integration for clinic bookings

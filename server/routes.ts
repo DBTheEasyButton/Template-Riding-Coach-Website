@@ -187,6 +187,12 @@ function requireSuperAdmin(req: Request, res: Response, next: NextFunction): voi
   next();
 }
 
+// Helper to check if a feature is enabled
+async function isFeatureEnabled(key: string): Promise<boolean> {
+  const setting = await storage.getSiteSetting(key);
+  return setting?.settingValue ?? true; // Default to true if not found
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Initialize super admin accounts on startup
   await initializeSuperAdmins();
@@ -647,41 +653,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   console.error('[WEBHOOK RECOVERY] Failed to sync to GHL:', error);
                 }
                 
-                // Send confirmation email
-                try {
-                  const allRegs = await storage.getAllClinicRegistrations();
-                  const userRegs = allRegs.filter(r => r.email === newRegistration.email);
-                  const isFirstClinic = userRegs.length <= 1;
-                  
-                  let loyaltyProgram = await storage.getLoyaltyProgram(newRegistration.email);
-                  if (!loyaltyProgram) {
-                    const newProgram = await storage.createLoyaltyProgram({
-                      email: newRegistration.email,
-                      firstName: newRegistration.firstName,
-                      lastName: newRegistration.lastName || ''
+                // Send confirmation email (check if email automations are enabled)
+                const emailAutomationsEnabledWebhook = await isFeatureEnabled('email_automations_enabled');
+                if (emailAutomationsEnabledWebhook) {
+                  try {
+                    const allRegs = await storage.getAllClinicRegistrations();
+                    const userRegs = allRegs.filter(r => r.email === newRegistration.email);
+                    const isFirstClinic = userRegs.length <= 1;
+                    
+                    let loyaltyProgram = await storage.getLoyaltyProgram(newRegistration.email);
+                    if (!loyaltyProgram) {
+                      const newProgram = await storage.createLoyaltyProgram({
+                        email: newRegistration.email,
+                        firstName: newRegistration.firstName,
+                        lastName: newRegistration.lastName || ''
+                      });
+                      loyaltyProgram = { ...newProgram, availableDiscounts: [] };
+                    }
+                    
+                    const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
+                      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
                     });
-                    loyaltyProgram = { ...newProgram, availableDiscounts: [] };
+                    
+                    if (isFirstClinic) {
+                      await emailService.sendFirstTimeClinicConfirmation(
+                        newRegistration.email, newRegistration.firstName, clinic.title, clinicDate,
+                        loyaltyProgram.referralCode || 'PENDING', clinic.location, clinic.googleMapsLink || undefined
+                      );
+                    } else {
+                      await emailService.sendReturningClinicConfirmation(
+                        newRegistration.email, newRegistration.firstName, clinic.title, clinicDate,
+                        loyaltyProgram.referralCode || 'PENDING', loyaltyProgram.points,
+                        clinic.location, clinic.googleMapsLink || undefined
+                      );
+                    }
+                    console.log(`[WEBHOOK RECOVERY] Sent confirmation email to ${newRegistration.email}`);
+                  } catch (error) {
+                    console.error('[WEBHOOK RECOVERY] Failed to send confirmation email:', error);
                   }
-                  
-                  const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
-                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-                  });
-                  
-                  if (isFirstClinic) {
-                    await emailService.sendFirstTimeClinicConfirmation(
-                      newRegistration.email, newRegistration.firstName, clinic.title, clinicDate,
-                      loyaltyProgram.referralCode || 'PENDING', clinic.location, clinic.googleMapsLink || undefined
-                    );
-                  } else {
-                    await emailService.sendReturningClinicConfirmation(
-                      newRegistration.email, newRegistration.firstName, clinic.title, clinicDate,
-                      loyaltyProgram.referralCode || 'PENDING', loyaltyProgram.points,
-                      clinic.location, clinic.googleMapsLink || undefined
-                    );
-                  }
-                  console.log(`[WEBHOOK RECOVERY] Sent confirmation email to ${newRegistration.email}`);
-                } catch (error) {
-                  console.error('[WEBHOOK RECOVERY] Failed to send confirmation email:', error);
                 }
                 
                 // Mark discount as used if applicable
@@ -1317,6 +1326,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Audio Course payment intent - creates Stripe payment for £97 audio course (or £72 with DAN25 discount)
   app.post("/api/audio-course/create-payment-intent", async (req, res) => {
     try {
+      // Check if online payments are enabled
+      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      if (!paymentsEnabled) {
+        return res.status(403).json({ error: 'Online payments are currently disabled' });
+      }
+      
       if (!stripe) {
         return res.status(503).json({ error: 'Payment system not configured. Please add Stripe credentials.' });
       }
@@ -1440,6 +1455,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // 28 Days Challenge payment intent - creates Stripe payment for £147
   app.post("/api/challenge/create-payment-intent", async (req, res) => {
     try {
+      // Check if online payments are enabled
+      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      if (!paymentsEnabled) {
+        return res.status(403).json({ error: 'Online payments are currently disabled' });
+      }
+      
       const { firstName, lastName, email, mobile, horseName } = req.body;
 
       if (!firstName || !lastName || !email || !mobile || !horseName) {
@@ -1747,6 +1768,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const totalEntries = 1 + (additionalEntries?.length || 0);
     
     try {
+      // Check if online payments are enabled
+      const paymentsEnabled = await isFeatureEnabled('online_payments_enabled');
+      if (!paymentsEnabled) {
+        return res.status(403).json({ message: "Online payments are currently disabled" });
+      }
       
       const clinic = await storage.getClinic(clinicId);
       if (!clinic) {
@@ -1966,6 +1992,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Register for clinic (after payment confirmation)
   app.post("/api/clinics/:id/register", async (req, res) => {
     try {
+      // Check if booking system is enabled
+      const bookingEnabled = await isFeatureEnabled('booking_system_enabled');
+      if (!bookingEnabled) {
+        return res.status(403).json({ message: "Clinic registration is currently disabled" });
+      }
+      
       const clinicId = parseInt(req.params.id);
       const { paymentIntentId, ...registrationData } = req.body;
       
@@ -2144,16 +2176,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Send confirmation email based on whether this is first-time or returning client
-      try {
-        // Check if this is their first clinic (before the current registration)
-        const allRegistrations = await storage.getAllClinicRegistrations();
-        const userRegistrations = allRegistrations.filter(r => r.email === registration.email);
-        const isFirstClinic = userRegistrations.length === 1; // Only the current registration
+      // Check if email automations are enabled first
+      const emailAutomationsEnabled = await isFeatureEnabled('email_automations_enabled');
+      if (emailAutomationsEnabled) {
+        try {
+          // Check if this is their first clinic (before the current registration)
+          const allRegistrations = await storage.getAllClinicRegistrations();
+          const userRegistrations = allRegistrations.filter(r => r.email === registration.email);
+          const isFirstClinic = userRegistrations.length === 1; // Only the current registration
 
-        // Get loyalty program data (referral code and points)
-        const loyaltyProgram = await storage.getLoyaltyProgram(registration.email);
-        
-        if (loyaltyProgram) {
+          // Get loyalty program data (referral code and points)
+          const loyaltyProgram = await storage.getLoyaltyProgram(registration.email);
+          
+          if (loyaltyProgram) {
           const clinicDate = new Date(clinic.date).toLocaleDateString('en-GB', {
             weekday: 'long',
             day: 'numeric',
@@ -2190,9 +2225,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log(`Sent returning clinic confirmation email to ${registration.email}`);
           }
         }
-      } catch (error) {
-        console.error("Failed to send clinic confirmation email:", error);
-        // Don't fail the registration if email sending fails
+        } catch (error) {
+          console.error("Failed to send clinic confirmation email:", error);
+          // Don't fail the registration if email sending fails
+        }
       }
 
       // Send referral bonus notification if bonus was awarded
@@ -2411,8 +2447,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.log('  - ⏭️ Skipping Facebook post (conditions not met)');
       }
 
-      // Send GHL emails to all contacts (tag-filtered) - only if enabled
-      if (sendEmailAnnouncement !== false) {
+      // Send GHL emails to all contacts (tag-filtered) - only if enabled and email automations are on
+      const emailAutomationsForAnnouncement = await isFeatureEnabled('email_automations_enabled');
+      if (sendEmailAnnouncement !== false && emailAutomationsForAnnouncement) {
         try {
           console.log('  - ✅ Sending email announcement to GHL contacts...');
           const filterTags: string[] = excludeTagsFromEmail ? excludeTagsFromEmail.split(',').map((t: string) => t.trim()).filter((t: string) => t) : [];
@@ -2422,6 +2459,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error('Error sending clinic announcement emails:', emailError);
           // Don't fail the clinic creation if emails fail
         }
+      } else if (!emailAutomationsForAnnouncement) {
+        console.log('  - ⏭️ Skipping email announcement (email automations disabled)');
       } else {
         console.log('  - ⏭️ Skipping email announcement (disabled by user)');
       }
@@ -2728,6 +2767,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/sessions/:sessionId/auto-organize", async (req, res) => {
     try {
+      // Check if auto-grouping is enabled
+      const autoGroupingEnabled = await isFeatureEnabled('auto_grouping_enabled');
+      if (!autoGroupingEnabled) {
+        return res.status(403).json({ message: "Automatic group assignment is currently disabled" });
+      }
+      
       const sessionId = parseInt(req.params.sessionId);
       const groups = await storage.autoOrganizeGroups(sessionId);
       
@@ -2894,6 +2939,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Send email times to all participants in a clinic
   app.post("/api/admin/clinics/:clinicId/email-times", async (req, res) => {
     try {
+      // Check if schedule emails are enabled
+      const scheduleEmailEnabled = await isFeatureEnabled('schedule_email_enabled');
+      if (!scheduleEmailEnabled) {
+        return res.status(403).json({ message: "Schedule email notifications are currently disabled" });
+      }
+      
       const clinicId = parseInt(req.params.clinicId);
       
       // Get clinic details
@@ -4960,6 +5011,12 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
 
   app.post("/api/admin/email-campaigns/:id/send", async (req, res) => {
     try {
+      // Check if email automations are enabled
+      const emailEnabled = await isFeatureEnabled('email_automations_enabled');
+      if (!emailEnabled) {
+        return res.status(403).json({ message: "Email automations are currently disabled" });
+      }
+      
       const id = parseInt(req.params.id);
       const result = await emailService.sendCampaign(id);
       res.json({ 
@@ -4998,6 +5055,12 @@ If you have any questions, please contact Dan at info@your-coaching-business.com
   // Send pole clinic invitation email to contacts with "pole clinic" tag
   app.post("/api/admin/email/pole-clinic-blast", async (req, res) => {
     try {
+      // Check if email automations are enabled
+      const emailEnabled = await isFeatureEnabled('email_automations_enabled');
+      if (!emailEnabled) {
+        return res.status(403).json({ message: "Email automations are currently disabled" });
+      }
+      
       const { tag = "pole clinic" } = req.body;
       console.log(`Starting pole clinic email blast for tag: "${tag}"`);
       

@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, log } from "./vite";
 import { seoMiddleware } from "./seo-middleware";
@@ -12,6 +13,25 @@ const app = express();
 
 // Cookie parser for visitor recognition
 app.use(cookieParser());
+
+// Session middleware for admin authentication
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret && process.env.NODE_ENV === 'production') {
+  console.error('FATAL: SESSION_SECRET is required in production');
+  process.exit(1);
+}
+
+app.use(session({
+  secret: sessionSecret || 'dev-session-secret-not-for-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  }
+}));
 
 // CRITICAL: Stripe webhook needs raw body for signature verification
 // Apply raw body parser ONLY for webhook endpoint, JSON parser for everything else
