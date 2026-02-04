@@ -248,7 +248,7 @@ export default function GroupClinics() {
                       <span>{clinic.location}</span>
                     </div>
                     
-                    <p className="text-gray-700 text-sm line-clamp-2 mb-3 flex-grow">{clinic.description}</p>
+                    <p className="text-gray-700 text-sm line-clamp-4 mb-3 flex-grow">{clinic.description}</p>
                     
                     <div className="flex items-center justify-between pt-3 border-t border-gray-200 mt-auto">
                       <div className="text-2xl font-bold text-orange">

@@ -837,7 +837,7 @@ export default function ClinicsSection() {
               
               <CardHeader className="transition-transform duration-300 group-hover:translate-y-1">
                 <CardTitle className="text-xl font-playfair text-navy font-bold transition-colors duration-300 group-hover:text-orange">{clinic.title}</CardTitle>
-                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-3 whitespace-pre-line">{clinic.description}</CardDescription>
+                <CardDescription className="text-dark font-medium transition-colors duration-300 group-hover:text-gray-600 line-clamp-5 whitespace-pre-line">{clinic.description}</CardDescription>
               </CardHeader>
               
               <CardContent className="transition-transform duration-300 group-hover:translate-y-1 flex-grow">
@@ -1375,9 +1375,13 @@ export default function ClinicsSection() {
                     id="specialRequests"
                     value={registrationData.specialRequests}
                     onChange={(e) => handleInputChange('specialRequests', e.target.value)}
-                    placeholder="Please include your preferred session times and any specific goals or requests for the clinic..."
+                    placeholder="e.g. I'm travelling with Sarah Smith and we'd like to be in the same session..."
                     rows={3}
                   />
+                  <p className="text-xs text-gray-500 mt-2">
+                    <strong>Please note:</strong> Session times are allocated by us based on skill level and group sizes - you cannot choose your exact time. 
+                    The clinic runs during the hours shown above. If you're travelling with a friend and need to be in the same session, or if there are times you absolutely cannot do, please let us know here and we'll do our best to accommodate you.
+                  </p>
                 </div>
               </div>
 
